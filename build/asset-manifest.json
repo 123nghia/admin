@@ -1,0 +1,42 @@
+{
+  "files": {
+    "static/js/0.15e6dbca.chunk.js": "/static/js/0.15e6dbca.chunk.js",
+    "static/js/0.15e6dbca.chunk.js.map": "/static/js/0.15e6dbca.chunk.js.map",
+    "main.css": "/static/css/main.3201d6c2.chunk.css",
+    "main.js": "/static/js/main.6cccbd96.chunk.js",
+    "main.js.map": "/static/js/main.6cccbd96.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.4b4dee37.js",
+    "runtime-main.js.map": "/static/js/runtime-main.4b4dee37.js.map",
+    "static/css/3.a0aed932.chunk.css": "/static/css/3.a0aed932.chunk.css",
+    "static/js/3.8d30ea26.chunk.js": "/static/js/3.8d30ea26.chunk.js",
+    "static/js/3.8d30ea26.chunk.js.map": "/static/js/3.8d30ea26.chunk.js.map",
+    "static/css/4.4bd8e119.chunk.css": "/static/css/4.4bd8e119.chunk.css",
+    "static/js/4.ba2d9074.chunk.js": "/static/js/4.ba2d9074.chunk.js",
+    "static/js/4.ba2d9074.chunk.js.map": "/static/js/4.ba2d9074.chunk.js.map",
+    "static/js/5.c8d05316.chunk.js": "/static/js/5.c8d05316.chunk.js",
+    "static/js/5.c8d05316.chunk.js.map": "/static/js/5.c8d05316.chunk.js.map",
+    "static/js/6.bddad0b5.chunk.js": "/static/js/6.bddad0b5.chunk.js",
+    "static/js/6.bddad0b5.chunk.js.map": "/static/js/6.bddad0b5.chunk.js.map",
+    "static/js/7.f41f008e.chunk.js": "/static/js/7.f41f008e.chunk.js",
+    "static/js/7.f41f008e.chunk.js.map": "/static/js/7.f41f008e.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/3.a0aed932.chunk.css.map": "/static/css/3.a0aed932.chunk.css.map",
+    "static/css/4.4bd8e119.chunk.css.map": "/static/css/4.4bd8e119.chunk.css.map",
+    "static/css/main.3201d6c2.chunk.css.map": "/static/css/main.3201d6c2.chunk.css.map",
+    "static/js/0.15e6dbca.chunk.js.LICENSE.txt": "/static/js/0.15e6dbca.chunk.js.LICENSE.txt",
+    "static/js/3.8d30ea26.chunk.js.LICENSE.txt": "/static/js/3.8d30ea26.chunk.js.LICENSE.txt",
+    "static/media/coreui-icons.min.css": "/static/media/CoreUI-Icons-Linear.f11e30c6.woff",
+    "static/media/simple-line-icons.css": "/static/media/Simple-Line-Icons.f1515a45.svg",
+    "static/media/flag-icon.min.css": "/static/media/zw.f5ceeff7.svg",
+    "static/media/font-awesome.min.css": "/static/media/fontawesome-webfont.f691f37e.woff",
+    "static/media/logo-main.22658d7e.png": "/static/media/logo-main.22658d7e.png",
+    "static/media/logo-test.065d65d0.png": "/static/media/logo-test.065d65d0.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4b4dee37.js",
+    "static/css/3.a0aed932.chunk.css",
+    "static/js/3.8d30ea26.chunk.js",
+    "static/css/main.3201d6c2.chunk.css",
+    "static/js/main.6cccbd96.chunk.js"
+  ]
+}

@@ -1,0 +1,177 @@
+.error, .has-error span{color: red}
+body{
+    background-color: #bdc3c7;
+  }
+.table-fixed{
+    width: 100%;
+    background-color: #f3f3f3;
+  }
+.table-fixed  tbody{
+    height: 345px;
+    overflow-y:auto;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tbody tr,
+.table-fixed tbody td,
+.table-fixed tbody th{
+    display: block;
+
+}
+.table-fixed tbody tr{
+    width: 100%;
+}
+.table-fixed tbody td{
+    float:left;
+    font-size: 0.74rem
+}
+.table-fixed  tr{
+    width: 100%;
+    float: left;
+}
+.wd5{
+    width: 5%;
+}
+.wd10{
+    width: 101px;
+}
+.wd30{
+    width: 30%;
+}
+.wd20{
+    width: 20%;
+}
+.wd15{
+    width: 166px;
+}
+.wd25{
+    width: 253px;
+}
+
+.form-check-input{
+    position: relative !important;
+    margin-left: 0px !important;
+}
+
+/* loading */
+
+#page-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+    background-color: #F5F5F5;
+  }
+
+  .three-balls {
+    margin: 0 auto;
+    width: 70px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 45%;
+  }
+
+  .three-balls .ball {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    -webkit-animation: bouncedelay 3.0s infinite cubic-bezier(.62, .28, .23, .99) both;
+    animation: bouncedelay 3.0s infinite cubic-bezier(.62, .28, .23, .99) both;
+  }
+
+  .three-balls .ball1 {
+    -webkit-animation-delay: -.16s;
+    animation-delay: -.16s;
+  }
+
+  .three-balls .ball2 {
+    -webkit-animation-delay: -.08s;
+    animation-delay: -.08s;
+  }
+
+  @keyframes bouncedelay {
+    0% {
+      bottom: 0;
+      background-color: #03A9F4;
+    }
+    16.66% {
+      bottom: 40px;
+      background-color: #FB6542;
+    }
+    33.33% {
+      bottom: 0px;
+      background-color: #FB6542;
+    }
+    50% {
+      bottom: 40px;
+      background-color: #FFBB00;
+    }
+    66.66% {
+      bottom: 0px;
+      background-color: #FFBB00;
+    }
+    83.33% {
+      bottom: 40px;
+      background-color: #03A9F4;
+    }
+    100% {
+      bottom: 0;
+      background-color: #03A9F4;
+    }
+  }
+
+  @-webkit-keyframes bouncedelay {
+    0% {
+      bottom: 0;
+      background-color: #03A9F4;
+    }
+    16.66% {
+      bottom: 40px;
+      background-color: #FB6542;
+    }
+    33.33% {
+      bottom: 0px;
+      background-color: #FB6542;
+    }
+    50% {
+      bottom: 40px;
+      background-color: #FFBB00;
+    }
+    66.66% {
+      bottom: 0px;
+      background-color: #FFBB00;
+    }
+    83.33% {
+      bottom: 40px;
+      background-color: #03A9F4;
+    }
+    100% {
+      bottom: 0;
+      background-color: #03A9F4;
+    }
+  }
+.react-datetime-picker {
+  display: block !important
+}
+.control-label.radio{
+  margin-right: 10px;
+}
+.blacktext {
+  color: #000 !important
+}
+.expired {
+    background-color: #c0c0c0;
+}
+
+label {
+    white-space: pre-wrap;
+}

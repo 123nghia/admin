@@ -1,0 +1,11 @@
+1. Dang nhap : admin/admin
+2 De them 1 trang moi vi du ABC
+ + Them vao view/ABC
+ + Them nao src/_nav.js
+ + Them vao src/routes.js 
+3. Cau hinh env 
+ them link vao file env
+
+
+Source admin :
+APi lay ben server app dung
