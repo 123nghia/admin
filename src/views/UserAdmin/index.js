@@ -50,7 +50,9 @@ class Users extends Component {
             modalDelete: false,
             delete: null,
             dataCompany: [],
-            currentCompany: ''
+            currentCompany: '',
+            dataSale: [],
+            currentSale: ''
         };
     }
     async componentDidMount() {
@@ -112,6 +114,7 @@ class Users extends Component {
 
     async toggleModal(key) {
         await this.getCompanyData()
+        await this.getSaleData()
         if (key == 'new') {
             this.setState({
                 modalCom: !this.state.modalCom,
@@ -179,6 +182,7 @@ class Users extends Component {
 
     async openUpdate(item) {
         await this.getCompanyData(item.Company_Id)
+        await this.getSaleData(item.Sale_Id)
 
         this.setState({
             modalCom: !this.state.modalCom,
@@ -304,10 +308,31 @@ class Users extends Component {
                 url: '/api/list-company?id=' + id,
                 method: 'GET',
             });
-    
-            this.setState({ currentCompany: currentC.data.data.Name });
+            if(currentC.data.data != null || currentC.data.data != undefined){
+                this.setState({ currentCompany: currentC.data.data.Name });
+            }
         }
         this.setState({ dataCompany: resCompany.data.data });
+    }
+
+    async getSaleData(id) {
+        const resSale = await axios({
+            baseURL: 'http://thanhvien.applamdep.com',
+            url: '/api/list-sale',
+            method: 'GET',
+        });
+
+        if(id != '' || id != undefined){
+            const currentSale = await axios({
+                baseURL: 'http://thanhvien.applamdep.com',
+                url: '/api/list-sale?id=' + id,
+                method: 'GET',
+            });
+            if(currentSale.data.data != null || currentSale.data.data != undefined){
+                this.setState({ currentSale: currentSale.data.data.Name });
+            }
+        }
+        this.setState({ dataSale: resSale.data.data });
     }
 
     // async handlePageChange(pageNumber) {
@@ -342,7 +367,7 @@ class Users extends Component {
     // setUserCommunityAdmin(address, communityId, admin = true) {
     // }
     render() {
-        const { data, key, viewingUser, communities, dataCompany } = this.state;
+        const { data, key, viewingUser, communities, dataCompany, currentCompany, dataSale, currentSale, action } = this.state;
         if (!this.state.isLoading) {
             return (
                 <div className="animated fadeIn">
@@ -437,7 +462,7 @@ class Users extends Component {
                                 label="Password"
                                 value={this.state.Password}
                                 type={"password"}
-                                readOnly={true}
+                                readOnly={action == 'new' ? false : true}
                                 onChange={e => this.onChange("Password", e.target.value)}
                             // rows="5"
                             />
@@ -480,12 +505,18 @@ class Users extends Component {
                             <div>
                                 <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
                                 <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
-                                    <option value={this.state.Company_Id}>{this.state.Company_Id == '' ? ` - - - - - - - - - - ` : this.state.currentCompany}</option>
+                                    <option value={this.state.Company_Id}>-----</option>
                                     {
                                         dataCompany.map((item, i) => {
-                                            return (
-                                                <option value={item._id}>{item.Name}</option>  
-                                            );
+                                            if(item.Name == currentCompany){
+                                                return (
+                                                    <option selected value={item._id}>{item.Name}</option>  
+                                                );
+                                            } else {
+                                                return (
+                                                    <option value={item._id}>{item.Name}</option>  
+                                                );
+                                            }
                                         })
                                     }
                                 </select>
@@ -501,7 +532,20 @@ class Users extends Component {
                             <div>
                                 <label style={styles.flexLabel} htmlFor="tag">Sale:    </label>
                                 <select style={styles.flexOption} name="Sale_Id" onChange={e => this.onChange("Sale_Id", e.target.value)}>
-                                    <option value={this.state.Sale_Id}>{this.state.Sale_Id == '' ? ` - - - - - - - - - - ` : this.state.Sale_Id}</option>
+                                    <option value={this.state.Sale_Id}>-----</option>
+                                    {
+                                        dataSale.map((item, i) => {
+                                            if(item.Name == currentSale){
+                                                return (
+                                                    <option selected value={item._id}>{item.Name}</option>  
+                                                );
+                                            } else {
+                                                return (
+                                                    <option value={item._id}>{item.Name}</option>  
+                                                );
+                                            }
+                                        })
+                                    }
                                 </select>
                             </div>
                         </ModalBody>
@@ -561,12 +605,12 @@ const styles = {
         overflowY: "auto"
     },
     wh12: {
-        width: "10%",
+        width: "9%",
         float: "left",
         height: "80px"
     },
     wh15: {
-        width: "20%",
+        width: "14%",
         float: "left",
         height: "80px"
     },

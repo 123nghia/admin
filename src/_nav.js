@@ -22,7 +22,7 @@ export default {
 
     },
     {
-      name: "PakageSale",
+      name: "Pakage Sale",
       url: "/package_sale",
       icon: "icon-eyeglass",
     },
