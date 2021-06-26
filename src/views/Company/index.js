@@ -45,11 +45,23 @@ class Company extends Component {
             Code: '',
             Status: '',
             modalDelete: false,
-            delete: null
+            delete: null,
+            arrPagination: [],
+            indexPage: 0
         };
     }
     async componentDidMount() {
         this.getData()
+    }
+
+    pagination(dataApi) {
+        var i, j, temparray, chunk = 5;
+        var arrTotal = [];
+        for (i = 0, j = dataApi.length; i < j; i += chunk) {
+            temparray = dataApi.slice(i, i + chunk);
+            arrTotal.push(temparray);
+        }
+        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
     }
 
     getData = async () => {
@@ -59,8 +71,8 @@ class Company extends Component {
             url: '/api/list-company',
             method: 'GET',
         });
-
-        this.setState({ data: res.data.data, dataApi: res.data.data });
+        this.pagination(res.data.data);
+        this.setState({ dataApi: res.data.data });
 
         let active = 0
 
@@ -74,6 +86,7 @@ class Company extends Component {
     }
 
     searchKey(key) {
+        const { indexPage } = this.state;
         this.setState({ key: key })
 
         if (key != '') {
@@ -101,7 +114,7 @@ class Company extends Component {
                 }
             })
 
-            this.setState({ data: this.state.dataApi, totalActive: active })
+            this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
         }
     }
 
@@ -157,7 +170,7 @@ class Company extends Component {
 
         if (res.data.is_success == true) {
             this.getData();
-            this.toggleModal("new");
+            this.setState({ modalCom: !this.state.modalCom })
         } else {
             alert(res.data.message);
             this.setState({ isLoading: false });
@@ -214,7 +227,7 @@ class Company extends Component {
 
         if (res.data.is_success == true) {
             this.getData();
-            this.toggleModal("new");
+            this.setState({ modalCom: !this.state.modalCom })
         } else {
             alert(res.data.message);
             this.setState({ isLoading: false });
@@ -300,7 +313,7 @@ class Company extends Component {
     setUserCommunityAdmin(address, communityId, admin = true) {
     }
     render() {
-        const { data, key, viewingUser, communities, action } = this.state;
+        const { data, key, viewingUser, communities, action, arrPagination, indexPage } = this.state;
         if (!this.state.isLoading) {
             return (
                 <div className="animated fadeIn">
@@ -310,7 +323,7 @@ class Company extends Component {
                             <p style={styles.danger}>{this.state.deleted}</p>
                             <Card>
                                 <CardHeader>
-                                    <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data.length}, Active: {this.state.totalActive})
+                                    <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data.length}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
                                     <div style={styles.tags}>
                                         <div>
                                             <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
@@ -322,12 +335,12 @@ class Company extends Component {
                                     <Table responsive>
                                         <thead>
                                             <tr>
-                                                <th style={styles.wh12}>No.</th>
+                                                <th style={styles.wa10}>No.</th>
                                                 <th style={styles.wh12}>Name</th>
                                                 <th style={styles.wh12}>Email</th>
-                                                <th style={styles.wh15}>Phone</th>
+                                                <th style={styles.wh12}>Phone</th>
                                                 <th style={styles.wh12}>Fax</th>
-                                                <th style={styles.wh12}>Address</th>
+                                                <th style={styles.wh15}>Address</th>
                                                 <th style={styles.wh12}>Website</th>
                                                 <th style={styles.wh12}>Code</th>
                                                 <th style={styles.wh12}>Status</th>
@@ -339,12 +352,12 @@ class Company extends Component {
                                                 data.map((item, i) => {
                                                     return (
                                                         <tr key={i} style={styles.row}>
-                                                            <td style={styles.wh12}>{i + 1}</td>
+                                                            <td style={styles.wa10}>{i + 1}</td>
                                                             <td style={styles.wh12}>{item.Name}</td>
                                                             <td style={styles.wh12}>{item.Email}</td>
-                                                            <td style={styles.wh15}>{item.Phone}</td>
+                                                            <td style={styles.wh12}>{item.Phone}</td>
                                                             <td style={styles.wh12}>{item.Fax}</td>
-                                                            <td style={styles.wh12}>{item.Address}</td>
+                                                            <td style={styles.wh15}>{item.Address}</td>
                                                             <td style={styles.wh12}>{item.Website}</td>
                                                             <td style={styles.wh12}>{item.Code}</td>
                                                             <td style={styles.wh12}>{item.Status}</td>
@@ -360,25 +373,34 @@ class Company extends Component {
                                     </Table>
                                 </CardBody>
                             </Card>
-                            {/* <Pagination
-                                activePage={this.state.activePage}
-                                itemsCountPerPage={this.state.limit}
-                                totalItemsCount={this.state.itemsCount}
-                                pageRangeDisplayed={10} // so luong item hien thi tren pagination number
-                                onChange={e => this.handlePageChange(e)}
-                                itemClass="page-item"
-                                linkClass="page-link"
-                            /> */}
+                            {
+                                arrPagination.length == 1 ? "" :
+                                    <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                                        <tr style={styles.row}>
+                                            {
+                                                arrPagination.map((item, i) => {
+                                                    return (
+                                                        <td>
+                                                            <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                                                        </td>
+                                                    );
+                                                })
+                                            }
+                                        </tr>
+                                    </div>
+                            }
+
                         </Col>
                     </Row>
 
-                    <Modal isOpen={this.state.modalCom} toggle={e => this.toggleModal('new')} className={this.props.className}>
-                        <ModalHeader toggle={e => this.toggleModal('new')}>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+                    <Modal isOpen={this.state.modalCom} className={this.props.className}>
+                        <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
                         <ModalBody>
                             <TextFieldGroup
                                 field="Email"
                                 label="Email"
                                 value={this.state.Email}
+                                placeholder={"Emal"}
                                 // error={errors.title}
                                 onChange={e => this.onChange("Email", e.target.value)}
                             // rows="5"
@@ -387,6 +409,7 @@ class Company extends Component {
                                 field="Name"
                                 label="Name"
                                 value={this.state.Name}
+                                placeholder={"Company Name"}
                                 // error={errors.title}
                                 onChange={e => this.onChange("Name", e.target.value)}
                             // rows="5"
@@ -396,6 +419,7 @@ class Company extends Component {
                                 field="Phone"
                                 label="Phone"
                                 value={this.state.Phone}
+                                placeholder={"Phone"}
                                 onChange={e => this.onChange("Phone", e.target.value)}
                             // rows="5"
                             />
@@ -404,6 +428,7 @@ class Company extends Component {
                                 field="Fax"
                                 label="Fax"
                                 value={this.state.Fax}
+                                placeholder={"Fax"}
                                 // error={errors.title}
                                 onChange={e => this.onChange("Fax", e.target.value)}
                             // rows="5"
@@ -413,6 +438,7 @@ class Company extends Component {
                                 field="Address"
                                 label="Address"
                                 value={this.state.Address}
+                                placeholder={"Address"}
                                 // error={errors.title}
                                 onChange={e => this.onChange("Address", e.target.value)}
                             // rows="5"
@@ -422,6 +448,7 @@ class Company extends Component {
                                 field="Website"
                                 label="Website"
                                 value={this.state.Website}
+                                placeholder={"Website"}
                                 // error={errors.title}
                                 onChange={e => this.onChange("Website", e.target.value)}
                             // rows="5"
@@ -431,6 +458,7 @@ class Company extends Component {
                                 field="Code"
                                 label="Code"
                                 value={this.state.Code}
+                                placeholder={"Code"}
                                 // error={errors.title}
                                 onChange={e => this.onChange("Code", e.target.value)}
                             // rows="5"
@@ -465,7 +493,7 @@ class Company extends Component {
                             <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
                         </ModalFooter>
                     </Modal>
-                </div>
+                </div >
             );
         }
         return (
@@ -481,6 +509,9 @@ class Company extends Component {
 }
 
 const styles = {
+    pagination: {
+        marginRight: '5px'
+    },
     flexLabel: {
         width: 100
     },
@@ -510,12 +541,17 @@ const styles = {
         height: "80px"
     },
     wh15: {
-        width: "15%",
+        width: "12%",
         float: "left",
         height: "80px"
     },
     w5: {
         width: "10%",
+        float: "left",
+        height: "80px"
+    },
+    wa10: {
+        width: "5%",
         float: "left",
         height: "80px"
     },

@@ -12,6 +12,8 @@ import {
 } from 'reactstrap';
 import 'moment-timezone';
 import TextArea from "../Common/TextArea";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import axios from 'axios'
@@ -36,25 +38,13 @@ class Users extends Component {
             updated: '',
             dataApi: [],
             action: 'new',
-            Email: '',
-            Name: '',
-            Phone: '',
-            Gender: 'Nam',
-            Company_Id: '',
-            Role_Id: '',
-            UserName: '',
-            Password: '',
             Sale_Id: '',
-            Code: '',
+            End_Date: new Date(),
             Status: '',
             modalDelete: false,
             delete: null,
-            dataCompany: [],
-            currentCompany: '',
             dataSale: [],
             currentSale: '',
-            dataRole: [],
-            currentRole: '',
             arrPagination: [],
             indexPage: 0
         };
@@ -70,14 +60,19 @@ class Users extends Component {
             temparray = dataApi.slice(i, i + chunk);
             arrTotal.push(temparray);
         }
-        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+        if (arrTotal.length != 0) {
+            this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+        } else {
+            this.setState({ arrPagination: arrTotal, data: [] });
+        }
+
     }
 
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
             baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-user',
+            url: '/api/list-salelog',
             method: 'GET',
         });
         this.pagination(res.data.data);
@@ -95,56 +90,18 @@ class Users extends Component {
     }
 
     searchKey(key) {
-        const { indexPage } = this.state;
-        this.setState({ key: key })
 
-        if (key != '') {
-            let d = []
-            this.state.dataApi.map(val => {
-                if (val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) || val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
-                    d.push(val)
-                }
-            })
-            let active = 0
-
-            d.map(val => {
-                if (val.Status == "Actived") {
-                    active = active + 1
-                }
-            })
-
-            this.setState({ data: d, totalActive: active })
-        } else {
-            let active = 0
-
-            this.state.dataApi.map(val => {
-                if (val.Status == "Actived") {
-                    active = active + 1
-                }
-            })
-
-            this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
-        }
     }
 
     async toggleModal(key) {
-        await this.getCompanyData()
+        const { Sale_Id, End_Date } = this.state
         await this.getSaleData()
-        await this.getRoleData()
         if (key == 'new') {
             this.setState({
                 modalCom: !this.state.modalCom,
                 action: key,
-                Email: '',
-                Name: '',
-                Phone: '',
-                Gender: 'Nam',
-                Company_Id: '',
-                Role_Id: '',
-                UserName: '',
-                Password: '',
-                Sale_Id: '',
-                Code: ''
+                End_Date: End_Date,
+                Sale_Id: ''
             })
         }
     }
@@ -154,42 +111,24 @@ class Users extends Component {
     }
 
     async addUser() {
-        const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id, Company_Id, Sale_Id } = this.state
-
-        if (Email == null || Email == ''
-            || Name == null || Name == ''
-            || Phone == null || Phone == ''
-            || UserName == null || UserName == ''
-            || Code == null || Code == ''
-            || Password == null || Password == '') {
-            alert("Please fill in all the requirements");
-            return
-        }
+        const { Sale_Id, End_Date } = this.state
 
         const body = {
-            Email: Email,
-            Name: Name,
-            Phone: Phone,
-            Gender: Gender,
-            Company_Id: Company_Id,
-            Role_Id: Role_Id,
-            UserName: UserName,
-            Password: Password,
-            Sale_Id: Sale_Id,
-            Code: Code
+            End_Date: End_Date,
+            Sale_Id: Sale_Id
         }
 
         this.setState({ isLoading: true });
         const res = await axios({
             baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/add-user',
+            url: '/api/add-salelog',
             method: 'PUT',
             data: body
         });
 
         if (res.data.is_success == true) {
             this.getData();
-            this.setState({modalCom: !this.state.modalCom})
+            this.setState({ modalCom: !this.state.modalCom })
         } else {
             alert(res.data.message);
             this.setState({ isLoading: false });
@@ -197,53 +136,24 @@ class Users extends Component {
     }
 
     async openUpdate(item) {
-        await this.getCompanyData(item.Company_Id)
         await this.getSaleData(item.Sale_Id)
-        await this.getRoleData(item.Role_Id)
 
         this.setState({
             modalCom: !this.state.modalCom,
             action: "update",
-            Email: item.Email,
-            Name: item.Name,
-            Phone: item.Phone,
-            Gender: item.Gender,
-            Company_Id: item.Company_Id,
-            Role_Id: item.Role_Id,
-            UserName: item.UserName,
-            Password: item.Password,
             Sale_Id: item.Sale_Id,
-            Code: item.Code,
+            End_Date: item.End_Date,
             id: item['_id'],
             Status: item.Status
         })
     }
 
     async updateUser() {
-        const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id, 
-            Company_Id, Sale_Id, Status} = this.state
-
-        if (Email == null || Email == ''
-            || Name == null || Name == ''
-            || Phone == null || Phone == ''
-            || UserName == null || UserName == ''
-            || Code == null || Code == ''
-            || Password == null || Password == '') {
-            alert("Please fill in all the requirements");
-            return
-        }
+        const { End_Date, Sale_Id, Status } = this.state
 
         const body = {
-            Email: Email,
-            Name: Name,
-            Phone: Phone,
-            Gender: Gender,
-            Company_Id: Company_Id,
-            Role_Id: Role_Id,
-            UserName: UserName,
-            Password: Password,
+            End_Date: End_Date,
             Sale_Id: Sale_Id,
-            Code: Code,
             id: this.state.id,
             Status: Status
         }
@@ -251,14 +161,14 @@ class Users extends Component {
         this.setState({ isLoading: true });
         const res = await axios({
             baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-user',
+            url: '/api/update-salelog',
             method: 'POST',
             data: body
         });
 
         if (res.data.is_success == true) {
             this.getData();
-            this.setState({modalCom: !this.state.modalCom})
+            this.setState({ modalCom: !this.state.modalCom })
         } else {
             alert(res.data.message);
             this.setState({ isLoading: false });
@@ -276,7 +186,7 @@ class Users extends Component {
         this.setState({ isLoading: true });
         const res = await axios({
             baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-user',
+            url: '/api/delete-salelog',
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']
@@ -313,26 +223,6 @@ class Users extends Component {
         }).catch(console.log);
     }
 
-    async getCompanyData(id) {
-        const resCompany = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-company',
-            method: 'GET',
-        });
-
-        if(id != '' || id != undefined){
-            const currentC = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-company?id=' + id,
-                method: 'GET',
-            });
-            if(currentC.data.data != null || currentC.data.data != undefined){
-                this.setState({ currentCompany: currentC.data.data.Name });
-            }
-        }
-        this.setState({ dataCompany: resCompany.data.data });
-    }
-
     async getSaleData(id) {
         const resSale = await axios({
             baseURL: 'http://thanhvien.applamdep.com',
@@ -340,37 +230,17 @@ class Users extends Component {
             method: 'GET',
         });
 
-        if(id != '' || id != undefined){
+        if (id != '' || id != undefined) {
             const currentSale = await axios({
                 baseURL: 'http://thanhvien.applamdep.com',
                 url: '/api/list-sale?id=' + id,
                 method: 'GET',
             });
-            if(currentSale.data.data != null || currentSale.data.data != undefined){
+            if (currentSale.data.data != null || currentSale.data.data != undefined) {
                 this.setState({ currentSale: currentSale.data.data.Name });
             }
         }
         this.setState({ dataSale: resSale.data.data });
-    }
-
-    async getRoleData(id) {
-        const resRole = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-role',
-            method: 'GET',
-        });
-
-        if(id != '' || id != undefined){
-            const currentRole = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-role?id=' + id,
-                method: 'GET',
-            });
-            if(currentRole.data.data != null || currentRole.data.data != undefined){
-                this.setState({ currentRole: currentRole.data.data.Name });
-            }
-        }
-        this.setState({ dataRole: resRole.data.data });
     }
 
     inputChange(e) {
@@ -378,8 +248,7 @@ class Users extends Component {
     }
 
     render() {
-        const { data, key, viewingUser, communities, dataCompany, 
-            currentCompany, dataSale, currentSale, action, dataRole, currentRole, arrPagination, indexPage  } = this.state;
+        const { data, key, viewingUser, communities, dataSale, currentSale, action, arrPagination, indexPage, End_Date } = this.state;
         if (!this.state.isLoading) {
             return (
                 <div className="animated fadeIn">
@@ -402,13 +271,9 @@ class Users extends Component {
                                         <thead>
                                             <tr>
                                                 <th style={styles.wa10}>No.</th>
-                                                <th style={styles.wh12}>Username</th>
-                                                <th style={styles.wh12}>Name</th>
-                                                <th style={styles.wh15}>Email</th>
-                                                <th style={styles.wh12}>Phone</th>
-                                                <th style={styles.wh12}>Gender</th>
-                                                <th style={styles.wh12}>Status</th>
-                                                <th style={styles.wh12}>Code</th>
+                                                <th style={styles.wh25}>Sale ID</th>
+                                                <th style={styles.wh25}>End Date</th>
+                                                <th style={styles.wh25}>Status</th>
                                                 <th style={styles.w5}>Action</th>
                                             </tr>
                                         </thead>
@@ -418,13 +283,11 @@ class Users extends Component {
                                                     return (
                                                         <tr key={i} style={styles.row}>
                                                             <td style={styles.wa10}>{i + 1}</td>
-                                                            <td style={styles.wh12}>{item.UserName}</td>
-                                                            <td style={styles.wh12}>{item.Name}</td>
-                                                            <td style={styles.wh15}>{item.Email}</td>
-                                                            <td style={styles.wh12}>{item.Phone}</td>
-                                                            <td style={styles.wh12}>{item.Gender}</td>
-                                                            <td style={styles.wh12}>{item.Status}</td>
-                                                            <td style={styles.wh12}>{item.Code}</td>
+                                                            <td style={styles.wh25}>{item.Sale_Id}</td>
+                                                            <td style={styles.wh25}>
+                                                                {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
+                                                            </td>
+                                                            <td style={styles.wh25}>{item.Status}</td>
                                                             <td style={styles.w5}>
                                                                 <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
                                                                 <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
@@ -439,7 +302,7 @@ class Users extends Component {
                             </Card>
                             {
                                 arrPagination.length == 1 ? "" :
-                                    <div style={{ float: 'right', marginRight: '10px', padding: '10px'  }}>
+                                    <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
                                         <tr style={styles.row}>
                                             {
                                                 arrPagination.map((item, i) => {
@@ -459,114 +322,22 @@ class Users extends Component {
                     <Modal isOpen={this.state.modalCom} className={this.props.className}>
                         <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
                         <ModalBody>
-                            <TextFieldGroup
-                                field="Email"
-                                label="Email"
-                                value={this.state.Email}
-                                placeholder={"Email"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Email", e.target.value)}
-                            // rows="5"
-                            />
-                            <TextFieldGroup
-                                field="Name"
-                                label="Name"
-                                value={this.state.Name}
-                                placeholder={"Name"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Name", e.target.value)}
-                            // rows="5"
-                            />
-
-                            <TextFieldGroup
-                                field="Password"
-                                label="Password"
-                                value={this.state.Password}
-                                type={"password"}
-                                placeholder={"Password"}
-                                readOnly={action == 'new' ? false : true}
-                                onChange={e => this.onChange("Password", e.target.value)}
-                            // rows="5"
-                            />
-
-                            <TextFieldGroup
-                                field="Code"
-                                label="Code"
-                                placeholder={"Code"}
-                                value={this.state.Code}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Code", e.target.value)}
-                            // rows="5"
-                            />
-
-                            <TextFieldGroup
-                                field="UserName"
-                                label="UserName"
-                                placeholder={"Username"}
-                                value={this.state.UserName}
-                                // error={errors.title}
-                                onChange={e => this.onChange("UserName", e.target.value)}
-                            // rows="5"
-                            />
-
-                            <TextFieldGroup
-                                field="Phone"
-                                label="Phone"
-                                value={this.state.Phone}
-                                placeholder={"Phone"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Phone", e.target.value)}
-                            // rows="5"
-                            />
-
-                            <div>
-                                <label style={styles.flexLabel} htmlFor="tag">Gender:    </label>
-                                <select style={styles.flexOption} name="Gender" onChange={e => this.onChange("Gender", e.target.value)}>
-                                <option value={this.state.Gender}>{this.state.Gender == '' ? ` - - - - - - - - - - ` : this.state.Gender}</option>
-                                    <option value={'Nam'}>Nam</option>
-                                    <option value={'Nữ'}>Nữ</option>
-                                </select>
+                            <div style={styles.datePicker}>
+                                <label>End Date:  </label>
+                                <DatePicker selected={new Date(End_Date)} onChange={(date) => this.setState({ End_Date: date })} />
                             </div>
 
-                            <div>
-                                <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
-                                <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
-                                    <option value={this.state.Company_Id}>-----</option>
-                                    {
-                                        dataCompany.map((item, i) => {
-                                            if(item.Name == currentCompany){
-                                                return (
-                                                    <option selected value={item._id}>{item.Name}</option>  
-                                                );
-                                            } else {
-                                                return (
-                                                    <option value={item._id}>{item.Name}</option>  
-                                                );
-                                            }
-                                        })
-                                    }
-                                </select>
-                            </div>
-
-                            <div>
-                                <label style={styles.flexLabel} htmlFor="tag">Role:    </label>
-                                <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
-                                    <option value={this.state.Role_Id}>-----</option>
-                                    {
-                                        dataRole.map((item, i) => {
-                                            if(item.Name == currentRole){
-                                                return (
-                                                    <option selected value={item._id}>{item.Name}</option>  
-                                                );
-                                            } else {
-                                                return (
-                                                    <option value={item._id}>{item.Name}</option>  
-                                                );
-                                            }
-                                        })
-                                    }
-                                </select>
-                            </div>
+                            {
+                                action == 'new' ? "" : <div>
+                                    <label style={styles.flexLabel} htmlFor="tag">Status    </label>
+                                    <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
+                                        <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
+                                        <option value={'Actived'}>Actived</option>
+                                        <option value={'Locked'}>Locked</option>
+                                        <option value={'Deactived'}>Deactived</option>
+                                    </select>
+                                </div>
+                            }
 
                             <div>
                                 <label style={styles.flexLabel} htmlFor="tag">Sale:    </label>
@@ -574,13 +345,13 @@ class Users extends Component {
                                     <option value={this.state.Sale_Id}>-----</option>
                                     {
                                         dataSale.map((item, i) => {
-                                            if(item.Name == currentSale){
+                                            if (item.Name == currentSale) {
                                                 return (
-                                                    <option selected value={item._id}>{item.Name}</option>  
+                                                    <option selected value={item._id}>{item.Name}</option>
                                                 );
                                             } else {
                                                 return (
-                                                    <option value={item._id}>{item.Name}</option>  
+                                                    <option value={item._id}>{item.Name}</option>
                                                 );
                                             }
                                         })
@@ -620,6 +391,9 @@ class Users extends Component {
 }
 
 const styles = {
+    datePicker: {
+        marginBottom: 20
+    },
     wa10: {
         width: "5%",
         float: "left",
@@ -651,8 +425,8 @@ const styles = {
         height: "380px",
         overflowY: "auto"
     },
-    wh12: {
-        width: "10%",
+    wh25: {
+        width: "25%",
         float: "left",
         height: "80px"
     },

@@ -28,12 +28,12 @@ export default {
     },
     {
       name: "Package Sale Log",
-      url: "",
+      url: "/package_sale_log",
       icon: "icon-eyeglass",
     },
     {
       name: "Role",
-      url: "",
+      url: "/role",
       icon: "icon-user-following",
     },
     {

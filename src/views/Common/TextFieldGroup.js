@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-const TextFieldGroup = ({ field, value, label, error, type, onChange, checkUserExists, readOnly }) => {
+const TextFieldGroup = ({ field, value, label, error, type, onChange, checkUserExists, readOnly, placeholder }) => {
   return (
     <div className={classnames('form-group', { 'has-error': error })}>
       <label className="control-label">{label}</label>
@@ -12,6 +12,7 @@ const TextFieldGroup = ({ field, value, label, error, type, onChange, checkUserE
         value={value}
         type={type}
         name={field}
+        placeholder={placeholder}
         readOnly={readOnly}
         className="form-control"
       />
