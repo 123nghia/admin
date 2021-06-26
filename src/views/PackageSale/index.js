@@ -300,7 +300,8 @@ class PackageSale extends Component {
                             <p style={styles.danger}>{this.state.deleted}</p>
                             <Card>
                                 <CardHeader>
-                                    <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data.length}, Active: {this.state.totalActive})
+                                    <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data != undefined || this.state.data != null ? 
+                                        this.state.data.length : 0}, Active: {this.state.totalActive})
                                     <div style={styles.tags}>
                                         <div>
                                             <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
@@ -312,7 +313,7 @@ class PackageSale extends Component {
                                     <Table responsive>
                                         <thead>
                                             <tr>
-                                                <th style={styles.wh16}>No.</th>
+                                                <th style={styles.wa10}>No.</th>
                                                 <th style={styles.wh16}>Name</th>
                                                 <th style={styles.wh16}>Company ID</th>
                                                 <th style={styles.wh16}>End Date</th>
@@ -322,10 +323,11 @@ class PackageSale extends Component {
                                         </thead>
                                         <tbody>
                                             {
+                                                data != undefined ?
                                                 data.map((item, i) => {
                                                     return (
                                                         <tr key={i} style={styles.row}>
-                                                            <td style={styles.wh16}>{i + 1}</td>
+                                                            <td style={styles.wa10}>{i + 1}</td>
                                                             <td style={styles.wh16}>{item.Name}</td>
                                                             <td style={styles.wh16}>{item.Company_Id}</td>
                                                             <td style={styles.wh16}>
@@ -338,7 +340,7 @@ class PackageSale extends Component {
                                                             </td>
                                                         </tr>
                                                     );
-                                                })
+                                                }) : ""
                                             }
                                         </tbody>
                                     </Table>
@@ -462,6 +464,11 @@ const styles = {
         height: "380px",
         overflowY: "auto"
     },
+    wa10: {
+        width: "5%",
+        float: "left",
+        height: "80px"
+    },
     wh16: {
         width: "17%",
         float: "left",
@@ -473,7 +480,7 @@ const styles = {
         height: "80px"
     },
     w5: {
-        width: "10%",
+        width: "20%",
         float: "left",
         height: "80px"
     },

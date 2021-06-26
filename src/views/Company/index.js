@@ -323,7 +323,8 @@ class Company extends Component {
                             <p style={styles.danger}>{this.state.deleted}</p>
                             <Card>
                                 <CardHeader>
-                                    <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data.length}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                                    <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data != undefined || this.state.data != null ? 
+                                        this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
                                     <div style={styles.tags}>
                                         <div>
                                             <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
@@ -337,7 +338,7 @@ class Company extends Component {
                                             <tr>
                                                 <th style={styles.wa10}>No.</th>
                                                 <th style={styles.wh12}>Name</th>
-                                                <th style={styles.wh12}>Email</th>
+                                                <th style={styles.wh15}>Email</th>
                                                 <th style={styles.wh12}>Phone</th>
                                                 <th style={styles.wh12}>Fax</th>
                                                 <th style={styles.wh15}>Address</th>
@@ -349,12 +350,13 @@ class Company extends Component {
                                         </thead>
                                         <tbody>
                                             {
+                                                data != undefined ?
                                                 data.map((item, i) => {
                                                     return (
                                                         <tr key={i} style={styles.row}>
                                                             <td style={styles.wa10}>{i + 1}</td>
                                                             <td style={styles.wh12}>{item.Name}</td>
-                                                            <td style={styles.wh12}>{item.Email}</td>
+                                                            <td style={styles.wh15}>{item.Email}</td>
                                                             <td style={styles.wh12}>{item.Phone}</td>
                                                             <td style={styles.wh12}>{item.Fax}</td>
                                                             <td style={styles.wh15}>{item.Address}</td>
@@ -367,7 +369,7 @@ class Company extends Component {
                                                             </td>
                                                         </tr>
                                                     );
-                                                })
+                                                }) : ""
                                             }
                                         </tbody>
                                     </Table>
@@ -541,7 +543,7 @@ const styles = {
         height: "80px"
     },
     wh15: {
-        width: "12%",
+        width: "13%",
         float: "left",
         height: "80px"
     },

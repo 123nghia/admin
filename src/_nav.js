@@ -38,17 +38,17 @@ export default {
     },
     {
       name: "Key",
-      url: "",
+      url: "/key",
       icon: "icon-key",
     },
     {
       name: "Type Key",
-      url: "",
+      url: "/type_key",
       icon: "icon-key",
     },
     {
       name: "Key Order",
-      url: "",
+      url: "/key_order",
       icon: "icon-key",
     }
   ],

@@ -258,7 +258,8 @@ class Users extends Component {
                             <p style={styles.danger}>{this.state.deleted}</p>
                             <Card>
                                 <CardHeader>
-                                    <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data.length}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                                    <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data != undefined || this.state.data != null ? 
+                                        this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
                                     <div style={styles.tags}>
                                         <div>
                                             <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
@@ -279,6 +280,7 @@ class Users extends Component {
                                         </thead>
                                         <tbody>
                                             {
+                                                data != undefined ?
                                                 data.map((item, i) => {
                                                     return (
                                                         <tr key={i} style={styles.row}>
@@ -294,7 +296,7 @@ class Users extends Component {
                                                             </td>
                                                         </tr>
                                                     );
-                                                })
+                                                }) : ""
                                             }
                                         </tbody>
                                     </Table>
@@ -436,7 +438,7 @@ const styles = {
         height: "80px"
     },
     w5: {
-        width: "10%",
+        width: "15%",
         float: "left",
         height: "80px"
     },
