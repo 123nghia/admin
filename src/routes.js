@@ -45,6 +45,11 @@ const KeyOrder = Loadable({
   loading: Loading,
 });
 
+const DashBoard = Loadable({
+  loader: () => import("./views/DashBoard"),
+  loading: Loading,
+});
+
 const routes = [
   { path: "/user_admin", exact: true, name: "UserAdmin", component: UserAdmin },
   { path: "/company", exact: true, name: "Company", component: Company },
@@ -53,7 +58,8 @@ const routes = [
   { path: "/role", exact: true, name: "Role", component: Role },
   { path: "/key", exact: true, name: "Key", component: Key },
   { path: "/type_key", exact: true, name: "TypeKey", component: TypeKey },
-  { path: "/key_order", exact: true, name: "KeyOrder", component: KeyOrder }
+  { path: "/key_order", exact: true, name: "KeyOrder", component: KeyOrder },
+  { path: "/dashboard", exact: true, name: "Dash Board", component: DashBoard }
 ];
 
 export default routes;

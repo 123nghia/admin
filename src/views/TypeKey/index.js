@@ -14,6 +14,7 @@ import 'moment-timezone';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import TextArea from "../Common/TextArea";
+import Constants from "../../contants/contants";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import axios from 'axios'
@@ -57,14 +58,14 @@ class Users extends Component {
             temparray = dataApi.slice(i, i + chunk);
             arrTotal.push(temparray);
         }
-        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+        this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
     }
 
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-typekey',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_TYPEKEY,
             method: 'GET',
         });
 
@@ -143,8 +144,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com/',
-            url: '/api/add-typekey',
+            baseURL: Constants.BASE_URL,
+            url: Constants.ADD_TYPEKEY,
             method: 'PUT',
             data: body
         });
@@ -185,8 +186,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-typekey',
+            baseURL: Constants.BASE_URL,
+            url: Constants.UPDATE_TYPEKEY,
             method: 'POST',
             data: body
         });
@@ -210,8 +211,8 @@ class Users extends Component {
     async delete() {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-typekey',
+            baseURL: Constants.BASE_URL,
+            url: Constants.DELETE_TYPEKEY,
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']

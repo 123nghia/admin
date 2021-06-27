@@ -15,6 +15,7 @@ import TextArea from "../Common/TextArea";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import TextFieldGroup from "../Common/TextFieldGroup";
+import Constants from "../../contants/contants";
 import Pagination from "react-js-pagination";
 import axios from 'axios'
 let headers = new Headers();
@@ -61,7 +62,7 @@ class Users extends Component {
             arrTotal.push(temparray);
         }
         if (arrTotal.length != 0) {
-            this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+            this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
         } else {
             this.setState({ arrPagination: arrTotal, data: [] });
         }
@@ -71,8 +72,8 @@ class Users extends Component {
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-salelog',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_SALELOG,
             method: 'GET',
         });
         this.pagination(res.data.data);
@@ -120,8 +121,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/add-salelog',
+            baseURL: Constants.BASE_URL,
+            url: Constants.ADD_SALELOG,
             method: 'PUT',
             data: body
         });
@@ -160,8 +161,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-salelog',
+            baseURL: Constants.BASE_URL,
+            url: Constants.UPDATE_SALELOG,
             method: 'POST',
             data: body
         });
@@ -185,8 +186,8 @@ class Users extends Component {
     async delete() {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-salelog',
+            baseURL: Constants.BASE_URL,
+            url: Constants.DELETE_SALELOG,
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']
@@ -225,15 +226,15 @@ class Users extends Component {
 
     async getSaleData(id) {
         const resSale = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-sale',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_SALE,
             method: 'GET',
         });
 
         if (id != '' || id != undefined) {
             const currentSale = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-sale?id=' + id,
+                baseURL: Constants.BASE_URL,
+                url: Constants.LIST_SALE_WITH_ID + id,
                 method: 'GET',
             });
             if (currentSale.data.data != null || currentSale.data.data != undefined) {

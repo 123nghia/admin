@@ -14,6 +14,7 @@ import 'moment-timezone';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import TextArea from "../Common/TextArea";
+import Constants from "../../contants/contants";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import axios from 'axios'
@@ -66,14 +67,14 @@ class Users extends Component {
             temparray = dataApi.slice(i, i + chunk);
             arrTotal.push(temparray);
         }
-        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+        this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
     }
 
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-key',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_KEY,
             method: 'GET',
         });
 
@@ -164,8 +165,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com/',
-            url: '/api/add-key',
+            baseURL: Constants.BASE_URL,
+            url: Constants.ADD_KEY,
             method: 'PUT',
             data: body
         });
@@ -218,8 +219,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-key',
+            baseURL: Constants.BASE_URL,
+            url: Constants.UPDATE_KEY,
             method: 'POST',
             data: body
         });
@@ -243,8 +244,8 @@ class Users extends Component {
     async delete() {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-key',
+            baseURL: Constants.BASE_URL,
+            url: Constants.DELETE_KEY,
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']
@@ -283,15 +284,15 @@ class Users extends Component {
 
     async getCompanyData(id) {
         const resCompany = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-company',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_COMPANY,
             method: 'GET',
         });
 
         if (id != '' || id != undefined) {
             const currentC = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-company?id=' + id,
+                baseURL: Constants.BASE_URL,
+                url: Constants.LIST_COMPANY_WITH_ID + id,
                 method: 'GET',
             });
             if (currentC.data.data != null || currentC.data.data != undefined) {
@@ -303,15 +304,15 @@ class Users extends Component {
 
     async getTypeKeyData(id) {
         const resType = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-typekey',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_TYPEKEY,
             method: 'GET',
         });
 
         if (id != '' || id != undefined) {
             const currentTypeKey = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-typekey?id=' + id,
+                baseURL: Constants.BASE_URL,
+                url: Constants.LIST_TYPEKEY_WITH_ID + id,
                 method: 'GET',
             });
             if (currentTypeKey.data.data != null || currentTypeKey.data.data != undefined) {
@@ -353,8 +354,8 @@ class Users extends Component {
                                             <tr>
                                                 <th style={styles.wa10}>No.</th>
                                                 <th style={styles.wh12}>Name</th>
-                                                <th style={styles.wh12}>Company ID</th>
-                                                <th style={styles.wh12}>Type Key</th>
+                                                <th style={styles.wh15}>Company ID</th>
+                                                <th style={styles.wh15}>Type Key</th>
                                                 <th style={styles.wh12}>Start Date</th>
                                                 <th style={styles.wh12}>End Date</th>
                                                 <th style={styles.wh12}>Value</th>
@@ -370,8 +371,8 @@ class Users extends Component {
                                                         <tr key={i} style={styles.row}>
                                                             <td style={styles.wa10}>{i + 1}</td>
                                                             <td style={styles.wh12}>{item.Name}</td>
-                                                            <td style={styles.wh12}>{item.Company_Id}</td>
-                                                            <td style={styles.wh12}>{item.Type_Key}</td>
+                                                            <td style={styles.wh15}>{item.Company_Id}</td>
+                                                            <td style={styles.wh15}>{item.Type_Key}</td>
                                                             <td style={styles.wh12}>
                                                                 {(new Date(item.Start_Date)).toLocaleDateString() + ' ' + (new Date(item.Start_Date)).toLocaleTimeString()}
                                                             </td>
@@ -575,7 +576,7 @@ const styles = {
         height: "80px"
     },
     w5: {
-        width: "20%",
+        width: "10%",
         float: "left",
         height: "80px"
     },

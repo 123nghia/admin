@@ -12,6 +12,7 @@ import {
 } from 'reactstrap';
 import 'moment-timezone';
 import TextArea from "../Common/TextArea";
+import Constants from "../../contants/contants";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import axios from 'axios'
@@ -61,14 +62,14 @@ class Company extends Component {
             temparray = dataApi.slice(i, i + chunk);
             arrTotal.push(temparray);
         }
-        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+        this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
     }
 
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-company',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_COMPANY,
             method: 'GET',
         });
         this.pagination(res.data.data);
@@ -162,8 +163,8 @@ class Company extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/add-company',
+            baseURL: Constants.BASE_URL,
+            url: Constants.ADD_COMPANY,
             method: 'PUT',
             data: body
         });
@@ -219,8 +220,8 @@ class Company extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-company',
+            baseURL: Constants.BASE_URL,
+            url: Constants.UPDATE_COMPANY,
             method: 'POST',
             data: body
         });
@@ -244,8 +245,8 @@ class Company extends Component {
     async delete() {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-company',
+            baseURL: Constants.BASE_URL,
+            url: Constants.DELETE_COMPANY,
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']
@@ -538,7 +539,7 @@ const styles = {
         overflowY: "auto"
     },
     wh12: {
-        width: "9%",
+        width: "8%",
         float: "left",
         height: "80px"
     },
@@ -548,7 +549,7 @@ const styles = {
         height: "80px"
     },
     w5: {
-        width: "10%",
+        width: "12%",
         float: "left",
         height: "80px"
     },

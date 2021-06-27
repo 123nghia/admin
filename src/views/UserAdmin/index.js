@@ -12,6 +12,8 @@ import {
 } from 'reactstrap';
 import 'moment-timezone';
 import TextArea from "../Common/TextArea";
+import Constants from "../../contants/contants";
+import CallApi from "../../helpers/CallAPI";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import axios from 'axios'
@@ -70,14 +72,14 @@ class Users extends Component {
             temparray = dataApi.slice(i, i + chunk);
             arrTotal.push(temparray);
         }
-        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+        this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
     }
 
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-user',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_USER,
             method: 'GET',
         });
         this.pagination(res.data.data);
@@ -181,8 +183,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/add-user',
+            baseURL: Constants.BASE_URL,
+            url: Constants.ADD_USER,
             method: 'PUT',
             data: body
         });
@@ -250,8 +252,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-user',
+            baseURL: Constants.BASE_URL,
+            url: Constants.UPDATE_USER,
             method: 'POST',
             data: body
         });
@@ -275,8 +277,8 @@ class Users extends Component {
     async delete() {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-user',
+            baseURL: Constants.BASE_URL,
+            url: Constants.DELETE_USER,
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']
@@ -315,15 +317,15 @@ class Users extends Component {
 
     async getCompanyData(id) {
         const resCompany = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-company',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_COMPANY,
             method: 'GET',
         });
 
         if(id != '' || id != undefined){
             const currentC = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-company?id=' + id,
+                baseURL: Constants.BASE_URL,
+                url: Constants.LIST_COMPANY_WITH_ID + id,
                 method: 'GET',
             });
             if(currentC.data.data != null || currentC.data.data != undefined){
@@ -335,15 +337,15 @@ class Users extends Component {
 
     async getSaleData(id) {
         const resSale = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-sale',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_SALE,
             method: 'GET',
         });
 
         if(id != '' || id != undefined){
             const currentSale = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-sale?id=' + id,
+                baseURL: Constants.BASE_URL,
+                url: Constants.LIST_SALE_WITH_ID + id,
                 method: 'GET',
             });
             if(currentSale.data.data != null || currentSale.data.data != undefined){
@@ -355,15 +357,15 @@ class Users extends Component {
 
     async getRoleData(id) {
         const resRole = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-role',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_ROLE,
             method: 'GET',
         });
 
         if(id != '' || id != undefined){
             const currentRole = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-role?id=' + id,
+                baseURL: Constants.BASE_URL,
+                url: Constants.LIST_ROLE_WITH_ID + id,
                 method: 'GET',
             });
             if(currentRole.data.data != null || currentRole.data.data != undefined){

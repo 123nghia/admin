@@ -14,6 +14,7 @@ import 'moment-timezone';
 import TextArea from "../Common/TextArea";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
+import Constants from "../../contants/contants";
 import axios from 'axios'
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -39,22 +40,34 @@ class Users extends Component {
             Name: '',
             Status: '',
             modalDelete: false,
-            delete: null
+            delete: null,
+            arrPagination: [],
+            indexPage: 0
         };
     }
     async componentDidMount() {
         this.getData()
     }
 
+    pagination(dataApi) {
+        var i, j, temparray, chunk = 5;
+        var arrTotal = [];
+        for (i = 0, j = dataApi.length; i < j; i += chunk) {
+            temparray = dataApi.slice(i, i + chunk);
+            arrTotal.push(temparray);
+        }
+        this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
+    }
+
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-role',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_ROLE,
             method: 'GET',
         });
-
-        this.setState({ data: res.data.data, dataApi: res.data.data });
+        this.pagination(res.data.data);
+        this.setState({ dataApi: res.data.data });
 
         let active = 0
 
@@ -127,8 +140,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/add-role',
+            baseURL: Constants.BASE_URL,
+            url: Constants.ADD_ROLE,
             method: 'PUT',
             data: body
         });
@@ -168,8 +181,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-role',
+            baseURL: Constants.BASE_URL,
+            url: Constants.UPDATE_ROLE,
             method: 'POST',
             data: body
         });
@@ -193,8 +206,8 @@ class Users extends Component {
     async delete() {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-role',
+            baseURL: Constants.BASE_URL,
+            url: Constants.DELETE_ROLE,
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']
@@ -239,7 +252,8 @@ class Users extends Component {
     }
    
     render() {
-        const { data, key, viewingUser, communities, dataCompany, currentCompany, dataSale, currentSale, action } = this.state;
+        const { data, key, viewingUser, communities, dataCompany, 
+            currentCompany, dataSale, currentSale, action, arrPagination, indexPage } = this.state;
         if (!this.state.isLoading) {
             return (
                 <div className="animated fadeIn">
@@ -250,7 +264,7 @@ class Users extends Component {
                             <Card>
                                 <CardHeader>
                                     <i className="fa fa-align-justify"></i> USERS (Total: {this.state.data != undefined || this.state.data != null ? 
-                                        this.state.data.length : 0}, Active: {this.state.totalActive})
+                                        this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1}))
                                     <div style={styles.tags}>
                                         <div>
                                             <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
@@ -291,6 +305,22 @@ class Users extends Component {
                                     </Table>
                                 </CardBody>
                             </Card>
+                            {
+                                arrPagination.length == 1 ? "" :
+                                    <div style={{ float: 'right', marginRight: '10px', padding: '10px'  }}>
+                                        <tr style={styles.row}>
+                                            {
+                                                arrPagination.map((item, i) => {
+                                                    return (
+                                                        <td>
+                                                            <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                                                        </td>
+                                                    );
+                                                })
+                                            }
+                                        </tr>
+                                    </div>
+                            }
                         </Col>
                     </Row>
 
@@ -350,6 +380,9 @@ class Users extends Component {
 }
 
 const styles = {
+    pagination: {
+        marginRight: '5px'
+    },
     flexLabel: {
         width: 100
     },

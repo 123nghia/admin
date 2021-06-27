@@ -14,6 +14,7 @@ import 'moment-timezone';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import TextArea from "../Common/TextArea";
+import Constants from "../../contants/contants";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import axios from 'axios'
@@ -55,8 +56,8 @@ class PackageSale extends Component {
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-sale',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_SALE,
             method: 'GET',
         });
 
@@ -139,8 +140,8 @@ class PackageSale extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/add-sale',
+            baseURL: Constants.BASE_URL,
+            url: Constants.ADD_SALE,
             method: 'PUT',
             data: body
         });
@@ -186,8 +187,8 @@ class PackageSale extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-sale',
+            baseURL: Constants.BASE_URL,
+            url: Constants.UPDATE_SALE,
             method: 'POST',
             data: body
         });
@@ -211,8 +212,8 @@ class PackageSale extends Component {
     async delete() {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-sale',
+            baseURL: Constants.BASE_URL,
+            url: Constants.DELETE_SALE,
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']
@@ -271,15 +272,15 @@ class PackageSale extends Component {
     
     async getCompanyData(id) {
         const resCompany = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-company',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_COMPANY,
             method: 'GET',
         });
 
         if(id != '' || id != undefined){
             const currentC = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-company?id=' + id,
+                baseURL: Constants.BASE_URL,
+                url: Constants.LIST_COMPANY_WITH_ID + id,
                 method: 'GET',
             });
             if(currentC.data.data != null || currentC.data.data != undefined){

@@ -16,6 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import TextArea from "../Common/TextArea";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
+import Constants from "../../contants/contants";
 import axios from 'axios'
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -63,14 +64,14 @@ class Users extends Component {
             temparray = dataApi.slice(i, i + chunk);
             arrTotal.push(temparray);
         }
-        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+        this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
     }
 
     getData = async () => {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-keyorder',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_KEYORDER,
             method: 'GET',
         });
 
@@ -162,8 +163,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com/',
-            url: '/api/add-keyorder',
+            baseURL: Constants.BASE_URL,
+            url: Constants.ADD_KEYORDER,
             method: 'PUT',
             data: body
         });
@@ -216,8 +217,8 @@ class Users extends Component {
 
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/update-keyorder',
+            baseURL: Constants.BASE_URL,
+            url: Constants.UPDATE_KEYORDER,
             method: 'POST',
             data: body
         });
@@ -241,8 +242,8 @@ class Users extends Component {
     async delete() {
         this.setState({ isLoading: true });
         const res = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/delete-keyorder',
+            baseURL: Constants.BASE_URL,
+            url: Constants.DELETE_KEYORDER,
             method: 'DELETE',
             data: {
                 "id": this.state.delete['_id']
@@ -281,15 +282,15 @@ class Users extends Component {
 
     async getCompanyData(id) {
         const resCompany = await axios({
-            baseURL: 'http://thanhvien.applamdep.com',
-            url: '/api/list-company',
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_COMPANY,
             method: 'GET',
         });
 
         if (id != '' || id != undefined) {
             const currentC = await axios({
-                baseURL: 'http://thanhvien.applamdep.com',
-                url: '/api/list-company?id=' + id,
+                baseURL: Constants.BASE_URL,
+                url: Constants.LIST_COMPANY_WITH_ID + id,
                 method: 'GET',
             });
             if (currentC.data.data != null || currentC.data.data != undefined) {
@@ -331,7 +332,7 @@ class Users extends Component {
                                             <tr>
                                                 <th style={styles.wa10}>No.</th>
                                                 <th style={styles.wh12}>UserName</th>
-                                                <th style={styles.wh12}>Company ID</th>
+                                                <th style={styles.wh15}>Company ID</th>
                                                 <th style={styles.wh15}>Email</th>
                                                 <th style={styles.wh15}>Address</th>
                                                 <th style={styles.wh12}>Phone</th>
@@ -347,7 +348,7 @@ class Users extends Component {
                                                             <tr key={i} style={styles.row}>
                                                                 <td style={styles.wa10}>{i + 1}</td>
                                                                 <td style={styles.wh12}>{item.UserName}</td>
-                                                                <td style={styles.wh12}>{item.Company_Id}</td>
+                                                                <td style={styles.wh15}>{item.Company_Id}</td>
                                                                 <td style={styles.wh15}>{item.Email}</td>
                                                                 <td style={styles.wh15}>{item.Address}</td>
                                                                 <td style={styles.wh12}>{item.Phone}</td>
@@ -537,7 +538,7 @@ const styles = {
         height: "80px"
     },
     w5: {
-        width: "15%",
+        width: "12%",
         float: "left",
         height: "80px"
     },
