@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
+const Dashboard = React.lazy(() => import('./views/DashBoard/Dashboard'));
 const TableUser = React.lazy(() => import('./views/base/tables/TableUser'));
 const TableCompany = React.lazy(() => import('./views/base/tables/Company'));
 const TableKey = React.lazy(() => import('./views/base/tables/Key'));
