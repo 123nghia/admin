@@ -14,7 +14,7 @@ import 'moment-timezone';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/common/TextFieldGroup";
+import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 let headers = new Headers();
 const auth = localStorage.getItem('auth');

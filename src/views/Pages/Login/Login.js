@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, InputGroup, Row } from 'reactstrap';
 import validateInput from '../../../shared/validations/login';
-import TextFieldGroup from '../../common/TextFieldGroup';
+import TextFieldGroup from '../../Common/TextFieldGroup';
 
 class Login extends Component {
   constructor(props) {
