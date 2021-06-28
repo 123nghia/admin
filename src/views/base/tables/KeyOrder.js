@@ -530,7 +530,7 @@ const styles = {
         height: "80px"
     },
     wh15: {
-        width: "15%",
+        width: "16%",
         float: "left",
         height: "80px"
     },

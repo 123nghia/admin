@@ -20,6 +20,7 @@ const routes = [
   { path: '/pakage_sale', name: 'Sale', component: TablePakageSale },
   { path: '/pakage_sale_log', name: 'SaleLog', component: TablePakageSaleLog },
   { path: '/type_key', name: 'TypeKey', component: TableTypeKey },
+  { path: '/role', name: 'Role', component: TableRole },
 ];
 
 export default routes;
