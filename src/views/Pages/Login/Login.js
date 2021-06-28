@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, InputGroup, Row } from 'reactstrap';
 import validateInput from '../../../shared/validations/login';
-import TextFieldGroup from '../../Common/TextFieldGroup';
+import TextFieldGroup from '../../common/TextFieldGroup';
 
 class Login extends Component {
   constructor(props) {
@@ -27,28 +27,6 @@ class Login extends Component {
     e.preventDefault();
     if(this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      
-      // todo verify admin later
-      // let fetchData = {
-      //     method: 'POST',
-      //     body: JSON.stringify({username:this.state.identifier, password: this.state.password}),
-      //     headers: { 'Content-Type': 'application/json' }
-      // };
-      // fetch(global.BASE_URL + '/admin/login',
-      //   fetchData
-      // ).then(res => res.json())
-      // .then(json => {
-      //     if(json.statusCode === 400){
-      //         this.setState({isLoading: false, errors: {common: 'Username or password is incorrect'}});
-      //     }
-      //     else  {
-      //       localStorage.setItem('auth', json.token);
-      //       localStorage.setItem('user', JSON.stringify(json.user || ''));
-      //       this.props.history.push('/other-settings')
-      //     }
-      // });
-
-      // this.props.history.push('/news')
       if (this.state.identifier === 'admin' && this.state.password ==='admin') {
         localStorage.setItem('user', JSON.stringify({ username: this.state.identifier, password: this.state.password }));
         localStorage.setItem('auth', 'abv');
@@ -64,7 +42,7 @@ class Login extends Component {
   render() {
     const {errors, identifier, password, isLoading} = this.state;
     return (
-      <div className="app flex-row align-items-center">
+      <div className="app flex-row align-items-center mt-5">
         <Container>
           <Row className="justify-content-center">
             <Col md="4">
