@@ -19,6 +19,16 @@ import CIcon from '@coreui/icons-react'
 import navigation from './_nav'
 
 const TheSidebar = () => {
+  const auth = localStorage.getItem('role');
+
+  for(let i = 0; i < navigation.length; i++){
+    var arr = navigation[i].role;
+    if(arr.includes(auth)){
+      navigation[i].hidden = false;
+    } else {
+      navigation[i].hidden = true;
+    }
+  }
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)
 
