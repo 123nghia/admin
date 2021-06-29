@@ -97,6 +97,7 @@ class Users extends Component {
         url: Constants.LIST_USER,
         method: 'POST'
       });
+
     } else if (role == 'SHOPMANAGER') {
       var res = await axios({
         baseURL: Constants.BASE_URL,
@@ -104,6 +105,7 @@ class Users extends Component {
         method: 'POST',
         data: bodyUser
       });
+
     } else if (role == 'SALES') {
       var res = await axios({
         baseURL: Constants.BASE_URL,
