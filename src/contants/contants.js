@@ -3,12 +3,12 @@ export default {
   //"BASE_URL" : "http://localhost:3000",
 
   "LIST_USER" : "/api/list-user",
+  "LIST_CUSTOMER" : "/api/list-customer",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
   "UPDATE_USER" : "/api/update-user",
   "DELETE_USER" : "/api/delete-user",
   "LOGIN_ADMIN" : "/api/login_admin",
-
   "LIST_TYPEKEY" : "/api/list-typekey",
   "LIST_TYPEKEY_WITH_ID" : "/api/list-typekey?id=",
   "ADD_TYPEKEY" : "/api/add-typekey",

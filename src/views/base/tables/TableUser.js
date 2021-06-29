@@ -93,21 +93,21 @@ class Users extends Component {
     }
     if (role == 'ADMIN') {
       var res = await axios({
-        baseURL: "http://localhost:3000",
-        url: '/api/list-user',
+        baseURL: Constants.BASE_URL,
+        url: Constants.LIST_USER,
         method: 'POST'
       });
     } else if (role == 'SHOPMANAGER') {
       var res = await axios({
-        baseURL: "http://localhost:3000",
-        url: '/api/list-user',
+        baseURL: Constants.BASE_URL,
+        url: Constants.LIST_USER,
         method: 'POST',
         data: bodyUser
       });
     } else if (role == 'SALES') {
       var res = await axios({
-        baseURL: "http://localhost:3000",
-        url: '/api/list-customer',
+        baseURL: Constants.BASE_URL,
+        url: Constants.LIST_CUSTOMER,
         method: 'POST',
         data: bodyCustomer
       })
