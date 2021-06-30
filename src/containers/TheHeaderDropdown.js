@@ -5,7 +5,8 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CImg
+  CImg,
+  CLabel
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
@@ -13,11 +14,13 @@ const TheHeaderDropdown = () => {
   return (
     <CDropdown
       inNav
-      className="c-header-nav-items mx-2"
+      className="c-header-nav-items mx-5"
       direction="down"
     >
-      <CDropdownToggle className="c-header-nav-link" caret={false}>
+      <CDropdownToggle className="c-header-nav-link"  caret={false}>
         <div className="c-avatar">
+
+          <div className="mr-2" style={{ fontSize: 20, color: 'red' }}><strong>{JSON.parse(localStorage.getItem('user')).username}</strong></div>
           <CImg
             src={'avatars/6.jpg'}
             className="c-avatar-img"
