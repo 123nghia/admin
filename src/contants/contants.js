@@ -9,6 +9,9 @@ export default {
   "UPDATE_USER" : "/api/update-user",
   "DELETE_USER" : "/api/delete-user",
   "LOGIN_ADMIN" : "/api/login_admin",
+  "GET_SHOP" : "/api/get-shop",
+  "GET_SALE" : "/api/get-sale",
+
   "LIST_TYPEKEY" : "/api/list-typekey",
   "LIST_TYPEKEY_WITH_ID" : "/api/list-typekey?id=",
   "ADD_TYPEKEY" : "/api/add-typekey",
