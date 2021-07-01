@@ -10,6 +10,10 @@ import {
   ModalHeader, ModalBody, ModalFooter, Modal,
   Alert
 } from 'reactstrap';
+import { connect } from 'react-redux';
+import {
+  onTest
+} from '../../../redux/data/actions'
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
@@ -19,6 +23,7 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
+
 class Users extends Component {
   constructor(props) {
     super(props);
@@ -567,7 +572,7 @@ class Users extends Component {
                             <th style={styles.wh12}>Gender</th>
                             <th style={styles.wh12}>Company Id</th>
                             <th style={styles.wh12}>Sale Id</th>
-                            <th style={styles.wh12}>Date</th>
+                            <th style={styles.wh12}>Code</th>
                             <th style={styles.w5}>Action</th>
                           </tr>
                         </thead>
@@ -588,7 +593,7 @@ class Users extends Component {
                                     <td style={styles.w5}>
                                       <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
                                       <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
-                                      <Button outline color="primary" size="sm" onClick={async (e) => { await this.tableUserSale(item._id) }}>Detail</Button>
+                                      <Button outline color="primary" size="sm" onClick={async (e) => { await this.tableUserSale(item._id); console.log(item._id) }}>Detail</Button>
                                     </td>
                                   </tr>
                                 );
@@ -929,4 +934,12 @@ const styles = {
   }
 }
 
-export default Users;
+const mapStateToProps = state => {
+  return {
+      test: state.getData_AllAPI
+  }
+}
+
+
+export default connect(mapStateToProps, {onTest})(Users);
+

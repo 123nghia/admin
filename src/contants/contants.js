@@ -1,9 +1,7 @@
 export default {
   "BASE_URL" : "http://thanhvien.applamdep.com",
   //"BASE_URL" : "http://localhost:3000",
-
   "LIST_USER" : "/api/list-user",
-  "LIST_CUSTOMER" : "/api/list-customer",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
   "UPDATE_USER" : "/api/update-user",
@@ -11,6 +9,10 @@ export default {
   "LOGIN_ADMIN" : "/api/login_admin",
   "GET_SHOP" : "/api/get-shop",
   "GET_SALE" : "/api/get-sale",
+  "GET_COEFFICIENT" : "/api/calculator-coefficient-user",
+
+  "LIST_CUSTOMER" : "/api/list-customer",
+  "LIST_CUSTOMER_BY_MONTH" : "/api/get-user-sale-by-month",
 
   "LIST_TYPEKEY" : "/api/list-typekey",
   "LIST_TYPEKEY_WITH_ID" : "/api/list-typekey?id=",
