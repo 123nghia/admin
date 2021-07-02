@@ -10,6 +10,10 @@ export default {
   "GET_SHOP" : "/api/get-shop",
   "GET_SALE" : "/api/get-sale",
   "GET_COEFFICIENT" : "/api/calculator-coefficient-user",
+  "GET_COEFFICIENT_PER_SALE" : "/api/calculator-coefficient-user-per-sale",
+  "GET_USER_SALE_BY_MONTH" : "/api/get-user-of-sale-by-month",
+  "CALCULATOR_ALL_USER_OF_COMPANY" : "/api/calculator-all-user-company",
+  "CALCULATOR_ALL_USER_OF_SALE" : "/api/calculator-all-user-of-sale",
 
   "LIST_CUSTOMER" : "/api/list-customer",
   "LIST_CUSTOMER_BY_MONTH" : "/api/get-user-sale-by-month",

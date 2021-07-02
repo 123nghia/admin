@@ -38,7 +38,7 @@ const TheSidebar = () => {
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
-      <NavLink style={{ fontSize: 20 }} href="/" className="navbar-brand"><img src={logoMainnet} width="40" height="auto" alt="HB Analytics Logo" className="navbar-brand-full"/> Beas</NavLink>
+      <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{textDecoration:'underline'}}><img src={logoMainnet} width="40" height="auto" alt="HB Analytics Logo" className="navbar-brand-full"/> Beas</NavLink>
         <CIcon
           className="c-sidebar-brand-minimized"
           name="sygnet"

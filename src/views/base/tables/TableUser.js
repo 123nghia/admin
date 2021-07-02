@@ -10,15 +10,25 @@ import {
   ModalHeader, ModalBody, ModalFooter, Modal,
   Alert
 } from 'reactstrap';
+
+import {
+  CLabel,
+  CSelect,
+  CContainer,
+  CRow,
+  CCol
+} from '@coreui/react'
+
 import { connect } from 'react-redux';
 import {
-  onTest
+  onSaveID
 } from '../../../redux/data/actions'
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import LazyLoad from 'react-lazyload';
+import ReactLoading from 'react-loading';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -42,6 +52,7 @@ class Users extends Component {
       dataApi: [],
       action: 'new',
       Email: '',
+      Address: '',
       Name: '',
       Phone: '',
       Gender: 'Nam',
@@ -62,13 +73,30 @@ class Users extends Component {
       currentRole: '',
       arrPagination: [],
       indexPage: 0,
+      arrPagination_All: [],
+      indexPage_All: 0,
       role: localStorage.getItem('role'),
       company_id: localStorage.getItem('user'),
-      see_detail: true
+      see_detail: true,
+      month: 0,
+      arrTemp: [],
+      arrMonth: [
+        "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
+      ],
+      arrMonthWithDefault: [
+        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
+      ],
+      isLoading: true,
+      hidden: false,
+      nameSale: '',
+      dataAll: [],
+      hidden_all: false,
+      isSale: false,
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     };
   }
   async componentDidMount() {
-    this.getData()
+    this.getData();
   }
 
   pagination(dataApi) {
@@ -78,7 +106,35 @@ class Users extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
+    if (arrTotal.length == 0) {
+      this.setState({
+        hidden: false
+      })
+    } else {
+      this.setState({
+        hidden: true
+      })
+    }
     this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
+  }
+
+  pagination_all(dataApi) {
+    var i, j, temparray, chunk = 5;
+    let arrTotal = [];
+    for (i = 0, j = dataApi.length; i < j; i += chunk) {
+      temparray = dataApi.slice(i, i + chunk);
+      arrTotal.push(temparray);
+    }
+    if (arrTotal.length == 0) {
+      this.setState({
+        hidden_all: false
+      })
+    } else {
+      this.setState({
+        hidden_all: true
+      })
+    }
+    this.setState({ arrPagination_All: arrTotal, dataAll: arrTotal[this.state.indexPage_All] });
   }
 
   getUserSale = async (sale_id) => {
@@ -114,11 +170,150 @@ class Users extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
+  countType(arr, phone) {
+    const count = arr.filter(data => data.Phone == phone);
+    return count.length;
+  }
+
+  getUserSale_ByMonth = async (sale_id, month) => {
+    const { company_id } = this.state;
+    this.setState({ isLoading: true });
+    var id = JSON.parse(company_id);
+
+    var bodyCustomer = {
+      "month": month,
+      "company_id": id.company_id,
+      "sale_id": sale_id
+    }
+
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.GET_USER_SALE_BY_MONTH,
+      method: 'POST',
+      data: bodyCustomer
+    })
+
+    this.setState({ dataApi: res.data.data, arrTemp: res.data.data });
+    let arrCount_User_Per = [];
+    var getArrTemp = this.state.arrTemp;
+    for (let i = 0; i < getArrTemp.length; i++) {
+      //check if exits in arr
+      if (!arrCount_User_Per.some(item => getArrTemp[i].Phone == item.Phone)) {
+        getArrTemp[i].count = this.countType(getArrTemp, getArrTemp[i].Phone);
+        const resCal = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.GET_COEFFICIENT_PER_SALE,
+          method: 'POST',
+          data: {
+            "month": month,
+            "company_id": id.company_id,
+            "phone": getArrTemp[i].Phone,
+            "sale_id": this.props.data.idSale
+          }
+        });
+        getArrTemp[i].coefficient = resCal.data.data.calculator;
+        arrCount_User_Per.push(getArrTemp[i])
+      }
+    }
+
+    this.pagination(arrCount_User_Per);
+    this.setState({ isLoading: false });
+  }
+
+  getUserSale_ByMonth_forSale = async (sale_id, month) => {
+    const { company_id } = this.state;
+    this.setState({ isLoading: true });
+    var id = JSON.parse(company_id);
+
+    var bodyCustomer = {
+      "month": month,
+      "company_id": id.company_id,
+      "sale_id": sale_id
+    }
+
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.GET_USER_SALE_BY_MONTH,
+      method: 'POST',
+      data: bodyCustomer
+    })
+
+    this.setState({ dataApi: res.data.data, arrTemp: res.data.data });
+    let arrCount_User_Per = [];
+    var getArrTemp = this.state.arrTemp;
+    for (let i = 0; i < getArrTemp.length; i++) {
+      //check if exits in arr
+      if (!arrCount_User_Per.some(item => getArrTemp[i].Phone == item.Phone)) {
+        getArrTemp[i].count = this.countType(getArrTemp, getArrTemp[i].Phone);
+        const resCal = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.GET_COEFFICIENT_PER_SALE,
+          method: 'POST',
+          data: {
+            "month": month,
+            "company_id": id.company_id,
+            "phone": getArrTemp[i].Phone,
+            "sale_id": sale_id
+          }
+        });
+        getArrTemp[i].coefficient = resCal.data.data.calculator;
+        arrCount_User_Per.push(getArrTemp[i])
+      }
+    }
+    this.pagination(arrCount_User_Per);
+    this.setState({ isLoading: false });
+  }
+
+  getAllData = async () => {
+    const { company_id } = this.state;
+    this.setState({ isLoading: true });
+    var id = JSON.parse(company_id);
+
+    var resAll = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_CUSTOMER,
+      method: 'POST',
+      data: {
+        condition: {
+          Company_Id: id.company_id,
+          Sale_Id: this.props.data.idSale
+        }
+      }
+    })
+
+    this.setState({ dataApi: resAll.data.data });
+
+    let arrCount_All_User = [];
+
+    for (let i = 0; i < resAll.data.data.length; i++) {
+      //check if exits in arr
+      if (!arrCount_All_User.some(item => resAll.data.data[i].Phone == item.Phone)) {
+        resAll.data.data[i].count = this.countType(resAll.data.data, resAll.data.data[i].Phone);
+
+        var resCal_all = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.CALCULATOR_ALL_USER_OF_SALE,
+          method: 'POST',
+          data: {
+            "company_id": id.company_id,
+            "phone": resAll.data.data[i].Phone,
+            "sale_id": this.props.data.idSale
+          }
+        });
+        resAll.data.data[i].coefficient = resCal_all.data.data.calculator;
+        arrCount_All_User.push(resAll.data.data[i])
+      }
+    }
+
+    this.pagination_all(arrCount_All_User);
+    this.setState({ isLoading: false });
+  }
+
   getData = async () => {
     const { company_id, role } = this.state;
     this.setState({ isLoading: true });
     var id = JSON.parse(company_id);
-    console.log(localStorage.getItem('role'))
+
     var bodyUser = {
       company_id: id.company_id
     }
@@ -153,6 +348,7 @@ class Users extends Component {
       })
     }
 
+    console.log(res.data.data)
     this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
 
@@ -167,9 +363,17 @@ class Users extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  async tableUserSale(id_sale) {
-    await this.getUserSale(id_sale);
-    this.setState({ see_detail: false })
+  async tableUserSale(id_sale, nameSale) {
+    await this.getUserSale_ByMonth(id_sale, "01");
+    this.props.onSaveID(id_sale)
+    this.getAllData();
+    this.setState({ see_detail: false, nameSale: nameSale })
+  }
+
+  async tableUserSale_forSale(month) {
+    const { company_id } = this.state;
+    var id = JSON.parse(company_id);
+    await this.getUserSale_ByMonth_forSale(id.sale_id, month);
   }
 
   searchKey(key) {
@@ -232,7 +436,7 @@ class Users extends Component {
   }
 
   async addUser() {
-    const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id, Company_Id, Sale_Id } = this.state
+    const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id, Company_Id, Sale_Id, Address } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -246,6 +450,7 @@ class Users extends Component {
 
     const body = {
       Email: Email,
+      Address: Address,
       Name: Name,
       Phone: Phone,
       Gender: Gender,
@@ -283,6 +488,7 @@ class Users extends Component {
       modalCom: !this.state.modalCom,
       action: "update",
       Email: item.Email,
+      Address: item.Address,
       Name: item.Name,
       Phone: item.Phone,
       Gender: item.Gender,
@@ -299,7 +505,7 @@ class Users extends Component {
 
   async updateUser() {
     const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id,
-      Company_Id, Sale_Id, Status } = this.state
+      Company_Id, Sale_Id, Status, Address } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -312,6 +518,7 @@ class Users extends Component {
 
     const body = {
       Email: Email,
+      Address: Address,
       Name: Name,
       Phone: Phone,
       Gender: Gender,
@@ -435,6 +642,7 @@ class Users extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_ROLE,
       method: 'GET',
+      headers: this.state.token
     });
 
     if (id != '' || id != undefined) {
@@ -442,6 +650,7 @@ class Users extends Component {
         baseURL: Constants.BASE_URL,
         url: Constants.LIST_ROLE_WITH_ID + id,
         method: 'GET',
+        headers: this.state.token
       });
       if (currentRole.data.data != null || currentRole.data.data != undefined) {
         this.setState({ currentRole: currentRole.data.data.Name });
@@ -454,23 +663,42 @@ class Users extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  async getDataUser_ForSale(month) {
+    const { role } = this.state;
+    if (role == 'SALES') {
+      this.setState({ isSale: true, month: month })
+      await this.tableUserSale_forSale(month);
+    }
+  }
+
+  async check(e) {
+    if (e.target.value == "00") {
+      this.getData();
+      this.setState({ isSale: false })
+    } else {
+      await this.getDataUser_ForSale(e.target.value);
+      this.setState({ month: e.target.value })
+    }
+  }
+
   render() {
-    const { data, key, viewingUser, communities, dataCompany, role,
-      currentCompany, dataSale, currentSale, action, dataRole, currentRole, arrPagination, indexPage } = this.state;
+    const { data, key, dataCompany, role, hidden, dataAll, arrPagination_All, indexPage_All,
+      currentCompany, action, dataRole, currentRole, arrPagination, indexPage,
+      hidden_all, isSale } = this.state;
+
     if (!this.state.isLoading) {
       return (
 
-        <div className="animated fadeIn">
-          <Row>
-            <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
-              <Card hidden={!this.state.see_detail}>
-                <CardHeader>
-                  <i className="fa fa-align-justify"></i> {
-                    role == 'ADMIN' ? "SHOP LIST" : role == 'SHOPMANAGER' ? 'SALE LIST' : 'USER LIST'
-                  } (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+        <div>
+
+          <Card hidden={!this.state.see_detail}>
+            <CardHeader>
+              <i className="fa fa-align-justify"></i> {
+                role == 'ADMIN' ? "SHOP LIST" : role == 'SHOPMANAGER' ? 'SALE LIST' : 'USER LIST'
+              } ( Page: {this.state.indexPage + 1} )
+
+              <CRow>
+                <CCol lg="5" sm="5" md="5" xs="12">
                   <div style={styles.tags}>
                     {
                       role == 'SALES' ? "" :
@@ -480,145 +708,290 @@ class Users extends Component {
                         </div>
                     }
                   </div>
-                </CardHeader>
-                <CardBody>
-                  {
-                    role == 'SALES' ? <Table responsive>
-                      <thead>
-                        <tr>
-                          <th style={styles.wa10}>No.</th>
-                          <th style={styles.wh12}>Name</th>
-                          <th style={styles.wh12}>Email</th>
-                          <th style={styles.wh15}>Phone</th>
-                          <th style={styles.wh12}>Gender</th>
-                          <th style={styles.wh12}>Company Id</th>
-                          <th style={styles.wh12}>Sale Id</th>
-                          <th style={styles.wh12}>Date</th>
-                          <th style={styles.w5}>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          data != undefined ?
-                            data.map((item, i) => {
-                              return (
-                                <tr key={i} style={styles.row}>
-                                  <td style={styles.wa10}>{i + 1}</td>
-                                  <td style={styles.wh12}>{item.Name}</td>
-                                  <td style={styles.wh12}>{item.Email}</td>
-                                  <td style={styles.wh15}>{item.Phone}</td>
-                                  <td style={styles.wh12}>{item.Gender}</td>
-                                  <td style={styles.wh12}>{item.Company_Id}</td>
-                                  <td style={styles.wh12}>{item.Sale_Id}</td>
-                                  <td style={styles.wh12}>
-                                    {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                  </td>
-                                  <td style={styles.w5}>
-                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
-                                    <Button outline color="primary" size="sm" onClick={(e) => { }}>Detail</Button>
-                                  </td>
-                                </tr>
-                              );
-                            }) : ""
-                        }
-                      </tbody>
-                    </Table> : role == 'ADMIN' ?
-                      <Table responsive>
-                        <thead>
-                          <tr>
-                            <th style={styles.wa10}>No.</th>
-                            <th style={styles.wh12}>Username</th>
-                            <th style={styles.wh12}>Name</th>
-                            <th style={styles.wh15}>Email</th>
-                            <th style={styles.wh12}>Phone</th>
-                            <th style={styles.wh12}>Gender</th>
-                            <th style={styles.wh12}>Status</th>
-                            <th style={styles.wh12}>Code</th>
-                            <th style={styles.w5}>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            data != undefined ?
-                              data.map((item, i) => {
-                                return (
-                                  <tr key={i} style={styles.row}>
-                                    <td style={styles.wa10}>{i + 1}</td>
-                                    <td style={styles.wh12}>{item.UserName}</td>
-                                    <td style={styles.wh12}>{item.Name}</td>
-                                    <td style={styles.wh15}>{item.Email}</td>
-                                    <td style={styles.wh12}>{item.Phone}</td>
-                                    <td style={styles.wh12}>{item.Gender}</td>
-                                    <td style={styles.wh12}>{item.Status}</td>
-                                    <td style={styles.wh12}>{item.Code}</td>
-                                    <td style={styles.w5}>
-                                      <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                      <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
-                                    </td>
-                                  </tr>
-                                );
-                              }) : ""
-                          }
-                        </tbody>
-                      </Table> :
-                      <Table responsive>
-                        <thead>
-                          <tr>
-                            <th style={styles.wa10}>No.</th>
-                            <th style={styles.wh12}>Name</th>
-                            <th style={styles.wh12}>Email</th>
-                            <th style={styles.wh15}>Phone</th>
-                            <th style={styles.wh12}>Gender</th>
-                            <th style={styles.wh12}>Company Id</th>
-                            <th style={styles.wh12}>Sale Id</th>
-                            <th style={styles.wh12}>Code</th>
-                            <th style={styles.w5}>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            data != undefined ?
-                              data.map((item, i) => {
-                                return (
-                                  <tr key={i} style={styles.row}>
-                                    <td style={styles.wa10}>{i + 1}</td>
-                                    <td style={styles.wh12}>{item.UserName}</td>
-                                    <td style={styles.wh12}>{item.Name}</td>
-                                    <td style={styles.wh15}>{item.Email}</td>
-                                    <td style={styles.wh12}>{item.Phone}</td>
-                                    <td style={styles.wh12}>{item.Gender}</td>
-                                    <td style={styles.wh12}>{item.Status}</td>
-                                    <td style={styles.wh12}>{item.Code}</td>
-                                    <td style={styles.w5}>
-                                      <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                      <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
-                                      <Button outline color="primary" size="sm" onClick={async (e) => { await this.tableUserSale(item._id); console.log(item._id) }}>Detail</Button>
-                                    </td>
-                                  </tr>
-                                );
-                              }) : ""
-                          }
-                        </tbody>
-                      </Table>
-                  }
-                </CardBody>
-              </Card>
-              <Card hidden={this.state.see_detail}>
-                <CardHeader>
-                  <i className="fa fa-align-justify"></i> USER (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
-                  <div style={styles.tags}>
+                </CCol>
+                <CCol lg="7" sm="7" md="7" xs="12">
+                  <div>Choose Month</div>
+                  <CSelect style={{ width: 300, float: 'left', backgroundColor: '#ffff99' }} onChange={async e => { await this.check(e) }} custom size="sm" name="selectSm" id="SelectLm">
                     {
-                      role == 'SALES' ? "" :
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
-                          <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
-                              await this.getData() ;this.setState({ see_detail: true })
-                          }}>Close</Button>
-                        </div>
+                      this.state.arrMonthWithDefault.map((item, i) => {
+                        if (item == "00") {
+                          return (
+                            <option selected value={item}>Get All</option>
+                          );
+                        } else {
+                          if (item == this.state.month) {
+                            return (
+                              <option selected value={item}>{item}</option>
+                            );
+                          } else {
+                            return (
+                              <option value={item}>{item}</option>
+                            );
+                          }
+                        }
+                      })
                     }
-                  </div>
+                  </CSelect>
+                </CCol>
+              </CRow>
+            </CardHeader>
+            <CardBody>
+              {
+                role == 'SALES' ? <Table responsive>
+                  <thead>
+                    <tr>
+                      <th style={styles.wa10}>No.</th>
+                      <th style={styles.wh12}>Name</th>
+                      <th style={styles.wh12}>Email</th>
+                      <th style={styles.wh15}>Phone</th>
+                      {
+                        isSale ? <th style={styles.sale_times}>Times</th> : ""
+                      }
+                      {
+                        isSale ? <th style={styles.sale_times}>Coeff</th> : ""
+                      }
+                      <th style={styles.wh12}>Gender</th>
+                      <th style={styles.wh12}>Date</th>
+                      <th style={styles.wh12}></th>
+                      <th style={isSale ? styles.w5_10 : styles.w5}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <td colSpan="10" hidden={hidden} className="text-center">No users in this month</td>
+                    {
+                      data != undefined ?
+                        data.map((item, i) => {
+                          return (
+                            <tr key={i} style={styles.row}>
+
+                              <td style={styles.wa10}>{i + 1}</td>
+                              <td style={styles.wh12}>{item.Name}</td>
+                              <td style={styles.wh12}>{item.Email}</td>
+                              <td style={styles.wh15}>{item.Phone}</td>
+                              {
+                                isSale ? <th style={styles.sale_times}>{item.count}</th> : ""
+                              }
+                              {
+                                isSale ? <th style={styles.sale_times}>{item.coefficient}</th> : ""
+                              }
+                              <td style={styles.wh12}>{item.Gender}</td>
+                              <td style={styles.wh12}>
+                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                              </td>
+                              <td style={styles.wh12}></td>
+                              <td style={isSale ? styles.w5_10 : styles.w5}>
+                                {/* <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
+                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '} */}
+                                <Button outline color="primary" size="sm" onClick={async (e) => { }}>Detail</Button>
+                              </td>
+                            </tr>
+                          );
+                        }) : ""
+                    }
+                  </tbody>
+                </Table> : role == 'ADMIN' ?
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th style={styles.wa10}>No.</th>
+                        <th style={styles.wh12}>Username</th>
+                        <th style={styles.wh12}>Name</th>
+                        <th style={styles.wh15}>Email</th>
+                        <th style={styles.wh12}>Phone</th>
+                        <th style={styles.wh12}>Gender</th>
+                        <th style={styles.wh12}>Status</th>
+                        <th style={styles.wh12}>Code</th>
+                        <th style={styles.w5}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        data != undefined ?
+                          data.map((item, i) => {
+                            return (
+                              <tr key={i} style={styles.row}>
+                                <td style={styles.wa10}>{i + 1}</td>
+                                <td style={styles.wh12}>{item.UserName}</td>
+                                <td style={styles.wh12}>{item.Name}</td>
+                                <td style={styles.wh15}>{item.Email}</td>
+                                <td style={styles.wh12}>{item.Phone}</td>
+                                <td style={styles.wh12}>{item.Gender}</td>
+                                <td style={styles.wh12}>{item.Status}</td>
+                                <td style={styles.wh12}>{item.Code}</td>
+                                <td style={styles.w5}>
+                                  <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
+                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
+                                </td>
+                              </tr>
+                            );
+                          }) : ""
+                      }
+                    </tbody>
+                  </Table> :
+
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th style={styles.wa10}>No.</th>
+                        <th style={styles.wh12}>Name</th>
+                        <th style={styles.wh12}>Email</th>
+                        <th style={styles.wh15}>Phone</th>
+                        <th style={styles.wh12}>Gender</th>
+                        <th style={styles.wh12}>Company Id</th>
+                        <th style={styles.wh12}>Code</th>
+                        <th style={styles.w5}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        data != undefined ?
+                          data.map((item, i) => {
+                            return (
+                              <tr key={i} style={styles.row}>
+                                <td style={styles.wa10}>{i + 1}</td>
+                                <td style={styles.wh12}>{item.UserName}</td>
+                                <td style={styles.wh12}>{item.Name}</td>
+                                <td style={styles.wh15}>{item.Email}</td>
+                                <td style={styles.wh12}>{item.Phone}</td>
+                                <td style={styles.wh12}>{item.Gender}</td>
+                                <td style={styles.wh12}>{item.Code}</td>
+                                <td style={styles.w5}>
+                                  <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
+                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
+                                  <Button outline color="primary" size="sm" onClick={async (e) => { await this.tableUserSale(item._id, item.Name); this.setState({ month: "01" }) }}>Detail</Button>
+                                </td>
+                              </tr>
+                            );
+                          }) : ""
+                      }
+                    </tbody>
+                  </Table>
+
+              }
+            </CardBody>
+          </Card>
+          {
+            arrPagination.length == 1 ? "" :
+              <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                <tr style={styles.row}>
+                  {
+                    arrPagination.map((item, i) => {
+                      return (
+                        <td>
+                          <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                        </td>
+                      );
+                    })
+                  }
+                </tr>
+              </div>
+          }
+          <div hidden={this.state.see_detail}>
+
+            <Card style={this.state.data == undefined ? { width: '97.8%' } : { width: '100%' }}>
+              <CardHeader>
+                <CContainer>
+                  <CRow>
+                    <CCol lg="5" sm="12" md="12" xs="12">
+                      <i className="justify-content-center"></i> LIST USER SALE OF SALE ON MONTH {this.state.nameSale} ( Page: {this.state.indexPage + 1})
+                    </CCol>
+                    <CCol lg="4" sm="12" md="12" xs="12">
+                      <CSelect className="mt-3" style={{ width: 200, float: 'right', backgroundColor: '#ffff99' }} onChange={async e => { await this.getUserSale_ByMonth(this.props.data.idSale, e.target.value); this.setState({ month: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+                        {
+                          this.state.arrMonth.map((item, i) => {
+                            if (item == this.state.month) {
+                              return (
+                                <option selected value={item}>{item}</option>
+                              );
+                            } else {
+                              return (
+                                <option value={item}>{item}</option>
+                              );
+                            }
+
+                          })
+                        }
+                      </CSelect>
+                    </CCol>
+                    <CCol lg="3" sm="12" md="12" xs="12">
+                      <div style={styles.tags}>
+                        {
+                          role == 'SALES' ? "" :
+                            <div>
+                              <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
+                              <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
+                                await this.getData(); this.setState({ see_detail: true });
+                              }}>Close</Button>
+                            </div>
+                        }
+                      </div>
+                    </CCol>
+                  </CRow>
+                </CContainer>
+              </CardHeader>
+              <CardBody>
+                {
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th style={styles.wa10}>No.</th>
+                        <th style={styles.ws12}>Name</th>
+                        <th style={styles.ws12}>Email</th>
+                        <th style={styles.ws12}>Phone</th>
+                        <th style={styles.ws12}>Gender</th>
+                        <th style={styles.ws12}>Time Invite</th>
+                        <th style={styles.ws12}>Coefficient</th>
+                        <th style={styles.ws12}>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td colSpan="8" hidden={hidden} className="text-center">No users in this month</td>
+                      {
+                        data != undefined ?
+                          data.map((item, i) => {
+                            return (
+                              <tr key={i} style={styles.row}>
+                                <td style={styles.wa10}>{i + 1}</td>
+                                <td style={styles.ws12}>{item.Name}</td>
+                                <td style={styles.ws12}>{item.Email}</td>
+                                <td style={styles.ws12}>{item.Phone}</td>
+                                <td style={styles.ws12}>{item.Gender}</td>
+                                <td style={styles.ws12}>{item.count}</td>
+                                <td style={styles.ws12}>{item.coefficient}</td>
+                                <td style={styles.ws12}>
+                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                </td>
+                              </tr>
+                            );
+                          }) : ""
+                      }
+                    </tbody>
+                  </Table>
+                }
+              </CardBody>
+            </Card>
+            {
+              arrPagination.length == 1 ? "" :
+                <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                  <tr style={styles.row}>
+                    {
+                      arrPagination.map((item, i) => {
+                        return (
+                          <td>
+                            <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                          </td>
+                        );
+                      })
+                    }
+                  </tr>
+                </div>
+            }
+
+            {/* dawdaefakwdhlkawjdkl */}
+            <center>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify"></i>LIST USER SALE OF SALER ( Sale Name: {this.state.nameSale}, Page: {this.state.indexPage + 1})
                 </CardHeader>
                 <CardBody>
                   {
@@ -630,15 +1003,16 @@ class Users extends Component {
                           <th style={styles.ws12}>Email</th>
                           <th style={styles.wh15}>Phone</th>
                           <th style={styles.ws12}>Gender</th>
-                          <th style={styles.ws12}>Company Id</th>
-                          <th style={styles.ws12}>Sale Id</th>
+                          <th style={styles.ws12}>Time Invite</th>
+                          <th style={styles.ws12}>Coefficient</th>
                           <th style={styles.ws12}>Date</th>
                         </tr>
                       </thead>
                       <tbody>
+                        <td colSpan="8" hidden={hidden_all} className="text-center">No users in this month</td>
                         {
-                          data != undefined ?
-                            data.map((item, i) => {
+                          dataAll != undefined ?
+                            dataAll.map((item, i) => {
                               return (
                                 <tr key={i} style={styles.row}>
                                   <td style={styles.wa10}>{i + 1}</td>
@@ -646,8 +1020,8 @@ class Users extends Component {
                                   <td style={styles.ws12}>{item.Email}</td>
                                   <td style={styles.wh15}>{item.Phone}</td>
                                   <td style={styles.ws12}>{item.Gender}</td>
-                                  <td style={styles.ws12}>{item.Company_Id}</td>
-                                  <td style={styles.ws12}>{item.Sale_Id}</td>
+                                  <td style={styles.ws12}>{item.count}</td>
+                                  <td style={styles.ws12}>{item.coefficient}</td>
                                   <td style={styles.ws12}>
                                     {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                   </td>
@@ -661,14 +1035,14 @@ class Users extends Component {
                 </CardBody>
               </Card>
               {
-                arrPagination.length == 1 ? "" :
+                arrPagination_All.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
                     <tr style={styles.row}>
                       {
-                        arrPagination.map((item, i) => {
+                        arrPagination_All.map((item, i) => {
                           return (
                             <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                              <Button style={styles.pagination} color={i == indexPage_All ? 'primary' : 'danger'} onClick={e => { this.setState({ dataAll: arrPagination_All[i], indexPage_All: i }) }}>{i + 1}</Button>
                             </td>
                           );
                         })
@@ -676,8 +1050,9 @@ class Users extends Component {
                     </tr>
                   </div>
               }
-            </Col>
-          </Row>
+            </center>
+          </div>
+
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
             <ModalBody>
@@ -686,8 +1061,17 @@ class Users extends Component {
                 label="Email"
                 value={this.state.Email}
                 placeholder={"Email"}
-                // error={errors.title}
+                type={'email'}
                 onChange={e => this.onChange("Email", e.target.value)}
+              // rows="5"
+              />
+              <TextFieldGroup
+                field="Address"
+                label="Address"
+                value={this.state.Address}
+                placeholder={"Email"}
+                type={'email'}
+                onChange={e => this.onChange("Address", e.target.value)}
               // rows="5"
               />
               <TextFieldGroup
@@ -830,12 +1214,8 @@ class Users extends Component {
       );
     }
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="d-flex justify-content-center">
+        <ReactLoading type={"balls"} color={"orange"} height={'5%'} width={'5%'} />
       </div>
     );
   }
@@ -845,7 +1225,13 @@ const styles = {
   wa10: {
     width: "5%",
     float: "left",
-    height: "80px"
+    height: "60px"
+  },
+  sale_times: {
+    width: "8%",
+    float: "left",
+    height: "60px",
+    textAlign: 'center'
   },
   pagination: {
     marginRight: '5px'
@@ -874,24 +1260,32 @@ const styles = {
     overflowY: "auto"
   },
   wh12: {
-    width: "10%",
+    width: "11%",
     float: "left",
-    height: "80px"
+    height: "60px",
+    textAlign: 'center'
   },
   ws12: {
     width: "13%",
     float: "left",
-    height: "80px"
+    height: "60px",
+    textAlign: 'center'
   },
   wh15: {
     width: "15%",
     float: "left",
-    height: "80px"
+    height: "60px",
+    textAlign: 'center'
   },
   w5: {
-    width: "20%",
+    width: "22%",
     float: "left",
-    height: "80px"
+    height: "60px"
+  },
+  w5_10: {
+    width: "5%",
+    float: "left",
+    height: "60px"
   },
   row: {
     float: "left",
@@ -907,9 +1301,10 @@ const styles = {
     marginLeft: '5px'
   },
   tags: {
-    float: "right",
+    float: "left",
     marginRight: "5px",
-    width: "250px"
+    width: "250px",
+    marginTop: '10px'
   },
   searchInput: {
     width: "190px",
@@ -936,10 +1331,10 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
-      test: state.getData_AllAPI
+    data: state.getData_AllAPI
   }
 }
 
 
-export default connect(mapStateToProps, {onTest})(Users);
+export default connect(mapStateToProps, { onSaveID })(Users);
 

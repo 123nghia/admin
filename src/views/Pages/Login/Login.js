@@ -47,6 +47,7 @@ class Login extends Component {
           password: this.state.password, company_id: res.data.data.data.Company_Id, sale_id: res.data.data.data._id }));
         localStorage.setItem('auth', 'abv');
         localStorage.setItem('role', token.role);
+        localStorage.setItem('token', res.data.data.token);
 
         this.props.history.push('/dashboard')
       } else {

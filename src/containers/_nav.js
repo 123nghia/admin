@@ -55,14 +55,14 @@ const _nav =  [
     name: 'Package Sale',
     to: '/pakage_sale',
     icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon"/>,
-    role: ['ADMIN']
+    role: ['ADMIN', 'SALES', 'SHOPMANAGER']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Package Sale Log',
     to: '/pakage_sale_log',
     icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon"/>,
-    role: ['ADMIN']
+    role: ['ADMIN', 'SALES', 'SHOPMANAGER']
   },
   {
     _tag: 'CSidebarNavItem',
