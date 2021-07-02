@@ -47,6 +47,7 @@ class ShopManager extends Component {
       dataApi: [],
       arrTemp: [],
       hidden: true,
+      hidden_all: true,
     };
   }
 
@@ -80,13 +81,50 @@ class ShopManager extends Component {
   }
 
   async getCustomer() {
+
+    const { company_id } = this.state;
+    var id = JSON.parse(company_id);
+
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_CUSTOMER,
-      method: 'POST'
+      method: 'POST',
+      data: {
+        "condition": {
+          "Company_Id": id.company_id
+        }
+      }
     });
-    this.pagination(res.data.data);
+
     this.setState({ dataApi: res.data.data });
+
+
+    //STATISTICAL
+    let arrCount_User_Company = [];
+    for (let i = 0; i < res.data.data.length; i++) {
+      //check if exits in arr
+      if (!arrCount_User_Company.some(item => res.data.data[i].Phone == item.Phone)) {
+        res.data.data[i].count = this.countType(res.data.data, res.data.data[i].Phone);
+        const resCal_Compay = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.CALCULATOR_ALL_USER_OF_COMPANY,
+          method: 'POST',
+          data: {
+            "company_id": id.company_id,
+            "phone": res.data.data[i].Phone
+          }
+        });
+        res.data.data[i].coefficient = resCal_Compay.data.data.calculator;
+        arrCount_User_Company.push(res.data.data[i])
+      }
+    }
+    if (arrCount_User_Company.length == 0) {
+      this.setState({ hidden: false })
+    } else {
+      this.setState({ hidden: true })
+    }
+    this.pagination(arrCount_User_Company);
+
   }
 
   async getCustomerByMonth(month) {
@@ -112,7 +150,6 @@ class ShopManager extends Component {
       } else {
         this.setState({ hidden: true })
       }
-      this.pagination(res.data.data);
       this.setState({ dataApi: res.data.data, arrTemp: res.data.data });
 
       //STATISTICAL
@@ -126,6 +163,7 @@ class ShopManager extends Component {
             url: Constants.GET_COEFFICIENT,
             method: 'POST',
             data: {
+              "month": month,
               "company_id": id.company_id,
               "phone": this.state.arrTemp[i].Phone
             }
@@ -140,7 +178,7 @@ class ShopManager extends Component {
   }
 
   render() {
-    const { dataUserSale, hidden, arrPagination, indexPage,
+    const { dataUserSale, hidden, arrPagination, indexPage, hidden_all,
       dataStatistical, arrPaginationStatistical, indexPageStatistical } = this.state;
     return (
       <CRow>
@@ -149,24 +187,10 @@ class ShopManager extends Component {
             <CCardHeader>
               <CFormGroup row>
                 <CCol md="3">
-                  <CLabel htmlFor="selectSm">LIST USER SALE ON MONTH</CLabel>
+                  <CLabel htmlFor="selectSm">ALL USER SALE OF COMPANY</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
-                  <CSelect onChange={async e => { await this.getCustomerByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
-                    <option value="0">Choose month</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">06</option>
-                    <option value="07">07</option>
-                    <option value="08">08</option>
-                    <option value="09">09</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                  </CSelect>
+                  {/*  */}
                 </CCol>
               </CFormGroup>
             </CCardHeader>
@@ -179,11 +203,13 @@ class ShopManager extends Component {
                     <th className="text-center">Email</th>
                     <th className="text-center">Phone</th>
                     <th className="text-center">Gender</th>
-                    <th className="text-center">Times Invite</th>
+                    <th className="text-center">Time Visits</th>
+                    <th className="text-center">Coefficient</th>
+                    <th className="text-center">Last Times Visit</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <td colSpan="6" hidden={hidden} className="text-center">No users in this month</td>
+                  <td colSpan="9" hidden={hidden_all} className="text-center">No users in this month</td>
                   {
                     dataUserSale != undefined ?
                       dataUserSale.map((item, i) => {
@@ -194,6 +220,8 @@ class ShopManager extends Component {
                             <td className="text-center">{item.Email}</td>
                             <td className="text-center">{item.Phone}</td>
                             <td className="text-center">{item.Gender}</td>
+                            <td className="text-center">{item.count}</td>
+                            <td className="text-center">{item.coefficient}</td>
                             <td className="text-center">
                               {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                             </td>
@@ -226,10 +254,26 @@ class ShopManager extends Component {
             <CCardHeader>
               <CFormGroup row>
                 <CCol md="3">
-                  <CLabel htmlFor="selectSm">STATISTICAL LIST USER SALE ON MONTH</CLabel>
+                  <CLabel htmlFor="selectSm">NEW USER SALE ON MONTH OF COMPANY</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
-                  {/*  */}
+                  <div style={{ float: "right", width: "250px" }}>
+                    <CSelect onChange={async e => { await this.getCustomerByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
+                      <option value="0">Choose month</option>
+                      <option value="01">01</option>
+                      <option value="02">02</option>
+                      <option value="03">03</option>
+                      <option value="04">04</option>
+                      <option value="05">05</option>
+                      <option value="06">06</option>
+                      <option value="07">07</option>
+                      <option value="08">08</option>
+                      <option value="09">09</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                    </CSelect>
+                  </div>
                 </CCol>
               </CFormGroup>
             </CCardHeader>
@@ -247,7 +291,7 @@ class ShopManager extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <td colSpan="6" hidden={hidden} className="text-center">No users in this month</td>
+                  <td colSpan="7" hidden={hidden} className="text-center">No users in this month</td>
                   {
                     dataStatistical != undefined ?
                       dataStatistical.map((item, i) => {

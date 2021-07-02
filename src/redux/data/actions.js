@@ -1,9 +1,10 @@
 import {
-  TEST
+  SAVE_ID_SALE
 } from '../actions.js'
 
-export function onTest() {
+export function onSaveID(id) {
   return {
-    type: TEST
+    type: SAVE_ID_SALE,
+    payload: { id }
   };
 }

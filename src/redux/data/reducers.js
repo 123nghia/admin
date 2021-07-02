@@ -1,5 +1,5 @@
 import {
-  TEST
+  SAVE_ID_SALE
 } from '../actions.js'
 
 const INIT_STATE = {
@@ -8,8 +8,9 @@ const INIT_STATE = {
 
 export function getData_AllAPI (state = INIT_STATE, action){
   switch (action.type) {
-      case TEST: {
-          return { ...state, ahihi: "123456789awd" }
+      case SAVE_ID_SALE: {
+          const { id } = action.payload;
+          return { ...state, idSale: id }
       }
       default: return { ...state }
   }
