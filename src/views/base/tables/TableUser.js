@@ -712,28 +712,33 @@ class Users extends Component {
                     </div>
                   </div>
                   <div class="col">
-                    <div>Choose Month</div>
-                    <CSelect style={{ width: '100%', backgroundColor: '#ffff99' }} onChange={async e => { await this.check(e) }} custom size="sm" name="selectSm" id="SelectLm">
-                      {
-                        this.state.arrMonthWithDefault.map((item, i) => {
-                          if (item == "00") {
-                            return (
-                              <option selected value={item}>Get All</option>
-                            );
-                          } else {
-                            if (item == this.state.month) {
-                              return (
-                                <option selected value={item}>{item}</option>
-                              );
-                            } else {
-                              return (
-                                <option value={item}>{item}</option>
-                              );
-                            }
+                    {
+                      role == 'SALES' ? <div>
+                        <div>Choose Month</div>
+                        <CSelect style={{ width: '100%', backgroundColor: '#ffff99' }} onChange={async e => { await this.check(e) }} custom size="sm" name="selectSm" id="SelectLm">
+                          {
+                            this.state.arrMonthWithDefault.map((item, i) => {
+                              if (item == "00") {
+                                return (
+                                  <option selected value={item}>Get All</option>
+                                );
+                              } else {
+                                if (item == this.state.month) {
+                                  return (
+                                    <option selected value={item}>{item}</option>
+                                  );
+                                } else {
+                                  return (
+                                    <option value={item}>{item}</option>
+                                  );
+                                }
+                              }
+                            })
                           }
-                        })
-                      }
-                    </CSelect>
+                        </CSelect>
+                      </div> : ""
+                    }
+
                   </div>
                 </div>
               </div>
@@ -840,7 +845,6 @@ class Users extends Component {
                         <th style={styles.wh15}>Email</th>
                         <th style={styles.wh12}>Phone</th>
                         <th style={styles.wh12}>Gender</th>
-                        <th style={styles.wh12}>Status</th>
                         <th style={styles.wh12}>Code</th>
                         <th style={styles.w5}>Action</th>
                       </tr>
@@ -857,7 +861,6 @@ class Users extends Component {
                                 <td style={styles.wh15}>{item.Email}</td>
                                 <td style={styles.wh12}>{item.Phone}</td>
                                 <td style={styles.wh12}>{item.Gender}</td>
-                                <td style={styles.wh12}>{item.Status}</td>
                                 <td style={styles.wh12}>{item.Code}</td>
                                 <td style={styles.w5}>
                                   <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
@@ -1329,7 +1332,7 @@ const styles = {
     marginLeft: '5px'
   },
   tags: {
-    float: "left",
+    float: "right",
     marginRight: "5px",
     width: "250px",
     marginTop: '10px'
