@@ -693,11 +693,52 @@ class Users extends Component {
 
           <Card hidden={!this.state.see_detail}>
             <CardHeader>
-              <i className="fa fa-align-justify"></i> {
-                role == 'ADMIN' ? "SHOP LIST" : role == 'SHOPMANAGER' ? 'SALE LIST' : 'USER LIST'
-              } ( Page: {this.state.indexPage + 1} )
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <i className="fa fa-align-justify"></i> {
+                      role == 'ADMIN' ? "SHOP LIST" : role == 'SHOPMANAGER' ? 'SALE LIST' : 'USER LIST'
+                    } ( Page: {this.state.indexPage + 1} )
+                  </div>
+                  <div class="col">
+                    <div style={styles.tags}>
+                      {
+                        role == 'SALES' ? "" :
+                          <div>
+                            <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
+                            <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Add</Button>
+                          </div>
+                      }
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div>Choose Month</div>
+                    <CSelect style={{ width: '100%', backgroundColor: '#ffff99' }} onChange={async e => { await this.check(e) }} custom size="sm" name="selectSm" id="SelectLm">
+                      {
+                        this.state.arrMonthWithDefault.map((item, i) => {
+                          if (item == "00") {
+                            return (
+                              <option selected value={item}>Get All</option>
+                            );
+                          } else {
+                            if (item == this.state.month) {
+                              return (
+                                <option selected value={item}>{item}</option>
+                              );
+                            } else {
+                              return (
+                                <option value={item}>{item}</option>
+                              );
+                            }
+                          }
+                        })
+                      }
+                    </CSelect>
+                  </div>
+                </div>
+              </div>
 
-              <CRow>
+              {/* <CRow>
                 <CCol lg="5" sm="5" md="5" xs="12">
                   <div style={styles.tags}>
                     {
@@ -733,7 +774,7 @@ class Users extends Component {
                     }
                   </CSelect>
                 </CCol>
-              </CRow>
+              </CRow> */}
             </CardHeader>
             <CardBody>
               {
@@ -890,13 +931,13 @@ class Users extends Component {
 
             <Card style={this.state.data == undefined ? { width: '97.8%' } : { width: '100%' }}>
               <CardHeader>
-                <CContainer>
-                  <CRow>
-                    <CCol lg="5" sm="12" md="12" xs="12">
+                <div class="container">
+                  <div class="row">
+                    <div class="col">
                       <i className="justify-content-center"></i> LIST USER SALE OF SALE ON MONTH {this.state.nameSale} ( Page: {this.state.indexPage + 1})
-                    </CCol>
-                    <CCol lg="4" sm="12" md="12" xs="12">
-                      <CSelect className="mt-3" style={{ width: 200, float: 'right', backgroundColor: '#ffff99' }} onChange={async e => { await this.getUserSale_ByMonth(this.props.data.idSale, e.target.value); this.setState({ month: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+                    </div>
+                    <div class="col">
+                      <CSelect className="mt-3" style={{ width: 300, float: 'right', backgroundColor: '#ffff99' }} onChange={async e => { await this.getUserSale_ByMonth(this.props.data.idSale, e.target.value); this.setState({ month: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
                         {
                           this.state.arrMonth.map((item, i) => {
                             if (item == this.state.month) {
@@ -912,22 +953,9 @@ class Users extends Component {
                           })
                         }
                       </CSelect>
-                    </CCol>
-                    <CCol lg="3" sm="12" md="12" xs="12">
-                      <div style={styles.tags}>
-                        {
-                          role == 'SALES' ? "" :
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
-                              <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
-                                await this.getData(); this.setState({ see_detail: true });
-                              }}>Close</Button>
-                            </div>
-                        }
-                      </div>
-                    </CCol>
-                  </CRow>
-                </CContainer>
+                    </div>
+                  </div>
+                </div>
               </CardHeader>
               <CardBody>
                 {
