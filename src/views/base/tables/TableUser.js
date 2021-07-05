@@ -16,8 +16,24 @@ import {
   CSelect,
   CContainer,
   CRow,
-  CCol
+  CCol,
+  CCardGroup,
+  CCard,
+  CCardHeader,
+  CCardBody,
+  CFormGroup,
+
 } from '@coreui/react'
+
+
+import {
+  CChartBar,
+  CChartLine,
+  CChartDoughnut,
+  CChartRadar,
+  CChartPie,
+  CChartPolarArea
+} from '@coreui/react-chartjs'
 
 import { connect } from 'react-redux';
 import {
@@ -92,7 +108,8 @@ class Users extends Component {
       dataAll: [],
       hidden_all: false,
       isSale: false,
-      token: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      arrAllUser: []
     };
   }
   async componentDidMount() {
@@ -348,7 +365,6 @@ class Users extends Component {
       })
     }
 
-    console.log(res.data.data)
     this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
 
@@ -364,10 +380,33 @@ class Users extends Component {
   }
 
   async tableUserSale(id_sale, nameSale) {
+
+    const { company_id, arrMonth } = this.state;
+    var id = JSON.parse(company_id);
+
     await this.getUserSale_ByMonth(id_sale, "01");
     this.props.onSaveID(id_sale)
     this.getAllData();
-    this.setState({ see_detail: false, nameSale: nameSale })
+    let arrTemp = [];
+
+    for (let i = 0; i < arrMonth.length; i++) {
+      const res = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.GET_USER_SALE_BY_MONTH,
+        method: 'POST',
+        data: {
+          "month": arrMonth[i],
+          "company_id": id.company_id,
+          "sale_id": this.props.data.idSale
+        }
+      })
+
+      arrTemp.push(res.data.data.length);
+    }
+
+    this.setState({ see_detail: false, nameSale: nameSale, arrAllUser: arrTemp })
+
+
   }
 
   async tableUserSale_forSale(month) {
@@ -783,134 +822,126 @@ class Users extends Component {
             </CardHeader>
             <CardBody>
               {
-                role == 'SALES' ? <Table responsive>
-                  <thead>
-                    <tr>
-                      <th style={styles.wa10}>No.</th>
-                      <th style={styles.wh12}>Name</th>
-                      <th style={styles.wh12}>Email</th>
-                      <th style={styles.wh15}>Phone</th>
+                role == 'SALES' ?
+                  <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                    <thead className="thead-light">
+                      <tr>
+                        <th className="text-center">Name</th>
+                        <th className="text-center">Email</th>
+                        <th className="text-center">Phone</th>
+                        {
+                          isSale ? <th className="text-center">Times</th> : ""
+                        }
+                        {
+                          isSale ? <th className="text-center">Coeff</th> : ""
+                        }
+                        <th className="text-center">Gender</th>
+                        <th className="text-center">Date</th>
+                        <th className="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td colSpan="10" hidden={hidden} className="text-center">No users in this month</td>
                       {
-                        isSale ? <th style={styles.sale_times}>Times</th> : ""
-                      }
-                      {
-                        isSale ? <th style={styles.sale_times}>Coeff</th> : ""
-                      }
-                      <th style={styles.wh12}>Gender</th>
-                      <th style={styles.wh12}>Date</th>
-                      <th style={styles.wh12}></th>
-                      <th style={isSale ? styles.w5_10 : styles.w5}>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <td colSpan="10" hidden={hidden} className="text-center">No users in this month</td>
-                    {
-                      data != undefined ?
-                        data.map((item, i) => {
-                          return (
-                            <tr key={i} style={styles.row}>
-
-                              <td style={styles.wa10}>{i + 1}</td>
-                              <td style={styles.wh12}>{item.Name}</td>
-                              <td style={styles.wh12}>{item.Email}</td>
-                              <td style={styles.wh15}>{item.Phone}</td>
-                              {
-                                isSale ? <th style={styles.sale_times}>{item.count}</th> : ""
-                              }
-                              {
-                                isSale ? <th style={styles.sale_times}>{item.coefficient}</th> : ""
-                              }
-                              <td style={styles.wh12}>{item.Gender}</td>
-                              <td style={styles.wh12}>
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                              </td>
-                              <td style={styles.wh12}></td>
-                              <td style={isSale ? styles.w5_10 : styles.w5}>
-                                {/* <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
+                        data != undefined ?
+                          data.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{item.Name}</td>
+                                <td className="text-center">{item.Email}</td>
+                                <td className="text-center">{item.Phone}</td>
+                                {
+                                  isSale ? <th className="text-center">{item.count}</th> : ""
+                                }
+                                {
+                                  isSale ? <th className="text-center">{item.coefficient}</th> : ""
+                                }
+                                <td className="text-center">{item.Gender}</td>
+                                <td className="text-center">
+                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  {/* <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
                                 <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '} */}
-                                <Button outline color="primary" size="sm" onClick={async (e) => { }}>Detail</Button>
-                              </td>
-                            </tr>
-                          );
-                        }) : ""
-                    }
-                  </tbody>
-                </Table> : role == 'ADMIN' ?
-                  <Table responsive>
-                    <thead>
-                      <tr>
-                        <th style={styles.wa10}>No.</th>
-                        <th style={styles.wh12}>Username</th>
-                        <th style={styles.wh12}>Name</th>
-                        <th style={styles.wh15}>Email</th>
-                        <th style={styles.wh12}>Phone</th>
-                        <th style={styles.wh12}>Gender</th>
-                        <th style={styles.wh12}>Code</th>
-                        <th style={styles.w5}>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
-                            return (
-                              <tr key={i} style={styles.row}>
-                                <td style={styles.wa10}>{i + 1}</td>
-                                <td style={styles.wh12}>{item.UserName}</td>
-                                <td style={styles.wh12}>{item.Name}</td>
-                                <td style={styles.wh15}>{item.Email}</td>
-                                <td style={styles.wh12}>{item.Phone}</td>
-                                <td style={styles.wh12}>{item.Gender}</td>
-                                <td style={styles.wh12}>{item.Code}</td>
-                                <td style={styles.w5}>
-                                  <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
+                                  <Button outline color="primary" size="sm" onClick={async (e) => { }}>Detail</Button>
                                 </td>
                               </tr>
                             );
                           }) : ""
                       }
                     </tbody>
-                  </Table> :
+                  </table> : role == 'ADMIN' ?
 
-                  <Table responsive>
-                    <thead>
-                      <tr>
-                        <th style={styles.wa10}>No.</th>
-                        <th style={styles.wh12}>Name</th>
-                        <th style={styles.wh12}>Email</th>
-                        <th style={styles.wh15}>Phone</th>
-                        <th style={styles.wh12}>Gender</th>
-                        <th style={styles.wh12}>Company Id</th>
-                        <th style={styles.wh12}>Code</th>
-                        <th style={styles.w5}>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
-                            return (
-                              <tr key={i} style={styles.row}>
-                                <td style={styles.wa10}>{i + 1}</td>
-                                <td style={styles.wh12}>{item.UserName}</td>
-                                <td style={styles.wh12}>{item.Name}</td>
-                                <td style={styles.wh15}>{item.Email}</td>
-                                <td style={styles.wh12}>{item.Phone}</td>
-                                <td style={styles.wh12}>{item.Gender}</td>
-                                <td style={styles.wh12}>{item.Code}</td>
-                                <td style={styles.w5}>
-                                  <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
-                                  <Button outline color="primary" size="sm" onClick={async (e) => { await this.tableUserSale(item._id, item.Name); this.setState({ month: "01" }) }}>Detail</Button>
-                                </td>
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </Table>
+                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">Username</th>
+                          <th className="text-center">Name</th>
+                          <th className="text-center">Email</th>
+                          <th className="text-center">Phone</th>
+                          <th className="text-center">Gender</th>
+                          <th className="text-center">Code</th>
+                          <th className="text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          data != undefined ?
+                            data.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{item.UserName}</td>
+                                  <td className="text-center">{item.Name}</td>
+                                  <td className="text-center">{item.Email}</td>
+                                  <td className="text-center">{item.Phone}</td>
+                                  <td className="text-center">{item.Gender}</td>
+                                  <td className="text-center">{item.Code}</td>
+                                  <td className="text-center">
+                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
+                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
+                                  </td>
+                                </tr>
+                              );
+                            }) : ""
+                        }
+                      </tbody>
+                    </table> :
 
+                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">Name</th>
+                          <th className="text-center">Email</th>
+                          <th className="text-center">Phone</th>
+                          <th className="text-center">Gender</th>
+                          <th className="text-center">Company Id</th>
+                          <th className="text-center">Code</th>
+                          <th className="text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          data != undefined ?
+                            data.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{item.UserName}</td>
+                                  <td className="text-center">{item.Name}</td>
+                                  <td className="text-center">{item.Email}</td>
+                                  <td className="text-center">{item.Phone}</td>
+                                  <td className="text-center">{item.Gender}</td>
+                                  <td className="text-center">{item.Code}</td>
+                                  <td className="text-center">
+                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
+                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
+                                    <Button outline color="primary" size="sm" onClick={async (e) => { await this.tableUserSale(item._id, item.Name); this.setState({ month: "01" }) }}>Detail</Button>
+                                  </td>
+                                </tr>
+                              );
+                            }) : ""
+                        }
+                      </tbody>
+                    </table>
               }
             </CardBody>
           </Card>
@@ -931,65 +962,43 @@ class Users extends Component {
               </div>
           }
           <div hidden={this.state.see_detail}>
+            <Button color="primary" style={{ margin: '10px', width: '300px' }} size="sm" onClick={async e => { this.getData(); this.setState({ see_detail: !this.state.see_detail }) }}>
+              Go back
+            </Button>
 
-            <Card style={this.state.data == undefined ? { width: '97.8%' } : { width: '100%' }}>
+            {/* dawdaefakwdhlkawjdkl */}
+            <Card>
               <CardHeader>
-                <div class="container">
-                  <div class="row">
-                    <div class="col">
-                      <i className="justify-content-center"></i> LIST USER SALE OF SALE ON MONTH {this.state.nameSale} ( Page: {this.state.indexPage + 1})
-                    </div>
-                    <div class="col">
-                      <CSelect className="mt-3" style={{ width: 300, float: 'right', backgroundColor: '#ffff99' }} onChange={async e => { await this.getUserSale_ByMonth(this.props.data.idSale, e.target.value); this.setState({ month: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                        {
-                          this.state.arrMonth.map((item, i) => {
-                            if (item == this.state.month) {
-                              return (
-                                <option selected value={item}>{item}</option>
-                              );
-                            } else {
-                              return (
-                                <option value={item}>{item}</option>
-                              );
-                            }
-
-                          })
-                        }
-                      </CSelect>
-                    </div>
-                  </div>
-                </div>
+                <i className="fa fa-align-justify"></i>LIST USER SALE OF SALER ( Sale Name: {this.state.nameSale}, Page: {this.state.indexPage + 1})
               </CardHeader>
               <CardBody>
                 {
-                  <Table responsive>
-                    <thead>
+                  <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                    <thead className="thead-light">
                       <tr>
-                        <th style={styles.wa10}>No.</th>
-                        <th style={styles.ws12}>Name</th>
-                        <th style={styles.ws12}>Email</th>
-                        <th style={styles.ws12}>Phone</th>
-                        <th style={styles.ws12}>Gender</th>
-                        <th style={styles.ws12}>Time Invite</th>
-                        <th style={styles.ws12}>Coefficient</th>
-                        <th style={styles.ws12}>Date</th>
+                        <th className="text-center">Name</th>
+                        <th className="text-center">Email</th>
+                        <th className="text-center">Phone</th>
+                        <th className="text-center">Gender</th>
+                        <th className="text-center">Time Invite</th>
+                        <th className="text-center">Coefficient</th>
+                        <th className="text-center">Date</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="8" hidden={hidden} className="text-center">No users in this month</td>
+                      <td colSpan="8" hidden={hidden_all} className="text-center">No users in this month</td>
                       {
-                        data != undefined ?
-                          data.map((item, i) => {
+                        dataAll != undefined ?
+                          dataAll.map((item, i) => {
                             return (
-                              <tr key={i} style={styles.row}>
-                                <td style={styles.wa10}>{i + 1}</td>
-                                <td style={styles.ws12}>{item.Name}</td>
-                                <td style={styles.ws12}>{item.Email}</td>
-                                <td style={styles.ws12}>{item.Phone}</td>
-                                <td style={styles.ws12}>{item.Gender}</td>
-                                <td style={styles.ws12}>{item.count}</td>
-                                <td style={styles.ws12}>{item.coefficient}</td>
-                                <td style={styles.ws12}>
+                              <tr key={i}>
+                                <td className="text-center">{item.Name}</td>
+                                <td className="text-center">{item.Email}</td>
+                                <td className="text-center">{item.Phone}</td>
+                                <td className="text-center">{item.Gender}</td>
+                                <td className="text-center">{item.count}</td>
+                                <td className="text-center">{item.coefficient}</td>
+                                <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
                               </tr>
@@ -997,19 +1006,19 @@ class Users extends Component {
                           }) : ""
                       }
                     </tbody>
-                  </Table>
+                  </table>
                 }
               </CardBody>
             </Card>
             {
-              arrPagination.length == 1 ? "" :
+              arrPagination_All.length == 1 ? "" :
                 <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
                   <tr style={styles.row}>
                     {
-                      arrPagination.map((item, i) => {
+                      arrPagination_All.map((item, i) => {
                         return (
                           <td>
-                            <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                            <Button style={styles.pagination} color={i == indexPage_All ? 'primary' : 'danger'} onClick={e => { this.setState({ dataAll: arrPagination_All[i], indexPage_All: i }) }}>{i + 1}</Button>
                           </td>
                         );
                       })
@@ -1018,70 +1027,110 @@ class Users extends Component {
                 </div>
             }
 
-            {/* dawdaefakwdhlkawjdkl */}
-            <center>
-              <Card>
-                <CardHeader>
-                  <i className="fa fa-align-justify"></i>LIST USER SALE OF SALER ( Sale Name: {this.state.nameSale}, Page: {this.state.indexPage + 1})
-                </CardHeader>
-                <CardBody>
-                  {
-                    <Table responsive>
-                      <thead>
-                        <tr>
-                          <th style={styles.wa10}>No.</th>
-                          <th style={styles.ws12}>Name</th>
-                          <th style={styles.ws12}>Email</th>
-                          <th style={styles.wh15}>Phone</th>
-                          <th style={styles.ws12}>Gender</th>
-                          <th style={styles.ws12}>Time Invite</th>
-                          <th style={styles.ws12}>Coefficient</th>
-                          <th style={styles.ws12}>Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <td colSpan="8" hidden={hidden_all} className="text-center">No users in this month</td>
-                        {
-                          dataAll != undefined ?
-                            dataAll.map((item, i) => {
-                              return (
-                                <tr key={i} style={styles.row}>
-                                  <td style={styles.wa10}>{i + 1}</td>
-                                  <td style={styles.ws12}>{item.Name}</td>
-                                  <td style={styles.ws12}>{item.Email}</td>
-                                  <td style={styles.wh15}>{item.Phone}</td>
-                                  <td style={styles.ws12}>{item.Gender}</td>
-                                  <td style={styles.ws12}>{item.count}</td>
-                                  <td style={styles.ws12}>{item.coefficient}</td>
-                                  <td style={styles.ws12}>
-                                    {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                  </td>
-                                </tr>
-                              );
-                            }) : ""
-                        }
-                      </tbody>
-                    </Table>
-                  }
-                </CardBody>
-              </Card>
-              {
-                arrPagination_All.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
+
+            <CCardGroup rows className="cols-2">
+              <CCard backgroundColor="red">
+                <CCardBody>
+                  <CChartBar
+                    datasets={[
                       {
-                        arrPagination_All.map((item, i) => {
-                          return (
-                            <td>
-                              <Button style={styles.pagination} color={i == indexPage_All ? 'primary' : 'danger'} onClick={e => { this.setState({ dataAll: arrPagination_All[i], indexPage_All: i }) }}>{i + 1}</Button>
-                            </td>
-                          );
-                        })
+                        label: 'Total user of month ',
+                        backgroundColor: '#f87979',
+                        data: this.state.arrAllUser
                       }
-                    </tr>
-                  </div>
-              }
-            </center>
+                    ]}
+                    labels="months"
+                    options={{
+                      tooltips: {
+                        enabled: true
+                      }
+                    }}
+                  />
+                </CCardBody>
+              </CCard>
+              <CCard backgroundColor="red">
+                <Card>
+                  <CardHeader>
+                    <div class="container">
+                      <div class="row">
+                        <div class="col">
+                          <i className="justify-content-center"></i>{this.state.nameSale} ( Page: {this.state.indexPage + 1}, Month: {this.state.month})
+                        </div>
+                        <div class="col">
+                          <CSelect style={{ width: 300, float: 'right', backgroundColor: '#ffff99' }} onChange={async e => { await this.getUserSale_ByMonth(this.props.data.idSale, e.target.value); this.setState({ month: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+                            {
+                              this.state.arrMonth.map((item, i) => {
+                                if (item == this.state.month) {
+                                  return (
+                                    <option selected value={item}>{item}</option>
+                                  );
+                                } else {
+                                  return (
+                                    <option value={item}>{item}</option>
+                                  );
+                                }
+
+                              })
+                            }
+                          </CSelect>
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    {
+                      <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                        <thead className="thead-light">
+                          <tr>
+                            <th className="text-center">Name</th>
+                            <th className="text-center">Email</th>
+                            <th className="text-center">Phone</th>
+                            <th className="text-center">Gender</th>
+                            <th className="text-center">Time Invite</th>
+                            <th className="text-center">Coefficient</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <td colSpan="8" hidden={hidden} className="text-center">No users in this month</td>
+                          {
+                            data != undefined ?
+                              data.map((item, i) => {
+                                return (
+                                  <tr key={i}>
+                                    <td className="text-center">{item.Name}</td>
+                                    <td className="text-center">{item.Email}</td>
+                                    <td className="text-center">{item.Phone}</td>
+                                    <td className="text-center">{item.Gender}</td>
+                                    <td className="text-center">{item.count}</td>
+                                    <td className="text-center">{item.coefficient}</td>
+                                  </tr>
+                                );
+                              }) : ""
+                          }
+                        </tbody>
+                      </table>
+                    }
+                  </CardBody>
+                </Card>
+                {
+                  arrPagination.length == 1 ? "" :
+                    <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                      <tr style={styles.row}>
+                        {
+                          arrPagination.map((item, i) => {
+                            return (
+                              <td>
+                                <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                              </td>
+                            );
+                          })
+                        }
+                      </tr>
+                    </div>
+                }
+              </CCard>
+            </CCardGroup>
+
           </div>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>

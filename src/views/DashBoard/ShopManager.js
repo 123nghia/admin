@@ -14,9 +14,19 @@ import {
   CForm,
   CFormGroup,
   CLabel,
-  CSelect
+  CSelect, CCardGroup
 } from '@coreui/react'
 
+import {
+  CChartBar,
+  CChartLine,
+  CChartDoughnut,
+  CChartRadar,
+  CChartPie,
+  CChartPolarArea
+} from '@coreui/react-chartjs'
+
+import { DocsLink } from 'src/reusable'
 
 import {
   Button
@@ -48,11 +58,31 @@ class ShopManager extends Component {
       arrTemp: [],
       hidden: true,
       hidden_all: true,
+      arrAllUser: []
     };
   }
 
   async componentDidMount() {
     await this.getCustomer();
+    await this.getCustomerByMonth("01");
+    const { company_id } = this.state;
+    var id = JSON.parse(company_id);
+    let arrMonth = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+    let arrTemp = [];
+    for (let i = 0; i < arrMonth.length; i++) {
+      const res = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.LIST_CUSTOMER_BY_MONTH,
+        method: 'POST',
+        data: {
+          company_id: id.company_id,
+          month: arrMonth[i]
+        }
+      });
+      arrTemp.push(res.data.data.length)
+    }
+    this.setState({ arrAllUser: arrTemp })
+
   }
 
   countType(arr, phone) {
@@ -124,6 +154,10 @@ class ShopManager extends Component {
       this.setState({ hidden: true })
     }
     this.pagination(arrCount_User_Company);
+
+  }
+
+  getDataForCharts() {
 
   }
 
@@ -247,88 +281,115 @@ class ShopManager extends Component {
                     </tr>
                   </div>
               }
-            </CCardBody>
-          </CCard>
+              <br />
 
-          <CCard>
-            <CCardHeader>
-              <CFormGroup row>
-                <CCol md="3">
-                  <CLabel htmlFor="selectSm">NEW USER SALE ON MONTH OF COMPANY</CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <div style={{ float: "right", width: "250px" }}>
-                    <CSelect onChange={async e => { await this.getCustomerByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
-                      <option value="0">Choose month</option>
-                      <option value="01">01</option>
-                      <option value="02">02</option>
-                      <option value="03">03</option>
-                      <option value="04">04</option>
-                      <option value="05">05</option>
-                      <option value="06">06</option>
-                      <option value="07">07</option>
-                      <option value="08">08</option>
-                      <option value="09">09</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
-                    </CSelect>
-                  </div>
-                </CCol>
-              </CFormGroup>
-            </CCardHeader>
-            <CCardBody>
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                <thead className="thead-light">
-                  <tr>
-                    <th className="text-center">No.</th>
-                    <th className="text-center">Name</th>
-                    <th className="text-center">Email</th>
-                    <th className="text-center">Phone</th>
-                    <th className="text-center">Gender</th>
-                    <th className="text-center">Times Count</th>
-                    <th className="text-center">Coefficient</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <td colSpan="7" hidden={hidden} className="text-center">No users in this month</td>
-                  {
-                    dataStatistical != undefined ?
-                      dataStatistical.map((item, i) => {
-                        return (
-                          <tr key={i}>
-                            <td className="text-center">{i + 1}</td>
-                            <td className="text-center">{item.Name}</td>
-                            <td className="text-center">{item.Email}</td>
-                            <td className="text-center">{item.Phone}</td>
-                            <td className="text-center">{item.Gender}</td>
-                            <td className="text-center">{item.count}</td>
-                            <td className="text-center">{item.coefficient}</td>
+              <CCardGroup rows className="cols-2">
+                <CCard backgroundColor="red">
+                  <CCardHeader>
+                    Bar Chart
+                  </CCardHeader>
+                  <CCardBody>
+                    <CChartBar
+                      datasets={[
+                        {
+                          label: 'Total user of month ',
+                          backgroundColor: '#f87979',
+                          data: this.state.arrAllUser
+                        }
+                      ]}
+                      labels="months"
+                      options={{
+                        tooltips: {
+                          enabled: true
+                        }
+                      }}
+                    />
+                  </CCardBody>
+                </CCard>
+                <CCard>
+                  <CCardHeader>
+                    <CFormGroup row>
+                      <CCol md="3">
+                        <CLabel htmlFor="selectSm">USER ON MONTH</CLabel>
+                      </CCol>
+                      <CCol xs="12" md="9">
+                        <div style={{ float: "right", width: "250px" }}>
+                          <CSelect onChange={async e => { await this.getCustomerByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                          </CSelect>
+                        </div>
+                      </CCol>
+                    </CFormGroup>
+                  </CCardHeader>
+                  <CCardBody>
+                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">Name</th>
+                          <th className="text-center">Email</th>
+                          <th className="text-center">Phone</th>
+                          <th className="text-center">Gender</th>
+                          <th className="text-center">Times Count</th>
+                          <th className="text-center">Coefficient</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td colSpan="7" hidden={hidden} className="text-center">No users in this month</td>
+                        {
+                          dataStatistical != undefined ?
+                            dataStatistical.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{item.Name}</td>
+                                  <td className="text-center">{item.Email}</td>
+                                  <td className="text-center">{item.Phone}</td>
+                                  <td className="text-center">{item.Gender}</td>
+                                  <td className="text-center">{item.count}</td>
+                                  <td className="text-center">{item.coefficient}</td>
+                                </tr>
+                              );
+                            }) : ""
+                        }
+                      </tbody>
+                    </table>
+
+                    {
+                      arrPaginationStatistical.length == 1 ? "" :
+                        <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                          <tr style={{ float: "left", width: "100%" }}>
+                            {
+                              arrPaginationStatistical.map((item, i) => {
+                                return (
+                                  <td>
+                                    <Button style={{ marginRight: '5px' }} color={i == indexPageStatistical ? 'primary' : 'danger'} onClick={e => { this.setState({ dataStatistical: arrPaginationStatistical[i], indexPageStatistical: i }) }}>{i + 1}</Button>
+                                  </td>
+                                );
+                              })
+                            }
                           </tr>
-                        );
-                      }) : ""
-                  }
-                </tbody>
-              </table>
+                        </div>
+                    }
+                  </CCardBody>
+                </CCard>
 
-              {
-                arrPaginationStatistical.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={{ float: "left", width: "100%" }}>
-                      {
-                        arrPaginationStatistical.map((item, i) => {
-                          return (
-                            <td>
-                              <Button style={{ marginRight: '5px' }} color={i == indexPageStatistical ? 'primary' : 'danger'} onClick={e => { this.setState({ dataStatistical: arrPaginationStatistical[i], indexPageStatistical: i }) }}>{i + 1}</Button>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              }
+              </CCardGroup>
             </CCardBody>
           </CCard>
+
+
+
+
         </CCol>
       </CRow>
 
