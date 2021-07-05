@@ -194,7 +194,6 @@ class Users extends Component {
 
   getUserSale_ByMonth = async (sale_id, month) => {
     const { company_id } = this.state;
-    this.setState({ isLoading: true });
     var id = JSON.parse(company_id);
 
     var bodyCustomer = {
