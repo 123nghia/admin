@@ -24,6 +24,13 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Link',
+    to: '/link',
+    icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon"/>,
+    role: ['ADMIN', 'SHOPMANAGER']
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Company',
     to: '/company',
     icon: <CIcon name="cil-location-pin" customClasses="c-sidebar-nav-icon"/>,

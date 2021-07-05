@@ -21,6 +21,7 @@ import axios from 'axios'
 import Constants from "./../../contants/contants";
 import MainChartExample from '../charts/MainChartExample.js'
 import ShopManager from './ShopManager'
+import SaleManager from './SaleManager'
 
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
@@ -33,7 +34,7 @@ class Dashboard extends Component {
     return (
       <div>
         {
-          localStorage.getItem('role') == 'SHOPMANAGER' ? <ShopManager /> : ""
+          localStorage.getItem('role') == 'SHOPMANAGER' ? <ShopManager /> : <SaleManager />
         }
       </div>
     )

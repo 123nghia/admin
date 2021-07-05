@@ -60,4 +60,10 @@ export default {
   "UPDATE_COMPANY" : "/api/update-company",
   "DELETE_COMPANY" : "/api/delete-company",
 
+  "LIST_LINK" : "/api/list-link",
+  "LIST_LINK_WITH_ID" : "/api/list-link?id=",
+  "ADD_LINK" : "/api/add-link",
+  "UPDATE_LINK" : "/api/update-link",
+  "DELETE_LINK" : "/api/delete-link",
+
 };

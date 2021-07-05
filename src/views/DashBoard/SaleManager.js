@@ -105,7 +105,8 @@ class ShopManager extends Component {
       method: 'POST',
       data: {
         "condition": {
-          "Company_Id": id.company_id
+          "Company_Id": id.company_id,
+          "Sale_Id": id.sale_id
         }
       }
     });
@@ -121,11 +122,12 @@ class ShopManager extends Component {
         res.data.data[i].count = this.countType(res.data.data, res.data.data[i].Phone);
         const resCal_Compay = await axios({
           baseURL: Constants.BASE_URL,
-          url: Constants.CALCULATOR_ALL_USER_OF_COMPANY,
+          url: Constants.CALCULATOR_ALL_USER_OF_SALE,
           method: 'POST',
           data: {
             "company_id": id.company_id,
-            "phone": res.data.data[i].Phone
+            "phone": res.data.data[i].Phone,
+            "sale_id": id.sale_id
           }
         });
         res.data.data[i].coefficient = resCal_Compay.data.data.calculator;
@@ -149,15 +151,17 @@ class ShopManager extends Component {
     for (let i = 0; i < arrMonth.length; i++) {
       const res = await axios({
         baseURL: Constants.BASE_URL,
-        url: Constants.LIST_CUSTOMER_BY_MONTH,
+        url: Constants.GET_USER_SALE_BY_MONTH,
         method: 'POST',
         data: {
           company_id: id.company_id,
-          month: arrMonth[i]
+          month: arrMonth[i],
+          sale_id: id.sale_id
         }
       });
       arrTemp.push(res.data.data.length)
     }
+
     this.setState({ arrAllUser: arrTemp })
   }
 
@@ -166,7 +170,8 @@ class ShopManager extends Component {
     var id = JSON.parse(company_id);
     var bodyUser = {
       company_id: id.company_id,
-      month: month
+      month: month,
+      sale_id: id.sale_id
     }
 
     if (month == 0) {
@@ -174,7 +179,7 @@ class ShopManager extends Component {
     } else {
       const res = await axios({
         baseURL: Constants.BASE_URL,
-        url: Constants.LIST_CUSTOMER_BY_MONTH,
+        url: Constants.GET_USER_SALE_BY_MONTH,
         method: 'POST',
         data: bodyUser
       });
@@ -194,12 +199,13 @@ class ShopManager extends Component {
           this.state.arrTemp[i].count = this.countType(this.state.arrTemp, this.state.arrTemp[i].Phone);
           const resCal = await axios({
             baseURL: Constants.BASE_URL,
-            url: Constants.GET_COEFFICIENT,
+            url: Constants.GET_COEFFICIENT_PER_SALE,
             method: 'POST',
             data: {
               "month": month,
               "company_id": id.company_id,
-              "phone": this.state.arrTemp[i].Phone
+              "phone": this.state.arrTemp[i].Phone,
+              "sale_id": id.sale_id
             }
           });
           this.state.arrTemp[i].coefficient = resCal.data.data.calculator;
