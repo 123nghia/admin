@@ -37,7 +37,8 @@ import {
 
 import { connect } from 'react-redux';
 import {
-  onSaveID
+  onSaveID,
+  onSaveSeed
 } from '../../../redux/data/actions'
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
@@ -45,6 +46,7 @@ import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import LazyLoad from 'react-lazyload';
 import ReactLoading from 'react-loading';
+
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -114,6 +116,20 @@ class Users extends Component {
   }
   async componentDidMount() {
     this.getData();
+  }
+
+  async getSeeder(){
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.GET_SEEDER,
+      method: 'POST',
+      data: {
+        "email": "ktpm489@gmail.com"
+      }
+    })
+
+    this.props.onSaveSeed(res.data.data);
+    this.props.history.push('/history')
   }
 
   pagination(dataApi) {
@@ -862,7 +878,7 @@ class Users extends Component {
                                 <td className="text-center">
                                   {/* <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
                                 <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '} */}
-                                  <Button outline color="primary" size="sm" onClick={async (e) => { }}>Detail</Button>
+                                  <Button outline color="primary" size="sm" onClick={async (e) => { await this.getSeeder() }}>Detail</Button>
                                 </td>
                               </tr>
                             );
@@ -1415,5 +1431,5 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps, { onSaveID })(Users);
+export default connect(mapStateToProps, { onSaveID, onSaveSeed })(Users);
 

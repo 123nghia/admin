@@ -53,14 +53,6 @@ class Login extends Component {
       } else {
         this.setState({ isLoading: false, errors: { common: 'Username or password is incorrect' } });
       }
-      // if (this.state.username === 'admin' && this.state.password === 'admin') {
-      //   localStorage.setItem('user', JSON.stringify({ username: this.state.username, password: this.state.password }));
-      //   localStorage.setItem('auth', 'abv');
-
-      //   this.props.history.push('/dashboard')
-      // } else {
-      //   this.setState({ isLoading: false, errors: { common: 'Username or password is incorrect' } });
-      // }
     }
   }
   onChange(e) {

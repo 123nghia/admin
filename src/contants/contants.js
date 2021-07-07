@@ -14,6 +14,7 @@ export default {
   "GET_USER_SALE_BY_MONTH" : "/api/get-user-of-sale-by-month",
   "CALCULATOR_ALL_USER_OF_COMPANY" : "/api/calculator-all-user-company",
   "CALCULATOR_ALL_USER_OF_SALE" : "/api/calculator-all-user-of-sale",
+  "GET_SEEDER" : "/api/get-seed",
 
   "LIST_CUSTOMER" : "/api/list-customer",
   "LIST_CUSTOMER_BY_MONTH" : "/api/get-user-sale-by-month",

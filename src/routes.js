@@ -10,6 +10,7 @@ const TablePakageSaleLog = React.lazy(() => import('./views/base/tables/PakageSa
 const TableRole = React.lazy(() => import('./views/base/tables/Role'));
 const TableTypeKey = React.lazy(() => import('./views/base/tables/TypeKey'));
 const TableLink = React.lazy(() => import('./views/base/tables/Link'));
+const HistorySkinUser = React.lazy(() => import('./views/base/tables/HistorySkinUser'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -23,6 +24,7 @@ const routes = [
   { path: '/type_key', name: 'TypeKey', component: TableTypeKey },
   { path: '/role', name: 'Role', component: TableRole },
   { path: '/link', name: 'Key', component: TableLink },
+  { path: '/history', name: 'HistorySkin', component: HistorySkinUser },
 ];
 
 export default routes;
