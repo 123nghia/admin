@@ -1,5 +1,5 @@
 export default {
-  "BASE_URL" : "http://thanhvien.applamdep.com",
+  "BASE_URL" : "https://thanhvien.applamdep.com",
   //"BASE_URL" : "http://localhost:3000",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
