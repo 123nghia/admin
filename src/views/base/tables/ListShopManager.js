@@ -118,7 +118,15 @@ class Users extends Component {
   }
   async componentDidMount() {
     this.getData();
-    console.log(this.state.role)
+
+    let arr = JSON.parse(localStorage.getItem('url'));
+    for(let i = 0; i < arr.length; i++){
+      if("#" + arr[i].to == window.location.hash){
+        if(arr[i].hidden == true){
+          window.location.href = '#/'
+        }
+      }
+    }
   }
 
   async getSeeder() {
@@ -355,8 +363,6 @@ class Users extends Component {
       headers: this.state.token
     });
 
-    console.log(res)
-
     this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
 
@@ -372,21 +378,16 @@ class Users extends Component {
   }
 
   searchKey() {
-    const { indexPage, keyUserName, keyName, keyEmail, keyCompanyCode,
+    const { indexPage, key, keyUserName, keyName, keyEmail, keyCompanyCode,
       keyPhone, keyGender, keyCode, keyStatus } = this.state;
 
-    if (keyUserName != '' || keyName != '' || keyEmail != '' || keyCompanyCode != '' ||
-      keyPhone != '' || keyGender != '' || keyCode != '' || keyStatus != '') {
+    if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.UserName.toLocaleUpperCase().includes(keyUserName.toLocaleUpperCase()) &&
-          val.Name.toLocaleUpperCase().includes(keyName.toLocaleUpperCase()) &&
-          val.Email.toLocaleUpperCase().includes(keyEmail.toLocaleUpperCase()) &&
-          val.Company_Id.toLocaleUpperCase().includes(keyCompanyCode.toLocaleUpperCase()) &&
-          val.Gender.toLocaleUpperCase().includes(keyGender.toLocaleUpperCase()) &&
-          val.Code.toLocaleUpperCase().includes(keyCode.toLocaleUpperCase()) &&
-          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase()) &&
-          val.Phone.toLocaleUpperCase().includes(keyPhone.toLocaleUpperCase())) {
+        if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+            val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
           d.push(val)
         }
       })
@@ -720,30 +721,16 @@ class Users extends Component {
 
               <div style={styles.tags}>
                 <CRow>
-                  <CCol sm="6" lg="12">
+                  <CCol sm="12" lg="12">
                     <CRow>
-                      <CCol sm="12" lg="2">
+                      <CCol sm="12" lg="4">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyName");
-                          }} name="key" value={keyName} placeholder="Tên" />
+                            this.actionSearch(e, "key");
+                          }} name="key" value={key} placeholder="Từ khóa" />
                         </div>
                       </CCol>
-                      <CCol sm="12" lg="2">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyEmail");
-                          }} name="key" value={keyEmail} placeholder="Email" />
-                        </div>
-                      </CCol>
-                      <CCol sm="12" lg="2">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyPhone");
-                          }} name="key" value={keyPhone} placeholder="Số điện thoại" />
-                        </div>
-                      </CCol>
-                      <CCol sm="12" lg="2">
+                      <CCol sm="12" lg="4">
                         <CSelect style={styles.flexOption} onChange={e => {
 
                           this.actionSearch(e, "keyStatus");
@@ -758,12 +745,12 @@ class Users extends Component {
                           }
                         </CSelect>
                       </CCol>
-                      <CCol sm="12" lg="2">
+                      <CCol sm="12" lg="4">
                         <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                       </CCol>
                     </CRow>
                   </CCol>
-                  <CCol sm="6" lg="12">
+                  <CCol sm="12" lg="12">
                     <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
                   </CCol>
                 </CRow>

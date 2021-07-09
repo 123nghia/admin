@@ -37,14 +37,8 @@ const TheSidebar = () => {
     }
   }
 
-  // for(let i = 0; i < navigation.length; i++){
-  //   var arr = navigation[i].role;
-  //   if(arr.includes(auth)){
-  //     navigation[i].hidden = false;
-  //   } else {
-  //     navigation[i].hidden = true;
-  //   }
-  // }
+  localStorage.setItem('url', JSON.stringify(navigation[1]._children))
+
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)
 

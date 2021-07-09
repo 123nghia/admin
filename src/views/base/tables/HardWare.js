@@ -34,6 +34,7 @@ class PackageSale extends Component {
     super(props);
     this.state = {
       data: [],
+      key: '',
       keyName: '',
       keyActive: '',
       keyEnd: '',
@@ -64,7 +65,15 @@ class PackageSale extends Component {
     };
   }
   async componentDidMount() {
-    this.getData()
+    this.getData();
+    let arr = JSON.parse(localStorage.getItem('url'));
+    for(let i = 0; i < arr.length; i++){
+      if("#" + arr[i].to == window.location.hash){
+        if(arr[i].hidden == true){
+          window.location.href = '#/'
+        }
+      }
+    }
   }
 
   getBadge(status) {
@@ -110,18 +119,15 @@ class PackageSale extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  searchKey(key) {
-    const { indexPage, keyName, keyActive, keyEnd, keyCode, keyStatus } = this.state;
+  searchKey() {
+    const { indexPage, key, keyName, keyActive, keyEnd, keyCode, keyStatus } = this.state;
 
-    if (keyName != '' || keyActive != '' || keyEnd != '' || keyCode != '' || keyStatus != '') {
+    if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Name.toLocaleUpperCase().includes(keyName.toLocaleUpperCase()) &&
-          val.Active_Date >= keyActive &&
-          val.End_Date <= keyEnd &&
-          val.Key.toLocaleUpperCase().includes(keyCode.toLocaleUpperCase()) &&
-          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-          d.push(val)
+        if (val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) &&
+            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+            d.push(val)
         }
       })
       let active = 0
@@ -339,42 +345,22 @@ class PackageSale extends Component {
                 <CRow>
                   <CCol sm="6" lg="12">
                     <CRow>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="6" lg="4">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyName");
-                          }} name="key" value={keyName} placeholder="Tên phần cứng" />
+                            this.actionSearch(e, "key");
+                          }} name="key" value={key} placeholder="Từ khóa" />
                         </div>
                       </CCol>
 
-                      <CCol sm="6" lg="2">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyCode");
-                          }} name="key" value={keyCode} placeholder="Mã phần cứng" />
-                        </div>
-                      </CCol>
-
-                      <CCol sm="6" lg="2">
-                        <CInput type="date" onChange={e => {
-                          this.actionSearch(e, "keyActive");
-                        }} placeholder="Ngày kích hoạt" />
-                      </CCol>
-
-                      <CCol sm="6" lg="2">
-                        <CInput type="date" onChange={e => {
-                          this.actionSearch(e, "keyEnd");
-                        }} placeholder="Ngày hết hạn" />
-                      </CCol>
-
-                      <CCol sm="6" lg="2">
+                      <CCol sm="6" lg="4">
                         <CSelect style={styles.flexOption} onChange={e => {
 
                           this.actionSearch(e, "keyStatus");
 
                         }} custom>
                           {
-                            ['Actived', 'Deactived', 'Locked'].map((item, i) => {
+                            ['INSTOCK', 'AVAILABLE'].map((item, i) => {
                               return (
                                 <option value={item}>{item}</option>
                               );
@@ -382,7 +368,7 @@ class PackageSale extends Component {
                           }
                         </CSelect>
                       </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="6" lg="4">
                         <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                       </CCol>
                     </CRow>

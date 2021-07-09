@@ -72,7 +72,7 @@ class PackageSale extends Component {
     var id = JSON.parse(company_id);
 
     this.setState({ isLoading: true });
-    if (role == 'ADMIN') {
+    if (role == 'ADMIN' || role == 'ADMINSALE') {
       var res = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.LIST_LINK,
@@ -215,7 +215,7 @@ class PackageSale extends Component {
     }
 
     const body = {
-      Company_Id: role == 'ADMIN' ? Company_Id : id.company_id,
+      Company_Id: role == 'ADMIN' || role == 'ADMINSALE' ? Company_Id : id.company_id,
       link_shop: link_shop,
       link_shopee: link_shopee,
       link_lazada: link_lazada,
@@ -348,7 +348,7 @@ class PackageSale extends Component {
                     <div>
                       <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
                       {
-                        role == 'ADMIN' ?
+                        role == 'ADMIN' || role == 'ADMINSALE' ?
                           <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>
                             Add
                           </Button> : ""
@@ -383,7 +383,7 @@ class PackageSale extends Component {
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '}
                                   {
-                                    role == "ADMIN" ?
+                                    role == 'ADMIN' || role == 'ADMINSALE' ?
                                       <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                         Delete
                                       </Button> : ""
@@ -471,7 +471,7 @@ class PackageSale extends Component {
                 </div>
               } */}
               {
-                role == 'ADMIN' ?
+                role == 'ADMIN' || role == 'ADMINSALE' ?
                   <div>
                     <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
                     <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>

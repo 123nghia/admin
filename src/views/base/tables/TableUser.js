@@ -358,7 +358,7 @@ class Users extends Component {
         Sale_Id: id.sale_id
       }
     }
-    if (role == 'ADMIN') {
+    if (role == 'ADMIN' || role == 'ADMINSALE') {
       var res = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.GET_SHOP,

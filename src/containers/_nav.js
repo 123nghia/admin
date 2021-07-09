@@ -5,13 +5,17 @@ const arrRoleADMIN = ['SALES', 'ADMIN', 'SHOPMANAGER', 'ADMINSALES', 'COMPANY'];
 const arrRoleCOMPANY = ['SALES', 'SHOPMANAGER'];
 const arrRoleSHOPMANAGER = ['SALES'];
 const _nav = [
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Dashboard',
-  //   to: '/dashboard',
-  //   icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-  //   role: arrRoleADMIN
-  // },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Thống kê'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Dashboard',
+    to: '/dashboard',
+    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
+    role: arrRoleADMIN
+  },
   // {
   //   _tag: 'CSidebarNavTitle',
   //   _children: ['Quản lí danh sách'],
@@ -87,17 +91,16 @@ const _nav = [
   // },
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Admin'],
+    _children: ['Quản lý'],
   },
   {
-    _tag: 'CSidebarNavDropdown',
-    name: "Quản lí",
+    _tag: 'CSidebarNavTitle',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách công ty',
       to: '/company',
-      role: ['ADMIN', 'ADMINSALE']
+      role: ['ADMIN', 'ADMINSALE'],
     }
       //, {
       //   _tag: 'CSidebarNavItem',
@@ -129,7 +132,7 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Danh sách key',
       to: '/key',
-      role: ['ADMIN', 'ADMINSALE']
+      role: ['ADMIN', 'ADMINSALE', 'COMPANY']
     }]
   }
 

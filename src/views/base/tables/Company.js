@@ -33,6 +33,7 @@ class Company extends Component {
     super(props);
     this.state = {
       data: [],
+      key: '',
       keyEmail: '',
       keyPhone: '',
       keyFax: '',
@@ -74,6 +75,14 @@ class Company extends Component {
   async componentDidMount() {
     this.getData();
     this.getCompanyData();
+    let arr = JSON.parse(localStorage.getItem('url'));
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
+          window.location.href = '#/'
+        }
+      }
+    }
   }
 
   async getCompanyData() {
@@ -117,21 +126,17 @@ class Company extends Component {
   }
 
   searchKey() {
-    const { indexPage, keyEmail, keyCompany, keyPhone, keyFax, keyAddress, keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
+    const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
+      keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
     // this.setState({ key: key })
 
-    if (keyEmail != '' || keyCompany != '' || keyPhone != '' || keyFax != '' ||
-      keyAddress != '' || keyWebsite != '' || keyCode != '' || keyStatus != '') {
+    if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Email.toLocaleUpperCase().includes(keyEmail.toLocaleUpperCase()) &&
-          val.Name.toLocaleUpperCase().includes(keyCompany.toLocaleUpperCase()) &&
-          val.Phone.toLocaleUpperCase().includes(keyPhone.toLocaleUpperCase()) &&
-          val.Fax.toLocaleUpperCase().includes(keyFax.toLocaleUpperCase()) &&
-          val.Address.toLocaleUpperCase().includes(keyAddress.toLocaleUpperCase()) &&
-          val.Website.toLocaleUpperCase().includes(keyWebsite.toLocaleUpperCase()) &&
-          val.Code.toLocaleUpperCase().includes(keyCode.toLocaleUpperCase()) &&
-          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+        if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+            val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -188,7 +193,6 @@ class Company extends Component {
       || Name == null || Name == ''
       || Phone == null || Phone == ''
       || Address == null || Address == ''
-      || Code == null || Code == ''
       || UserName == null || UserName == ''
       || Password == null || Password == '') {
       alert("Please fill in all the requirements");
@@ -229,13 +233,12 @@ class Company extends Component {
         "Status": "Actived"
       }
 
-      var duy = await axios({
+      await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.ADD_USER,
         method: 'POST',
         data: bodyAddUser
       });
-      console.log(duy)
       console.log(res.data.data)
 
       this.setState({ modalCom: !this.state.modalCom })
@@ -394,6 +397,7 @@ class Company extends Component {
 
   resetSearch() {
     this.setState({
+      key: '',
       keyEmail: '',
       keyPhone: '',
       keyFax: '',
@@ -425,44 +429,13 @@ class Company extends Component {
                     this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
-                      <CCol sm="6" lg="12">
+                      <CCol sm="12" lg="12">
                         <CRow>
-                          <CCol sm="6" lg="2">
-                            <CSelect style={styles.flexOption} onChange={e => {
-
-                              this.actionSearch(e, "keyCompany");
-
-                            }
-                            } custom>
-                              <option value={this.state.currentCompany}>-----</option>
-                              {
-                                dataCompany.map((item, i) => {
-                                  return (
-                                    <option value={item.Name}>{item.Name}</option>
-                                  );
-                                })
-                              }
-                            </CSelect>
-                          </CCol>
-                          <CCol sm="6" lg="2">
+                          <CCol sm="12" lg="4">
                             <div>
                               <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "keyEmail");
-                              }} name="key" value={keyEmail} placeholder="Email" />
-                            </div>
-                          </CCol>
-                          <CCol sm="6" lg="2">
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "keyPhone");
-                              }} name="key" value={keyPhone} placeholder="Số điện thoại" />
-                            </div>
-                          </CCol>
-                          <CCol sm="6" lg="2">
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "keyCode");
-                              }} name="key" value={keyCode} placeholder="Code" />
+                                this.actionSearch(e, "key");
+                              }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
                           {/* <CCol sm="6" lg="2">
@@ -470,7 +443,7 @@ class Company extends Component {
                               this.actionSearch(e, "keyDateCreate");
                             }} value={keyDateCreate} placeholder="Create Date" />
                           </CCol> */}
-                          <CCol sm="6" lg="2">
+                          <CCol sm="12" lg="4">
                             <CSelect style={styles.flexOption} onChange={e => {
 
                               this.actionSearch(e, "keyStatus");
@@ -485,12 +458,12 @@ class Company extends Component {
                               }
                             </CSelect>
                           </CCol>
-                          <CCol sm="6" lg="2">
+                          <CCol sm="12" lg="4">
                             <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                           </CCol>
                         </CRow>
                       </CCol>
-                      <CCol sm="6" lg="12">
+                      <CCol sm="12" lg="12">
                         <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
                       </CCol>
                     </CRow>
@@ -572,6 +545,7 @@ class Company extends Component {
                 field="Email"
                 label="Email"
                 value={this.state.Email}
+                type={"email"}
                 placeholder={"Emal"}
                 // error={errors.title}
                 onChange={e => this.onChange("Email", e.target.value)}
@@ -600,6 +574,7 @@ class Company extends Component {
               <TextFieldGroup
                 field="Password"
                 label="Mật khẩu"
+                type={"password"}
                 value={this.state.Password}
                 placeholder={"Mật khẩu"}
                 // error={errors.title}
