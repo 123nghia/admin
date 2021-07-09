@@ -69,7 +69,8 @@ class Users extends Component {
       currentHardWare: '',
       arrPagination: [],
       indexPage: 0,
-      hidden: true
+      hidden: true,
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     };
   }
   async componentDidMount() {
@@ -110,7 +111,8 @@ class Users extends Component {
     const resKey = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HARDWARE,
-      method: 'POST'
+      method: 'POST',
+      headers: this.state.token
     });
 
     this.setState({ dataHardWare: resKey.data.data });
@@ -125,7 +127,8 @@ class Users extends Component {
         condition: {
           "Status": "INSTOCK"
         }
-      }
+      },
+      headers: this.state.token
     });
 
     if (id != '' || id != undefined) {
@@ -133,6 +136,7 @@ class Users extends Component {
         baseURL: Constants.BASE_URL,
         url: Constants.LIST_HARDWARE_WITH_ID + id,
         method: 'POST',
+        headers: this.state.token
       });
       if (currentKey.data.data != null || currentKey.data.data != undefined) {
         this.setState({ currentHardWare: currentKey.data.data.Name });
@@ -459,14 +463,6 @@ class Users extends Component {
                           <CCol sm="6" lg="2">
                             <div>
                               <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "keyCodeCompany");
-                              }} name="key" value={keyCodeCompany} placeholder="Mã công ty" />
-                            </div>
-                          </CCol>
-
-                          <CCol sm="6" lg="2">
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
                                 this.actionSearch(e, "keyTypeKey");
                               }} name="key" value={keyTypeKey} placeholder="Mã khóa" />
                             </div>
@@ -499,23 +495,6 @@ class Users extends Component {
                               }
                             </CSelect>
                           </CCol>
-
-                          {/* <CCol sm="6" lg="2">
-                            <CSelect style={styles.flexOption} onChange={e => {
-
-                              this.actionSearch(e, "keyValue");
-
-                            }} custom>
-                              <option>-----</option>
-                              {
-                                dataHardWare.map((item, i) => {
-                                  return (
-                                    <option value={item.Key}>{item.Name}</option>
-                                  );
-                                })
-                              }
-                            </CSelect>
-                          </CCol> */}
                           <CCol sm="6" lg="2">
                             <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                           </CCol>
@@ -533,7 +512,6 @@ class Users extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên key</th>
-                        <th className="text-center">Mã công ty</th>
                         <th className="text-center">Loại key</th>
                         <th className="text-center">Ngày kích hoạt</th>
                         <th className="text-center">Ngày hết hạn</th>
@@ -551,7 +529,6 @@ class Users extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Name}</td>
-                                <td className="text-center">{item.Company_Id}</td>
                                 <td className="text-center">{item.Type_Key}</td>
                                 <td className="text-center">
                                   {(new Date(item.Start_Date)).toLocaleDateString() + ' ' + (new Date(item.Start_Date)).toLocaleTimeString()}

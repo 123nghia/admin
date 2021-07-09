@@ -5,105 +5,107 @@ const arrRoleADMIN = ['SALES', 'ADMIN', 'SHOPMANAGER', 'ADMINSALES', 'COMPANY'];
 const arrRoleCOMPANY = ['SALES', 'SHOPMANAGER'];
 const arrRoleSHOPMANAGER = ['SALES'];
 const _nav = [
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Dashboard',
-    to: '/dashboard',
-    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-    role: arrRoleADMIN
-  },
-  {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Quản lí danh sách'],
-  },
-  {
-    _tag: 'CSidebarNavDropdown',
-    icon: 'cil-star',
-    _children: [
-      // {
-      //   _tag: 'CSidebarNavItem',
-      //   name: 'Users',
-      //   to: '/users',
-      //   icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
-      //   role: arrRole
-      // },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Link',
-        to: '/link',
-        icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon" />,
-        role: arrRoleADMIN
-      },
-      // {
-      //   _tag: 'CSidebarNavItem',
-      //   name: 'Company',
-      //   to: '/company',
-      //   icon: <CIcon name="cil-location-pin" customClasses="c-sidebar-nav-icon" />,
-      //   role: arrRole
-      // },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Key',
-        to: '/key',
-        icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
-        role: arrRoleADMIN
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'KeyOrder',
-        to: '/key_order',
-        icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
-        role: arrRoleADMIN
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'TypeKey',
-        to: '/type_key',
-        icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
-        role: arrRoleADMIN
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Package Sale',
-        to: '/pakage_sale',
-        icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon" />,
-        role: arrRoleADMIN
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Package Sale Log',
-        to: '/pakage_sale_log',
-        icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon" />,
-        role: arrRoleADMIN
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Role',
-        to: '/role',
-        icon: <CIcon name="cil-location-pin" customClasses="c-sidebar-nav-icon" />,
-        role: arrRoleADMIN
-      }],
-    name: "Quản lí dữ liệu"
-  },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Dashboard',
+  //   to: '/dashboard',
+  //   icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
+  //   role: arrRoleADMIN
+  // },
+  // {
+  //   _tag: 'CSidebarNavTitle',
+  //   _children: ['Quản lí danh sách'],
+  // },
+  // {
+  //   _tag: 'CSidebarNavDropdown',
+  //   icon: 'cil-star',
+  //   _children: [
+  //     // {
+  //     //   _tag: 'CSidebarNavItem',
+  //     //   name: 'Users',
+  //     //   to: '/users',
+  //     //   icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
+  //     //   role: arrRole
+  //     // },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'Link',
+  //       to: '/link',
+  //       icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon" />,
+  //       role: arrRoleADMIN
+  //     },
+  //     // {
+  //     //   _tag: 'CSidebarNavItem',
+  //     //   name: 'Company',
+  //     //   to: '/company',
+  //     //   icon: <CIcon name="cil-location-pin" customClasses="c-sidebar-nav-icon" />,
+  //     //   role: arrRole
+  //     // },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'Key',
+  //       to: '/key',
+  //       icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
+  //       role: arrRoleADMIN
+  //     },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'KeyOrder',
+  //       to: '/key_order',
+  //       icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
+  //       role: arrRoleADMIN
+  //     },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'TypeKey',
+  //       to: '/type_key',
+  //       icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
+  //       role: arrRoleADMIN
+  //     },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'Package Sale',
+  //       to: '/pakage_sale',
+  //       icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon" />,
+  //       role: arrRoleADMIN
+  //     },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'Package Sale Log',
+  //       to: '/pakage_sale_log',
+  //       icon: <CIcon name="cilPencil" customClasses="c-sidebar-nav-icon" />,
+  //       role: arrRoleADMIN
+  //     },
+  //     {
+  //       _tag: 'CSidebarNavItem',
+  //       name: 'Role',
+  //       to: '/role',
+  //       icon: <CIcon name="cil-location-pin" customClasses="c-sidebar-nav-icon" />,
+  //       role: arrRoleADMIN
+  //     }],
+  //   name: "Quản lí dữ liệu"
+  // },
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Admin'],
   },
   {
     _tag: 'CSidebarNavDropdown',
-    name: "Quản lí phần cứng",
+    name: "Quản lí",
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách công ty',
       to: '/company',
       role: ['ADMIN', 'ADMINSALE']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách admin sale',
-      to: '/company',
-      role: ['ADMIN', 'ADMINSALE']
-    }, {
+    }
+      //, {
+      //   _tag: 'CSidebarNavItem',
+      //   name: 'Danh sách admin sale',
+      //   to: '/company',
+      //   role: ['ADMIN', 'ADMINSALE']
+      // }
+      , {
       _tag: 'CSidebarNavItem',
       name: 'Danh sách chủ shop',
       to: '/shopmanager',
@@ -123,7 +125,7 @@ const _nav = [
       name: 'Danh sách phần cứng',
       to: '/hardware',
       role: ['ADMIN', 'ADMINSALE']
-    },{
+    }, {
       _tag: 'CSidebarNavItem',
       name: 'Danh sách key',
       to: '/key',

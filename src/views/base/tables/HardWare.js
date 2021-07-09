@@ -466,27 +466,27 @@ class PackageSale extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="Name"
-                label="Name"
+                label="Tên phần cứng"
                 value={this.state.Name}
-                placeholder={"Name"}
+                placeholder={"Tên phần cứng"}
                 // error={errors.title}
                 onChange={e => this.onChange("Name", e.target.value)}
               // rows="5"
               />
 
               <div style={styles.datePicker}>
-                <label style={styles.flexLabel}>Active Date:</label>
+                <label style={styles.flexLabel}>Ngày kích hoạt:</label>
                 <DatePicker style={styles.flexOption} selected={new Date(Active_Date)} onChange={(date) => this.setState({ Active_Date: date })} />
               </div>
 
               <div style={styles.datePicker}>
-                <label style={styles.flexLabel}>End Date:</label>
+                <label style={styles.flexLabel}>Ngày hết hạn:</label>
                 <DatePicker style={styles.flexOption} selected={new Date(End_Date)} onChange={(date) => this.setState({ End_Date: date })} />
               </div>
 
               {
                 action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Status:</label>
+                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
                     <option value={'INSTOCK'}>INSTOCK</option>

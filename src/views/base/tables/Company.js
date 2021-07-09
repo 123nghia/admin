@@ -118,7 +118,7 @@ class Company extends Component {
 
   searchKey() {
     const { indexPage, keyEmail, keyCompany, keyPhone, keyFax, keyAddress, keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
-    //this.setState({ key: key })
+    // this.setState({ key: key })
 
     if (keyEmail != '' || keyCompany != '' || keyPhone != '' || keyFax != '' ||
       keyAddress != '' || keyWebsite != '' || keyCode != '' || keyStatus != '') {
@@ -256,7 +256,7 @@ class Company extends Component {
       Fax: item.Fax,
       Address: item.Address,
       Website: item.Website,
-      Code: item.Code,
+      Code: item._id,
       id: item['_id'],
       Status: item.Status
     })
@@ -280,7 +280,7 @@ class Company extends Component {
       Fax: Fax,
       Address: Address,
       Website: Website,
-      Code: Code,
+      Code: this.state.id,
       Status: Status,
       id: this.state.id
     }
@@ -506,8 +506,6 @@ class Company extends Component {
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">Fax</th>
                         <th className="text-center">Địa chỉ</th>
-                        <th className="text-center">Website</th>
-                        <th className="text-center">Code</th>
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
@@ -526,8 +524,6 @@ class Company extends Component {
                                 <td className="text-center">{item.Phone}</td>
                                 <td className="text-center">{item.Fax}</td>
                                 <td className="text-center">{item.Address}</td>
-                                <td className="text-center">{item.Website}</td>
-                                <td className="text-center">{item.Code}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
@@ -583,9 +579,9 @@ class Company extends Component {
               />
               <TextFieldGroup
                 field="Name"
-                label="Name"
+                label="Tên công ty"
                 value={this.state.Name}
-                placeholder={"Company Name"}
+                placeholder={"Tên công ty"}
                 // error={errors.title}
                 onChange={e => this.onChange("Name", e.target.value)}
               // rows="5"
@@ -593,9 +589,9 @@ class Company extends Component {
 
               <TextFieldGroup
                 field="UserName"
-                label="UserName"
+                label="Tên đăng nhập"
                 value={this.state.UserName}
-                placeholder={"UserName"}
+                placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={e => this.onChange("UserName", e.target.value)}
               // rows="5"
@@ -603,9 +599,9 @@ class Company extends Component {
 
               <TextFieldGroup
                 field="Password"
-                label="Password"
+                label="Mật khẩu"
                 value={this.state.Password}
-                placeholder={"Password"}
+                placeholder={"Mật khẩu"}
                 // error={errors.title}
                 onChange={e => this.onChange("Password", e.target.value)}
               // rows="5"
@@ -613,9 +609,9 @@ class Company extends Component {
 
               <TextFieldGroup
                 field="Phone"
-                label="Phone"
+                label="Số điện thoại"
                 value={this.state.Phone}
-                placeholder={"Phone"}
+                placeholder={"Số điện thoại"}
                 onChange={e => this.onChange("Phone", e.target.value)}
               // rows="5"
               />
@@ -632,9 +628,9 @@ class Company extends Component {
 
               <TextFieldGroup
                 field="Address"
-                label="Address"
+                label="Địa chỉ"
                 value={this.state.Address}
-                placeholder={"Address"}
+                placeholder={"Địa chỉ"}
                 // error={errors.title}
                 onChange={e => this.onChange("Address", e.target.value)}
               // rows="5"
@@ -647,16 +643,6 @@ class Company extends Component {
                 placeholder={"Website"}
                 // error={errors.title}
                 onChange={e => this.onChange("Website", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Code"
-                label="Code"
-                value={this.state.Code}
-                placeholder={"Code"}
-                // error={errors.title}
-                onChange={e => this.onChange("Code", e.target.value)}
               // rows="5"
               />
               {
@@ -712,7 +698,7 @@ const styles = {
     width: 100
   },
   flexOption: {
-    width: 200,
+    width: 160,
     margin: '1px'
   },
   a: {
@@ -770,7 +756,7 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "200px",
+    width: "160px",
     display: 'inline-block',
     margin: '1px'
   },

@@ -488,7 +488,7 @@ class Users extends Component {
       UserName: UserName,
       Password: Password,
       Sale_Id: Sale_Id,
-      Code: Code
+      Code: id.company_id
     }
 
     this.setState({ isLoading: true });
@@ -722,64 +722,28 @@ class Users extends Component {
                 <CRow>
                   <CCol sm="6" lg="12">
                     <CRow>
-                      <CCol sm="6" lg="2">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyUserName");
-                          }} name="key" value={keyUserName} placeholder="Tên đăng nhập" />
-                        </div>
-                      </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
                             this.actionSearch(e, "keyName");
                           }} name="key" value={keyName} placeholder="Tên" />
                         </div>
                       </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
                             this.actionSearch(e, "keyEmail");
                           }} name="key" value={keyEmail} placeholder="Email" />
                         </div>
                       </CCol>
-                      <CCol sm="6" lg="2">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyCompanyCode");
-                          }} name="key" value={keyCompanyCode} placeholder="Mã công ty" />
-                        </div>
-                      </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
                             this.actionSearch(e, "keyPhone");
                           }} name="key" value={keyPhone} placeholder="Số điện thoại" />
                         </div>
                       </CCol>
-                      <CCol sm="6" lg="2">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyCode");
-                          }} name="key" value={keyCode} placeholder="Code" />
-                        </div>
-                      </CCol>
-                      <CCol sm="6" lg="2">
-                        <CSelect style={styles.flexOption} onChange={e => {
-
-                          this.actionSearch(e, "keyGender");
-
-                        }} custom>
-                          {
-                            ['Nam', 'Nữ'].map((item, i) => {
-                              return (
-                                <option value={item}>{item}</option>
-                              );
-                            })
-                          }
-                        </CSelect>
-                      </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <CSelect style={styles.flexOption} onChange={e => {
 
                           this.actionSearch(e, "keyStatus");
@@ -794,7 +758,7 @@ class Users extends Component {
                           }
                         </CSelect>
                       </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                       </CCol>
                     </CRow>
@@ -851,13 +815,9 @@ class Users extends Component {
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
-                      <th className="text-center">Tên đăng nhập</th>
                       <th className="text-center">Tên</th>
                       <th className="text-center">Email</th>
-                      <th className="text-center">Mã công ty</th>
                       <th className="text-center">Số điện thoại</th>
-                      <th className="text-center">Giới tính</th>
-                      <th className="text-center">Code</th>
                       <th className="text-center">Ngày tạo</th>
                       <th className="text-center">Trạng thái</th>
                       <th className="text-center">#</th>
@@ -870,13 +830,9 @@ class Users extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.UserName}</td>
                               <td className="text-center">{item.Name}</td>
                               <td className="text-center">{item.Email}</td>
-                              <td className="text-center">{item.Company_Id}</td>
                               <td className="text-center">{item.Phone}</td>
-                              <td className="text-center">{item.Gender}</td>
-                              <td className="text-center">{item.Code}</td>
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>
@@ -929,18 +885,18 @@ class Users extends Component {
               />
               <TextFieldGroup
                 field="Address"
-                label="Address"
+                label="Địa chỉ"
                 value={this.state.Address}
-                placeholder={"Email"}
-                type={'email'}
+                placeholder={"Địa chỉ"}
+                type={'text'}
                 onChange={e => this.onChange("Address", e.target.value)}
               // rows="5"
               />
               <TextFieldGroup
                 field="Name"
-                label="Name"
+                label="Tên"
                 value={this.state.Name}
-                placeholder={"Name"}
+                placeholder={"Tên"}
                 // error={errors.title}
                 onChange={e => this.onChange("Name", e.target.value)}
               // rows="5"
@@ -948,29 +904,19 @@ class Users extends Component {
 
               <TextFieldGroup
                 field="Password"
-                label="Password"
+                label="Mật khẩu"
                 value={this.state.Password}
                 type={"password"}
-                placeholder={"Password"}
+                placeholder={"Mật khẩu"}
                 readOnly={action == 'new' ? false : true}
                 onChange={e => this.onChange("Password", e.target.value)}
               // rows="5"
               />
 
               <TextFieldGroup
-                field="Code"
-                label="Code"
-                placeholder={"Code"}
-                value={this.state.Code}
-                // error={errors.title}
-                onChange={e => this.onChange("Code", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
                 field="UserName"
-                label="UserName"
-                placeholder={"Username"}
+                label="Tên đăng nhập"
+                placeholder={"Tên đăng nhập"}
                 value={this.state.UserName}
                 // error={errors.title}
                 onChange={e => this.onChange("UserName", e.target.value)}
@@ -979,16 +925,16 @@ class Users extends Component {
 
               <TextFieldGroup
                 field="Phone"
-                label="Phone"
+                label="Số điện thoại"
                 value={this.state.Phone}
-                placeholder={"Phone"}
+                placeholder={"Số điện thoại"}
                 // error={errors.title}
                 onChange={e => this.onChange("Phone", e.target.value)}
               // rows="5"
               />
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Gender:    </label>
+                <label style={styles.flexLabel} htmlFor="tag">Giới tính:    </label>
                 <select style={styles.flexOption} name="Gender" onChange={e => this.onChange("Gender", e.target.value)}>
                   <option value={this.state.Gender}>{this.state.Gender == '' ? ` - - - - - - - - - - ` : this.state.Gender}</option>
                   <option value={'Nam'}>Nam</option>
@@ -1017,7 +963,7 @@ class Users extends Component {
               </div> */}
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Role:    </label>
+                <label style={styles.flexLabel} htmlFor="tag">Phân quyền:    </label>
                 <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
                   <option value={this.state.Role_Id}>-----</option>
                   {
@@ -1046,7 +992,7 @@ class Users extends Component {
 
               {
                 action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Status:</label>
+                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
                     <option value={'Actived'}>Actived</option>
@@ -1124,7 +1070,7 @@ const styles = {
     width: 100
   },
   flexOption: {
-    width: 200,
+    width: 160,
     margin: '1px'
   },
   a: {
@@ -1190,7 +1136,7 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "200px",
+    width: "160px",
     display: 'inline-block',
     margin: '1px'
   },

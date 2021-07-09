@@ -772,50 +772,28 @@ class Users extends Component {
                 <CRow>
                   <CCol sm="6" lg="12">
                     <CRow>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
                             this.actionSearch(e, "keyName");
                           }} name="key" value={keyName} placeholder="Tên" />
                         </div>
                       </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
                             this.actionSearch(e, "keyEmail");
                           }} name="key" value={keyEmail} placeholder="Email" />
                         </div>
                       </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
                             this.actionSearch(e, "keyPhone");
                           }} name="key" value={keyPhone} placeholder="Số điện thoại" />
                         </div>
                       </CCol>
-                      <CCol sm="6" lg="2">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyCodeCompany");
-                          }} name="key" value={keyCodeCompany} placeholder="Mã công ty" />
-                        </div>
-                      </CCol>
-                      <CCol sm="6" lg="2">
-                        <CSelect style={styles.flexOption} onChange={e => {
-
-                          this.actionSearch(e, "keyGender");
-
-                        }} custom>
-                          {
-                            ['Nam', 'Nữ'].map((item, i) => {
-                              return (
-                                <option value={item}>{item}</option>
-                              );
-                            })
-                          }
-                        </CSelect>
-                      </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <CSelect style={styles.flexOption} onChange={e => {
 
                           this.actionSearch(e, "keyStatus");
@@ -830,7 +808,7 @@ class Users extends Component {
                           }
                         </CSelect>
                       </CCol>
-                      <CCol sm="6" lg="2">
+                      <CCol sm="12" lg="2">
                         <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                       </CCol>
                     </CRow>
@@ -850,8 +828,6 @@ class Users extends Component {
                     <th className="text-center">Tên</th>
                     <th className="text-center">Email</th>
                     <th className="text-center">Số điện thoại</th>
-                    <th className="text-center">Mã công ty</th>
-                    <th className="text-center">Giới tính</th>
                     <th className="text-center">Trạng thái</th>
                     <th className="text-center">Ngày tạo</th>
                     <th className="text-center">#</th>
@@ -868,8 +844,6 @@ class Users extends Component {
                             <td className="text-center">{item.Name}</td>
                             <td className="text-center">{item.Email}</td>
                             <td className="text-center">{item.Phone}</td>
-                            <th className="text-center">{item.Company_Id}</th>
-                            <td className="text-center">{item.Gender}</td>
                             <td className="text-center">
                               <CBadge color={this.getBadge(item.Status)}>
                                 {item.Status}
@@ -922,18 +896,18 @@ class Users extends Component {
               />
               <TextFieldGroup
                 field="Address"
-                label="Address"
+                label="Địa chỉ"
                 value={this.state.Address}
-                placeholder={"Address"}
+                placeholder={"Địa chỉ"}
                 type={'email'}
                 onChange={e => this.onChange("Address", e.target.value)}
               // rows="5"
               />
               <TextFieldGroup
                 field="Name"
-                label="Name"
+                label="Tên"
                 value={this.state.Name}
-                placeholder={"Name"}
+                placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={e => this.onChange("Name", e.target.value)}
               // rows="5"
@@ -941,10 +915,10 @@ class Users extends Component {
 
               <TextFieldGroup
                 field="Password"
-                label="Password"
+                label="Mật khẩu"
                 value={this.state.Password}
                 type={"password"}
-                placeholder={"Password"}
+                placeholder={"Mật khẩu"}
                 readOnly={action == 'new' ? false : true}
                 onChange={e => this.onChange("Password", e.target.value)}
               // rows="5"
@@ -962,8 +936,8 @@ class Users extends Component {
 
               <TextFieldGroup
                 field="UserName"
-                label="UserName"
-                placeholder={"Username"}
+                label="Tên đăng nhập"
+                placeholder={"Tên đăng nhập"}
                 value={this.state.UserName}
                 // error={errors.title}
                 onChange={e => this.onChange("UserName", e.target.value)}
@@ -972,16 +946,16 @@ class Users extends Component {
 
               <TextFieldGroup
                 field="Phone"
-                label="Phone"
+                label="Số điện thoại"
                 value={this.state.Phone}
-                placeholder={"Phone"}
+                placeholder={"Số điện thoại"}
                 // error={errors.title}
                 onChange={e => this.onChange("Phone", e.target.value)}
               // rows="5"
               />
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Gender:    </label>
+                <label style={styles.flexLabel} htmlFor="tag">Giới tính:    </label>
                 <select style={styles.flexOption} name="Gender" onChange={e => this.onChange("Gender", e.target.value)}>
                   <option value={this.state.Gender}>{this.state.Gender == '' ? ` - - - - - - - - - - ` : this.state.Gender}</option>
                   <option value={'Nam'}>Nam</option>
@@ -1010,7 +984,7 @@ class Users extends Component {
               </div> */}
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Role:    </label>
+                <label style={styles.flexLabel} htmlFor="tag">Phân quyền:    </label>
                 <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
                   <option value={this.state.Role_Id}>-----</option>
                   {
@@ -1103,7 +1077,7 @@ const styles = {
     width: 100
   },
   flexOption: {
-    width: 200,
+    width: 160,
     margin: '1px'
   },
   a: {
@@ -1169,7 +1143,7 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "200px",
+    width: "160px",
     display: 'inline-block',
     margin: '1px'
   },

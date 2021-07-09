@@ -9,6 +9,7 @@ import {
   CLabel
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { Nav, NavItem, NavLink } from 'reactstrap';
 
 const TheHeaderDropdown = () => {
   return (
@@ -85,7 +86,7 @@ const TheHeaderDropdown = () => {
         <CDropdownItem divider />
         <CDropdownItem>
           <CIcon name="cil-lock-locked" className="mfe-2" />
-          Lock Account
+          <NavLink onClick={() => { window.location.href = '#/login' }}>Logout</NavLink>
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

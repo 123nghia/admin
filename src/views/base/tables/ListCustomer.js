@@ -487,13 +487,7 @@ class Users extends Component {
                           }} name="key" value={keyPhone} placeholder="Số điện thoại" />
                         </div>
                       </CCol>
-                      <CCol sm="6" lg="2">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "keyPhone");
-                          }} name="key" value={keyPhone} placeholder="Số điện thoại" />
-                        </div>
-                      </CCol>
+
                       <CCol sm="6" lg="2">
                         <CSelect style={styles.flexOption} onChange={e => {
 
@@ -781,7 +775,7 @@ const styles = {
     width: 100
   },
   flexOption: {
-    width: 200,
+    width: 160,
     margin: '1px'
   },
   a: {
@@ -847,7 +841,7 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "200px",
+    width: "160px",
     display: 'inline-block',
     margin: '1px'
   },
