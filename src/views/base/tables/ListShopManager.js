@@ -12,17 +12,11 @@ import {
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
-  CContainer,
+  CBadge,
   CRow,
   CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-
+  CSelect,
+  CInput
 } from '@coreui/react'
 
 
@@ -58,6 +52,14 @@ class Users extends Component {
     this.state = {
       data: [],
       key: '',
+      keyUserName: '',
+      keyName: '',
+      keyEmail: '',
+      keyCompanyCode: '',
+      keyPhone: '',
+      keyGender: '',
+      keyCode: '',
+      keyStatus: '',
       activePage: 1,
       page: 1,
       itemsCount: 0,
@@ -116,9 +118,10 @@ class Users extends Component {
   }
   async componentDidMount() {
     this.getData();
+    console.log(this.state.role)
   }
 
-  async getSeeder(){
+  async getSeeder() {
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.GET_SEEDER,
@@ -186,8 +189,7 @@ class Users extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_CUSTOMER,
       method: 'POST',
-      data: bodyCustomer,
-      headers: this.state.token
+      data: bodyCustomer
     })
 
     this.pagination(res.data.data);
@@ -311,8 +313,7 @@ class Users extends Component {
           Company_Id: id.company_id,
           Sale_Id: this.props.data.idSale
         }
-      },
-      headers: this.state.token
+      }
     })
 
     this.setState({ dataApi: resAll.data.data });
@@ -344,105 +345,48 @@ class Users extends Component {
   }
 
   getData = async () => {
-    const { company_id, role } = this.state;
+    const { company_id } = this.state;
     this.setState({ isLoading: true });
-    var id = JSON.parse(company_id);
 
-    var bodyUser = {
-      company_id: id.company_id
-    }
+    var res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.GET_SHOP,
+      method: 'POST',
+      headers: this.state.token
+    });
 
-    var bodyCustomer = {
-      condition: {
-        Company_Id: id.company_id,
-        Sale_Id: id.sale_id
-      }
-    }
-    if (role == 'ADMIN') {
-      var res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.GET_SHOP,
-        method: 'POST',
-        headers: this.state.token
-      });
-
-    } else if (role == 'SHOPMANAGER') {
-      var res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.GET_SALE,
-        method: 'POST',
-        data: bodyUser,
-        headers: this.state.token
-      });
-
-    } else if (role == 'SALES') {
-      var res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.LIST_CUSTOMER,
-        method: 'POST',
-        data: bodyCustomer,
-        headers: this.state.token
-      })
-    }
+    console.log(res)
 
     this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
 
     let active = 0
 
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
+    // res.data.data.map(val => {
+    //   if (val.Status == "Actived") {
+    //     active = active + 1
+    //   }
+    // })
 
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  async tableUserSale(id_sale, nameSale) {
+  searchKey() {
+    const { indexPage, keyUserName, keyName, keyEmail, keyCompanyCode,
+      keyPhone, keyGender, keyCode, keyStatus } = this.state;
 
-    const { company_id, arrMonth } = this.state;
-    var id = JSON.parse(company_id);
-
-    await this.getUserSale_ByMonth(id_sale, "01");
-    this.props.onSaveID(id_sale)
-    this.getAllData();
-    let arrTemp = [];
-
-    for (let i = 0; i < arrMonth.length; i++) {
-      const res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.GET_USER_SALE_BY_MONTH,
-        method: 'POST',
-        data: {
-          "month": arrMonth[i],
-          "company_id": id.company_id,
-          "sale_id": this.props.data.idSale
-        }
-      })
-
-      arrTemp.push(res.data.data.length);
-    }
-
-    this.setState({ see_detail: false, nameSale: nameSale, arrAllUser: arrTemp })
-
-
-  }
-
-  async tableUserSale_forSale(month) {
-    const { company_id } = this.state;
-    var id = JSON.parse(company_id);
-    await this.getUserSale_ByMonth_forSale(id.sale_id, month);
-  }
-
-  searchKey(key) {
-    const { indexPage } = this.state;
-    this.setState({ key: key })
-
-    if (key != '') {
+    if (keyUserName != '' || keyName != '' || keyEmail != '' || keyCompanyCode != '' ||
+      keyPhone != '' || keyGender != '' || keyCode != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase()) || val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        if (val.UserName.toLocaleUpperCase().includes(keyUserName.toLocaleUpperCase()) &&
+          val.Name.toLocaleUpperCase().includes(keyName.toLocaleUpperCase()) &&
+          val.Email.toLocaleUpperCase().includes(keyEmail.toLocaleUpperCase()) &&
+          val.Company_Id.toLocaleUpperCase().includes(keyCompanyCode.toLocaleUpperCase()) &&
+          val.Gender.toLocaleUpperCase().includes(keyGender.toLocaleUpperCase()) &&
+          val.Code.toLocaleUpperCase().includes(keyCode.toLocaleUpperCase()) &&
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase()) &&
+          val.Phone.toLocaleUpperCase().includes(keyPhone.toLocaleUpperCase())) {
           d.push(val)
         }
       })
@@ -466,6 +410,30 @@ class Users extends Component {
 
       this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
     }
+  }
+
+
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      keyUserName: '',
+      keyName: '',
+      keyEmail: '',
+      keyCompanyCode: '',
+      keyPhone: '',
+      keyGender: '',
+      keyCode: '',
+      keyStatus: ''
+    }, () => {
+      this.searchKey();
+    });
   }
 
   async toggleModal(key) {
@@ -501,19 +469,21 @@ class Users extends Component {
       || Name == null || Name == ''
       || Phone == null || Phone == ''
       || UserName == null || UserName == ''
-      || Role_Id == null || Role_Id == ''
       || Password == null || Password == '') {
       alert("Please fill in all the requirements");
       return
     }
 
+    const { company_id } = this.state;
+    var id = JSON.parse(company_id);
+    console.log(id.company_id)
     const body = {
       Email: Email,
       Address: Address,
       Name: Name,
       Phone: Phone,
       Gender: Gender,
-      Company_Id: Company_Id,
+      Company_Id: this.state.role == 'ADMIN' || this.state.role == 'ADMINSALE' ? Company_Id : id.company_id,
       Role_Id: Role_Id,
       UserName: UserName,
       Password: Password,
@@ -563,6 +533,9 @@ class Users extends Component {
   }
 
   async updateUser() {
+    const { company_id } = this.state;
+    var id = JSON.parse(company_id);
+
     const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id,
       Company_Id, Sale_Id, Status, Address } = this.state
 
@@ -581,7 +554,7 @@ class Users extends Component {
       Name: Name,
       Phone: Phone,
       Gender: Gender,
-      Company_Id: Company_Id,
+      Company_Id: this.state.role == 'ADMIN' || this.state.role == 'ADMINSALE' ? Company_Id : id.company_id,
       Role_Id: Role_Id,
       UserName: UserName,
       Password: Password,
@@ -718,89 +691,121 @@ class Users extends Component {
     this.setState({ dataRole: resRole.data.data });
   }
 
+  getBadge(status) {
+    switch (status) {
+      case 'Actived': return 'success'
+      case 'Inactive': return 'secondary'
+      case 'Locked': return 'warning'
+      case 'Deactived': return 'danger'
+      default: return 'primary'
+    }
+  }
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-  }
-
-  async getDataUser_ForSale(month) {
-    const { role } = this.state;
-    if (role == 'SALES') {
-      this.setState({ isSale: true, month: month })
-      await this.tableUserSale_forSale(month);
-    }
-  }
-
-  async check(e) {
-    if (e.target.value == "00") {
-      this.getData();
-      this.setState({ isSale: false })
-    } else {
-      await this.getDataUser_ForSale(e.target.value);
-      this.setState({ month: e.target.value })
-    }
   }
 
   render() {
     const { data, key, dataCompany, role, hidden, dataAll, arrPagination_All, indexPage_All,
       currentCompany, action, dataRole, currentRole, arrPagination, indexPage,
-      hidden_all, isSale } = this.state;
+      hidden_all, isSale, keyUserName, keyName, keyEmail, keyCompanyCode, keyPhone, keyGender, keyCode,
+      keyStatus } = this.state;
 
     if (!this.state.isLoading) {
       return (
-
         <div>
-
-          <Card hidden={!this.state.see_detail}>
+          <Card>
             <CardHeader>
-              <div class="container">
-                <div class="row">
-                  <div class="col">
-                    <i className="fa fa-align-justify"></i> {
-                      role == 'ADMIN' ? "SHOP LIST" : role == 'SHOPMANAGER' ? 'SALE LIST' : 'USER LIST'
-                    } ( Page: {this.state.indexPage + 1} )
-                  </div>
-                  <div class="col">
-                    <div style={styles.tags}>
-                      {
-                        role == 'SALES' ? "" :
-                          <div>
-                            <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
-                            <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Add</Button>
-                          </div>
-                      }
-                    </div>
-                  </div>
-                  <div class="col">
-                    {
-                      role == 'SALES' ? <div>
-                        <div>Choose Month</div>
-                        <CSelect style={{ width: '100%', backgroundColor: '#ffff99' }} onChange={async e => { await this.check(e) }} custom size="sm" name="selectSm" id="SelectLm">
+
+              Danh sách chủ shop ( Page: {this.state.indexPage + 1} )
+
+              <div style={styles.tags}>
+                <CRow>
+                  <CCol sm="6" lg="12">
+                    <CRow>
+                      <CCol sm="6" lg="2">
+                        <div>
+                          <Input style={styles.searchInput} onChange={(e) => {
+                            this.actionSearch(e, "keyUserName");
+                          }} name="key" value={keyUserName} placeholder="Tên đăng nhập" />
+                        </div>
+                      </CCol>
+                      <CCol sm="6" lg="2">
+                        <div>
+                          <Input style={styles.searchInput} onChange={(e) => {
+                            this.actionSearch(e, "keyName");
+                          }} name="key" value={keyName} placeholder="Tên" />
+                        </div>
+                      </CCol>
+                      <CCol sm="6" lg="2">
+                        <div>
+                          <Input style={styles.searchInput} onChange={(e) => {
+                            this.actionSearch(e, "keyEmail");
+                          }} name="key" value={keyEmail} placeholder="Email" />
+                        </div>
+                      </CCol>
+                      <CCol sm="6" lg="2">
+                        <div>
+                          <Input style={styles.searchInput} onChange={(e) => {
+                            this.actionSearch(e, "keyCompanyCode");
+                          }} name="key" value={keyCompanyCode} placeholder="Mã công ty" />
+                        </div>
+                      </CCol>
+                      <CCol sm="6" lg="2">
+                        <div>
+                          <Input style={styles.searchInput} onChange={(e) => {
+                            this.actionSearch(e, "keyPhone");
+                          }} name="key" value={keyPhone} placeholder="Số điện thoại" />
+                        </div>
+                      </CCol>
+                      <CCol sm="6" lg="2">
+                        <div>
+                          <Input style={styles.searchInput} onChange={(e) => {
+                            this.actionSearch(e, "keyCode");
+                          }} name="key" value={keyCode} placeholder="Code" />
+                        </div>
+                      </CCol>
+                      <CCol sm="6" lg="2">
+                        <CSelect style={styles.flexOption} onChange={e => {
+
+                          this.actionSearch(e, "keyGender");
+
+                        }} custom>
                           {
-                            this.state.arrMonthWithDefault.map((item, i) => {
-                              if (item == "00") {
-                                return (
-                                  <option selected value={item}>Get All</option>
-                                );
-                              } else {
-                                if (item == this.state.month) {
-                                  return (
-                                    <option selected value={item}>{item}</option>
-                                  );
-                                } else {
-                                  return (
-                                    <option value={item}>{item}</option>
-                                  );
-                                }
-                              }
+                            ['Nam', 'Nữ'].map((item, i) => {
+                              return (
+                                <option value={item}>{item}</option>
+                              );
                             })
                           }
                         </CSelect>
-                      </div> : ""
-                    }
+                      </CCol>
+                      <CCol sm="6" lg="2">
+                        <CSelect style={styles.flexOption} onChange={e => {
 
-                  </div>
-                </div>
+                          this.actionSearch(e, "keyStatus");
+
+                        }} custom>
+                          {
+                            ['Actived', 'Deactived', 'Locked'].map((item, i) => {
+                              return (
+                                <option value={item}>{item}</option>
+                              );
+                            })
+                          }
+                        </CSelect>
+                      </CCol>
+                      <CCol sm="6" lg="2">
+                        <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                      </CCol>
+                    </CRow>
+                  </CCol>
+                  <CCol sm="6" lg="12">
+                    <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
+                  </CCol>
+                </CRow>
               </div>
+
+
 
               {/* <CRow>
                 <CCol lg="5" sm="5" md="5" xs="12">
@@ -842,126 +847,54 @@ class Users extends Component {
             </CardHeader>
             <CardBody>
               {
-                role == 'SALES' ?
-                  <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">Name</th>
-                        <th className="text-center">Email</th>
-                        <th className="text-center">Phone</th>
-                        {
-                          isSale ? <th className="text-center">Times</th> : ""
-                        }
-                        {
-                          isSale ? <th className="text-center">Coeff</th> : ""
-                        }
-                        <th className="text-center">Gender</th>
-                        <th className="text-center">Date</th>
-                        <th className="text-center">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td colSpan="10" hidden={hidden} className="text-center">No users in this month</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{item.Name}</td>
-                                <td className="text-center">{item.Email}</td>
-                                <td className="text-center">{item.Phone}</td>
-                                {
-                                  isSale ? <th className="text-center">{item.count}</th> : ""
-                                }
-                                {
-                                  isSale ? <th className="text-center">{item.coefficient}</th> : ""
-                                }
-                                <td className="text-center">{item.Gender}</td>
-                                <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                </td>
-                                <td className="text-center">
-                                  {/* <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '} */}
-                                  <Button outline color="primary" size="sm" onClick={async (e) => { await this.getSeeder() }}>Detail</Button>
-                                </td>
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </table> : role == 'ADMIN' ?
-
-                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                      <thead className="thead-light">
-                        <tr>
-                          <th className="text-center">Username</th>
-                          <th className="text-center">Name</th>
-                          <th className="text-center">Email</th>
-                          <th className="text-center">Phone</th>
-                          <th className="text-center">Gender</th>
-                          <th className="text-center">Code</th>
-                          <th className="text-center">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          data != undefined ?
-                            data.map((item, i) => {
-                              return (
-                                <tr key={i}>
-                                  <td className="text-center">{item.UserName}</td>
-                                  <td className="text-center">{item.Name}</td>
-                                  <td className="text-center">{item.Email}</td>
-                                  <td className="text-center">{item.Phone}</td>
-                                  <td className="text-center">{item.Gender}</td>
-                                  <td className="text-center">{item.Code}</td>
-                                  <td className="text-center">
-                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
-                                  </td>
-                                </tr>
-                              );
-                            }) : ""
-                        }
-                      </tbody>
-                    </table> :
-
-                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                      <thead className="thead-light">
-                        <tr>
-                          <th className="text-center">Name</th>
-                          <th className="text-center">Email</th>
-                          <th className="text-center">Phone</th>
-                          <th className="text-center">Gender</th>
-                          <th className="text-center">Company Id</th>
-                          <th className="text-center">Code</th>
-                          <th className="text-center">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          data != undefined ?
-                            data.map((item, i) => {
-                              return (
-                                <tr key={i}>
-                                  <td className="text-center">{item.UserName}</td>
-                                  <td className="text-center">{item.Name}</td>
-                                  <td className="text-center">{item.Email}</td>
-                                  <td className="text-center">{item.Phone}</td>
-                                  <td className="text-center">{item.Gender}</td>
-                                  <td className="text-center">{item.Code}</td>
-                                  <td className="text-center">
-                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
-                                    <Button outline color="primary" size="sm" onClick={async (e) => { await this.tableUserSale(item._id, item.Name); this.setState({ month: "01" }) }}>Detail</Button>
-                                  </td>
-                                </tr>
-                              );
-                            }) : ""
-                        }
-                      </tbody>
-                    </table>
+                <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      <th className="text-center">Tên đăng nhập</th>
+                      <th className="text-center">Tên</th>
+                      <th className="text-center">Email</th>
+                      <th className="text-center">Mã công ty</th>
+                      <th className="text-center">Số điện thoại</th>
+                      <th className="text-center">Giới tính</th>
+                      <th className="text-center">Code</th>
+                      <th className="text-center">Ngày tạo</th>
+                      <th className="text-center">Trạng thái</th>
+                      <th className="text-center">#</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      data != undefined ?
+                        data.map((item, i) => {
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.Name}</td>
+                              <td className="text-center">{item.Email}</td>
+                              <td className="text-center">{item.Company_Id}</td>
+                              <td className="text-center">{item.Phone}</td>
+                              <td className="text-center">{item.Gender}</td>
+                              <td className="text-center">{item.Code}</td>
+                              <td className="text-center">
+                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                              </td>
+                              <td className="text-center">
+                                <CBadge color={this.getBadge(item.Status)}>
+                                  {item.Status}
+                                </CBadge>
+                              </td>
+                              <td className="text-center">
+                                <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
+                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
+                              </td>
+                            </tr>
+                          );
+                        }) : ""
+                    }
+                  </tbody>
+                </table>
               }
             </CardBody>
           </Card>
@@ -981,177 +914,6 @@ class Users extends Component {
                 </tr>
               </div>
           }
-          <div hidden={this.state.see_detail}>
-            <Button color="primary" style={{ margin: '10px', width: '300px' }} size="sm" onClick={async e => { this.getData(); this.setState({ see_detail: !this.state.see_detail }) }}>
-              Go back
-            </Button>
-
-            {/* dawdaefakwdhlkawjdkl */}
-            <Card>
-              <CardHeader>
-                <i className="fa fa-align-justify"></i>LIST USER SALE OF SALER ( Sale Name: {this.state.nameSale}, Page: {this.state.indexPage + 1})
-              </CardHeader>
-              <CardBody>
-                {
-                  <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">Name</th>
-                        <th className="text-center">Email</th>
-                        <th className="text-center">Phone</th>
-                        <th className="text-center">Gender</th>
-                        <th className="text-center">Time Invite</th>
-                        <th className="text-center">Coefficient</th>
-                        <th className="text-center">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td colSpan="8" hidden={hidden_all} className="text-center">No users in this month</td>
-                      {
-                        dataAll != undefined ?
-                          dataAll.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{item.Name}</td>
-                                <td className="text-center">{item.Email}</td>
-                                <td className="text-center">{item.Phone}</td>
-                                <td className="text-center">{item.Gender}</td>
-                                <td className="text-center">{item.count}</td>
-                                <td className="text-center">{item.coefficient}</td>
-                                <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                </td>
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </table>
-                }
-              </CardBody>
-            </Card>
-            {
-              arrPagination_All.length == 1 ? "" :
-                <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                  <tr style={styles.row}>
-                    {
-                      arrPagination_All.map((item, i) => {
-                        return (
-                          <td>
-                            <Button style={styles.pagination} color={i == indexPage_All ? 'primary' : 'danger'} onClick={e => { this.setState({ dataAll: arrPagination_All[i], indexPage_All: i }) }}>{i + 1}</Button>
-                          </td>
-                        );
-                      })
-                    }
-                  </tr>
-                </div>
-            }
-
-
-            <CCardGroup rows className="cols-2">
-              <CCard backgroundColor="red">
-                <CCardBody>
-                  <CChartBar
-                    datasets={[
-                      {
-                        label: 'Total user of month ',
-                        backgroundColor: '#f87979',
-                        data: this.state.arrAllUser
-                      }
-                    ]}
-                    labels="months"
-                    options={{
-                      tooltips: {
-                        enabled: true
-                      }
-                    }}
-                  />
-                </CCardBody>
-              </CCard>
-              <CCard backgroundColor="red">
-                <Card>
-                  <CardHeader>
-                    <div class="container">
-                      <div class="row">
-                        <div class="col">
-                          <i className="justify-content-center"></i>{this.state.nameSale} ( Page: {this.state.indexPage + 1}, Month: {this.state.month})
-                        </div>
-                        <div class="col">
-                          <CSelect style={{ width: 300, float: 'right', backgroundColor: '#ffff99' }} onChange={async e => { await this.getUserSale_ByMonth(this.props.data.idSale, e.target.value); this.setState({ month: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                            {
-                              this.state.arrMonth.map((item, i) => {
-                                if (item == this.state.month) {
-                                  return (
-                                    <option selected value={item}>{item}</option>
-                                  );
-                                } else {
-                                  return (
-                                    <option value={item}>{item}</option>
-                                  );
-                                }
-
-                              })
-                            }
-                          </CSelect>
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardBody>
-                    {
-                      <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                        <thead className="thead-light">
-                          <tr>
-                            <th className="text-center">Name</th>
-                            <th className="text-center">Email</th>
-                            <th className="text-center">Phone</th>
-                            <th className="text-center">Gender</th>
-                            <th className="text-center">Time Invite</th>
-                            <th className="text-center">Coefficient</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <td colSpan="8" hidden={hidden} className="text-center">No users in this month</td>
-                          {
-                            data != undefined ?
-                              data.map((item, i) => {
-                                return (
-                                  <tr key={i}>
-                                    <td className="text-center">{item.Name}</td>
-                                    <td className="text-center">{item.Email}</td>
-                                    <td className="text-center">{item.Phone}</td>
-                                    <td className="text-center">{item.Gender}</td>
-                                    <td className="text-center">{item.count}</td>
-                                    <td className="text-center">{item.coefficient}</td>
-                                  </tr>
-                                );
-                              }) : ""
-                          }
-                        </tbody>
-                      </table>
-                    }
-                  </CardBody>
-                </Card>
-                {
-                  arrPagination.length == 1 ? "" :
-                    <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                      <tr style={styles.row}>
-                        {
-                          arrPagination.map((item, i) => {
-                            return (
-                              <td>
-                                <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                              </td>
-                            );
-                          })
-                        }
-                      </tr>
-                    </div>
-                }
-              </CCard>
-            </CCardGroup>
-
-          </div>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
@@ -1234,7 +996,7 @@ class Users extends Component {
                 </select>
               </div>
 
-              <div>
+              {/* <div>
                 <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
                 <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
                   <option value={this.state.Company_Id}>-----</option>
@@ -1252,47 +1014,69 @@ class Users extends Component {
                     })
                   }
                 </select>
-              </div>
+              </div> */}
 
               <div>
                 <label style={styles.flexLabel} htmlFor="tag">Role:    </label>
                 <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
                   <option value={this.state.Role_Id}>-----</option>
                   {
-                    dataRole.map((item, i) => {
-                      if (item.Name == currentRole) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
+                    this.state.role == 'ADMIN' || this.state.role == 'ADMINSALE' ?
+                      dataRole.map((item, i) => {
+                        if (item.Name == currentRole) {
+                          return (
+                            <option selected value={item._id}>{item.Name}</option>
+                          );
+                        }
+                        else {
+                          return (
+                            <option value={item._id}>{item.Name}</option>
+                          );
+                        }
+                      }) : dataRole.map((item, i) => {
+                        if (item.Name == 'SHOPMANAGER') {
+                          return (
+                            <option value={item._id}>{item.Name}</option>
+                          );
+                        }
+                      })
                   }
                 </select>
               </div>
 
-              {/* <div>
-                <label style={styles.flexLabel} htmlFor="tag">Sale:    </label>
-                <select style={styles.flexOption} name="Sale_Id" onChange={e => this.onChange("Sale_Id", e.target.value)}>
-                  <option value={this.state.Sale_Id}>-----</option>
-                  {
-                    dataSale.map((item, i) => {
-                      if (item.Name == currentSale) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div> */}
+              {
+                action == 'new' ? "" : <div>
+                  <label style={styles.flexLabel} htmlFor="tag">Status:</label>
+                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
+                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
+                    <option value={'Actived'}>Actived</option>
+                    <option value={'Locked'}>Locked</option>
+                    <option value={'Deactived'}>Deactived</option>
+                  </select>
+                </div>
+              }
+              {/* {
+                this.state.role == 'ADMIN' ? <div>
+                  <label style={styles.flexLabel} htmlFor="tag">Sale:    </label>
+                  <select style={styles.flexOption} name="Sale_Id" onChange={e => this.onChange("Sale_Id", e.target.value)}>
+                    <option value={this.state.Sale_Id}>-----</option>
+                    {
+                      dataSale.map((item, i) => {
+                        if (item.Name == currentSale) {
+                          return (
+                            <option selected value={item._id}>{item.Name}</option>
+                          );
+                        } else {
+                          return (
+                            <option value={item._id}>{item.Name}</option>
+                          );
+                        }
+                      })
+                    }
+                  </select>
+                </div> : ""
+              } */}
+
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
@@ -1340,7 +1124,8 @@ const styles = {
     width: 100
   },
   flexOption: {
-    width: 300
+    width: 200,
+    margin: '1px'
   },
   a: {
     textDecoration: 'none'
@@ -1402,13 +1187,12 @@ const styles = {
   },
   tags: {
     float: "right",
-    marginRight: "5px",
-    width: "250px",
-    marginTop: '10px'
+    marginRight: "5px"
   },
   searchInput: {
-    width: "190px",
+    width: "200px",
     display: 'inline-block',
+    margin: '1px'
   },
   userActive: {
     color: 'green'

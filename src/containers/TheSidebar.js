@@ -21,14 +21,30 @@ import navigation from './_nav'
 const TheSidebar = () => {
   const auth = localStorage.getItem('role');
 
+
   for(let i = 0; i < navigation.length; i++){
-    var arr = navigation[i].role;
-    if(arr.includes(auth)){
-      navigation[i].hidden = false;
-    } else {
-      navigation[i].hidden = true;
+    if(navigation[i]._children != undefined){
+      if(navigation[i]._children.length > 1){
+        var arr = navigation[i]._children;
+        for(let y = 0; y < arr.length; y++){
+          if(arr[y].role.includes(auth)){
+            arr[y].hidden = false;
+          } else {
+            arr[y].hidden = true;
+          }
+        }
+      }
     }
   }
+
+  // for(let i = 0; i < navigation.length; i++){
+  //   var arr = navigation[i].role;
+  //   if(arr.includes(auth)){
+  //     navigation[i].hidden = false;
+  //   } else {
+  //     navigation[i].hidden = true;
+  //   }
+  // }
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)
 

@@ -25,6 +25,12 @@ export default {
   "UPDATE_TYPEKEY" : "/api/update-typekey",
   "DELETE_TYPEKEY" : "/api/delete-typekey",
 
+  "LIST_HARDWARE" : "/api/list-hardware",
+  "LIST_HARDWARE_WITH_ID" : "/api/list-hardware?id=",
+  "ADD_HARDWARE" : "/api/add-hardware",
+  "UPDATE_HARDWARE" : "/api/update-hardware",
+  "DELETE_HARDWARE" : "/api/delete-hardware",
+
   "LIST_ROLE" : "/api/list-role",
   "LIST_ROLE_WITH_ID" : "/api/list-role?id=",
   "ADD_ROLE" : "/api/add-role",

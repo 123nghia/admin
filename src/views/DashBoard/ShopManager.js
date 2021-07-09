@@ -107,7 +107,8 @@ class ShopManager extends Component {
         "condition": {
           "Company_Id": id.company_id
         }
-      }
+      },
+      headers: this.state.token
     });
 
     this.setState({ dataApi: res.data.data });

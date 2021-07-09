@@ -11,6 +11,10 @@ const TableRole = React.lazy(() => import('./views/base/tables/Role'));
 const TableTypeKey = React.lazy(() => import('./views/base/tables/TypeKey'));
 const TableLink = React.lazy(() => import('./views/base/tables/Link'));
 const HistorySkinUser = React.lazy(() => import('./views/base/tables/HistorySkinUser'));
+const ListShopManager = React.lazy(() => import('./views/base/tables/ListShopManager'));
+const ListSale = React.lazy(() => import('./views/base/tables/ListSale'));
+const ListCustomer = React.lazy(() => import('./views/base/tables/ListCustomer'));
+const HardWare = React.lazy(() => import('./views/base/tables/HardWare'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -25,6 +29,10 @@ const routes = [
   { path: '/role', name: 'Role', component: TableRole },
   { path: '/link', name: 'Key', component: TableLink },
   { path: '/history', name: 'HistorySkin', component: HistorySkinUser },
+  { path: '/sales', name: 'ShopManager', component: ListSale },
+  { path: '/shopmanager', name: 'ShopManager', component: ListShopManager },
+  { path: '/customers', name: 'Customers', component: ListCustomer },
+  { path: '/hardware', name: 'Customers', component: HardWare },
 ];
 
 export default routes;

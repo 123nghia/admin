@@ -11,12 +11,22 @@ import { icons } from './assets/icons'
 
 import { Provider } from 'react-redux'
 import store from './store'
+import { createStore, applyMiddleware } from 'redux';
+import rootReducers from "./../src/redux/reducers";
+import createSagaMiddleware from 'redux-saga'
+import root from "./../src/redux/sagas"
+
+const sagaMiddleware = createSagaMiddleware()
+const storeS = createStore(rootReducers, applyMiddleware(sagaMiddleware))
 
 React.icons = icons
 
+sagaMiddleware.run(root)
+const GlobalContext = React.createContext();
+
 ReactDOM.render(
-  <Provider store={store}>
-    <App/>
+  <Provider store={storeS}>
+    <App />
   </Provider>,
   document.getElementById('root')
 );

@@ -49,6 +49,7 @@ class Users extends Component {
       arrPagination: [],
       indexPage: 0,
       company_id: localStorage.getItem('user'),
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isUpdate: false
     };
   }
@@ -267,7 +268,8 @@ class Users extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.GET_SALE,
       method: 'POST',
-      data: bodyCustomer
+      data: bodyCustomer,
+      headers: this.state.token
     })
 
     this.setState({ dataSaleOfCompany: resAllSale.data.data });

@@ -51,6 +51,8 @@ class Login extends Component {
 
         this.props.history.push('/dashboard')
       } else {
+        console.log(this.state.username)
+        console.log(this.state.password)
         this.setState({ isLoading: false, errors: { common: 'Username or password is incorrect' } });
       }
     }
