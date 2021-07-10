@@ -238,16 +238,17 @@ class Users extends Component {
 
     let arrCount_All_User = [];
 
+    this.getSaleDataOfUser()
+
     for (let i = 0; i < resAll.data.data.length; i++) {
       //check if exits in arr
       if (!arrCount_All_User.some(item => resAll.data.data[i].Phone == item.Phone)) {
-        resAll.data.data[i].Address = await (await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id)).Address;
-        resAll.data.data[i].NameSale = await (await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id)).Name;
+        // resAll.data.data[i].Address = await (await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id)).Address;
+        // resAll.data.data[i].NameSale = await (await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id)).Name;
         arrCount_All_User.push(resAll.data.data[i])
       }
     }
 
-    console.log(await (await this.getSaleDataOfUser()).Address);
     if (arrCount_All_User.length == 0) {
       this.setState({
         hidden_all: false
@@ -320,18 +321,17 @@ class Users extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  async getSaleDataOfUser(sale_id){
+  async getSaleDataOfUser(){
+    const { role } = this.state;
+
     var res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.GET_SALE,
       method: 'POST',
-      data: {
-        sale_id: sale_id
-      },
       headers: this.state.token
     });
+    return res.data.data;
 
-    return {Address: res.data.data[0].Address, Name: res.data.data[0].Name}
   }
 
   async getRoleData(id) {

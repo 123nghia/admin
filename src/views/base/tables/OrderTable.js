@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  CardFooter,
   Col,
   Row,
   Table, Button, Input,
@@ -16,7 +17,8 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput
+  CInput,
+  CLabel
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -28,22 +30,12 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-class Company extends Component {
+class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       key: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyFax: '',
-      keyAddress: '',
-      keyWebsite: '',
-      keyCode: '',
-      keyCompany: '',
-      UserName: "",
-      Password: "",
-      keyDateCreate: new Date(),
       keyStatus: '',
       activePage: 1,
       page: 1,
@@ -54,27 +46,25 @@ class Company extends Component {
       viewingUser: {},
       communities: [],
       updated: '',
+      Status: '',
       dataApi: [],
       action: 'new',
-      Name: '',
-      Email: '',
-      Phone: '',
-      Fax: 'Nam',
-      Address: '',
-      Website: '',
-      Code: '',
-      Status: '',
       modalDelete: false,
       delete: null,
       arrPagination: [],
       indexPage: 0,
       dataCompany: [],
       currentCompany: '',
+      currentID: '',
+      currentCom_ID: 'ăd',
+      currentSale_ID: 'ăd',
+      dataOrderDetail: [],
+      hiddenDetail: true
     };
   }
   async componentDidMount() {
     this.getData();
-    this.getCompanyData();
+
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -108,9 +98,10 @@ class Company extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_COMPANY,
+      url: Constants.LIST_ORDER,
       method: 'POST',
     });
+
     this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
 
@@ -125,18 +116,49 @@ class Company extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
+  getOrderDetail = async (company_id, sale_id) => {
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_ORDER_DETAIL,
+      method: 'POST',
+      data: {
+        "company_id": company_id
+      }
+    });
+
+    const resCom = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_COMPANY,
+      method: 'POST',
+      data: {
+        condition: {
+          _id: company_id
+        }
+      }
+    });
+
+    const resSale = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.GET_SALE_NAME,
+      method: 'POST',
+      data: {
+        sale_id: sale_id
+      }
+    });
+
+    this.setState({ dataApi: res.data.data, dataOrderDetail: res.data.data,
+      hiddenDetail: false, currentID: company_id, currentCom_ID: resCom.data.data[0].Name, currentSale_ID: resSale.data.data[0].Name });
+  }
+
   searchKey() {
-    const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
-      keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
+    const { indexPage, key, keyStatus } = this.state;
     // this.setState({ key: key })
 
     if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+        if (val.Company_Id.toLocaleUpperCase().includes(key.toLocaleUpperCase()) &&
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -253,115 +275,25 @@ class Company extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      Name: item.Name,
-      Email: item.Email,
-      Phone: item.Phone,
-      Fax: item.Fax,
-      Address: item.Address,
-      Website: item.Website,
-      Code: item._id,
       id: item['_id'],
       Status: item.Status
     })
   }
 
   async updateCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Code, Status } = this.state
-
-    if (Email == null || Email == ''
-      || Name == null || Name == ''
-      || Phone == null || Phone == ''
-      || Address == null || Address == '') {
-      alert("Please fill in all the requirements");
-      return
-    }
+    const { Status } = this.state
 
     const body = {
-      Name: Name,
-      Email: Email,
-      Phone: Phone,
-      Fax: Fax,
-      Address: Address,
-      Website: Website,
-      Code: this.state.id,
       Status: Status,
       id: this.state.id
     }
 
     this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_COMPANY,
-      method: 'POST',
-      data: body
-    });
-
-    if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert(res.data.message);
-      this.setState({ isLoading: false });
-    }
-  }
-
-  openDelete = (item) => {
-    this.setState({
-      modalDelete: !this.state.modalDelete,
-      delete: item
-    })
-  }
-
-  async delete() {
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_COMPANY,
-      method: 'DELETE',
-      data: {
-        "id": this.state.delete['_id']
-      }
-    });
-
-    if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalDelete: !this.state.modalDelete, delete: null })
-    } else {
-      alert(res.data.message);
-      this.setState({ isLoading: false });
-    }
-
-  }
-
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-  async handlePageChange(pageNumber) {
-    this.getUsers(pageNumber);
   }
 
   getBadge(status) {
     switch (status) {
-      case 'Actived': return 'success'
-      case 'Inactive': return 'secondary'
-      case 'Locked': return 'warning'
-      case 'Deactived': return 'danger'
+      case 'SPENDING': return 'success'
       default: return 'primary'
     }
   }
@@ -415,7 +347,7 @@ class Company extends Component {
   render() {
     const { data, key, viewingUser, communities, action, arrPagination,
       indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus } = this.state;
+      keyDateCreate, keyStatus, dataOrderDetail } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -425,8 +357,7 @@ class Company extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách công ty (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng (Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -450,7 +381,7 @@ class Company extends Component {
 
                             }} custom>
                               {
-                                ['Actived', 'Deactived', 'Locked'].map((item, i) => {
+                                ['AVAILABLE', 'SPENDING'].map((item, i) => {
                                   return (
                                     <option value={item}>{item}</option>
                                   );
@@ -463,9 +394,6 @@ class Company extends Component {
                           </CCol>
                         </CRow>
                       </CCol>
-                      <CCol sm="12" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
-                      </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
@@ -474,15 +402,12 @@ class Company extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên Công Ty</th>
-                        <th className="text-center">Email</th>
-                        <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Fax</th>
-                        <th className="text-center">Địa chỉ</th>
-                        <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">Mã công ty</th>
+                        <th className="text-center">Ngày mua</th>
+                        <th className="text-center">Ngày kích hoạt</th>
+                        <th className="text-center">Số lượng mua</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
-
                       </tr>
                     </thead>
                     <tbody>
@@ -492,14 +417,14 @@ class Company extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Name}</td>
-                                <td className="text-center">{item.Email}</td>
-                                <td className="text-center">{item.Phone}</td>
-                                <td className="text-center">{item.Fax}</td>
-                                <td className="text-center">{item.Address}</td>
+                                <td className="text-center">{item.Company_Id}</td>
                                 <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                  {(new Date(item.Purcharse_Date)).toLocaleDateString() + ' ' + (new Date(item.Purcharse_Date)).toLocaleTimeString()}
                                 </td>
+                                <td className="text-center">
+                                  {(new Date(item.Active_Date)).toLocaleDateString() + ' ' + (new Date(item.Active_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">{item.Count}</td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
                                     {item.Status}
@@ -507,7 +432,85 @@ class Company extends Component {
                                 </td>
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
+                                  <Button outline color="success" size="sm" onClick={async (e) => { await this.getOrderDetail(item.Company_Id, item.Sale_Id) }} >Detail</Button>
+                                  {/* <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button> */}
+                                </td>
+                              </tr>
+                            );
+                          }) : ""
+                      }
+                    </tbody>
+                  </table>
+
+                </CardBody>
+                <CardFooter>
+                  {
+                    arrPagination.length == 1 ? "" :
+                      <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                        <tr style={styles.row}>
+                          {
+                            arrPagination.map((item, i) => {
+                              return (
+                                <td>
+                                  <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                                </td>
+                              );
+                            })
+                          }
+                        </tr>
+                      </div>
+                  }
+                </CardFooter>
+              </Card>
+
+
+              <Card hidden={this.state.hiddenDetail}>
+                <CardHeader>
+                  <i className="fa fa-align-justify"></i> Chi tiết đơn hàng của {this.state.currentCom_ID} (Page: {this.state.indexPage + 1})
+
+                  <CRow style={{ marginTop: 20 }}>
+                    <CCol sm="6" lg="6">
+                      <CCol sm="12" lg="12">
+                        <CLabel htmlFor="selectSm">Tên công ty đăng ký phần cứng: {this.state.currentCom_ID}</CLabel>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <CLabel htmlFor="selectSm">Tên sale: {this.state.currentSale_ID}</CLabel>
+                      </CCol>
+                    </CCol>
+                    <CCol sm="6" lg="6">
+                      <Button color="primary" style={{ float: 'right', marginTop: 5 }} size="sm" onClick={e => { this.setState({ hiddenDetail: true }) }}>Đóng</Button>
+                    </CCol>
+                  </CRow>
+                </CardHeader>
+                <CardBody>
+                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                    <thead className="thead-light">
+                      <tr>
+                        <th className="text-center">STT.</th>
+                        <th className="text-center">Mã phần cứng</th>
+                        <th className="text-center">Ngày mua</th>
+                        <th className="text-center">Ngày kích hoạt</th>
+                        <th className="text-center">Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        dataOrderDetail != undefined ?
+                          dataOrderDetail.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.HardWareID}</td>
+                                <td className="text-center">
+                                  {(new Date(item.Purcharse_Date)).toLocaleDateString() + ' ' + (new Date(item.Purcharse_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  {(new Date(item.Active_Date)).toLocaleDateString() + ' ' + (new Date(item.Active_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  <CBadge color={this.getBadge(item.Status)}>
+                                    {item.Status}
+                                  </CBadge>
                                 </td>
                               </tr>
                             );
@@ -518,22 +521,6 @@ class Company extends Component {
 
                 </CardBody>
               </Card>
-              {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              }
 
             </Col>
           </Row>
@@ -541,93 +528,12 @@ class Company extends Component {
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="Email"
-                label="Email"
-                value={this.state.Email}
-                type={"email"}
-                placeholder={"Emal"}
-                // error={errors.title}
-                onChange={e => this.onChange("Email", e.target.value)}
-              // rows="5"
-              />
-              <TextFieldGroup
-                field="Name"
-                label="Tên công ty"
-                value={this.state.Name}
-                placeholder={"Tên công ty"}
-                // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="UserName"
-                label="Tên đăng nhập"
-                value={this.state.UserName}
-                placeholder={"Tên đăng nhập"}
-                // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Password"
-                label="Mật khẩu"
-                type={"password"}
-                value={this.state.Password}
-                placeholder={"Mật khẩu"}
-                // error={errors.title}
-                onChange={e => this.onChange("Password", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Phone"
-                label="Số điện thoại"
-                value={this.state.Phone}
-                placeholder={"Số điện thoại"}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Fax"
-                label="Fax"
-                value={this.state.Fax}
-                placeholder={"Fax"}
-                // error={errors.title}
-                onChange={e => this.onChange("Fax", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Address"
-                label="Địa chỉ"
-                value={this.state.Address}
-                placeholder={"Địa chỉ"}
-                // error={errors.title}
-                onChange={e => this.onChange("Address", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Website"
-                label="Website"
-                value={this.state.Website}
-                placeholder={"Website"}
-                // error={errors.title}
-                onChange={e => this.onChange("Website", e.target.value)}
-              // rows="5"
-              />
               {
                 action == 'new' ? "" : <div>
                   <label style={styles.flexLabel} htmlFor="tag">Status    </label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'Actived'}>Actived</option>
-                    <option value={'Locked'}>Locked</option>
-                    <option value={'Deactived'}>Deactived</option>
+                    <option value={'SPENDING'}>SPENDING</option>
                   </select>
                 </div>
               }
@@ -754,4 +660,4 @@ const styles = {
   }
 }
 
-export default Company;
+export default Order;

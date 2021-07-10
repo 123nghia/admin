@@ -15,6 +15,8 @@ const ListShopManager = React.lazy(() => import('./views/base/tables/ListShopMan
 const ListSale = React.lazy(() => import('./views/base/tables/ListSale'));
 const ListCustomer = React.lazy(() => import('./views/base/tables/ListCustomer'));
 const HardWare = React.lazy(() => import('./views/base/tables/HardWare'));
+const Order = React.lazy(() => import('./views/base/tables/CreateOrder'));
+const OrderTable = React.lazy(() => import('./views/base/tables/OrderTable'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -32,7 +34,9 @@ const routes = [
   { path: '/sales', name: 'ShopManager', component: ListSale },
   { path: '/shopmanager', name: 'ShopManager', component: ListShopManager },
   { path: '/customers', name: 'Customers', component: ListCustomer },
-  { path: '/hardware', name: 'Customers', component: HardWare },
+  { path: '/hardware', name: 'HardWares', component: HardWare },
+  { path: '/orders', name: 'Orders', component: Order },
+  { path: '/order_table', name: 'Order Table', component: OrderTable },
 ];
 
 export default routes;

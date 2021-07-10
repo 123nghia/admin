@@ -21,21 +21,26 @@ const _nav = [
     _children: ['Quản lý'],
   },
   {
-    _tag: 'CSidebarNavTitle',
+    _tag: 'CSidebarNavDropdown',
+    name: 'Quản lý',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách công ty',
       to: '/company',
       role: ['ADMIN', 'ADMINSALE'],
-    }
-      //, {
-      //   _tag: 'CSidebarNavItem',
-      //   name: 'Danh sách admin sale',
-      //   to: '/company',
-      //   role: ['ADMIN', 'ADMINSALE']
-      // }
-      , {
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Tạo đơn hàng',
+      to: '/orders',
+      role: ['ADMIN', 'ADMINSALE']
+    },
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách đơn hàng',
+      to: '/order_table',
+      role: ['ADMIN', 'ADMINSALE']
+    },{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách shop',
       to: '/shopmanager',

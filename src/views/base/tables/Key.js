@@ -397,14 +397,14 @@ class Users extends Component {
     const resCompany = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_COMPANY,
-      method: 'GET',
+      method: 'POST',
     });
 
     if (id != '' || id != undefined) {
       const currentC = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.LIST_COMPANY_WITH_ID + id,
-        method: 'GET',
+        method: 'POST',
       });
       if (currentC.data.data != null || currentC.data.data != undefined) {
         this.setState({ currentCompany: currentC.data.data.Name });
@@ -452,7 +452,7 @@ class Users extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  Quản lí khóa (Page: {this.state.indexPage + 1})
+                  Quản lý khóa (Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="6" lg="12">

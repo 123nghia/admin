@@ -15,6 +15,7 @@ export default {
   "CALCULATOR_ALL_USER_OF_COMPANY" : "/api/calculator-all-user-company",
   "CALCULATOR_ALL_USER_OF_SALE" : "/api/calculator-all-user-of-sale",
   "GET_SEEDER" : "/api/get-seed",
+  "GET_SALE_NAME": "/api/get-name-sale",
 
   "LIST_CUSTOMER" : "/api/list-customer",
   "LIST_CUSTOMER_BY_MONTH" : "/api/get-user-sale-by-month",
@@ -30,6 +31,12 @@ export default {
   "ADD_HARDWARE" : "/api/add-hardware",
   "UPDATE_HARDWARE" : "/api/update-hardware",
   "DELETE_HARDWARE" : "/api/delete-hardware",
+
+  "LIST_ORDER" : "/api/list-order",
+  "ADD_ORDER" : "/api/add-order",
+
+  "LIST_ORDER_DETAIL" : "/api/list-orderdetail",
+  "ADD_ORDER_DETAIL" : "/api/add-orderdetail",
 
   "LIST_ROLE" : "/api/list-role",
   "LIST_ROLE_WITH_ID" : "/api/list-role?id=",
