@@ -123,7 +123,6 @@ class Users extends Component {
   }
   async componentDidMount() {
     this.getAllData();
-
     let arr = JSON.parse(localStorage.getItem('url'));
     for(let i = 0; i < arr.length; i++){
       if("#" + arr[i].to == window.location.hash){
@@ -242,10 +241,13 @@ class Users extends Component {
     for (let i = 0; i < resAll.data.data.length; i++) {
       //check if exits in arr
       if (!arrCount_All_User.some(item => resAll.data.data[i].Phone == item.Phone)) {
+        resAll.data.data[i].Address = await (await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id)).Address;
+        resAll.data.data[i].NameSale = await (await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id)).Name;
         arrCount_All_User.push(resAll.data.data[i])
       }
     }
 
+    console.log(await (await this.getSaleDataOfUser()).Address);
     if (arrCount_All_User.length == 0) {
       this.setState({
         hidden_all: false
@@ -318,24 +320,18 @@ class Users extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  async getSaleData(id) {
-    const resSale = await axios({
+  async getSaleDataOfUser(sale_id){
+    var res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SALE,
-      method: 'GET',
+      url: Constants.GET_SALE,
+      method: 'POST',
+      data: {
+        sale_id: sale_id
+      },
+      headers: this.state.token
     });
 
-    if (id != '' || id != undefined) {
-      const currentSale = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.LIST_SALE_WITH_ID + id,
-        method: 'GET',
-      });
-      if (currentSale.data.data != null || currentSale.data.data != undefined) {
-        this.setState({ currentSale: currentSale.data.data.Name });
-      }
-    }
-    this.setState({ dataSale: resSale.data.data });
+    return {Address: res.data.data[0].Address, Name: res.data.data[0].Name}
   }
 
   async getRoleData(id) {
@@ -514,6 +510,8 @@ class Users extends Component {
                     <tr>
                       <th className="text-center">STT.</th>
                       <th className="text-center">Tên</th>
+                      <th className="text-center">Tên Sale</th>
+                      <th className="text-center">Địa chỉ shop</th>
                       <th className="text-center">Email</th>
                       <th className="text-center">Số điện thoại</th>
                       <th className="text-center">Giới tính</th>
@@ -530,6 +528,8 @@ class Users extends Component {
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.Name}</td>
+                              <td className="text-center">{item.NameSale}</td>
+                              <td className="text-center">{item.Address}</td>
                               <td className="text-center">{item.Email}</td>
                               <td className="text-center">{item.Phone}</td>
                               <td className="text-center">{item.Gender}</td>

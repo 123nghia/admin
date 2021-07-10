@@ -37,7 +37,7 @@ const _nav = [
       // }
       , {
       _tag: 'CSidebarNavItem',
-      name: 'Danh sách chủ shop',
+      name: 'Danh sách shop',
       to: '/shopmanager',
       role: ['ADMIN', 'ADMINSALE', 'COMPANY']
     }, {
@@ -59,7 +59,7 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Danh sách key',
       to: '/key',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY']
+      role: ['ADMIN', 'ADMINSALE']
     }]
   }
 
