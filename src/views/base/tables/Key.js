@@ -79,9 +79,9 @@ class Users extends Component {
     await this.getHardWData_all();
 
     let arr = JSON.parse(localStorage.getItem('url'));
-    for(let i = 0; i < arr.length; i++){
-      if("#" + arr[i].to == window.location.hash){
-        if(arr[i].hidden == true){
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
           window.location.href = '#/'
         }
       }
@@ -109,10 +109,8 @@ class Users extends Component {
 
   getBadge(status) {
     switch (status) {
-      case 'Actived': return 'success'
-      case 'Inactive': return 'secondary'
-      case 'Locked': return 'warning'
-      case 'Deactived': return 'danger'
+      case 'INSTOCK': return 'success'
+      case 'DISABLE': return 'danger'
       default: return 'primary'
     }
   }
@@ -180,14 +178,15 @@ class Users extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyName, keyCodeCompany, keyTypeKey, keyActive, keyEndDate, keyValue, keyStatus } = this.state;
+    const { indexPage, key, keyStatus } = this.state;
 
     if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-            d.push(val)
+        if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Value.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+          d.push(val)
         }
       })
       let active = 0
@@ -222,73 +221,17 @@ class Users extends Component {
 
   resetSearch() {
     this.setState({
-      keyName: '',
-      keyCodeCompany: '',
-      keyTypeKey: '',
-      keyActive: '',
-      keyEndDate: '',
-      keyStatus: '',
-      keyValue: ''
+      key: '',
+      keyStatus: ''
     }, () => {
       this.searchKey();
     });
-  }
-
-  async toggleModal(key) {
-    await this.getCompanyData()
-    await this.getTypeKeyData()
-    await this.getHardWData()
-    if (key == 'new') {
-      this.setState({
-        modalCom: !this.state.modalCom,
-        action: key,
-        Name: '',
-        Company_Id: '',
-        Type_Key: '',
-        Start_Date: new Date(),
-        End_Date: new Date(),
-        Value: ''
-      })
-    }
   }
 
   onChange(key, val) {
     this.setState({ [key]: val })
   }
 
-  async addUser() {
-    const { Name, Company_Id, Type_Key, Start_Date, End_Date, Value } = this.state
-
-    if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
-      return
-    }
-
-    const body = {
-      Name: Name,
-      Company_Id: Company_Id,
-      Type_Key: Type_Key,
-      Start_Date: Start_Date,
-      End_Date: End_Date,
-      Value: Value
-    }
-
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.ADD_KEY,
-      method: 'PUT',
-      data: body
-    });
-
-    if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert(res.data.message);
-      this.setState({ isLoading: false });
-    }
-  }
 
   async openUpdate(item) {
     await this.getCompanyData(item.Company_Id)
@@ -298,32 +241,15 @@ class Users extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      Name: item.Name,
-      Company_Id: item.Company_Id,
-      Type_Key: item.Type_Key,
-      Start_Date: item.Start_Date,
-      End_Date: item.End_Date,
-      Value: item.Value,
       id: item['_id'],
       Status: item.Status
     })
   }
 
   async updateUser() {
-    const { Name, Company_Id, Type_Key, Start_Date, End_Date, Value, Status } = this.state
-
-    if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
-      return
-    }
+    const { Status } = this.state
 
     const body = {
-      Name: Name,
-      Company_Id: Company_Id,
-      Type_Key: Type_Key,
-      Start_Date: Start_Date,
-      End_Date: End_Date,
-      Value: Value,
       id: this.state.id,
       Status: Status
     }
@@ -471,8 +397,9 @@ class Users extends Component {
                               this.actionSearch(e, "keyStatus");
 
                             }} custom>
+                              <option value={""}>-----</option>
                               {
-                                ['INSTOCK', 'AVAILABLE'].map((item, i) => {
+                                ['INSTOCK', 'AVAILABLE', 'ACTIVED', 'DISABLE'].map((item, i) => {
                                   return (
                                     <option value={item}>{item}</option>
                                   );
@@ -497,7 +424,6 @@ class Users extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên key</th>
-                        <th className="text-center">Loại key</th>
                         <th className="text-center">Ngày kích hoạt</th>
                         <th className="text-center">Ngày hết hạn</th>
                         <th className="text-center">Giá trị</th>
@@ -514,12 +440,17 @@ class Users extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Name}</td>
-                                <td className="text-center">{item.Type_Key}</td>
                                 <td className="text-center">
-                                  {(new Date(item.Start_Date)).toLocaleDateString() + ' ' + (new Date(item.Start_Date)).toLocaleTimeString()}
+                                  {
+                                    item.Start_Date != null || item.Start_Date != undefined ?
+                                      (new Date(item.Start_Date)).toLocaleDateString() + ' ' + (new Date(item.Start_Date)).toLocaleTimeString() : ""
+                                  }
                                 </td>
                                 <td className="text-center">
-                                  {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
+                                  {
+                                    item.End_Date != null || item.End_Date != undefined ?
+                                      (new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString() : ""
+                                  }
                                 </td>
                                 <td className="text-center">{item.Value}</td>
                                 <td className="text-center">
@@ -562,103 +493,22 @@ class Users extends Component {
             <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
 
             <ModalBody>
-              <TextFieldGroup
-                field="Name"
-                label="Name"
-                value={this.state.Name}
-                placeholder={"Name"}
-                // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
-              />
-
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
-                <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
-                  <option value={this.state.Company_Id}>-----</option>
-                  {
-                    dataCompany.map((item, i) => {
-                      if (item.Name == currentCompany) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div>
-
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Type Key:    </label>
-                <select style={styles.flexOption} name="Type_Key" onChange={e => this.onChange("Type_Key", e.target.value)}>
-                  <option value={this.state.Type_Key}>-----</option>
-                  {
-                    dataTypeKey.map((item, i) => {
-                      if (item.Name == currentTypeKey) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div>
-
-              <div style={styles.datePicker}>
-                <label style={styles.flexLabel}>Start Date:  </label>
-                <DatePicker style={styles.flexOption} selected={new Date(this.state.Start_Date)} onChange={(date) => this.setState({ Start_Date: date })} />
-              </div>
-
-              <div style={styles.datePicker}>
-                <label style={styles.flexLabel}>End Date:  </label>
-                <DatePicker style={styles.flexOption} selected={new Date(this.state.End_Date)} onChange={(date) => this.setState({ End_Date: date })} />
-              </div>
-
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Giá trị Key:    </label>
-                <select style={styles.flexOption} name="Value" onChange={e => { this.onChange("Value", e.target.value); console.log(e.target.value) }}>
-                  <option value={this.state.Value}>-----</option>
-                  {
-                    dataHardWare.map((item, i) => {
-                      if (item.Key == currentHardWare) {
-                        return (
-                          <option selected value={item.Key}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item.Key}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div>
-
               {
                 action == 'new' ? "" : <div>
                   <label style={styles.flexLabel} htmlFor="tag">Status:</label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'Actived'}>Actived</option>
-                    <option value={'Locked'}>Locked</option>
-                    <option value={'Deactived'}>Deactived</option>
+                    <option value={'INSTOCK'}>INSTOCK</option>
+                    <option value={'AVAILABLE'}>AVAILABLE</option>
+                    <option value={'ACTIVED'}>ACTIVED</option>
+                    <option value={'DISABLE'}>DISABLE</option>
                   </select>
                 </div>
               }
-
-
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.updateUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Cancel</Button>
             </ModalFooter>
           </Modal>
 

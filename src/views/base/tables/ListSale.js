@@ -364,6 +364,12 @@ class Users extends Component {
       headers: this.state.token
     })
 
+    for(let i = 0; i < res.data.data.length; i++){
+      let data = await this.getCompanyName(res.data.data[i].Company_Id);
+      res.data.data[i].Company_Name = data;
+    }
+
+
     this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
 
@@ -750,6 +756,20 @@ class Users extends Component {
     }
   }
 
+  getCompanyName = async (company_id) => {
+    const resCom = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.DATA_COMPANY,
+      method: 'POST',
+      data: {
+        company_id: company_id
+      }
+    });
+
+    return resCom.data.data.Name;
+  }
+
+
   render() {
     const { data, key, dataCompany, role, hidden, dataAll, arrPagination_All, indexPage_All,
       currentCompany, action, dataRole, currentRole, arrPagination, indexPage,
@@ -809,6 +829,7 @@ class Users extends Component {
                   <tr>
                     <th className="text-center">STT.</th>
                     <th className="text-center">Tên</th>
+                    <th className="text-center">Công ty</th>
                     <th className="text-center">Email</th>
                     <th className="text-center">Số điện thoại</th>
                     <th className="text-center">Địa chỉ</th>
@@ -826,6 +847,7 @@ class Users extends Component {
                           <tr key={i}>
                             <td className="text-center">{i + 1}</td>
                             <td className="text-center">{item.Name}</td>
+                            <td className="text-center">{item.Company_Name}</td>
                             <td className="text-center">{item.Email}</td>
                             <td className="text-center">{item.Phone}</td>
                             <td className="text-center">{item.Address}</td>

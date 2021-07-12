@@ -36,8 +36,9 @@ const TheSidebar = () => {
       }
     }
   }
+  var temp = navigation[4]._children.concat(navigation[6]._children.concat(navigation[8]._children));
 
-  localStorage.setItem('url', JSON.stringify(navigation[3]._children))
+  localStorage.setItem('url', JSON.stringify(temp))
 
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)

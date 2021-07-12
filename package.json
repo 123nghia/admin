@@ -39,6 +39,7 @@
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
     "moment-timezone": "^0.5.33",
+    "multiselect-react-dropdown": "^2.0.4",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",

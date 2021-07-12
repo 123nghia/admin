@@ -17,30 +17,36 @@ const _nav = [
     role: arrRoleADMIN
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Profile',
+    to: '/profile',
+    icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
+    role: arrRoleADMIN
+  },
+  {
     _tag: 'CSidebarNavTitle',
-    _children: ['Quản lý'],
+    _children: ['Thông tin công ty'],
   },
   {
     _tag: 'CSidebarNavDropdown',
-    name: 'Quản lý',
+    name: 'Danh sách',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách công ty',
       to: '/company',
       role: ['ADMIN', 'ADMINSALE'],
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Tạo đơn hàng',
-      to: '/orders',
-      role: ['ADMIN', 'ADMINSALE']
-    },
-    {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách đơn hàng',
-      to: '/order_table',
-      role: ['ADMIN', 'ADMINSALE']
-    },{
+    }]
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý phần cứng'],
+  },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Cấu hình phần cứng',
+    icon: 'cil-star',
+    _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách shop',
       to: '/shopmanager',
@@ -62,10 +68,48 @@ const _nav = [
       role: ['ADMIN', 'ADMINSALE']
     }, {
       _tag: 'CSidebarNavItem',
+      name: 'Danh sách sở hữu phần cứng',
+      to: '/hardwaremanager',
+      role: ['COMPANY']
+    }, {
+      _tag: 'CSidebarNavItem',
       name: 'Danh sách key',
       to: '/key',
       role: ['ADMIN', 'ADMINSALE']
     }]
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Thông tin đơn hàng'],
+  },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Thông tin đơn hàng',
+    icon: 'cil-star',
+    _children: [{
+      _tag: 'CSidebarNavItem',
+      name: 'Tạo đơn hàng',
+      to: '/orders',
+      role: ['ADMIN', 'ADMINSALE']
+    },
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách đơn hàng',
+      to: '/order_table',
+      role: ['ADMIN', 'ADMINSALE']
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách giao dịch',
+      to: '/transaction',
+      role: ['ADMIN', 'ADMINSALE']
+    },
+      //{
+      //   _tag: 'CSidebarNavItem',
+      //   name: 'Đơn hàng chờ thanh toán',
+      //   to: '/spending_order',
+      //   role: ['COMPANY']
+      // }
+    ]
   }
 
 ]

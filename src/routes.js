@@ -17,6 +17,10 @@ const ListCustomer = React.lazy(() => import('./views/base/tables/ListCustomer')
 const HardWare = React.lazy(() => import('./views/base/tables/HardWare'));
 const Order = React.lazy(() => import('./views/base/tables/CreateOrder'));
 const OrderTable = React.lazy(() => import('./views/base/tables/OrderTable'));
+const TransactionTable = React.lazy(() => import('./views/base/tables/Transaction'));
+const HardWareManager = React.lazy(() => import('./views/base/tables/HardWareManager'));
+const Profile = React.lazy(() => import('./views/users/ProfileUser'));
+const SPENDING = React.lazy(() => import('./views/base/tables/SpendingOrder'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -37,6 +41,10 @@ const routes = [
   { path: '/hardware', name: 'HardWares', component: HardWare },
   { path: '/orders', name: 'Orders', component: Order },
   { path: '/order_table', name: 'Order Table', component: OrderTable },
+  { path: '/transaction', name: 'Transaction', component: TransactionTable },
+  { path: '/hardwaremanager', name: 'HardWare', component: HardWareManager },
+  { path: '/profile', name: 'Profile', component: Profile },
+  { path: '/spending_order', name: 'SPENDING', component: SPENDING },
 ];
 
 export default routes;

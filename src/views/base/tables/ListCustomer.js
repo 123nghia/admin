@@ -124,9 +124,9 @@ class Users extends Component {
   async componentDidMount() {
     this.getAllData();
     let arr = JSON.parse(localStorage.getItem('url'));
-    for(let i = 0; i < arr.length; i++){
-      if("#" + arr[i].to == window.location.hash){
-        if(arr[i].hidden == true){
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
           window.location.href = '#/'
         }
       }
@@ -142,7 +142,6 @@ class Users extends Component {
         "email": "ktpm489@gmail.com"
       }
     })
-    console.log(res)
     this.props.onSaveSeed(res.data.data);
     this.props.history.push('/history')
   }
@@ -238,17 +237,18 @@ class Users extends Component {
 
     let arrCount_All_User = [];
 
-    this.getSaleDataOfUser()
+    // this.getSaleDataOfUser()
 
     for (let i = 0; i < resAll.data.data.length; i++) {
       //check if exits in arr
-      if (!arrCount_All_User.some(item => resAll.data.data[i].Phone == item.Phone)) {
-        // resAll.data.data[i].Address = await (await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id)).Address;
-        // resAll.data.data[i].NameSale = await (await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id)).Name;
-        arrCount_All_User.push(resAll.data.data[i])
-      }
+      //if (!arrCount_All_User.some(item => resAll.data.data[i].Name == item.Name)) {
+      var data = await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id);
+      resAll.data.data[i].Address = data.Address;
+      resAll.data.data[i].NameSale = data.Name;
+      arrCount_All_User.push(resAll.data.data[i])
+      //}
     }
-
+    // console.log(arrCount_All_User)
     if (arrCount_All_User.length == 0) {
       this.setState({
         hidden_all: false
@@ -259,9 +259,9 @@ class Users extends Component {
       })
     }
 
-    this.setState({ dataApi: arrCount_All_User, dataAll: arrCount_All_User});
+    this.setState({ dataApi: arrCount_All_User });
 
-    //this.pagination_all(arrCount_All_User);
+    this.pagination_all(arrCount_All_User);
     this.setState({ isLoading: false });
   }
 
@@ -321,16 +321,17 @@ class Users extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  async getSaleDataOfUser(){
-    const { role } = this.state;
-
-    var res = await axios({
+  async getSaleDataOfUser(sale_id) {
+    let res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.GET_SALE,
+      url: Constants.DATA_SALE,
       method: 'POST',
-      headers: this.state.token
+      data: {
+        sale_id: sale_id
+      }
     });
-    return res.data.data;
+    console.log(res.data.data[0])
+    return { Address: res.data.data[0].Address, Name: res.data.data[0].Name } ;
 
   }
 
@@ -389,16 +390,16 @@ class Users extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyName, keyEmail, keyPhone, keyGender, keyStatus } = this.state;
+    const { indexPage, indexPage_All, key, keyName, keyEmail, keyPhone, keyGender, keyStatus } = this.state;
 
     if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-            d.push(val)
+          val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+          d.push(val)
         }
       })
       let active = 0
@@ -411,24 +412,15 @@ class Users extends Component {
 
       this.setState({ dataAll: d, totalActive: active })
     } else {
-      let d = []
-      this.state.dataApi.map(val => {
-        if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-            d.push(val)
-        }
-      })
       let active = 0
 
-      d.map(val => {
+      this.state.dataApi.map(val => {
         if (val.Status == "Actived") {
           active = active + 1
         }
       })
 
-      this.setState({ dataAll: d, totalActive: active })
+      this.setState({ dataAll: this.state.arrPagination_All[indexPage_All], totalActive: active })
     }
   }
 
