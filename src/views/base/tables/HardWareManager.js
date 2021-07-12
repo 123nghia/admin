@@ -61,15 +61,17 @@ class PackageSale extends Component {
       currentCompany: '',
       arrPagination: [],
       indexPage: 0,
+      role: localStorage.getItem('role'),
+      company_id: localStorage.getItem('user'),
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
   }
   async componentDidMount() {
     this.getData();
     let arr = JSON.parse(localStorage.getItem('url'));
-    for(let i = 0; i < arr.length; i++){
-      if("#" + arr[i].to == window.location.hash){
-        if(arr[i].hidden == true){
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
           window.location.href = '#/'
         }
       }
@@ -78,10 +80,8 @@ class PackageSale extends Component {
 
   getBadge(status) {
     switch (status) {
-      case 'INSTOCK': return 'success'
-      case 'AVAILABLE': return 'secondary'
-      case 'Locked': return 'warning'
-      case 'Deactived': return 'danger'
+      case 'ENABLE': return 'success'
+      case 'DISABLE': return 'secondary'
       default: return 'primary'
     }
   }
@@ -100,7 +100,7 @@ class PackageSale extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_HARDWARE,
+      url: Constants.LIST_HARDWARE_CHECKOUT,
       method: 'POST',
       headers: this.state.token
     });
@@ -109,12 +109,6 @@ class PackageSale extends Component {
     this.setState({ dataApi: res.data.data });
 
     let active = 0
-
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
 
     this.setState({ isLoading: false, totalActive: active });
   }
@@ -125,9 +119,10 @@ class PackageSale extends Component {
     if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-            d.push(val)
+        if ((val.Transaction_ID.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.HardWard_ID.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+          d.push(val)
         }
       })
       let active = 0
@@ -189,61 +184,22 @@ class PackageSale extends Component {
   }
 
   async addPackageSale() {
-    const { Name, Active_Date, End_Date } = this.state
 
-    if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
-      return
-    }
-
-    const body = {
-      Name: Name,
-      Active_Date: Active_Date,
-      End_Date: End_Date
-    }
-
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.ADD_HARDWARE,
-      method: 'PUT',
-      data: body
-    });
-
-    if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert(res.data.message);
-      this.setState({ isLoading: false });
-    }
   }
 
   async openUpdate(item) {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      Name: item.Name,
-      Active_Date: item.Active_Date,
-      End_Date: item.End_Date,
-      Status: item.Status,
       id: item['_id'],
       Status: item.Status
     })
   }
 
-  async updatePackageSale() {
-    const { Name, Active_Date, End_Date, Status } = this.state
-
-    if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
-      return
-    }
+  async updateStatus() {
+    const { Status } = this.state
 
     const body = {
-      Name: Name,
-      Active_Date: Active_Date,
-      End_Date: End_Date,
       id: this.state.id,
       Status: Status
     }
@@ -251,7 +207,7 @@ class PackageSale extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_HARDWARE,
+      url: Constants.UPDATE_STATUS_CHECKOUT,
       method: 'POST',
       data: body
     });
@@ -273,23 +229,7 @@ class PackageSale extends Component {
   }
 
   async delete() {
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_HARDWARE,
-      method: 'DELETE',
-      data: {
-        "id": this.state.delete['_id']
-      }
-    });
 
-    if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalDelete: !this.state.modalDelete, delete: null })
-    } else {
-      alert(res.data.message);
-      this.setState({ isLoading: false });
-    }
   }
 
   getUsers(page = 1) {
@@ -334,13 +274,13 @@ class PackageSale extends Component {
 
   render() {
     const { data, key, viewingUser, communities, action, End_Date, Active_Date,
-      dataCompany, currentCompany, arrPagination, indexPage, keyName, keyActive, keyEnd, keyCode, keyStatus } = this.state;
+      dataCompany, currentCompany, arrPagination, indexPage } = this.state;
     if (!this.state.isLoading) {
       return (
         <div>
           <Card>
             <CardHeader>
-              Quản lí phần cứng (Page: {this.state.indexPage + 1})
+              Danh sách phần cứng chủ quản (Page: {this.state.indexPage + 1})
               <div style={styles.tags}>
                 <CRow>
                   <CCol sm="6" lg="12">
@@ -360,7 +300,7 @@ class PackageSale extends Component {
 
                         }} custom>
                           {
-                            ['INSTOCK', 'AVAILABLE'].map((item, i) => {
+                            ['ENABLE', 'DISABLE'].map((item, i) => {
                               return (
                                 <option value={item}>{item}</option>
                               );
@@ -373,9 +313,6 @@ class PackageSale extends Component {
                       </CCol>
                     </CRow>
                   </CCol>
-                  <CCol sm="6" lg="12">
-                    <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
-                  </CCol>
                 </CRow>
               </div>
             </CardHeader>
@@ -384,11 +321,10 @@ class PackageSale extends Component {
                 <thead className="thead-light">
                   <tr>
                     <th className="text-center">STT.</th>
-                    <th className="text-center">Tên</th>
+                    <th className="text-center">Mã giao dịch</th>
+                    <th className="text-center">Mã phần cứng</th>
                     <th className="text-center">Ngày kích hoạt</th>
                     <th className="text-center">Ngày hết hạn</th>
-                    <th className="text-center">Mã</th>
-                    <th className="text-center">Ngày tạo</th>
                     <th className="text-center">Trạng thái</th>
                     <th className="text-center">#</th>
                   </tr>
@@ -400,16 +336,13 @@ class PackageSale extends Component {
                         return (
                           <tr key={i}>
                             <td className="text-center">{i + 1}</td>
-                            <td className="text-center">{item.Name}</td>
+                            <td className="text-center">{item.Transaction_ID}</td>
+                            <td className="text-center">{item.HardWard_ID}</td>
                             <td className="text-center">
                               {(new Date(item.Active_Date)).toLocaleDateString() + ' ' + (new Date(item.Active_Date)).toLocaleTimeString()}
                             </td>
                             <td className="text-center">
                               {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
-                            </td>
-                            <td className="text-center">{item.Key}</td>
-                            <td className="text-center">
-                              {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                             </td>
                             <td className="text-center">
                               <CBadge color={this.getBadge(item.Status)}>
@@ -417,8 +350,7 @@ class PackageSale extends Component {
                               </CBadge>
                             </td>
                             <td className="text-center">
-                              <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '}
-                              <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
+                              <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>
                             </td>
                           </tr>
                         );
@@ -436,7 +368,7 @@ class PackageSale extends Component {
                     arrPagination.map((item, i) => {
                       return (
                         <td>
-                          <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                          <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>{' '}
                         </td>
                       );
                     })
@@ -450,39 +382,30 @@ class PackageSale extends Component {
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="Name"
-                label="Tên phần cứng"
-                value={this.state.Name}
-                placeholder={"Tên phần cứng"}
-                // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
-              />
-
-              <div style={styles.datePicker}>
-                <label style={styles.flexLabel}>Ngày kích hoạt:</label>
-                <DatePicker style={styles.flexOption} selected={new Date(Active_Date)} onChange={(date) => this.setState({ Active_Date: date })} />
-              </div>
-
-              <div style={styles.datePicker}>
-                <label style={styles.flexLabel}>Ngày hết hạn:</label>
-                <DatePicker style={styles.flexOption} selected={new Date(End_Date)} onChange={(date) => this.setState({ End_Date: date })} />
-              </div>
-
               {
                 action == 'new' ? "" : <div>
                   <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'INSTOCK'}>INSTOCK</option>
-                    <option value={'AVAILABLE'}>AVAILABLE</option>
+                    {
+                      ['ENABLE', 'DISABLE'].map((item, i) => {
+                        if (item == this.state.Status) {
+                          return (
+                            <option selected value={item}>{item}</option>
+                          );
+                        } else {
+                          return (
+                            <option value={item}>{item}</option>
+                          );
+                        }
+                      })
+                    }
                   </select>
                 </div>
               }
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updateStatus() }} disabled={this.state.isLoading}>Save</Button>{' '}
               <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
             </ModalFooter>
           </Modal>

@@ -30,7 +30,7 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-class Order extends Component {
+class Transaction extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,7 +56,8 @@ class Order extends Component {
       dataCompany: [],
       currentCompany: '',
       currentID: '',
-      currentCom_ID: '',
+      currenCom: '',
+      currenCom_ID: '',
       currentSale_ID: '',
       curentStatus: '',
       dataOrderDetail: [],
@@ -100,9 +101,23 @@ class Order extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_ORDER,
+      url: Constants.LIST_TRANSACTION,
       method: 'POST',
     });
+
+    for (let i = 0; i < res.data.data.length; i++) {
+      const resCom = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.LIST_COMPANY,
+        method: 'POST',
+        data: {
+          condition: {
+            _id: res.data.data[i].Company_Id
+          }
+        }
+      });
+      res.data.data[i].Com_Name = resCom.data.data[0].Name;
+    }
 
     this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
@@ -118,13 +133,16 @@ class Order extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  getOrderDetail = async (company_id, sale_id, status) => {
+  getOrderDetail = async (trans_id, company_id) => {
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_ORDER_DETAIL,
+      url: Constants.LIST_CHECK_OUT,
       method: 'POST',
       data: {
-        "company_id": company_id
+        condition: {
+          "isDelete": false,
+          "Transaction_ID": trans_id
+        }
       }
     });
 
@@ -139,20 +157,7 @@ class Order extends Component {
       }
     });
 
-    const resSale = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.GET_SALE_NAME,
-      method: 'POST',
-      data: {
-        sale_id: sale_id
-      }
-    });
-
-    this.setState({
-      dataApi: res.data.data, dataOrderDetail: res.data.data,
-      hiddenDetail: false, currentID: company_id, currentCom_ID: resCom.data.data[0].Name,
-      currentSale_ID: resSale.data.data[0].Name, curentStatus: status
-    });
+    this.setState({ dataOrderDetail: res.data.data, currenCom: resCom.data.data[0].Name, currenCom_ID: company_id });
   }
 
   searchKey() {
@@ -349,8 +354,8 @@ class Order extends Component {
 
   getBadge(status) {
     switch (status) {
-      case 'SPENDING': return 'success'
-      default: return 'primary'
+      case 'ENABLE': return 'primary'
+      default: return 'success'
     }
   }
 
@@ -400,6 +405,7 @@ class Order extends Component {
     });
   }
 
+
   render() {
     const { data, key, viewingUser, communities, action, arrPagination,
       indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
@@ -413,7 +419,7 @@ class Order extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách giao dich (Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -437,7 +443,7 @@ class Order extends Component {
 
                             }} custom>
                               {
-                                ['AVAILABLE', 'SPENDING'].map((item, i) => {
+                                ['ACTIVE', 'DISABLE'].map((item, i) => {
                                   return (
                                     <option value={item}>{item}</option>
                                   );
@@ -461,7 +467,7 @@ class Order extends Component {
                         <th className="text-center">Mã công ty</th>
                         <th className="text-center">Ngày mua</th>
                         <th className="text-center">Ngày kích hoạt</th>
-                        <th className="text-center">Số lượng mua</th>
+                        <th className="text-center">Ngày hết hạn</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
                       </tr>
@@ -473,22 +479,24 @@ class Order extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Company_Id}</td>
+                                <td className="text-center">{item.Com_Name}</td>
                                 <td className="text-center">
-                                  {(new Date(item.Purcharse_Date)).toLocaleDateString() + ' ' + (new Date(item.Purcharse_Date)).toLocaleTimeString()}
+                                  {(new Date(item.Create_At)).toLocaleDateString() + ' ' + (new Date(item.Create_At)).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
                                   {(new Date(item.Active_Date)).toLocaleDateString() + ' ' + (new Date(item.Active_Date)).toLocaleTimeString()}
                                 </td>
-                                <td className="text-center">{item.Count}</td>
+                                <td className="text-center">
+                                  {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
+                                </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
                                     {item.Status}
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '}
-                                  <Button outline color="success" size="sm" onClick={async (e) => { await this.getOrderDetail(item.Company_Id, item.Sale_Id, item.Status) }} >Chi tiết</Button>
+                                  {/* <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '} */}
+                                  <Button outline color="primary" size="sm" onClick={async (e) => { await this.getOrderDetail(item._id, item.Company_Id) }} >Chi tiết</Button>
                                   {/* <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button> */}
                                 </td>
                               </tr>
@@ -520,40 +528,19 @@ class Order extends Component {
               </Card>
 
 
-              <Card hidden={this.state.hiddenDetail}>
+              <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Chi tiết đơn hàng của {this.state.currentCom_ID} (Page: {this.state.indexPage + 1})
-
-                  <CRow style={{ marginTop: 20 }}>
-                    <CCol sm="6" lg="6">
-                      <CCol sm="12" lg="12">
-                        <CLabel htmlFor="selectSm">Tên công ty đăng ký phần cứng: {this.state.currentCom_ID}</CLabel>
-                      </CCol>
-                      <CCol sm="12" lg="12">
-                        <CLabel htmlFor="selectSm">Tên sale: {this.state.currentSale_ID}</CLabel>
-                      </CCol>
-                      <CCol sm="12" lg="12">
-                        <CLabel htmlFor="selectSm">Trạng thái đơn hàng: {
-                          <CBadge color={this.getBadge(this.state.curentStatus)}>
-                            {this.state.curentStatus}
-                          </CBadge>
-                        }</CLabel>
-                      </CCol>
-                    </CCol>
-                    <CCol sm="6" lg="6">
-                      <Button color="primary" style={{ float: 'right', marginTop: 5 }} size="sm" onClick={e => { this.setState({ hiddenDetail: true }) }}>Đóng</Button>
-                    </CCol>
-                  </CRow>
+                  <i className="fa fa-align-justify"></i> Chi tiết giao dịch của {this.state.currenCom} (Mã công ty: {this.state.currenCom_ID}) (Page: {this.state.indexPage + 1})
                 </CardHeader>
                 <CardBody>
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Mã đơn hàng</th>
+                        <th className="text-center">Mã giao dịch</th>
                         <th className="text-center">Mã phần cứng</th>
-                        <th className="text-center">Ngày mua</th>
                         <th className="text-center">Ngày kích hoạt</th>
+                        <th className="text-center">Ngày hết hạn</th>
                         <th className="text-center">Trạng thái</th>
                       </tr>
                     </thead>
@@ -564,13 +551,13 @@ class Order extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.OrderID}</td>
-                                <td className="text-center">{item.HardWareID}</td>
-                                <td className="text-center">
-                                  {(new Date(item.Purcharse_Date)).toLocaleDateString() + ' ' + (new Date(item.Purcharse_Date)).toLocaleTimeString()}
-                                </td>
+                                <td className="text-center">{item.Transaction_ID}</td>
+                                <td className="text-center">{item.HardWard_ID}</td>
                                 <td className="text-center">
                                   {(new Date(item.Active_Date)).toLocaleDateString() + ' ' + (new Date(item.Active_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -731,4 +718,4 @@ const styles = {
   }
 }
 
-export default Order;
+export default Transaction;

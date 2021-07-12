@@ -81,6 +81,8 @@ class ShopManager extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
+
+    console.log(arrTotal)
     this.setState({ arrPagination: arrTotal, dataUserSale: arrTotal[this.state.indexPage] });
   }
 

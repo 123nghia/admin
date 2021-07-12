@@ -16,6 +16,7 @@ export default {
   "CALCULATOR_ALL_USER_OF_SALE" : "/api/calculator-all-user-of-sale",
   "GET_SEEDER" : "/api/get-seed",
   "GET_SALE_NAME": "/api/get-name-sale",
+  "GET_USER_BY_ID": "/api/get-user-byID",
 
   "LIST_CUSTOMER" : "/api/list-customer",
   "LIST_CUSTOMER_BY_MONTH" : "/api/get-user-sale-by-month",
@@ -34,6 +35,14 @@ export default {
 
   "LIST_ORDER" : "/api/list-order",
   "ADD_ORDER" : "/api/add-order",
+  "UPDATE_STATUS_ORDER" : "/api/update-status-order",
+
+  "LIST_TRANSACTION" : "/api/list-transaction",
+  "ADD_TRANSACTION" : "/api/add-transaction",
+
+  "LIST_CHECK_OUT" : "/api/list-checkout",
+  "LIST_HARDWARE_CHECKOUT" : "/api/get-list-hardward-by-check-out",
+  "UPDATE_STATUS_CHECKOUT" : "/api/update-status-hardware",
 
   "LIST_ORDER_DETAIL" : "/api/list-orderdetail",
   "ADD_ORDER_DETAIL" : "/api/add-orderdetail",
@@ -50,6 +59,7 @@ export default {
   "UPDATE_SALELOG" : "/api/update-salelog",
   "DELETE_SALELOG" : "/api/delete-salelog",
 
+  "DATA_SALE" : "/api/get-data-sale",
   "LIST_SALE" : "/api/list-sale",
   "LIST_SALE_WITH_ID" : "/api/list-sale?id=",
   "ADD_SALE" : "/api/add-sale",
@@ -73,11 +83,13 @@ export default {
   "ADD_COMPANY" : "/api/add-company",
   "UPDATE_COMPANY" : "/api/update-company",
   "DELETE_COMPANY" : "/api/delete-company",
+  "DATA_COMPANY" : "/api/get-data-company",
 
   "LIST_LINK" : "/api/list-link",
   "LIST_LINK_WITH_ID" : "/api/list-link?id=",
   "ADD_LINK" : "/api/add-link",
   "UPDATE_LINK" : "/api/update-link",
   "DELETE_LINK" : "/api/delete-link",
+  "GET-LINK-BY-ID" : "/api/link-by-id",
 
 };

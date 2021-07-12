@@ -22,7 +22,6 @@ const storeS = createStore(rootReducers, applyMiddleware(sagaMiddleware))
 React.icons = icons
 
 sagaMiddleware.run(root)
-const GlobalContext = React.createContext();
 
 ReactDOM.render(
   <Provider store={storeS}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Multiselect from 'multiselect-react-dropdown';
 import {
   Card,
   CardBody,
@@ -63,6 +63,7 @@ class Order extends Component {
       currentCompany: '',
       arrHardWard: [],
       dataHardWard: [],
+      arrChooseHard: [],
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       company_id: localStorage.getItem('user')
     };
@@ -85,6 +86,9 @@ class Order extends Component {
   async addOrder() {
     const { arrHardWard, Company_Id, token } = this.state;
 
+    if(Company_Id == '' || Company_Id == null){
+      alert("Vui lòng chọn chính xác công ty")
+    }
     const resOrder = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.ADD_ORDER,
@@ -171,6 +175,34 @@ class Order extends Component {
     }
   }
 
+  renderSelect(arrChoose) {
+    const { dataHardWard } = this.state;
+    let arrTemp = [];
+    for (let i = 0; i < dataHardWard.length; i++) {
+      arrTemp.push({ name: dataHardWard[i].Name, id: dataHardWard[i]._id })
+    }
+
+    return (
+      <Multiselect
+        options={arrTemp}
+        // selectedValues={this.state.selectedValue}
+        onSelect={(e) => {
+          arrChoose = new Array();
+          for (let i = 0; i < e.length; i++) {
+            arrChoose.push(e[i].id); this.setState({ arrChooseHard: arrChoose});
+          }
+        }}
+        onRemove={(e) => {
+          arrChoose = new Array();
+          for (let i = 0; i < e.length; i++) {
+            arrChoose.push(e[i].id); this.setState({ arrChooseHard: arrChoose});
+          }
+        }}
+        displayValue="name"
+      />
+    )
+  }
+
   render() {
     const { dataCompany, currentCompany, dataHardWard, arrHardWard } = this.state;
     const arrT = [];
@@ -186,7 +218,7 @@ class Order extends Component {
                 <CCol sm="12" lg="12">
                   <div>
                     <label style={styles.flexLabel} htmlFor="tag">Chọn công ty:    </label>
-                    <select style={styles.flexOption} onChange={e => { this.setState({ Company_Id: e.target.value }); console.log(this.state.arrHardWard) }}>
+                    <select style={styles.flexOption} onChange={e => { this.setState({ Company_Id: e.target.value }); }}>
                       <option value={this.state.Company_Id}>-----</option>
                       {
                         dataCompany.map((item, i) => {
@@ -221,20 +253,19 @@ class Order extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {/* <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> */}
                       {
                         arrHardWard != undefined ?
                           arrHardWard.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Key}</td>
+                                <td className="text-center">{item[0].Key}</td>
                                 <td className="text-center">
-                                  <CBadge color={this.getBadge(item.Status)}>
-                                    {item.Status}
+                                  <CBadge color={this.getBadge(item[0].Status)}>
+                                    {item[0].Status}
                                   </CBadge>
                                 </td>
-                                <td className="text-center">{item.Create_Date}</td>
+                                <td className="text-center">{item[0].Create_Date}</td>
                               </tr>
                             );
                           }) : ""
@@ -252,7 +283,7 @@ class Order extends Component {
                     <CCol sm="12" lg="6">
                     </CCol>
                     <CCol sm="12" lg="6">
-                      <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => { await this.addOrder() }}>Save</Button>
+                      <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => { await this.addOrder() }}>Lưu</Button>
                     </CCol>
                   </CRow>
                 </CCol>
@@ -265,9 +296,12 @@ class Order extends Component {
           <ModalHeader>Danh sách phần cứng</ModalHeader>
 
           <ModalBody>
-            <div>
+            {
+              this.renderSelect(arrT)
+            }
+            {/* <div>
               <label style={styles.flexLabel} htmlFor="tag">Chọn phần cứng:    </label>
-              <select style={styles.flexOption} onChange={e => { arrT.push(e.target.value) }}>
+              <select style={styles.flexOption} onChange={e => { arrT.push(e.target.value); }}>
                 {
                   dataHardWard.map((item, i) => {
                     return (
@@ -276,10 +310,10 @@ class Order extends Component {
                   })
                 }
               </select>
-            </div>
+            </div> */}
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard: arrT }); }}>Save</Button>{' '}
+            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</Button>{' '}
             <Button color="secondary" onClick={e => this.toggleModal("new")}>Close</Button>
           </ModalFooter>
         </Modal>
