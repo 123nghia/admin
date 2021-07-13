@@ -233,13 +233,13 @@ class Company extends Component {
         "Status": "Actived"
       }
 
-      await axios({
+      var test = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.ADD_USER,
         method: 'POST',
         data: bodyAddUser
       });
-      console.log(res.data.data)
+      console.log(test)
 
       this.setState({ modalCom: !this.state.modalCom })
     } else {

@@ -91,6 +91,20 @@ class Users extends Component {
     }
   }
 
+  getCompanyName = async (company_id) => {
+    const resCom = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.DATA_COMPANY,
+      method: 'POST',
+      data: {
+        company_id: company_id
+      }
+    });
+
+    return resCom.data.data.Name;
+  }
+
+
   getBadge(status) {
     switch (status) {
       case 'Actived': return 'success'
@@ -211,15 +225,15 @@ class Users extends Component {
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Company_Id</CLabel>
-                          <Input style={styles.searchInput} value={data.Company_Id} />
+                          <CLabel>Company Id</CLabel>
+                          <Input style={styles.searchInput} value={async () => { await this.getCompanyName(data.Company_Id) }} />
                         </div>
                       </CCol>
 
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Role_Id</CLabel>
+                          <CLabel>Role Id</CLabel>
                           <Input style={styles.searchInput} value={data.Role_Id} />
                         </div>
                       </CCol>

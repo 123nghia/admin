@@ -230,7 +230,7 @@ class ShopManager extends Component {
             <CCardHeader>
               <CFormGroup row>
                 <CCol md="3">
-                  <CLabel htmlFor="selectSm">ALL USER SALE OF COMPANY</CLabel>
+                  <CLabel htmlFor="selectSm">Thống kê tổng số lượt user</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
                   {/*  */}

@@ -7,25 +7,25 @@ const arrRoleSHOPMANAGER = ['SALES'];
 const _nav = [
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Thống kê'],
+    _children: ['Danh mục'],
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Dashboard',
+    name: 'Tổng quan',
     to: '/dashboard',
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
     role: arrRoleADMIN
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Profile',
+    name: 'Hồ sơ',
     to: '/profile',
     icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
     role: arrRoleADMIN
   },
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Thông tin công ty'],
+    _children: ['Quản lí khách hàng TIKITECH'],
   },
   {
     _tag: 'CSidebarNavDropdown',
