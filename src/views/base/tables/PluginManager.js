@@ -274,7 +274,9 @@ class Company extends Component {
     var arrChoose = new Array();
     let arrTemp = [];
     for (let i = 0; i < dataFeature.length; i++) {
-      arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
+      if(dataFeature[i].Type == "1"){
+        arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
+      }
     }
 
     return (

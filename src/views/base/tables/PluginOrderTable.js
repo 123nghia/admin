@@ -26,6 +26,7 @@ import axios from 'axios'
 import md5 from "md5";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
+const user = localStorage.getItem('user');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 class PluginCustomerManager extends Component {
@@ -56,7 +57,8 @@ class PluginCustomerManager extends Component {
       indexPage: 0,
       dataCompany: [],
       currentCompany: '',
-      hidden: false
+      hidden: false,
+      company_name: ''
     };
   }
   async componentDidMount() {
@@ -72,10 +74,25 @@ class PluginCustomerManager extends Component {
     }
   }
 
+  // async getCompanyData(company_id) {
+
+  //   const resCom = await axios({
+  //     baseURL: Constants.BASE_URL,
+  //     url: Constants.PLUGIN_DATA_COMPANY,
+  //     method: 'POST',
+  //     data: {
+  //       company_id: company_id
+  //     }
+  //   });
+
+  //   this.setState({ company_name: resCom.data.data.Name })
+
+  // }
+
   async getCompanyData() {
     const resCompany = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_COMPANY,
+      url: Constants.PLUGIN_DATA_COMPANY,
       method: 'POST'
     });
     this.setState({ dataCompany: resCompany.data.data });
@@ -380,7 +397,7 @@ class PluginCustomerManager extends Component {
                             </CSelect>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                            <Button color="primary" style={{ width: '100%', marginTop: 5, marginRight: 55 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                           </CCol>
                         </CRow>
                       </CCol>
