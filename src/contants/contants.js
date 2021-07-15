@@ -1,6 +1,6 @@
 export default {
   "BASE_URL" : "https://api-soida.applamdep.com",
-  "BASE_URL" : "http://localhost:3000",
+  //"BASE_URL" : "http://localhost:3000",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
