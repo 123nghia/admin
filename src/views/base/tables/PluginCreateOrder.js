@@ -353,9 +353,15 @@ class PluginCreateOrder extends Component {
                     <CCol sm="12" lg="6">
                       <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
                         // await this.onNext(Company_Id, Package_Id, arrayChooseFeature);
-                        await this.getCompanyName(Company_Id)
-                        await this.getPackageName(Package_Id)
-                        await this.getFeatureChoose(arrayChooseFeature);
+                        if(Company_Id != '' && Package_Id != '')
+                        {
+                          await this.getCompanyName(Company_Id)
+                          await this.getPackageName(Package_Id)
+                          await this.getFeatureChoose(arrayChooseFeature);
+                        } else {
+                          alert('Vui lòng nhập đầy đủ thông tin !!!')
+                        }
+
                       }}>Tiếp tục</Button>
                     </CCol>
                   </CRow>
