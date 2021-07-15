@@ -19,25 +19,30 @@ import CIcon from '@coreui/icons-react'
 import navigation from './_nav'
 
 const TheSidebar = () => {
-  const auth = localStorage.getItem('role');
+  const role = localStorage.getItem('role');
 
-
-  for(let i = 0; i < navigation.length; i++){
-    if(navigation[i]._children != undefined){
-      if(navigation[i]._children.length > 1){
-        var arr = navigation[i]._children;
-        for(let y = 0; y < arr.length; y++){
-          if(arr[y].role.includes(auth)){
-            arr[y].hidden = false;
-          } else {
-            arr[y].hidden = true;
-          }
-        }
-      }
+  for (let i = 0; i < navigation.length; i++) {
+    if (navigation[i].role.includes(role)) {
+      navigation[i].hidden = false;
+    } else {
+      navigation[i].hidden = true;
     }
+    //   if(navigation[i]._children != undefined){
+    //     if(navigation[i]._children.length > 1){
+    //       var arr = navigation[i]._children;
+    //       for(let y = 0; y < arr.length; y++){
+    //         if(arr[y].role.includes(auth)){
+    //           arr[y].hidden = false;
+    //         } else {
+    //           arr[y].hidden = true;
+    //         }
+    //       }
+    //     }
+    //   }
   }
-  var temp = navigation[4]._children.concat(navigation[6]._children.concat(navigation[8]._children));
-
+  // console.log("Duy: ", arr)
+  //var temp = navigation[3]._children.concat(navigation[5]._children.concat(navigation[7]._children.concat(navigation[9]._children)));
+  var temp = []
   localStorage.setItem('url', JSON.stringify(temp))
 
   const dispatch = useDispatch()
@@ -46,10 +51,10 @@ const TheSidebar = () => {
   return (
     <CSidebar
       show={show}
-      onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
+      onShowChange={(val) => dispatch({ type: 'set', sidebarShow: val })}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
-      <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{textDecoration:'underline'}}><img src={logoMainnet} width="40" height="auto" alt="HB Analytics Logo" className="navbar-brand-full"/> Beas</NavLink>
+        <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{ textDecoration: 'underline' }}><img src={logoMainnet} width="40" height="auto" alt="HB Analytics Logo" className="navbar-brand-full" /> Beas</NavLink>
         <CIcon
           className="c-sidebar-brand-minimized"
           name="sygnet"
@@ -68,7 +73,7 @@ const TheSidebar = () => {
           }}
         />
       </CSidebarNav>
-      <CSidebarMinimizer className="c-d-md-down-none"/>
+      <CSidebarMinimizer className="c-d-md-down-none" />
     </CSidebar>
   )
 }

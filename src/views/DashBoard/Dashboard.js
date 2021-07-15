@@ -22,6 +22,8 @@ import Constants from "./../../contants/contants";
 import MainChartExample from '../charts/MainChartExample.js'
 import ShopManager from './ShopManager'
 import SaleManager from './SaleManager'
+import Company from './Company'
+import Admin from './Admin'
 
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
@@ -34,7 +36,7 @@ class Dashboard extends Component {
     return (
       <div>
         {
-          localStorage.getItem('role') == 'SHOPMANAGER' ? <ShopManager /> : <SaleManager />
+          localStorage.getItem('role') == 'ADMIN' ? <Admin /> : <Company />
         }
       </div>
     )

@@ -8,110 +8,94 @@ const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Danh mục'],
+    role: ['ADMIN', 'COMPANY'],
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Tổng quan',
+    name: 'Danh sách tính năng',
     to: '/dashboard',
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-    role: arrRoleADMIN
+    role: ['COMPANY'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Hồ sơ',
     to: '/profile',
     icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
-    role: arrRoleADMIN
+    role: ['ADMIN', 'COMPANY'],
   },
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Quản lí khách hàng TIKITECH'],
+    _children: ['Phân quyền'],
+    role: ['ADMIN'],
   },
   {
     _tag: 'CSidebarNavDropdown',
-    name: 'Danh sách',
+    name: 'Danh sách quyền',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
-      name: 'Danh sách công ty',
-      to: '/company',
-      role: ['ADMIN', 'ADMINSALE'],
-    }]
+      name: 'Quản lý quyền',
+      to: '/role_manager',
+    }],
+    role: ['ADMIN'],
   },
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Quản lý phần cứng'],
+    _children: ['Khách hàng'],
+    role: ['ADMIN'],
   },
   {
     _tag: 'CSidebarNavDropdown',
-    name: 'Cấu hình phần cứng',
+    name: 'Khách hàng',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
-      name: 'Danh sách shop',
-      to: '/shopmanager',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách sale',
-      to: '/sales',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách khách hàng',
-      to: '/customers',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách phần cứng',
-      to: '/hardware',
-      role: ['ADMIN', 'ADMINSALE']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách sở hữu phần cứng',
-      to: '/hardwaremanager',
-      role: ['COMPANY']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách key',
-      to: '/key',
-      role: ['ADMIN', 'ADMINSALE']
-    }]
+      name: 'Quản lý khách hàng',
+      to: '/customer_manager',
+    }],
+    role: ['ADMIN'],
   },
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Thông tin đơn hàng'],
+    _children: ['Gói sản phẩm'],
+    role: ['ADMIN'],
   },
   {
     _tag: 'CSidebarNavDropdown',
-    name: 'Thông tin đơn hàng',
+    name: 'Gói sản phẩm',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
-      name: 'Tạo đơn hàng',
-      to: '/orders',
-      role: ['ADMIN', 'ADMINSALE']
-    },
-    {
+      name: 'Quản lý gói sản phẩm',
+      to: '/plugin_manager',
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Quản lý tính năng',
+      to: '/feature',
+    }],
+    role: ['ADMIN'],
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Đơn hàng'],
+    role: ['ADMIN'],
+  },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Tạo mới đơn hàng',
+    icon: 'cil-star',
+    _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách đơn hàng',
-      to: '/order_table',
-      role: ['ADMIN', 'ADMINSALE']
+      to: '/list_order',
     }, {
       _tag: 'CSidebarNavItem',
-      name: 'Danh sách giao dịch',
-      to: '/transaction',
-      role: ['ADMIN', 'ADMINSALE']
-    },
-      //{
-      //   _tag: 'CSidebarNavItem',
-      //   name: 'Đơn hàng chờ thanh toán',
-      //   to: '/spending_order',
-      //   role: ['COMPANY']
-      // }
-    ]
-  }
-
+      name: 'Tạo đơn hàng',
+      to: '/plugin_create_order',
+    }],
+    role: ['ADMIN'],
+  },
 ]
 
 export default _nav

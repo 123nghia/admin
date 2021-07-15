@@ -118,27 +118,11 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.GET_USER_BY_ID,
+      url: Constants.PLUGIN_GET_USER_BYID,
       method: 'POST',
       headers: this.state.token
     });
-
-    const resLink = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants['GET-LINK-BY-ID'],
-      method: 'POST',
-      headers: this.state.token
-    });
-
-    this.setState({ data_link_shop: resLink.data.data.link_shop,
-                    data_link_recommand: resLink.data.data.link_recommand,
-                    data_link_sku: resLink.data.data.link_sku_hair
-                  })
-    res.data.data.link_shop = resLink.data.data.link_shop
-    res.data.data.link_recommand = resLink.data.data.link_recommand
-    res.data.data.link_sku_hair = resLink.data.data.link_sku_hair
-
-    console.log(resLink)
+    console.log(res)
     this.setState({ dataApi: res.data.data, data: res.data.data });
   }
 
@@ -266,68 +250,6 @@ class Users extends Component {
                         </div>
                       </CCol>
                     </CRow>
-                  </CCol>
-                  <CCol sm="12" lg="6">
-                    <CLabel><strong>Quản lý dường dẫn</strong></CLabel>
-                    <CCol sm="12" lg="12">
-                      <CLabel>Đường dẫn gian hàng</CLabel>
-                      <CRow>
-                        <CCol sm="9" lg="9">
-                          <Input style={styles.searchInput} readOnly={link_shop} onChange={(e) => { this.setState({ data_link_shop: e.target.value }) }} value={this.state.data_link_shop} />
-                        </CCol>
-                        <CCol sm="3" lg="3">
-                          {
-                            link_shop ?
-                              <Button color="primary" onClick={e => { this.openUpdate('link_shop') }}>Thay đổi</Button> :
-                              <Button color="primary" onClick={async e =>
-                                {
-                                  this.openUpdate('link_shop');
-                                  await this.updateLink();
-                                }}>Lưu thay đổi</Button>
-                          }
-                        </CCol>
-                      </CRow>
-                    </CCol>
-
-                    <CCol sm="12" lg="12">
-                      <CLabel>Đường dẫn RECOMMAND</CLabel>
-                      <CRow>
-                        <CCol sm="9" lg="9">
-                          <Input style={styles.searchInput} readOnly={link_recommand} onChange={(e) => { this.setState({ data_link_recommand: e.target.value})}} value={this.state.data_link_recommand} />
-                        </CCol>
-                        <CCol sm="3" lg="3">
-                          {
-                            link_recommand ?
-                              <Button color="primary" onClick={e => { this.openUpdate('link_recommand') }}>Thay đổi</Button> :
-                              <Button color="primary" onClick={async e =>
-                                {
-                                  this.openUpdate('link_recommand');
-                                  await this.updateLink();
-                                }}>Lưu thay đổi</Button>
-                          }
-                        </CCol>
-                      </CRow>
-                    </CCol>
-
-                    <CCol sm="12" lg="12">
-                      <CLabel>Đường dẫn SKU Tóc</CLabel>
-                      <CRow>
-                        <CCol sm="9" lg="9">
-                          <Input style={styles.searchInput} readOnly={link_sku} onChange={(e) => { this.setState({ data_link_sku: e.target.value })}} value={this.state.data_link_sku} />
-                        </CCol>
-                        <CCol sm="3" lg="3">
-                          {
-                            link_sku ?
-                              <Button color="primary" onClick={e => { this.openUpdate('link_sku') }}>Thay đổi</Button> :
-                              <Button color="primary" onClick={async e =>
-                                {
-                                  this.openUpdate('link_sku');
-                                  await this.updateLink();
-                                }}>Lưu thay đổi</Button>
-                          }
-                        </CCol>
-                      </CRow>
-                    </CCol>
                   </CCol>
                 </CRow>
               </CardBody>

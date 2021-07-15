@@ -17,6 +17,7 @@ const loading = (
 
 const TheContent = () => {
   const auth = localStorage.getItem('auth');
+  const role = localStorage.getItem('role');
   if (!auth) return (
     <Redirect from="/" to="/login" />
   )
@@ -39,7 +40,9 @@ const TheContent = () => {
                   )} />
               )
             })}
-            <Redirect from="/" to="/dashboard" />
+            {
+              role == 'ADMIN' ? <Redirect from="/" to="/list_order" /> : <Redirect from="/" to="/dashboard" />
+            }
           </Switch>
         </Suspense>
       </CContainer>

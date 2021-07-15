@@ -21,6 +21,12 @@ const TransactionTable = React.lazy(() => import('./views/base/tables/Transactio
 const HardWareManager = React.lazy(() => import('./views/base/tables/HardWareManager'));
 const Profile = React.lazy(() => import('./views/users/ProfileUser'));
 const SPENDING = React.lazy(() => import('./views/base/tables/SpendingOrder'));
+const RoleManager = React.lazy(() => import('./views/base/tables/RoleManager'));
+const PluginManager = React.lazy(() => import('./views/base/tables/PluginManager'));
+const PluginCustomer = React.lazy(() => import('./views/base/tables/PluginCustomerManager'));
+const PluginCreateOrder = React.lazy(() => import('./views/base/tables/PluginCreateOrder'));
+const FeatureTable = React.lazy(() => import('./views/base/tables/FeatureTable'));
+const PluginOrderTable = React.lazy(() => import('./views/base/tables/PluginOrderTable'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -45,6 +51,12 @@ const routes = [
   { path: '/hardwaremanager', name: 'HardWare', component: HardWareManager },
   { path: '/profile', name: 'Profile', component: Profile },
   { path: '/spending_order', name: 'SPENDING', component: SPENDING },
+  { path: '/role_manager', name: 'Role Manager', component: RoleManager },
+  { path: '/plugin_manager', name: 'Plugin Manager', component: PluginManager },
+  { path: '/customer_manager', name: 'Customer Manager', component: PluginCustomer },
+  { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
+  { path: '/feature', name: 'Feature', component: FeatureTable },
+  { path: '/list_order', name: 'Order Plugin', component: PluginOrderTable },
 ];
 
 export default routes;

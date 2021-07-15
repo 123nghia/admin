@@ -1,6 +1,6 @@
 export default {
-  "BASE_URL" : "https://thanhvien.applamdep.com",
-  //"BASE_URL" : "http://localhost:3000",
+  "BASE_URL" : "https://api-soida.applamdep.com",
+  "BASE_URL" : "http://localhost:3000",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
@@ -53,6 +53,12 @@ export default {
   "UPDATE_ROLE" : "/api/update-role",
   "DELETE_ROLE" : "/api/delete-role",
 
+  "LIST_PACKAGE" : "/api/list-package",
+  "ADD_PACKAGE" : "/api/add-package",
+  "UPDATE_PACKAGE" : "/api/update-package",
+  "DELETE_PACKAGE" : "/api/delete-package",
+  "PLUGIN_DATA_PACKAGE" : "/api/get-name-package",
+
   "LIST_SALELOG" : "/api/list-salelog",
   "LIST_SALELOG_WITH_ID" : "/api/list-salelog?id=",
   "ADD_SALELOG" : "/api/add-salelog",
@@ -78,6 +84,13 @@ export default {
   "UPDATE_KEY" : "/api/update-key",
   "DELETE_KEY" : "/api/delete-key",
 
+  "PLUGIN_LIST_COMPANY" : "/api/plugin-list-company",
+  "PLUGIN_LIST_COMPANY_WITH_ID" : "/api/plugin-list-company?id=",
+  "PLUGIN_ADD_COMPANY" : "/api/plugin-add-company",
+  "PLUGIN_UPDATE_COMPANY" : "/api/plugin-update-company",
+  "PLUGIN_DELETE_COMPANY" : "/api/plugin-delete-company",
+  "PLUGIN_DATA_COMPANY" : "/api/plugin-get-data-company",
+
   "LIST_COMPANY" : "/api/list-company",
   "LIST_COMPANY_WITH_ID" : "/api/list-company?id=",
   "ADD_COMPANY" : "/api/add-company",
@@ -92,4 +105,29 @@ export default {
   "DELETE_LINK" : "/api/delete-link",
   "GET-LINK-BY-ID" : "/api/link-by-id",
 
+  "LIST_FEATURE" : "/api/list-feature",
+  "ADD_FEATURE" : "/api/add-feature",
+  "UPDATE_FEATURE" : "/api/update-feature",
+  "DELETE_FEATURE" : "/api/delete-feature",
+  "DATA_CHOOSE_FEATURE" : "/api/get-feature-choose",
+
+  "LIST_PLUGIN_ORDER" : "/api/plugin-list-order",
+  "LIST_PLUGIN_ORDER_BY_ID" : "/api/plugin-list-order-by-id",
+  "ADD_PLUGIN_ORDER" : "/api/plugin-add-order",
+  "UPDATE_PLUGIN_ORDER" : "/api/plugin-update-order",
+  "DELETE_PLUGIN_ORDER" : "/api/plugin-delete-order",
+
+  "PLUGIN_LIST_USER" : "/api/plugin-list-user",
+  "PLUGIN_ADD_USER" : "/api/plugin-add-user",
+  "PLUGIN_UPDATE_USER" : "/api/plugin-update-user",
+  "PLUGIN_DELETE_USER" : "/api/plugin-delete-user",
+  "PLUGIN_RESET_PASSWORD" : "/api/plugin-reset-password",
+  "PLUGIN_UPDATE_STATUS" : "/api/plugin-update-status",
+  "PLUGIN_LOGIN_ADMIN" : "/api/plugin-login_admin",
+  "PLUGIN_GET_USER_BYID" : "/api/plugin-get-user-byID",
+
+  "PLUGIN_LIST_ROLE" : "/api/plugin-list-role",
+  "PLUGIN_ADD_ROLE" : "/api/plugin-add-role",
+  "PLUGIN_UPDATE_ROLE" : "/api/plugin-update-role",
+  "PLUGIN_DELETE_ROLE" : "/api/plugin-delete-role"
 };
