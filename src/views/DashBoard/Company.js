@@ -97,7 +97,7 @@ class Company extends Component {
     const { array_feature, company_slug } = this.state;
 
     return (
-      <div>
+      <div className="container">
         <div class="title" className="h3" style={{ alignSelf: 'center' }}>
           DANH SÁCH QUẢN LÝ TÍNH NĂNG
         </div>
@@ -113,10 +113,13 @@ class Company extends Component {
                           <img width="80" height="80" src="https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg" />
                         </div>
                         <div className="feature__body">
-                          <div className="feature__title h4" style={{ marginBottom: 50 }}>{item.Key}</div>
-                          <p className="feature__desc">
-                            Nhấp vào đây để chuyển hướng đến {item.Value + "/" + company_slug}
-                          </p>
+                          <center>
+                            <div style={{ width: '80%', height: 50, alignItems: 'center', fontSize: 15, fontWeight: 'bold' }}>{item.Key}</div>
+
+                            <div style={{ width: '80', height: 70, fontSize: 10 }}>
+                              Nhấp vào đây để chuyển hướng đến {item.Value + "/" + company_slug}
+                            </div>
+                          </center>
                         </div>
                       </div>
                     </NavLink>

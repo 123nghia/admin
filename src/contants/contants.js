@@ -116,6 +116,7 @@ export default {
   "ADD_PLUGIN_ORDER" : "/api/plugin-add-order",
   "UPDATE_PLUGIN_ORDER" : "/api/plugin-update-order",
   "DELETE_PLUGIN_ORDER" : "/api/plugin-delete-order",
+  "UPDATE_SLUG" : "/api/plugin-update-slug",
 
   "PLUGIN_LIST_USER" : "/api/plugin-list-user",
   "PLUGIN_ADD_USER" : "/api/plugin-add-user",

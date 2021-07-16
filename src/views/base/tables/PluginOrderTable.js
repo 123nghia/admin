@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Multiselect from 'multiselect-react-dropdown';
 
 import {
   Card,
@@ -16,7 +17,8 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput
+  CInput,
+  CLabel
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -55,10 +57,19 @@ class PluginCustomerManager extends Component {
       delete: null,
       arrPagination: [],
       indexPage: 0,
-      dataCompany: [],
       currentCompany: '',
       hidden: false,
-      company_name: ''
+      company_name: '',
+      package_name: '',
+      package_unit: '',
+      package_key: '',
+      package_time: '',
+      currentSlug: '',
+      confirmSlug: '',
+      dataPackage: [],
+      arrayChooseFeature: [],
+      arrFeature: [],
+      dataFeature: []
     };
   }
   async componentDidMount() {
@@ -89,15 +100,6 @@ class PluginCustomerManager extends Component {
 
   // }
 
-  async getCompanyData() {
-    const resCompany = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_DATA_COMPANY,
-      method: 'POST'
-    });
-    this.setState({ dataCompany: resCompany.data.data });
-  }
-
   pagination(dataApi) {
     var i, j, temparray, chunk = 5;
     var arrTotal = [];
@@ -126,7 +128,10 @@ class PluginCustomerManager extends Component {
       url: Constants.LIST_PLUGIN_ORDER,
       method: 'POST',
     });
-    this.pagination(res.data.data);
+
+    let val = res.data.data;
+
+    this.pagination(val);
     this.setState({ dataApi: res.data.data });
 
     let active = 0
@@ -207,16 +212,20 @@ class PluginCustomerManager extends Component {
   }
 
   async updateCompany() {
-    const { Key, Value, Type, Status, Image } = this.state
-
-    if (Key == null || Key == ''
-      || Value == null || Value == ''
-      || Type == null || Type == '') {
+    const { Status, Company_Id, Package_Id, arrFeature, time_create, time_expried } = this.state
+    if (Company_Id == null || Company_Id == ''
+      || Package_Id == null || Package_Id == ''
+      || arrFeature.length == 0) {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
+      Company_Id: Company_Id,
+      Package_Id: Package_Id,
+      Array_Feature: arrFeature,
+      Active_Date: time_create,
+      End_Date: time_expried,
       Status: Status,
       id: this.state.id
     }
@@ -363,10 +372,214 @@ class PluginCustomerManager extends Component {
     }
   }
 
+  renderSelect() {
+    const { dataFeature, dataPackage, Package_Id } = this.state;
+    var arrChoose = new Array();
+    let arrTemp = [];
+    let arrFeature = [];
+    let arrSetDefault = [];
+    for (let i = 0; i < dataPackage.length; i++) {
+      arrFeature.push({ name: dataPackage[i].Key, id: dataPackage[i]._id });
+      arrSetDefault.push(dataPackage[i]._id)
+    }
+
+    localStorage.setItem('arrFeature', JSON.stringify(arrSetDefault));
+    //Đang lấy đúng config của multiselect để đổ dữ liệu vào cho multi select
+    for (let i = 0; i < dataFeature.length; i++) {
+      if (dataFeature[i].Type == "1") {
+        arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
+      }
+    }
+    return (
+      <Multiselect
+        options={arrTemp}
+        selectedValues={arrFeature}
+        onSelect={async (e) => {
+          arrChoose = new Array();
+          for (let i = 0; i < e.length; i++) {
+            arrChoose.push(e[i].id);
+          }
+          this.setState({ arrayChooseFeature: arrChoose, arrFeature: [] });
+        }}
+        onRemove={async (e) => {
+          arrChoose = new Array();
+          for (let i = 0; i < e.length; i++) {
+            arrChoose.push(e[i].id);
+          }
+          this.setState({ arrayChooseFeature: arrChoose, arrFeature: [] });
+        }}
+        displayValue="name"
+      />
+    )
+  }
+
+  async onNext(Company_Id, Package_Id, arrayChooseFeature) {
+    const { package_key, package_unit, currentSlug, confirmSlug } = this.state;
+    if (Package_Id != '') {
+      await this.getCompanyName(Company_Id)
+      await this.getPackageName(Package_Id)
+      await this.getFeatureChoose(arrayChooseFeature);
+
+      if (currentSlug != confirmSlug) {
+        await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.UPDATE_SLUG,
+          method: 'POST',
+          data: {
+            id: Company_Id,
+            Slug: currentSlug
+          }
+        });
+
+        this.setState({ currentSlug: currentSlug })
+      }
+    } else {
+      alert('Vui lòng nhập đầy đủ thông tin !!!')
+    }
+  }
+
+  getCompanyName = async (company_id) => {
+    const resCom = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_DATA_COMPANY,
+      method: 'POST',
+      data: {
+        company_id: company_id
+      }
+    });
+
+    this.setState({
+      company_name: resCom.data.data.Name,
+      currentSlug: resCom.data.data.Slug, confirmSlug: resCom.data.data.Slug
+    })
+  }
+
+  getPackageName = async (package_id) => {
+    const resPackage = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_DATA_PACKAGE,
+      method: 'POST',
+      data: {
+        package_id: package_id
+      }
+    });
+
+    this.setState({
+      package_name: resPackage.data.data.Name,
+      package_time: resPackage.data.data.Value + " " + this.convertUnitToDate(resPackage.data.data.Unit),
+      time_create: Date.now(),
+      time_expried: this.getCurrentMonth(resPackage.data.data.Unit, Number(resPackage.data.data.Value))
+    })
+    return resPackage.data.data.Name;
+  }
+
+  getFeatureChoose = async (feature) => {
+    const resPackage = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.DATA_CHOOSE_FEATURE,
+      method: 'POST',
+      data: {
+        feature: feature.length == 0 ? JSON.parse(localStorage.getItem('arrFeature')) : feature
+      }
+    });
+    this.setState({ arrFeature: resPackage.data.data })
+    return resPackage.data.data;
+  }
+
+  getCurrentMonth(unit, value) {
+    var today = new Date();
+    switch (unit) {
+      case "0":
+        var date = today.setDate(today.getDate() + value);
+        return date;
+
+      case "1":
+        var month = today.setMonth(today.getMonth() + value);
+        return month;
+      case "2":
+        var year = today.setFullYear(today.getFullYear() + value);
+        return year;
+
+      default:
+        break;
+    }
+  }
+
+  async getCompanyData() {
+    const resCompany = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_LIST_COMPANY,
+      method: 'POST',
+    });
+
+    this.setState({ dataCompany: resCompany.data.data });
+  }
+
+  async getPackageData(package_arr) {
+    let arrTemp = [];
+    const resPackage = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_PACKAGE,
+      method: 'POST',
+    });
+
+    this.setState({ dataPackage: package_arr });
+  }
+
+  async getFeatureData() {
+    const resFeature = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_FEATURE,
+      method: 'POST',
+    });
+
+    this.setState({ dataFeature: resFeature.data.data });
+  }
+
+  convertUnitToDate(unit) {
+    switch (unit) {
+      case '0': return 'Ngày'
+      case '1': return 'Tháng'
+      case '2': return 'Năm'
+    }
+  }
+
+  renderTable(arrFeature, company_name, package_name, package_time) {
+    const { currentSlug } = this.state;
+    return (
+      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+        <thead className="thead-light">
+          <tr>
+            <th className="text-center">No.</th>
+            <th className="text-center">Thời hạn</th>
+            <th className="text-center">Tên tính năng</th>
+            <th className="text-center">Đường dẫn</th>
+          </tr>
+        </thead>
+        <tbody>
+          <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
+          {
+            arrFeature != undefined || arrFeature.length != 0 || arrFeature != null ?
+              arrFeature.map((item, i) => {
+                return (
+                  <tr key={i}>
+                    <td className="text-center">{i + 1}</td>
+                    <td className="text-center">{package_time}</td>
+                    <td className="text-center">{item.Key}</td>
+                    <td className="text-center">{item.Value + currentSlug}</td>
+                  </tr>
+                );
+              }) : ""
+          }
+        </tbody>
+      </table>
+    )
+  }
+
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus } = this.state;
+    const { data, action, arrPagination, indexPage, currentSlug, confirmSlug,
+      dataPackage, Company_Id, Package_Id, arrayChooseFeature, arrFeature,
+      company_name, package_name, package_unit, package_key, package_time } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -381,7 +594,7 @@ class PluginCustomerManager extends Component {
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="6">
                             <CSelect style={styles.flexOption} onChange={e => {
 
                               this.actionSearch(e, "keyStatus");
@@ -396,13 +609,10 @@ class PluginCustomerManager extends Component {
                               }
                             </CSelect>
                           </CCol>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="6">
                             <Button color="primary" style={{ width: '100%', marginTop: 5, marginRight: 55 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                           </CCol>
                         </CRow>
-                      </CCol>
-                      <CCol sm="12" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
                       </CCol>
                     </CRow>
                   </div>
@@ -414,7 +624,7 @@ class PluginCustomerManager extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Mã công ty</th>
                         <th className="text-center">Mã gói</th>
-                        <th className="text-center">Số lượng gói</th>
+                        <th className="text-center">Số lượng tính năng</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
 
@@ -437,7 +647,18 @@ class PluginCustomerManager extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '}
+                                  <Button outline color="primary" size="sm"
+                                    onClick={async (e) => {
+                                      this.openUpdate(item);
+                                      this.setState({ Company_Id: item.Company_Id, Package_Id: item.Package_Id });
+                                      this.getCompanyData();
+                                      this.getPackageData(item.Array_Feature);
+                                      this.getFeatureData();
+                                      await this.getCompanyName(item.Company_Id);
+                                      this.setState({ arrFeature: [] })
+
+                                    }}
+                                  >Update</Button>{' '}
                                   <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
                                 </td>
                               </tr>
@@ -469,37 +690,117 @@ class PluginCustomerManager extends Component {
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+          <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className}>
+            <ModalHeader>{this.state.action == 'new' ? `Create` : `Cập nhật đơn hàng của ${this.state.company_name}`}</ModalHeader>
             <ModalBody>
-              {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Status    </label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    {
-                      ["0", "1"].map((item, i) => {
-                        if (item == this.state.Status) {
-                          return (
-                            <option selected value={item}>{item == 0 ? 'Tắt' : 'Bật'}</option>
-                          );
-                        } else {
-                          return (
-                            <option value={item}>{item == 0 ? 'Tắt' : 'Bật'}</option>
-                          );
-                        }
+              <CRow>
+                <CCol sm="12" lg="12">
+                  <CLabel>Slug</CLabel>
+                  <Input onChange={(e) => { this.setState({ currentSlug: e.target.value }) }} value={currentSlug} />
+                </CCol>
 
-                      })
-                    }
-                  </select>
-                </div>
-              }
+                <CCol sm="12" lg="12">
+                  <div>
+                    <label htmlFor="tag">Chọn gói sản phẩm:    </label>
+                    <CSelect onChange={async e => {
+                      this.setState({ Package_Id: e.target.value, arrFeature: [] });
+                    }}>
+                      <option value={this.state.Package_Id}>-----</option>
+                      {
+                        dataPackage.map((item, i) => {
+                          if (item._id == Package_Id) {
+                            return (
+                              <option selected value={item._id}>{`${item.Name} (${item.Value} ${this.convertUnitToDate(item.Unit)})`}</option>
+                            );
+                          } else {
+                            return (
+                              <option value={item._id}>{`${item.Name} (${item.Value} ${this.convertUnitToDate(item.Unit)})`}</option>
+                            );
+                          }
+                        })
+                      }
+                    </CSelect>
+                  </div>
+                </CCol>
+
+
+                <CCol sm="12" lg="12">
+                  <label htmlFor="tag">Chọn các tính năng cho gói:    </label>
+                  {
+                    this.renderSelect()
+                  }
+                </CCol>
+                <CCol sm="12" lg="12">
+                  <CRow>
+                    <CCol sm="12" lg="6">
+                    </CCol>
+                    <CCol sm="12" lg="6">
+                      <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
+                        await this.onNext(Company_Id, Package_Id, arrayChooseFeature);
+                      }}>Kiểm tra trước khi cập nhật ( BẮT BUỘC )</Button>
+                    </CCol>
+                  </CRow>
+                </CCol>
+                {arrFeature.length != 0 ?
+                  <CCol sm="12" lg="12" disabled={true}>
+                    <CRow>
+                      <CCol sm="12" lg="12">
+                        KIỂM TRA LẠI ĐƠN HÀNG TRƯỚC KHI CẬP NHẬT
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <strong>Tên Công Ty: {company_name}</strong>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <strong>Tên Gói: {package_name}</strong>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <strong>Thời gian kích hoạt dự kiến: {(new Date(Date.now())).toLocaleDateString()}</strong>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <strong>Thời gian hết hạn dự kiến: {new Date(this.getCurrentMonth(package_unit, Number(package_key))).toLocaleDateString()}</strong>
+                      </CCol>
+
+                      <CCol sm="12" lg="12">
+                        {
+                          this.renderTable(arrFeature, company_name, package_name, package_time)
+                        }
+                      </CCol>
+                    </CRow>
+                  </CCol> : ""
+
+                }
+              </CRow>
+              <CCol sm="12" lg="12">
+                {
+                  action == 'new' ? "" : <div>
+                    <label style={styles.flexLabel} htmlFor="tag">Status    </label>
+                    <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
+                      <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
+                      {
+                        ["0", "1"].map((item, i) => {
+                          if (item == this.state.Status) {
+                            return (
+                              <option selected value={item}>{item == 0 ? 'Tắt' : 'Bật'}</option>
+                            );
+                          } else {
+                            return (
+                              <option value={item}>{item == 0 ? 'Tắt' : 'Bật'}</option>
+                            );
+                          }
+
+                        })
+                      }
+                    </select>
+                  </div>
+                }
+              </CCol>
+
 
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={arrFeature.length == 0 ? true : false}>Cập nhật</Button>{' '}
+              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>
 

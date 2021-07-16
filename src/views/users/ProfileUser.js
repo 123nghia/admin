@@ -187,13 +187,13 @@ class Users extends Component {
                       </CCol>
 
                       <CCol sm="12" lg="12">
-                        <CLabel>Phone</CLabel>
+                        <CLabel>Số điện thoại</CLabel>
                         <Input style={styles.searchInput} value={data.Phone} />
                       </CCol>
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Gender</CLabel>
+                          <CLabel>Giới tính</CLabel>
                           <Input style={styles.searchInput} value={data.Gender} />
                         </div>
                       </CCol>
@@ -201,7 +201,7 @@ class Users extends Component {
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Address</CLabel>
+                          <CLabel>Địa chỉ</CLabel>
                           <Input style={styles.searchInput} value={data.Address} />
                         </div>
                       </CCol>
@@ -209,7 +209,7 @@ class Users extends Component {
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Company Id</CLabel>
+                          <CLabel>Tên công ty</CLabel>
                           <Input style={styles.searchInput} value={async () => { await this.getCompanyName(data.Company_Id) }} />
                         </div>
                       </CCol>
@@ -217,7 +217,7 @@ class Users extends Component {
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Role Id</CLabel>
+                          <CLabel>Quyền hạn</CLabel>
                           <Input style={styles.searchInput} value={data.Role_Id} />
                         </div>
                       </CCol>
@@ -225,13 +225,13 @@ class Users extends Component {
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>UserName</CLabel>
+                          <CLabel>Tên đăng nhập</CLabel>
                           <Input style={styles.searchInput} value={data.UserName} />
                         </div>
                       </CCol>
 
                       <CCol sm="12" lg="12">
-                        <CLabel>Password</CLabel>
+                        <CLabel>Mật khẩu</CLabel>
                         <CRow>
                           <CCol sm="9" lg="9">
                             <Input type={"password"} style={styles.searchInput} readOnly onChange={(e) => { }} value={data.Password} />
@@ -245,7 +245,7 @@ class Users extends Component {
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Status</CLabel>
+                          <CLabel>Trạng thái</CLabel>
                           <Input style={styles.searchInput} onChange={(e) => { }} value={data.Status} />
                         </div>
                       </CCol>
