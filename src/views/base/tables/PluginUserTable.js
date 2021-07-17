@@ -10,7 +10,7 @@ import {
   ModalHeader, ModalBody, ModalFooter, Modal,
   Alert
 } from 'reactstrap';
-import Multiselect from 'multiselect-react-dropdown';
+
 import {
   CBadge,
   CRow,
@@ -48,20 +48,18 @@ class Company extends Component {
       dataApi: [],
       action: 'new',
       Name: '',
-      Value: '',
-      Unit: '',
-      arrFeature: '',
+      Email: '',
+      Phone: '',
+      Address: '',
+      UserName: '',
+      Password: '',
       Status: '',
       modalDelete: false,
       delete: null,
       arrPagination: [],
       indexPage: 0,
       dataCompany: [],
-      dataFeature: [],
       currentCompany: '',
-      hidden: false,
-      arrFeature_Save: [],
-      arrFeature_Update: []
     };
   }
   async componentDidMount() {
@@ -78,7 +76,12 @@ class Company extends Component {
   }
 
   async getCompanyData() {
-    this.getFeatureData()
+    const resCompany = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_COMPANY,
+      method: 'POST'
+    });
+    this.setState({ dataCompany: resCompany.data.data });
   }
 
   pagination(dataApi) {
@@ -88,17 +91,6 @@ class Company extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
-
-    if (arrTotal.length == 0) {
-      this.setState({
-        hidden: false
-      })
-    } else {
-      this.setState({
-        hidden: true
-      })
-    }
-
     this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
   }
 
@@ -106,13 +98,10 @@ class Company extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_PACKAGE,
+      url: Constants.PLUGIN_LIST_USER,
       method: 'POST',
     });
-
-    let val = res.data.data;
-
-    this.pagination(val);
+    this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
 
     let active = 0
@@ -134,8 +123,10 @@ class Company extends Component {
     if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+        if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+            val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -168,9 +159,11 @@ class Company extends Component {
         modalCom: !this.state.modalCom,
         action: key,
         Name: '',
-        Value: '',
-        Unit: '',
-        Status: ''
+        Email: '',
+        Phone: '',
+        Address: '',
+        UserName: '',
+        Password: ''
       })
     }
   }
@@ -180,28 +173,33 @@ class Company extends Component {
   }
 
   async addCompany() {
-    const { Name, Value, Unit, Status, arrFeature_Save } = this.state
+    const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password } = this.state
 
-    if (Name == null || Name == ''
-      || Value == null || Value == ''
-      || Unit == null || Unit == '') {
+    if (Email == null || Email == ''
+      || Name == null || Name == ''
+      || Phone == null || Phone == ''
+      || Address == null || Address == ''
+      || UserName == null || UserName == ''
+      || Password == null || Password == '') {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
       Name: Name,
-      Value: Value,
-      Unit: Unit,
-      Status: Status,
-      Array_Feature: arrFeature_Save
+      Email: Email,
+      Phone: Phone,
+      Address: Address,
+      UserName: UserName,
+      Password: Password
+
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.ADD_PACKAGE,
-      method: 'PUT',
+      url: Constants.PLUGIN_ADD_SALE,
+      method: 'POST',
       data: body
     });
 
@@ -220,29 +218,34 @@ class Company extends Component {
       modalCom: !this.state.modalCom,
       action: "update",
       Name: item.Name,
-      Value: item.Value,
-      Array_Feature: item.Array_Feature,
-      Unit: item.Unit,
+      Email: item.Email,
+      Phone: item.Phone,
+      Address: item.Address,
+      UserName: item.UserName,
+      Password: item.Password,
       id: item['_id'],
-      Status: item.Status,
-      arrFeature_Update: item.Array_Feature
+      Status: item.Status
     })
   }
 
   async updateCompany() {
-    const { Name, Value, Unit, Status, arrFeature_Save, arrFeature_Update } = this.state
+    const { Email, Name, Phone, Address, Status, UserName, Password } = this.state
 
-    if (Name == null || Name == ''
-      || Value == null || Value == ''
-      || Unit == null || Unit == '') {
+    if (Email == null || Email == ''
+      || Name == null || Name == ''
+      || Phone == null || Phone == ''
+      || Address == null || Address == '') {
       alert("Please fill in all the requirements");
       return
     }
+
     const body = {
       Name: Name,
-      Value: Value,
-      Unit: Unit,
-      Array_Feature: arrFeature_Save.concat(arrFeature_Update),
+      Email: Email,
+      Phone: Phone,
+      Address: Address,
+      UserName: UserName,
+      Password: Password,
       Status: Status,
       id: this.state.id
     }
@@ -250,7 +253,7 @@ class Company extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_PACKAGE,
+      url: Constants.PLUGIN_UPDATE_USER,
       method: 'POST',
       data: body
     });
@@ -264,61 +267,6 @@ class Company extends Component {
     }
   }
 
-  async getFeatureData() {
-    const resFeature = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_FEATURE,
-      method: 'POST',
-    });
-
-    this.setState({ dataFeature: resFeature.data.data });
-  }
-
-  renderSelect() {
-    const { dataFeature, arrFeature_Update } = this.state;
-    var arrChoose = new Array();
-    let arrTemp = [];
-    let arrUpdate = [];
-    for (let i = 0; i < dataFeature.length; i++) {
-      if(dataFeature[i].Type == "1"){
-        arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
-      }
-    }
-
-    for (let i = 0; i < arrFeature_Update.length; i++) {
-      if(arrFeature_Update[i].Type == "1"){
-        arrUpdate.push({ name: arrFeature_Update[i].Key, id: arrFeature_Update[i]._id })
-      }
-    }
-
-    return (
-      <div style={{ marginTop: 5 }}>
-        <label style={{ width: '100%' }} htmlFor="tag">Chọn tính năng cho gói    </label>
-        <Multiselect
-          options={arrTemp}
-          selectedValues={arrUpdate}
-          onSelect={async (e) => {
-            arrChoose = new Array();
-            for (let i = 0; i < e.length; i++) {
-              arrChoose.push(e[i].id); this.setState({ arrFeature: arrChoose });
-            }
-
-            this.getFeatureChoose(arrChoose)
-          }}
-          onRemove={async (e) => {
-            arrChoose = new Array();
-            for (let i = 0; i < e.length; i++) {
-              arrChoose.push(e[i].id); this.setState({ arrFeature: arrChoose });
-            }
-
-            this.getFeatureChoose(arrChoose)
-          }}
-          displayValue="name"
-        />
-      </div>
-    )
-  }
-
   openDelete = (item) => {
     this.setState({
       modalDelete: !this.state.modalDelete,
@@ -330,7 +278,7 @@ class Company extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_PACKAGE,
+      url: Constants.PLUGIN_DELETE_USER,
       method: 'DELETE',
       data: {
         "id": this.state.delete['_id']
@@ -372,36 +320,10 @@ class Company extends Component {
 
   getBadge(status) {
     switch (status) {
-      case "0": return 'danger'
-      case "1": return 'success'
-
-      default: return 'primary'
-    }
-  }
-
-  getBadge_string(status) {
-    switch (status) {
-      case "0": return 'Đã vô hiệu'
-      case "1": return 'Đang kích hoạt'
-
-      default: return 'primary'
-    }
-  }
-
-  getBadge_isDelete(status) {
-    switch (status) {
-      case true: return 'danger'
-      case false: return 'success'
-
-      default: return 'primary'
-    }
-  }
-
-  getBadge_isDelete_string(status) {
-    switch (status) {
-      case true: return 'Đã xóa'
-      case false: return 'Còn hạn dùng'
-
+      case 'Actived': return 'success'
+      case 'Inactive': return 'secondary'
+      case 'Locked': return 'warning'
+      case 'Deactived': return 'danger'
       default: return 'primary'
     }
   }
@@ -435,23 +357,9 @@ class Company extends Component {
     });
   }
 
-  getFeatureChoose = async (feature) => {
-    const resPackage = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.DATA_CHOOSE_FEATURE,
-      method: 'POST',
-      data: {
-        feature: feature
-      }
-    });
-
-    this.setState({ arrFeature_Save: resPackage.data.data })
-  }
-
   resetSearch() {
     this.setState({
       key: '',
-      keyDateCreate: new Date(),
       keyStatus: ''
     }, () => {
       this.searchKey();
@@ -471,7 +379,8 @@ class Company extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách gói sản phẩm (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách SALES (Total: {this.state.data != undefined || this.state.data != null ?
+                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -483,7 +392,11 @@ class Company extends Component {
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
-
+                          {/* <CCol sm="6" lg="2">
+                            <CInput type="date" onChange={e => {
+                              this.actionSearch(e, "keyDateCreate");
+                            }} value={keyDateCreate} placeholder="Create Date" />
+                          </CCol> */}
                           <CCol sm="12" lg="4">
                             <CSelect style={styles.flexOption} onChange={e => {
 
@@ -491,9 +404,9 @@ class Company extends Component {
 
                             }} custom>
                               {
-                                ["0", "1"].map((item, i) => {
+                                ['Actived', 'Deactived', 'Locked'].map((item, i) => {
                                   return (
-                                    <option value={item}>{item == 0 ? 'DISABLE' : 'ENABLE'}</option>
+                                    <option value={item}>{item}</option>
                                   );
                                 })
                               }
@@ -515,17 +428,16 @@ class Company extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên gói</th>
-                        <th className="text-center">Giá trị</th>
-                        <th className="text-center">Đơn vị</th>
+                        <th className="text-center">Tên Sale</th>
+                        <th className="text-center">Email</th>
+                        <th className="text-center">Số điện thoại</th>
+                        <th className="text-center">Địa chỉ</th>
                         <th className="text-center">Trạng thái</th>
-                        <th className="text-center">Tình trạng</th>
                         <th className="text-center">#</th>
 
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="7" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -533,16 +445,12 @@ class Company extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Name}</td>
-                                <td className="text-center">{item.Value}</td>
-                                <td className="text-center">{item.Unit == '0' ? 'Ngày' : item.Unit == '1' ? "Tháng" : "Năm"}</td>
+                                <td className="text-center">{item.Email}</td>
+                                <td className="text-center">{item.Phone}</td>
+                                <td className="text-center">{item.Address}</td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
-                                    {this.getBadge_string(item.Status)}
-                                  </CBadge>
-                                </td>
-                                <td className="text-center">
-                                  <CBadge color={this.getBadge_isDelete(item.isDelete)}>
-                                    {this.getBadge_isDelete_string(item.isDelete)}
+                                    {item.Status}
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
@@ -582,79 +490,77 @@ class Company extends Component {
             <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
+                field="Email"
+                label="Email"
+                value={this.state.Email}
+                type={"email"}
+                placeholder={"Emal"}
+                // error={errors.title}
+                onChange={e => this.onChange("Email", e.target.value)}
+              // rows="5"
+              />
+              <TextFieldGroup
                 field="Name"
-                label="Tên gói"
+                label="Tên Sale"
                 value={this.state.Name}
-                placeholder={"Nhập tên gói"}
+                placeholder={"Tên Sale"}
                 // error={errors.title}
                 onChange={e => this.onChange("Name", e.target.value)}
               // rows="5"
               />
 
               <TextFieldGroup
-                field="Vualue"
-                label="Giá trị"
-                value={this.state.Value}
-                placeholder={"Nhập giá trị"}
+                field="UserName"
+                label="Tên đăng nhập"
+                value={this.state.UserName}
+                placeholder={"Tên đăng nhập"}
                 // error={errors.title}
-                onChange={e => this.onChange("Value", e.target.value)}
+                onChange={e => this.onChange("UserName", e.target.value)}
               // rows="5"
               />
 
-              {/* <TextFieldGroup
-                field="Unit"
-                label="Đơn vị (Ngày, tháng, năm)"
-                value={this.state.Unit}
-                placeholder={"Đơn vị"}
+              <TextFieldGroup
+                field="Password"
+                label="Mật khẩu"
+                type={"password"}
+                value={this.state.Password}
+                placeholder={"Mật khẩu"}
                 // error={errors.title}
-                onChange={e => this.onChange("Unit", e.target.value)}
+                onChange={e => this.onChange("Password", e.target.value)}
               // rows="5"
-              /> */}
-              <div style={{ marginTop: 5 }}>
-                <label style={styles.flexLabel} htmlFor="tag">Đơn vị    </label>
-                <CSelect style={styles.flexOption} onChange={e => this.onChange("Unit", e.target.value)} custom>
-                  <option value={this.state.Unit}>{this.state.Unit == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                  {
-                    ['0', '1', '2'].map((item, i) => {
-                      if (item == this.state.Unit) {
-                        return (
-                          <option selected value={item}>{item == '0' ? "Ngày" : item == '1' ? "Tháng" : "Năm"}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item}>{item == '0' ? "Ngày" : item == '1' ? "Tháng" : "Năm"}</option>
-                        );
-                      }
-                    })
-                  }
-                </CSelect>
-                {
-                  action == 'new' ? "" : <div>
-                    <label style={styles.flexLabel} htmlFor="tag">Status    </label>
-                    <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                      <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                      {
-                        ["0", "1"].map((item, i) => {
-                          if (item == this.state.Status) {
-                            return (
-                              <option selected value={item}>{item == 0 ? 'DISABLE' : 'ENABLE'}</option>
-                            );
-                          } else {
-                            return (
-                              <option value={item}>{item == 0 ? 'DISABLE' : 'ENABLE'}</option>
-                            );
-                          }
+              />
 
-                        })
-                      }
-                    </select>
-                  </div>
+              <TextFieldGroup
+                field="Phone"
+                label="Số điện thoại"
+                value={this.state.Phone}
+                placeholder={"Số điện thoại"}
+                onChange={e => this.onChange("Phone", e.target.value)}
+              // rows="5"
+              />
 
-                }
-              </div>
+              <TextFieldGroup
+                field="Address"
+                label="Địa chỉ"
+                value={this.state.Address}
+                placeholder={"Địa chỉ"}
+                // error={errors.title}
+                onChange={e => this.onChange("Address", e.target.value)}
+              // rows="5"
+              />
+
               {
-                this.renderSelect()
+                action == 'new' ? "" : <div>
+                  <label style={styles.flexLabel} htmlFor="tag">Status    </label>
+                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
+                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
+                    <option value={'Actived'}>Actived</option>
+                    <option value={'Locked'}>Locked</option>
+                    <option value={'Deactived'}>Deactived</option>
+                  </select>
+                </div>
               }
+
             </ModalBody>
 
             <ModalFooter>

@@ -258,7 +258,8 @@ class PluginCreateOrder extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.ADD_PLUGIN_ORDER,
       method: 'PUT',
-      data: body
+      data: body,
+      headers: this.state.token
     });
 
     if (resOrder.data.is_success == true) {
@@ -446,9 +447,9 @@ class PluginCreateOrder extends Component {
                     <CCol sm="12" lg="6">
                     </CCol>
                     <CCol sm="12" lg="6">
-                      <Button disabled={this.state.disableNext} outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
+                      <CButton disabled={this.state.disableNext} outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
                         await this.onNext(Company_Id, Package_Id, arrayChooseFeature);
-                      }}>Tiếp tục</Button>
+                      }}>Tiếp tục</CButton>
                     </CCol>
                   </CRow>
                 </CCol>
@@ -477,9 +478,9 @@ class PluginCreateOrder extends Component {
                         }
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
                           await this.addOrderPlugin();
-                        }}>Kết thúc</Button>
+                        }}>Tạo đơn hàng</CButton>
                       </CCol>
                     </CRow>
                   </CCol> : ""
@@ -497,8 +498,8 @@ class PluginCreateOrder extends Component {
 
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</Button>{' '}
-            <Button color="secondary" onClick={e => this.toggleModal("new")}>Close</Button>
+            <CButton color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</CButton>{' '}
+            <CButton color="secondary" onClick={e => this.toggleModal("new")}>Close</CButton>
           </ModalFooter>
         </Modal>
       </div >

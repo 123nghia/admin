@@ -27,6 +27,7 @@ const PluginCustomer = React.lazy(() => import('./views/base/tables/PluginCustom
 const PluginCreateOrder = React.lazy(() => import('./views/base/tables/PluginCreateOrder'));
 const FeatureTable = React.lazy(() => import('./views/base/tables/FeatureTable'));
 const PluginOrderTable = React.lazy(() => import('./views/base/tables/PluginOrderTable'));
+const PluginUserTable = React.lazy(() => import('./views/base/tables/PluginUserTable'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -57,6 +58,7 @@ const routes = [
   { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
   { path: '/feature', name: 'Feature', component: FeatureTable },
   { path: '/list_order', name: 'Order Plugin', component: PluginOrderTable },
+  { path: '/saleAdmin', name: 'SALE', component: PluginUserTable },
 ];
 
 export default routes;

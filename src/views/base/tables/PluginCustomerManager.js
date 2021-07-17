@@ -22,7 +22,8 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CButton
+  CButton,
+  CTooltip
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -72,7 +73,8 @@ class PluginCustomerManager extends Component {
       current_package: '',
       arrTotalPackage: [],
       arrDetailPackage: [],
-      phone_number: ''
+      phone_number: '',
+      current_slug: ''
     };
   }
   async componentDidMount() {
@@ -119,9 +121,12 @@ class PluginCustomerManager extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  async onView(name, com_id, phone_number) {
+  async onView(name, com_id, phone_number, slug) {
     await this.getPackageData(com_id)
-    this.setState({ toggleView: !this.state.toggleView, company_name: name, arrDetailPackage: [], phone_number: phone_number })
+    this.setState({
+      toggleView: !this.state.toggleView, company_name: name,
+      arrDetailPackage: [], phone_number: phone_number, current_slug: slug
+    })
   }
 
   searchKey() {
@@ -468,7 +473,7 @@ class PluginCustomerManager extends Component {
                   <tr key={i}>
                     <td className="text-center">{i + 1}</td>
                     <td className="text-center">{item.Key}</td>
-                    <td className="text-center">{item.Value}</td>
+                    <td className="text-center">{item.Value + this.state.current_slug}</td>
                   </tr>
                 );
               }) : ""
@@ -476,6 +481,10 @@ class PluginCustomerManager extends Component {
         </tbody>
       </table>
     )
+  }
+
+  calDateLeft(end, active) {
+    return this.CalculatorDateLeft(new Date(end), new Date(active))
   }
 
   render() {
@@ -524,12 +533,12 @@ class PluginCustomerManager extends Component {
                             </CSelect>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
                       </CCol>
                     </CRow>
                   </div>
@@ -571,15 +580,17 @@ class PluginCustomerManager extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
+                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
-                                  </Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                  </CButton>{' '}
+                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                     <CIcon name="cilTrash" />
-                                  </Button>{' '}
-                                  <Button outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone) }}>
-                                    <CIcon name="cil-magnifying-glass" />
-                                  </Button>
+                                  </CButton>{' '}
+                                  <CTooltip content="Xem chi tiết đơn hàng">
+                                    <CButton outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}>
+                                      <CIcon name="cil-magnifying-glass" />
+                                    </CButton>
+                                  </CTooltip>
                                 </td>
                               </tr>
                             );
@@ -598,7 +609,7 @@ class PluginCustomerManager extends Component {
                         arrPagination.map((item, i) => {
                           return (
                             <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
                             </td>
                           );
                         })
@@ -639,7 +650,6 @@ class PluginCustomerManager extends Component {
                     arrTotalPackage == 0 ?
                       <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
                       <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
-
                   }
                   {
                     arrTotalPackage != undefined ?
@@ -652,18 +662,23 @@ class PluginCustomerManager extends Component {
                             <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
                             <th className="text-center">{new Date(item.Active_Date).toLocaleDateString()}</th>
                             <th className="text-center">{new Date(item.End_Date).toLocaleDateString()}</th>
-                            <th className="text-center">
-                              {this.CalculatorDateLeft(new Date(item.End_Date), new Date(item.Active_Date))} ngày nữa
+                            <th className="text-center" style={
+                              this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
+                              this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                            }>
+                              {
+                                this.calDateLeft(item.End_Date, item.Active_Date)
+                              } ngày nữa
                             </th>
                             <td className="text-center">
-                              <Button outline color="info" size="sm"
+                              <CButton outline color="info" size="sm"
                                 onClick={async (e) => {
                                   this.setState({
                                     arrDetailPackage: item.Array_Feature, current_package: item.Name
                                   })
                                 }}>
                                 <CIcon name="cil-magnifying-glass" />
-                              </Button>
+                              </CButton>
                             </td>
                           </tr>
                         )
@@ -791,8 +806,8 @@ class PluginCustomerManager extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
             </ModalFooter>
           </Modal>
 
@@ -802,8 +817,8 @@ class PluginCustomerManager extends Component {
               <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
             </ModalFooter>
           </Modal>
         </div >

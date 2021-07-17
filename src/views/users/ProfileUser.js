@@ -13,13 +13,20 @@ import {
 
 import {
   CBadge,
+  CLabel,
   CRow,
   CCol,
   CSelect,
   CInput,
-  CLabel
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CButton,
+  CTooltip
 } from '@coreui/react'
-
+import CIcon from '@coreui/icons-react'
 import 'moment-timezone';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -60,22 +67,18 @@ class Users extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       role: localStorage.getItem('role'),
       company_id: localStorage.getItem('user'),
-      Name: '',
-      Email: '',
-      Phone: '',
-      Gender: '',
-      Address: '',
-      Company_Id: '',
-      Role_Id: '',
-      UserName: '',
-      Password: '',
-      Status: '',
       link_shop: true,
       data_link_shop: '',
       link_recommand: true,
       data_link_recommand: '',
       link_sku: true,
-      data_link_sku: ''
+      data_link_sku: '',
+      toggleView: false,
+      company_name: '',
+      arrDetailPackage: [],
+      phone_number: '',
+      current_slug: '',
+      arrTotalPackage: []
     };
   }
   async componentDidMount() {
@@ -136,8 +139,85 @@ class Users extends Component {
     });
   }
 
+  getPackageName = async (package_id) => {
+    const resPackage = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_DATA_PACKAGE,
+      method: 'POST',
+      data: {
+        package_id: package_id
+      }
+    });
+    return resPackage.data.data;
+  }
+
+  async getPackageData(company_id) {
+    let arrTemp = []
+    const resPackage = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_PLUGIN_ORDER_BY_ID,
+      method: 'POST',
+      data: {
+        company_id: company_id
+      }
+    });
+    let val = resPackage.data.data;
+
+    for (let i = 0; i < val.length; i++) {
+      let data = await this.getPackageName(val[i].Package_Id);
+      data.Active_Date = val[i].Active_Date;
+      data.End_Date = val[i].End_Date;
+      arrTemp.push(data)
+    }
+    console.log(val)
+    this.setState({ arrTotalPackage: arrTemp })
+  }
+
+  async onView(name, com_id, phone_number, slug) {
+    await this.getPackageData(com_id)
+    this.setState({
+      toggleView: !this.state.toggleView, company_name: name,
+      arrDetailPackage: [], phone_number: phone_number, current_slug: slug
+    })
+  }
+
+  renderDetailPackage() {
+    return (
+      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+        <thead className="thead-light">
+          <tr>
+            <th className="text-center">STT.</th>
+            <th className="text-center">Tên dịch vụ</th>
+            <th className="text-center">Đường dẫn</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            this.state.arrDetailPackage.length == 0 ?
+              <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
+              <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
+
+          }
+
+          {
+            this.state.arrDetailPackage != undefined || this.state.arrDetailPackage.length != 0 || this.state.arrDetailPackage != null ?
+              this.state.arrDetailPackage.map((item, i) => {
+                return (
+                  <tr key={i}>
+                    <td className="text-center">{i + 1}</td>
+                    <td className="text-center">{item.Key}</td>
+                    <td className="text-center">{item.Value + this.state.current_slug}</td>
+                  </tr>
+                );
+              }) : ""
+          }
+        </tbody>
+      </table>
+    )
+  }
+
   async updateLink() {
-    const { data_link_shop, data_link_recommand, data_link_sku  } = this.state;
+    const { data_link_shop, data_link_recommand, data_link_sku } = this.state;
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.UPDATE_LINK,
@@ -151,12 +231,29 @@ class Users extends Component {
     });
   }
 
+  convertUnitToDate(unit) {
+    switch (unit) {
+      case '0': return 'Ngày'
+      case '1': return 'Tháng'
+      case '2': return 'Năm'
+    }
+  }
+
+  CalculatorDateLeft(dateStart, dateEnd) {
+    return Math.ceil(Math.abs(new Date(dateEnd) - new Date(dateStart)) / (1000 * 60 * 60 * 24))
+  }
+
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  calDateLeft(end, active) {
+    return this.CalculatorDateLeft(new Date(end), new Date(active))
+  }
+
   render() {
-    const { data, link_shop, link_recommand, link_sku } = this.state;
+    const { data, link_shop, link_recommand, link_sku, role, viewingUser, communities, action, arrPagination,
+      indexPage, arrTotalPackage, company_name, current_package, phone_number } = this.state;
 
 
     return (
@@ -171,8 +268,24 @@ class Users extends Component {
               </CardHeader>
               <CardBody>
                 <CRow>
-                  <CCol sm="12" lg="6">
-                    <CLabel><strong>Quản lý tài khoản</strong></CLabel>
+                  <CCol sm="12" lg="12">
+                    <CRow>
+                      <CCol sm="12" lg="6">
+                        <CLabel><strong>Quản lý tài khoản</strong></CLabel>
+                      </CCol>
+                      {
+                        role == 'ADMIN' || role == 'SALE' ? "" :
+                          <CCol sm="12" lg="6">
+                            <CTooltip content="Xem chi tiết đơn hàng">
+                              <CButton outline color="info" size="sm" onClick={async (e) => {
+                                await this.onView(data.Name, data.Company_Id, data.Phone, data.Slug)
+                              }}>
+                                <CIcon name="cil-magnifying-glass" /> Chi tiết các đơn hàng đã mua
+                              </CButton>
+                            </CTooltip>
+                          </CCol>
+                      }
+                    </CRow>
                     <CRow>
                       <CCol sm="12" lg="12">
                         <div>
@@ -218,7 +331,7 @@ class Users extends Component {
                       <CCol sm="12" lg="12">
                         <div>
                           <CLabel>Quyền hạn</CLabel>
-                          <Input style={styles.searchInput} value={data.Role_Id} />
+                          <Input style={styles.searchInput} value={role} />
                         </div>
                       </CCol>
 
@@ -256,6 +369,84 @@ class Users extends Component {
             </Card>
           </Col>
         </Row>
+
+        <CModal
+          show={this.state.toggleView}
+          onClose={() => { this.setState({ toggleView: !this.state.toggleView }) }}
+          size="xl"
+        >
+          <CModalHeader closeButton>
+            <CModalTitle>Danh sách đơn hàng của {company_name}</CModalTitle>
+            <CModalTitle style={{ marginLeft: 50 }}>Số điện thoại: {phone_number}</CModalTitle>
+          </CModalHeader>
+
+          <CModalBody>
+            <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+              <thead className="thead-light">
+                <tr>
+                  <th className="text-center">STT.</th>
+                  <th className="text-center">Tên Gói</th>
+                  <th className="text-center">Số lượng tính năng</th>
+                  <th className="text-center">Gói</th>
+                  <th className="text-center">Ngày kích hoạt</th>
+                  <th className="text-center">Ngày hết hạn</th>
+                  <th className="text-center">Thời gian hết hạn</th>
+                  <th className="text-center">#</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  arrTotalPackage == 0 ?
+                    <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
+                    <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
+
+                }
+                {
+                  arrTotalPackage != undefined ?
+                    arrTotalPackage.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <th className="text-center">{i + 1}</th>
+                          <th className="text-center">{item.Name}</th>
+                          <th className="text-center">{item.Array_Feature.length}</th>
+                          <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
+                          <th className="text-center">{new Date(item.Active_Date).toLocaleDateString()}</th>
+                          <th className="text-center">{new Date(item.End_Date).toLocaleDateString()}</th>
+                          <th className="text-center" style={
+                            this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
+                            this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                          }>
+                            {this.calDateLeft(item.End_Date, item.Active_Date)} ngày nữa
+                          </th>
+                          <td className="text-center">
+                            <CButton outline color="info" size="sm"
+                              onClick={async (e) => {
+                                this.setState({
+                                  arrDetailPackage: item.Array_Feature, current_package: item.Name
+                                })
+                              }}>
+                              <CIcon name="cil-magnifying-glass" />
+                            </CButton>
+                          </td>
+                        </tr>
+                      )
+                    }) : ""
+                }
+              </tbody>
+            </table>
+            <br />
+            <CModalHeader>
+              <CModalTitle>Chi tiết tính năng ({current_package})</CModalTitle>
+            </CModalHeader>
+            {
+              this.renderDetailPackage()
+            }
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => { this.setState({ toggleView: !this.state.toggleView }) }}>Đóng</CButton>
+          </CModalFooter>
+        </CModal>
+
       </div>
     );
 

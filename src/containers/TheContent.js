@@ -41,7 +41,7 @@ const TheContent = () => {
               )
             })}
             {
-              role == 'ADMIN' ? <Redirect from="/" to="/list_order" /> : <Redirect from="/" to="/dashboard" />
+              role == 'ADMIN' || 'SALE' ? <Redirect from="/" to="/list_order" /> : <Redirect from="/" to="/dashboard" />
             }
           </Switch>
         </Suspense>

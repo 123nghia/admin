@@ -117,7 +117,7 @@ class Company extends Component {
                             <div style={{ width: '80%', height: 50, alignItems: 'center', fontSize: 15, fontWeight: 'bold' }}>{item.Key}</div>
 
                             <div style={{ width: '80', height: 70, fontSize: 10 }}>
-                              Nhấp vào đây để chuyển hướng đến {item.Value + "/" + company_slug}
+                              Nhấp vào đây để chuyển hướng đến {item.Value + company_slug}
                             </div>
                           </center>
                         </div>
