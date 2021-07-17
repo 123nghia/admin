@@ -94,7 +94,7 @@ class Admin extends Component {
                           <div className="feature__title h4" style={{ marginBottom: 50 }}>{item.Key}</div>
                           <p className="feature__desc">
                             Nhấp vào đây để chuyển hướng đến
-                            {item.Value + "/" + JSON.parse(user).username + "/" + md5(JSON.parse(user).password)}
+                            {item.Value + JSON.parse(user).username + "/" + md5(JSON.parse(user).password)}
                           </p>
                         </div>
                       </div>

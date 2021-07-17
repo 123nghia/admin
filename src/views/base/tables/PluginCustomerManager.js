@@ -10,13 +10,20 @@ import {
   ModalHeader, ModalBody, ModalFooter, Modal,
   Alert
 } from 'reactstrap';
-
+import CIcon from '@coreui/icons-react'
 import {
   CBadge,
   CRow,
   CCol,
   CSelect,
-  CInput
+  CInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CButton,
+  CTooltip
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -34,16 +41,8 @@ class PluginCustomerManager extends Component {
     this.state = {
       data: [],
       key: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyFax: '',
-      keyAddress: '',
-      keyWebsite: '',
-      keyCode: '',
-      keyCompany: '',
       UserName: "",
       Password: "",
-      keyDateCreate: new Date(),
       keyStatus: '',
       activePage: 1,
       page: 1,
@@ -59,7 +58,7 @@ class PluginCustomerManager extends Component {
       Name: '',
       Email: '',
       Phone: '',
-      Fax: 'Nam',
+      Fax: '',
       Address: '',
       Website: '',
       Code: '',
@@ -69,8 +68,13 @@ class PluginCustomerManager extends Component {
       delete: null,
       arrPagination: [],
       indexPage: 0,
-      dataCompany: [],
-      currentCompany: '',
+      toggleView: false,
+      company_name: '',
+      current_package: '',
+      arrTotalPackage: [],
+      arrDetailPackage: [],
+      phone_number: '',
+      current_slug: ''
     };
   }
   async componentDidMount() {
@@ -84,15 +88,6 @@ class PluginCustomerManager extends Component {
         }
       }
     }
-  }
-
-  async getCompanyData() {
-    const resCompany = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_LIST_COMPANY,
-      method: 'POST'
-    });
-    this.setState({ dataCompany: resCompany.data.data });
   }
 
   pagination(dataApi) {
@@ -124,6 +119,14 @@ class PluginCustomerManager extends Component {
     })
 
     this.setState({ isLoading: false, totalActive: active });
+  }
+
+  async onView(name, com_id, phone_number, slug) {
+    await this.getPackageData(com_id)
+    this.setState({
+      toggleView: !this.state.toggleView, company_name: name,
+      arrDetailPackage: [], phone_number: phone_number, current_slug: slug
+    })
   }
 
   searchKey() {
@@ -320,6 +323,40 @@ class PluginCustomerManager extends Component {
 
   }
 
+  async getPackageData(company_id) {
+    let arrTemp = []
+    const resPackage = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_PLUGIN_ORDER_BY_ID,
+      method: 'POST',
+      data: {
+        company_id: company_id
+      }
+    });
+    let val = resPackage.data.data;
+
+    for (let i = 0; i < val.length; i++) {
+      let data = await this.getPackageName(val[i].Package_Id);
+      data.Active_Date = val[i].Active_Date;
+      data.End_Date = val[i].End_Date;
+      arrTemp.push(data)
+    }
+
+    this.setState({ arrTotalPackage: arrTemp })
+  }
+
+  getPackageName = async (package_id) => {
+    const resPackage = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_DATA_PACKAGE,
+      method: 'POST',
+      data: {
+        package_id: package_id
+      }
+    });
+    return resPackage.data.data;
+  }
+
   getUsers(page = 1) {
     const limit = this.state.limit;
     const key = this.state.key || '';
@@ -399,10 +436,60 @@ class PluginCustomerManager extends Component {
     });
   }
 
+  convertUnitToDate(unit) {
+    switch (unit) {
+      case '0': return 'Ngày'
+      case '1': return 'Tháng'
+      case '2': return 'Năm'
+    }
+  }
+
+  CalculatorDateLeft(dateStart, dateEnd) {
+    return Math.ceil(Math.abs(new Date(dateEnd) - new Date(dateStart)) / (1000 * 60 * 60 * 24))
+  }
+
+  renderDetailPackage() {
+    return (
+      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+        <thead className="thead-light">
+          <tr>
+            <th className="text-center">STT.</th>
+            <th className="text-center">Tên dịch vụ</th>
+            <th className="text-center">Đường dẫn</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            this.state.arrDetailPackage.length == 0 ?
+              <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
+              <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
+
+          }
+
+          {
+            this.state.arrDetailPackage != undefined || this.state.arrDetailPackage.length != 0 || this.state.arrDetailPackage != null ?
+              this.state.arrDetailPackage.map((item, i) => {
+                return (
+                  <tr key={i}>
+                    <td className="text-center">{i + 1}</td>
+                    <td className="text-center">{item.Key}</td>
+                    <td className="text-center">{item.Value + this.state.current_slug}</td>
+                  </tr>
+                );
+              }) : ""
+          }
+        </tbody>
+      </table>
+    )
+  }
+
+  calDateLeft(end, active) {
+    return this.CalculatorDateLeft(new Date(end), new Date(active))
+  }
+
   render() {
     const { data, key, viewingUser, communities, action, arrPagination,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus } = this.state;
+      indexPage, arrTotalPackage, company_name, current_package, phone_number } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -446,12 +533,12 @@ class PluginCustomerManager extends Component {
                             </CSelect>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
                       </CCol>
                     </CRow>
                   </div>
@@ -462,9 +549,7 @@ class PluginCustomerManager extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên Công Ty</th>
-                        <th className="text-center">Email</th>
-                        <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Fax</th>
+                        <th className="text-center">Email - SĐT</th>
                         <th className="text-center">Địa chỉ</th>
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
@@ -480,9 +565,11 @@ class PluginCustomerManager extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Name}</td>
-                                <td className="text-center">{item.Email}</td>
-                                <td className="text-center">{item.Phone}</td>
-                                <td className="text-center">{item.Fax}</td>
+                                <td className="text-center">
+                                  <div>{item.Email}</div>
+                                  <div>------------</div>
+                                  <div>{item.Phone}</div>
+                                </td>
                                 <td className="text-center">{item.Address}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
@@ -493,8 +580,17 @@ class PluginCustomerManager extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
+                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
+                                    <CIcon name="cilPencil" />
+                                  </CButton>{' '}
+                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                    <CIcon name="cilTrash" />
+                                  </CButton>{' '}
+                                  <CTooltip content="Xem chi tiết đơn hàng">
+                                    <CButton outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}>
+                                      <CIcon name="cil-magnifying-glass" />
+                                    </CButton>
+                                  </CTooltip>
                                 </td>
                               </tr>
                             );
@@ -513,7 +609,7 @@ class PluginCustomerManager extends Component {
                         arrPagination.map((item, i) => {
                           return (
                             <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
                             </td>
                           );
                         })
@@ -524,6 +620,84 @@ class PluginCustomerManager extends Component {
 
             </Col>
           </Row>
+
+          <CModal
+            show={this.state.toggleView}
+            onClose={() => { this.setState({ toggleView: !this.state.toggleView }) }}
+            size="xl"
+          >
+            <CModalHeader closeButton>
+              <CModalTitle>Danh sách đơn hàng của {company_name}</CModalTitle>
+              <CModalTitle style={{ marginLeft: 50 }}>Số điện thoại: {phone_number}</CModalTitle>
+            </CModalHeader>
+
+            <CModalBody>
+              <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <thead className="thead-light">
+                  <tr>
+                    <th className="text-center">STT.</th>
+                    <th className="text-center">Tên Gói</th>
+                    <th className="text-center">Số lượng tính năng</th>
+                    <th className="text-center">Gói</th>
+                    <th className="text-center">Ngày kích hoạt</th>
+                    <th className="text-center">Ngày hết hạn</th>
+                    <th className="text-center">Thời gian hết hạn</th>
+                    <th className="text-center">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    arrTotalPackage == 0 ?
+                      <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
+                      <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
+                  }
+                  {
+                    arrTotalPackage != undefined ?
+                      arrTotalPackage.map((item, i) => {
+                        return (
+                          <tr key={i}>
+                            <th className="text-center">{i + 1}</th>
+                            <th className="text-center">{item.Name}</th>
+                            <th className="text-center">{item.Array_Feature.length}</th>
+                            <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
+                            <th className="text-center">{new Date(item.Active_Date).toLocaleDateString()}</th>
+                            <th className="text-center">{new Date(item.End_Date).toLocaleDateString()}</th>
+                            <th className="text-center" style={
+                              this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
+                              this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                            }>
+                              {
+                                this.calDateLeft(item.End_Date, item.Active_Date)
+                              } ngày nữa
+                            </th>
+                            <td className="text-center">
+                              <CButton outline color="info" size="sm"
+                                onClick={async (e) => {
+                                  this.setState({
+                                    arrDetailPackage: item.Array_Feature, current_package: item.Name
+                                  })
+                                }}>
+                                <CIcon name="cil-magnifying-glass" />
+                              </CButton>
+                            </td>
+                          </tr>
+                        )
+                      }) : ""
+                  }
+                </tbody>
+              </table>
+              <br />
+              <CModalHeader>
+                <CModalTitle>Chi tiết tính năng ({current_package})</CModalTitle>
+              </CModalHeader>
+              {
+                this.renderDetailPackage()
+              }
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => { this.setState({ toggleView: !this.state.toggleView }) }}>Đóng</CButton>
+            </CModalFooter>
+          </CModal>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
@@ -632,8 +806,8 @@ class PluginCustomerManager extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
             </ModalFooter>
           </Modal>
 
@@ -643,8 +817,8 @@ class PluginCustomerManager extends Component {
               <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
             </ModalFooter>
           </Modal>
         </div >

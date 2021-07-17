@@ -13,19 +13,27 @@ import {
   Alert
 } from 'reactstrap';
 import Select from 'react-select'
+import ReactLoading from 'react-loading';
 import {
   CBadge,
   CRow,
   CCol,
   CSelect,
-  CInput
+  CInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CButton,
+  CLabel
 } from '@coreui/react'
 
 import 'moment-timezone';
 import Constants from "../../../contants/contants";
 import TextFieldGroup from "../../Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
+import moment from "moment";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -40,11 +48,6 @@ class PluginCreateOrder extends Component {
       Feature_Id: '',
       arrayFeature: [],
       arrayChooseFeature: [],
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
       updated: '',
       dataApi: [],
@@ -52,9 +55,7 @@ class PluginCreateOrder extends Component {
       modalDelete: false,
       delete: null,
       arrPagination: [],
-      indexPage: 0,
       dataCompany: [],
-      currentCompany: '',
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       company_id: localStorage.getItem('user'),
       dataPackage: [],
@@ -65,6 +66,12 @@ class PluginCreateOrder extends Component {
       package_key: '',
       package_unit: '',
       arrFeature: [],
+      disableNext: false,
+      time_expried: '',
+      time_create: '',
+      //So sách 2 slug nếu trùng thì thôi còn khác nhau thì update lại slug của công ty
+      currentSlug: '',
+      confirmSlug: ''
     };
   }
 
@@ -102,7 +109,11 @@ class PluginCreateOrder extends Component {
         company_id: company_id
       }
     });
-    this.setState({ company_name: resCom.data.data.Name })
+
+    this.setState({
+      company_name: resCom.data.data.Name,
+      currentSlug: resCom.data.data.Slug, confirmSlug: resCom.data.data.Slug
+    })
     return resCom.data.data.Name;
   }
 
@@ -115,9 +126,11 @@ class PluginCreateOrder extends Component {
         package_id: package_id
       }
     });
-    this.setState({ package_name: resPackage.data.data.Name,
+    this.setState({
+      package_name: resPackage.data.data.Name,
       package_time: resPackage.data.data.Value + " " + this.convertUnitToDate(resPackage.data.data.Unit),
-      package_key: resPackage.data.data.Value, package_unit: resPackage.data.data.Unit})
+      package_key: resPackage.data.data.Value, package_unit: resPackage.data.data.Unit
+    })
     return resPackage.data.data.Name;
   }
 
@@ -178,7 +191,7 @@ class PluginCreateOrder extends Component {
     }
   }
 
-  convertUnitToDate(unit){
+  convertUnitToDate(unit) {
     switch (unit) {
       case '0': return 'Ngày'
       case '1': return 'Tháng'
@@ -193,7 +206,7 @@ class PluginCreateOrder extends Component {
     let arrFeature = [];
     let arrSetDefault = [];
     for (let i = 0; i < dataPackage.length; i++) {
-      if(dataPackage[i]._id == Package_Id && dataPackage[i].Status == "1"){
+      if (dataPackage[i]._id == Package_Id && dataPackage[i].Status == "1") {
         for (let y = 0; y < dataPackage[i].Array_Feature.length; y++) {
           arrFeature.push({ name: dataPackage[i].Array_Feature[y].Key, id: dataPackage[i].Array_Feature[y]._id });
           arrSetDefault.push(dataPackage[i].Array_Feature[y]._id)
@@ -204,7 +217,7 @@ class PluginCreateOrder extends Component {
     localStorage.setItem('arrFeature', JSON.stringify(arrSetDefault));
     //Đang lấy đúng config của multiselect để đổ dữ liệu vào cho multi select
     for (let i = 0; i < dataFeature.length; i++) {
-      if(dataFeature[i].Type == "1"){
+      if (dataFeature[i].Type == "1") {
         arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
       }
     }
@@ -232,18 +245,21 @@ class PluginCreateOrder extends Component {
   }
 
   async addOrderPlugin() {
-    const {Company_Id, Package_Id, arrFeature} = this.state;
+    const { Company_Id, Package_Id, arrFeature, time_create, time_expried } = this.state;
     var body = {
       Company_Id: Company_Id,
       Package_Id: Package_Id,
-      Array_Feature: arrFeature
+      Array_Feature: arrFeature,
+      Active_Date: time_create,
+      End_Date: time_expried
     }
 
     const resOrder = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.ADD_PLUGIN_ORDER,
       method: 'PUT',
-      data: body
+      data: body,
+      headers: this.state.token
     });
 
     if (resOrder.data.is_success == true) {
@@ -255,13 +271,12 @@ class PluginCreateOrder extends Component {
   }
 
   renderTable(arrFeature, company_name, package_name, package_time) {
+    const { currentSlug } = this.state;
     return (
       <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>
             <th className="text-center">No.</th>
-            <th className="text-center">Tên công ty</th>
-            <th className="text-center">Tên gói</th>
             <th className="text-center">Thời hạn</th>
             <th className="text-center">Tên tính năng</th>
             <th className="text-center">Đường dẫn</th>
@@ -275,11 +290,9 @@ class PluginCreateOrder extends Component {
                 return (
                   <tr key={i}>
                     <td className="text-center">{i + 1}</td>
-                    <td className="text-center">{company_name}</td>
-                    <td className="text-center">{package_name}</td>
                     <td className="text-center">{package_time}</td>
                     <td className="text-center">{item.Key}</td>
-                    <td className="text-center">{item.Value}</td>
+                    <td className="text-center">{item.Value + currentSlug}</td>
                   </tr>
                 );
               }) : ""
@@ -289,10 +302,83 @@ class PluginCreateOrder extends Component {
     )
   }
 
+  getCurrentMonth(unit, value) {
+    var today = new Date();
+
+    switch (unit) {
+      case "0":
+        var date = today.setDate(today.getDate() + value);
+        return date;
+
+      case "1":
+        var month = today.setMonth(today.getMonth() + value);
+        return month;
+      case "2":
+        var year = today.setFullYear(today.getFullYear() + value);
+        return year;
+
+      default:
+        break;
+    }
+  }
+
+  getCurrentDate(year = 0, month = 6, date = 16) {
+    // setInterval(function () {
+    //   var date_future = new Date(new Date().getFullYear() + year, month, date, 11, 1, 10);
+    //   var date_now = new Date();
+
+    //   var seconds = Math.floor((date_future - (date_now)) / 1000);
+    //   var minutes = Math.floor(seconds / 60);
+    //   var hours = Math.floor(minutes / 60);
+    //   var days = Math.floor(hours / 24);
+
+    //   hours = hours - (days * 24);
+    //   minutes = minutes - (days * 24 * 60) - (hours * 60);
+    //   seconds = seconds - (days * 24 * 60 * 60) - (hours * 60 * 60) - (minutes * 60);
+
+    //   console.log("Time until new year: Days: " + days + " Hours: " + hours + " Minutes: " + minutes + " Seconds: " + seconds);
+    // }, 1000);
+    // var delta = Math.abs(new Date(Date.now() + (86400000 * 2)) - new Date(Date.now() + (8640000))) / 1000;
+    // var days = Math.floor(delta / 86400);
+    // delta -= days * 86400;
+    // console.log("Duy: ", delta)
+    // //console.log(new Date(Date.now() + (8640000)).toLocaleDateString());
+    // return Number(new Date(Date.now() + (86400000 * 8)));
+  }
+
+  async onNext(Company_Id, Package_Id, arrayChooseFeature) {
+    const { package_key, package_unit, currentSlug, confirmSlug } = this.state;
+    if (Company_Id != '' && Package_Id != '') {
+      await this.getCompanyName(Company_Id)
+      await this.getPackageName(Package_Id)
+      await this.getFeatureChoose(arrayChooseFeature);
+
+      if (currentSlug != confirmSlug) {
+        await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.UPDATE_SLUG,
+          method: 'POST',
+          data: {
+            id: Company_Id,
+            Slug: currentSlug
+          }
+        });
+
+        this.setState({ currentSlug:  currentSlug})
+      }
+    } else {
+      alert('Vui lòng nhập đầy đủ thông tin !!!')
+    }
+
+    this.getCurrentDate();
+    this.getCurrentMonth();
+    this.setState({ disableNext: true, time_create: Date.now(), time_expried: this.getCurrentMonth(package_unit, Number(package_key)) })
+  }
+
   render() {
     const { dataCompany, dataPackage, Company_Id, Package_Id, arrayChooseFeature,
-            company_name, package_name, package_time, arrFeature, company_id, package_id, package_key,
-            package_unit } = this.state;
+      company_name, package_name, package_time, arrFeature, company_id, package_id, package_key,
+      package_unit, currentSlug, confirmSlug } = this.state;
     const arrT = [];
     return (
       <div className="animated fadeIn">
@@ -306,7 +392,11 @@ class PluginCreateOrder extends Component {
                 <CCol sm="12" lg="12">
                   <div>
                     <label style={styles.flexLabel} htmlFor="tag">Chọn công ty:    </label>
-                    <CSelect style={styles.flexOption} onChange={async e => { this.setState({ Company_Id: e.target.value }); await this.getCompanyName(e.target.value) }}>
+                    <CSelect style={styles.flexOption}
+                      onChange={async e => {
+                        this.setState({ Company_Id: e.target.value });
+                        await this.getCompanyName(e.target.value)
+                      }}>
                       <option value={this.state.Company_Id}>-----</option>
                       {
                         dataCompany.map((item, i) => {
@@ -317,6 +407,11 @@ class PluginCreateOrder extends Component {
                       }
                     </CSelect>
                   </div>
+                </CCol>
+
+                <CCol sm="12" lg="12">
+                  <CLabel>Slug</CLabel>
+                  <Input onChange={(e) => { this.setState({ currentSlug: e.target.value }) }} value={currentSlug} />
                 </CCol>
 
                 <CCol sm="12" lg="12">
@@ -335,6 +430,7 @@ class PluginCreateOrder extends Component {
                   </div>
                 </CCol>
 
+
                 <CCol sm="12" lg="12">
                   <label style={styles.flexLabel} htmlFor="tag">Chọn các tính năng cho gói:    </label>
                   {
@@ -351,34 +447,29 @@ class PluginCreateOrder extends Component {
                     <CCol sm="12" lg="6">
                     </CCol>
                     <CCol sm="12" lg="6">
-                      <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
-                        // await this.onNext(Company_Id, Package_Id, arrayChooseFeature);
-                        await this.getCompanyName(Company_Id)
-                        await this.getPackageName(Package_Id)
-                        await this.getFeatureChoose(arrayChooseFeature);
-                      }}>Tiếp tục</Button>
+                      <CButton disabled={this.state.disableNext} outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
+                        await this.onNext(Company_Id, Package_Id, arrayChooseFeature);
+                      }}>Tiếp tục</CButton>
                     </CCol>
                   </CRow>
                 </CCol>
-                {  arrFeature.length != 0 ?
+                {arrFeature.length != 0 ?
                   <CCol sm="12" lg="12">
                     <CRow>
                       <CCol sm="12" lg="12">
                         KIỂM TRA LẠI ĐƠN HÀNG TRƯỚC KHI XÁC NHẬN
                       </CCol>
                       <CCol sm="12" lg="12">
-                        Tên Công Ty: {company_name}
+                        <strong>Tên Công Ty: {company_name}</strong>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        Tên Công Ty: {company_name}
+                        <strong>Tên Gói: {package_name}</strong>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        Thời gian kích hoạt dự kiến: {(new Date(Date.now())).toLocaleDateString()}
+                        <strong>Thời gian kích hoạt dự kiến: {(new Date(Date.now())).toLocaleDateString()}</strong>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        Thời gian hết hạn dự kiến: {package_time} bắt đầu từ ngày kích hoạt dự kiến,
-                        {/* { package_unit == '0' ? (new Date(new Date().getTime() + (86400000 * Number(package_key))).toLocaleDateString())
-                        : package_unit == '1' ? (new Date().getMonth()) : ""} */}
+                        <strong>Thời gian hết hạn dự kiến: {new Date(this.getCurrentMonth(package_unit, Number(package_key))).toLocaleDateString()}</strong>
                       </CCol>
 
                       <CCol sm="12" lg="12">
@@ -387,12 +478,13 @@ class PluginCreateOrder extends Component {
                         }
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
                           await this.addOrderPlugin();
-                        }}>Kết thúc</Button>
+                        }}>Tạo đơn hàng</CButton>
                       </CCol>
                     </CRow>
                   </CCol> : ""
+
                 }
               </CRow>
             </div>
@@ -406,8 +498,8 @@ class PluginCreateOrder extends Component {
 
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</Button>{' '}
-            <Button color="secondary" onClick={e => this.toggleModal("new")}>Close</Button>
+            <CButton color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</CButton>{' '}
+            <CButton color="secondary" onClick={e => this.toggleModal("new")}>Close</CButton>
           </ModalFooter>
         </Modal>
       </div >

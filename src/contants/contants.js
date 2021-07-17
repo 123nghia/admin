@@ -34,8 +34,10 @@ export default {
   "DELETE_HARDWARE" : "/api/delete-hardware",
 
   "LIST_ORDER" : "/api/list-order",
+  "LIST_ORDER_BY_SALE" : "/api/plugin-list-order-by-saleid",
   "ADD_ORDER" : "/api/add-order",
   "UPDATE_STATUS_ORDER" : "/api/update-status-order",
+  "CHECK_OUT": "/api/checkout-order",
 
   "LIST_TRANSACTION" : "/api/list-transaction",
   "ADD_TRANSACTION" : "/api/add-transaction",
@@ -116,9 +118,11 @@ export default {
   "ADD_PLUGIN_ORDER" : "/api/plugin-add-order",
   "UPDATE_PLUGIN_ORDER" : "/api/plugin-update-order",
   "DELETE_PLUGIN_ORDER" : "/api/plugin-delete-order",
+  "UPDATE_SLUG" : "/api/plugin-update-slug",
 
   "PLUGIN_LIST_USER" : "/api/plugin-list-user",
   "PLUGIN_ADD_USER" : "/api/plugin-add-user",
+  "PLUGIN_ADD_SALE" : "/api/plugin-add-sale",
   "PLUGIN_UPDATE_USER" : "/api/plugin-update-user",
   "PLUGIN_DELETE_USER" : "/api/plugin-delete-user",
   "PLUGIN_RESET_PASSWORD" : "/api/plugin-reset-password",
