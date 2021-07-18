@@ -74,11 +74,15 @@ class PluginCustomerManager extends Component {
       arrTotalPackage: [],
       arrDetailPackage: [],
       phone_number: '',
-      current_slug: ''
+      current_slug: '',
+      type: localStorage.getItem('type'),
+      province: [],
+      current_province: '',
     };
   }
   async componentDidMount() {
     this.getData();
+    this.getProvince();
     // this.getCompanyData();
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
@@ -107,12 +111,14 @@ class PluginCustomerManager extends Component {
       url: Constants.PLUGIN_LIST_COMPANY,
       method: 'POST',
     });
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    let val = res.data.data;
+
+    this.pagination(val);
+    this.setState({ dataApi: val });
 
     let active = 0
 
-    res.data.data.map(val => {
+    val.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
       }
@@ -122,11 +128,15 @@ class PluginCustomerManager extends Component {
   }
 
   async onView(name, com_id, phone_number, slug) {
-    await this.getPackageData(com_id)
-    this.setState({
-      toggleView: !this.state.toggleView, company_name: name,
-      arrDetailPackage: [], phone_number: phone_number, current_slug: slug
-    })
+    let data = await this.getPackageData(com_id)
+    try {
+      this.setState({
+        toggleView: !this.state.toggleView, company_name: name, current_package: data.length == 0 ? '' : data[0].Name,
+        arrDetailPackage: data.length == 0 ? [] : data[0].Array_Feature, phone_number: phone_number, current_slug: slug
+      })
+    } catch (error) {
+      throw error;
+    }
   }
 
   searchKey() {
@@ -192,7 +202,7 @@ class PluginCustomerManager extends Component {
   }
 
   async addCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password, Slug } = this.state
+    const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password, Slug, current_province } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -210,7 +220,7 @@ class PluginCustomerManager extends Component {
       Email: Email,
       Phone: Phone,
       Fax: Fax,
-      Address: Address,
+      Address: Address + "," + current_province,
       Slug: Slug,
       Website: Website,
       Code: Code,
@@ -249,12 +259,13 @@ class PluginCustomerManager extends Component {
       Website: item.Website,
       Code: item._id,
       id: item['_id'],
-      Status: item.Status
+      Status: item.Status,
+      current_province: item.Address.split(',')[item.Address.split(',').length-1]
     })
   }
 
   async updateCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Slug, Status } = this.state
+    const { Email, Name, Phone, Fax, Address, Website, Slug, Status, current_province } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -264,13 +275,15 @@ class PluginCustomerManager extends Component {
       alert("Please fill in all the requirements");
       return
     }
+    let add = Address.split(',');
+    add.splice(Address.split(',').length - 1, 1)
 
     const body = {
       Name: Name,
       Email: Email,
       Phone: Phone,
       Fax: Fax,
-      Address: Address,
+      Address: add + "," + current_province,
       Website: Website,
       Slug: Slug,
       Code: this.state.id,
@@ -333,16 +346,18 @@ class PluginCustomerManager extends Component {
         company_id: company_id
       }
     });
-    let val = resPackage.data.data;
-
+    let val = resPackage.data.data.result;
     for (let i = 0; i < val.length; i++) {
       let data = await this.getPackageName(val[i].Package_Id);
       data.Active_Date = val[i].Active_Date;
       data.End_Date = val[i].End_Date;
+      data.Status_Order = val[i].Status
       arrTemp.push(data)
     }
 
     this.setState({ arrTotalPackage: arrTemp })
+
+    return arrTemp;
   }
 
   getPackageName = async (package_id) => {
@@ -357,29 +372,6 @@ class PluginCustomerManager extends Component {
     return resPackage.data.data;
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-  async handlePageChange(pageNumber) {
-    this.getUsers(pageNumber);
-  }
-
   getBadge(status) {
     switch (status) {
       case 'Actived': return 'success'
@@ -390,25 +382,24 @@ class PluginCustomerManager extends Component {
     }
   }
 
-  toggle(action = '') {
-    this.setState({
-      modal: !this.state.modal,
-      image: '',
-      url: '',
-      isActive: false,
-      isLoading: false,
-      errors: {},
-      action,
-      position: 1,
-      data: [],
-      updated: '',
-    });
+  getBadgeStatus(status) {
+    switch (status) {
+      case "0": return 'danger'
+      case "1": return 'success'
+      default: return 'primary'
+    }
   }
+
+  getStatus(status) {
+    switch (status) {
+      case "0": return 'Chờ duyệt'
+      case "1": return 'Đã duyệt'
+      default: return 'primary'
+    }
+  }
+
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-  }
-  goSearch() {
-    this.getUsers();
   }
 
   actionSearch(e, name_action) {
@@ -487,9 +478,18 @@ class PluginCustomerManager extends Component {
     return this.CalculatorDateLeft(new Date(end), new Date(active))
   }
 
+  async getProvince() {
+    const res = await axios({
+      baseURL: 'https://vapi.vnappmob.com',
+      url: '/api/province',
+      method: 'GET',
+    });
+
+    this.setState({ province: res.data.results })
+  }
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
-      indexPage, arrTotalPackage, company_name, current_package, phone_number } = this.state;
+    const { data, key, viewingUser, communities, action, arrPagination, type, current_province,
+      indexPage, arrTotalPackage, company_name, current_package, phone_number, province } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -499,8 +499,7 @@ class PluginCustomerManager extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách công ty (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách công ty (Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -572,7 +571,7 @@ class PluginCustomerManager extends Component {
                                 </td>
                                 <td className="text-center">{item.Address}</td>
                                 <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                  {(new Date(item.Create_Date)).toLocaleDateString()}
                                 </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -580,17 +579,22 @@ class PluginCustomerManager extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                    <CIcon name="cilTrash" />
-                                  </CButton>{' '}
-                                  <CTooltip content="Xem chi tiết đơn hàng">
-                                    <CButton outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}>
-                                      <CIcon name="cil-magnifying-glass" />
-                                    </CButton>
-                                  </CTooltip>
+
+                                        <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
+                                          <CIcon name="cilPencil" />
+                                        </CButton>{' '}
+                                        {
+                                          type == "0" ?
+                                            <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                              <CIcon name="cilTrash" />
+                                            </CButton> : ""
+                                        }
+                                        {' '}
+                                        <CTooltip content="Xem chi tiết đơn hàng">
+                                          <CButton outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}>
+                                            <CIcon name="cil-magnifying-glass" />
+                                          </CButton>
+                                        </CTooltip>
                                 </td>
                               </tr>
                             );
@@ -642,6 +646,7 @@ class PluginCustomerManager extends Component {
                     <th className="text-center">Ngày kích hoạt</th>
                     <th className="text-center">Ngày hết hạn</th>
                     <th className="text-center">Thời gian hết hạn</th>
+                    <th className="text-center">Trạng thái</th>
                     <th className="text-center">#</th>
                   </tr>
                 </thead>
@@ -660,16 +665,28 @@ class PluginCustomerManager extends Component {
                             <th className="text-center">{item.Name}</th>
                             <th className="text-center">{item.Array_Feature.length}</th>
                             <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
-                            <th className="text-center">{new Date(item.Active_Date).toLocaleDateString()}</th>
-                            <th className="text-center">{new Date(item.End_Date).toLocaleDateString()}</th>
-                            <th className="text-center" style={
-                              this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
-                              this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
-                            }>
-                              {
-                                this.calDateLeft(item.End_Date, item.Active_Date)
-                              } ngày nữa
+                            <th className="text-center">
+                              {item.Status_Order == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
                             </th>
+                            <th className="text-center">
+                              {item.Status_Order == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
+                            </th>
+                            {
+                              item.Status_Order == "1" ? <th className="text-center" style={
+                                this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
+                                  this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                              }>
+                                {
+                                  this.calDateLeft(item.End_Date, item.Active_Date)
+                                } ngày nữa
+                              </th> : <th className="text-center">-----</th>
+                            }
+                            <th className="text-center" >
+                              <CBadge color={this.getBadgeStatus(item.Status_Order)}>
+                                {this.getStatus(item.Status_Order)}
+                              </CBadge>
+                            </th>
+
                             <td className="text-center">
                               <CButton outline color="info" size="sm"
                                 onClick={async (e) => {
@@ -771,6 +788,23 @@ class PluginCustomerManager extends Component {
                 onChange={e => this.onChange("Address", e.target.value)}
               // rows="5"
               />
+
+              <label style={styles.flexLabel} htmlFor="tag">Tỉnh  </label>
+              <CSelect onChange={async e => { this.setState({ current_province: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+                {
+                  province.map((item, i) => {
+                    if(item.province_name == current_province){
+                      return (
+                        <option selected value={item.province_name}>{item.province_name}</option>
+                      );
+                    } else {
+                      return (
+                        <option value={item.province_name}>{item.province_name}</option>
+                      );
+                    }
+                  })
+                }
+              </CSelect>
 
               <TextFieldGroup
                 field="Slug"

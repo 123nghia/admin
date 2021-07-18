@@ -129,6 +129,7 @@ export default {
   "PLUGIN_UPDATE_STATUS" : "/api/plugin-update-status",
   "PLUGIN_LOGIN_ADMIN" : "/api/plugin-login_admin",
   "PLUGIN_GET_USER_BYID" : "/api/plugin-get-user-byID",
+  "PLUGIN_GET_USER_BY_BODY" : "/api/plugin-get-user-byID-with-body",
 
   "PLUGIN_LIST_ROLE" : "/api/plugin-list-role",
   "PLUGIN_ADD_ROLE" : "/api/plugin-add-role",

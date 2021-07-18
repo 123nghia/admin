@@ -24,7 +24,7 @@ React.icons = icons
 sagaMiddleware.run(root)
 
 ReactDOM.render(
-  <Provider store={storeS}>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById('root')

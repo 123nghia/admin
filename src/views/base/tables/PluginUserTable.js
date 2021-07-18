@@ -379,8 +379,7 @@ class Company extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách SALES (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách SALES (Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">

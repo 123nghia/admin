@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import CIcon from '@coreui/icons-react'
 import {
   Card,
   CardBody,
@@ -22,7 +22,8 @@ import {
   CCardHeader,
   CCardBody,
   CFormGroup,
-  CBadge
+  CBadge,
+  CButton
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -301,12 +302,11 @@ class Users extends Component {
             <p style={styles.danger}>{this.state.deleted}</p>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách quyền (Total: {this.state.data != undefined || this.state.data != null ?
-                  this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1}))
+                <i className="fa fa-align-justify"></i> Danh sách quyền (Page: {this.state.indexPage + 1}))
                 <div style={styles.tags}>
                   <div>
-                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
-                    <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Add</Button>
+                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" />
+                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm quyền</CButton>
                   </div>
                 </div>
               </CardHeader>
@@ -315,10 +315,10 @@ class Users extends Component {
                 <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-light">
                     <tr>
-                      <th className="text-center">No.</th>
-                      <th className="text-center">Name</th>
-                      <th className="text-center">Status</th>
-                      <th className="text-center">Create Date</th>
+                      <th className="text-center">STT.</th>
+                      <th className="text-center">Tên quyền</th>
+                      <th className="text-center">Trạng thái</th>
+                      <th className="text-center">Ngày tạo</th>
                       <th className="text-center">#</th>
                     </tr>
                   </thead>
@@ -340,8 +340,12 @@ class Users extends Component {
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>
                               <td className="text-center">
-                                <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
+                                <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                  <CIcon name="cilPencil" />
+                                </CButton>{' '}
+                                <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                  <CIcon name="cilTrash" />
+                                </CButton>
                               </td>
                             </tr>
                           );
@@ -359,7 +363,7 @@ class Users extends Component {
                       arrPagination.map((item, i) => {
                         return (
                           <td>
-                            <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                            <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
                           </td>
                         );
                       })
@@ -395,8 +399,8 @@ class Users extends Component {
             }
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
-            <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+            <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+            <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
           </ModalFooter>
         </Modal>
 
@@ -406,8 +410,8 @@ class Users extends Component {
             <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-            <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+            <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
+            <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
           </ModalFooter>
         </Modal>
       </div>

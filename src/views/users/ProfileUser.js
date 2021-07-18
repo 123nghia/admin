@@ -125,7 +125,7 @@ class Users extends Component {
       method: 'POST',
       headers: this.state.token
     });
-    console.log(res)
+
     this.setState({ dataApi: res.data.data, data: res.data.data });
   }
 
@@ -161,12 +161,13 @@ class Users extends Component {
         company_id: company_id
       }
     });
-    let val = resPackage.data.data;
-
+    let val = resPackage.data.data.result;
+    console.log(val)
     for (let i = 0; i < val.length; i++) {
       let data = await this.getPackageName(val[i].Package_Id);
       data.Active_Date = val[i].Active_Date;
       data.End_Date = val[i].End_Date;
+      data.Status_Order = val[i].Status
       arrTemp.push(data)
     }
     console.log(val)
@@ -249,6 +250,22 @@ class Users extends Component {
 
   calDateLeft(end, active) {
     return this.CalculatorDateLeft(new Date(end), new Date(active))
+  }
+
+  getBadgeStatus(status) {
+    switch (status) {
+      case "0": return 'danger'
+      case "1": return 'success'
+      default: return 'primary'
+    }
+  }
+
+  getStatus(status) {
+    switch (status) {
+      case "0": return 'Chờ duyệt'
+      case "1": return 'Đã duyệt'
+      default: return 'primary'
+    }
   }
 
   render() {
@@ -384,14 +401,15 @@ class Users extends Component {
             <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
               <thead className="thead-light">
                 <tr>
-                  <th className="text-center">STT.</th>
-                  <th className="text-center">Tên Gói</th>
-                  <th className="text-center">Số lượng tính năng</th>
-                  <th className="text-center">Gói</th>
-                  <th className="text-center">Ngày kích hoạt</th>
-                  <th className="text-center">Ngày hết hạn</th>
-                  <th className="text-center">Thời gian hết hạn</th>
-                  <th className="text-center">#</th>
+                    <th className="text-center">STT.</th>
+                    <th className="text-center">Tên Gói</th>
+                    <th className="text-center">Số lượng tính năng</th>
+                    <th className="text-center">Gói</th>
+                    <th className="text-center">Ngày kích hoạt</th>
+                    <th className="text-center">Ngày hết hạn</th>
+                    <th className="text-center">Thời gian hết hạn</th>
+                    <th className="text-center">Trạng thái</th>
+                    <th className="text-center">#</th>
                 </tr>
               </thead>
               <tbody>
@@ -406,29 +424,43 @@ class Users extends Component {
                     arrTotalPackage.map((item, i) => {
                       return (
                         <tr key={i}>
-                          <th className="text-center">{i + 1}</th>
-                          <th className="text-center">{item.Name}</th>
-                          <th className="text-center">{item.Array_Feature.length}</th>
-                          <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
-                          <th className="text-center">{new Date(item.Active_Date).toLocaleDateString()}</th>
-                          <th className="text-center">{new Date(item.End_Date).toLocaleDateString()}</th>
-                          <th className="text-center" style={
-                            this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
-                            this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
-                          }>
-                            {this.calDateLeft(item.End_Date, item.Active_Date)} ngày nữa
-                          </th>
-                          <td className="text-center">
-                            <CButton outline color="info" size="sm"
-                              onClick={async (e) => {
-                                this.setState({
-                                  arrDetailPackage: item.Array_Feature, current_package: item.Name
-                                })
-                              }}>
-                              <CIcon name="cil-magnifying-glass" />
-                            </CButton>
-                          </td>
-                        </tr>
+                            <th className="text-center">{i + 1}</th>
+                            <th className="text-center">{item.Name}</th>
+                            <th className="text-center">{item.Array_Feature.length}</th>
+                            <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
+                            <th className="text-center">
+                              {item.Status_Order == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
+                            </th>
+                            <th className="text-center">
+                              {item.Status_Order == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
+                            </th>
+                            {
+                              item.Status_Order == "1" ? <th className="text-center" style={
+                                this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
+                                  this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                              }>
+                                {
+                                  this.calDateLeft(item.End_Date, item.Active_Date)
+                                } ngày nữa
+                              </th> : <th className="text-center">-----</th>
+                            }
+                            <th className="text-center" >
+                              <CBadge color={this.getBadgeStatus(item.Status_Order)}>
+                                {this.getStatus(item.Status_Order)}
+                              </CBadge>
+                            </th>
+
+                            <td className="text-center">
+                              <CButton outline color="info" size="sm"
+                                onClick={async (e) => {
+                                  this.setState({
+                                    arrDetailPackage: item.Array_Feature, current_package: item.Name
+                                  })
+                                }}>
+                                <CIcon name="cil-magnifying-glass" />
+                              </CButton>
+                            </td>
+                          </tr>
                       )
                     }) : ""
                 }

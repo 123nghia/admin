@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import CIcon from '@coreui/icons-react'
 import {
   Card,
   CardBody,
@@ -16,7 +16,8 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput
+  CInput,
+  CButton
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -57,7 +58,8 @@ class PluginCustomerManager extends Component {
       indexPage: 0,
       dataCompany: [],
       currentCompany: '',
-      hidden: false
+      hidden: false,
+      type: localStorage.getItem('type')
     };
   }
   async componentDidMount() {
@@ -388,7 +390,7 @@ class PluginCustomerManager extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
+    const { data, key, viewingUser, communities, action, arrPagination, type,
       indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
       keyDateCreate, keyStatus } = this.state;
     if (!this.state.isLoading) {
@@ -433,12 +435,12 @@ class PluginCustomerManager extends Component {
                             </CSelect>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
                       </CCol>
                     </CRow>
                   </div>
@@ -457,7 +459,7 @@ class PluginCustomerManager extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="5" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -477,8 +479,12 @@ class PluginCustomerManager extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
+                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
+                                    <CIcon name="cilPencil" />
+                                  </CButton>{' '}
+                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                    <CIcon name="cilTrash" />
+                                  </CButton>
                                 </td>
                               </tr>
                             );
@@ -497,7 +503,7 @@ class PluginCustomerManager extends Component {
                         arrPagination.map((item, i) => {
                           return (
                             <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
                             </td>
                           );
                         })
@@ -577,8 +583,8 @@ class PluginCustomerManager extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
             </ModalFooter>
           </Modal>
 
@@ -588,8 +594,8 @@ class PluginCustomerManager extends Component {
               <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
             </ModalFooter>
           </Modal>
         </div >

@@ -76,11 +76,14 @@ class PluginCustomerManager extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       current_status: '',
       isUpdate: '',
-      role: localStorage.getItem('role')
+      role: localStorage.getItem('role'),
+      type: localStorage.getItem('type'),
+      arrName: [],
+      arrPackage: [],
     };
   }
   async componentDidMount() {
-    if(this.state.role == 'ADMIN'){
+    if (this.state.role == 'ADMIN') {
       await this.getData();
     } else {
       await this.getDataBySale()
@@ -141,20 +144,30 @@ class PluginCustomerManager extends Component {
       method: 'POST',
     });
 
-    let val = res.data.data;
+    let val = res.data.data.result;
+
+    for(let i = 0; i < val.length; i++){
+      const name_sale = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.PLUGIN_GET_USER_BY_BODY,
+        method: 'POST',
+        data: {
+          id: val[i].Sale_Id
+        }
+      });
+
+      val[i].Sale = name_sale.data.data
+    }
 
     this.pagination(val);
-    this.setState({ dataApi: res.data.data });
+    this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package, isLoading: false });
+  }
 
-    let active = 0
-
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
-
-    this.setState({ isLoading: false, totalActive: active });
+  loadName(com, pac) {
+    const { arrName, arrPackage } = this.state;
+    var nameCom = arrName.findIndex(x => x._id === com);
+    var namePac = arrPackage.findIndex(x => x._id === pac);
+    return { com: arrName[nameCom].name, pac: arrPackage[namePac].name }
   }
 
   getDataBySale = async () => {
@@ -166,18 +179,12 @@ class PluginCustomerManager extends Component {
       headers: this.state.token
     });
 
-    let val = res.data.data;
+    let val = res.data.data.result;
 
     this.pagination(val);
-    this.setState({ dataApi: res.data.data });
+    this.setState({ dataApi: res.data.data.result, arrName: res.data.data.company, arrPackage: res.data.data.package });
 
     let active = 0
-
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
 
     this.setState({ isLoading: false, totalActive: active });
   }
@@ -285,12 +292,14 @@ class PluginCustomerManager extends Component {
     }
   }
 
-  async checkOutOrder() {
+  async checkOutOrder(active, end) {
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.CHECK_OUT,
       method: 'POST',
       data: {
+        Active_Date: active,
+        End_Date: end,
         id: this.state.id
       }
     });
@@ -634,7 +643,7 @@ class PluginCustomerManager extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, indexPage, currentSlug, confirmSlug, role,
+    const { data, action, arrPagination, indexPage, currentSlug, confirmSlug, role, type,
       dataPackage, Company_Id, Package_Id, arrayChooseFeature, arrFeature,
       company_name, package_name, package_unit, package_key, package_time, dataPackage_All, current_status } = this.state;
     if (!this.state.isLoading) {
@@ -671,6 +680,9 @@ class PluginCustomerManager extends Component {
                           </CCol>
                         </CRow>
                       </CCol>
+                      <CCol sm="12" lg="12">
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => { window.location.href = '#/plugin_create_order' }}>Thêm mới</CButton>
+                      </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
@@ -683,20 +695,22 @@ class PluginCustomerManager extends Component {
                         <th className="text-center">Mã gói</th>
                         <th className="text-center">Số lượng tính năng</th>
                         <th className="text-center">Trạng thái</th>
+                        <th className="text-center">Người tạo</th>
+                        <th className="text-center">Ngày tạo</th>
                         <th className="text-center">#</th>
 
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="5" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Company_Id}</td>
-                                <td className="text-center">{item.Package_Id}</td>
+                                <td className="text-center">{this.loadName(item.Company_Id, item.Package_Id).com}</td>
+                                <td className="text-center">{this.loadName(item.Company_Id, item.Package_Id).pac}</td>
                                 <td className="text-center">{item.Array_Feature.length}</td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -705,7 +719,17 @@ class PluginCustomerManager extends Component {
                                 </td>
                                 <td className="text-center">
                                   {
-                                    role == 'ADMIN' ? <CTooltip content="Duyệt đơn hàng">
+                                    item.Sale
+                                  }
+                                </td>
+                                <td className="text-center">
+                                  {
+                                    new Date(item.Create_Date).toLocaleDateString()
+                                  }
+                                </td>
+                                <td className="text-center">
+                                  {
+                                    type == '0' ? <CTooltip content="Duyệt đơn hàng">
                                       <CButton outline color="success" size="sm" onClick={async (e) => {
                                         this.openUpdate(item);
                                         this.setState({ Company_Id: item.Company_Id, Package_Id: item.Package_Id });
@@ -733,9 +757,11 @@ class PluginCustomerManager extends Component {
                                       }}
                                     ><CIcon name="cilPencil" /></CButton>
                                   </CTooltip>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                    <CIcon name="cilTrash" />
-                                  </CButton>
+                                  {
+                                    type == '0' ? <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                                    <CIcon name="cilTrash" />
+                                                  </CButton> : ""
+                                  }
                                 </td>
                               </tr>
                             );
@@ -878,7 +904,7 @@ class PluginCustomerManager extends Component {
               {
                 this.state.isUpdate ?
                   <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={arrFeature.length == 0 || current_status == "1" ? true : false}>Cập nhật</CButton> :
-                  <CButton color="primary" onClick={async e => { await this.checkOutOrder() }} disabled={arrFeature.length == 0 && current_status == "0" ? true : false}>Duyệt đơn</CButton>
+                  <CButton color="primary" onClick={async e => { await this.checkOutOrder(Date.now(), this.getCurrentMonth(package_unit, Number(package_key))) }} disabled={arrFeature.length == 0 || current_status == "1" ? true : false}>Duyệt đơn</CButton>
               }
               {' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import CIcon from '@coreui/icons-react'
 import {
   Card,
   CardBody,
@@ -61,7 +61,8 @@ class Company extends Component {
       currentCompany: '',
       hidden: false,
       arrFeature_Save: [],
-      arrFeature_Update: []
+      arrFeature_Update: [],
+      type: localStorage.getItem('type')
     };
   }
   async componentDidMount() {
@@ -459,7 +460,7 @@ class Company extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
+    const { data, key, viewingUser, communities, action, arrPagination, type,
       indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
       keyDateCreate, keyStatus } = this.state;
     if (!this.state.isLoading) {
@@ -519,13 +520,12 @@ class Company extends Component {
                         <th className="text-center">Giá trị</th>
                         <th className="text-center">Đơn vị</th>
                         <th className="text-center">Trạng thái</th>
-                        <th className="text-center">Tình trạng</th>
                         <th className="text-center">#</th>
 
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="7" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -541,13 +541,12 @@ class Company extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <CBadge color={this.getBadge_isDelete(item.isDelete)}>
-                                    {this.getBadge_isDelete_string(item.isDelete)}
-                                  </CBadge>
-                                </td>
-                                <td className="text-center">
-                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</CButton>
+                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
+                                    <CIcon name="cilPencil" />
+                                  </CButton>{' '}
+                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                    <CIcon name="cilTrash" />
+                                  </CButton>
                                 </td>
                               </tr>
                             );

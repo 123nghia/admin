@@ -87,9 +87,8 @@ class Company extends Component {
         company_id: JSON.parse(user).company_id
       }
     });
-
-    console.log(resPackage.data.data)
-    this.setState({ array_feature: resPackage.data.data.length ? resPackage.data.data[0].Array_Feature : [] })
+    let val = resPackage.data.data.result;
+    this.setState({ array_feature: val.length ? val[0].Array_Feature : [] })
     // return resPackage.data.data.Name;
   }
 
@@ -107,7 +106,7 @@ class Company extends Component {
               array_feature.map((item, i) => {
                 return (
                   <CCol lg="3" sm="12" xm="12">
-                    <NavLink style={{ pointer: 'cursor' }} onClick={() => { window.location.href = item.Value + "/" + company_slug }}>
+                    <NavLink style={{ pointer: 'cursor' }} onClick={() => { window.location.href = item.Value + company_slug }}>
                       <div style={styles.feature}>
                         <div style={{ height: '200px', width: '100%', 'marginTop': '24px' }}>
                           <img width="80" height="80" src="https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg" />
