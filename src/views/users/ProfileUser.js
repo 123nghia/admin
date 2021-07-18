@@ -97,14 +97,14 @@ class Users extends Component {
   getCompanyName = async (company_id) => {
     const resCom = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.DATA_COMPANY,
+      url: Constants.PLUGIN_DATA_COMPANY,
       method: 'POST',
       data: {
         company_id: company_id
       }
     });
 
-    return resCom.data.data.Name;
+    return resCom.data.data == null ? "" : resCom.data.data.Name;
   }
 
 
@@ -125,8 +125,10 @@ class Users extends Component {
       method: 'POST',
       headers: this.state.token
     });
+    let val = res.data.data
+    val.com_name = await this.getCompanyName(val.Company_Id)
 
-    this.setState({ dataApi: res.data.data, data: res.data.data });
+    this.setState({ dataApi: res.data.data, data: val });
   }
 
   onChange(key, val) {
@@ -162,23 +164,24 @@ class Users extends Component {
       }
     });
     let val = resPackage.data.data.result;
-    console.log(val)
+
     for (let i = 0; i < val.length; i++) {
       let data = await this.getPackageName(val[i].Package_Id);
-      data.Active_Date = val[i].Active_Date;
-      data.End_Date = val[i].End_Date;
-      data.Status_Order = val[i].Status
-      arrTemp.push(data)
+      val[i].Name =  data.Name
+      val[i].Unit =  data.Unit
+      val[i].Value =  data.Value
+      arrTemp.push(val[i])
     }
-    console.log(val)
+
     this.setState({ arrTotalPackage: arrTemp })
+    return arrTemp;
   }
 
   async onView(name, com_id, phone_number, slug) {
-    await this.getPackageData(com_id)
+    let data = await this.getPackageData(com_id)
     this.setState({
       toggleView: !this.state.toggleView, company_name: name,
-      arrDetailPackage: [], phone_number: phone_number, current_slug: slug
+      arrDetailPackage: data.length == 0 ? [] : data[0].Array_Feature, phone_number: phone_number, current_slug: slug
     })
   }
 
@@ -340,7 +343,7 @@ class Users extends Component {
                       <CCol sm="12" lg="12">
                         <div>
                           <CLabel>Tên công ty</CLabel>
-                          <Input style={styles.searchInput} value={async () => { await this.getCompanyName(data.Company_Id) }} />
+                          <Input style={styles.searchInput} value={data.com_name} />
                         </div>
                       </CCol>
 
@@ -429,13 +432,13 @@ class Users extends Component {
                             <th className="text-center">{item.Array_Feature.length}</th>
                             <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
                             <th className="text-center">
-                              {item.Status_Order == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
+                              {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
                             </th>
                             <th className="text-center">
-                              {item.Status_Order == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
+                              {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
                             </th>
                             {
-                              item.Status_Order == "1" ? <th className="text-center" style={
+                              item.Status == "1" ? <th className="text-center" style={
                                 this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
                                   this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
                               }>
@@ -445,8 +448,8 @@ class Users extends Component {
                               </th> : <th className="text-center">-----</th>
                             }
                             <th className="text-center" >
-                              <CBadge color={this.getBadgeStatus(item.Status_Order)}>
-                                {this.getStatus(item.Status_Order)}
+                              <CBadge color={this.getBadgeStatus(item.Status)}>
+                                {this.getStatus(item.Status)}
                               </CBadge>
                             </th>
 

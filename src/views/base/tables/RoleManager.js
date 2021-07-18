@@ -53,6 +53,7 @@ class Users extends Component {
       hidden: false,
       action: 'new',
       Name: '',
+      Type: '',
       Status: '',
       modalDelete: false,
       delete: null,
@@ -146,6 +147,7 @@ class Users extends Component {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
+        Type: '',
         Name: ''
       })
     }
@@ -156,7 +158,7 @@ class Users extends Component {
   }
 
   async addRoles() {
-    const { Name } = this.state
+    const { Name, Type } = this.state
 
     if (Name == null || Name == '') {
       alert("Please fill in all the requirements");
@@ -164,7 +166,8 @@ class Users extends Component {
     }
 
     const body = {
-      Name: Name
+      Name: Name,
+      Type: Type
     }
 
     this.setState({ isLoading: true });
@@ -304,10 +307,10 @@ class Users extends Component {
               <CardHeader>
                 <i className="fa fa-align-justify"></i> Danh sách quyền (Page: {this.state.indexPage + 1}))
                 <div style={styles.tags}>
-                  <div>
-                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" />
-                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm quyền</CButton>
-                  </div>
+                  {/* <div>
+                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
+                  <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm quyền</CButton>
+                  {/* </div> */}
                 </div>
               </CardHeader>
               <CardBody>
@@ -337,7 +340,7 @@ class Users extends Component {
                                 </CBadge>
                               </td>
                               <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>
                               <td className="text-center">
                                 <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -386,6 +389,17 @@ class Users extends Component {
               onChange={e => this.onChange("Name", e.target.value)}
             // rows="5"
             />
+
+            <TextFieldGroup
+              field="Type"
+              label="Loại"
+              value={this.state.Type}
+              placeholder={"Type"}
+              // error={errors.title}
+              onChange={e => this.onChange("Type", e.target.value)}
+            // rows="5"
+            />
+
             {
               action == 'new' ? "" : <div>
                 <label style={styles.flexLabel} htmlFor="tag">Status:</label>

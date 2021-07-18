@@ -730,7 +730,7 @@ class PluginCustomerManager extends Component {
                                 <td className="text-center">
                                   {
                                     type == '0' ? <CTooltip content="Duyệt đơn hàng">
-                                      <CButton outline color="success" size="sm" onClick={async (e) => {
+                                      <CButton style={{ margin: 1 }} outline color="success" size="sm" onClick={async (e) => {
                                         this.openUpdate(item);
                                         this.setState({ Company_Id: item.Company_Id, Package_Id: item.Package_Id });
                                         this.getCompanyData();
@@ -745,7 +745,7 @@ class PluginCustomerManager extends Component {
                                   }
                                   {' '}
                                   <CTooltip content="Cập nhật đơn hàng">
-                                    <CButton outline color="primary" size="sm"
+                                    <CButton style={{ margin: 1 }} outline color="primary" size="sm"
                                       onClick={async (e) => {
                                         this.openUpdate(item);
                                         this.setState({ Company_Id: item.Company_Id, Package_Id: item.Package_Id });
@@ -758,7 +758,7 @@ class PluginCustomerManager extends Component {
                                     ><CIcon name="cilPencil" /></CButton>
                                   </CTooltip>{' '}
                                   {
-                                    type == '0' ? <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                    type == '0' ? <CButton style={{ margin: 1 }} outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                                     <CIcon name="cilTrash" />
                                                   </CButton> : ""
                                   }

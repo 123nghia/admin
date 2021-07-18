@@ -87,6 +87,7 @@ export default {
   "DELETE_KEY" : "/api/delete-key",
 
   "PLUGIN_LIST_COMPANY" : "/api/plugin-list-company",
+  "PLUGIN_LIST_COMPANY_BY_ID" : "/api/plugin-list-company-by-id",
   "PLUGIN_LIST_COMPANY_WITH_ID" : "/api/plugin-list-company?id=",
   "PLUGIN_ADD_COMPANY" : "/api/plugin-add-company",
   "PLUGIN_UPDATE_COMPANY" : "/api/plugin-update-company",

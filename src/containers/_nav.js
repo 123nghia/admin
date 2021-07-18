@@ -83,7 +83,7 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavDropdown',
-    name: 'Tạo mới đơn hàng',
+    name: 'Đơn hàng',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',

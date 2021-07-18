@@ -36,6 +36,7 @@ import axios from 'axios'
 import Constants from "./../../contants/contants";
 import MainChartExample from '../charts/MainChartExample.js'
 import { Nav, NavItem, NavLink } from 'reactstrap';
+import ReactTooltip from 'react-tooltip';
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 let headers = new Headers();
@@ -98,7 +99,7 @@ class Company extends Component {
     return (
       <div className="container">
         <div class="title" className="h3" style={{ alignSelf: 'center' }}>
-          DANH SÁCH QUẢN LÝ TÍNH NĂNG
+          DANH SÁCH CÁC DỊCH VỤ
         </div>
         <CRow>
           {
@@ -106,7 +107,7 @@ class Company extends Component {
               array_feature.map((item, i) => {
                 return (
                   <CCol lg="3" sm="12" xm="12">
-                    <NavLink style={{ pointer: 'cursor' }} onClick={() => { window.location.href = item.Value + company_slug }}>
+                    <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer" }} onClick={() => { window.location.href = item.Value + company_slug }}>
                       <div style={styles.feature}>
                         <div style={{ height: '200px', width: '100%', 'marginTop': '24px' }}>
                           <img width="80" height="80" src="https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg" />
@@ -121,7 +122,8 @@ class Company extends Component {
                           </center>
                         </div>
                       </div>
-                    </NavLink>
+                    </a>
+                    <ReactTooltip />
                   </CCol>
                 );
               }) : ""

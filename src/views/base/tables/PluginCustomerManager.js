@@ -78,10 +78,16 @@ class PluginCustomerManager extends Component {
       type: localStorage.getItem('type'),
       province: [],
       current_province: '',
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
   }
   async componentDidMount() {
-    this.getData();
+    if (this.state.type == "0") {
+      this.getData();
+    } else {
+      this.getData_ByID();
+    }
+
     this.getProvince();
     // this.getCompanyData();
     let arr = JSON.parse(localStorage.getItem('url'));
@@ -113,16 +119,54 @@ class PluginCustomerManager extends Component {
     });
     let val = res.data.data;
 
+    for (let i = 0; i < val.length; i++) {
+      const name_sale = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.PLUGIN_GET_USER_BY_BODY,
+        method: 'POST',
+        data: {
+          id: val[i].Create_By
+        }
+      });
+
+      val[i].Sale = name_sale.data.data
+    }
+
     this.pagination(val);
     this.setState({ dataApi: val });
 
     let active = 0
 
-    val.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
+    this.setState({ isLoading: false, totalActive: active });
+  }
+
+  getData_ByID = async () => {
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_LIST_COMPANY_BY_ID,
+      method: 'POST',
+      headers: this.state.token
+    });
+    let val = res.data.data;
+
+    for (let i = 0; i < val.length; i++) {
+      const name_sale = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.PLUGIN_GET_USER_BY_BODY,
+        method: 'POST',
+        data: {
+          id: val[i].Create_By
+        }
+      });
+
+      val[i].Sale = name_sale.data.data
+    }
+
+    this.pagination(val);
+    this.setState({ dataApi: val });
+
+    let active = 0
 
     this.setState({ isLoading: false, totalActive: active });
   }
@@ -233,7 +277,8 @@ class PluginCustomerManager extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.PLUGIN_ADD_COMPANY,
       method: 'PUT',
-      data: body
+      data: body,
+      headers: this.state.token
     });
 
     if (res.data.is_success == true) {
@@ -260,7 +305,7 @@ class PluginCustomerManager extends Component {
       Code: item._id,
       id: item['_id'],
       Status: item.Status,
-      current_province: item.Address.split(',')[item.Address.split(',').length-1]
+      current_province: item.Address.split(',')[item.Address.split(',').length - 1]
     })
   }
 
@@ -349,14 +394,13 @@ class PluginCustomerManager extends Component {
     let val = resPackage.data.data.result;
     for (let i = 0; i < val.length; i++) {
       let data = await this.getPackageName(val[i].Package_Id);
-      data.Active_Date = val[i].Active_Date;
-      data.End_Date = val[i].End_Date;
-      data.Status_Order = val[i].Status
-      arrTemp.push(data)
+      val[i].Name = data.Name
+      val[i].Unit = data.Unit
+      val[i].Value = data.Value
+      arrTemp.push(val[i])
     }
 
     this.setState({ arrTotalPackage: arrTemp })
-
     return arrTemp;
   }
 
@@ -550,6 +594,7 @@ class PluginCustomerManager extends Component {
                         <th className="text-center">Tên Công Ty</th>
                         <th className="text-center">Email - SĐT</th>
                         <th className="text-center">Địa chỉ</th>
+                        <th className="text-center">Người tạo</th>
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
@@ -570,6 +615,7 @@ class PluginCustomerManager extends Component {
                                   <div>{item.Phone}</div>
                                 </td>
                                 <td className="text-center">{item.Address}</td>
+                                <td className="text-center">{item.Sale}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString()}
                                 </td>
@@ -580,21 +626,21 @@ class PluginCustomerManager extends Component {
                                 </td>
                                 <td className="text-center">
 
-                                        <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
-                                          <CIcon name="cilPencil" />
-                                        </CButton>{' '}
-                                        {
-                                          type == "0" ?
-                                            <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                              <CIcon name="cilTrash" />
-                                            </CButton> : ""
-                                        }
-                                        {' '}
-                                        <CTooltip content="Xem chi tiết đơn hàng">
-                                          <CButton outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}>
-                                            <CIcon name="cil-magnifying-glass" />
-                                          </CButton>
-                                        </CTooltip>
+                                  <CButton style={{ margin: 1 }} outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
+                                    <CIcon name="cilPencil" />
+                                  </CButton>{' '}
+                                  {
+                                    type == "0" ?
+                                      <CButton style={{ margin: 1 }} outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                        <CIcon name="cilTrash" />
+                                      </CButton> : ""
+                                  }
+                                  {' '}
+                                  <CTooltip content="Xem chi tiết đơn hàng">
+                                    <CButton style={{ margin: 1 }} outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}>
+                                      <CIcon name="cil-magnifying-glass" />
+                                    </CButton>
+                                  </CTooltip>
                                 </td>
                               </tr>
                             );
@@ -666,13 +712,13 @@ class PluginCustomerManager extends Component {
                             <th className="text-center">{item.Array_Feature.length}</th>
                             <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
                             <th className="text-center">
-                              {item.Status_Order == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
+                              {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
                             </th>
                             <th className="text-center">
-                              {item.Status_Order == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
+                              {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
                             </th>
                             {
-                              item.Status_Order == "1" ? <th className="text-center" style={
+                              item.Status == "1" ? <th className="text-center" style={
                                 this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
                                   this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
                               }>
@@ -682,14 +728,16 @@ class PluginCustomerManager extends Component {
                               </th> : <th className="text-center">-----</th>
                             }
                             <th className="text-center" >
-                              <CBadge color={this.getBadgeStatus(item.Status_Order)}>
-                                {this.getStatus(item.Status_Order)}
+                              <CBadge color={this.getBadgeStatus(item.Status)}>
+                                {this.getStatus(item.Status)}
                               </CBadge>
                             </th>
 
                             <td className="text-center">
                               <CButton outline color="info" size="sm"
                                 onClick={async (e) => {
+                                  console.log(item.Company_Id)
+                                  console.log(item.Package_Id)
                                   this.setState({
                                     arrDetailPackage: item.Array_Feature, current_package: item.Name
                                   })
@@ -793,7 +841,7 @@ class PluginCustomerManager extends Component {
               <CSelect onChange={async e => { this.setState({ current_province: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
                 {
                   province.map((item, i) => {
-                    if(item.province_name == current_province){
+                    if (item.province_name == current_province) {
                       return (
                         <option selected value={item.province_name}>{item.province_name}</option>
                       );
@@ -831,7 +879,6 @@ class PluginCustomerManager extends Component {
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
                     <option value={'Actived'}>Actived</option>
-                    <option value={'Locked'}>Locked</option>
                     <option value={'Deactived'}>Deactived</option>
                   </select>
                 </div>
