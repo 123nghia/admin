@@ -17,7 +17,9 @@ class Login extends Component {
       isLoading: false
     }
     localStorage.removeItem('auth');
-    if (this.props.location.pathname === '/logout') window.location.href = '#/login';
+    if (this.props.location.pathname === '/logout') {
+      window.location.href = '#/login';
+    }
   }
   isValid() {
     const { errors, isValid } = validateInput(this.state);
@@ -41,16 +43,18 @@ class Login extends Component {
         }
       });
 
-      if(res.data.is_success){
+      if (res.data.is_success) {
         var token = jwt.decode(res.data.data.token);
-        localStorage.setItem('user', JSON.stringify({ username: this.state.username,
-          password: this.state.password, company_id: res.data.data.data.Company_Id, sale_id: res.data.data.data._id }));
+        localStorage.setItem('user', JSON.stringify({
+          username: this.state.username,
+          password: this.state.password, company_id: res.data.data.data.Company_Id, sale_id: res.data.data.data._id
+        }));
         localStorage.setItem('auth', 'abv');
         localStorage.setItem('role', token.role);
         localStorage.setItem('type', token.type);
         localStorage.setItem('token', res.data.data.token);
 
-        if(token.role == 'ADMIN' || token.role == 'SALE'){
+        if (token.role == 'ADMIN' || token.role == 'SALE') {
           this.props.history.push('/list_order')
         } else {
           this.props.history.push('/dashboard')

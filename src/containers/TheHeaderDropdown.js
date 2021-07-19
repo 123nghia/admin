@@ -18,7 +18,7 @@ const TheHeaderDropdown = () => {
       className="c-header-nav-items mx-5"
       direction="down"
     >
-      <CDropdownToggle className="c-header-nav-link"  caret={false}>
+      <CDropdownToggle className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
 
           <div className="mr-2" style={{ fontSize: 20, color: 'red' }}><strong>{JSON.parse(localStorage.getItem('user')) == null || JSON.parse(localStorage.getItem('user')) == undefined ? "" : JSON.parse(localStorage.getItem('user')).username}</strong></div>
@@ -32,7 +32,9 @@ const TheHeaderDropdown = () => {
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownItem>
           <CIcon name="cil-lock-locked" className="mfe-2" />
-          <NavLink onClick={() => { window.location.href = '#/login' }}>Logout</NavLink>
+          <NavLink onClick={() => {
+            window.location.href = '#/login'
+          }}>Logout</NavLink>
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>
