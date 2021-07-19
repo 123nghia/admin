@@ -215,7 +215,7 @@ class PluginCustomerManager extends Component {
   }
 
   openUpdate(item) {
-
+    console.log(item.Image)
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -452,6 +452,7 @@ class PluginCustomerManager extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Khóa</th>
                         <th className="text-center">Giá trị</th>
+                        <th className="text-center">Logo</th>
                         <th className="text-center">Loại</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
@@ -468,6 +469,9 @@ class PluginCustomerManager extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Key}</td>
                                 <td className="text-center">{item.Value}</td>
+                                <td className="text-center">
+                                  <img width="80" height="80" src={item.Image} />
+                                </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge_type(item.Type)}>
                                     {this.getBadge_type_string(item.Type)}
@@ -534,6 +538,16 @@ class PluginCustomerManager extends Component {
                 placeholder={"Nhập giá trị của khóa"}
                 // error={errors.title}
                 onChange={e => this.onChange("Value", e.target.value)}
+              // rows="5"
+              />
+
+              <TextFieldGroup
+                field="Image"
+                label="Logo"
+                value={this.state.Image}
+                placeholder={"Nhập link image"}
+                // error={errors.title}
+                onChange={e => this.onChange("Image", e.target.value)}
               // rows="5"
               />
 

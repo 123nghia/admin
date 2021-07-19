@@ -311,6 +311,7 @@ class PluginCustomerManager extends Component {
       url: Constants.CHECK_OUT,
       method: 'POST',
       data: {
+        Array_Feature: this.state.arrFeature,
         Active_Date: active,
         End_Date: end,
         id: this.state.id
@@ -464,9 +465,9 @@ class PluginCustomerManager extends Component {
     localStorage.setItem('arrFeature', JSON.stringify(arrSetDefault));
     //Đang lấy đúng config của multiselect để đổ dữ liệu vào cho multi select
     for (let i = 0; i < dataFeature.length; i++) {
-      if (dataFeature[i].Type == "1") {
-        arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
-      }
+      //if (dataFeature[i].Type == "1") {
+      arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
+      //}
     }
     return (
       <Multiselect

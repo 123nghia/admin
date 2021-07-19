@@ -127,6 +127,8 @@ export default {
   "PLUGIN_UPDATE_USER" : "/api/plugin-update-user",
   "PLUGIN_DELETE_USER" : "/api/plugin-delete-user",
   "PLUGIN_RESET_PASSWORD" : "/api/plugin-reset-password",
+  "PLUGIN_UPDATE_PASSWORD" : "/api/plugin-update-password",
+
   "PLUGIN_UPDATE_STATUS" : "/api/plugin-update-status",
   "PLUGIN_LOGIN_ADMIN" : "/api/plugin-login_admin",
   "PLUGIN_GET_USER_BYID" : "/api/plugin-get-user-byID",

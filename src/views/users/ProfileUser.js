@@ -78,7 +78,9 @@ class Users extends Component {
       arrDetailPackage: [],
       phone_number: '',
       current_slug: '',
-      arrTotalPackage: []
+      arrTotalPackage: [],
+      isChange: true,
+      currentPassword: ''
     };
   }
   async componentDidMount() {
@@ -128,7 +130,7 @@ class Users extends Component {
     let val = res.data.data
     val.com_name = await this.getCompanyName(val.Company_Id)
 
-    this.setState({ dataApi: res.data.data, data: val });
+    this.setState({ dataApi: res.data.data, data: val, currentPassword: val.Password });
   }
 
   onChange(key, val) {
@@ -220,21 +222,6 @@ class Users extends Component {
     )
   }
 
-  async updateLink() {
-    const { data_link_shop, data_link_recommand, data_link_sku } = this.state;
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_LINK,
-      method: 'POST',
-      data: {
-        link_shop: data_link_shop,
-        link_recommand: data_link_recommand,
-        link_sku_hair: data_link_sku,
-      },
-      headers: this.state.token
-    });
-  }
-
   convertUnitToDate(unit) {
     switch (unit) {
       case '0': return 'Ngày'
@@ -271,9 +258,31 @@ class Users extends Component {
     }
   }
 
+  async updatePassword(id, password) {
+    console.log(id)
+    console.log(password)
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_UPDATE_PASSWORD,
+      method: 'POST',
+      data: {
+        id: id,
+        new_password: password
+      }
+    });
+
+    if (res.data.is_success == true) {
+      this.getData();
+      this.setState({ isChange: true });
+    } else {
+      alert(res.data.message);
+      this.setState({ isLoading: false });
+    }
+  }
+
   render() {
     const { data, link_shop, link_recommand, link_sku, role, viewingUser, communities, action, arrPagination,
-      indexPage, arrTotalPackage, company_name, current_package, phone_number } = this.state;
+      indexPage, arrTotalPackage, company_name, current_package, phone_number, isChange, currentPassword } = this.state;
 
 
     return (
@@ -367,10 +376,19 @@ class Users extends Component {
                         <CLabel>Mật khẩu</CLabel>
                         <CRow>
                           <CCol sm="9" lg="9">
-                            <Input type={"password"} style={styles.searchInput} readOnly onChange={(e) => { }} value={data.Password} />
+                            <Input type={"password"} style={styles.searchInput} readOnly={isChange} onChange={(e) => { this.setState({ currentPassword:  e.target.value }) }} value={currentPassword} />
                           </CCol>
                           <CCol sm="3" lg="3">
-                            <Button color="primary" onClick={e => { }}>Thay đổi</Button>
+                            {
+                              isChange ?
+                              <Button color="primary" onClick={e => {
+                                this.setState({ isChange: false })
+                              }}>Thay đổi</Button> :
+                              <Button color="primary" onClick={async e => {
+                                await this.updatePassword(data._id, currentPassword);
+                              }}>Cập nhật</Button>
+                            }
+
                           </CCol>
                         </CRow>
                       </CCol>

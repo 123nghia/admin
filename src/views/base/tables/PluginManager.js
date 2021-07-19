@@ -275,21 +275,29 @@ class Company extends Component {
     this.setState({ dataFeature: resFeature.data.data });
   }
 
+  getDescription(status) {
+    switch (status) {
+      case "0": return 'ADMIN'
+      case "1": return 'CUSTOMER'
+    }
+  }
+
   renderSelect() {
     const { dataFeature, arrFeature_Update } = this.state;
     var arrChoose = new Array();
     let arrTemp = [];
     let arrUpdate = [];
+
     for (let i = 0; i < dataFeature.length; i++) {
-      if(dataFeature[i].Type == "1"){
-        arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
-      }
+      //if(dataFeature[i].Type == "1"){
+      arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
+      //}
     }
 
     for (let i = 0; i < arrFeature_Update.length; i++) {
-      if(arrFeature_Update[i].Type == "1"){
-        arrUpdate.push({ name: arrFeature_Update[i].Key, id: arrFeature_Update[i]._id })
-      }
+      //if(arrFeature_Update[i].Type == "1"){
+      arrUpdate.push({ name: arrFeature_Update[i].Key, id: arrFeature_Update[i]._id })
+      //}
     }
 
     return (

@@ -217,9 +217,9 @@ class PluginCreateOrder extends Component {
     localStorage.setItem('arrFeature', JSON.stringify(arrSetDefault));
     //Đang lấy đúng config của multiselect để đổ dữ liệu vào cho multi select
     for (let i = 0; i < dataFeature.length; i++) {
-      if (dataFeature[i].Type == "1") {
-        arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
-      }
+      //if (dataFeature[i].Type == "1") {
+      arrTemp.push({ name: dataFeature[i].Key, id: dataFeature[i]._id })
+      //}
     }
     return (
       <Multiselect
@@ -364,7 +364,7 @@ class PluginCreateOrder extends Component {
           }
         });
 
-        this.setState({ currentSlug:  currentSlug})
+        this.setState({ currentSlug: currentSlug })
       }
     } else {
       alert('Vui lòng nhập đầy đủ thông tin !!!')
