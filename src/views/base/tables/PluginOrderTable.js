@@ -181,6 +181,19 @@ class PluginCustomerManager extends Component {
 
     let val = res.data.data.result;
 
+    for(let i = 0; i < val.length; i++){
+      const name_sale = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.PLUGIN_GET_USER_BY_BODY,
+        method: 'POST',
+        data: {
+          id: val[i].Sale_Id
+        }
+      });
+
+      val[i].Sale = name_sale.data.data
+    }
+
     this.pagination(val);
     this.setState({ dataApi: res.data.data.result, arrName: res.data.data.company, arrPackage: res.data.data.package });
 

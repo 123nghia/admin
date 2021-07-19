@@ -41,7 +41,6 @@ const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
-const user = localStorage.getItem('user');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
@@ -54,29 +53,28 @@ class Company extends Component {
       package_name: '',
       package_time: '',
       package_unit: '',
-      array_feature: []
+      array_feature: [],
+      company_id: localStorage.getItem('user')
     };
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     await this.getCompanyData();
     await this.getPackageData();
+    console.log(JSON.parse(this.state.company_id).company_id)
   }
 
   async getCompanyData() {
-    try {
-      const resCom = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.PLUGIN_DATA_COMPANY,
-        method: 'POST',
-        data: {
-          company_id: JSON.parse(user).company_id
-        }
-      });
-      this.setState({ company_name: resCom.data.data.Name, company_slug: resCom.data.data.Slug, })
-    } catch (error) {
-      window.location.reload();
-    }
+
+    const resCom = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_DATA_COMPANY,
+      method: 'POST',
+      data: {
+        company_id: JSON.parse(this.state.company_id).company_id
+      }
+    });
+    this.setState({ company_name: resCom.data.data.Name, company_slug: resCom.data.data.Slug, })
   }
 
   async getPackageData() {
@@ -85,11 +83,12 @@ class Company extends Component {
       url: Constants.LIST_PLUGIN_ORDER_BY_ID,
       method: 'POST',
       data: {
-        company_id: JSON.parse(user).company_id
+        company_id: JSON.parse(this.state.company_id).company_id
       }
     });
     let val = resPackage.data.data.result;
-    this.setState({ array_feature: val.length ? val[0].Array_Feature : [] })
+
+    this.setState({ array_feature: val.length > 0 ? val[0].Array_Feature : [] })
     // return resPackage.data.data.Name;
   }
 
@@ -129,6 +128,10 @@ class Company extends Component {
               }) : ""
           }
         </CRow>
+        {
+          array_feature == undefined || array_feature.length == 0 ?
+          <div>Bạn chưa có bất kì tính năng nào !!! Vui lòng liên hệ admin !!!</div> : ""
+        }
       </div>
     )
   }
