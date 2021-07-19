@@ -232,37 +232,45 @@ class Company extends Component {
 
   async updateCompany() {
     const { Name, Value, Unit, Status, arrFeature_Save, arrFeature_Update } = this.state
+    console.log(arrFeature_Update)
+    setTimeout(
+      async function () {
+        if (Name == null || Name == ''
+          || Value == null || Value == ''
+          || Unit == null || Unit == '') {
+          alert("Please fill in all the requirements");
+          return
+        }
 
-    if (Name == null || Name == ''
-      || Value == null || Value == ''
-      || Unit == null || Unit == '') {
-      alert("Please fill in all the requirements");
-      return
-    }
-    const body = {
-      Name: Name,
-      Value: Value,
-      Unit: Unit,
-      Array_Feature: arrFeature_Save.concat(arrFeature_Update),
-      Status: Status,
-      id: this.state.id
-    }
+        const body = {
+          Name: Name,
+          Value: Value,
+          Unit: Unit,
+          Array_Feature: arrFeature_Save,
+          Status: Status,
+          id: this.state.id
+        }
 
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_PACKAGE,
-      method: 'POST',
-      data: body
-    });
+        this.setState({ isLoading: true });
 
-    if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert(res.data.message);
-      this.setState({ isLoading: false });
-    }
+        const res = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.UPDATE_PACKAGE,
+          method: 'POST',
+          data: body
+        });
+
+        if (res.data.is_success == true) {
+          this.getData();
+          this.setState({ modalCom: !this.state.modalCom })
+        } else {
+          alert(res.data.message);
+          this.setState({ isLoading: false });
+        }
+      }
+        .bind(this),
+      3000
+    );
   }
 
   async getFeatureData() {
@@ -527,6 +535,7 @@ class Company extends Component {
                         <th className="text-center">Tên gói</th>
                         <th className="text-center">Giá trị</th>
                         <th className="text-center">Đơn vị</th>
+                        <th className="text-center">Số lượng tính năng</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
 
@@ -543,6 +552,7 @@ class Company extends Component {
                                 <td className="text-center">{item.Name}</td>
                                 <td className="text-center">{item.Value}</td>
                                 <td className="text-center">{item.Unit == '0' ? 'Ngày' : item.Unit == '1' ? "Tháng" : "Năm"}</td>
+                                <td className="text-center">{item.Array_Feature.length}</td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
                                     {this.getBadge_string(item.Status)}

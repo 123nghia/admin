@@ -137,5 +137,22 @@ export default {
   "PLUGIN_LIST_ROLE" : "/api/plugin-list-role",
   "PLUGIN_ADD_ROLE" : "/api/plugin-add-role",
   "PLUGIN_UPDATE_ROLE" : "/api/plugin-update-role",
-  "PLUGIN_DELETE_ROLE" : "/api/plugin-delete-role"
+  "PLUGIN_DELETE_ROLE" : "/api/plugin-delete-role",
+
+  "CUS_RES_LIST" : "/api/list-customer-request",
+  "CUS_RES_ADD" : "/api/add-customer-request",
+  "CUS_RES_UPDATE" : "/api/update-customer-request",
+  "CUS_RES_DELETE" : "/api/delete-customer-request",
+
+  "REWARD_INFO_LIST" : "/api/list-reward-info",
+  "REWARD_INFO_ADD" : "/api/add-reward-info",
+  "REWARD_INFO_UPDATE" : "/api/update-reward-info",
+  "REWARD_INFO_DELETE" : "/api/delete-reward-info",
+
+
+  "REWARD_TRANS_LIST" : "/api/list-reward-trans",
+  "REWARD_TRANSO_ADD" : "/api/list-reward-trans",
+  "REWARD_TRANS_UPDATE" : "/api/update-reward-trans",
+  "REWARD_TRANS_DELETE" : "/api/delete-reward-trans",
+
 };

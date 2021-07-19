@@ -25,45 +25,19 @@ const _nav = [
     role: ['ADMIN', 'COMPANY', 'SALE'],
   },
   {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Phân quyền'],
-    role: ['ADMIN'],
-  },
-  {
     _tag: 'CSidebarNavDropdown',
-    name: 'Danh sách quyền',
-    icon: 'cil-star',
+    name: 'Quản lý phân quyền',
+    icon: <CIcon name="cil-star" customClasses="c-sidebar-nav-icon" />,
     _children: [{
       _tag: 'CSidebarNavItem',
-      name: 'Quản lý quyền',
+      name: 'Danh sách quyền',
       to: '/role_manager',
     }],
     role: ['ADMIN'],
   },
   {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Khách hàng'],
-    role: ['ADMIN', 'SALE'],
-  },
-  {
     _tag: 'CSidebarNavDropdown',
-    name: 'Khách hàng',
-    icon: 'cil-star',
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Quản lý khách hàng',
-      to: '/customer_manager',
-    }],
-    role: ['ADMIN', 'SALE'],
-  },
-  {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Gói sản phẩm'],
-    role: ['ADMIN', 'SALE'],
-  },
-  {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Gói sản phẩm',
+    name: 'Quản lý gói tính năng',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
@@ -77,13 +51,42 @@ const _nav = [
     role: ['ADMIN', 'SALE'],
   },
   {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Đơn hàng'],
+    _tag: 'CSidebarNavDropdown',
+    name: 'Quản lý khách hàng',
+    icon: 'cil-star',
+    _children: [{
+      _tag: 'CSidebarNavItem',
+      name: 'Quản lý khách hàng',
+      to: '/customer_manager',
+    }],
     role: ['ADMIN', 'SALE'],
   },
   {
     _tag: 'CSidebarNavDropdown',
-    name: 'Đơn hàng',
+    name: 'Quản lý Sale',
+    icon: 'cil-star',
+    _children: [{
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách Sale',
+      to: '/saleAdmin',
+    }],
+    role: ['ADMIN'],
+  },
+
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Chương trình khuyến mãi',
+    icon: 'cil-star',
+    _children: [{
+      _tag: 'CSidebarNavItem',
+      name: 'Comming soon',
+    }],
+    role: ['ADMIN'],
+  },
+
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Quản lý đơn hàng',
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
@@ -95,23 +98,7 @@ const _nav = [
       to: '/plugin_create_order',
     }],
     role: ['ADMIN', 'SALE'],
-  },
-  {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Quản lí Sale'],
-    role: ['ADMIN'],
-  },
-  {
-    _tag: 'CSidebarNavDropdown',
-    name: 'SALES',
-    icon: 'cil-star',
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách Sale',
-      to: '/saleAdmin',
-    }],
-    role: ['ADMIN'],
-  },
+  }
 ]
 
 export default _nav
