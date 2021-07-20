@@ -90,9 +90,10 @@ class ListFeatureOfCustomer extends Component {
     this.getData();
 
     let arr = JSON.parse(localStorage.getItem('url'));
+
     for (let i = 0; i < arr.length; i++) {
-      if ("#" + arr[i].to == window.location.hash) {
-        if (arr[i].hidden == true) {
+      if (arr[i].url == window.location.hash) {
+        if (arr[i].isHidden == true) {
           window.location.href = '#/'
         }
       }

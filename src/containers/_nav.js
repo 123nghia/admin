@@ -88,6 +88,10 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Nội dung khuyến mãi',
       to: '/reward_info'
+    },{
+      _tag: 'CSidebarNavItem',
+      name: 'Yêu cầu khách hàng',
+      to: '/cus_request'
     }],
     role: ['ADMIN'],
   },

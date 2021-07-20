@@ -27,7 +27,9 @@ const TheSidebar = () => {
     } else {
       navigation[i].hidden = true;
     }
+  }
 
+  for (let i = 0; i < navigation.length; i++) {
     if(navigation[i]._children){
       for (let y = 0; y < navigation[i]._children.length; y++) {
         if(navigation[i]._children[y].to){
@@ -36,7 +38,8 @@ const TheSidebar = () => {
       }
     }
   }
-
+  // console.log(navigation)
+  // console.log(temp)
   localStorage.setItem('url', JSON.stringify(temp))
 
   const dispatch = useDispatch()

@@ -91,9 +91,10 @@ class PluginCustomerManager extends Component {
 
     // this.getCompanyData();
     let arr = JSON.parse(localStorage.getItem('url'));
+
     for (let i = 0; i < arr.length; i++) {
-      if ("#" + arr[i].to == window.location.hash) {
-        if (arr[i].hidden == true) {
+      if (arr[i].url == window.location.hash) {
+        if (arr[i].isHidden == true) {
           window.location.href = '#/'
         }
       }
@@ -928,7 +929,7 @@ class PluginCustomerManager extends Component {
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
             <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}

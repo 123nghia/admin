@@ -52,15 +52,16 @@ class Users extends Component {
       dataApi: [],
       hidden: false,
       action: 'new',
-      Subject: '',
-      Content: '',
-      Templates: '',
+      UserName: '',
+      Phone: '',
+      Type: '',
       Status: '',
       modalDelete: false,
       delete: null,
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      isLoading: true
     };
   }
   async componentDidMount() {
@@ -102,10 +103,10 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.REWARD_INFO_LIST,
+      url: Constants.CUS_RES_LIST,
       method: 'POST'
     });
-
+    console.log(res.data.is_success)
     this.pagination(res.data.data);
     this.setState({ dataApi: res.data.data });
 
@@ -126,8 +127,8 @@ class Users extends Component {
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if ((val.Subject.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.Content.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
+        if ((val.UserName.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
           d.push(val)
         }
       })
@@ -158,9 +159,9 @@ class Users extends Component {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
-        Subject: '',
-        Content: '',
-        Templates: ''
+        UserName: '',
+        Phone: '',
+        Type: ''
       })
     }
   }
@@ -170,25 +171,24 @@ class Users extends Component {
   }
 
   async addRoles() {
-    const { Subject, Content, Templates } = this.state
+    const { UserName, Phone, Type } = this.state
 
-    if (Subject == null || Subject == '' ||
-      Content == null || Content == '' ||
-      Templates == null || Templates == '') {
+    if (UserName == null || UserName == '' ||
+      Phone == null || Phone == '') {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
-      Subject: Subject,
-      Content: Content,
-      Templates: Templates
+      UserName: UserName,
+      Phone: Phone,
+      Type: Type
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.REWARD_INFO_ADD,
+      url: Constants.CUS_RES_ADD,
       method: 'PUT',
       data: body
     });
@@ -206,28 +206,27 @@ class Users extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      Subject: item.Subject,
-      Content: item.Content,
-      Templates: item.Templates,
+      UserName: item.UserName,
+      Phone: item.Phone,
+      Type: item.Type,
       id: item['_id'],
       Status: item.Status
     })
   }
 
   async updateUser() {
-    const { Subject, Content, Templates, Status } = this.state
-
-    if (Subject == null || Subject == '' ||
-      Content == null || Content == '' ||
-      Templates == null || Templates == '') {
+    const { UserName, Phone, Type, Status } = this.state
+    if (UserName == null || UserName == '' ||
+      Phone == null || Phone == '') {
       alert("Please fill in all the requirements");
       return
+
     }
 
     const body = {
-      Subject: Subject,
-      Content: Content,
-      Templates: Templates,
+      UserName: UserName,
+      Phone: Phone,
+      Type: Type,
       id: this.state.id,
       Status: Status
     }
@@ -235,7 +234,7 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.REWARD_INFO_UPDATE,
+      url: Constants.CUS_RES_UPDATE,
       method: 'POST',
       data: body
     });
@@ -260,7 +259,7 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.REWARD_INFO_DELETE,
+      url: Constants.CUS_RES_DELETE,
       method: 'DELETE',
       data: {
         "id": this.state.delete['_id']
@@ -282,6 +281,14 @@ class Users extends Component {
   }
 
   getBadge(status) {
+    switch (status) {
+      case '0': return 'danger'
+      case '1': return 'success'
+      default: return 'primary'
+    }
+  }
+
+  getBadge_String(status) {
     switch (status) {
       case '0': return 'danger'
       case '1': return 'success'
@@ -314,11 +321,10 @@ class Users extends Component {
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
-                      <th className="text-center">Tiêu đề</th>
-                      <th className="text-center">Nội dung</th>
-                      <th className="text-center">Templates</th>
+                      <th className="text-center">Tên</th>
+                      <th className="text-center">Số điện thoại</th>
+                      <th className="text-center">Loại</th>
                       <th className="text-center">Ngày tạo</th>
-                      <th className="text-center">Trạng thái</th>
                       <th className="text-center">#</th>
                     </tr>
                   </thead>
@@ -330,16 +336,16 @@ class Users extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Subject}</td>
-                              <td className="text-center">{item.Content}</td>
-                              <td className="text-center">{item.Templates}</td>
+                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.Phone}</td>
+                              <td className="text-center">{item.Type}</td>
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>
                               <td className="text-center">
-                                <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                {/* <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                   <CIcon name="cilPencil" />
-                                </CButton>{' '}
+                                </CButton>{' '} */}
                                 <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                   <CIcon name="cilTrash" />
                                 </CButton>
@@ -375,32 +381,32 @@ class Users extends Component {
           <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
           <ModalBody>
             <TextFieldGroup
-              field="Subject"
-              label="Tiêu đề"
+              field="UserName"
+              label="Tên đăng nhập"
               value={this.state.Subject}
-              placeholder={"Tiêu đề"}
+              placeholder={"Tên đăng nhập"}
               // error={errors.title}
-              onChange={e => this.onChange("Subject", e.target.value)}
+              onChange={e => this.onChange("UserName", e.target.value)}
             // rows="5"
             />
 
             <TextFieldGroup
-              field="Content"
-              label="Nội dung"
-              value={this.state.Content}
-              placeholder={"Nhập nội dung"}
+              field="Phone"
+              label="Số điện thoại"
+              value={this.state.Phone}
+              placeholder={"Số điện thoại"}
               // error={errors.title}
-              onChange={e => this.onChange("Content", e.target.value)}
+              onChange={e => this.onChange("Phone", e.target.value)}
             // rows="5"
             />
 
             <TextFieldGroup
-              field="Templates"
-              label="Nhập nội dung sms"
-              value={this.state.Templates}
-              placeholder={"Nhập nội dung sms"}
+              field="Type"
+              label="Loại"
+              value={this.state.Type}
+              placeholder={"Loại"}
               // error={errors.title}
-              onChange={e => this.onChange("Templates", e.target.value)}
+              onChange={e => this.onChange("Type", e.target.value)}
             // rows="5"
             />
 

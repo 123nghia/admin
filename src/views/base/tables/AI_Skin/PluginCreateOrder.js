@@ -80,9 +80,10 @@ class PluginCreateOrder extends Component {
     this.getPackageData();
     this.getFeatureData();
     let arr = JSON.parse(localStorage.getItem('url'));
+
     for (let i = 0; i < arr.length; i++) {
-      if ("#" + arr[i].to == window.location.hash) {
-        if (arr[i].hidden == true) {
+      if (arr[i].url == window.location.hash) {
+        if (arr[i].isHidden == true) {
           window.location.href = '#/'
         }
       }
@@ -410,7 +411,7 @@ class PluginCreateOrder extends Component {
                 </CCol>
 
                 <CCol sm="12" lg="12">
-                  <CLabel>Slug</CLabel>
+                  <CLabel>Định danh</CLabel>
                   <Input onChange={(e) => { this.setState({ currentSlug: e.target.value }) }} value={currentSlug} />
                 </CCol>
 

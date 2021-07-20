@@ -65,6 +65,16 @@ class Users extends Component {
   }
   async componentDidMount() {
     this.getData()
+
+    let arr = JSON.parse(localStorage.getItem('url'));
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].url == window.location.hash) {
+        if (arr[i].isHidden == true) {
+          window.location.href = '#/'
+        }
+      }
+    }
   }
 
   pagination(dataApi) {
@@ -284,7 +294,7 @@ class Users extends Component {
             <p style={styles.danger}>{this.state.deleted}</p>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách khuyến mãi (Page: {this.state.indexPage + 1}))
+                <i className="fa fa-align-justify"></i> Danh sách gửi quà (Page: {this.state.indexPage + 1}))
                 <div style={styles.tags}>
                   {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
@@ -298,9 +308,10 @@ class Users extends Component {
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
-                      <th className="text-center">Tiêu đề</th>
+                      <th className="text-center">Số điện thoại</th>
                       <th className="text-center">Nội dung</th>
-                      <th className="text-center">Templates</th>
+                      <th className="text-center">Nội dụng sms</th>
+                      <th className="text-center">Tên công ty</th>
                       <th className="text-center">Ngày tạo</th>
                       <th className="text-center">Trạng thái</th>
                       <th className="text-center">#</th>
@@ -314,9 +325,10 @@ class Users extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Subject}</td>
-                              <td className="text-center">{item.Content}</td>
-                              <td className="text-center">{item.Templates}</td>
+                              <td className="text-center">{item.Phone}</td>
+                              <td className="text-center"></td>
+                              <td className="text-center"></td>
+                              <td className="text-center"></td>
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>
@@ -359,12 +371,12 @@ class Users extends Component {
           <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
           <ModalBody>
             <TextFieldGroup
-              field="Subject"
-              label="Tiêu đề"
-              value={this.state.Subject}
-              placeholder={"Tiêu đề"}
+              field="Phone"
+              label="Số điện thoại"
+              value={this.state.Phone}
+              placeholder={"Số điện thoại"}
               // error={errors.title}
-              onChange={e => this.onChange("Subject", e.target.value)}
+              onChange={e => this.onChange("Phone", e.target.value)}
             // rows="5"
             />
 
@@ -409,7 +421,7 @@ class Users extends Component {
         <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
           <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
           <ModalBody>
-            <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+            <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
           </ModalBody>
           <ModalFooter>
             <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
