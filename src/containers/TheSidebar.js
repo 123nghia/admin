@@ -20,29 +20,23 @@ import navigation from './_nav'
 
 const TheSidebar = () => {
   const role = localStorage.getItem('role');
-
+  var temp = []
   for (let i = 0; i < navigation.length; i++) {
     if (navigation[i].role.includes(role)) {
       navigation[i].hidden = false;
     } else {
       navigation[i].hidden = true;
     }
-    //   if(navigation[i]._children != undefined){
-    //     if(navigation[i]._children.length > 1){
-    //       var arr = navigation[i]._children;
-    //       for(let y = 0; y < arr.length; y++){
-    //         if(arr[y].role.includes(auth)){
-    //           arr[y].hidden = false;
-    //         } else {
-    //           arr[y].hidden = true;
-    //         }
-    //       }
-    //     }
-    //   }
+
+    if(navigation[i]._children){
+      for (let y = 0; y < navigation[i]._children.length; y++) {
+        if(navigation[i]._children[y].to){
+         temp.push({"url": "#" + navigation[i]._children[y].to, "isHidden": navigation[i].hidden})
+        }
+      }
+    }
   }
-  // console.log("Duy: ", arr)
-  //var temp = navigation[3]._children.concat(navigation[5]._children.concat(navigation[7]._children.concat(navigation[9]._children)));
-  var temp = []
+
   localStorage.setItem('url', JSON.stringify(temp))
 
   const dispatch = useDispatch()

@@ -54,14 +54,14 @@ class Company extends Component {
       package_time: '',
       package_unit: '',
       array_feature: [],
-      company_id: localStorage.getItem('user')
+      company_id: localStorage.getItem('user'),
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
   }
 
   async componentWillMount() {
     await this.getCompanyData();
     await this.getPackageData();
-    console.log(JSON.parse(this.state.company_id).company_id)
   }
 
   async getCompanyData() {
@@ -82,13 +82,22 @@ class Company extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PLUGIN_ORDER_BY_ID,
       method: 'POST',
-      data: {
-        company_id: JSON.parse(this.state.company_id).company_id
-      }
+      headers: this.state.token
     });
     let val = resPackage.data.data.result;
+    let arrTemp = [];
+    let arrCheckID = [];
+    for(let i = 0; i < val.length; i++){
+      let arrFeat = val[i].Array_Feature;
+      for(let y = 0; y < arrFeat.length; y++){
+        if(arrCheckID.includes(arrFeat[y]._id) == false){
+          arrTemp.push(arrFeat[y]);
+        }
+        arrCheckID.push(arrFeat[y]._id)
+      }
+    }
 
-    this.setState({ array_feature: val.length > 0 ? val[0].Array_Feature : [] })
+    this.setState({ array_feature: val.length > 0 ? arrTemp : [] })
     // return resPackage.data.data.Name;
   }
 
@@ -97,7 +106,7 @@ class Company extends Component {
 
     return (
       <div className="container">
-        <div class="title" className="h3" style={{ alignSelf: 'center' }}>
+        {/* <div class="title" className="h3" style={{ alignSelf: 'center' }}>
           DANH SÁCH CÁC DỊCH VỤ (CUSTOMER)
         </div>
         <CRow>
@@ -133,10 +142,10 @@ class Company extends Component {
         {
           array_feature == undefined || array_feature.length == 0 ?
             <div>Bạn chưa có bất kì tính năng nào !!! Vui lòng liên hệ admin !!!</div> : ""
-        }
+        } */}
 
         <div class="title" className="h3" style={{ alignSelf: 'center' }}>
-          DANH SÁCH CÁC DỊCH VỤ (ADMIN)
+          DANH SÁCH QUẢN LÝ (ADMIN)
         </div>
         <CRow>
           {
@@ -145,7 +154,7 @@ class Company extends Component {
                 if (item.Type == "0") {
                   return (
                     <CCol lg="3" sm="12" xm="12">
-                      <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer", margin: 5 }} onClick={() => { window.location.href = item.Value + company_slug }}>
+                      <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer", margin: 5 }} onClick={() => { window.location.href = item.Value + "#" + "/" + company_slug }}>
                         <div style={styles.feature}>
                           <div style={{ height: '200px', width: '100%', 'marginTop': '24px' }}>
                             <img width="80" height="80" src={item.Image} />

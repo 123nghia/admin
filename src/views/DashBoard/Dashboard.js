@@ -32,11 +32,17 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: localStorage.getItem('type')
+    };
+  }
   render() {
     return (
       <div>
         {
-          localStorage.getItem('role') == 'ADMIN' || localStorage.getItem('role') == 'SALE' ? <Admin /> : <Company />
+          this.state.type == '0' || this.state.type == '1' ? <Admin /> : <Company />
         }
       </div>
     )

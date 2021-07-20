@@ -30,8 +30,8 @@ import {
 } from '@coreui/react'
 
 import 'moment-timezone';
-import Constants from "../../../contants/contants";
-import TextFieldGroup from "../../Common/TextFieldGroup";
+import Constants from "../../../../contants/contants";
+import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import moment from "moment";
 let headers = new Headers();

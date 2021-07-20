@@ -27,8 +27,8 @@ import {
 } from '@coreui/react'
 
 import 'moment-timezone';
-import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
+import Constants from "./../../../../contants/contants";
+import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import md5 from "md5";
 let headers = new Headers();
@@ -385,13 +385,14 @@ class PluginCustomerManager extends Component {
     let arrTemp = []
     const resPackage = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_PLUGIN_ORDER_BY_ID,
+      url: Constants.LIST_PLUGIN_ORDER_FOR_ADMIN,
       method: 'POST',
       data: {
         company_id: company_id
       }
     });
     let val = resPackage.data.data.result;
+
     for (let i = 0; i < val.length; i++) {
       let data = await this.getPackageName(val[i].Package_Id);
       val[i].Name = data.Name

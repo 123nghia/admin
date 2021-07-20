@@ -1,6 +1,6 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import { cifAU } from '@coreui/icons';
+import { cifAU, freeSet } from '@coreui/icons';
 const arrRoleADMIN = ['SALES', 'ADMIN', 'SHOPMANAGER', 'ADMINSALES', 'COMPANY'];
 const arrRoleCOMPANY = ['SALES', 'SHOPMANAGER'];
 const arrRoleSHOPMANAGER = ['SALES'];
@@ -8,13 +8,13 @@ const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Danh mục'],
-    role: ['ADMIN', 'COMPANY'],
+    role: ['ADMIN', 'COMPANY', 'SALE'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách tính năng',
     to: '/dashboard',
-    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon name="cil-chartPie" customClasses="c-sidebar-nav-icon" />,
     role: ['COMPANY'],
   },
   {
@@ -25,9 +25,16 @@ const _nav = [
     role: ['ADMIN', 'COMPANY', 'SALE'],
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Tính năng đã đăng ký',
+    to: '/feature_customer',
+    icon: <CIcon name="cil-laptop" customClasses="c-sidebar-nav-icon" />,
+    role: ['COMPANY'],
+  },
+  {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý phân quyền',
-    icon: <CIcon name="cil-star" customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon name="cil-people" customClasses="c-sidebar-nav-icon" />,
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách quyền',
@@ -38,7 +45,7 @@ const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý gói tính năng',
-    icon: 'cil-star',
+    icon: 'cil-laptop',
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Quản lý gói sản phẩm',
@@ -53,7 +60,7 @@ const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý khách hàng',
-    icon: 'cil-star',
+    icon: 'cil-userFollow',
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Quản lý khách hàng',
@@ -64,7 +71,7 @@ const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý Sale',
-    icon: 'cil-star',
+    icon: 'cil-people',
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách Sale',
@@ -76,10 +83,11 @@ const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Chương trình khuyến mãi',
-    icon: 'cil-star',
+    icon: 'cil-bell',
     _children: [{
       _tag: 'CSidebarNavItem',
-      name: 'Comming soon',
+      name: 'Nội dung khuyến mãi',
+      to: '/reward_info'
     }],
     role: ['ADMIN'],
   },
@@ -87,7 +95,7 @@ const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý đơn hàng',
-    icon: 'cil-star',
+    icon: 'cil-chartPie',
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách đơn hàng',

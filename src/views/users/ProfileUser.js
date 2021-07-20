@@ -33,6 +33,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../contants/contants";
 import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import axios from 'axios'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -105,7 +106,7 @@ class Users extends Component {
         company_id: company_id
       }
     });
-
+    this.setState({ current_slug: resCom.data.data.Slug })
     return resCom.data.data == null ? "" : resCom.data.data.Name;
   }
 
@@ -161,17 +162,15 @@ class Users extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PLUGIN_ORDER_BY_ID,
       method: 'POST',
-      data: {
-        company_id: company_id
-      }
+      headers: this.state.token
     });
     let val = resPackage.data.data.result;
 
     for (let i = 0; i < val.length; i++) {
       let data = await this.getPackageName(val[i].Package_Id);
-      val[i].Name =  data.Name
-      val[i].Unit =  data.Unit
-      val[i].Value =  data.Value
+      val[i].Name = data.Name
+      val[i].Unit = data.Unit
+      val[i].Value = data.Value
       arrTemp.push(val[i])
     }
 
@@ -179,11 +178,11 @@ class Users extends Component {
     return arrTemp;
   }
 
-  async onView(name, com_id, phone_number, slug) {
+  async onView(name, com_id, phone_number) {
     let data = await this.getPackageData(com_id)
     this.setState({
       toggleView: !this.state.toggleView, company_name: name,
-      arrDetailPackage: data.length == 0 ? [] : data[0].Array_Feature, phone_number: phone_number, current_slug: slug
+      arrDetailPackage: data.length == 0 ? [] : data[0].Array_Feature, phone_number: phone_number
     })
   }
 
@@ -195,6 +194,7 @@ class Users extends Component {
             <th className="text-center">STT.</th>
             <th className="text-center">Tên dịch vụ</th>
             <th className="text-center">Đường dẫn</th>
+            <th className="text-center">#</th>
           </tr>
         </thead>
         <tbody>
@@ -213,6 +213,14 @@ class Users extends Component {
                     <td className="text-center">{i + 1}</td>
                     <td className="text-center">{item.Key}</td>
                     <td className="text-center">{item.Value + this.state.current_slug}</td>
+                    <td className="text-center">
+                      <CTooltip content="Copy">
+                        <CopyToClipboard text={item.Value + this.state.current_slug}
+                          onCopy={() => { }}>
+                          <CIcon name="cil-pencil" />
+                        </CopyToClipboard>
+                      </CTooltip>
+                    </td>
                   </tr>
                 );
               }) : ""
@@ -307,7 +315,7 @@ class Users extends Component {
                           <CCol sm="12" lg="6">
                             <CTooltip content="Xem chi tiết đơn hàng">
                               <CButton outline color="info" size="sm" onClick={async (e) => {
-                                await this.onView(data.Name, data.Company_Id, data.Phone, data.Slug)
+                                await this.onView(data.Name, data.Company_Id, data.Phone)
                               }}>
                                 <CIcon name="cil-magnifying-glass" /> Chi tiết các đơn hàng đã mua
                               </CButton>
@@ -376,17 +384,17 @@ class Users extends Component {
                         <CLabel>Mật khẩu</CLabel>
                         <CRow>
                           <CCol sm="9" lg="9">
-                            <Input type={"password"} style={styles.searchInput} readOnly={isChange} onChange={(e) => { this.setState({ currentPassword:  e.target.value }) }} value={currentPassword} />
+                            <Input type={"password"} style={styles.searchInput} readOnly={isChange} onChange={(e) => { this.setState({ currentPassword: e.target.value }) }} value={currentPassword} />
                           </CCol>
                           <CCol sm="3" lg="3">
                             {
                               isChange ?
-                              <Button color="primary" onClick={e => {
-                                this.setState({ isChange: false })
-                              }}>Thay đổi</Button> :
-                              <Button color="primary" onClick={async e => {
-                                await this.updatePassword(data._id, currentPassword);
-                              }}>Cập nhật</Button>
+                                <Button color="primary" onClick={e => {
+                                  this.setState({ isChange: false })
+                                }}>Thay đổi</Button> :
+                                <Button color="primary" onClick={async e => {
+                                  await this.updatePassword(data._id, currentPassword);
+                                }}>Cập nhật</Button>
                             }
 
                           </CCol>
@@ -422,15 +430,15 @@ class Users extends Component {
             <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
               <thead className="thead-light">
                 <tr>
-                    <th className="text-center">STT.</th>
-                    <th className="text-center">Tên Gói</th>
-                    <th className="text-center">Số lượng tính năng</th>
-                    <th className="text-center">Gói</th>
-                    <th className="text-center">Ngày kích hoạt</th>
-                    <th className="text-center">Ngày hết hạn</th>
-                    <th className="text-center">Thời gian hết hạn</th>
-                    <th className="text-center">Trạng thái</th>
-                    <th className="text-center">#</th>
+                  <th className="text-center">STT.</th>
+                  <th className="text-center">Tên Gói</th>
+                  <th className="text-center">Số lượng tính năng</th>
+                  <th className="text-center">Gói</th>
+                  <th className="text-center">Ngày kích hoạt</th>
+                  <th className="text-center">Ngày hết hạn</th>
+                  <th className="text-center">Thời gian hết hạn</th>
+                  <th className="text-center">Trạng thái</th>
+                  <th className="text-center">#</th>
                 </tr>
               </thead>
               <tbody>
@@ -445,43 +453,43 @@ class Users extends Component {
                     arrTotalPackage.map((item, i) => {
                       return (
                         <tr key={i}>
-                            <th className="text-center">{i + 1}</th>
-                            <th className="text-center">{item.Name}</th>
-                            <th className="text-center">{item.Array_Feature.length}</th>
-                            <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
-                            <th className="text-center">
-                              {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
-                            </th>
-                            <th className="text-center">
-                              {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
-                            </th>
-                            {
-                              item.Status == "1" ? <th className="text-center" style={
-                                this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
-                                  this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
-                              }>
-                                {
-                                  this.calDateLeft(item.End_Date, item.Active_Date)
-                                } ngày nữa
-                              </th> : <th className="text-center">-----</th>
-                            }
-                            <th className="text-center" >
-                              <CBadge color={this.getBadgeStatus(item.Status)}>
-                                {this.getStatus(item.Status)}
-                              </CBadge>
-                            </th>
+                          <th className="text-center">{i + 1}</th>
+                          <th className="text-center">{item.Name}</th>
+                          <th className="text-center">{item.Array_Feature.length}</th>
+                          <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
+                          <th className="text-center">
+                            {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
+                          </th>
+                          <th className="text-center">
+                            {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
+                          </th>
+                          {
+                            item.Status == "1" ? <th className="text-center" style={
+                              this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
+                                this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                            }>
+                              {
+                                this.calDateLeft(item.End_Date, item.Active_Date)
+                              } ngày nữa
+                            </th> : <th className="text-center">-----</th>
+                          }
+                          <th className="text-center" >
+                            <CBadge color={this.getBadgeStatus(item.Status)}>
+                              {this.getStatus(item.Status)}
+                            </CBadge>
+                          </th>
 
-                            <td className="text-center">
-                              <CButton outline color="info" size="sm"
-                                onClick={async (e) => {
-                                  this.setState({
-                                    arrDetailPackage: item.Array_Feature, current_package: item.Name
-                                  })
-                                }}>
-                                <CIcon name="cil-magnifying-glass" />
-                              </CButton>
-                            </td>
-                          </tr>
+                          <td className="text-center">
+                            <CButton outline color="info" size="sm"
+                              onClick={async (e) => {
+                                this.setState({
+                                  arrDetailPackage: item.Array_Feature, current_package: item.Name
+                                })
+                              }}>
+                              <CIcon name="cil-magnifying-glass" />
+                            </CButton>
+                          </td>
+                        </tr>
                       )
                     }) : ""
                 }
