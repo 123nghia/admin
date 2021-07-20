@@ -27,8 +27,8 @@ import {
 } from '@coreui/react'
 
 import 'moment-timezone';
-import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
+import Constants from "../../../../contants/contants";
+import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -52,8 +52,9 @@ class Users extends Component {
       dataApi: [],
       hidden: false,
       action: 'new',
-      Name: '',
-      Type: '',
+      Subject: '',
+      Content: '',
+      Templates: '',
       Status: '',
       modalDelete: false,
       delete: null,
@@ -91,9 +92,8 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_LIST_ROLE,
-      method: 'POST',
-      headers: this.state.token
+      url: Constants.REWARD_INFO_LIST,
+      method: 'POST'
     });
 
     this.pagination(res.data.data);
@@ -116,7 +116,8 @@ class Users extends Component {
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        if ((val.Subject.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Content.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
           d.push(val)
         }
       })
@@ -147,8 +148,9 @@ class Users extends Component {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
-        Type: '',
-        Name: ''
+        Subject: '',
+        Content: '',
+        Templates: ''
       })
     }
   }
@@ -158,22 +160,25 @@ class Users extends Component {
   }
 
   async addRoles() {
-    const { Name, Type } = this.state
+    const { Subject, Content, Templates } = this.state
 
-    if (Name == null || Name == '') {
+    if (Subject == null || Subject == '' ||
+      Content == null || Content == '' ||
+      Templates == null || Templates == '') {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
-      Name: Name,
-      Type: Type
+      Subject: Subject,
+      Content: Content,
+      Templates: Templates
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_ADD_ROLE,
+      url: Constants.REWARD_INFO_ADD,
       method: 'PUT',
       data: body
     });
@@ -191,22 +196,28 @@ class Users extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      Name: item.Name,
+      Subject: item.Subject,
+      Content: item.Content,
+      Templates: item.Templates,
       id: item['_id'],
       Status: item.Status
     })
   }
 
   async updateUser() {
-    const { Name, Status } = this.state
+    const { Subject, Content, Templates, Status } = this.state
 
-    if (Name == null || Name == '') {
+    if (Subject == null || Subject == '' ||
+      Content == null || Content == '' ||
+      Templates == null || Templates == '') {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
-      Name: Name,
+      Subject: Subject,
+      Content: Content,
+      Templates: Templates,
       id: this.state.id,
       Status: Status
     }
@@ -214,7 +225,7 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_UPDATE_ROLE,
+      url: Constants.REWARD_INFO_UPDATE,
       method: 'POST',
       data: body
     });
@@ -239,7 +250,7 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_DELETE_ROLE,
+      url: Constants.REWARD_INFO_DELETE,
       method: 'DELETE',
       data: {
         "id": this.state.delete['_id']
@@ -256,46 +267,20 @@ class Users extends Component {
 
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-  }
-  goSearch() {
-    this.getUsers();
   }
 
   getBadge(status) {
     switch (status) {
-      case 'Actived': return 'success'
-      case 'Inactive': return 'secondary'
-      case 'Locked': return 'warning'
-      case 'Deactived': return 'danger'
+      case '0': return 'danger'
+      case '1': return 'success'
       default: return 'primary'
     }
   }
 
   render() {
-    const { data, key, viewingUser, communities, dataCompany,
-      currentCompany, dataSale, currentSale, action, arrPagination, indexPage } = this.state;
+    const { data, action, arrPagination, indexPage } = this.state;
 
     return (
       <div className="animated fadeIn">
@@ -305,11 +290,11 @@ class Users extends Component {
             <p style={styles.danger}>{this.state.deleted}</p>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách quyền (Page: {this.state.indexPage + 1}))
+                <i className="fa fa-align-justify"></i> Danh sách nội dung chương trình khuyến mãi (Page: {this.state.indexPage + 1}))
                 <div style={styles.tags}>
                   {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                  <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm quyền</CButton>
+                  <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
                   {/* </div> */}
                 </div>
               </CardHeader>
@@ -319,9 +304,11 @@ class Users extends Component {
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
-                      <th className="text-center">Tên quyền</th>
-                      <th className="text-center">Trạng thái</th>
+                      <th className="text-center">Tiêu đề</th>
+                      <th className="text-center">Nội dung</th>
+                      <th className="text-center">Templates</th>
                       <th className="text-center">Ngày tạo</th>
+                      <th className="text-center">Trạng thái</th>
                       <th className="text-center">#</th>
                     </tr>
                   </thead>
@@ -333,12 +320,9 @@ class Users extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">
-                                <CBadge color={this.getBadge(item.Status)}>
-                                  {item.Status}
-                                </CBadge>
-                              </td>
+                              <td className="text-center">{item.Subject}</td>
+                              <td className="text-center">{item.Content}</td>
+                              <td className="text-center">{item.Templates}</td>
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>
@@ -381,26 +365,36 @@ class Users extends Component {
           <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
           <ModalBody>
             <TextFieldGroup
-              field="Name"
-              label="Name"
-              value={this.state.Name}
-              placeholder={"Name"}
+              field="Subject"
+              label="Tiêu đề"
+              value={this.state.Subject}
+              placeholder={"Tiêu đề"}
               // error={errors.title}
-              onChange={e => this.onChange("Name", e.target.value)}
+              onChange={e => this.onChange("Subject", e.target.value)}
             // rows="5"
             />
 
             <TextFieldGroup
-              field="Type"
-              label="Loại"
-              value={this.state.Type}
-              placeholder={"Type"}
+              field="Content"
+              label="Nội dung"
+              value={this.state.Content}
+              placeholder={"Nhập nội dung"}
               // error={errors.title}
-              onChange={e => this.onChange("Type", e.target.value)}
+              onChange={e => this.onChange("Content", e.target.value)}
             // rows="5"
             />
 
-            {
+            <TextFieldGroup
+              field="Templates"
+              label="Nhập nội dung sms"
+              value={this.state.Templates}
+              placeholder={"Nhập nội dung sms"}
+              // error={errors.title}
+              onChange={e => this.onChange("Templates", e.target.value)}
+            // rows="5"
+            />
+
+            {/* {
               action == 'new' ? "" : <div>
                 <label style={styles.flexLabel} htmlFor="tag">Status:</label>
                 <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
@@ -410,7 +404,7 @@ class Users extends Component {
                   <option value={'Deactived'}>Deactived</option>
                 </select>
               </div>
-            }
+            } */}
           </ModalBody>
           <ModalFooter>
             <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}

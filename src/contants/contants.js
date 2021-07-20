@@ -116,6 +116,7 @@ export default {
 
   "LIST_PLUGIN_ORDER" : "/api/plugin-list-order",
   "LIST_PLUGIN_ORDER_BY_ID" : "/api/plugin-list-order-by-id",
+  "LIST_PLUGIN_ORDER_FOR_ADMIN" : "/api/plugin-list-order-for-admin",
   "ADD_PLUGIN_ORDER" : "/api/plugin-add-order",
   "UPDATE_PLUGIN_ORDER" : "/api/plugin-update-order",
   "DELETE_PLUGIN_ORDER" : "/api/plugin-delete-order",
@@ -151,7 +152,7 @@ export default {
 
 
   "REWARD_TRANS_LIST" : "/api/list-reward-trans",
-  "REWARD_TRANSO_ADD" : "/api/list-reward-trans",
+  "REWARD_TRANS_ADD" : "/api/list-reward-trans",
   "REWARD_TRANS_UPDATE" : "/api/update-reward-trans",
   "REWARD_TRANS_DELETE" : "/api/delete-reward-trans",
 

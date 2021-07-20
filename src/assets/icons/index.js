@@ -122,6 +122,7 @@ import {
   cilTrash,
   cilUnderline,
   cilUser,
+  cilSecurity,
   cilUserFemale,
   cilUserFollow,
   cilUserUnfollow,

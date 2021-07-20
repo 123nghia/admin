@@ -21,8 +21,8 @@ import {
 } from '@coreui/react'
 
 import 'moment-timezone';
-import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
+import Constants from "./../../../../contants/contants";
+import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import md5 from "md5";
 let headers = new Headers();
@@ -66,13 +66,14 @@ class PluginCustomerManager extends Component {
     this.getData();
     // this.getCompanyData();
     let arr = JSON.parse(localStorage.getItem('url'));
-    for (let i = 0; i < arr.length; i++) {
-      if ("#" + arr[i].to == window.location.hash) {
-        if (arr[i].hidden == true) {
-          window.location.href = '#/'
-        }
-      }
-    }
+    console.log(arr)
+    // for (let i = 0; i < arr.length; i++) {
+    //   if ("#" + arr[i].to == window.location.hash) {
+    //     if (arr[i].hidden == true) {
+    //       window.location.href = '#/'
+    //     }
+    //   }
+    // }
   }
 
   async getCompanyData() {

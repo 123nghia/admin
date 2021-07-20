@@ -21,13 +21,15 @@ const TransactionTable = React.lazy(() => import('./views/base/tables/Transactio
 const HardWareManager = React.lazy(() => import('./views/base/tables/HardWareManager'));
 const Profile = React.lazy(() => import('./views/users/ProfileUser'));
 const SPENDING = React.lazy(() => import('./views/base/tables/SpendingOrder'));
-const RoleManager = React.lazy(() => import('./views/base/tables/RoleManager'));
-const PluginManager = React.lazy(() => import('./views/base/tables/PluginManager'));
-const PluginCustomer = React.lazy(() => import('./views/base/tables/PluginCustomerManager'));
-const PluginCreateOrder = React.lazy(() => import('./views/base/tables/PluginCreateOrder'));
-const FeatureTable = React.lazy(() => import('./views/base/tables/FeatureTable'));
-const PluginOrderTable = React.lazy(() => import('./views/base/tables/PluginOrderTable'));
-const PluginUserTable = React.lazy(() => import('./views/base/tables/PluginUserTable'));
+const RoleManager = React.lazy(() => import('./views/base/tables/AI_Skin/RoleManager'));
+const PluginManager = React.lazy(() => import('./views/base/tables/AI_Skin/PluginManager'));
+const PluginCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/PluginCustomerManager'));
+const PluginCreateOrder = React.lazy(() => import('./views/base/tables/AI_Skin/PluginCreateOrder'));
+const FeatureTable = React.lazy(() => import('./views/base/tables/AI_Skin/FeatureTable'));
+const PluginOrderTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginOrderTable'));
+const PluginUserTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginUserTable'));
+const RewardInfomation = React.lazy(() => import('./views/base/tables/AI_Skin/RewardInfomation'));
+const ListFeatureOfCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ListFeatureOfCustomer'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -59,6 +61,8 @@ const routes = [
   { path: '/feature', name: 'Feature', component: FeatureTable },
   { path: '/list_order', name: 'Order Plugin', component: PluginOrderTable },
   { path: '/saleAdmin', name: 'SALE', component: PluginUserTable },
+  { path: '/reward_info', name: 'REWARD_INFO', component: RewardInfomation },
+  { path: '/feature_customer', name: 'REWARD_INFO', component: ListFeatureOfCustomer },
 ];
 
 export default routes;
