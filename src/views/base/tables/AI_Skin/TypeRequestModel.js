@@ -23,7 +23,8 @@ import {
   CCardBody,
   CFormGroup,
   CBadge,
-  CButton
+  CButton,
+  CTextarea
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -54,9 +55,8 @@ class Users extends Component {
       dataApi: [],
       hidden: false,
       action: 'new',
-      Phone: '',
-      Reward_Id: '',
-      Company_Id: '',
+      Value: '',
+      Description: '',
       Status: '',
       modalDelete: false,
       delete: null,
@@ -105,7 +105,7 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.REWARD_TRANS_LIST,
+      url: Constants.TYPE_REQUEST_LIST,
       method: 'POST'
     });
 
@@ -129,7 +129,8 @@ class Users extends Component {
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        if ((val.Vale.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Description.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
           d.push(val)
         }
       })
@@ -160,9 +161,8 @@ class Users extends Component {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
-        Phone: '',
-        Reward_Id: '',
-        Company_Id: ''
+        Value: '',
+        Description: ''
       })
     }
   }
@@ -172,23 +172,23 @@ class Users extends Component {
   }
 
   async addRoles() {
-    const { Phone, Reward_Id, Company_Id } = this.state
+    const { Value, Description } = this.state
 
-    if (Phone == null || Phone == '') {
+    if (Value == null || Value == '' ||
+      Description == null || Description == '') {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
-      Phone: Phone,
-      Reward_Id: Reward_Id,
-      Company_Id: Company_Id
+      Value: Value,
+      Description: Description
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.REWARD_TRANS_ADD,
+      url: Constants.TYPE_REQUEST_ADD,
       method: 'PUT',
       data: body
     });
@@ -206,25 +206,25 @@ class Users extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      Phone: item.Phone,
-      Reward_Id: item.Reward_Id,
-      Company_Id: item.Company_Id,
+      Value: item.Value,
+      Description: item.Description,
       id: item['_id'],
       Status: item.Status
     })
   }
 
   async updateUser() {
-    const { Phone, Reward_Id, Status } = this.state
-
-    if (Phone == null || Phone == '') {
+    const { Value, Description, Status } = this.state
+    if (Value == null || Value == '' ||
+      Description == null || Description == '') {
       alert("Please fill in all the requirements");
       return
+
     }
 
     const body = {
-      Phone: Phone,
-      Reward_Id: Reward_Id,
+      Value: Value,
+      Description: Description,
       id: this.state.id,
       Status: Status
     }
@@ -232,7 +232,7 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.REWARD_TRANS_UPDATE,
+      url: Constants.TYPE_REQUEST_UPDATE,
       method: 'POST',
       data: body
     });
@@ -257,7 +257,7 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.REWARD_TRANS_DELETE,
+      url: Constants.TYPE_REQUEST_DELETE,
       method: 'DELETE',
       data: {
         "id": this.state.delete['_id']
@@ -286,6 +286,14 @@ class Users extends Component {
     }
   }
 
+  getBadge_String(status) {
+    switch (status) {
+      case '0': return 'danger'
+      case '1': return 'success'
+      default: return 'primary'
+    }
+  }
+
   render() {
     const { data, action, arrPagination, indexPage } = this.state;
     if (!this.state.isLoading) {
@@ -297,7 +305,7 @@ class Users extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách gửi quà (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Quản lý loại yêu cầu (Page: {this.state.indexPage + 1}))
                   <div style={styles.tags}>
                     {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
@@ -311,12 +319,9 @@ class Users extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Nội dung</th>
-                        <th className="text-center">Nội dụng sms</th>
-                        <th className="text-center">Tên công ty</th>
+                        <th className="text-center">Giá trị</th>
+                        <th className="text-center">Mô tả</th>
                         <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -328,10 +333,8 @@ class Users extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Phone}</td>
-                                <td className="text-center"></td>
-                                <td className="text-center"></td>
-                                <td className="text-center"></td>
+                                <td className="text-center">{item.Value}</td>
+                                <td className="text-center">{item.Description}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
@@ -374,35 +377,32 @@ class Users extends Component {
             <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
-                field="Phone"
-                label="Số điện thoại"
-                value={this.state.Phone}
-                placeholder={"Số điện thoại"}
+                field="Value"
+                label="Nhập giá trị"
+                value={this.state.Value}
+                placeholder={"Nhập giá trị"}
                 // error={errors.title}
-                onChange={e => this.onChange("Phone", e.target.value)}
+                onChange={e => this.onChange("Value", e.target.value)}
               // rows="5"
               />
 
-              <TextFieldGroup
-                field="Content"
-                label="Nội dung"
-                value={this.state.Content}
-                placeholder={"Nhập nội dung"}
-                // error={errors.title}
-                onChange={e => this.onChange("Content", e.target.value)}
-              // rows="5"
-              />
+              {/* <TextFieldGroup
+              field="Phone"
+              label="Số điện thoại"
+              value={this.state.Phone}
+              placeholder={"Số điện thoại"}
+              // error={errors.title}
+              onChange={e => this.onChange("Phone", e.target.value)}
+            // rows="5"
+            /> */}
 
-              <TextFieldGroup
-                field="Templates"
-                label="Nhập nội dung sms"
-                value={this.state.Templates}
-                placeholder={"Nhập nội dung sms"}
-                // error={errors.title}
-                onChange={e => this.onChange("Templates", e.target.value)}
-              // rows="5"
+              <label className="control-label">Mô tả</label>
+              <CTextarea
+                name="Description"
+                rows="9"
+                onChange={(e) => { this.setState({ Description: e.target.value }) }}
+                placeholder="Mô tả"
               />
-
               {/* {
               action == 'new' ? "" : <div>
                 <label style={styles.flexLabel} htmlFor="tag">Status:</label>

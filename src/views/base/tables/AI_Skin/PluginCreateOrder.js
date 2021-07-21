@@ -34,6 +34,8 @@ import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import moment from "moment";
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -71,7 +73,8 @@ class PluginCreateOrder extends Component {
       time_create: '',
       //So sách 2 slug nếu trùng thì thôi còn khác nhau thì update lại slug của công ty
       currentSlug: '',
-      confirmSlug: ''
+      confirmSlug: '',
+      isLoading: false
     };
   }
 

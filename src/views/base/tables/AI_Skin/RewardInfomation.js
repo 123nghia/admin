@@ -30,6 +30,8 @@ import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -61,6 +63,7 @@ class Users extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      isLoading: false
     };
   }
   async componentDidMount() {
@@ -291,120 +294,121 @@ class Users extends Component {
 
   render() {
     const { data, action, arrPagination, indexPage } = this.state;
+    if (!this.state.isLoading) {
 
-    return (
-      <div className="animated fadeIn">
-        <Row>
-          <Col>
-            <p style={styles.success}>{this.state.updated}</p>
-            <p style={styles.danger}>{this.state.deleted}</p>
-            <Card>
-              <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách nội dung chương trình khuyến mãi (Page: {this.state.indexPage + 1}))
-                <div style={styles.tags}>
-                  {/* <div>
+      return (
+        <div className="animated fadeIn">
+          <Row>
+            <Col>
+              <p style={styles.success}>{this.state.updated}</p>
+              <p style={styles.danger}>{this.state.deleted}</p>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify"></i> Danh sách nội dung chương trình khuyến mãi (Page: {this.state.indexPage + 1}))
+                  <div style={styles.tags}>
+                    {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                  <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
-                  {/* </div> */}
-                </div>
-              </CardHeader>
-              <CardBody>
+                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
+                    {/* </div> */}
+                  </div>
+                </CardHeader>
+                <CardBody>
 
-                <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">STT.</th>
-                      <th className="text-center">Tiêu đề</th>
-                      <th className="text-center">Nội dung</th>
-                      <th className="text-center">Templates</th>
-                      <th className="text-center">Ngày tạo</th>
-                      <th className="text-center">Trạng thái</th>
-                      <th className="text-center">#</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                    {
-                      data != undefined ?
-                        data.map((item, i) => {
+                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                    <thead className="thead-light">
+                      <tr>
+                        <th className="text-center">STT.</th>
+                        <th className="text-center">Tiêu đề</th>
+                        <th className="text-center">Nội dung</th>
+                        <th className="text-center">Templates</th>
+                        <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">Trạng thái</th>
+                        <th className="text-center">#</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                      {
+                        data != undefined ?
+                          data.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.Subject}</td>
+                                <td className="text-center">{item.Content}</td>
+                                <td className="text-center">{item.Templates}</td>
+                                <td className="text-center">
+                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                    <CIcon name="cilPencil" />
+                                  </CButton>{' '}
+                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                    <CIcon name="cilTrash" />
+                                  </CButton>
+                                </td>
+                              </tr>
+                            );
+                          }) : ""
+                      }
+                    </tbody>
+                  </table>
+                </CardBody>
+              </Card>
+              {
+                arrPagination.length == 1 ? "" :
+                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                    <tr style={styles.row}>
+                      {
+                        arrPagination.map((item, i) => {
                           return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Subject}</td>
-                              <td className="text-center">{item.Content}</td>
-                              <td className="text-center">{item.Templates}</td>
-                              <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                              </td>
-                              <td className="text-center">
-                                <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                  <CIcon name="cilPencil" />
-                                </CButton>{' '}
-                                <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                  <CIcon name="cilTrash" />
-                                </CButton>
-                              </td>
-                            </tr>
+                            <td>
+                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
+                            </td>
                           );
-                        }) : ""
-                    }
-                  </tbody>
-                </table>
-              </CardBody>
-            </Card>
-            {
-              arrPagination.length == 1 ? "" :
-                <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                  <tr style={styles.row}>
-                    {
-                      arrPagination.map((item, i) => {
-                        return (
-                          <td>
-                            <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                          </td>
-                        );
-                      })
-                    }
-                  </tr>
-                </div>
-            }
-          </Col>
-        </Row>
+                        })
+                      }
+                    </tr>
+                  </div>
+              }
+            </Col>
+          </Row>
 
-        <Modal isOpen={this.state.modalCom} className={this.props.className}>
-          <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
-          <ModalBody>
-            <TextFieldGroup
-              field="Subject"
-              label="Tiêu đề"
-              value={this.state.Subject}
-              placeholder={"Tiêu đề"}
-              // error={errors.title}
-              onChange={e => this.onChange("Subject", e.target.value)}
-            // rows="5"
-            />
+          <Modal isOpen={this.state.modalCom} className={this.props.className}>
+            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+            <ModalBody>
+              <TextFieldGroup
+                field="Subject"
+                label="Tiêu đề"
+                value={this.state.Subject}
+                placeholder={"Tiêu đề"}
+                // error={errors.title}
+                onChange={e => this.onChange("Subject", e.target.value)}
+              // rows="5"
+              />
 
-            <TextFieldGroup
-              field="Content"
-              label="Nội dung"
-              value={this.state.Content}
-              placeholder={"Nhập nội dung"}
-              // error={errors.title}
-              onChange={e => this.onChange("Content", e.target.value)}
-            // rows="5"
-            />
+              <TextFieldGroup
+                field="Content"
+                label="Nội dung"
+                value={this.state.Content}
+                placeholder={"Nhập nội dung"}
+                // error={errors.title}
+                onChange={e => this.onChange("Content", e.target.value)}
+              // rows="5"
+              />
 
-            <TextFieldGroup
-              field="Templates"
-              label="Nhập nội dung sms"
-              value={this.state.Templates}
-              placeholder={"Nhập nội dung sms"}
-              // error={errors.title}
-              onChange={e => this.onChange("Templates", e.target.value)}
-            // rows="5"
-            />
+              <TextFieldGroup
+                field="Templates"
+                label="Nhập nội dung sms"
+                value={this.state.Templates}
+                placeholder={"Nhập nội dung sms"}
+                // error={errors.title}
+                onChange={e => this.onChange("Templates", e.target.value)}
+              // rows="5"
+              />
 
-            {/* {
+              {/* {
               action == 'new' ? "" : <div>
                 <label style={styles.flexLabel} htmlFor="tag">Status:</label>
                 <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
@@ -415,28 +419,39 @@ class Users extends Component {
                 </select>
               </div>
             } */}
-          </ModalBody>
-          <ModalFooter>
-            <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-            <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
-          </ModalFooter>
-        </Modal>
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+            </ModalFooter>
+          </Modal>
 
-        <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-          <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
-          <ModalBody>
-            <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
-          </ModalBody>
-          <ModalFooter>
-            <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-            <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
-          </ModalFooter>
-        </Modal>
+          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalBody>
+              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+            </ModalFooter>
+          </Modal>
+        </div>
+      );
+    }
+    return (
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
-
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   pagination: {

@@ -30,6 +30,8 @@ import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -61,11 +63,13 @@ class Users extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      isLoading: true
+      isLoading: false,
+      arrTypeRequest: []
     };
   }
   async componentDidMount() {
-    this.getData()
+    this.getData();
+    this.getTypeRequestData();
 
     let arr = JSON.parse(localStorage.getItem('url'));
 
@@ -75,6 +79,18 @@ class Users extends Component {
           window.location.href = '#/'
         }
       }
+    }
+  }
+
+  async getTypeRequestData() {
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.TYPE_REQUEST_LIST,
+      method: 'POST'
+    });
+
+    if (res.data.is_success) {
+      this.setState({ arrTypeRequest: res.data.data })
     }
   }
 
@@ -106,19 +122,20 @@ class Users extends Component {
       url: Constants.CUS_RES_LIST,
       method: 'POST'
     });
-    console.log(res.data.is_success)
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    if (res.data.is_success) {
+      this.pagination(res.data.data);
+      this.setState({ dataApi: res.data.data });
 
-    let active = 0
+      let active = 0
 
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
+      res.data.data.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
 
-    this.setState({ isLoading: false, totalActive: active });
+      this.setState({ isLoading: false, totalActive: active });
+    }
   }
 
   searchKey(key) {
@@ -297,110 +314,110 @@ class Users extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, indexPage } = this.state;
-
-    return (
-      <div className="animated fadeIn">
-        <Row>
-          <Col>
-            <p style={styles.success}>{this.state.updated}</p>
-            <p style={styles.danger}>{this.state.deleted}</p>
-            <Card>
-              <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách nội dung chương trình khuyến mãi (Page: {this.state.indexPage + 1}))
-                <div style={styles.tags}>
-                  {/* <div>
+    const { data, action, arrPagination, indexPage, arrTypeRequest } = this.state;
+    if (!this.state.isLoading) {
+      return (
+        <div className="animated fadeIn">
+          <Row>
+            <Col>
+              <p style={styles.success}>{this.state.updated}</p>
+              <p style={styles.danger}>{this.state.deleted}</p>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify"></i> Danh sách nội dung chương trình khuyến mãi (Page: {this.state.indexPage + 1}))
+                  <div style={styles.tags}>
+                    {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                  <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
-                  {/* </div> */}
-                </div>
-              </CardHeader>
-              <CardBody>
+                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
+                    {/* </div> */}
+                  </div>
+                </CardHeader>
+                <CardBody>
 
-                <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">STT.</th>
-                      <th className="text-center">Tên</th>
-                      <th className="text-center">Số điện thoại</th>
-                      <th className="text-center">Loại</th>
-                      <th className="text-center">Ngày tạo</th>
-                      <th className="text-center">#</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                    {
-                      data != undefined ?
-                        data.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.UserName}</td>
-                              <td className="text-center">{item.Phone}</td>
-                              <td className="text-center">{item.Type}</td>
-                              <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                              </td>
-                              <td className="text-center">
-                                {/* <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                    <thead className="thead-light">
+                      <tr>
+                        <th className="text-center">STT.</th>
+                        <th className="text-center">Tên</th>
+                        <th className="text-center">Số điện thoại</th>
+                        <th className="text-center">Loại</th>
+                        <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">#</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                      {
+                        data != undefined ?
+                          data.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.UserName}</td>
+                                <td className="text-center">{item.Phone}</td>
+                                <td className="text-center">{item.Type}</td>
+                                <td className="text-center">
+                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  {/* <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                   <CIcon name="cilPencil" />
                                 </CButton>{' '} */}
-                                <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                  <CIcon name="cilTrash" />
-                                </CButton>
-                              </td>
-                            </tr>
+                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                    <CIcon name="cilTrash" />
+                                  </CButton>
+                                </td>
+                              </tr>
+                            );
+                          }) : ""
+                      }
+                    </tbody>
+                  </table>
+                </CardBody>
+              </Card>
+              {
+                arrPagination.length == 1 ? "" :
+                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                    <tr style={styles.row}>
+                      {
+                        arrPagination.map((item, i) => {
+                          return (
+                            <td>
+                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
+                            </td>
                           );
-                        }) : ""
-                    }
-                  </tbody>
-                </table>
-              </CardBody>
-            </Card>
-            {
-              arrPagination.length == 1 ? "" :
-                <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                  <tr style={styles.row}>
-                    {
-                      arrPagination.map((item, i) => {
-                        return (
-                          <td>
-                            <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                          </td>
-                        );
-                      })
-                    }
-                  </tr>
-                </div>
-            }
-          </Col>
-        </Row>
+                        })
+                      }
+                    </tr>
+                  </div>
+              }
+            </Col>
+          </Row>
 
-        <Modal isOpen={this.state.modalCom} className={this.props.className}>
-          <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
-          <ModalBody>
-            <TextFieldGroup
-              field="UserName"
-              label="Tên đăng nhập"
-              value={this.state.Subject}
-              placeholder={"Tên đăng nhập"}
-              // error={errors.title}
-              onChange={e => this.onChange("UserName", e.target.value)}
-            // rows="5"
-            />
+          <Modal isOpen={this.state.modalCom} className={this.props.className}>
+            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+            <ModalBody>
+              <TextFieldGroup
+                field="UserName"
+                label="Tên đăng nhập"
+                value={this.state.Subject}
+                placeholder={"Tên đăng nhập"}
+                // error={errors.title}
+                onChange={e => this.onChange("UserName", e.target.value)}
+              // rows="5"
+              />
 
-            <TextFieldGroup
-              field="Phone"
-              label="Số điện thoại"
-              value={this.state.Phone}
-              placeholder={"Số điện thoại"}
-              // error={errors.title}
-              onChange={e => this.onChange("Phone", e.target.value)}
-            // rows="5"
-            />
+              <TextFieldGroup
+                field="Phone"
+                label="Số điện thoại"
+                value={this.state.Phone}
+                placeholder={"Số điện thoại"}
+                // error={errors.title}
+                onChange={e => this.onChange("Phone", e.target.value)}
+              // rows="5"
+              />
 
-            <TextFieldGroup
+              {/* <TextFieldGroup
               field="Type"
               label="Loại"
               value={this.state.Type}
@@ -408,9 +425,28 @@ class Users extends Component {
               // error={errors.title}
               onChange={e => this.onChange("Type", e.target.value)}
             // rows="5"
-            />
+            /> */}
 
-            {/* {
+              <label htmlFor="tag">Chọn gói sản phẩm:    </label>
+              <CSelect onChange={async e => {
+                this.setState({ Type: e.target.value });
+              }}>
+                {
+                  arrTypeRequest.map((item, i) => {
+                    if (item.Value == this.state.Type) {
+                      return (
+                        <option selected value={item.Value}>{item.Value}</option>
+                      );
+                    } else {
+                      return (
+                        <option value={item.Value}>{item.Value}</option>
+                      );
+                    }
+                  })
+                }
+              </CSelect>
+
+              {/* {
               action == 'new' ? "" : <div>
                 <label style={styles.flexLabel} htmlFor="tag">Status:</label>
                 <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
@@ -421,28 +457,41 @@ class Users extends Component {
                 </select>
               </div>
             } */}
-          </ModalBody>
-          <ModalFooter>
-            <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-            <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
-          </ModalFooter>
-        </Modal>
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+            </ModalFooter>
+          </Modal>
 
-        <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-          <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
-          <ModalBody>
-            <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
-          </ModalBody>
-          <ModalFooter>
-            <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-            <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
-          </ModalFooter>
-        </Modal>
+          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalBody>
+              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+            </ModalFooter>
+          </Modal>
+        </div>
+      );
+    }
+
+    return (
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
 
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   pagination: {

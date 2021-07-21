@@ -31,6 +31,7 @@ const PluginUserTable = React.lazy(() => import('./views/base/tables/AI_Skin/Plu
 const RewardInfomation = React.lazy(() => import('./views/base/tables/AI_Skin/RewardInfomation'));
 const ListFeatureOfCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ListFeatureOfCustomer'));
 const CusRequest = React.lazy(() => import('./views/base/tables/AI_Skin/CustomerRequestTable'));
+const TypeRequest = React.lazy(() => import('./views/base/tables/AI_Skin/TypeRequestModel'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -65,6 +66,7 @@ const routes = [
   { path: '/reward_info', name: 'REWARD_INFO', component: RewardInfomation },
   { path: '/feature_customer', name: 'REWARD_INFO', component: ListFeatureOfCustomer },
   { path: '/cus_request', name: 'REWARD_INFO', component: CusRequest },
+  { path: '/type_request', name: 'REWARD_INFO', component: TypeRequest },
 ];
 
 export default routes;

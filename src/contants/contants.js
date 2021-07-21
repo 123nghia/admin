@@ -156,4 +156,9 @@ export default {
   "REWARD_TRANS_UPDATE" : "/api/update-reward-trans",
   "REWARD_TRANS_DELETE" : "/api/delete-reward-trans",
 
+  "TYPE_REQUEST_LIST" : "/api/list-type-request",
+  "TYPE_REQUEST_ADD" : "/api/add-type-request",
+  "TYPE_REQUEST_UPDATE" : "/api/update-type-request",
+  "TYPE_REQUEST_DELETE" : "/api/delete-type-request",
+
 };

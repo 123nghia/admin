@@ -106,7 +106,7 @@ class Users extends Component {
         company_id: company_id
       }
     });
-    this.setState({ current_slug: resCom.data.data.Slug })
+    this.setState({ current_slug: resCom.data.data == null ? "" : resCom.data.data.Slug })
     return resCom.data.data == null ? "" : resCom.data.data.Name;
   }
 

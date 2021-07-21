@@ -34,6 +34,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../../../contants/contants";
 import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -83,7 +85,8 @@ class ListFeatureOfCustomer extends Component {
       arrTotalPackage: [],
       isChange: true,
       currentPassword: '',
-      current_package: ''
+      current_package: '',
+      isLoading: false
     };
   }
   async componentDidMount() {
@@ -135,7 +138,7 @@ class ListFeatureOfCustomer extends Component {
 
     await this.onView(val.Name, val.Company_Id, val.Phone);
 
-    this.setState({ dataApi: res.data.data, data: val, currentPassword: val.Password });
+    this.setState({ dataApi: res.data.data, data: val, currentPassword: val.Password, isLoading: false });
   }
 
   onChange(key, val) {
@@ -296,99 +299,112 @@ class ListFeatureOfCustomer extends Component {
     const { data, link_shop, link_recommand, link_sku, role, viewingUser, communities, action, arrPagination,
       indexPage, arrTotalPackage, company_name, current_package, phone_number, isChange, currentPassword } = this.state;
 
+    if (!this.state.isLoading) {
+
+      return (
+        <div className="animated fadeIn">
+          <Card style={{ padding: 15 }}>
+            <CardHeader closeButton>
+              <CModalTitle>Danh sách đơn hàng</CModalTitle>
+            </CardHeader>
+            <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+              <thead className="thead-light">
+                <tr>
+                  <th className="text-center">STT.</th>
+                  <th className="text-center">Tên Gói</th>
+                  <th className="text-center">Số lượng tính năng</th>
+                  <th className="text-center">Gói</th>
+                  <th className="text-center">Ngày kích hoạt</th>
+                  <th className="text-center">Ngày hết hạn</th>
+                  <th className="text-center">Thời gian hết hạn</th>
+                  <th className="text-center">Trạng thái</th>
+                  <th className="text-center">#</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  arrTotalPackage == 0 ?
+                    <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
+                    <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
+
+                }
+                {
+                  arrTotalPackage != undefined ?
+                    arrTotalPackage.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <th className="text-center">{i + 1}</th>
+                          <th className="text-center">{item.Name}</th>
+                          <th className="text-center">{item.Array_Feature.length}</th>
+                          <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
+                          <th className="text-center">
+                            {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
+                          </th>
+                          <th className="text-center">
+                            {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
+                          </th>
+                          {
+                            item.Status == "1" ? <th className="text-center" style={
+                              this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
+                                this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                            }>
+                              {
+                                this.calDateLeft(item.End_Date, item.Active_Date)
+                              } ngày nữa
+                            </th> : <th className="text-center">-----</th>
+                          }
+                          <th className="text-center" >
+                            <CBadge color={this.getBadgeStatus(item.Status)}>
+                              {this.getStatus(item.Status)}
+                            </CBadge>
+                          </th>
+
+                          <td className="text-center">
+                            <CButton outline color="info" size="sm"
+                              onClick={async (e) => {
+                                this.setState({
+                                  arrDetailPackage: item.Array_Feature, current_package: item.Name
+                                })
+                              }}>
+                              <CIcon name="cil-magnifying-glass" />
+                            </CButton>
+                          </td>
+                        </tr>
+                      )
+                    }) : ""
+                }
+              </tbody>
+            </table>
+            <br />
+            <CardHeader closeButton>
+              <CModalTitle>Chi tiết tính năng ({current_package})</CModalTitle>
+            </CardHeader>
+            {
+              this.renderDetailPackage()
+            }
+            <CardFooter>
+              <CButton color="primary" onClick={() => {
+
+              }}>Hướng dẫn sử dụng</CButton>
+            </CardFooter>
+          </Card>
+        </div>
+      );
+    }
 
     return (
-      <div className="animated fadeIn">
-        <Card style={{ padding: 15 }}>
-          <CardHeader closeButton>
-            <CModalTitle>Danh sách đơn hàng</CModalTitle>
-          </CardHeader>
-          <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-            <thead className="thead-light">
-              <tr>
-                <th className="text-center">STT.</th>
-                <th className="text-center">Tên Gói</th>
-                <th className="text-center">Số lượng tính năng</th>
-                <th className="text-center">Gói</th>
-                <th className="text-center">Ngày kích hoạt</th>
-                <th className="text-center">Ngày hết hạn</th>
-                <th className="text-center">Thời gian hết hạn</th>
-                <th className="text-center">Trạng thái</th>
-                <th className="text-center">#</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                arrTotalPackage == 0 ?
-                  <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
-                  <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
-
-              }
-              {
-                arrTotalPackage != undefined ?
-                  arrTotalPackage.map((item, i) => {
-                    return (
-                      <tr key={i}>
-                        <th className="text-center">{i + 1}</th>
-                        <th className="text-center">{item.Name}</th>
-                        <th className="text-center">{item.Array_Feature.length}</th>
-                        <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
-                        <th className="text-center">
-                          {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
-                        </th>
-                        <th className="text-center">
-                          {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
-                        </th>
-                        {
-                          item.Status == "1" ? <th className="text-center" style={
-                            this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
-                              this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
-                          }>
-                            {
-                              this.calDateLeft(item.End_Date, item.Active_Date)
-                            } ngày nữa
-                          </th> : <th className="text-center">-----</th>
-                        }
-                        <th className="text-center" >
-                          <CBadge color={this.getBadgeStatus(item.Status)}>
-                            {this.getStatus(item.Status)}
-                          </CBadge>
-                        </th>
-
-                        <td className="text-center">
-                          <CButton outline color="info" size="sm"
-                            onClick={async (e) => {
-                              this.setState({
-                                arrDetailPackage: item.Array_Feature, current_package: item.Name
-                              })
-                            }}>
-                            <CIcon name="cil-magnifying-glass" />
-                          </CButton>
-                        </td>
-                      </tr>
-                    )
-                  }) : ""
-              }
-            </tbody>
-          </table>
-          <br />
-          <CardHeader closeButton>
-            <CModalTitle>Chi tiết tính năng ({current_package})</CModalTitle>
-          </CardHeader>
-          {
-            this.renderDetailPackage()
-          }
-          <CardFooter>
-            <CButton color="primary" onClick={() => {
-
-            }}>Hướng dẫn sử dụng</CButton>
-          </CardFooter>
-        </Card>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
-
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   datePicker: {

@@ -25,6 +25,8 @@ import Constants from "./../../../../contants/contants";
 import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import md5 from "md5";
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -59,7 +61,8 @@ class PluginCustomerManager extends Component {
       dataCompany: [],
       currentCompany: '',
       hidden: false,
-      type: localStorage.getItem('type')
+      type: localStorage.getItem('type'),
+      isLoading: false
     };
   }
   async componentDidMount() {
@@ -112,18 +115,21 @@ class PluginCustomerManager extends Component {
       url: Constants.LIST_FEATURE,
       method: 'POST',
     });
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
 
-    let active = 0
+    if (res.data.is_success) {
+      this.pagination(res.data.data);
+      this.setState({ dataApi: res.data.data });
 
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
+      let active = 0
 
-    this.setState({ isLoading: false, totalActive: active });
+      res.data.data.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
+
+      this.setState({ isLoading: false, totalActive: active });
+    }
   }
 
   searchKey() {
@@ -616,16 +622,18 @@ class PluginCustomerManager extends Component {
       );
     }
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   pagination: {

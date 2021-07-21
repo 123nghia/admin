@@ -92,6 +92,10 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Yêu cầu khách hàng',
       to: '/cus_request'
+    },{
+      _tag: 'CSidebarNavItem',
+      name: 'Quản lý loại yêu cầu',
+      to: '/type_request'
     }],
     role: ['ADMIN'],
   },
