@@ -141,11 +141,13 @@ export default {
   "PLUGIN_DELETE_ROLE" : "/api/plugin-delete-role",
 
   "CUS_RES_LIST" : "/api/list-customer-request",
+  "CUS_RES_LIST_COMPANY" : "/api/list-customer-request-for-company",
   "CUS_RES_ADD" : "/api/add-customer-request",
   "CUS_RES_UPDATE" : "/api/update-customer-request",
   "CUS_RES_DELETE" : "/api/delete-customer-request",
 
   "REWARD_INFO_LIST" : "/api/list-reward-info",
+  "REWARD_INFO_LIST_COMPANY" : "/api/list-reward-info-for-company",
   "REWARD_INFO_ADD" : "/api/add-reward-info",
   "REWARD_INFO_UPDATE" : "/api/update-reward-info",
   "REWARD_INFO_DELETE" : "/api/delete-reward-info",

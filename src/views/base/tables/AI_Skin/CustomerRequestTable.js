@@ -55,20 +55,29 @@ class Users extends Component {
       hidden: false,
       action: 'new',
       UserName: '',
+      FullName: '',
       Phone: '',
-      Type: '',
+      Company_Id: '',
+      Type: "0",
       Status: '',
       modalDelete: false,
       delete: null,
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      company_id: localStorage.getItem('user'),
       isLoading: false,
-      arrTypeRequest: []
+      arrTypeRequest: [],
+      type: localStorage.getItem('type')
     };
   }
   async componentDidMount() {
-    this.getData();
+    if (this.state.type == '0' || this.state.type == '1') {
+      this.getData();
+    } else {
+      this.getDataForCompany();
+    }
+
     this.getTypeRequestData();
 
     let arr = JSON.parse(localStorage.getItem('url'));
@@ -122,6 +131,47 @@ class Users extends Component {
       url: Constants.CUS_RES_LIST,
       method: 'POST'
     });
+    let val = res.data.data;
+    if (res.data.is_success) {
+      for (let i = 0; i < val.length; i++) {
+        const resCom = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.PLUGIN_LIST_COMPANY,
+          method: 'POST',
+          data: {
+            condition: {
+              _id: val[i].Company_Id
+            }
+          }
+        });
+        val[i].Com_Name = resCom.data.data.length == 0 ? "admin" : resCom.data.data[0].Name;
+      }
+
+      this.pagination(res.data.data);
+      this.setState({ dataApi: res.data.data });
+
+      let active = 0
+
+      res.data.data.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
+
+      this.setState({ isLoading: false, totalActive: active });
+    }
+  }
+
+  getDataForCompany = async () => {
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.CUS_RES_LIST_COMPANY,
+      method: 'POST',
+      data: {
+        Company_Id: JSON.parse(this.state.company_id).company_id
+      }
+    });
     if (res.data.is_success) {
       this.pagination(res.data.data);
       this.setState({ dataApi: res.data.data });
@@ -145,6 +195,7 @@ class Users extends Component {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.UserName.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.FullName.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
           val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
           d.push(val)
         }
@@ -177,8 +228,9 @@ class Users extends Component {
         modalCom: !this.state.modalCom,
         action: key,
         UserName: '',
+        FullName: '',
         Phone: '',
-        Type: ''
+        Type: "0"
       })
     }
   }
@@ -188,17 +240,19 @@ class Users extends Component {
   }
 
   async addRoles() {
-    const { UserName, Phone, Type } = this.state
+    const { UserName, Phone, Type, FullName } = this.state
 
     if (UserName == null || UserName == '' ||
-      Phone == null || Phone == '') {
+      Phone == null || Phone == '' || FullName == '') {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
       UserName: UserName,
+      FullName: FullName,
       Phone: Phone,
+      Company_Id: this.state.type == '0' || this.state.type == '1' ? null : JSON.parse(this.state.company_id).company_id,
       Type: Type
     }
 
@@ -211,7 +265,11 @@ class Users extends Component {
     });
 
     if (res.data.is_success == true) {
-      this.getData();
+      if (this.state.type == '0' || this.state.type == '1') {
+        this.getData();
+      } else {
+        this.getDataForCompany();
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert(res.data.message);
@@ -224,6 +282,7 @@ class Users extends Component {
       modalCom: !this.state.modalCom,
       action: "update",
       UserName: item.UserName,
+      FullName: item.FullName,
       Phone: item.Phone,
       Type: item.Type,
       id: item['_id'],
@@ -232,9 +291,9 @@ class Users extends Component {
   }
 
   async updateUser() {
-    const { UserName, Phone, Type, Status } = this.state
+    const { UserName, Phone, Type, FullName, Status } = this.state
     if (UserName == null || UserName == '' ||
-      Phone == null || Phone == '') {
+      Phone == null || Phone == '' || FullName == null || FullName == '') {
       alert("Please fill in all the requirements");
       return
 
@@ -242,6 +301,7 @@ class Users extends Component {
 
     const body = {
       UserName: UserName,
+      FullName: FullName,
       Phone: Phone,
       Type: Type,
       id: this.state.id,
@@ -257,7 +317,11 @@ class Users extends Component {
     });
 
     if (res.data.is_success == true) {
-      this.getData();
+      if (this.state.type == '0' || this.state.type == '1') {
+        this.getData();
+      } else {
+        this.getDataForCompany();
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert(res.data.message);
@@ -284,7 +348,11 @@ class Users extends Component {
     });
 
     if (res.data.is_success == true) {
-      this.getData();
+      if (this.state.type == '0' || this.state.type == '1') {
+        this.getData();
+      } else {
+        this.getDataForCompany();
+      }
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
       alert(res.data.message);
@@ -314,7 +382,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, indexPage, arrTypeRequest } = this.state;
+    const { data, action, arrPagination, indexPage, arrTypeRequest, type } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -324,7 +392,7 @@ class Users extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách nội dung chương trình khuyến mãi (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh sách request khách hàng(Page: {this.state.indexPage + 1}))
                   <div style={styles.tags}>
                     {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
@@ -339,8 +407,14 @@ class Users extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên</th>
+                        <th className="text-center">Tên đầy đủ</th>
                         <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Loại</th>
+                        {
+                          type == '0' || type == '1' ? <th className="text-center">Tạo bởi</th> : ""
+                        }
+                        {
+                          type == '0' || type == '1' ? <th className="text-center">Loại</th> : ""
+                        }
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">#</th>
                       </tr>
@@ -354,15 +428,21 @@ class Users extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
+                                <td className="text-center">{item.FullName}</td>
                                 <td className="text-center">{item.Phone}</td>
-                                <td className="text-center">{item.Type}</td>
+                                {
+                                  type == '0' || type == '1' ? <td className="text-center">{item.Com_Name}</td> : ""
+                                }
+                                {
+                                  type == '0' || type == '1' ? <td className="text-center">{item.Type}</td> : ""
+                                }
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
-                                  {/* <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                  <CIcon name="cilPencil" />
-                                </CButton>{' '} */}
+                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                    <CIcon name="cilPencil" />
+                                  </CButton>{' '}
                                   <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                     <CIcon name="cilTrash" />
                                   </CButton>
@@ -400,10 +480,20 @@ class Users extends Component {
               <TextFieldGroup
                 field="UserName"
                 label="Tên đăng nhập"
-                value={this.state.Subject}
+                value={this.state.UserName}
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={e => this.onChange("UserName", e.target.value)}
+              // rows="5"
+              />
+
+              <TextFieldGroup
+                field="FullName"
+                label="Tên đầy đủ"
+                value={this.state.FullName}
+                placeholder={"Tên đầy đủ"}
+                // error={errors.title}
+                onChange={e => this.onChange("FullName", e.target.value)}
               // rows="5"
               />
 
@@ -427,7 +517,7 @@ class Users extends Component {
             // rows="5"
             /> */}
 
-              <label htmlFor="tag">Chọn gói sản phẩm:    </label>
+              <label htmlFor="tag">Chọn loại khuyến mãi </label>
               <CSelect onChange={async e => {
                 this.setState({ Type: e.target.value });
               }}>

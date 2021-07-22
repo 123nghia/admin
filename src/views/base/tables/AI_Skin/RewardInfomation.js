@@ -63,11 +63,17 @@ class Users extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      isLoading: false
+      isLoading: false,
+      company_id: localStorage.getItem('user'),
+      type: localStorage.getItem('type')
     };
   }
   async componentDidMount() {
-    this.getData()
+    if(this.state.type == '0' || this.state.type == '1'){
+      this.getData();
+    } else {
+      this.getDataForCompany();
+    }
 
     let arr = JSON.parse(localStorage.getItem('url'));
 
@@ -114,6 +120,31 @@ class Users extends Component {
 
     let active = 0
 
+    res.data.data.map(val => {
+      if (val.Status == "Actived") {
+        active = active + 1
+      }
+    })
+
+    this.setState({ isLoading: false, totalActive: active });
+  }
+
+  getDataForCompany = async () => {
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.REWARD_INFO_LIST_COMPANY,
+      method: 'POST',
+      data: {
+        Company_Id: JSON.parse(this.state.company_id).company_id
+      }
+    });
+
+    this.pagination(res.data.data);
+    this.setState({ dataApi: res.data.data });
+
+    let active = 0
+    console.log(res.data)
     res.data.data.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
@@ -185,6 +216,7 @@ class Users extends Component {
     const body = {
       Subject: Subject,
       Content: Content,
+      Company_Id: this.state.type == '0' || this.state.type == '1' ? null : JSON.parse(this.state.company_id).company_id,
       Templates: Templates
     }
 
@@ -197,7 +229,11 @@ class Users extends Component {
     });
 
     if (res.data.is_success == true) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData();
+      } else {
+        this.getDataForCompany();
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert(res.data.message);
@@ -244,7 +280,11 @@ class Users extends Component {
     });
 
     if (res.data.is_success == true) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData();
+      } else {
+        this.getDataForCompany();
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert(res.data.message);
@@ -271,7 +311,11 @@ class Users extends Component {
     });
 
     if (res.data.is_success == true) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData();
+      } else {
+        this.getDataForCompany();
+      }
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
       alert(res.data.message);

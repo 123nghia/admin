@@ -90,14 +90,14 @@ const _nav = [
       to: '/reward_info'
     },{
       _tag: 'CSidebarNavItem',
-      name: 'Yêu cầu khách hàng',
+      name: 'Danh sách nhận quà',
       to: '/cus_request'
     },{
       _tag: 'CSidebarNavItem',
       name: 'Quản lý loại yêu cầu',
       to: '/type_request'
     }],
-    role: ['ADMIN'],
+    role: ['ADMIN', 'COMPANY'],
   },
 
   {

@@ -34,6 +34,8 @@ import Constants from "./../../contants/contants";
 import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -81,7 +83,8 @@ class Users extends Component {
       current_slug: '',
       arrTotalPackage: [],
       isChange: true,
-      currentPassword: ''
+      currentPassword: '',
+      isLoading: false
     };
   }
   async componentDidMount() {
@@ -131,7 +134,7 @@ class Users extends Component {
     let val = res.data.data
     val.com_name = await this.getCompanyName(val.Company_Id)
 
-    this.setState({ dataApi: res.data.data, data: val, currentPassword: val.Password });
+    this.setState({ dataApi: res.data.data, data: val, currentPassword: val.Password, isLoading: false });
   }
 
   onChange(key, val) {
@@ -292,227 +295,239 @@ class Users extends Component {
     const { data, link_shop, link_recommand, link_sku, role, viewingUser, communities, action, arrPagination,
       indexPage, arrTotalPackage, company_name, current_package, phone_number, isChange, currentPassword } = this.state;
 
+    if (!this.state.isLoading) {
+      return (
+        <div className="animated fadeIn">
+          <Row>
+            <Col>
+              <p style={styles.success}>{this.state.updated}</p>
+              <p style={styles.danger}>{this.state.deleted}</p>
+              <Card>
+                <CardHeader>
+                  THÔNG TIN TÀI KHOẢN
+                </CardHeader>
+                <CardBody>
+                  <CRow>
+                    <CCol sm="12" lg="12">
+                      <CRow>
+                        <CCol sm="12" lg="6">
+                          <CLabel><strong>Quản lý tài khoản</strong></CLabel>
+                        </CCol>
+                        {
+                          role == 'ADMIN' || role == 'SALE' ? "" :
+                            <CCol sm="12" lg="6">
+                              <CTooltip content="Xem chi tiết đơn hàng">
+                                <CButton outline color="info" size="sm" onClick={async (e) => {
+                                  await this.onView(data.Name, data.Company_Id, data.Phone)
+                                }}>
+                                  <CIcon name="cil-magnifying-glass" /> Chi tiết các đơn hàng đã mua
+                                </CButton>
+                              </CTooltip>
+                            </CCol>
+                        }
+                      </CRow>
+                      <CRow>
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Tên</CLabel>
+                            <Input style={styles.searchInput} value={data.Name} />
+                          </div>
+                        </CCol>
+
+                        <CCol sm="12" lg="12">
+                          <CLabel>Email</CLabel>
+                          <Input style={styles.searchInput} value={data.Email} />
+                        </CCol>
+
+                        <CCol sm="12" lg="12">
+                          <CLabel>Số điện thoại</CLabel>
+                          <Input style={styles.searchInput} value={data.Phone} />
+                        </CCol>
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Giới tính</CLabel>
+                            <Input style={styles.searchInput} value={data.Gender} />
+                          </div>
+                        </CCol>
+
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Địa chỉ</CLabel>
+                            <Input style={styles.searchInput} value={data.Address} />
+                          </div>
+                        </CCol>
+
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Tên công ty</CLabel>
+                            <Input style={styles.searchInput} value={data.com_name} />
+                          </div>
+                        </CCol>
+
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Quyền hạn</CLabel>
+                            <Input style={styles.searchInput} value={role} />
+                          </div>
+                        </CCol>
+
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Tên đăng nhập</CLabel>
+                            <Input style={styles.searchInput} value={data.UserName} />
+                          </div>
+                        </CCol>
+
+                        <CCol sm="12" lg="12">
+                          <CLabel>Mật khẩu</CLabel>
+                          <CRow>
+                            <CCol sm="9" lg="9">
+                              <Input type={"password"} style={styles.searchInput} readOnly={isChange} onChange={(e) => { this.setState({ currentPassword: e.target.value }) }} value={currentPassword} />
+                            </CCol>
+                            <CCol sm="3" lg="3">
+                              {
+                                isChange ?
+                                  <Button color="primary" onClick={e => {
+                                    this.setState({ isChange: false })
+                                  }}>Thay đổi</Button> :
+                                  <Button color="primary" onClick={async e => {
+                                    await this.updatePassword(data._id, currentPassword);
+                                  }}>Cập nhật</Button>
+                              }
+
+                            </CCol>
+                          </CRow>
+                        </CCol>
+
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Trạng thái</CLabel>
+                            <Input style={styles.searchInput} onChange={(e) => { }} value={data.Status} />
+                          </div>
+                        </CCol>
+                      </CRow>
+                    </CCol>
+                  </CRow>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+
+          <CModal
+            show={this.state.toggleView}
+            onClose={() => { this.setState({ toggleView: !this.state.toggleView }) }}
+            size="xl"
+          >
+            <CModalHeader closeButton>
+              <CModalTitle>Danh sách đơn hàng của {company_name}</CModalTitle>
+              <CModalTitle style={{ marginLeft: 50 }}>Số điện thoại: {phone_number}</CModalTitle>
+            </CModalHeader>
+
+            <CModalBody>
+              <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <thead className="thead-light">
+                  <tr>
+                    <th className="text-center">STT.</th>
+                    <th className="text-center">Tên Gói</th>
+                    <th className="text-center">Số lượng tính năng</th>
+                    <th className="text-center">Gói</th>
+                    <th className="text-center">Ngày kích hoạt</th>
+                    <th className="text-center">Ngày hết hạn</th>
+                    <th className="text-center">Thời gian hết hạn</th>
+                    <th className="text-center">Trạng thái</th>
+                    <th className="text-center">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    arrTotalPackage == 0 ?
+                      <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
+                      <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
+
+                  }
+                  {
+                    arrTotalPackage != undefined ?
+                      arrTotalPackage.map((item, i) => {
+                        return (
+                          <tr key={i}>
+                            <th className="text-center">{i + 1}</th>
+                            <th className="text-center">{item.Name}</th>
+                            <th className="text-center">{item.Array_Feature.length}</th>
+                            <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
+                            <th className="text-center">
+                              {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
+                            </th>
+                            <th className="text-center">
+                              {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
+                            </th>
+                            {
+                              item.Status == "1" ? <th className="text-center" style={
+                                this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
+                                  this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                              }>
+                                {
+                                  this.calDateLeft(item.End_Date, item.Active_Date)
+                                } ngày nữa
+                              </th> : <th className="text-center">-----</th>
+                            }
+                            <th className="text-center" >
+                              <CBadge color={this.getBadgeStatus(item.Status)}>
+                                {this.getStatus(item.Status)}
+                              </CBadge>
+                            </th>
+
+                            <td className="text-center">
+                              <CButton outline color="info" size="sm"
+                                onClick={async (e) => {
+                                  this.setState({
+                                    arrDetailPackage: item.Array_Feature, current_package: item.Name
+                                  })
+                                }}>
+                                <CIcon name="cil-magnifying-glass" />
+                              </CButton>
+                            </td>
+                          </tr>
+                        )
+                      }) : ""
+                  }
+                </tbody>
+              </table>
+              <br />
+              <CModalHeader>
+                <CModalTitle>Chi tiết tính năng ({current_package})</CModalTitle>
+              </CModalHeader>
+              {
+                this.renderDetailPackage()
+              }
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => { this.setState({ toggleView: !this.state.toggleView }) }}>Đóng</CButton>
+            </CModalFooter>
+          </CModal>
+
+        </div>
+      );
+    }
 
     return (
-      <div className="animated fadeIn">
-        <Row>
-          <Col>
-            <p style={styles.success}>{this.state.updated}</p>
-            <p style={styles.danger}>{this.state.deleted}</p>
-            <Card>
-              <CardHeader>
-                THÔNG TIN TÀI KHOẢN
-              </CardHeader>
-              <CardBody>
-                <CRow>
-                  <CCol sm="12" lg="12">
-                    <CRow>
-                      <CCol sm="12" lg="6">
-                        <CLabel><strong>Quản lý tài khoản</strong></CLabel>
-                      </CCol>
-                      {
-                        role == 'ADMIN' || role == 'SALE' ? "" :
-                          <CCol sm="12" lg="6">
-                            <CTooltip content="Xem chi tiết đơn hàng">
-                              <CButton outline color="info" size="sm" onClick={async (e) => {
-                                await this.onView(data.Name, data.Company_Id, data.Phone)
-                              }}>
-                                <CIcon name="cil-magnifying-glass" /> Chi tiết các đơn hàng đã mua
-                              </CButton>
-                            </CTooltip>
-                          </CCol>
-                      }
-                    </CRow>
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <div>
-                          <CLabel>Tên</CLabel>
-                          <Input style={styles.searchInput} value={data.Name} />
-                        </div>
-                      </CCol>
-
-                      <CCol sm="12" lg="12">
-                        <CLabel>Email</CLabel>
-                        <Input style={styles.searchInput} value={data.Email} />
-                      </CCol>
-
-                      <CCol sm="12" lg="12">
-                        <CLabel>Số điện thoại</CLabel>
-                        <Input style={styles.searchInput} value={data.Phone} />
-                      </CCol>
-
-                      <CCol sm="12" lg="12">
-                        <div>
-                          <CLabel>Giới tính</CLabel>
-                          <Input style={styles.searchInput} value={data.Gender} />
-                        </div>
-                      </CCol>
-
-
-                      <CCol sm="12" lg="12">
-                        <div>
-                          <CLabel>Địa chỉ</CLabel>
-                          <Input style={styles.searchInput} value={data.Address} />
-                        </div>
-                      </CCol>
-
-
-                      <CCol sm="12" lg="12">
-                        <div>
-                          <CLabel>Tên công ty</CLabel>
-                          <Input style={styles.searchInput} value={data.com_name} />
-                        </div>
-                      </CCol>
-
-
-                      <CCol sm="12" lg="12">
-                        <div>
-                          <CLabel>Quyền hạn</CLabel>
-                          <Input style={styles.searchInput} value={role} />
-                        </div>
-                      </CCol>
-
-
-                      <CCol sm="12" lg="12">
-                        <div>
-                          <CLabel>Tên đăng nhập</CLabel>
-                          <Input style={styles.searchInput} value={data.UserName} />
-                        </div>
-                      </CCol>
-
-                      <CCol sm="12" lg="12">
-                        <CLabel>Mật khẩu</CLabel>
-                        <CRow>
-                          <CCol sm="9" lg="9">
-                            <Input type={"password"} style={styles.searchInput} readOnly={isChange} onChange={(e) => { this.setState({ currentPassword: e.target.value }) }} value={currentPassword} />
-                          </CCol>
-                          <CCol sm="3" lg="3">
-                            {
-                              isChange ?
-                                <Button color="primary" onClick={e => {
-                                  this.setState({ isChange: false })
-                                }}>Thay đổi</Button> :
-                                <Button color="primary" onClick={async e => {
-                                  await this.updatePassword(data._id, currentPassword);
-                                }}>Cập nhật</Button>
-                            }
-
-                          </CCol>
-                        </CRow>
-                      </CCol>
-
-
-                      <CCol sm="12" lg="12">
-                        <div>
-                          <CLabel>Trạng thái</CLabel>
-                          <Input style={styles.searchInput} onChange={(e) => { }} value={data.Status} />
-                        </div>
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-
-        <CModal
-          show={this.state.toggleView}
-          onClose={() => { this.setState({ toggleView: !this.state.toggleView }) }}
-          size="xl"
-        >
-          <CModalHeader closeButton>
-            <CModalTitle>Danh sách đơn hàng của {company_name}</CModalTitle>
-            <CModalTitle style={{ marginLeft: 50 }}>Số điện thoại: {phone_number}</CModalTitle>
-          </CModalHeader>
-
-          <CModalBody>
-            <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-              <thead className="thead-light">
-                <tr>
-                  <th className="text-center">STT.</th>
-                  <th className="text-center">Tên Gói</th>
-                  <th className="text-center">Số lượng tính năng</th>
-                  <th className="text-center">Gói</th>
-                  <th className="text-center">Ngày kích hoạt</th>
-                  <th className="text-center">Ngày hết hạn</th>
-                  <th className="text-center">Thời gian hết hạn</th>
-                  <th className="text-center">Trạng thái</th>
-                  <th className="text-center">#</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  arrTotalPackage == 0 ?
-                    <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
-                    <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
-
-                }
-                {
-                  arrTotalPackage != undefined ?
-                    arrTotalPackage.map((item, i) => {
-                      return (
-                        <tr key={i}>
-                          <th className="text-center">{i + 1}</th>
-                          <th className="text-center">{item.Name}</th>
-                          <th className="text-center">{item.Array_Feature.length}</th>
-                          <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
-                          <th className="text-center">
-                            {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
-                          </th>
-                          <th className="text-center">
-                            {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
-                          </th>
-                          {
-                            item.Status == "1" ? <th className="text-center" style={
-                              this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
-                                this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
-                            }>
-                              {
-                                this.calDateLeft(item.End_Date, item.Active_Date)
-                              } ngày nữa
-                            </th> : <th className="text-center">-----</th>
-                          }
-                          <th className="text-center" >
-                            <CBadge color={this.getBadgeStatus(item.Status)}>
-                              {this.getStatus(item.Status)}
-                            </CBadge>
-                          </th>
-
-                          <td className="text-center">
-                            <CButton outline color="info" size="sm"
-                              onClick={async (e) => {
-                                this.setState({
-                                  arrDetailPackage: item.Array_Feature, current_package: item.Name
-                                })
-                              }}>
-                              <CIcon name="cil-magnifying-glass" />
-                            </CButton>
-                          </td>
-                        </tr>
-                      )
-                    }) : ""
-                }
-              </tbody>
-            </table>
-            <br />
-            <CModalHeader>
-              <CModalTitle>Chi tiết tính năng ({current_package})</CModalTitle>
-            </CModalHeader>
-            {
-              this.renderDetailPackage()
-            }
-          </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => { this.setState({ toggleView: !this.state.toggleView }) }}>Đóng</CButton>
-          </CModalFooter>
-        </CModal>
-
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
-
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   datePicker: {

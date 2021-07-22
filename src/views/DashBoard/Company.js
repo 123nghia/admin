@@ -37,6 +37,8 @@ import Constants from "./../../contants/contants";
 import MainChartExample from '../charts/MainChartExample.js'
 import { Nav, NavItem, NavLink } from 'reactstrap';
 import ReactTooltip from 'react-tooltip';
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 let headers = new Headers();
@@ -56,6 +58,7 @@ class Company extends Component {
       array_feature: [],
       company_id: localStorage.getItem('user'),
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      isLoading: false
     };
   }
 
@@ -74,10 +77,12 @@ class Company extends Component {
         company_id: JSON.parse(this.state.company_id).company_id
       }
     });
+    console.log(JSON.parse(this.state.company_id))
     this.setState({ company_name: resCom.data.data.Name, company_slug: resCom.data.data.Slug, })
   }
 
   async getPackageData() {
+    this.setState({ isLoading: true })
     const resPackage = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PLUGIN_ORDER_BY_ID,
@@ -87,104 +92,80 @@ class Company extends Component {
     let val = resPackage.data.data.result;
     let arrTemp = [];
     let arrCheckID = [];
-    for(let i = 0; i < val.length; i++){
+    for (let i = 0; i < val.length; i++) {
       let arrFeat = val[i].Array_Feature;
-      for(let y = 0; y < arrFeat.length; y++){
-        if(arrCheckID.includes(arrFeat[y]._id) == false){
+      for (let y = 0; y < arrFeat.length; y++) {
+        if (arrCheckID.includes(arrFeat[y]._id) == false) {
           arrTemp.push(arrFeat[y]);
         }
         arrCheckID.push(arrFeat[y]._id)
       }
     }
 
-    this.setState({ array_feature: val.length > 0 ? arrTemp : [] })
+    this.setState({ array_feature: val.length > 0 ? arrTemp : [], isLoading: false })
     // return resPackage.data.data.Name;
   }
 
   render() {
     const { array_feature, company_slug } = this.state;
+    if (!this.state.isLoading) {
+      return (
+        <div className="container">
+          <div class="title" className="h3" style={{ alignSelf: 'center' }}>
+            DANH SÁCH QUẢN LÝ (ADMIN)
+          </div>
+          <CRow>
+            {
+              array_feature != undefined ?
+                array_feature.map((item, i) => {
+                  if (item.Type == "0") {
+                    return (
+                      <CCol lg="3" sm="12" xm="12">
+                        <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer", margin: 5 }} onClick={() => { window.location.href = item.Value + "#" + "/" + company_slug }}>
+                          <div style={styles.feature}>
+                            <div style={{ height: '200px', width: '100%', 'marginTop': '24px' }}>
+                              <img width="80" height="80" src={item.Image} />
+                            </div>
+                            <div className="feature__body">
+                              <center>
+                                <div style={{ width: '80%', height: 50, alignItems: 'center', fontSize: 15, fontWeight: 'bold' }}>{item.Key}</div>
+
+                                <div style={{ width: '80', height: 70, fontSize: 10 }}>
+                                  Nhấp vào đây để chuyển hướng đến {item.Value + company_slug}
+                                </div>
+                              </center>
+                            </div>
+                          </div>
+                        </a>
+                        <ReactTooltip />
+                      </CCol>
+                    );
+                  }
+                }) : ""
+            }
+          </CRow>
+          {
+            array_feature == undefined || array_feature.length == 0 ?
+              <div>Bạn chưa có bất kì tính năng nào !!! Vui lòng liên hệ admin !!!</div> : ""
+          }
+        </div>
+      )
+    }
 
     return (
-      <div className="container">
-        {/* <div class="title" className="h3" style={{ alignSelf: 'center' }}>
-          DANH SÁCH CÁC DỊCH VỤ (CUSTOMER)
-        </div>
-        <CRow>
-          {
-            array_feature != undefined ?
-              array_feature.map((item, i) => {
-                if (item.Type == "1") {
-                  return (
-                    <CCol lg="3" sm="12" xm="12">
-                      <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer", margin: 5 }} onClick={() => { window.location.href = item.Value + company_slug }}>
-                        <div style={styles.feature}>
-                          <div style={{ height: '200px', width: '100%', 'marginTop': '24px' }}>
-                            <img width="80" height="80" src={item.Image} onError={() => {alert("Ok")}}/>
-                          </div>
-                          <div className="feature__body">
-                            <center>
-                              <div style={{ width: '80%', height: 50, alignItems: 'center', fontSize: 15, fontWeight: 'bold' }}>{item.Key}</div>
-
-                              <div style={{ width: '80', height: 70, fontSize: 10 }}>
-                                Nhấp vào đây để chuyển hướng đến {item.Value + company_slug}
-                              </div>
-                            </center>
-                          </div>
-                        </div>
-                      </a>
-                      <ReactTooltip />
-                    </CCol>
-                  );
-                }
-              }) : ""
-          }
-        </CRow>
-        {
-          array_feature == undefined || array_feature.length == 0 ?
-            <div>Bạn chưa có bất kì tính năng nào !!! Vui lòng liên hệ admin !!!</div> : ""
-        } */}
-
-        <div class="title" className="h3" style={{ alignSelf: 'center' }}>
-          DANH SÁCH QUẢN LÝ (ADMIN)
-        </div>
-        <CRow>
-          {
-            array_feature != undefined ?
-              array_feature.map((item, i) => {
-                if (item.Type == "0") {
-                  return (
-                    <CCol lg="3" sm="12" xm="12">
-                      <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer", margin: 5 }} onClick={() => { window.location.href = item.Value + "#" + "/" + company_slug }}>
-                        <div style={styles.feature}>
-                          <div style={{ height: '200px', width: '100%', 'marginTop': '24px' }}>
-                            <img width="80" height="80" src={item.Image} />
-                          </div>
-                          <div className="feature__body">
-                            <center>
-                              <div style={{ width: '80%', height: 50, alignItems: 'center', fontSize: 15, fontWeight: 'bold' }}>{item.Key}</div>
-
-                              <div style={{ width: '80', height: 70, fontSize: 10 }}>
-                                Nhấp vào đây để chuyển hướng đến {item.Value + company_slug}
-                              </div>
-                            </center>
-                          </div>
-                        </div>
-                      </a>
-                      <ReactTooltip />
-                    </CCol>
-                  );
-                }
-              }) : ""
-          }
-        </CRow>
-        {
-          array_feature == undefined || array_feature.length == 0 ?
-            <div>Bạn chưa có bất kì tính năng nào !!! Vui lòng liên hệ admin !!!</div> : ""
-        }
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
-    )
+    );
   }
 }
+
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   feature: {
