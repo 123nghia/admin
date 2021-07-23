@@ -112,7 +112,7 @@ class Company extends Component {
       return (
         <div className="container">
           <div class="title" className="h3" style={{ alignSelf: 'center' }}>
-            DANH SÁCH QUẢN LÝ (ADMIN)
+            Danh sách quản lý các tính năng Admin
           </div>
           <CRow>
             {
@@ -121,16 +121,16 @@ class Company extends Component {
                   if (item.Type == "0") {
                     return (
                       <CCol lg="3" sm="12" xm="12">
-                        <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer", margin: 5 }} onClick={() => { window.location.href = item.Value + "#" + "/" + company_slug }}>
+                        <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer", margin: 5 }} href={item.Value + "#" + "/" + company_slug} target="_blank">
                           <div style={styles.feature}>
                             <div style={{ height: '200px', width: '100%', 'marginTop': '24px' }}>
                               <img width="80" height="80" src={item.Image} />
                             </div>
                             <div className="feature__body">
                               <center>
-                                <div style={{ width: '80%', height: 50, alignItems: 'center', fontSize: 15, fontWeight: 'bold' }}>{item.Key}</div>
+                                <div style={{ width: '80%', height: 50, alignItems: 'center', fontSize: 17, fontWeight: 'bold' }}>{item.Key}</div>
 
-                                <div style={{ width: '80', height: 70, fontSize: 10 }}>
+                                <div style={{ width: '80', height: 70, fontSize: 12 }}>
                                   Nhấp vào đây để chuyển hướng đến {item.Value + company_slug}
                                 </div>
                               </center>
@@ -174,11 +174,12 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-    width: '100%',
+    width: '85%',
     height: 280,
     color: '#fff',
     padding: '10px',
-    background: '#123254',
+    border: '1px',
+    background: '#FF4F23',
     borderRadius: '10px',
     borderRadius: '10px'
 

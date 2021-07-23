@@ -29,6 +29,9 @@ import {
   CLabel
 } from '@coreui/react'
 
+
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
@@ -40,6 +43,14 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
 class PluginCreateOrder extends Component {
   constructor(props) {
     super(props);

@@ -69,6 +69,7 @@ class Users extends Component {
       hidden: true,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       role: localStorage.getItem('role'),
+      type: localStorage.getItem('type'),
       company_id: localStorage.getItem('user'),
       link_shop: true,
       data_link_shop: '',
@@ -292,7 +293,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, link_shop, link_recommand, link_sku, role, viewingUser, communities, action, arrPagination,
+    const { data, link_shop, link_recommand, link_sku, role, type, viewingUser, communities, action, arrPagination,
       indexPage, arrTotalPackage, company_name, current_package, phone_number, isChange, currentPassword } = this.state;
 
     if (!this.state.isLoading) {
@@ -314,7 +315,7 @@ class Users extends Component {
                           <CLabel><strong>Quản lý tài khoản</strong></CLabel>
                         </CCol>
                         {
-                          role == 'ADMIN' || role == 'SALE' ? "" :
+                          type == '0' || type == '1' ? "" :
                             <CCol sm="12" lg="6">
                               <CTooltip content="Xem chi tiết đơn hàng">
                                 <CButton outline color="info" size="sm" onClick={async (e) => {

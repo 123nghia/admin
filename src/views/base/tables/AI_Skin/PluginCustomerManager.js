@@ -26,6 +26,9 @@ import {
   CTooltip
 } from '@coreui/react'
 
+
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "./../../../../contants/contants";
 import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
@@ -37,6 +40,14 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
 class PluginCustomerManager extends Component {
   constructor(props) {
     super(props);
@@ -81,7 +92,8 @@ class PluginCustomerManager extends Component {
       province: [],
       current_province: '',
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      isLoading: false
+      isLoading: false,
+      hidden: false
     };
   }
   async componentDidMount() {
@@ -111,6 +123,17 @@ class PluginCustomerManager extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
+
+    if (arrTotal.length == 0) {
+      this.setState({
+        hidden: false
+      })
+    } else {
+      this.setState({
+        hidden: true
+      })
+    }
+
     this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
   }
 
@@ -539,6 +562,7 @@ class PluginCustomerManager extends Component {
   render() {
     const { data, key, viewingUser, communities, action, arrPagination, type, current_province,
       indexPage, arrTotalPackage, company_name, current_package, phone_number, province } = this.state;
+    const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -607,6 +631,7 @@ class PluginCustomerManager extends Component {
                       </tr>
                     </thead>
                     <tbody>
+                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -656,7 +681,12 @@ class PluginCustomerManager extends Component {
 
                 </CardBody>
               </Card>
-              {
+              <div style={{ float: 'right' }}>
+                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                }} />
+              </div>
+              {/* {
                 arrPagination.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
                     <tr style={styles.row}>
@@ -671,7 +701,7 @@ class PluginCustomerManager extends Component {
                       }
                     </tr>
                   </div>
-              }
+              } */}
 
             </Col>
           </Row>

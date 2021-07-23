@@ -26,6 +26,8 @@ import {
   CButton
 } from '@coreui/react'
 
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
@@ -36,7 +38,15 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-class Users extends Component {
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
+class CustomerRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -383,6 +393,7 @@ class Users extends Component {
 
   render() {
     const { data, action, arrPagination, indexPage, arrTypeRequest, type } = this.state;
+    const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -455,7 +466,12 @@ class Users extends Component {
                   </table>
                 </CardBody>
               </Card>
-              {
+              <div style={{ float: 'right' }}>
+                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                }} />
+              </div>
+              {/* {
                 arrPagination.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
                     <tr style={styles.row}>
@@ -470,7 +486,7 @@ class Users extends Component {
                       }
                     </tr>
                   </div>
-              }
+              } */}
             </Col>
           </Row>
 
@@ -666,4 +682,4 @@ const styles = {
   }
 }
 
-export default Users;
+export default CustomerRequest;

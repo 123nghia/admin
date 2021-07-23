@@ -8,28 +8,28 @@ const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Danh mục'],
-    role: ['ADMIN', 'COMPANY', 'SALE'],
+    role: ['0', '1', '2'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách tính năng',
     to: '/dashboard',
     icon: <CIcon name="cil-chartPie" customClasses="c-sidebar-nav-icon" />,
-    role: ['COMPANY'],
+    role: ['2'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Hồ sơ',
     to: '/profile',
     icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
-    role: ['ADMIN', 'COMPANY', 'SALE'],
+    role: ['0', '1', '2'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Tính năng đã đăng ký',
     to: '/feature_customer',
     icon: <CIcon name="cil-laptop" customClasses="c-sidebar-nav-icon" />,
-    role: ['COMPANY'],
+    role: ['2']
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -40,7 +40,7 @@ const _nav = [
       name: 'Danh sách quyền',
       to: '/role_manager',
     }],
-    role: ['ADMIN'],
+    role: ['0'],
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -55,7 +55,7 @@ const _nav = [
       name: 'Quản lý tính năng',
       to: '/feature',
     }],
-    role: ['ADMIN', 'SALE'],
+    role: ['0'],
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -66,7 +66,7 @@ const _nav = [
       name: 'Quản lý khách hàng',
       to: '/customer_manager',
     }],
-    role: ['ADMIN', 'SALE'],
+    role: ['0', '1'],
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -77,7 +77,7 @@ const _nav = [
       name: 'Danh sách Sale',
       to: '/saleAdmin',
     }],
-    role: ['ADMIN'],
+    role: ['0'],
   },
 
   {
@@ -97,7 +97,7 @@ const _nav = [
       name: 'Quản lý loại yêu cầu',
       to: '/type_request'
     }],
-    role: ['ADMIN', 'COMPANY'],
+    role: ['0', '1', '2'],
   },
 
   {
@@ -107,13 +107,13 @@ const _nav = [
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách đơn hàng',
-      to: '/list_order',
+      to: '/list_order'
     }, {
       _tag: 'CSidebarNavItem',
       name: 'Tạo đơn hàng',
       to: '/plugin_create_order',
     }],
-    role: ['ADMIN', 'SALE'],
+    role: ['0', '1'],
   }
 ]
 

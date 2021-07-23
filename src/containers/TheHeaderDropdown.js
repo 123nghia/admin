@@ -21,7 +21,7 @@ const TheHeaderDropdown = () => {
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
 
-          <div className="mr-2" style={{ fontSize: 20, color: 'red' }}><strong>{JSON.parse(localStorage.getItem('user')) == null || JSON.parse(localStorage.getItem('user')) == undefined ? "" : JSON.parse(localStorage.getItem('user')).username}</strong></div>
+          <div className="mr-2" style={{ fontSize: 20, color: 'orange', fontFamily: 'Myriad Pro Regular' }}><strong>{JSON.parse(localStorage.getItem('user')) == null || JSON.parse(localStorage.getItem('user')) == undefined ? "" : JSON.parse(localStorage.getItem('user')).username}</strong></div>
           <CImg
             src={'avatars/6.jpg'}
             className="c-avatar-img"

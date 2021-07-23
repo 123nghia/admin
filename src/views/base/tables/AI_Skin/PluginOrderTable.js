@@ -23,6 +23,8 @@ import {
   CTooltip
 } from '@coreui/react'
 
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "./../../../../contants/contants";
 import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
@@ -35,7 +37,15 @@ const auth = localStorage.getItem('auth');
 const user = localStorage.getItem('user');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-class PluginCustomerManager extends Component {
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
+class PluginOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -86,7 +96,7 @@ class PluginCustomerManager extends Component {
     };
   }
   async componentDidMount() {
-    if (this.state.role == 'ADMIN') {
+    if (this.state.type == '0') {
       await this.getData();
     } else {
       await this.getDataBySale()
@@ -150,7 +160,7 @@ class PluginCustomerManager extends Component {
 
     let val = res.data.data.result;
 
-    for(let i = 0; i < val.length; i++){
+    for (let i = 0; i < val.length; i++) {
       const name_sale = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.PLUGIN_GET_USER_BY_BODY,
@@ -185,7 +195,7 @@ class PluginCustomerManager extends Component {
 
     let val = res.data.data.result;
 
-    for(let i = 0; i < val.length; i++){
+    for (let i = 0; i < val.length; i++) {
       const name_sale = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.PLUGIN_GET_USER_BY_BODY,
@@ -664,6 +674,8 @@ class PluginCustomerManager extends Component {
     const { data, action, arrPagination, indexPage, currentSlug, confirmSlug, role, type,
       dataPackage, Company_Id, Package_Id, arrayChooseFeature, arrFeature,
       company_name, package_name, package_unit, package_key, package_time, dataPackage_All, current_status } = this.state;
+
+    const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -709,8 +721,8 @@ class PluginCustomerManager extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Mã công ty</th>
-                        <th className="text-center">Mã gói</th>
+                        <th className="text-center">Công ty</th>
+                        <th className="text-center">Gói tính năng</th>
                         <th className="text-center">Số lượng tính năng</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">Người tạo</th>
@@ -777,8 +789,8 @@ class PluginCustomerManager extends Component {
                                   </CTooltip>{' '}
                                   {
                                     type == '0' ? <CButton style={{ margin: 1 }} outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                                    <CIcon name="cilTrash" />
-                                                  </CButton> : ""
+                                      <CIcon name="cilTrash" />
+                                    </CButton> : ""
                                   }
                                 </td>
                               </tr>
@@ -790,7 +802,12 @@ class PluginCustomerManager extends Component {
 
                 </CardBody>
               </Card>
-              {
+              <div style={{ float: 'right' }}>
+                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                }} />
+              </div>
+              {/* {
                 arrPagination.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
                     <tr style={styles.row}>
@@ -805,7 +822,7 @@ class PluginCustomerManager extends Component {
                       }
                     </tr>
                   </div>
-              }
+              } */}
 
             </Col>
           </Row>
@@ -1045,4 +1062,4 @@ const styles = {
   }
 }
 
-export default PluginCustomerManager;
+export default PluginOrder;

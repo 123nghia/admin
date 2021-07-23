@@ -27,6 +27,8 @@ import {
   CTextarea
 } from '@coreui/react'
 
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
@@ -37,7 +39,15 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-class Users extends Component {
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
+class TypeRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -312,6 +322,7 @@ class Users extends Component {
 
   render() {
     const { data, action, arrPagination, indexPage } = this.state;
+    const { classes } = this.props;
     if(!this.state.isError){
       if (!this.state.isLoading) {
         return (
@@ -554,4 +565,4 @@ const styles = {
   }
 }
 
-export default Users;
+export default TypeRequest;
