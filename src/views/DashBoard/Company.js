@@ -77,7 +77,7 @@ class Company extends Component {
         company_id: JSON.parse(this.state.company_id).company_id
       }
     });
-    console.log(JSON.parse(this.state.company_id))
+
     this.setState({ company_name: resCom.data.data.Name, company_slug: resCom.data.data.Slug, })
   }
 

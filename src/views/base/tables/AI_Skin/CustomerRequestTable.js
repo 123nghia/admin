@@ -385,8 +385,8 @@ class CustomerRequest extends Component {
 
   getBadge_String(status) {
     switch (status) {
-      case '0': return 'danger'
-      case '1': return 'success'
+      case '0': return 'Chưa nhận quà'
+      case '1': return 'Đã nhận quà'
       default: return 'primary'
     }
   }
@@ -403,12 +403,12 @@ class CustomerRequest extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách request khách hàng(Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh sách nhận quà(Page: {this.state.indexPage + 1}))
                   <div style={styles.tags}>
-                    {/* <div>
-                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
-                    {/* </div> */}
+                    {/* {
+                      type == "2" ? "" :
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
+                    } */}
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -427,6 +427,7 @@ class CustomerRequest extends Component {
                           type == '0' || type == '1' ? <th className="text-center">Loại</th> : ""
                         }
                         <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -449,6 +450,11 @@ class CustomerRequest extends Component {
                                 }
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  <CBadge color={this.getBadge(item.Status)}>
+                                    {this.getBadge_String(item.Status)}
+                                  </CBadge>
                                 </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -552,17 +558,16 @@ class CustomerRequest extends Component {
                 }
               </CSelect>
 
-              {/* {
-              action == 'new' ? "" : <div>
-                <label style={styles.flexLabel} htmlFor="tag">Status:</label>
-                <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                  <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                  <option value={'Actived'}>Actived</option>
-                  <option value={'Locked'}>Locked</option>
-                  <option value={'Deactived'}>Deactived</option>
-                </select>
-              </div>
-            } */}
+              {
+                action == 'new' ? "" : <div>
+                  <label style={styles.flexLabel} htmlFor="tag">Status:</label>
+                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
+                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
+                    <option value={'0'}>Chưa nhận quà</option>
+                    <option value={'1'}>Đã nhận quà</option>
+                  </select>
+                </div>
+              }
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}

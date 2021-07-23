@@ -22,9 +22,23 @@ const TheSidebar = () => {
   const type = localStorage.getItem('type');
 
   var temp = []
+  //Phân quyền bên phía menu
   for (let i = 0; i < navigation.length; i++) {
     if (navigation[i].role.includes(type)) {
       navigation[i].hidden = false;
+      if(navigation[i]._children != undefined){
+        var _child = navigation[i]._children;
+        for (let y = 0; y < _child.length; y++) {
+          var roleCheck = _child[y].role;
+          if(roleCheck != undefined){
+            if (roleCheck.includes(type)) {
+              _child[y].hidden = false
+            } else {
+              _child[y].hidden = true
+            }
+          }
+        }
+      }
     } else {
       navigation[i].hidden = true;
     }

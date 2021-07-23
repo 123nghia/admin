@@ -39,6 +39,7 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Danh sách quyền',
       to: '/role_manager',
+      role: ['0'],
     }],
     role: ['0'],
   },
@@ -50,10 +51,12 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Quản lý gói sản phẩm',
       to: '/plugin_manager',
+      role: ['0'],
     }, {
       _tag: 'CSidebarNavItem',
       name: 'Quản lý tính năng',
       to: '/feature',
+      role: ['0'],
     }],
     role: ['0'],
   },
@@ -65,6 +68,7 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Quản lý khách hàng',
       to: '/customer_manager',
+      role: ['0', '1'],
     }],
     role: ['0', '1'],
   },
@@ -76,10 +80,10 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Danh sách Sale',
       to: '/saleAdmin',
+      role: ['0'],
     }],
     role: ['0'],
   },
-
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Chương trình khuyến mãi',
@@ -87,15 +91,18 @@ const _nav = [
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Nội dung khuyến mãi',
-      to: '/reward_info'
+      to: '/reward_info',
+      role: ['0', '1', '2']
     },{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách nhận quà',
-      to: '/cus_request'
+      to: '/cus_request',
+      role: ['0', '1', '2']
     },{
       _tag: 'CSidebarNavItem',
       name: 'Quản lý loại yêu cầu',
-      to: '/type_request'
+      to: '/type_request',
+      role: ['0', '1'],
     }],
     role: ['0', '1', '2'],
   },
@@ -107,11 +114,13 @@ const _nav = [
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách đơn hàng',
-      to: '/list_order'
+      to: '/list_order',
+      role: ['0', '1'],
     }, {
       _tag: 'CSidebarNavItem',
       name: 'Tạo đơn hàng',
       to: '/plugin_create_order',
+      role: ['0', '1'],
     }],
     role: ['0', '1'],
   }
