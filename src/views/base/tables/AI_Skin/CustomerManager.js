@@ -131,11 +131,9 @@ class CustomerManager extends Component {
     });
     let val = res.data.data.result;
     let valCount = res.data.data.Count;
-    let valName = res.data.data.arrName;
     if (res.data.is_success) {
       for (let i = 0; i < val.length; i++) {
         val[i].Count = valCount[i]
-        val[i].CompanyName = valName[i]
       }
 
       this.pagination(val);
@@ -166,12 +164,10 @@ class CustomerManager extends Component {
 
     let val = res.data.data.result;
     let valCount = res.data.data.Count;
-    let valName = res.data.data.arrName;
 
     if (res.data.is_success) {
       for (let i = 0; i < val.length; i++) {
         val[i].Count = valCount[i]
-        val[i].CompanyName = valName[i]
       }
 
       this.pagination(val);
@@ -425,7 +421,7 @@ class CustomerManager extends Component {
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">{item.FullName}</td>
                                 <td className="text-center">{item.Phone}</td>
-                                <td className="text-center">{item.CompanyName}</td>
+                                <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name }</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>

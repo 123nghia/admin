@@ -142,27 +142,14 @@ class CustomerRequest extends Component {
       method: 'POST'
     });
     let val = res.data.data;
-    if (res.data.is_success) {
-      for (let i = 0; i < val.length; i++) {
-        const resCom = await axios({
-          baseURL: Constants.BASE_URL,
-          url: Constants.PLUGIN_LIST_COMPANY,
-          method: 'POST',
-          data: {
-            condition: {
-              _id: val[i].Company_Id
-            }
-          }
-        });
-        val[i].Com_Name = resCom.data.data.length == 0 ? "admin" : resCom.data.data[0].Name;
-      }
 
-      this.pagination(res.data.data);
-      this.setState({ dataApi: res.data.data });
+    if (res.data.is_success) {
+      this.pagination(val);
+      this.setState({ dataApi: val });
 
       let active = 0
 
-      res.data.data.map(val => {
+      val.map(val => {
         if (val.Status == "Actived") {
           active = active + 1
         }
@@ -443,7 +430,7 @@ class CustomerRequest extends Component {
                                 <td className="text-center">{item.FullName}</td>
                                 <td className="text-center">{item.Phone}</td>
                                 {
-                                  type == '0' || type == '1' ? <td className="text-center">{item.Com_Name}</td> : ""
+                                  type == '0' || type == '1' ? <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td> : ""
                                 }
                                 {
                                   type == '0' || type == '1' ? <td className="text-center">{item.Type}</td> : ""
