@@ -103,6 +103,11 @@ const _nav = [
       name: 'Quản lý loại yêu cầu',
       to: '/type_request',
       role: ['0', '1'],
+    },{
+      _tag: 'CSidebarNavItem',
+      name: 'Thống kê lượt khách hàng',
+      to: '/customer',
+      role: ['0', '1', '2'],
     }],
     role: ['0', '1', '2'],
   },

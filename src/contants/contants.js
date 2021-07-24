@@ -163,4 +163,7 @@ export default {
   "TYPE_REQUEST_UPDATE" : "/api/update-type-request",
   "TYPE_REQUEST_DELETE" : "/api/delete-type-request",
 
+  "LIST_CUSTOMER": "/api/list-customer",
+  "LIST_CUSTOMER_FOR_COMPANY": "/api/list-customer-for-company",
+
 };
