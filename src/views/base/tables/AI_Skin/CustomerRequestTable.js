@@ -52,6 +52,7 @@ class CustomerRequest extends Component {
     this.state = {
       data: [],
       key: '',
+      keyStatus: '',
       activePage: 1,
       page: 1,
       itemsCount: 0,
@@ -169,13 +170,15 @@ class CustomerRequest extends Component {
         Company_Id: JSON.parse(this.state.company_id).company_id
       }
     });
+    let val = res.data.data;
+
     if (res.data.is_success) {
-      this.pagination(res.data.data);
-      this.setState({ dataApi: res.data.data });
+      this.pagination(val);
+      this.setState({ dataApi: val });
 
       let active = 0
 
-      res.data.data.map(val => {
+      val.map(val => {
         if (val.Status == "Actived") {
           active = active + 1
         }
@@ -185,15 +188,17 @@ class CustomerRequest extends Component {
     }
   }
 
-  searchKey(key) {
-    this.setState({ key: key })
+  searchKey() {
+    const { indexPage, key, keyStatus } = this.state;
+    // this.setState({ key: key })
 
-    if (key != '') {
+    if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.UserName.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.FullName.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
+          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+          val.Status.includes(keyStatus)) {
+
           d.push(val)
         }
       })
@@ -215,8 +220,25 @@ class CustomerRequest extends Component {
         }
       })
 
-      this.setState({ data: this.state.dataApi, totalActive: active })
+      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
     }
+  }
+
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      key: '',
+      keyStatus: ''
+    }, () => {
+      this.searchKey();
+    });
   }
 
   async toggleModal(key) {
@@ -379,7 +401,7 @@ class CustomerRequest extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, indexPage, arrTypeRequest, type } = this.state;
+    const { data, action, arrPagination, indexPage, arrTypeRequest, type, key } = this.state;
     const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
@@ -392,10 +414,37 @@ class CustomerRequest extends Component {
                 <CardHeader>
                   <i className="fa fa-align-justify"></i> Danh sách nhận quà(Page: {this.state.indexPage + 1}))
                   <div style={styles.tags}>
-                    {/* {
-                      type == "2" ? "" :
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
-                    } */}
+                    <CRow>
+                      <CCol sm="12" lg="12">
+                        <CRow>
+                          <CCol sm="12" lg="4">
+                            <div>
+                              <Input style={styles.searchInput} onChange={(e) => {
+                                this.actionSearch(e, "key");
+                              }} name="key" value={key} placeholder="Từ khóa" />
+                            </div>
+                          </CCol>
+                          <CCol sm="12" lg="4">
+                            <CSelect style={styles.flexOption} onChange={e => {
+
+                              this.actionSearch(e, "keyStatus");
+
+                            }} custom>
+                              {
+                                ['0', '1'].map((item, i) => {
+                                  return (
+                                    <option value={item}>{item == "0" ? "Chưa nhận quà" : "Đã nhận quà"}</option>
+                                  );
+                                })
+                              }
+                            </CSelect>
+                          </CCol>
+                          <CCol sm="12" lg="4">
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                          </CCol>
+                        </CRow>
+                      </CCol>
+                    </CRow>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -599,13 +648,14 @@ const styles = {
     width: 100
   },
   flexOption: {
-    width: 300
+    width: 160,
+    margin: '1px'
   },
   a: {
     textDecoration: 'none'
   },
   floatRight: {
-    float: "right",
+    float: 'right',
     marginTop: '3px'
   },
   spinner: {
@@ -618,13 +668,18 @@ const styles = {
     height: "380px",
     overflowY: "auto"
   },
-  wh25: {
-    width: "25%",
+  wh12: {
+    width: "8%",
+    float: "left",
+    height: "80px"
+  },
+  wh15: {
+    width: "15%",
     float: "left",
     height: "80px"
   },
   w5: {
-    width: "15%",
+    width: "12%",
     float: "left",
     height: "80px"
   },
@@ -648,12 +703,12 @@ const styles = {
   },
   tags: {
     float: "right",
-    marginRight: "5px",
-    width: "250px"
+    marginRight: "5px"
   },
   searchInput: {
-    width: "190px",
+    width: "160px",
     display: 'inline-block',
+    margin: '1px'
   },
   userActive: {
     color: 'green'
@@ -670,7 +725,7 @@ const styles = {
     borderRadius: '99999px'
   },
   mgl5: {
-    marginBottom: '0px'
+    marginBottom: '5px'
   }
 }
 

@@ -167,6 +167,23 @@ class User extends Component {
     }
   }
 
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      key: '',
+      keyStatus: ''
+    }, () => {
+      this.searchKey();
+    });
+  }
+
   toggleModal(key) {
     if (key == 'new') {
       this.setState({
@@ -363,23 +380,6 @@ class User extends Component {
     this.getUsers();
   }
 
-  actionSearch(e, name_action) {
-    this.setState({
-      [name_action]: e.target.value
-    }, () => {
-      this.searchKey();
-    });
-  }
-
-  resetSearch() {
-    this.setState({
-      key: '',
-      keyStatus: ''
-    }, () => {
-      this.searchKey();
-    });
-  }
-
   render() {
     const { data, key, viewingUser, communities, action, arrPagination,
       indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
@@ -406,11 +406,6 @@ class User extends Component {
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
-                          {/* <CCol sm="6" lg="2">
-                            <CInput type="date" onChange={e => {
-                              this.actionSearch(e, "keyDateCreate");
-                            }} value={keyDateCreate} placeholder="Create Date" />
-                          </CCol> */}
                           <CCol sm="12" lg="4">
                             <CSelect style={styles.flexOption} onChange={e => {
 
