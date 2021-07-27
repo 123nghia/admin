@@ -33,6 +33,14 @@ const ListFeatureOfCustomer = React.lazy(() => import('./views/base/tables/AI_Sk
 const CusRequest = React.lazy(() => import('./views/base/tables/AI_Skin/CustomerRequestTable'));
 const TypeRequest = React.lazy(() => import('./views/base/tables/AI_Skin/TypeRequestModel'));
 const CustomerManager = React.lazy(() => import('./views/base/tables/AI_Skin/CustomerManager'));
+const HistorySkin = React.lazy(() => import('./views/base/tables/AI_Skin/HistorySkin'));
+
+//ADMIN MakeUp
+const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestItem'));
+const Brand = React.lazy(() => import('./views/base/tables/MakeUp/Brand'));
+const Product = React.lazy(() => import('./views/base/tables/MakeUp/Product'));
+const SubType = React.lazy(() => import('./views/base/tables/MakeUp/SubType'));
+const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -69,6 +77,14 @@ const routes = [
   { path: '/cus_request', name: 'REWARD_INFO', component: CusRequest },
   { path: '/type_request', name: 'REWARD_INFO', component: TypeRequest },
   { path: '/customer', name: 'Customer Manager', component: CustomerManager },
+  { path: '/historyskin', name: 'History Skin', component: HistorySkin },
+
+  //Admin MakeUp
+  { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
+  { path: '/brand', name: 'BRAND', component: Brand },
+  { path: '/product', name: 'BRAND', component: Product },
+  { path: '/subtype', name: 'Sub Type', component: SubType },
+  { path: '/color', name: 'Color', component: Color },
 ];
 
 export default routes;

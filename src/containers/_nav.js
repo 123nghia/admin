@@ -5,18 +5,13 @@ const arrRoleADMIN = ['SALES', 'ADMIN', 'SHOPMANAGER', 'ADMINSALES', 'COMPANY'];
 const arrRoleCOMPANY = ['SALES', 'SHOPMANAGER'];
 const arrRoleSHOPMANAGER = ['SALES'];
 const _nav = [
-  {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Danh mục'],
-    role: ['0', '1', '2'],
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách tính năng',
-    to: '/dashboard',
-    icon: <CIcon name="cil-chartPie" customClasses="c-sidebar-nav-icon" />,
-    role: ['2'],
-  },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Danh sách tính năng',
+  //   to: '/dashboard',
+  //   icon: <CIcon name="cil-chartPie" customClasses="c-sidebar-nav-icon" />,
+  //   role: ['2'],
+  // },
   {
     _tag: 'CSidebarNavItem',
     name: 'Hồ sơ',
@@ -32,16 +27,16 @@ const _nav = [
     role: ['2']
   },
   {
-    _tag: 'CSidebarNavDropdown',
+    _tag: 'CSidebarNavItem',
     name: 'Quản lý phân quyền',
+    to: '/role_manager',
     icon: <CIcon name="cil-people" customClasses="c-sidebar-nav-icon" />,
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách quyền',
-      to: '/role_manager',
-      role: ['0'],
-    }],
     role: ['0'],
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lí soi da'],
+    role: ['0', '1', '2'],
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -73,15 +68,10 @@ const _nav = [
     role: ['0', '1'],
   },
   {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Quản lý Sale',
-    icon: 'cil-people',
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách Sale',
-      to: '/saleAdmin',
-      role: ['0'],
-    }],
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách Sale',
+    to: '/saleAdmin',
+    icon: <CIcon name="cil-people" customClasses="c-sidebar-nav-icon" />,
     role: ['0'],
   },
   {
@@ -127,6 +117,52 @@ const _nav = [
       to: '/plugin_create_order',
       role: ['0', '1'],
     }],
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Lịch sử soi da',
+    to: '/historyskin',
+    icon: <CIcon content={freeSet.cilHistory} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lí trang điểm'],
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm da mặt',
+    to: '/suggest',
+    icon: <CIcon content={freeSet.cilFace} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nhãn hiệu',
+    to: '/brand',
+    icon: <CIcon content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm',
+    to: '/product',
+    icon: <CIcon content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh mục',
+    to: '/subtype',
+    icon: <CIcon content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },{
+    _tag: 'CSidebarNavItem',
+    name: 'Mã màu',
+    to: '/color',
+    icon: <CIcon content={freeSet.cilColorFill} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1'],
   }
 ]

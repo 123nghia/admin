@@ -166,4 +166,34 @@ export default {
   "LIST_CUSTOMER": "/api/list-customer",
   "LIST_CUSTOMER_FOR_COMPANY": "/api/list-customer-for-company",
 
+  "LIST_SUGGEST_ITEM": "/itemSdk",
+  "ADD_SUGGEST_ITEM": "/itemSdk",
+  "UPDATE_SUGGEST_ITEM": "/itemSdk/",
+  "DELETE_SUGGEST_ITEM": "/itemSdk/deleteItem",
+  "LIST_SDK": "/sdk",
+
+  "LIST_BRAND": "/brands",
+  "ADD_BRAND": "/add-brand",
+  "UPDATE_BRAND": "/update-brand",
+  "DELETE_BRAND": "/delete-brand",
+
+  "LIST_PRODUCT": "/product",
+  "ADD_PRODUCT": "/add-product",
+  "UPDATE_PRODUCT": "/update-product",
+  "DELETE_PRODUCT": "/delete-product",
+
+  "LIST_TYPE": "/types",
+  "ADD_TYPE": "/add-type",
+  "UPDATE_TYPE": "/update-type",
+  "DELETE_TYPE": "/delete-type",
+
+  "LIST_COLOR": "/colors",
+  "ADD_COLOR": "/add-color",
+  "UPDATE_COLOR": "/update-color",
+  "DELETE_COLOR": "/delete-color",
+
+  "LIST_HISTORY_SKIN": "/api/get-history-skin",
+  "LIST_HISTORY_SKIN_BY_CONDITION": "/api/get-history-skin-by-condition",
+  "ADD_HISTORY_SKIN": "/api/add-history-skin"
+
 };

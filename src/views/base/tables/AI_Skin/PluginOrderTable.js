@@ -160,19 +160,6 @@ class PluginOrder extends Component {
 
     let val = res.data.data.result;
 
-    for (let i = 0; i < val.length; i++) {
-      const name_sale = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.PLUGIN_GET_USER_BY_BODY,
-        method: 'POST',
-        data: {
-          id: val[i].Sale_Id
-        }
-      });
-
-      val[i].Sale = name_sale.data.data
-    }
-
     this.pagination(val);
     this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package, isLoading: false });
   }
@@ -685,7 +672,7 @@ class PluginOrder extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sácha đơn hàng (Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -749,7 +736,7 @@ class PluginOrder extends Component {
                                 </td>
                                 <td className="text-center">
                                   {
-                                    item.Sale
+                                    item.Sale_Id != undefined ? item.Sale_Id.Name : "admin"
                                   }
                                 </td>
                                 <td className="text-center">
