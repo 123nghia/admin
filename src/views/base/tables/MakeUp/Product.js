@@ -77,11 +77,18 @@ class Product extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      type: localStorage.getItem('type'),
+      user: localStorage.getItem('user'),
       isLoading: false
     };
   }
   async componentDidMount() {
-    this.getData()
+    const { type } = this.state;
+    if(type == '0' || type == '1'){
+      this.getData()
+    } else {
+      this.getData_Company()
+    }
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -136,6 +143,38 @@ class Product extends Component {
     let val = res_product.data.data;
     let brands = res_brand.data.data;
     let types = res_type.data.data;
+    this.pagination(val);
+    this.setState({ dataApi: val, brands: brands, types: types });
+
+    let active = 0
+
+    this.setState({ isLoading: false, totalActive: active });
+  }
+
+  getData_Company = async () => {
+    this.setState({ isLoading: true });
+    const res_product = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id,
+      method: 'GET'
+    });
+
+    const res_brand = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id,
+      method: 'GET'
+    });
+
+    const res_type = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id,
+      method: 'GET'
+    });
+
+    let val = res_product.data.data;
+    let brands = res_brand.data.data;
+    let types = res_type.data.data;
+
     this.pagination(val);
     this.setState({ dataApi: val, brands: brands, types: types });
 

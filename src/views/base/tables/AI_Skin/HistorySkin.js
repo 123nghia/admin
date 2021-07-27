@@ -244,7 +244,9 @@ class HistorySkin extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
-                                <td className="text-center"></td>
+                                <td className="text-center">
+                                  {/* {item.Result} */}
+                                </td>
                                 <td className="text-center">{item.Company_Id.Name}</td>
                                 <td className="text-center">{item.Sale_Id.Name}</td>
                                 <td className="text-center">

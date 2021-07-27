@@ -82,11 +82,19 @@ class SuggestItem extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      type: localStorage.getItem('type'),
+      userData: localStorage.getItem('user'),
       isLoading: false
     };
   }
   async componentDidMount() {
-    this.getData()
+    const { type } = this.state;
+    if(type == '0' || type == '1'){
+      this.getData()
+    } else {
+      this.getDataForCompany()
+    }
+
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -133,6 +141,30 @@ class SuggestItem extends Component {
     });
 
     let val = res_suggest.data.data;
+    this.pagination(val);
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });
+
+    let active = 0
+
+    this.setState({ isLoading: false, totalActive: active });
+  }
+
+  getDataForCompany = async () => {
+    this.setState({ isLoading: true });
+    const res_suggest = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(this.state.userData).company_id,
+      method: 'GET'
+    });
+
+    const res_sdk = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_SDK,
+      method: 'GET'
+    });
+
+    let val = res_suggest.data.data;
+    console.log(val)
     this.pagination(val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });
 
