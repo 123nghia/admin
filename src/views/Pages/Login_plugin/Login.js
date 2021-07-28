@@ -54,10 +54,10 @@ class Login extends Component {
         localStorage.setItem('type', token.type);
         localStorage.setItem('token', res.data.data.token);
 
-        if (token.role == 'ADMIN' || token.role == 'SALE') {
+        if (token.type == '0' || token.type == '1') {
           this.props.history.push('/list_order')
         } else {
-          this.props.history.push('/dashboard')
+          this.props.history.push('/profile')
         }
       } else {
         console.log(this.state.username)

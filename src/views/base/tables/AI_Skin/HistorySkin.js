@@ -34,6 +34,7 @@ import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -75,11 +76,12 @@ class HistorySkin extends Component {
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
-      type: localStorage.getItem('type')
+      type: localStorage.getItem('type'),
+      BASE_URL: Constants.BASE_URL_CURRENT
     };
   }
   async componentDidMount() {
-    if(this.state.type = '0'){
+    if (this.state.type = '0') {
       this.getData()
     } else {
       this.getData_ByCondition()
@@ -245,6 +247,8 @@ class HistorySkin extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">
+                                  <CButton outline color="primary" onClick={e => {}}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                                  {/* <img src={this.state.BASE_URL + "/images/calendar.png"} style={{ width: '10%' }} /> */}
                                   {/* {item.Result} */}
                                 </td>
                                 <td className="text-center">{item.Company_Id.Name}</td>

@@ -1,6 +1,8 @@
 export default {
   "BASE_URL" : "https://api-soida.applamdep.com",
   //"BASE_URL" : "http://localhost:3002",
+  //"BASE_URL_CURRENT" : "https://id.applamdep.com/",
+  "BASE_URL_CURRENT" : "http://localhost:3003",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
@@ -123,6 +125,7 @@ export default {
   "UPDATE_SLUG" : "/api/plugin-update-slug",
 
   "PLUGIN_LIST_USER" : "/api/plugin-list-user",
+  "PLUGIN_ALL_USER" : "/api/plugin-all-user",
   "PLUGIN_ADD_USER" : "/api/plugin-add-user",
   "PLUGIN_ADD_SALE" : "/api/plugin-add-sale",
   "PLUGIN_UPDATE_USER" : "/api/plugin-update-user",
@@ -199,6 +202,18 @@ export default {
 
   "LIST_HISTORY_SKIN": "/api/get-history-skin",
   "LIST_HISTORY_SKIN_BY_CONDITION": "/api/get-history-skin-by-condition",
-  "ADD_HISTORY_SKIN": "/api/add-history-skin"
+  "ADD_HISTORY_SKIN": "/api/add-history-skin",
+
+
+  "LIST_TYPE_PRODUCT": "/api/list-type-product",
+  "ADD_TYPE_PRODUCT": "/api/add-type-product",
+  "UPDATE_TYPE_PRODUCT": "/api/update-type-product",
+  "DELETE_TYPE_PRODUCT": "/api/delete-type-product",
+
+
+  "LIST_TYPE_SDK": "/api/list-type-sdk",
+  "ADD_TYPE_SDK": "/api/add-type-sdk",
+  "UPDATE_TYPE_SDK": "/api/update-type-sdk",
+  "DELETE_TYPE_SDK": "/api/delete-type-sdk",
 
 };

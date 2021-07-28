@@ -192,7 +192,7 @@ class ListFeatureOfCustomer extends Component {
       arrTemp.push(val[i])
     }
 
-    this.setState({ arrTotalPackage: arrTemp, current_package: arrTemp[0].Name })
+    this.setState({ arrTotalPackage: arrTemp, current_package: arrTemp.length == '0' ? '' : arrTemp[0].Name })
     return arrTemp;
   }
 

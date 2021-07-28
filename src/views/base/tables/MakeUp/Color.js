@@ -231,7 +231,8 @@ class Color extends Component {
       hex: hex,
       makeup_id: makeup_id,
       alpha: alpha,
-      ver: version
+      ver: version,
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
     }
 
     this.setState({ isLoading: true });
@@ -241,9 +242,13 @@ class Color extends Component {
       method: 'POST',
       data: body
     });
-    console.log(res)
+
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Thêm màu thất bại");
@@ -291,9 +296,13 @@ class Color extends Component {
       method: 'POST',
       data: body
     });
-    console.log(res)
+
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -320,7 +329,11 @@ class Color extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
       alert("Xóa sản phẩm thất bại");

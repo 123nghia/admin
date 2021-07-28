@@ -18,6 +18,7 @@ const loading = (
 const TheContent = () => {
   const auth = localStorage.getItem('auth');
   const role = localStorage.getItem('role');
+  const type = localStorage.getItem('type');
   if (!auth) return (
     <Redirect from="/" to="/login" />
   )
@@ -41,7 +42,8 @@ const TheContent = () => {
               )
             })}
             {
-              <Redirect from="/" to="/dashboard" />
+              type == '0' || type == '1' ?
+              <Redirect from="/" to="/list_order" /> : <Redirect from="/" to="/profile" />
             }
           </Switch>
         </Suspense>

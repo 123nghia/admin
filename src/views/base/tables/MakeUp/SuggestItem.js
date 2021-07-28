@@ -74,6 +74,8 @@ class SuggestItem extends Component {
       level: "K1",
       sdktype: "1",
       companyid: "",
+      type_sdk_id: "",
+      type_product_id: "",
       sdkItem: [],
       currentSdkSelect: [],
       currentItemSelect: null,
@@ -84,17 +86,19 @@ class SuggestItem extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       userData: localStorage.getItem('user'),
-      isLoading: false
+      isLoading: false,
+      arrOptionSdkType: [],
+      arrOptionProductType: [],
     };
   }
   async componentDidMount() {
     const { type } = this.state;
-    if(type == '0' || type == '1'){
+    if (type == '0' || type == '1') {
       this.getData()
     } else {
       this.getDataForCompany()
     }
-
+    this.getListTypeProduct()
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -164,13 +168,29 @@ class SuggestItem extends Component {
     });
 
     let val = res_suggest.data.data;
-    console.log(val)
+
     this.pagination(val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });
 
     let active = 0
 
     this.setState({ isLoading: false, totalActive: active });
+  }
+
+  getListTypeProduct = async () => {
+    const res_pro = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_TYPE_PRODUCT,
+      method: 'POST'
+    });
+
+    const res_sdk = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_TYPE_SDK,
+      method: 'POST'
+    });
+
+    this.setState({ arrOptionProductType: res_pro.data.data, arrOptionSdkType: res_sdk.data.data })
   }
 
   changeSdkType = (e) => {
@@ -231,7 +251,9 @@ class SuggestItem extends Component {
         linkdetail: "",
         level: "K1",
         sdktype: "1",
-        companyid: ""
+        type_sdk_id: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0]._id,
+        type_product_id: this.state.arrOptionProductType.length == 0 ? '' : this.state.arrOptionProductType[0]._id,
+        companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id
       })
     }
   }
@@ -241,7 +263,7 @@ class SuggestItem extends Component {
   }
 
   async addRoles() {
-    const { name, image, title, description, linkdetail, level, sdktype, companyid } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, companyid, type_sdk_id, type_product_id } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       title == null || title == '' ||
@@ -258,7 +280,10 @@ class SuggestItem extends Component {
       linkdetail: linkdetail,
       level: level,
       sdktype: sdktype,
-      companyid: companyid
+      companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
+      type_sdk_id: type_sdk_id,
+      type_product_id: type_product_id
+
     }
 
     this.setState({ isLoading: true });
@@ -270,7 +295,11 @@ class SuggestItem extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if (this.state.type == '0' || this.state.type == '1') {
+        this.getData()
+      } else {
+        this.getDataForCompany()
+      };
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Thêm sản phẩm gợi ý thất bại");
@@ -289,6 +318,9 @@ class SuggestItem extends Component {
       linkdetail: item.linkdetail,
       level: item.level,
       sdktype: item.sdktype,
+      type_product_id: item.type_product_id._id,
+      type_sdk_id: item.type_sdk_id._id,
+      sdktype: item.sdktype,
       companyid: item.companyid,
       id: item['_id'],
       Status: item.Status
@@ -296,7 +328,7 @@ class SuggestItem extends Component {
   }
 
   async updateUser() {
-    const { name, image, title, description, linkdetail, level, sdktype, companyid } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, companyid, type_sdk_id, type_product_id } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -314,7 +346,9 @@ class SuggestItem extends Component {
       linkdetail: linkdetail,
       level: level,
       sdktype: sdktype,
-      companyid: companyid
+      type_sdk_id: type_sdk_id,
+      type_product_id: type_product_id,
+      companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id
     }
 
     this.setState({ isLoading: true });
@@ -326,7 +360,11 @@ class SuggestItem extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if (this.state.type == '0' || this.state.type == '1') {
+        this.getData()
+      } else {
+        this.getDataForCompany()
+      };
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -345,7 +383,7 @@ class SuggestItem extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_BRAND,
+      url: Constants.DELETE_SUGGEST_ITEM,
       method: 'POST',
       data: {
         "id": this.state.id
@@ -353,7 +391,11 @@ class SuggestItem extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if (this.state.type == '0' || this.state.type == '1') {
+        this.getData()
+      } else {
+        this.getDataForCompany()
+      };
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
       alert("Xóa sản phẩm thất bại");
@@ -376,8 +418,17 @@ class SuggestItem extends Component {
     }
   }
 
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image: e.target.result })
+    }
+  }
+
   render() {
-    const { data, key, sdkItem, action, arrPagination, indexPage, currentSdkSelect } = this.state;
+    const { data, key, sdkItem, action, arrPagination, indexPage, currentSdkSelect, arrOptionProductType, arrOptionSdkType } = this.state;
     const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
@@ -405,8 +456,10 @@ class SuggestItem extends Component {
                         <th className="text-center">Tiều đề</th>
                         <th className="text-center">Mô tả</th>
                         <th className="text-center">Chi tiết</th>
-                        <th className="text-center">Loại Sdk</th>
-                        <th className="text-center">Level</th>
+                        <th className="text-center">Loại sản phẩm</th>
+                        <th className="text-center">Loại SDK</th>
+                        {/* <th className="text-center">Loại Sdk</th>
+                        <th className="text-center">Level</th> */}
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -420,9 +473,10 @@ class SuggestItem extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  <a href={item.image} target="_blank">
+                                  <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
+                                  {/* <a href={item.image} target="_blank">
                                     {item.image ? "View Image" : ""}
-                                  </a>
+                                  </a> */}
                                 </td>
                                 <td className="text-center">
                                   {item.title.substr(0, 100) +
@@ -435,10 +489,10 @@ class SuggestItem extends Component {
                                   {item.linkdetail}
                                 </td>
                                 <td className="text-center">
-                                  {item.level}
+                                  {item.type_product_id.Name}
                                 </td>
                                 <td className="text-center">
-                                  {item.sdktype}
+                                  {item.type_sdk_id.Name}
                                 </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -493,13 +547,23 @@ class SuggestItem extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
+              {/* <TextFieldGroup
                 field="image"
                 label="Ảnh minh họa"
                 value={this.state.image}
                 placeholder={"Ảnh minh họa"}
                 // error={errors.title}
                 onChange={e => this.onChange("image", e.target.value)}
+              // rows="5"
+              /> */}
+
+              <TextFieldGroup
+                field="image"
+                label="Ảnh thương hiệu"
+                type={"file"}
+                // error={errors.title}
+                onChange={e => { this.onChangeImage(e) }}
+                onClick={(e) => { e.target.value = null }}
               // rows="5"
               />
 
@@ -534,16 +598,16 @@ class SuggestItem extends Component {
 
               <CLabel>Loại SDK:</CLabel>
               <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.changeSdkType(e) }} custom size="sm" name="selectSm" id="SelectLm">
+                <CSelect onChange={async e => { this.setState({ type_sdk_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
                   {
-                    sdkItem.map((item, i) => {
-                      if(item.name == this.state.level){
+                    arrOptionSdkType.map((item, i) => {
+                      if (item._id == this.state.type_sdk_id) {
                         return (
-                          <option selected key={i} value={item.name}>{item.name}</option>
+                          <option selected key={i} value={item._id}>{item.Name}</option>
                         );
                       } else {
                         return (
-                          <option key={i} value={item.name}>{item.name}</option>
+                          <option key={i} value={item._id}>{item.Name}</option>
                         );
                       }
                     })
@@ -551,14 +615,33 @@ class SuggestItem extends Component {
                 </CSelect>
               </div>
 
-              <CLabel>Level:</CLabel>
+              <CLabel>Loại sản phẩm:</CLabel>
+              <div style={{ width: "100%" }}>
+                <CSelect onChange={async e => { this.setState({ type_product_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+                  {
+                    arrOptionProductType.map((item, i) => {
+                      if (item._id == this.state.type_product_id) {
+                        return (
+                          <option selected key={i} value={item._id}>{item.Name}</option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item._id}>{item.Name}</option>
+                        );
+                      }
+                    })
+                  }
+                </CSelect>
+              </div>
+
+              {/* <CLabel>Level:</CLabel>
               <div style={{ width: "100%" }}>
                 {
                   currentSdkSelect.sdktype != undefined ? (
                     <CSelect onChange={async e => { this.changeLevel(e) }} custom size="sm" name="selectSm" id="SelectLm">
                       {
                         currentSdkSelect.sdktype.split(",").map((item, i) => {
-                          if(item == this.state.sdktype){
+                          if (item == this.state.sdktype) {
                             return (
                               <option selected key={i} value={item}>{item}</option>
                             );
@@ -572,7 +655,7 @@ class SuggestItem extends Component {
                     </CSelect>
                   ) : null
                 }
-              </div>
+              </div> */}
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}

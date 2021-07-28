@@ -79,12 +79,13 @@ class Product extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
-      isLoading: false
+      isLoading: false,
+      BASE_URL: Constants.BASE_URL_CURRENT
     };
   }
   async componentDidMount() {
     const { type } = this.state;
-    if(type == '0' || type == '1'){
+    if (type == '0' || type == '1') {
       this.getData()
     } else {
       this.getData_Company()
@@ -210,7 +211,7 @@ class Product extends Component {
   }
 
   async toggleModal(key) {
-    console.log(this.state.types[0]._id)
+
     if (key == 'new') {
       this.setState({
         modalCom: !this.state.modalCom,
@@ -228,12 +229,21 @@ class Product extends Component {
     this.setState({ [key]: val })
   }
 
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0])
+    reader.onload=(e)=>{
+      this.setState({image: e.target.result})
+    }
+  }
+
   async addRoles() {
     const { name, image, href, type_id, brand_id } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
-      href == null || href == ''||
-      type_id == null || type_id == ''||
+      href == null || href == '' ||
+      type_id == null || type_id == '' ||
       brand_id == null || brand_id == '') {
       alert("Please fill in all the requirements");
       return
@@ -245,6 +255,7 @@ class Product extends Component {
       name: name,
       href: href,
       image: image,
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
     }
 
     this.setState({ isLoading: true });
@@ -256,7 +267,11 @@ class Product extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Thêm sản phẩm thất bại");
@@ -281,8 +296,8 @@ class Product extends Component {
     const { name, image, href, type_id, brand_id } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
-      href == null || href == ''||
-      type_id == null || type_id == ''||
+      href == null || href == '' ||
+      type_id == null || type_id == '' ||
       brand_id == null || brand_id == '') {
       alert("Please fill in all the requirements");
       return
@@ -306,7 +321,11 @@ class Product extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      };
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -333,7 +352,11 @@ class Product extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      };
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
       alert("Xóa sản phẩm thất bại");
@@ -405,7 +428,9 @@ class Product extends Component {
                                     target="_blank"
                                   >{`Open web`}</a>
                                 </td>
-                                <td className="text-center" style={{ width: '10%' }}><img src={item.image} width={"80%"} /></td>
+                                <td className="text-center" style={{ width: '10%' }}>
+                                  <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
+                                </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -469,13 +494,23 @@ class Product extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
+              {/* <TextFieldGroup
                 field="image"
                 label="Ảnh"
                 value={this.state.image}
                 placeholder={"Ảnh"}
                 // error={errors.title}
                 onChange={e => this.onChange("image", e.target.value)}
+              // rows="5"
+              /> */}
+
+              <TextFieldGroup
+                field="image"
+                label="Ảnh"
+                type={"file"}
+                // error={errors.title}
+                onChange={e => { this.onChangeImage(e) }}
+                onClick={(e)=> { e.target.value = null }}
               // rows="5"
               />
 

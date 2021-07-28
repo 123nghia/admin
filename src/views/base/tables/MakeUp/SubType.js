@@ -79,7 +79,7 @@ class SubType extends Component {
   }
   async componentDidMount() {
     const { type } = this.state;
-    if(type == '0' || type == '1'){
+    if (type == '0' || type == '1') {
       this.getData()
     } else {
       this.getData_Company()
@@ -204,6 +204,7 @@ class SubType extends Component {
     const body = {
       vi: vi,
       image: image,
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
     }
 
     this.setState({ isLoading: true });
@@ -215,7 +216,11 @@ class SubType extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      };
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Thêm sản phẩm thất bại");
@@ -256,7 +261,11 @@ class SubType extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      };
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -283,7 +292,11 @@ class SubType extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      };
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
       alert("Xóa sản phẩm thất bại");
@@ -303,6 +316,15 @@ class SubType extends Component {
       case 'Locked': return 'warning'
       case 'Deactived': return 'danger'
       default: return 'primary'
+    }
+  }
+
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image: e.target.result })
     }
   }
 
@@ -346,7 +368,7 @@ class SubType extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  <img src={item.image} style={{ width: '10%' }} />
+                                  <img src={item.image} style={{ width: '50px', height: '50px' }} />
                                 </td>
                                 <td className="text-center">{item.vi}</td>
                                 <td className="text-center">
@@ -402,13 +424,23 @@ class SubType extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
+              {/* <TextFieldGroup
                 field="image"
                 label="Ảnh"
                 value={this.state.image}
                 placeholder={"Ảnh"}
                 // error={errors.title}
                 onChange={e => this.onChange("image", e.target.value)}
+              // rows="5"
+              /> */}
+
+              <TextFieldGroup
+                field="image"
+                label="Ảnh"
+                type={"file"}
+                // error={errors.title}
+                onChange={e => { this.onChangeImage(e) }}
+                onClick={(e) => { e.target.value = null }}
               // rows="5"
               />
             </ModalBody>

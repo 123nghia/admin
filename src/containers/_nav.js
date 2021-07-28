@@ -21,22 +21,25 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Tính năng đã đăng ký',
-    to: '/feature_customer',
-    icon: <CIcon name="cil-laptop" customClasses="c-sidebar-nav-icon" />,
-    role: ['2']
-  },
-  {
-    _tag: 'CSidebarNavItem',
     name: 'Quản lý phân quyền',
     to: '/role_manager',
     icon: <CIcon name="cil-people" customClasses="c-sidebar-nav-icon" />,
     role: ['0'],
   },
   {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Quản lí soi da'],
-    role: ['0', '1', '2'],
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý tính năng',
+    to: '/feature_customer',
+    icon: <CIcon name="cil-laptop" customClasses="c-sidebar-nav-icon" />,
+    role: ['2']
+  },
+
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý tài khoản',
+    to: '/saleAdmin',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0'],
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -56,6 +59,11 @@ const _nav = [
     role: ['0'],
   },
   {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lí soi da'],
+    role: ['0', '1', '2'],
+  },
+  {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý khách hàng',
     icon: 'cil-userFollow',
@@ -66,13 +74,6 @@ const _nav = [
       role: ['0', '1'],
     }],
     role: ['0', '1'],
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách Sale',
-    to: '/saleAdmin',
-    icon: <CIcon name="cil-people" customClasses="c-sidebar-nav-icon" />,
-    role: ['0'],
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -162,7 +163,7 @@ const _nav = [
     _tag: 'CSidebarNavItem',
     name: 'Mã màu',
     to: '/color',
-    icon: <CIcon content={freeSet.cilColorFill} customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon content={freeSet.cilColorPalette} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
   }
 ]

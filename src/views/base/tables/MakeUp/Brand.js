@@ -200,7 +200,8 @@ class Brand extends Component {
 
     const body = {
       name: name,
-      image: image
+      image: image,
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
     }
 
     this.setState({ isLoading: true });
@@ -212,7 +213,11 @@ class Brand extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Thêm thương hiệu thất bại");
@@ -254,7 +259,11 @@ class Brand extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -281,7 +290,11 @@ class Brand extends Component {
     });
 
     if (res.status == 200) {
-      this.getData();
+      if(this.state.type == '0' || this.state.type == '1'){
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
       alert("Xóa sản phẩm thất bại");
@@ -301,6 +314,15 @@ class Brand extends Component {
       case 'Locked': return 'warning'
       case 'Deactived': return 'danger'
       default: return 'primary'
+    }
+  }
+
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image: e.target.result })
     }
   }
 
@@ -342,7 +364,7 @@ class Brand extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                <td className="text-center"><img src={item.image} width={"10%"} /></td>
+                                <td className="text-center"><img src={item.image} width={"90px"} height={"70px"} /></td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -396,13 +418,23 @@ class Brand extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
+              {/* <TextFieldGroup
                 field="image"
                 label="Ảnh minh họa"
                 value={this.state.image}
                 placeholder={"Ảnh minh họa"}
                 // error={errors.title}
                 onChange={e => this.onChange("image", e.target.value)}
+              // rows="5"
+              /> */}
+
+              <TextFieldGroup
+                field="image"
+                label="Ảnh thương hiệu"
+                type={"file"}
+                // error={errors.title}
+                onChange={e => { this.onChangeImage(e) }}
+                onClick={(e) => { e.target.value = null }}
               // rows="5"
               />
             </ModalBody>

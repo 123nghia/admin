@@ -47,6 +47,7 @@ class User extends Component {
     this.state = {
       data: [],
       key: '',
+      keyRole: '',
       keyStatus: '',
       activePage: 1,
       page: 1,
@@ -71,12 +72,15 @@ class User extends Component {
       arrPagination: [],
       indexPage: 0,
       dataCompany: [],
+      dataRole: [],
       currentCompany: '',
-      isLoading: false
+      isLoading: false,
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
   }
   async componentDidMount() {
     this.getData();
+    this.getAllRole();
     this.getCompanyData();
     let arr = JSON.parse(localStorage.getItem('url'));
 
@@ -98,6 +102,16 @@ class User extends Component {
     this.setState({ dataCompany: resCompany.data.data });
   }
 
+  async getAllRole() {
+    const resRole = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_LIST_ROLE,
+      method: 'POST',
+      headers: this.state.token
+    });
+    this.setState({ dataRole: resRole.data.data });
+  }
+
   pagination(dataApi) {
     var i, j, temparray, chunk = 5;
     var arrTotal = [];
@@ -112,15 +126,20 @@ class User extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_LIST_USER,
+      url: Constants.PLUGIN_ALL_USER,
       method: 'POST',
     });
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+
+    let val = res.data.data;
+
+    console.log(val)
+
+    this.pagination(val);
+    this.setState({ dataApi: val });
 
     let active = 0
 
-    res.data.data.map(val => {
+    val.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
       }
@@ -131,16 +150,17 @@ class User extends Component {
 
   searchKey() {
     const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
-      keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
+      keyWebsite, keyCode, keyDateCreate, keyStatus, keyRole } = this.state;
     // this.setState({ key: key })
 
-    if (key != '' || keyStatus != '') {
+    if (key != '' || keyStatus != '' || keyRole != '') {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
           val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
           val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase()) &&
+          val.Role_Id.toLocaleUpperCase().includes(keyRole.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -381,9 +401,7 @@ class User extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus } = this.state;
+    const { data, key, action, arrPagination, dataRole} = this.state;
     const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
@@ -394,26 +412,41 @@ class User extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách SALES (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Quản lý tài khoản hệ thống (Page: {this.state.indexPage + 1})
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="3">
                             <div>
                               <Input style={styles.searchInput} onChange={(e) => {
                                 this.actionSearch(e, "key");
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="3">
+                            <CSelect style={styles.flexOption} onChange={e => {
+
+                              this.actionSearch(e, "keyRole");
+
+                            }} custom>
+                              {
+                                dataRole.map((item, i) => {
+                                  return (
+                                    <option value={item._id}>{item.Name}</option>
+                                  );
+                                })
+                              }
+                            </CSelect>
+                          </CCol>
+                          <CCol sm="12" lg="3">
                             <CSelect style={styles.flexOption} onChange={e => {
 
                               this.actionSearch(e, "keyStatus");
 
                             }} custom>
                               {
-                                ['Actived', 'Deactived', 'Locked'].map((item, i) => {
+                                ["Actived", 'Deactived', 'Locked'].map((item, i) => {
                                   return (
                                     <option value={item}>{item}</option>
                                   );
@@ -421,7 +454,7 @@ class User extends Component {
                               }
                             </CSelect>
                           </CCol>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="3">
                             <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
                           </CCol>
                         </CRow>
