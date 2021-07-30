@@ -158,17 +158,10 @@ class PluginOrder extends Component {
       method: 'POST',
     });
 
-    let val = res.data.data.result;
-
+    let val = res.data.data;
+    console.log(val)
     this.pagination(val);
     this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package, isLoading: false });
-  }
-
-  loadName(com, pac) {
-    const { arrName, arrPackage } = this.state;
-    var nameCom = arrName.findIndex(x => x._id === com);
-    var namePac = arrPackage.findIndex(x => x._id === pac);
-    return { com: arrName[nameCom].name, pac: arrPackage[namePac].name }
   }
 
   getDataBySale = async () => {
@@ -726,8 +719,8 @@ class PluginOrder extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{this.loadName(item.Company_Id, item.Package_Id).com}</td>
-                                <td className="text-center">{this.loadName(item.Company_Id, item.Package_Id).pac}</td>
+                                <td className="text-center">{item.Company_Id == null ? "" : item.Company_Id.Name}</td>
+                                <td className="text-center">{item.Package_Id.Name}</td>
                                 <td className="text-center">{item.Array_Feature.length}</td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>

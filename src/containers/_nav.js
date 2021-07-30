@@ -87,18 +87,6 @@ const _nav = [
     role: ['0', '1', '2'],
   },
   {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Quản lí soi da'],
-    role: ['0', '1', '2'],
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Sản phẩm da mặt',
-    to: '/suggest',
-    icon: <CIcon content={freeSet.cilFace} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-  },
-  {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý khách hàng',
     icon: 'cil-userFollow',
@@ -126,6 +114,18 @@ const _nav = [
       role: ['0', '1'],
     }],
     role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lí soi da'],
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm da mặt',
+    to: '/suggest',
+    icon: <CIcon content={freeSet.cilFace} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
   },
   {
     _tag: 'CSidebarNavItem',
