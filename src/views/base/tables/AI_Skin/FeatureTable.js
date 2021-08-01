@@ -464,8 +464,8 @@ class Feature extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Khóa</th>
-                        <th className="text-center">Giá trị</th>
+                        <th className="text-center">Tính năng AI AR</th>
+                        <th className="text-center">Link sử dụng</th>
                         <th className="text-center">Logo</th>
                         <th className="text-center">Loại</th>
                         <th className="text-center">Trạng thái</th>

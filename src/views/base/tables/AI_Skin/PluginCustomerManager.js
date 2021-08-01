@@ -330,7 +330,7 @@ class PluginCustomerManager extends Component {
       id: item['_id'],
       Status: item.Status,
       current_province: item.Address.length < 1 ? this.state.province[0].province_name :
-            item.Address.split(',')[item.Address.split(',').length - 1]
+        item.Address.split(',')[item.Address.split(',').length - 1]
     })
   }
 
@@ -719,7 +719,7 @@ class PluginCustomerManager extends Component {
                   <tr>
                     <th className="text-center">STT.</th>
                     <th className="text-center">Tên Gói</th>
-                    <th className="text-center">Số lượng tính năng</th>
+                    <th className="text-center">Danh sách tính năng</th>
                     <th className="text-center">Gói</th>
                     <th className="text-center">Ngày kích hoạt</th>
                     <th className="text-center">Ngày hết hạn</th>
@@ -741,7 +741,18 @@ class PluginCustomerManager extends Component {
                           <tr key={i}>
                             <th className="text-center">{i + 1}</th>
                             <th className="text-center">{item.Name}</th>
-                            <th className="text-center">{item.Array_Feature.length}</th>
+                            <th className="text-center">
+                              {item.Array_Feature.map((item, i) => {
+                                if (i < 2) {
+                                  return (
+                                    <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
+                                  )
+                                }
+                              })}
+                              {
+                                (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
+                              }
+                            </th>
                             <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
                             <th className="text-center">
                               {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}

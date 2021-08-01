@@ -131,8 +131,6 @@ class User extends Component {
 
     let val = res.data.data;
 
-    console.log(val)
-
     this.pagination(val);
     this.setState({ dataApi: val });
 
@@ -240,8 +238,8 @@ class User extends Component {
       Phone: Phone,
       Address: Address,
       UserName: UserName,
-      Password: Password
-
+      Password: Password,
+      isSale: true
     }
 
     this.setState({ isLoading: true });

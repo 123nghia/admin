@@ -7,11 +7,11 @@ import {
   Col,
   Row,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
-  CButton
+  CButton,
+  CBadge
 } from '@coreui/react'
 
 
@@ -114,12 +114,14 @@ class RewardInfomation extends Component {
       method: 'POST'
     });
 
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    let val = res.data.data;
+    console.log(val)
+    this.pagination(val);
+    this.setState({ dataApi: val });
 
     let active = 0
 
-    res.data.data.map(val => {
+    val.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
       }
@@ -143,7 +145,6 @@ class RewardInfomation extends Component {
     this.setState({ dataApi: res.data.data });
 
     let active = 0
-    console.log(res.data)
     res.data.data.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
@@ -335,6 +336,14 @@ class RewardInfomation extends Component {
     }
   }
 
+  getBadge_String(status) {
+    switch (status) {
+      case '0': return 'Đã ẩn'
+      case '1': return 'Đang kích hoạt'
+      default: return 'primary'
+    }
+  }
+
   render() {
     const { data, arrPagination } = this.state;
     if (!this.state.isLoading) {
@@ -361,6 +370,7 @@ class RewardInfomation extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
+                        <th className="text-center">Công ty</th>
                         <th className="text-center">Tiêu đề</th>
                         <th className="text-center">Nội dung</th>
                         <th className="text-center">Templates</th>
@@ -377,11 +387,17 @@ class RewardInfomation extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.Company_Id.Name}</td>
                                 <td className="text-center">{item.Subject}</td>
                                 <td className="text-center">{item.Content}</td>
                                 <td className="text-center">{item.Templates}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  <CBadge color={this.getBadge(item.Status)}>
+                                    {this.getBadge_String(item.Status)}
+                                  </CBadge>
                                 </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >

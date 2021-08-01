@@ -428,7 +428,7 @@ class Users extends Component {
                   <tr>
                     <th className="text-center">STT.</th>
                     <th className="text-center">Tên Gói</th>
-                    <th className="text-center">Số lượng tính năng</th>
+                    <th className="text-center">Danh sách tính năng</th>
                     <th className="text-center">Gói</th>
                     <th className="text-center">Ngày kích hoạt</th>
                     <th className="text-center">Ngày hết hạn</th>
@@ -451,7 +451,18 @@ class Users extends Component {
                           <tr key={i}>
                             <th className="text-center">{i + 1}</th>
                             <th className="text-center">{item.Name}</th>
-                            <th className="text-center">{item.Array_Feature.length}</th>
+                            <th className="text-center">
+                              {item.Array_Feature.map((item, i) => {
+                                if (i < 2) {
+                                  return (
+                                    <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
+                                  )
+                                }
+                              })}
+                              {
+                                (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
+                              }
+                            </th>
                             <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
                             <th className="text-center">
                               {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}

@@ -66,7 +66,8 @@ class HistorySkin extends Component {
     };
   }
   async componentDidMount() {
-    if (this.state.type = '0') {
+    console.log(this.state.type)
+    if (this.state.type == '0') {
       this.getData()
     } else {
       this.getData_ByCondition()
@@ -130,7 +131,8 @@ class HistorySkin extends Component {
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN_BY_CONDITION,
-      method: 'POST'
+      method: 'POST',
+      headers: this.state.token
     });
 
     this.pagination(res.data.data);
