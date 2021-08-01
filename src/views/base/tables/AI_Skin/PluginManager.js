@@ -6,9 +6,8 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 import Multiselect from 'multiselect-react-dropdown';
 import {
@@ -16,10 +15,9 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput,
   CButton
 } from '@coreui/react'
-
+import { css } from "@emotion/react";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
@@ -27,7 +25,6 @@ import Constants from "./../../../../contants/contants";
 import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import md5 from "md5";
-import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -490,10 +487,7 @@ class PluginManager extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination, type,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus } = this.state;
-    const { classes } = this.props;
+    const { data, key, action, arrPagination } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">

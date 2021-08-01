@@ -6,22 +6,10 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
-  CContainer,
-  CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
   CBadge,
   CButton
 } from '@coreui/react'
@@ -316,9 +304,7 @@ class RoleManager extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, dataCompany,
-      currentCompany, dataSale, currentSale, action, arrPagination, indexPage } = this.state;
-    const { classes } = this.props;
+    const { data, action, arrPagination } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -551,9 +537,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default RoleManager;

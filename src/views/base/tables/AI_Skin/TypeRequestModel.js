@@ -6,29 +6,15 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
-  CContainer,
-  CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
   CButton,
   CTextarea
 } from '@coreui/react'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
@@ -321,8 +307,7 @@ class TypeRequest extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, indexPage } = this.state;
-    const { classes } = this.props;
+    const { data, arrPagination, indexPage } = this.state;
     if(!this.state.isError){
       if (!this.state.isLoading) {
         return (
@@ -560,9 +545,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default TypeRequest;

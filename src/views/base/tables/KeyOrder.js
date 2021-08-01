@@ -8,7 +8,6 @@ import {
     Row,
     Table, Button, Input,
     ModalHeader, ModalBody, ModalFooter, Modal,
-    Alert
 } from 'reactstrap';
 import 'moment-timezone';
 import "react-datepicker/dist/react-datepicker.css";
@@ -140,7 +139,7 @@ class Users extends Component {
     }
 
     async addUser() {
-        const { UserName, Company_Id, Email, Address, Phone, Status } = this.state
+        const { UserName, Company_Id, Email, Address, Phone } = this.state
 
         if (UserName == null || UserName == '' ||
             Email == null || Email == '' ||
@@ -302,7 +301,7 @@ class Users extends Component {
     }
 
     render() {
-        const { data, key, viewingUser, communities, dataCompany,
+        const { data, key, dataCompany,
             currentCompany, action, arrPagination, indexPage } = this.state;
 
         if (!this.state.isLoading) {
@@ -575,9 +574,6 @@ const styles = {
         height: '100px',
         borderRadius: '99999px'
     },
-    mgl5: {
-        marginBottom: '0px'
-    }
 }
 
 export default Users;

@@ -6,7 +6,6 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
   Alert
 } from 'reactstrap';

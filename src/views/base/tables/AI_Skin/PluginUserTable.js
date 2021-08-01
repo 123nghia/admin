@@ -6,9 +6,8 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
@@ -149,8 +148,7 @@ class User extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
-      keyWebsite, keyCode, keyDateCreate, keyStatus, keyRole } = this.state;
+    const { indexPage, key, keyStatus, keyRole } = this.state;
     // this.setState({ key: key })
 
     if (key != '' || keyStatus != '' || keyRole != '') {
@@ -224,7 +222,7 @@ class User extends Component {
   }
 
   async addCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password } = this.state
+    const { Email, Name, Phone, Address, UserName, Password } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -728,9 +726,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '5px'
-  }
 }
 
 export default User;

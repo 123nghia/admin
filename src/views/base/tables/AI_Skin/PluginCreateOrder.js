@@ -6,39 +6,23 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
-import Select from 'react-select'
-import ReactLoading from 'react-loading';
+
 import {
-  CBadge,
   CRow,
   CCol,
   CSelect,
-  CInput,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
   CButton,
   CLabel
 } from '@coreui/react'
 
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
-import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
-import moment from "moment";
-import { css } from "@emotion/react";
-import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -392,9 +376,9 @@ class PluginCreateOrder extends Component {
 
   render() {
     const { dataCompany, dataPackage, Company_Id, Package_Id, arrayChooseFeature,
-      company_name, package_name, package_time, arrFeature, company_id, package_id, package_key,
-      package_unit, currentSlug, confirmSlug } = this.state;
-    const arrT = [];
+      company_name, package_name, package_time, arrFeature, package_key,
+      package_unit, currentSlug } = this.state;
+
     return (
       <div className="animated fadeIn">
         <Card>

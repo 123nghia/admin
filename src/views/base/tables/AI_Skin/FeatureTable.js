@@ -6,9 +6,9 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
+
 } from 'reactstrap';
 
 import {
@@ -16,7 +16,6 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput,
   CButton
 } from '@coreui/react'
 
@@ -143,8 +142,7 @@ class Feature extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
-      keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
+    const { indexPage, key, keyStatus } = this.state;
     // this.setState({ key: key })
 
     if (key != '' || keyStatus != '') {
@@ -406,9 +404,7 @@ class Feature extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination, type,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus } = this.state;
+    const { data, key, action, arrPagination} = this.state;
 
     const { classes } = this.props;
     if (!this.state.isLoading) {
@@ -736,9 +732,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '5px'
-  }
 }
 
 export default Feature;

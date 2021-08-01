@@ -7,7 +7,7 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
   Alert
 } from 'reactstrap';
@@ -17,7 +17,6 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput,
   CLabel,
   CButton,
   CTooltip
@@ -29,12 +28,10 @@ import 'moment-timezone';
 import Constants from "./../../../../contants/contants";
 import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
-const user = localStorage.getItem('user');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
@@ -197,8 +194,7 @@ class PluginOrder extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
-      keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
+    const { indexPage, key, keyStatus } = this.state;
     // this.setState({ key: key })
 
     if (key != '' || keyStatus != '') {
@@ -651,11 +647,9 @@ class PluginOrder extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, indexPage, currentSlug, confirmSlug, role, type,
-      dataPackage, Company_Id, Package_Id, arrayChooseFeature, arrFeature,
+    const { data, arrPagination, currentSlug, type, Company_Id, Package_Id, arrayChooseFeature, arrFeature,
       company_name, package_name, package_unit, package_key, package_time, dataPackage_All, current_status } = this.state;
 
-    const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">

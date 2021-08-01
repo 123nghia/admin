@@ -4,36 +4,16 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
-  CLabel,
   CSelect,
-  CContainer,
   CRow,
   CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
   CBadge
 } from '@coreui/react'
-
-
-import {
-  CChartBar,
-  CChartLine,
-  CChartDoughnut,
-  CChartRadar,
-  CChartPie,
-  CChartPolarArea
-} from '@coreui/react-chartjs'
 
 import { connect } from 'react-redux';
 import {
@@ -44,7 +24,6 @@ import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import LazyLoad from 'react-lazyload';
 import ReactLoading from 'react-loading';
 
 let headers = new Headers();
@@ -421,7 +400,7 @@ class Users extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyName, keyEmail, keyPhone, keyCodeCompany, keyGender, keyStatus } = this.state;
+    const { indexPage, key, keyStatus } = this.state;
 
     if (key != '' ||  keyStatus != '') {
       let d = []
@@ -508,7 +487,7 @@ class Users extends Component {
     const { company_id } = this.state;
     var id = JSON.parse(company_id);
 
-    const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id, Company_Id, Sale_Id, Address } = this.state
+    const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id, Sale_Id, Address } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -579,8 +558,7 @@ class Users extends Component {
     const { company_id } = this.state;
     var id = JSON.parse(company_id);
 
-    const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id,
-      Company_Id, Sale_Id, Status, Address } = this.state
+    const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id, Sale_Id, Status, Address } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -771,9 +749,7 @@ class Users extends Component {
 
 
   render() {
-    const { data, key, dataCompany, role, hidden, dataAll, arrPagination_All, indexPage_All,
-      currentCompany, action, dataRole, currentRole, arrPagination, indexPage,
-      hidden_all, isSale, keyName, keyEmail, keyPhone, keyCodeCompany, keyGender, keyStatus } = this.state;
+    const { data, key, hidden, action, dataRole, currentRole, arrPagination, indexPage } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -1168,9 +1144,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 const mapStateToProps = state => {

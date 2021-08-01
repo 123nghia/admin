@@ -6,9 +6,7 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
+  Button, Input
 } from 'reactstrap';
 
 import {
@@ -16,8 +14,6 @@ import {
   CLabel,
   CRow,
   CCol,
-  CSelect,
-  CInput,
   CModal,
   CModalBody,
   CModalFooter,
@@ -28,10 +24,8 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import 'moment-timezone';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../contants/contants";
-import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { css } from "@emotion/react";
@@ -124,7 +118,6 @@ class Users extends Component {
   }
 
   getData = async () => {
-    const { data_link_shop, data_link_recommand, data_link_sku } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -293,8 +286,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, link_shop, link_recommand, link_sku, role, type, viewingUser, communities, action, arrPagination,
-      indexPage, arrTotalPackage, company_name, current_package, phone_number, isChange, currentPassword } = this.state;
+    const { data, role, type, arrTotalPackage, company_name, current_package, phone_number, isChange, currentPassword } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -617,9 +609,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default Users;

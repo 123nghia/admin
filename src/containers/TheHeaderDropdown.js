@@ -6,7 +6,8 @@ import {
   CDropdownMenu,
   CDropdownToggle,
   CImg,
-  CLabel
+  CLabel,
+  CButton
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { Nav, NavItem, NavLink } from 'reactstrap';
@@ -18,15 +19,18 @@ const TheHeaderDropdown = () => {
       className="c-header-nav-items mx-5"
       direction="down"
     >
-      <CDropdownToggle className="c-header-nav-link" caret={false}>
+      <CDropdownToggle className="mr-10" className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
-
-          <div className="mr-2" style={{ fontSize: 20, color: 'orange', fontFamily: 'Myriad Pro Regular' }}><strong>{JSON.parse(localStorage.getItem('user')) == null || JSON.parse(localStorage.getItem('user')) == undefined ? "" : JSON.parse(localStorage.getItem('user')).username}</strong></div>
-          <CImg
+          <div className="mr-2" style={{ fontSize: 20, color: 'orange', fontFamily: 'Myriad Pro Regular' }}>
+            <strong>
+              {JSON.parse(localStorage.getItem('user')) == null || JSON.parse(localStorage.getItem('user')) == undefined ? "" : JSON.parse(localStorage.getItem('user')).username}
+            </strong>
+          </div>
+          {/* <CImg
             src={'avatars/6.jpg'}
             className="c-avatar-img"
             alt="admin@bootstrapmaster.com"
-          />
+          /> */}
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">

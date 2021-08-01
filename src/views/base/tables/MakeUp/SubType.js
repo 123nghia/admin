@@ -6,25 +6,16 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
+  Input
 } from 'reactstrap';
 
 import {
+  CButton,
   CLabel,
   CSelect,
-  CContainer,
   CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
-  CButton,
-  CTextarea
+  CCol
 } from '@coreui/react'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -40,13 +31,6 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class SubType extends Component {
   constructor(props) {
     super(props);
@@ -67,6 +51,7 @@ class SubType extends Component {
       action: 'new',
       vi: '',
       image: '',
+      isNull: false,
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -152,17 +137,26 @@ class SubType extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  searchKey(key) {
-    this.setState({ key: key })
+  searchKey() {
+    const { indexPage, key } = this.state;
+    // this.setState({ key: key })
 
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+        val.vi.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+
           d.push(val)
         }
       })
       let active = 0
+
+      d.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
 
       this.setState({ data: d, totalActive: active })
     } else {
@@ -174,8 +168,24 @@ class SubType extends Component {
         }
       })
 
-      this.setState({ data: this.state.dataApi, totalActive: active })
+      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
     }
+  }
+
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      key: ''
+    }, () => {
+      this.searchKey();
+    });
   }
 
   async toggleModal(key) {
@@ -216,7 +226,7 @@ class SubType extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -234,12 +244,13 @@ class SubType extends Component {
       action: "update",
       vi: item.vi || item.name,
       image: item.image,
+      isNull: item.isNull,
       id: item['_id']
     })
   }
 
   async updateUser() {
-    const { image, vi } = this.state
+    const { image, vi, isNull } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
       alert("Please fill in all the requirements");
@@ -249,7 +260,8 @@ class SubType extends Component {
     const body = {
       vi: vi,
       image: image,
-      id: this.state.id
+      id: this.state.id,
+      isNull: isNull
     }
 
     this.setState({ isLoading: true });
@@ -261,7 +273,7 @@ class SubType extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -292,7 +304,7 @@ class SubType extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -329,8 +341,7 @@ class SubType extends Component {
   }
 
   render() {
-    const { data, key, sdkItem, action, arrPagination, indexPage, currentSdkSelect } = this.state;
-    const { classes } = this.props;
+    const { data, arrPagination, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -340,10 +351,25 @@ class SubType extends Component {
                 <CardHeader>
                   <i className="fa fa-align-justify"></i> Danh mục (Page: {this.state.indexPage + 1}))
                   <div style={styles.tags}>
-                    {/* <div>
-                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
-                    {/* </div> */}
+                    <CRow>
+                      <CCol sm="12" lg="12">
+                        <CRow>
+                          <CCol sm="12" lg="6">
+                            <div>
+                              <Input style={styles.searchInput} onChange={(e) => {
+                                this.actionSearch(e, "key");
+                              }} name="key" value={key} placeholder="Từ khóa" />
+                            </div>
+                          </CCol>
+                          <CCol sm="12" lg="6">
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                          </CCol>
+                        </CRow>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+                      </CCol>
+                    </CRow>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -443,6 +469,32 @@ class SubType extends Component {
                 onClick={(e) => { e.target.value = null }}
               // rows="5"
               />
+
+              {
+                this.state.action == 'new' ? "" :
+                  <div>
+                    <CLabel>Ẩn danh mục ?</CLabel>
+                    <div style={{ width: "100%" }}>
+                      <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+                        {
+                          [true, false].map((item, i) => {
+                            if (item == this.state.isNull) {
+                              return (
+                                <option selected key={i} value={item}>{String(item)}</option>
+                              );
+                            } else {
+                              return (
+                                <option key={i} value={item}>{String(item)}</option>
+                              );
+                            }
+                          })
+                        }
+                      </CSelect>
+                    </div>
+                  </div>
+
+              }
+
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
@@ -534,8 +586,7 @@ const styles = {
   },
   tags: {
     float: "right",
-    marginRight: "5px",
-    width: "250px"
+    marginRight: "5px"
   },
   searchInput: {
     width: "190px",
@@ -555,9 +606,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default SubType;

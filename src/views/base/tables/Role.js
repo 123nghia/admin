@@ -8,7 +8,6 @@ import {
   Row,
   Table, Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
@@ -253,8 +252,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, dataCompany,
-      currentCompany, dataSale, currentSale, action, arrPagination, indexPage } = this.state;
+    const { data, key, action, arrPagination, indexPage } = this.state;
 
     return (
       <div className="animated fadeIn">
@@ -449,9 +447,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default Users;

@@ -6,9 +6,8 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 import CIcon from '@coreui/icons-react'
 import {
@@ -16,7 +15,6 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput,
   CModal,
   CModalBody,
   CModalFooter,
@@ -211,8 +209,7 @@ class PluginCustomerManager extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
-      keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
+    const { indexPage, key, keyStatus } = this.state;
     // this.setState({ key: key })
 
     if (key != '' || keyStatus != '') {
@@ -263,7 +260,8 @@ class PluginCustomerManager extends Component {
         Code: '',
         Status: '',
         username: '',
-        password: ''
+        password: '',
+        current_province: this.state.province[0]
       })
     }
   }
@@ -318,7 +316,6 @@ class PluginCustomerManager extends Component {
   }
 
   openUpdate(item) {
-
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -326,13 +323,14 @@ class PluginCustomerManager extends Component {
       Email: item.Email,
       Phone: item.Phone,
       Fax: item.Fax,
-      Address: item.Address,
+      Address: item.Address.length < 1 ? item.Address + ", " + this.state.province[0].province_name : item.Address,
       Slug: item.Slug,
       Website: item.Website,
       Code: item._id,
       id: item['_id'],
       Status: item.Status,
-      current_province: item.Address.split(',')[item.Address.split(',').length - 1]
+      current_province: item.Address.length < 1 ? this.state.province[0].province_name :
+            item.Address.split(',')[item.Address.split(',').length - 1]
     })
   }
 
@@ -560,9 +558,8 @@ class PluginCustomerManager extends Component {
     this.setState({ province: res.data.results })
   }
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination, type, current_province,
-      indexPage, arrTotalPackage, company_name, current_package, phone_number, province } = this.state;
-    const { classes } = this.props;
+    const { data, key, action, arrPagination, type, current_province, arrTotalPackage, company_name, current_package, phone_number, province } = this.state;
+
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">

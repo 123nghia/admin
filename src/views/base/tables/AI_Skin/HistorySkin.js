@@ -6,23 +6,9 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
-  CContainer,
-  CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
   CButton
 } from '@coreui/react'
 
@@ -30,7 +16,6 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
-import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
@@ -213,8 +198,7 @@ class HistorySkin extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, dataCompany,
-      currentCompany, dataSale, currentSale, action, arrPagination, indexPage } = this.state;
+    const { data, arrPagination } = this.state;
     const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
@@ -223,7 +207,7 @@ class HistorySkin extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> lịch sử soi da (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Lịch sử soi da (Page: {this.state.indexPage + 1}))
                 </CardHeader>
                 <CardBody>
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
@@ -247,7 +231,9 @@ class HistorySkin extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">
-                                  <CButton outline color="primary" onClick={e => {}}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                                  <CButton outline color="primary" onClick={e => {
+                                    console.log(JSON.parse(item.Result))
+                                  }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
                                   {/* <img src={this.state.BASE_URL + "/images/calendar.png"} style={{ width: '10%' }} /> */}
                                   {/* {item.Result} */}
                                 </td>

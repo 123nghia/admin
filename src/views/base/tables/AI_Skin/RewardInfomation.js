@@ -6,23 +6,11 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
   Alert
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
-  CContainer,
-  CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
   CButton
 } from '@coreui/react'
 
@@ -348,8 +336,7 @@ class RewardInfomation extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, indexPage } = this.state;
-    const { classes } = this.props;
+    const { data, arrPagination } = this.state;
     if (!this.state.isLoading) {
 
       return (

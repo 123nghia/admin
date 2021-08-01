@@ -2,40 +2,22 @@ import React, { Component } from 'react';
 
 import {
   Card,
-  CardBody,
   CardHeader,
   CardFooter,
-  Col,
-  Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
   CBadge,
-  CLabel,
-  CRow,
-  CCol,
-  CSelect,
-  CInput,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
   CModalTitle,
   CButton,
   CTooltip
 } from '@coreui/react'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Pagination from '@material-ui/lab/Pagination';
 import CIcon from '@coreui/icons-react'
 import 'moment-timezone';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../../../contants/contants";
-import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
@@ -307,9 +289,7 @@ class ListFeatureOfCustomer extends Component {
   }
 
   render() {
-    const { data, link_shop, link_recommand, link_sku, role, viewingUser, communities, action, arrPagination,
-      indexPage, arrTotalPackage, company_name, current_package, phone_number, isChange, currentPassword } = this.state;
-    const { classes } = this.props;
+    const { arrTotalPackage, current_package, } = this.state;
     if (!this.state.isLoading) {
 
       return (

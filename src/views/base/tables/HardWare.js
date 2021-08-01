@@ -4,11 +4,8 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
@@ -16,7 +13,6 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -120,7 +116,7 @@ class PackageSale extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyName, keyActive, keyEnd, keyCode, keyStatus } = this.state;
+    const { key, keyStatus } = this.state;
 
     if (key != '' || keyStatus != '') {
       let d = []
@@ -333,8 +329,7 @@ class PackageSale extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, End_Date, Active_Date,
-      dataCompany, currentCompany, arrPagination, indexPage, keyName, keyActive, keyEnd, keyCode, keyStatus } = this.state;
+    const { data, key, action, End_Date, Active_Date, arrPagination, indexPage } = this.state;
     if (!this.state.isLoading) {
       return (
         <div>
@@ -596,9 +591,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '5px'
-  }
 }
 
 export default PackageSale;

@@ -8,7 +8,6 @@ import {
     Row,
     Table, Button, Input,
     ModalHeader, ModalBody, ModalFooter, Modal,
-    Alert
 } from 'reactstrap';
 import 'moment-timezone';
 import DatePicker from "react-datepicker";
@@ -135,7 +134,7 @@ class PackageSale extends Component {
     }
 
     async addPackageSale() {
-        const { Name, Company_Id, End_Date, Status } = this.state
+        const { Name, Company_Id, End_Date } = this.state
 
         if (End_Date == null || End_Date == ''
             || Name == null || Name == '') {
@@ -302,7 +301,7 @@ class PackageSale extends Component {
     }
 
     render() {
-        const { data, key, viewingUser, communities, action, End_Date, dataCompany, currentCompany, arrPagination, indexPage } = this.state;
+        const { data, key, action, End_Date, dataCompany, currentCompany, arrPagination, indexPage } = this.state;
         if (!this.state.isLoading) {
             return (
                 <div className="animated fadeIn">
@@ -539,9 +538,6 @@ const styles = {
         height: '100px',
         borderRadius: '99999px'
     },
-    mgl5: {
-        marginBottom: '5px'
-    }
 }
 
 export default PackageSale;

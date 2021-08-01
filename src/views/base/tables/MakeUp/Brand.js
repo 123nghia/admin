@@ -6,25 +6,14 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
-  CContainer,
-  CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
   CButton,
-  CTextarea
+  CRow,
+  CCol
 } from '@coreui/react'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -79,7 +68,7 @@ class Brand extends Component {
   }
   async componentDidMount() {
     const { type } = this.state;
-    if(type == '0' || type == '1'){
+    if (type == '0' || type == '1') {
       this.getData()
     } else {
       this.getData_Company()
@@ -149,17 +138,25 @@ class Brand extends Component {
     this.setState({ isLoading: false, totalActive: active });
   }
 
-  searchKey(key) {
-    this.setState({ key: key })
+  searchKey() {
+    const { indexPage, key } = this.state;
+    // this.setState({ key: key })
 
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
         if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+
           d.push(val)
         }
       })
       let active = 0
+
+      d.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
 
       this.setState({ data: d, totalActive: active })
     } else {
@@ -171,8 +168,24 @@ class Brand extends Component {
         }
       })
 
-      this.setState({ data: this.state.dataApi, totalActive: active })
+      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
     }
+  }
+
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      key: ''
+    }, () => {
+      this.searchKey();
+    });
   }
 
   async toggleModal(key) {
@@ -213,7 +226,7 @@ class Brand extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -259,7 +272,7 @@ class Brand extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -290,7 +303,7 @@ class Brand extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -327,8 +340,7 @@ class Brand extends Component {
   }
 
   render() {
-    const { data, key, sdkItem, action, arrPagination, indexPage, currentSdkSelect } = this.state;
-    const { classes } = this.props;
+    const { data, arrPagination, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -338,10 +350,27 @@ class Brand extends Component {
                 <CardHeader>
                   <i className="fa fa-align-justify"></i> Danh sách thương hiệu (Page: {this.state.indexPage + 1}))
                   <div style={styles.tags}>
-                    {/* <div>
-                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
-                    {/* </div> */}
+
+                    <CRow>
+                      <CCol sm="12" lg="12">
+                        <CRow>
+                          <CCol sm="12" lg="6">
+                            <div>
+                              <Input style={styles.searchInput} onChange={(e) => {
+                                this.actionSearch(e, "key");
+                              }} name="key" value={key} placeholder="Từ khóa" />
+                            </div>
+                          </CCol>
+                          <CCol sm="12" lg="6">
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                          </CCol>
+                        </CRow>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+                      </CCol>
+                    </CRow>
+
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -528,8 +557,7 @@ const styles = {
   },
   tags: {
     float: "right",
-    marginRight: "5px",
-    width: "250px"
+    marginRight: "5px"
   },
   searchInput: {
     width: "190px",
@@ -549,9 +577,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default Brand;

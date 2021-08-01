@@ -34,6 +34,7 @@ const CusRequest = React.lazy(() => import('./views/base/tables/AI_Skin/Customer
 const TypeRequest = React.lazy(() => import('./views/base/tables/AI_Skin/TypeRequestModel'));
 const CustomerManager = React.lazy(() => import('./views/base/tables/AI_Skin/CustomerManager'));
 const HistorySkin = React.lazy(() => import('./views/base/tables/AI_Skin/HistorySkin'));
+const UpdatePackage = React.lazy(() => import('./views/base/tables/UpdatePackage'));
 
 //ADMIN MakeUp
 const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestItem'));
@@ -85,6 +86,7 @@ const routes = [
   { path: '/product', name: 'BRAND', component: Product },
   { path: '/subtype', name: 'Sub Type', component: SubType },
   { path: '/color', name: 'Color', component: Color },
+  { path: '/update_package', name: 'Update', component: UpdatePackage },
 ];
 
 export default routes;

@@ -6,28 +6,19 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
   CLabel,
   CSelect,
-  CContainer,
-  CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
   CButton,
-  CTextarea
+  CTextarea,
+  CRow, CCol
 } from '@coreui/react'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
@@ -40,13 +31,6 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class SuggestItem extends Component {
   constructor(props) {
     super(props);
@@ -213,17 +197,27 @@ class SuggestItem extends Component {
     });
   };
 
-  searchKey(key) {
-    this.setState({ key: key })
+  searchKey() {
+    const { indexPage, key } = this.state;
+    // this.setState({ key: key })
 
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.type_product_id.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.type_product_id.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+
           d.push(val)
         }
       })
       let active = 0
+
+      d.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
 
       this.setState({ data: d, totalActive: active })
     } else {
@@ -235,8 +229,24 @@ class SuggestItem extends Component {
         }
       })
 
-      this.setState({ data: this.state.dataApi, totalActive: active })
+      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
     }
+  }
+
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      key: ''
+    }, () => {
+      this.searchKey();
+    });
   }
 
   async toggleModal(key) {
@@ -263,7 +273,7 @@ class SuggestItem extends Component {
   }
 
   async addRoles() {
-    const { name, image, title, description, linkdetail, level, sdktype, companyid, type_sdk_id, type_product_id } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       title == null || title == '' ||
@@ -328,7 +338,7 @@ class SuggestItem extends Component {
   }
 
   async updateUser() {
-    const { name, image, title, description, linkdetail, level, sdktype, companyid, type_sdk_id, type_product_id } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -428,8 +438,7 @@ class SuggestItem extends Component {
   }
 
   render() {
-    const { data, key, sdkItem, action, arrPagination, indexPage, currentSdkSelect, arrOptionProductType, arrOptionSdkType } = this.state;
-    const { classes } = this.props;
+    const { data, arrPagination, arrOptionProductType, arrOptionSdkType, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -439,10 +448,25 @@ class SuggestItem extends Component {
                 <CardHeader>
                   <i className="fa fa-align-justify"></i> Danh sách sản phẩm da mặt (Page: {this.state.indexPage + 1}))
                   <div style={styles.tags}>
-                    {/* <div>
-                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
-                    {/* </div> */}
+                    <CRow>
+                      <CCol sm="12" lg="12">
+                        <CRow>
+                          <CCol sm="12" lg="6">
+                            <div>
+                              <Input style={styles.searchInput} onChange={(e) => {
+                                this.actionSearch(e, "key");
+                              }} name="key" value={key} placeholder="Từ khóa" />
+                            </div>
+                          </CCol>
+                          <CCol sm="12" lg="6">
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                          </CCol>
+                        </CRow>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+                      </CCol>
+                    </CRow>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -743,12 +767,11 @@ const styles = {
     color: 'red'
   },
   mgl5: {
-    marginLeft: '5px'
+    margin: '2px'
   },
   tags: {
     float: "right",
-    marginRight: "5px",
-    width: "250px"
+    marginRight: "5px"
   },
   searchInput: {
     width: "190px",
@@ -768,9 +791,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default SuggestItem;

@@ -6,9 +6,8 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
@@ -16,14 +15,12 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput
 } from '@coreui/react'
 
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -126,8 +123,7 @@ class Company extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
-      keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
+    const { indexPage, key, keyStatus } = this.state;
     // this.setState({ key: key })
 
     if (key != '' || keyStatus != '') {
@@ -266,7 +262,7 @@ class Company extends Component {
   }
 
   async updateCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Code, Status } = this.state
+    const { Email, Name, Phone, Fax, Address, Website, Status } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -413,9 +409,8 @@ class Company extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus } = this.state;
+    const { data, key, action, arrPagination,
+      indexPage, } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -749,9 +744,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '5px'
-  }
 }
 
 export default Company;

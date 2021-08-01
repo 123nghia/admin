@@ -6,23 +6,12 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
-  CLabel,
   CSelect,
-  CContainer,
-  CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
   CButton
 } from '@coreui/react'
 
@@ -378,8 +367,7 @@ class CustomerManager extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, indexPage, arrTypeRequest, type, key } = this.state;
-    const { classes } = this.props;
+    const { data, action, arrPagination, arrTypeRequest, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">

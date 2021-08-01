@@ -4,35 +4,20 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
-  CLabel,
   CSelect,
-  CContainer,
-  CRow,
-  CCol,
   CCardGroup,
   CCard,
-  CCardHeader,
   CCardBody,
-  CFormGroup,
-
 } from '@coreui/react'
 
 
 import {
   CChartBar,
-  CChartLine,
-  CChartDoughnut,
-  CChartRadar,
-  CChartPie,
-  CChartPolarArea
 } from '@coreui/react-chartjs'
 
 import { connect } from 'react-redux';
@@ -44,7 +29,6 @@ import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import LazyLoad from 'react-lazyload';
 import ReactLoading from 'react-loading';
 
 let headers = new Headers();
@@ -1424,9 +1408,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 const mapStateToProps = state => {

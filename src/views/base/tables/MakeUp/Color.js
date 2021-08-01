@@ -6,25 +6,15 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
   CLabel,
   CSelect,
-  CContainer,
-  CRow,
-  CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
   CButton,
-  CTextarea
+  CRow, CCol
 } from '@coreui/react'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -39,14 +29,6 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class Color extends Component {
   constructor(props) {
     super(props);
@@ -83,7 +65,7 @@ class Color extends Component {
   }
   async componentDidMount() {
     const { type } = this.state;
-    if(type == '0' || type == '1'){
+    if (type == '0' || type == '1') {
       this.getData()
     } else {
       this.getData_Company()
@@ -219,9 +201,9 @@ class Color extends Component {
     const { hex, makeup_id, alpha, product_id, version } = this.state;
 
     if (hex == null || hex == '' ||
-        makeup_id == null || makeup_id == '' ||
-        alpha == null || alpha == '' ||
-        product_id == null || product_id == '') {
+      makeup_id == null || makeup_id == '' ||
+      alpha == null || alpha == '' ||
+      product_id == null || product_id == '') {
       alert("Please fill in all the requirements");
       return
     }
@@ -244,7 +226,7 @@ class Color extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -273,9 +255,9 @@ class Color extends Component {
     const { hex, makeup_id, alpha, product_id, version } = this.state;
 
     if (hex == null || hex == '' ||
-        makeup_id == null || makeup_id == '' ||
-        alpha == null || alpha == '' ||
-        product_id == null || product_id == '') {
+      makeup_id == null || makeup_id == '' ||
+      alpha == null || alpha == '' ||
+      product_id == null || product_id == '') {
       alert("Please fill in all the requirements");
       return
     }
@@ -298,7 +280,7 @@ class Color extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -329,7 +311,7 @@ class Color extends Component {
     });
 
     if (res.status == 200) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
         this.getData_Company()
@@ -356,9 +338,60 @@ class Color extends Component {
     }
   }
 
+  searchKey() {
+    const { indexPage, key } = this.state;
+    // this.setState({ key: key })
+
+    if (key != '') {
+      let d = []
+      this.state.dataApi.map(val => {
+        if (val.product.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+        val.hex.toLocaleUpperCase().includes(key.toLocaleUpperCase())||
+        val.makeup_id.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+
+          d.push(val)
+        }
+      })
+      let active = 0
+
+      d.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
+
+      this.setState({ data: d, totalActive: active })
+    } else {
+      let active = 0
+
+      this.state.dataApi.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
+
+      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
+    }
+  }
+
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      key: ''
+    }, () => {
+      this.searchKey();
+    });
+  }
+
   render() {
-    const { data, key, sdkItem, action, arrPagination, indexPage, currentSdkSelect, products } = this.state;
-    const { classes } = this.props;
+    const { data, arrPagination, products, type, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -368,10 +401,29 @@ class Color extends Component {
                 <CardHeader>
                   <i className="fa fa-align-justify"></i> Danh sách mã màu (Page: {this.state.indexPage + 1}))
                   <div style={styles.tags}>
-                    {/* <div>
-                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
-                    {/* </div> */}
+                    <CRow>
+                      <CCol sm="12" lg="12">
+                        <CRow>
+                          <CCol sm="12" lg="6">
+                            <div>
+                              <Input style={styles.searchInput} onChange={(e) => {
+                                this.actionSearch(e, "key");
+                              }} name="key" value={key} placeholder="Từ khóa" />
+                            </div>
+                          </CCol>
+                          <CCol sm="12" lg="6">
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                          </CCol>
+                        </CRow>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        {
+                          type == "0" || type == "1" ? <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
+                            : ""
+                        }
+                      </CCol>
+                    </CRow>
+
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -494,7 +546,7 @@ class Color extends Component {
               // rows="5"
               />
 
-              <CLabel>Chọn sản phẩm:</CLabel>
+              <CLabel>Phiên bản:</CLabel>
               <div style={{ width: "100%" }}>
                 <CSelect onChange={async e => { this.setState({ version: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
                   {
@@ -603,8 +655,7 @@ const styles = {
   },
   tags: {
     float: "right",
-    marginRight: "5px",
-    width: "250px"
+    marginRight: "5px"
   },
   searchInput: {
     width: "190px",
@@ -624,9 +675,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default Color;

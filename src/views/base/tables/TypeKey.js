@@ -8,10 +8,8 @@ import {
     Row,
     Table, Button, Input,
     ModalHeader, ModalBody, ModalFooter, Modal,
-    Alert
 } from 'reactstrap';
 import 'moment-timezone';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
@@ -252,7 +250,7 @@ class Users extends Component {
     }
 
     render() {
-        const { data, key, viewingUser, communities, action, arrPagination, indexPage } = this.state;
+        const { data, key, action, arrPagination, indexPage } = this.state;
 
         if (!this.state.isLoading) {
             return (
@@ -467,9 +465,6 @@ const styles = {
         height: '100px',
         borderRadius: '99999px'
     },
-    mgl5: {
-        marginBottom: '0px'
-    }
 }
 
 export default Users;

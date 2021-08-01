@@ -34,6 +34,13 @@ const _nav = [
     role: ['2']
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Nâng cấp gói',
+    to: '/update_package',
+    icon: <CIcon content={freeSet.cilExpandUp} customClasses="c-sidebar-nav-icon" />,
+    role: ['2']
+  },
+  {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý gói tính năng',
     icon: 'cil-laptop',
@@ -87,15 +94,10 @@ const _nav = [
     role: ['0', '1', '2'],
   },
   {
-    _tag: 'CSidebarNavDropdown',
+    _tag: 'CSidebarNavItem',
     name: 'Quản lý khách hàng',
     icon: 'cil-userFollow',
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Quản lý khách hàng',
-      to: '/customer_manager',
-      role: ['0', '1'],
-    }],
+    to: '/customer_manager',
     role: ['0', '1'],
   },
   {

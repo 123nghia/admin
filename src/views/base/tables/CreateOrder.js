@@ -4,26 +4,18 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
-import Select from 'react-select'
 import {
   CBadge,
   CRow,
   CCol,
-  CSelect,
-  CInput
 } from '@coreui/react'
 
 import 'moment-timezone';
 import Constants from "../../../contants/contants";
-import TextFieldGroup from "../../Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -204,7 +196,7 @@ class Order extends Component {
   }
 
   render() {
-    const { dataCompany, currentCompany, dataHardWard, arrHardWard } = this.state;
+    const { dataCompany, arrHardWard } = this.state;
     const arrT = [];
     return (
       <div className="animated fadeIn">
@@ -407,9 +399,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '5px'
-  }
 }
 
 export default Order;

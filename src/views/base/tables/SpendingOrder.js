@@ -7,9 +7,8 @@ import {
   CardFooter,
   Col,
   Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
@@ -17,15 +16,12 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput,
   CLabel
 } from '@coreui/react'
 
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -401,9 +397,8 @@ class Order extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus, dataOrderDetail } = this.state;
+    const { data, key, action, arrPagination,
+      indexPage, dataOrderDetail } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -726,9 +721,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '5px'
-  }
 }
 
 export default Order;
