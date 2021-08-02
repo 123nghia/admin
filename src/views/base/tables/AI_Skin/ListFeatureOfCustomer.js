@@ -384,11 +384,11 @@ class ListFeatureOfCustomer extends Component {
             {
               this.renderDetailPackage()
             }
-            <CardFooter>
+            {/* <CardFooter>
               <CButton color="primary" onClick={() => {
 
               }}>Hướng dẫn sử dụng</CButton>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </div>
       );
