@@ -14,7 +14,7 @@ const _nav = [
   // },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Thông tin tài khoản',
+    name: 'Thông tin cá nhân',
     to: '/profile',
     icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
@@ -98,7 +98,7 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Thống kê lượt khách hàng',
+    name: 'Danh sách người dùng',
     to: '/customer',
     icon: <CIcon content={freeSet.cilUserPlus} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
