@@ -119,6 +119,7 @@ class CustomerManager extends Component {
       method: 'POST'
     });
     let val = res.data.data.result;
+
     let valCount = res.data.data.Count;
     if (res.data.is_success) {
       for (let i = 0; i < val.length; i++) {
@@ -367,7 +368,7 @@ class CustomerManager extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, arrTypeRequest, key } = this.state;
+    const { data, action, arrPagination, arrTypeRequest, key, indexPage } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -395,7 +396,7 @@ class CustomerManager extends Component {
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Số lần đến</th>
                         {/* <th className="text-center">Trạng thái</th> */}
-                        {/* <th className="text-center">#</th> */}
+                        <th className="text-center">#</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -409,11 +410,17 @@ class CustomerManager extends Component {
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">{item.FullName}</td>
                                 <td className="text-center">{item.Phone}</td>
-                                <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name }</td>
+                                <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">{item.Count}</td>
+
+                                <td className="text-center">
+                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => { }} >
+                                    Lịch sử soi da
+                                  </CButton>
+                                </td>
                                 {/* <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -431,7 +438,7 @@ class CustomerManager extends Component {
                 </CardBody>
               </Card>
               <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination} color="primary" onChange={(e, v) => {
+                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>

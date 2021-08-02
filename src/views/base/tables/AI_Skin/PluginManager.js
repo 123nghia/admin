@@ -543,7 +543,7 @@ class PluginManager extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên gói</th>
                         <th className="text-center">Hạn sử dụng</th>
-                        <th className="text-center">Danh sách tính năng</th>
+                        <th className="text-center">Tính năng</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
 

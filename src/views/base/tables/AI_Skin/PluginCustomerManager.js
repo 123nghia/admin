@@ -719,7 +719,7 @@ class PluginCustomerManager extends Component {
                   <tr>
                     <th className="text-center">STT.</th>
                     <th className="text-center">Tên Gói</th>
-                    <th className="text-center">Danh sách tính năng</th>
+                    <th className="text-center">Tính năng</th>
                     <th className="text-center">Gói</th>
                     <th className="text-center">Ngày kích hoạt</th>
                     <th className="text-center">Ngày hết hạn</th>

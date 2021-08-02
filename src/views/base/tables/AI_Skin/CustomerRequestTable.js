@@ -484,9 +484,6 @@ class CustomerRequest extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {}} >
-                                    Lịch sử soi da
-                                  </CButton>
                                   {/* <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
                                   </CButton>{' '} */}

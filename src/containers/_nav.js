@@ -7,7 +7,7 @@ const arrRoleSHOPMANAGER = ['SALES'];
 const _nav = [
   // {
   //   _tag: 'CSidebarNavItem',
-  //   name: 'Danh sách tính năng',
+  //   name: 'Tính năng',
   //   to: '/dashboard',
   //   icon: <CIcon name="cil-chartPie" customClasses="c-sidebar-nav-icon" />,
   //   role: ['2'],
@@ -85,6 +85,12 @@ const _nav = [
       role: ['0', '1', '2']
     },{
       _tag: 'CSidebarNavItem',
+      name: 'Danh sách khuyến mãi',
+      to: '/cus_request',
+      //icon: <CIcon content={freeSet.cilGift} customClasses="c-sidebar-nav-icon" />,
+      role: ['0', '1', '2']
+    },{
+      _tag: 'CSidebarNavItem',
       name: 'Quản lý loại yêu cầu',
       to: '/type_request',
       role: ['0', '1'],
@@ -94,7 +100,7 @@ const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý đơn hàng',
-    icon: 'cil-chartPie',
+    icon: <CIcon content={freeSet.cilFile} customClasses="c-sidebar-nav-icon" />,
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách đơn hàng',
@@ -112,13 +118,6 @@ const _nav = [
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lý người dùng'],
     role: ['0', '1', '2'],
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Quản lý khuyến mãi',
-    to: '/cus_request',
-    icon: <CIcon content={freeSet.cilGift} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2']
   },
   {
     _tag: 'CSidebarNavItem',
