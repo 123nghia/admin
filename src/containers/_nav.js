@@ -42,7 +42,7 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavDropdown',
-    name: 'Quản lý gói tính năng',
+    name: 'Quản lý gói tính năng AI AR',
     icon: 'cil-laptop',
     _children: [{
       _tag: 'CSidebarNavItem',
@@ -73,29 +73,6 @@ const _nav = [
       role: ['0', '1'],
     }],
     role: ['0', '1'],
-  },
-  {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Chương trình khuyến mãi',
-    icon: 'cil-bell',
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Nội dung khuyến mãi',
-      to: '/reward_info',
-      role: ['0', '1', '2']
-    },{
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách khuyến mãi',
-      to: '/cus_request',
-      //icon: <CIcon content={freeSet.cilGift} customClasses="c-sidebar-nav-icon" />,
-      role: ['0', '1', '2']
-    },{
-      _tag: 'CSidebarNavItem',
-      name: 'Quản lý loại yêu cầu',
-      to: '/type_request',
-      role: ['0', '1'],
-    }],
-    role: ['0', '1', '2'],
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -178,6 +155,35 @@ const _nav = [
     icon: <CIcon content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
   },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý chương trình khuyến mãi'],
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Chương trình khuyến mãi',
+    icon: 'cil-bell',
+    _children: [{
+      _tag: 'CSidebarNavItem',
+      name: 'Nội dung khuyến mãi',
+      to: '/reward_info',
+      role: ['0', '1', '2']
+    },{
+      _tag: 'CSidebarNavItem',
+      name: 'Quản lý loại yêu cầu',
+      to: '/type_request',
+      role: ['0', '1'],
+    }],
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách khuyến mãi',
+    to: '/cus_request',
+    icon: <CIcon content={freeSet.cilGift} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2']
+  }
 ]
 
 export default _nav

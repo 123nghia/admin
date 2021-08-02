@@ -302,12 +302,12 @@ class ListFeatureOfCustomer extends Component {
                 <tr>
                   <th className="text-center">STT.</th>
                   <th className="text-center">Tên Gói</th>
-                  <th className="text-center">Tính năng</th>
                   <th className="text-center">Gói</th>
                   <th className="text-center">Ngày kích hoạt</th>
                   <th className="text-center">Ngày hết hạn</th>
                   <th className="text-center">Thời gian hết hạn</th>
                   <th className="text-center">Trạng thái</th>
+                  <th className="text-center">Tính năng</th>
                   <th className="text-center">#</th>
                 </tr>
               </thead>
@@ -322,21 +322,9 @@ class ListFeatureOfCustomer extends Component {
                   arrTotalPackage != undefined ?
                     arrTotalPackage.map((item, i) => {
                       return (
-                        <tr key={i}>
+                        <tr key={i} style={{ justifyContent: 'center' }}>
                           <th className="text-center">{i + 1}</th>
                           <th className="text-center">{item.Package_Id.Name}</th>
-                          <th className="text-center">
-                            {item.Array_Feature.map((item, i) => {
-                              if(i < 2){
-                                return (
-                                  <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
-                                )
-                              }
-                            })}
-                            {
-                              (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
-                            }
-                          </th>
                           <th className="text-center">{`${item.Package_Id.Value} ${this.convertUnitToDate(item.Package_Id.Unit)}`}</th>
                           <th className="text-center">
                             {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
@@ -358,6 +346,19 @@ class ListFeatureOfCustomer extends Component {
                             <CBadge color={this.getBadgeStatus(item.Status)}>
                               {this.getStatus(item.Status)}
                             </CBadge>
+                          </th>
+
+                          <th className="text-center">
+                            {item.Array_Feature.map((item, i) => {
+                              if(i < 2){
+                                return (
+                                  <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
+                                )
+                              }
+                            })}
+                            {
+                              (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
+                            }
                           </th>
 
                           <td className="text-center">

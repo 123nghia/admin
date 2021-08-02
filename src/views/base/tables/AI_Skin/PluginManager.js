@@ -542,7 +542,8 @@ class PluginManager extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên gói</th>
-                        <th className="text-center">Hạn sử dụng</th>
+                        <th className="text-center">Thời gian sử dụng</th>
+                        <th className="text-center">Đơn vị tính</th>
                         <th className="text-center">Tính năng</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
@@ -558,7 +559,8 @@ class PluginManager extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Name} </td>
-                                <td className="text-center">{item.Value} {item.Unit == '0' ? 'Ngày' : item.Unit == '1' ? "Tháng" : "Năm"}</td>
+                                <td className="text-center">{item.Value}</td>
+                                <td className="text-center">{item.Unit == '0' ? 'Ngày' : item.Unit == '1' ? "Tháng" : "Năm"}</td>
                                 <td className="text-center">
                                   {item.Array_Feature.map((item, i) => {
                                     if (i < 2) {
