@@ -126,7 +126,8 @@ class Users extends Component {
       headers: this.state.token
     });
     let val = res.data.data
-    val.com_name = await this.getCompanyName(val.Company_Id)
+    console.log(val)
+    // val.com_name = await this.getCompanyName(val.Company_Id)
 
     this.setState({ dataApi: res.data.data, data: val, currentPassword: val.Password, isLoading: false });
   }
@@ -306,7 +307,7 @@ class Users extends Component {
                         <CCol sm="12" lg="6">
                           <CLabel><strong>Quản lý tài khoản</strong></CLabel>
                         </CCol>
-                        {
+                        {/* {
                           type == '0' || type == '1' ? "" :
                             <CCol sm="12" lg="6">
                               <CTooltip content="Xem chi tiết đơn hàng">
@@ -317,7 +318,7 @@ class Users extends Component {
                                 </CButton>
                               </CTooltip>
                             </CCol>
-                        }
+                        } */}
                       </CRow>
                       <CRow>
                         <CCol sm="12" lg="12">
@@ -356,7 +357,7 @@ class Users extends Component {
                         <CCol sm="12" lg="12">
                           <div>
                             <CLabel>Tên công ty</CLabel>
-                            <Input style={styles.searchInput} value={data.com_name} />
+                            <Input style={styles.searchInput} value={data.Company_Id == undefined ? "" : data.Company_Id.Name} />
                           </div>
                         </CCol>
 

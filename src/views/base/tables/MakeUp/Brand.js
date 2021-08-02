@@ -348,7 +348,7 @@ class Brand extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách thương hiệu (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh sách thương hiệu
                   <div style={styles.tags}>
 
                     <CRow>
@@ -466,6 +466,10 @@ class Brand extends Component {
                 onClick={(e) => { e.target.value = null }}
               // rows="5"
               />
+              {
+                this.state.image == "" ? "" :
+                  <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
+              }
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}

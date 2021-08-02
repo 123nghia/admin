@@ -56,6 +56,7 @@ class RewardInfomation extends Component {
       Subject: '',
       Content: '',
       Templates: '',
+      Link: '',
       Status: '',
       modalDelete: false,
       delete: null,
@@ -68,7 +69,7 @@ class RewardInfomation extends Component {
     };
   }
   async componentDidMount() {
-    if(this.state.type == '0' || this.state.type == '1'){
+    if (this.state.type == '0' || this.state.type == '1') {
       this.getData();
     } else {
       this.getDataForCompany();
@@ -194,7 +195,8 @@ class RewardInfomation extends Component {
         action: key,
         Subject: '',
         Content: '',
-        Templates: ''
+        Templates: '',
+        Link: ''
       })
     }
   }
@@ -204,11 +206,12 @@ class RewardInfomation extends Component {
   }
 
   async addRoles() {
-    const { Subject, Content, Templates } = this.state
+    const { Subject, Content, Templates, Link } = this.state
 
     if (Subject == null || Subject == '' ||
       Content == null || Content == '' ||
-      Templates == null || Templates == '') {
+      Templates == null || Templates == '' ||
+      Link == null || Link == '') {
       alert("Please fill in all the requirements");
       return
     }
@@ -217,7 +220,8 @@ class RewardInfomation extends Component {
       Subject: Subject,
       Content: Content,
       Company_Id: this.state.type == '0' || this.state.type == '1' ? null : JSON.parse(this.state.company_id).company_id,
-      Templates: Templates
+      Templates: Templates,
+      Link: Link
     }
 
     this.setState({ isLoading: true });
@@ -229,7 +233,7 @@ class RewardInfomation extends Component {
     });
 
     if (res.data.is_success == true) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData();
       } else {
         this.getDataForCompany();
@@ -249,16 +253,18 @@ class RewardInfomation extends Component {
       Content: item.Content,
       Templates: item.Templates,
       id: item['_id'],
-      Status: item.Status
+      Status: item.Status,
+      Link: item.Link
     })
   }
 
   async updateUser() {
-    const { Subject, Content, Templates, Status } = this.state
+    const { Subject, Content, Templates, Status, Link } = this.state
 
     if (Subject == null || Subject == '' ||
       Content == null || Content == '' ||
-      Templates == null || Templates == '') {
+      Templates == null || Templates == '' ||
+      Link == null || Link == '') {
       alert("Please fill in all the requirements");
       return
     }
@@ -268,7 +274,8 @@ class RewardInfomation extends Component {
       Content: Content,
       Templates: Templates,
       id: this.state.id,
-      Status: Status
+      Status: Status,
+      Link: Link
     }
 
     this.setState({ isLoading: true });
@@ -280,7 +287,7 @@ class RewardInfomation extends Component {
     });
 
     if (res.data.is_success == true) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData();
       } else {
         this.getDataForCompany();
@@ -311,7 +318,7 @@ class RewardInfomation extends Component {
     });
 
     if (res.data.is_success == true) {
-      if(this.state.type == '0' || this.state.type == '1'){
+      if (this.state.type == '0' || this.state.type == '1') {
         this.getData();
       } else {
         this.getDataForCompany();
@@ -356,7 +363,7 @@ class RewardInfomation extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách nội dung chương trình khuyến mãi (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh sách nội dung chương trình khuyến mãi
                   <div style={styles.tags}>
                     {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
@@ -374,6 +381,7 @@ class RewardInfomation extends Component {
                         <th className="text-center">Tiêu đề</th>
                         <th className="text-center">Nội dung</th>
                         <th className="text-center">Templates</th>
+                        <th className="text-center">Đường dẫn kèm theo</th>
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
@@ -391,6 +399,9 @@ class RewardInfomation extends Component {
                                 <td className="text-center">{item.Subject}</td>
                                 <td className="text-center">{item.Content}</td>
                                 <td className="text-center">{item.Templates}</td>
+                                <td className="text-center">
+                                  <a href={item.Link} target="_blank">{item.Link}</a>
+                                </td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
@@ -469,6 +480,16 @@ class RewardInfomation extends Component {
                 placeholder={"Nhập nội dung sms"}
                 // error={errors.title}
                 onChange={e => this.onChange("Templates", e.target.value)}
+              // rows="5"
+              />
+
+              <TextFieldGroup
+                field="Link"
+                label="Đường dẫn kèm theo"
+                value={this.state.Link}
+                placeholder={"Đường dẫn kèm theo"}
+                // error={errors.title}
+                onChange={e => this.onChange("Link", e.target.value)}
               // rows="5"
               />
 
@@ -570,7 +591,7 @@ const styles = {
     color: 'red'
   },
   mgl5: {
-    marginLeft: '5px'
+    margin: '5px'
   },
   tags: {
     float: "right",
@@ -595,9 +616,6 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
-  mgl5: {
-    marginBottom: '0px'
-  }
 }
 
 export default RewardInfomation;

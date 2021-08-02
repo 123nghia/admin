@@ -446,7 +446,7 @@ class SuggestItem extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm da mặt (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm da mặt
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -590,6 +590,10 @@ class SuggestItem extends Component {
                 onClick={(e) => { e.target.value = null }}
               // rows="5"
               />
+              {
+                this.state.image == "" ? "" :
+                  <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
+              }
 
               <TextFieldGroup
                 field="title"

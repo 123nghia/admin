@@ -377,7 +377,7 @@ class CustomerManager extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Thống kê lượt khách hàng(Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Thống kê lượt khách hàng
                   <div style={styles.tags}>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" />
                   </div>

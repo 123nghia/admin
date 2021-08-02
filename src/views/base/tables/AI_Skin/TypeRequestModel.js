@@ -318,7 +318,7 @@ class TypeRequest extends Component {
                 <p style={styles.danger}>{this.state.deleted}</p>
                 <Card>
                   <CardHeader>
-                    <i className="fa fa-align-justify"></i> Quản lý loại yêu cầu (Page: {this.state.indexPage + 1}))
+                    <i className="fa fa-align-justify"></i> Quản lý loại yêu cầu
                     <div style={styles.tags}>
                       {/* <div>
                       <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}

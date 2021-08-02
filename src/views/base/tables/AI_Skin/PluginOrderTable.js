@@ -344,29 +344,6 @@ class PluginOrder extends Component {
 
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-  async handlePageChange(pageNumber) {
-    this.getUsers(pageNumber);
-  }
-
   getBadge(status) {
     switch (status) {
       case "0": return 'danger'
@@ -659,7 +636,7 @@ class PluginOrder extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">

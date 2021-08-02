@@ -87,6 +87,15 @@ class Feature extends Component {
     }
   }
 
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ Image: e.target.result })
+    }
+  }
+
   async getCompanyData() {
     const resCompany = await axios({
       baseURL: Constants.BASE_URL,
@@ -306,29 +315,6 @@ class Feature extends Component {
 
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-  async handlePageChange(pageNumber) {
-    this.getUsers(pageNumber);
-  }
-
   getBadge(status) {
     switch (status) {
       case "0": return 'danger'
@@ -404,7 +390,7 @@ class Feature extends Component {
   }
 
   render() {
-    const { data, key, action, arrPagination} = this.state;
+    const { data, key, action, arrPagination } = this.state;
 
     const { classes } = this.props;
     if (!this.state.isLoading) {
@@ -416,7 +402,7 @@ class Feature extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách tính năng (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách tính năng
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -561,14 +547,18 @@ class Feature extends Component {
               />
 
               <TextFieldGroup
-                field="Image"
-                label="Logo"
-                value={this.state.Image}
-                placeholder={"Nhập link image"}
+                field="image"
+                label="Ảnh thương hiệu"
+                type={"file"}
                 // error={errors.title}
-                onChange={e => this.onChange("Image", e.target.value)}
+                onChange={e => { this.onChangeImage(e) }}
+                onClick={(e) => { e.target.value = null }}
               // rows="5"
               />
+              {
+                this.state.Image == "" ? "" :
+                <img width="250" height="300" src={this.state.Image} style={{ marginBottom: 20 }}/>
+              }
 
               <div>
                 <label style={styles.flexLabel} htmlFor="tag">Loại    </label>

@@ -51,6 +51,7 @@ class SubType extends Component {
       action: 'new',
       vi: '',
       image: '',
+      hover: '',
       isNull: false,
       modalDelete: false,
       delete: null,
@@ -145,7 +146,7 @@ class SubType extends Component {
       let d = []
       this.state.dataApi.map(val => {
         if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-        val.vi.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+          val.vi.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -194,7 +195,8 @@ class SubType extends Component {
         modalCom: !this.state.modalCom,
         action: key,
         vi: "",
-        image: ""
+        image: "",
+        hover: ''
       })
     }
   }
@@ -204,7 +206,7 @@ class SubType extends Component {
   }
 
   async addRoles() {
-    const { vi, image } = this.state
+    const { vi, image, hover } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
       alert("Please fill in all the requirements");
@@ -214,7 +216,8 @@ class SubType extends Component {
     const body = {
       vi: vi,
       image: image,
-      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
+      hover: hover
     }
 
     this.setState({ isLoading: true });
@@ -245,12 +248,13 @@ class SubType extends Component {
       vi: item.vi || item.name,
       image: item.image,
       isNull: item.isNull,
-      id: item['_id']
+      id: item['_id'],
+      hover: item.hover
     })
   }
 
   async updateUser() {
-    const { image, vi, isNull } = this.state
+    const { image, vi, isNull, hover } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
       alert("Please fill in all the requirements");
@@ -261,7 +265,8 @@ class SubType extends Component {
       vi: vi,
       image: image,
       id: this.state.id,
-      isNull: isNull
+      isNull: isNull,
+      hover: hover
     }
 
     this.setState({ isLoading: true });
@@ -349,7 +354,7 @@ class SubType extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh mục (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh mục
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -462,11 +467,25 @@ class SubType extends Component {
 
               <TextFieldGroup
                 field="image"
-                label="Ảnh"
+                label="Ảnh thương hiệu"
                 type={"file"}
                 // error={errors.title}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null }}
+              // rows="5"
+              />
+              {
+                this.state.image == "" ? "" :
+                  <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
+              }
+
+              <TextFieldGroup
+                field="hover"
+                label="Hover"
+                value={this.state.hover}
+                placeholder={"Hover"}
+                // error={errors.title}
+                onChange={e => this.onChange("hover", e.target.value)}
               // rows="5"
               />
 

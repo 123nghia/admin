@@ -399,7 +399,7 @@ class Color extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách mã màu (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh sách mã màu
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">

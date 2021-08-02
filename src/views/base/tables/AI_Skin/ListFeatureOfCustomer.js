@@ -77,7 +77,6 @@ class ListFeatureOfCustomer extends Component {
       current_slug: '',
       arrTotalPackage: [],
       isChange: true,
-      currentPassword: '',
       current_package: '',
       isLoading: false
     };
@@ -127,11 +126,11 @@ class ListFeatureOfCustomer extends Component {
       headers: this.state.token
     });
     let val = res.data.data
-    val.com_name = await this.getCompanyName(val.Company_Id)
+    //val.com_name = await this.getCompanyName(val.Company_Id)
 
     await this.onView(val.Name, val.Company_Id, val.Phone);
 
-    this.setState({ dataApi: res.data.data, data: val, currentPassword: val.Password, isLoading: false });
+    this.setState({ dataApi: res.data.data, data: val, isLoading: false });
   }
 
   onChange(key, val) {
@@ -166,16 +165,16 @@ class ListFeatureOfCustomer extends Component {
     });
     let val = resPackage.data.data.result;
 
-    for (let i = 0; i < val.length; i++) {
-      let data = await this.getPackageName(val[i].Package_Id);
-      val[i].Name = data.Name
-      val[i].Unit = data.Unit
-      val[i].Value = data.Value
-      arrTemp.push(val[i])
-    }
+    // for (let i = 0; i < val.length; i++) {
+    //   let data = await this.getPackageName(val[i].Package_Id);
+    //   val[i].Name = data.Name
+    //   val[i].Unit = data.Unit
+    //   val[i].Value = data.Value
+    //   arrTemp.push(val[i])
+    // }
 
-    this.setState({ arrTotalPackage: arrTemp, current_package: arrTemp.length == '0' ? '' : arrTemp[0].Name })
-    return arrTemp;
+    this.setState({ arrTotalPackage: val, current_package: val.length == 0 ? '' : val[0].Package_Id.Name })
+    return val;
   }
 
   async onView(name, com_id, phone_number) {
@@ -325,7 +324,7 @@ class ListFeatureOfCustomer extends Component {
                       return (
                         <tr key={i}>
                           <th className="text-center">{i + 1}</th>
-                          <th className="text-center">{item.Name}</th>
+                          <th className="text-center">{item.Package_Id.Name}</th>
                           <th className="text-center">
                             {item.Array_Feature.map((item, i) => {
                               if(i < 2){
@@ -338,7 +337,7 @@ class ListFeatureOfCustomer extends Component {
                               (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
                             }
                           </th>
-                          <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
+                          <th className="text-center">{`${item.Package_Id.Value} ${this.convertUnitToDate(item.Package_Id.Unit)}`}</th>
                           <th className="text-center">
                             {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
                           </th>
@@ -365,7 +364,7 @@ class ListFeatureOfCustomer extends Component {
                             <CButton outline color="info" size="sm"
                               onClick={async (e) => {
                                 this.setState({
-                                  arrDetailPackage: item.Array_Feature, current_package: item.Name
+                                  arrDetailPackage: item.Array_Feature, current_package: item.Package_Id.Name
                                 })
                               }}>
                               <CIcon name="cil-magnifying-glass" /> Chi tiết

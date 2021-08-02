@@ -569,7 +569,7 @@ class PluginCustomerManager extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách công ty (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách công ty
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">

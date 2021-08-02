@@ -424,7 +424,7 @@ class Product extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -559,16 +559,20 @@ class Product extends Component {
 
               <TextFieldGroup
                 field="image"
-                label="Ảnh"
+                label="Ảnh thương hiệu"
                 type={"file"}
                 // error={errors.title}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null }}
               // rows="5"
               />
+              {
+                this.state.image == "" ? "" :
+                  <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
+              }
 
-              <CLabel>Thương hiệu:</CLabel>
               <div style={{ width: "100%" }}>
+                <CLabel>Thương hiệu:</CLabel>
                 <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
                   {
                     brands.map((item, i) => {

@@ -266,26 +266,6 @@ class RoleManager extends Component {
 
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -314,7 +294,7 @@ class RoleManager extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách quyền (Page: {this.state.indexPage + 1}))
+                  <i className="fa fa-align-justify"></i> Danh sách quyền
                   <div style={styles.tags}>
                     {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
