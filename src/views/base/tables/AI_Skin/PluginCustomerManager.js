@@ -31,7 +31,6 @@ import 'moment-timezone';
 import Constants from "./../../../../contants/contants";
 import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
@@ -144,19 +143,6 @@ class PluginCustomerManager extends Component {
     });
     let val = res.data.data;
 
-    for (let i = 0; i < val.length; i++) {
-      const name_sale = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.PLUGIN_GET_USER_BY_BODY,
-        method: 'POST',
-        data: {
-          id: val[i].Create_By
-        }
-      });
-
-      val[i].Sale = name_sale.data.data
-    }
-
     this.pagination(val);
     this.setState({ dataApi: val });
 
@@ -174,19 +160,6 @@ class PluginCustomerManager extends Component {
       headers: this.state.token
     });
     let val = res.data.data;
-
-    for (let i = 0; i < val.length; i++) {
-      const name_sale = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.PLUGIN_GET_USER_BY_BODY,
-        method: 'POST',
-        data: {
-          id: val[i].Create_By
-        }
-      });
-
-      val[i].Sale = name_sale.data.data
-    }
 
     this.pagination(val);
     this.setState({ dataApi: val });
@@ -606,9 +579,9 @@ class PluginCustomerManager extends Component {
                           </CCol>
                         </CRow>
                       </CCol>
-                      <CCol sm="12" lg="12">
+                      {/* <CCol sm="12" lg="12">
                         <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
-                      </CCol>
+                      </CCol> */}
                     </CRow>
                   </div>
                 </CardHeader>
@@ -642,7 +615,7 @@ class PluginCustomerManager extends Component {
                                   <div>{item.Phone}</div>
                                 </td>
                                 <td className="text-center">{item.Address}</td>
-                                <td className="text-center">{item.Sale}</td>
+                                <td className="text-center">{item.Create_By == null ? "ADMIN" : item.Create_By.Name}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString()}
                                 </td>

@@ -676,7 +676,7 @@ class PluginOrder extends Component {
                         <th className="text-center">Gói tính năng</th>
                         <th className="text-center">Tính năng</th>
                         <th className="text-center">Trạng thái</th>
-                        <th className="text-center">Người tạo</th>
+                        <th className="text-center">Sale giới thiệu</th>
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">#</th>
 
@@ -807,7 +807,7 @@ class PluginOrder extends Component {
                       <option value={this.state.Package_Id}>-----</option>
                       {
                         dataPackage_All.map((item, i) => {
-                          if (item._id == Package_Id) {
+                          if (item._id == Package_Id._id) {
                             return (
                               <option selected value={item._id}>{`${item.Name} (${item.Value} ${this.convertUnitToDate(item.Unit)})`}</option>
                             );

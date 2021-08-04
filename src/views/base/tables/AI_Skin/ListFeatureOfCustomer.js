@@ -104,6 +104,7 @@ class ListFeatureOfCustomer extends Component {
         company_id: company_id
       }
     });
+
     this.setState({ current_slug: resCom.data.data.Slug })
     return resCom.data.data == null ? "" : resCom.data.data.Name;
   }
@@ -127,10 +128,9 @@ class ListFeatureOfCustomer extends Component {
     });
     let val = res.data.data
     //val.com_name = await this.getCompanyName(val.Company_Id)
-
     await this.onView(val.Name, val.Company_Id, val.Phone);
 
-    this.setState({ dataApi: res.data.data, data: val, isLoading: false });
+    this.setState({ dataApi: res.data.data, data: val, isLoading: false, current_slug: val.Company_Id.Slug });
   }
 
   onChange(key, val) {
@@ -307,7 +307,7 @@ class ListFeatureOfCustomer extends Component {
                   <th className="text-center">Ngày hết hạn</th>
                   <th className="text-center">Thời gian hết hạn</th>
                   <th className="text-center">Trạng thái</th>
-                  <th className="text-center">Tính năng</th>
+                  <th className="text-center" style={{ width: '300px' }}>Tính năng</th>
                   <th className="text-center">#</th>
                 </tr>
               </thead>
@@ -368,7 +368,8 @@ class ListFeatureOfCustomer extends Component {
                                   arrDetailPackage: item.Array_Feature, current_package: item.Package_Id.Name
                                 })
                               }}>
-                              <CIcon name="cil-magnifying-glass" /> Chi tiết
+                              {/* <CIcon name="cil-magnifying-glass" />  */}
+                              Xem chi tiết tính năng
                             </CButton>
                           </td>
                         </tr>
