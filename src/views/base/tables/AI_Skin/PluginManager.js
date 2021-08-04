@@ -570,7 +570,7 @@ class PluginManager extends Component {
                                     }
                                   })}
                                   {
-                                    (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
+                                    (item.Array_Feature.length - 2) <= 0 ? "" : "..."
                                   }
                                 </td>
                                 <td className="text-center">
