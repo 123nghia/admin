@@ -9,7 +9,6 @@ import {
   Row,
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {

@@ -69,8 +69,10 @@ class Login extends Component {
         localStorage.setItem('token', res.data.data.token);
 
         if (token.type == '0' || token.type == '1') {
+          localStorage.setItem('isAD', "0");
           this.props.history.push('/list_order')
         } else {
+          localStorage.setItem('isAD', "1");
           this.props.history.push('/profile')
         }
       } else {

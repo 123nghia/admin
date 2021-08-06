@@ -168,6 +168,7 @@ export default {
 
   "LIST_CUSTOMER": "/api/list-customer",
   "LIST_CUSTOMER_FOR_COMPANY": "/api/list-customer-for-company",
+  "LIST_CUSTOMER_FOR_COMPANY_BY_MONTH": "/api/list-customer-for-company-by-month",
 
   "LIST_SUGGEST_ITEM": "/itemSdk",
   "LIST_SUGGEST_ITEM_COMPANY": "/itemSdk/",

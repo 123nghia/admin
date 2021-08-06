@@ -1,25 +1,22 @@
 import React, { Component } from 'react';
-import CIcon from '@coreui/icons-react'
 import {
   Card,
   CardBody,
   CardHeader,
   Col,
   Row,
-  Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
+  Input
 } from 'reactstrap';
 
 import {
-  CSelect,
-  CButton
+  CButton,
+  CSelect
 } from '@coreui/react'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
-import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
@@ -40,6 +37,7 @@ class CustomerManager extends Component {
     super(props);
     this.state = {
       data: [],
+      dataByMonth: [],
       key: '',
       activePage: 1,
       page: 1,
@@ -52,6 +50,7 @@ class CustomerManager extends Component {
       updated: '',
       dataApi: [],
       hidden: false,
+      hidden_m: false,
       action: 'new',
       UserName: '',
       FullName: '',
@@ -78,6 +77,8 @@ class CustomerManager extends Component {
     } else {
       this.getDataForCompany();
     }
+
+    this.getDataForCompanyByMonth('01');
 
     let arr = JSON.parse(localStorage.getItem('url'));
 
@@ -172,6 +173,39 @@ class CustomerManager extends Component {
       })
 
       this.setState({ isLoading: false, totalActive: active });
+    }
+  }
+
+  getDataForCompanyByMonth = async (month) => {
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_CUSTOMER_FOR_COMPANY_BY_MONTH,
+      method: 'POST',
+      data: {
+        Company_Id: JSON.parse(this.state.company_id).company_id,
+        month: month
+      }
+    });
+
+    let val = res.data.data.result;
+    let valCount = res.data.data.Count;
+
+    if (res.data.is_success) {
+      for (let i = 0; i < val.length; i++) {
+        val[i].Count = valCount[i]
+      }
+
+      if (val.length == 0) {
+        this.setState({
+          hidden_m: false
+        })
+      } else {
+        this.setState({
+          hidden_m: true
+        })
+      }
+
+      this.setState({ dataByMonth: val});
     }
   }
 
@@ -368,7 +402,7 @@ class CustomerManager extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, arrTypeRequest, key, indexPage } = this.state;
+    const { data, action, arrPagination, arrTypeRequest, key, indexPage, type, dataByMonth } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -393,7 +427,7 @@ class CustomerManager extends Component {
                         <th className="text-center">Tên đầy đủ</th>
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">Công ty</th>
-                        <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">Lần đến gần nhất</th>
                         <th className="text-center">Số lần đến</th>
                         {/* <th className="text-center">Trạng thái</th> */}
                         <th className="text-center">#</th>
@@ -421,14 +455,6 @@ class CustomerManager extends Component {
                                     Lịch sử soi da
                                   </CButton>
                                 </td>
-                                {/* <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                    <CIcon name="cilTrash" />
-                                  </CButton>
-                                </td> */}
                               </tr>
                             );
                           }) : ""
@@ -442,114 +468,85 @@ class CustomerManager extends Component {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
+
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
-            <ModalBody>
-              <TextFieldGroup
-                field="UserName"
-                label="Tên đăng nhập"
-                value={this.state.UserName}
-                placeholder={"Tên đăng nhập"}
-                // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
-              />
+          {
+            type == "2" ?
+              <Row>
+                <Col>
+                  <p style={styles.success}>{this.state.updated}</p>
+                  <p style={styles.danger}>{this.state.deleted}</p>
+                  <Card>
+                    <CardHeader>
+                      <i className="fa fa-align-justify"></i> Thống kê lượt khách hàng theo từng tháng
+                      <div style={styles.tags}>
+                      Chọn tháng
+                      <CSelect onChange={async e => { this.getDataForCompanyByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                          </CSelect>
+                      </div>
+                    </CardHeader>
+                    <CardBody>
 
-              <TextFieldGroup
-                field="FullName"
-                label="Tên đầy đủ"
-                value={this.state.FullName}
-                placeholder={"Tên đầy đủ"}
-                // error={errors.title}
-                onChange={e => this.onChange("FullName", e.target.value)}
-              // rows="5"
-              />
+                      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                        <thead className="thead-light">
+                          <tr>
+                            <th className="text-center">STT.</th>
+                            <th className="text-center">Tên</th>
+                            <th className="text-center">Tên đầy đủ</th>
+                            <th className="text-center">Số điện thoại</th>
+                            <th className="text-center">Công ty</th>
+                            <th className="text-center">Lần đến gần nhất</th>
+                            <th className="text-center">Số lần đến</th>
+                            <th className="text-center">#</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <td colSpan="10" hidden={this.state.hidden_m} className="text-center">Không tìm thấy dữ liệu</td>
+                          {
+                            dataByMonth != undefined ?
+                              dataByMonth.map((item, i) => {
+                                return (
+                                  <tr key={i}>
+                                    <td className="text-center">{i + 1}</td>
+                                    <td className="text-center">{item.UserName}</td>
+                                    <td className="text-center">{item.FullName}</td>
+                                    <td className="text-center">{item.Phone}</td>
+                                    <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td>
+                                    <td className="text-center">
+                                      {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                    </td>
+                                    <td className="text-center">{item.Count}</td>
 
-              <TextFieldGroup
-                field="Phone"
-                label="Số điện thoại"
-                value={this.state.Phone}
-                placeholder={"Số điện thoại"}
-                // error={errors.title}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
-              />
-
-              {/* <TextFieldGroup
-              field="Type"
-              label="Loại"
-              value={this.state.Type}
-              placeholder={"Loại"}
-              // error={errors.title}
-              onChange={e => this.onChange("Type", e.target.value)}
-            // rows="5"
-            /> */}
-
-              <label htmlFor="tag">Chọn loại khuyến mãi </label>
-              <CSelect onChange={async e => {
-                this.setState({ Type: e.target.value });
-              }}>
-                {
-                  arrTypeRequest.map((item, i) => {
-                    if (item.Value == this.state.Type) {
-                      return (
-                        <option selected value={item.Value}>{item.Value}</option>
-                      );
-                    } else {
-                      return (
-                        <option value={item.Value}>{item.Value}</option>
-                      );
-                    }
-                  })
-                }
-              </CSelect>
-
-              {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Status:</label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'0'}>Chưa nhận quà</option>
-                    <option value={'1'}>Đã nhận quà</option>
-                  </select>
-                </div>
-              }
-            </ModalBody>
-            <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
-            </ModalFooter>
-          </Modal>
-
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
-            <ModalBody>
-              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
-            </ModalBody>
-            <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
-            </ModalFooter>
-          </Modal>
+                                    <td className="text-center">
+                                      <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => { }} >
+                                        Lịch sử soi da
+                                      </CButton>
+                                    </td>
+                                  </tr>
+                                );
+                              }) : ""
+                          }
+                        </tbody>
+                      </table>
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row> : ""
+          }
         </div>
       );
     }

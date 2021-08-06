@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import './scss/style.scss';
 
-
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -19,6 +18,13 @@ const Register = React.lazy(() => import('./views/Pages/Register/Register'));
 const Page404 = React.lazy(() => import('./views/Pages/Page404/Page404'));
 const Page500 = React.lazy(() => import('./views/Pages/Page500/Page500'));
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShow: true
+    };
+  }
 
   render() {
     return (

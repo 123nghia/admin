@@ -1,0 +1,45 @@
+/* .c-sidebar-nav-title {
+  background-color: #363636;
+} */
+
+.c-sidebar ul li.c-sidebar-nav-title {
+  /* color: #252525; */
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.c-sidebar ul li.c-sidebar-nav-item .c-active {
+  background-color: #944a6f;
+  /* color: #000000; */
+  font-weight: 500;
+}
+
+.c-sidebar ul li.c-sidebar-nav-item .c-active .c-sidebar-nav-icon {
+  /* color: #000000; */
+  /* color: #011741; */
+  font-weight: 500;
+}
+
+.c-body {
+  background-color: #fff9fe;
+}
+
+.c-header {
+  background-color: #3C4B64;
+}
+
+.c-footer {
+  background-color: #fff9fe;
+}
+
+.card .card-header {
+  background-color: #fdfdff;
+}
+
+.modal .modal-dialog .modal-content .modal-body .carousel .carousel-indicators li {
+  background-color: black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+

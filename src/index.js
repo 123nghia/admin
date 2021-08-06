@@ -15,7 +15,7 @@ import { createStore, applyMiddleware } from 'redux';
 import rootReducers from "./../src/redux/reducers";
 import createSagaMiddleware from 'redux-saga'
 import root from "./../src/redux/sagas"
-
+import './assets/css/sidebar.css';
 const sagaMiddleware = createSagaMiddleware()
 const storeS = createStore(rootReducers, applyMiddleware(sagaMiddleware))
 

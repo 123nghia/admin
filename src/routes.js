@@ -42,6 +42,12 @@ const Brand = React.lazy(() => import('./views/base/tables/MakeUp/Brand'));
 const Product = React.lazy(() => import('./views/base/tables/MakeUp/Product'));
 const SubType = React.lazy(() => import('./views/base/tables/MakeUp/SubType'));
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
+const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
+const TypeTwo = React.lazy(() => import('./views/base/tables/MakeUp/TypeTwo'));
+const TypeThree = React.lazy(() => import('./views/base/tables/MakeUp/TypeThree'));
+const TypeFour = React.lazy(() => import('./views/base/tables/MakeUp/TypeFour'));
+const TypeFive = React.lazy(() => import('./views/base/tables/MakeUp/TypeFive'));
+const TypeSix = React.lazy(() => import('./views/base/tables/MakeUp/TypeSix'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -86,7 +92,12 @@ const routes = [
   { path: '/product', name: 'BRAND', component: Product },
   { path: '/subtype', name: 'Sub Type', component: SubType },
   { path: '/color', name: 'Color', component: Color },
-  { path: '/update_package', name: 'Update', component: UpdatePackage },
+  { path: '/K1', name: 'K1', component: TypeOne },
+  { path: '/K2', name: 'K2', component: TypeTwo },
+  { path: '/K3', name: 'K3', component: TypeThree },
+  { path: '/K4', name: 'K4', component: TypeFour },
+  { path: '/K5', name: 'K5', component: TypeFive },
+  { path: '/K6', name: 'K6', component: TypeSix },
 ];
 
 export default routes;

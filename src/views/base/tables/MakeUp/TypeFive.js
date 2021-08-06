@@ -141,7 +141,7 @@ class SuggestItem extends Component {
     this.setState({ isLoading: true });
     const res_suggest = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(this.state.userData).company_id + "/K1",
+      url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(this.state.userData).company_id + "/4",
       method: 'GET'
     });
 
