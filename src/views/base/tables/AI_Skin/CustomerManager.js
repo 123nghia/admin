@@ -10,8 +10,12 @@ import {
 
 import {
   CButton,
-  CSelect
+  CSelect,
 } from '@coreui/react'
+
+import {
+  CChartBar
+} from '@coreui/react-chartjs'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
@@ -68,7 +72,8 @@ class CustomerManager extends Component {
       company_id: localStorage.getItem('user'),
       isLoading: false,
       arrTypeRequest: [],
-      type: localStorage.getItem('type')
+      type: localStorage.getItem('type'),
+      dataChart: []
     };
   }
   async componentDidMount() {
@@ -79,7 +84,7 @@ class CustomerManager extends Component {
     }
 
     this.getDataForCompanyByMonth('01');
-
+    this.getDataForCharts();
     let arr = JSON.parse(localStorage.getItem('url'));
 
     for (let i = 0; i < arr.length; i++) {
@@ -110,6 +115,27 @@ class CustomerManager extends Component {
     }
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
+  }
+
+  async getDataForCharts() {
+
+    let arrMonth = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+    let arrTemp = [];
+    for (let i = 0; i < arrMonth.length; i++) {
+      const res = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.LIST_CUSTOMER_FOR_COMPANY_BY_MONTH,
+        method: 'POST',
+        data: {
+          Company_Id: JSON.parse(this.state.company_id).company_id,
+          month: arrMonth[i]
+        }
+      });
+
+      arrTemp.push(res.data.data.result.length)
+    }
+
+    this.setState({ dataChart: arrTemp })
   }
 
   getData = async () => {
@@ -205,7 +231,7 @@ class CustomerManager extends Component {
         })
       }
 
-      this.setState({ dataByMonth: val});
+      this.setState({ dataByMonth: val });
     }
   }
 
@@ -402,7 +428,7 @@ class CustomerManager extends Component {
   }
 
   render() {
-    const { data, action, arrPagination, arrTypeRequest, key, indexPage, type, dataByMonth } = this.state;
+    const { data, arrPagination, key, type, dataByMonth, dataChart } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -426,7 +452,10 @@ class CustomerManager extends Component {
                         <th className="text-center">Tên</th>
                         <th className="text-center">Tên đầy đủ</th>
                         <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Công ty</th>
+                        {
+                          type == '0' || type == '1' ?
+                            <th className="text-center">Công ty</th> : ""
+                        }
                         <th className="text-center">Lần đến gần nhất</th>
                         <th className="text-center">Số lần đến</th>
                         {/* <th className="text-center">Trạng thái</th> */}
@@ -444,7 +473,10 @@ class CustomerManager extends Component {
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">{item.FullName}</td>
                                 <td className="text-center">{item.Phone}</td>
-                                <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td>
+                                {
+                                  type == '0' || type == '1' ?
+                                    <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td> : ""
+                                }
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
@@ -482,21 +514,21 @@ class CustomerManager extends Component {
                     <CardHeader>
                       <i className="fa fa-align-justify"></i> Thống kê lượt khách hàng theo từng tháng
                       <div style={styles.tags}>
-                      Chọn tháng
-                      <CSelect onChange={async e => { this.getDataForCompanyByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                          </CSelect>
+                        Tháng
+                        <CSelect onChange={async e => { this.getDataForCompanyByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
+                          <option value="01">01</option>
+                          <option value="02">02</option>
+                          <option value="03">03</option>
+                          <option value="04">04</option>
+                          <option value="05">05</option>
+                          <option value="06">06</option>
+                          <option value="07">07</option>
+                          <option value="08">08</option>
+                          <option value="09">09</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                        </CSelect>
                       </div>
                     </CardHeader>
                     <CardBody>
@@ -508,8 +540,11 @@ class CustomerManager extends Component {
                             <th className="text-center">Tên</th>
                             <th className="text-center">Tên đầy đủ</th>
                             <th className="text-center">Số điện thoại</th>
-                            <th className="text-center">Công ty</th>
-                            <th className="text-center">Lần đến gần nhất</th>
+                            {
+                              type == '0' || type == '1' ?
+                                <th className="text-center">Công ty</th> : ""
+                            }
+                            <th className="text-center">Lần đến gần nhất trong tháng</th>
                             <th className="text-center">Số lần đến</th>
                             <th className="text-center">#</th>
                           </tr>
@@ -525,7 +560,10 @@ class CustomerManager extends Component {
                                     <td className="text-center">{item.UserName}</td>
                                     <td className="text-center">{item.FullName}</td>
                                     <td className="text-center">{item.Phone}</td>
-                                    <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td>
+                                    {
+                                      type == '0' || type == '1' ?
+                                        <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td> : ""
+                                    }
                                     <td className="text-center">
                                       {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                     </td>
@@ -547,6 +585,37 @@ class CustomerManager extends Component {
                 </Col>
               </Row> : ""
           }
+
+          <Row>
+            <Col>
+              <p style={styles.success}>{this.state.updated}</p>
+              <p style={styles.danger}>{this.state.deleted}</p>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify"></i> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)
+                </CardHeader>
+                <CardBody>
+
+                  <CChartBar
+                    datasets={[
+                      {
+                        label: 'Lượt khách hàng mới của tháng',
+                        backgroundColor: '#f87979',
+                        data: dataChart
+                      }
+                    ]}
+                    labels="months"
+                    options={{
+                      tooltips: {
+                        enabled: true
+                      }
+                    }}
+                  />
+
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
         </div>
       );
     }

@@ -391,7 +391,7 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Hỗ trợ giảm quầng thăm mắt',
+    name: 'Hỗ trợ giảm quầng thâm mắt',
     to: '/K4',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['2'],
@@ -417,7 +417,7 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Hỗ trợ giảm thăm nám da',
+    name: 'Hỗ trợ giảm thâm nám da',
     to: '/K6',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['2'],
