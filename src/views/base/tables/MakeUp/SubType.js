@@ -129,7 +129,6 @@ class SubType extends Component {
 
 
     let val = res_product.data.data;
-
     this.pagination(val);
     this.setState({ dataApi: val });
 
@@ -265,7 +264,7 @@ class SubType extends Component {
       vi: vi,
       image: image,
       id: this.state.id,
-      isNull: isNull,
+      status: isNull,
       hover: hover
     }
 

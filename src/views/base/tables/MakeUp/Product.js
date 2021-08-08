@@ -51,6 +51,7 @@ class Product extends Component {
       action: 'new',
       type_id: '',
       brand_id: '',
+      brand_name: '',
       name: '',
       href: '',
       image: '',
@@ -239,7 +240,7 @@ class Product extends Component {
       name: name,
       href: href,
       image: image,
-      //company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
     }
 
     this.setState({ isLoading: true });
@@ -270,8 +271,9 @@ class Product extends Component {
       name: item.name,
       image: item.image,
       href: item.href,
-      type_id: item.type_id,
-      brand_id: item.brand_id,
+      type_id: item.type_id._id,
+      brand_id: item.brand_id._id,
+      brand_name: item.brand_id.name,
       id: item['_id']
     })
   }
@@ -416,7 +418,7 @@ class Product extends Component {
   }
 
   render() {
-    const { data, arrPagination, brands, types, type, key } = this.state;
+    const { data, arrPagination, brands, types, brand_name, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -442,10 +444,7 @@ class Product extends Component {
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        {
-                          type == "0" || type == "1" ? <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
-                            : ""
-                        }
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
                       </CCol>
                     </CRow>
                   </div>
@@ -472,8 +471,8 @@ class Product extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.type}</td>
-                                <td className="text-center">{item.brand}</td>
+                                <td className="text-center">{item.type_id == null ? "" : item.type_id.name}</td>
+                                <td className="text-center">{item.brand_id == null ? "" : item.brand_id.name}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   <a
@@ -576,7 +575,7 @@ class Product extends Component {
                 <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
                   {
                     brands.map((item, i) => {
-                      if (item._id == this.state.brand_id) {
+                      if (item.name == brand_name) {
                         return (
                           <option selected key={i} value={item._id}>{item.name}</option>
                         );
@@ -595,7 +594,7 @@ class Product extends Component {
                 <CSelect onChange={async e => { this.setState({ type_id: e.target.value }); console.log(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
                   {
                     types.map((item, i) => {
-                      if (item._id == this.state.type_id) {
+                      if (item.type_id == this.state.type_id) {
                         return (
                           <option selected key={i} value={item._id}>{item.name}</option>
                         );

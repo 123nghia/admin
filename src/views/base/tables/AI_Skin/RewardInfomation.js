@@ -352,7 +352,7 @@ class RewardInfomation extends Component {
   }
 
   render() {
-    const { data, arrPagination } = this.state;
+    const { data, arrPagination, type } = this.state;
     if (!this.state.isLoading) {
 
       return (
@@ -377,7 +377,9 @@ class RewardInfomation extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Công ty</th>
+                        {
+                          type == '0' || type == '1' ? <th className="text-center">Công ty</th> : ""
+                        }
                         <th className="text-center">Tiêu đề</th>
                         <th className="text-center">Nội dung</th>
                         <th className="text-center">Templates</th>
@@ -395,7 +397,9 @@ class RewardInfomation extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Company_Id.Name}</td>
+                                {
+                                  type == '0' || type == '1' ? <td className="text-center">{item.Company_Id.Name}</td> : ""
+                                }
                                 <td className="text-center">{item.Subject}</td>
                                 <td className="text-center">{item.Content}</td>
                                 <td className="text-center">{item.Templates}</td>

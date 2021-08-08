@@ -59,7 +59,6 @@ class SuggestItem extends Component {
       sdktype: "1",
       companyid: "",
       type_sdk_id: "",
-      type_product_id: "",
       sdkItem: [],
       currentSdkSelect: [],
       currentItemSelect: null,
@@ -118,7 +117,7 @@ class SuggestItem extends Component {
     this.setState({ isLoading: true });
     const res_suggest = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SUGGEST_ITEM,
+      url: Constants.LIST_SUGGEST_ITEM_ADMIN + "5",
       method: 'GET'
     });
 
@@ -262,7 +261,6 @@ class SuggestItem extends Component {
         level: "K1",
         sdktype: "1",
         type_sdk_id: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0]._id,
-        type_product_id: this.state.arrOptionProductType.length == 0 ? '' : this.state.arrOptionProductType[0]._id,
         companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id
       })
     }
@@ -273,7 +271,7 @@ class SuggestItem extends Component {
   }
 
   async addRoles() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       title == null || title == '' ||
@@ -292,7 +290,7 @@ class SuggestItem extends Component {
       sdktype: sdktype,
       companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
       type_sdk_id: type_sdk_id,
-      type_product_id: type_product_id
+      type_product_id: "5"
 
     }
 
@@ -630,25 +628,6 @@ class SuggestItem extends Component {
                   {
                     arrOptionSdkType.map((item, i) => {
                       if (item._id == this.state.type_sdk_id) {
-                        return (
-                          <option selected key={i} value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </CSelect>
-              </div>
-
-              <CLabel>Loại sản phẩm:</CLabel>
-              <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.setState({ type_product_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    arrOptionProductType.map((item, i) => {
-                      if (item._id == this.state.type_product_id) {
                         return (
                           <option selected key={i} value={item._id}>{item.Name}</option>
                         );

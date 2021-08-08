@@ -144,7 +144,8 @@ class Color extends Component {
 
     let val = res_color.data.data;
     let product = res_product.data.data;
-
+    console.log(product)
+    console.log(val)
     this.pagination(val);
     this.setState({ dataApi: val, products: product });
 
@@ -242,7 +243,7 @@ class Color extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      product_id: item.product_id,
+      product_id: item.product_id._id,
       hex: item.hex,
       makeup_id: item.makeup_id,
       alpha: item.alpha,
@@ -417,10 +418,7 @@ class Color extends Component {
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        {
-                          type == "0" || type == "1" ? <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
-                            : ""
-                        }
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
                       </CCol>
                     </CRow>
 
@@ -447,7 +445,7 @@ class Color extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.product}</td>
+                                <td className="text-center">{item.product_id == null ? "" : item.product_id.name}</td>
                                 <td className="text-center">
                                   {item.hex}
                                   <div style={{ backgroundColor: item.hex, width: '100%', height: '30px' }}> </div>
@@ -504,11 +502,11 @@ class Color extends Component {
                     products.map((item, i) => {
                       if (item._id == this.state.product_id) {
                         return (
-                          <option selected key={i} value={item.name}>{item.name}</option>
+                          <option selected key={i} value={item._id}>{item.name}</option>
                         );
                       } else {
                         return (
-                          <option key={i} value={item.name}>{item.name}</option>
+                          <option key={i} value={item._id}>{item.name}</option>
                         );
                       }
                     })

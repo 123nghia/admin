@@ -118,7 +118,7 @@ class SuggestItem extends Component {
     this.setState({ isLoading: true });
     const res_suggest = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SUGGEST_ITEM,
+      url: Constants.LIST_SUGGEST_ITEM_ADMIN + "2",
       method: 'GET'
     });
 
@@ -292,7 +292,7 @@ class SuggestItem extends Component {
       sdktype: sdktype,
       companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
       type_sdk_id: type_sdk_id,
-      type_product_id: type_product_id
+      type_product_id: "2"
 
     }
 
@@ -630,25 +630,6 @@ class SuggestItem extends Component {
                   {
                     arrOptionSdkType.map((item, i) => {
                       if (item._id == this.state.type_sdk_id) {
-                        return (
-                          <option selected key={i} value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </CSelect>
-              </div>
-
-              <CLabel>Loại sản phẩm:</CLabel>
-              <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.setState({ type_product_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    arrOptionProductType.map((item, i) => {
-                      if (item._id == this.state.type_product_id) {
                         return (
                           <option selected key={i} value={item._id}>{item.Name}</option>
                         );

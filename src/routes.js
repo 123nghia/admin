@@ -85,6 +85,7 @@ const routes = [
   { path: '/type_request', name: 'REWARD_INFO', component: TypeRequest },
   { path: '/customer', name: 'Customer Manager', component: CustomerManager },
   { path: '/historyskin', name: 'History Skin', component: HistorySkin },
+  { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
 
   //Admin MakeUp
   { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
