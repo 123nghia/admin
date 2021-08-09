@@ -126,10 +126,9 @@ class Users extends Component {
       headers: this.state.token
     });
     let val = res.data.data
-    console.log(val)
     // val.com_name = await this.getCompanyName(val.Company_Id)
 
-    this.setState({ dataApi: res.data.data, data: val, currentPassword: val.Password, isLoading: false });
+    this.setState({ dataApi: val, data: val, currentPassword: val.Password, isLoading: false });
   }
 
   onChange(key, val) {

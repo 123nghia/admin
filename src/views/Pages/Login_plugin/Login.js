@@ -104,7 +104,7 @@ class Login extends Component {
                             <CIcon name="cil-user" />
                           </CInputGroupText>
                         </CInputGroupPrepend>
-                        <CInput type="text" placeholder="Tên đăng nhập" autoComplete onChange={e => this.onChange(e, 'username')} />
+                        <CInput type="text" placeholder="Tên đăng nhập" name="username" onChange={e => this.onChange(e, 'username')} autoComplete="name"/>
                       </CInputGroup>
                       <CInputGroup className="mb-4">
                         <CInputGroupPrepend>
@@ -116,9 +116,12 @@ class Login extends Component {
                       </CInputGroup>
 
                       <Row>
-                        <Col xs="12" lg="12" sm="12">
+                        <Col xs="6" lg="6" sm="6">
                           <Button color="primary" className="px-4" disabled={isLoading}>Đăng nhập</Button>
                         </Col>
+                        <CCol xs="6" lg="6" sm="6"className="text-right">
+                          <CButton color="link" className="px-0" onClick={() => { window.location.href = "#/change_password" }}>Quên mật khẩu?</CButton>
+                        </CCol>
                       </Row>
 
                     </form>
@@ -141,48 +144,6 @@ class Login extends Component {
           </CRow>
         </CContainer>
       </div>
-      // <div className="app flex-row align-items-center mt-5">
-      //   <Container>
-      //     <Row className="justify-content-center">
-      //       <Col md="4">
-      //         <form onSubmit={async e => await this.onSubmit(e)}>
-      //           <CardGroup>
-      //             <Card className="p-4">
-      //               <CardBody>
-      //                 <h1>Login</h1>
-      //                 <span className="error">{errors.common}</span>
-      //                 <InputGroup className="mb-3">
-      //                   <TextFieldGroup
-      //                     field="username"
-      //                     label="Username"
-      //                     value={username}
-      //                     error={errors.username}
-      //                     onChange={e => this.onChange(e)}
-      //                   />
-      //                 </InputGroup>
-      //                 <InputGroup className="mb-4">
-      //                   <TextFieldGroup
-      //                     type="password"
-      //                     field="password"
-      //                     label="Password"
-      //                     value={password}
-      //                     error={errors.password}
-      //                     onChange={e => this.onChange(e)}
-      //                   />
-      //                 </InputGroup>
-      //                 <Row>
-      //                   <Col xs="6">
-      //                     <Button color="primary" className="px-4" disabled={isLoading}>Login</Button>
-      //                   </Col>
-      //                 </Row>
-      //               </CardBody>
-      //             </Card>
-      //           </CardGroup>
-      //         </form>
-      //       </Col>
-      //     </Row>
-      //   </Container>
-      // </div>
     );
   }
 }
