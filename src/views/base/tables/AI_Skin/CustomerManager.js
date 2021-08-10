@@ -586,36 +586,39 @@ class CustomerManager extends Component {
               </Row> : ""
           }
 
-          <Row>
-            <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
-              <Card>
-                <CardHeader>
-                  <i className="fa fa-align-justify"></i> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)
-                </CardHeader>
-                <CardBody>
+          {
+            type == "2" ?
+              <Row>
+                <Col>
+                  <p style={styles.success}>{this.state.updated}</p>
+                  <p style={styles.danger}>{this.state.deleted}</p>
+                  <Card>
+                    <CardHeader>
+                      <i className="fa fa-align-justify"></i> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)
+                    </CardHeader>
+                    <CardBody>
 
-                  <CChartBar
-                    datasets={[
-                      {
-                        label: 'Lượt khách hàng mới của tháng',
-                        backgroundColor: '#f87979',
-                        data: dataChart
-                      }
-                    ]}
-                    labels="months"
-                    options={{
-                      tooltips: {
-                        enabled: true
-                      }
-                    }}
-                  />
+                      <CChartBar
+                        datasets={[
+                          {
+                            label: 'Lượt khách hàng mới của tháng',
+                            backgroundColor: '#f87979',
+                            data: dataChart
+                          }
+                        ]}
+                        labels="months"
+                        options={{
+                          tooltips: {
+                            enabled: true
+                          }
+                        }}
+                      />
 
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row> : ""
+          }
         </div>
       );
     }

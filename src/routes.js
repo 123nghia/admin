@@ -41,6 +41,8 @@ const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestI
 const Brand = React.lazy(() => import('./views/base/tables/MakeUp/Brand'));
 const Product = React.lazy(() => import('./views/base/tables/MakeUp/Product'));
 const SubType = React.lazy(() => import('./views/base/tables/MakeUp/SubType'));
+const SubTypeHair = React.lazy(() => import('./views/base/tables/MakeUp/SubTypeHair'));
+const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTypeMakeUp'));
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 const TypeTwo = React.lazy(() => import('./views/base/tables/MakeUp/TypeTwo'));
@@ -92,6 +94,8 @@ const routes = [
   { path: '/brand', name: 'BRAND', component: Brand },
   { path: '/product', name: 'BRAND', component: Product },
   { path: '/subtype', name: 'Sub Type', component: SubType },
+  { path: '/subtype_hair', name: 'Sub Type', component: SubTypeHair },
+  { path: '/subtype_makeup', name: 'Sub Type', component: SubTypeMakeUp },
   { path: '/color', name: 'Color', component: Color },
   { path: '/K1', name: 'K1', component: TypeOne },
   { path: '/K2', name: 'K2', component: TypeTwo },

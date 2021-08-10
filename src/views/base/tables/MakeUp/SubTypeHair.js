@@ -107,7 +107,7 @@ class SubType extends Component {
     this.setState({ isLoading: true });
     const res_product = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_TYPE + "/null",
+      url: Constants.LIST_TYPE + "/1",
       method: 'GET'
     });
 
@@ -125,7 +125,7 @@ class SubType extends Component {
     this.setState({ isLoading: true });
     const res_product = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null",
+      url: Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/1",
       method: 'GET'
     });
 

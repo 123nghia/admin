@@ -39,25 +39,10 @@ class Users extends Component {
     super(props);
     this.state = {
       data: [],
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
-      modalCom: false,
-      viewingUser: {},
-      communities: [],
       updated: '',
       dataApi: [],
       action: 'new',
-      modalDelete: false,
       delete: null,
-      dataCompany: [],
-      currentCompany: '',
-      dataTypeKey: [],
-      currentTypeKey: '',
-      dataHardWare: [],
-      currentHardWare: '',
       arrPagination: [],
       indexPage: 0,
       hidden: true,
@@ -65,19 +50,15 @@ class Users extends Component {
       role: localStorage.getItem('role'),
       type: localStorage.getItem('type'),
       company_id: localStorage.getItem('user'),
-      link_shop: true,
-      data_link_shop: '',
-      link_recommand: true,
-      data_link_recommand: '',
-      link_sku: true,
-      data_link_sku: '',
       toggleView: false,
       company_name: '',
       arrDetailPackage: [],
       phone_number: '',
       current_slug: '',
+      companyID: '',
       arrTotalPackage: [],
       isChange: true,
+      isChangeSlug: true,
       currentPassword: '',
       isLoading: false
     };
@@ -93,19 +74,6 @@ class Users extends Component {
         }
       }
     }
-  }
-
-  getCompanyName = async (company_id) => {
-    const resCom = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_DATA_COMPANY,
-      method: 'POST',
-      data: {
-        company_id: company_id
-      }
-    });
-    this.setState({ current_slug: resCom.data.data == null ? "" : resCom.data.data.Slug })
-    return resCom.data.data == null ? "" : resCom.data.data.Name;
   }
 
 
@@ -126,9 +94,9 @@ class Users extends Component {
       headers: this.state.token
     });
     let val = res.data.data
-    // val.com_name = await this.getCompanyName(val.Company_Id)
 
-    this.setState({ dataApi: val, data: val, currentPassword: val.Password, isLoading: false });
+    this.setState({ dataApi: val, data: val, currentPassword: val.Password,
+      isLoading: false, current_slug: val.Company_Id.Slug, companyID: val.Company_Id._id });
   }
 
   onChange(key, val) {
@@ -264,8 +232,6 @@ class Users extends Component {
   }
 
   async updatePassword(id, password) {
-    console.log(id)
-    console.log(password)
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.PLUGIN_UPDATE_PASSWORD,
@@ -285,8 +251,29 @@ class Users extends Component {
     }
   }
 
+  async updateSlug() {
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.UPDATE_SLUG,
+      method: 'POST',
+      data: {
+        id: this.state.companyID,
+        Slug: this.state.current_slug,
+      }
+    });
+
+    if (res.data.is_success == true) {
+      this.getData();
+      this.setState({ isChangeSlug: true });
+    } else {
+      alert(res.data.message);
+      this.setState({ isChangeSlug: false });
+    }
+  }
+
   render() {
-    const { data, role, type, arrTotalPackage, company_name, current_package, phone_number, isChange, currentPassword } = this.state;
+    const { data, current_slug, arrTotalPackage, company_name, current_package,
+      phone_number, isChange, currentPassword, isChangeSlug } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -337,12 +324,12 @@ class Users extends Component {
                           <Input style={styles.searchInput} value={data.Phone} />
                         </CCol>
 
-                        <CCol sm="12" lg="12">
+                        {/* <CCol sm="12" lg="12">
                           <div>
                             <CLabel>Giới tính</CLabel>
                             <Input style={styles.searchInput} value={data.Gender} />
                           </div>
-                        </CCol>
+                        </CCol> */}
 
 
                         <CCol sm="12" lg="12">
@@ -360,12 +347,27 @@ class Users extends Component {
                           </div>
                         </CCol>
 
-
                         <CCol sm="12" lg="12">
-                          <div>
-                            <CLabel>Quyền hạn</CLabel>
-                            <Input style={styles.searchInput} value={role} />
-                          </div>
+                          <CLabel>Tên thương hiệu</CLabel>
+                          <CRow>
+                            <CCol sm="9" lg="9">
+                              <div>
+                                <Input style={styles.searchInput} readOnly={isChangeSlug} onChange={(e) => { this.setState({ current_slug: e.target.value }) }} value={current_slug} />
+                              </div>
+                            </CCol>
+                            <CCol sm="3" lg="3">
+                              {
+                                isChangeSlug ?
+                                  <Button color="primary" onClick={e => {
+                                    this.setState({ isChangeSlug: false })
+                                  }}>Thay đổi</Button> :
+                                  <Button color="primary" onClick={async e => {
+                                    await this.updateSlug();
+                                  }}>Cập nhật</Button>
+                              }
+
+                            </CCol>
+                          </CRow>
                         </CCol>
 
 
@@ -398,12 +400,12 @@ class Users extends Component {
                         </CCol>
 
 
-                        <CCol sm="12" lg="12">
+                        {/* <CCol sm="12" lg="12">
                           <div>
                             <CLabel>Trạng thái</CLabel>
                             <Input style={styles.searchInput} onChange={(e) => { }} value={data.Status} />
                           </div>
-                        </CCol>
+                        </CCol> */}
                       </CRow>
                     </CCol>
                   </CRow>
