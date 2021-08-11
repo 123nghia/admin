@@ -28,6 +28,7 @@ const content = {
                   reward_customer: "Danh sách nhận quà của người dùng đã đến sử dụng dịch vụ",
                   reward_type: "Danh sách các loại khuyến mãi",
                   update_package: "Nâng cấp gói",
+                  contact: "Danh sach liên hệ",
                 }
 
 
@@ -271,17 +272,6 @@ const _navOrther = [
                 <CIcon content={freeSet.cilBellExclamation} />
               </CTooltip>,
       }
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Quản lý loại yêu cầu',
-      to: '/type_request',
-      role: ['0', '1'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.reward_type}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
-      }
     }],
     role: ['0', '1', '2'],
   },
@@ -441,6 +431,37 @@ const _navOrther = [
       }
     }],
     role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Thông tin liên hệ'],
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách liên hệ',
+    to: '/contact',
+    role: ['0', '1'],
+    icon: <CIcon style={css} content={freeSet.cilContact} customClasses="c-sidebar-nav-icon" />,
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.contact}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách loại yêu cầu',
+    to: '/type_request',
+    role: ['0', '1'],
+    icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.contact}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>,
+    }
   },
 ]
 

@@ -221,4 +221,10 @@ export default {
   "UPDATE_TYPE_SDK": "/api/update-type-sdk",
   "DELETE_TYPE_SDK": "/api/delete-type-sdk",
 
+  "LIST_CONTACT_CUSTOMER": "/api/list-contact-customers",
+  "ADD_CONTACT_CUSTOMER": "/api/add-contact-customers",
+  "UPDATE_CONTACT_CUSTOMER": "/api/update-contact-customers",
+  "DELETE_CONTACT_CUSTOMER": "/api/delete-contact-customers",
+  "UPDATE_CONTACT_STATUS": "/api/update-contact-status",
+
 };

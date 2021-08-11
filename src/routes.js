@@ -34,6 +34,7 @@ const CusRequest = React.lazy(() => import('./views/base/tables/AI_Skin/Customer
 const TypeRequest = React.lazy(() => import('./views/base/tables/AI_Skin/TypeRequestModel'));
 const CustomerManager = React.lazy(() => import('./views/base/tables/AI_Skin/CustomerManager'));
 const HistorySkin = React.lazy(() => import('./views/base/tables/AI_Skin/HistorySkin'));
+const ContactCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ContactCustomer'));
 const UpdatePackage = React.lazy(() => import('./views/base/tables/UpdatePackage'));
 
 //ADMIN MakeUp
@@ -88,6 +89,7 @@ const routes = [
   { path: '/customer', name: 'Customer Manager', component: CustomerManager },
   { path: '/historyskin', name: 'History Skin', component: HistorySkin },
   { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
+  { path: '/contact', name: 'Contact', component: ContactCustomer },
 
   //Admin MakeUp
   { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
