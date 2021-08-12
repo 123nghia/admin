@@ -117,14 +117,19 @@ class Color extends Component {
 
 
     let val = res_color.data.data;
+    let sub = res_color.data.sub;
+    for(let i = 0; i < val.length; i++) {
+      if(sub[i] != undefined){
+        val[i].subName = sub[i].name
+      } else {
+        val[i].subName = ""
+      }
+    }
+
     let product = res_product.data.data;
 
     this.pagination(val);
-    this.setState({ dataApi: val, products: product });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ dataApi: val, products: product, isLoading: false })
   }
 
   getData_Company = async () => {
@@ -142,16 +147,22 @@ class Color extends Component {
     });
 
 
+
     let val = res_color.data.data;
+    let sub = res_color.data.sub;
+    for(let i = 0; i < val.length; i++) {
+      if(sub[i] != undefined){
+        val[i].subName = sub[i].name
+      } else {
+        val[i].subName = ""
+      }
+    }
+
     let product = res_product.data.data;
-    console.log(product)
-    console.log(val)
+
     this.pagination(val);
-    this.setState({ dataApi: val, products: product });
+    this.setState({ dataApi: val, products: product, isLoading: false });
 
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
   }
 
   searchKey(key) {
@@ -255,6 +266,7 @@ class Color extends Component {
   async updateUser() {
     const { hex, makeup_id, alpha, product_id, version } = this.state;
 
+    console.log(product_id)
     if (hex == null || hex == '' ||
       makeup_id == null || makeup_id == '' ||
       alpha == null || alpha == '' ||
@@ -346,9 +358,9 @@ class Color extends Component {
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.product.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-        val.hex.toLocaleUpperCase().includes(key.toLocaleUpperCase())||
-        val.makeup_id.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        if (val.hex.toLocaleUpperCase().includes(key.toLocaleUpperCase())||
+        val.makeup_id.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+        val.product_id.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -434,6 +446,7 @@ class Color extends Component {
                         <th className="text-center">Hex</th>
                         <th className="text-center">MakeUp ID</th>
                         <th className="text-center">Alpha</th>
+                        <th className="text-center">Danh mục cấp 2</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -452,6 +465,7 @@ class Color extends Component {
                                 </td>
                                 <td className="text-center">{item.makeup_id}</td>
                                 <td className="text-center">{item.alpha}</td>
+                                <td className="text-center">{item.subName}</td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />

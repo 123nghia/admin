@@ -56,6 +56,7 @@ class Brand extends Component {
       action: 'new',
       name: "",
       image: "",
+      link: "",
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -194,7 +195,8 @@ class Brand extends Component {
         modalCom: !this.state.modalCom,
         action: key,
         name: "",
-        image: ""
+        image: "",
+        link: ""
       })
     }
   }
@@ -204,7 +206,7 @@ class Brand extends Component {
   }
 
   async addRoles() {
-    const { name, image } = this.state
+    const { name, image, link } = this.state
     if (name == null || name == '' ||
       image == null || image == '') {
       alert("Please fill in all the requirements");
@@ -214,7 +216,8 @@ class Brand extends Component {
     const body = {
       name: name,
       image: image,
-      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
+      link: link
     }
 
     this.setState({ isLoading: true });
@@ -244,12 +247,13 @@ class Brand extends Component {
       action: "update",
       name: item.name,
       image: item.image,
-      id: item['_id']
+      id: item['_id'],
+      link: item.link
     })
   }
 
   async updateUser() {
-    const { name, image } = this.state
+    const { name, image, link } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '') {
@@ -260,7 +264,8 @@ class Brand extends Component {
     const body = {
       name: name,
       image: image,
-      id: this.state.id
+      id: this.state.id,
+      link: link
     }
 
     this.setState({ isLoading: true });
@@ -381,6 +386,7 @@ class Brand extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên thương hiệu</th>
                         <th className="text-center">Ảnh thương hiệu</th>
+                        <th className="text-center">Link thương hiệu</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -394,6 +400,9 @@ class Brand extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center"><img src={item.image} width={"90px"} height={"70px"} /></td>
+                                <td className="text-center">
+                                  <a href={item.link} target="_blank">{item.link}</a>
+                                </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -447,16 +456,6 @@ class Brand extends Component {
               // rows="5"
               />
 
-              {/* <TextFieldGroup
-                field="image"
-                label="Ảnh minh họa"
-                value={this.state.image}
-                placeholder={"Ảnh minh họa"}
-                // error={errors.title}
-                onChange={e => this.onChange("image", e.target.value)}
-              // rows="5"
-              /> */}
-
               <TextFieldGroup
                 field="image"
                 label="Ảnh thương hiệu"
@@ -470,6 +469,16 @@ class Brand extends Component {
                 this.state.image == "" ? "" :
                   <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
               }
+
+              <TextFieldGroup
+                field="link"
+                label="Link thương hiệu"
+                value={this.state.link}
+                placeholder={"Link thương hiệu"}
+                // error={errors.title}
+                onChange={e => this.onChange("link", e.target.value)}
+              // rows="5"
+              />
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}

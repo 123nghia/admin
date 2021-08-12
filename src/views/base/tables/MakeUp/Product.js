@@ -122,7 +122,7 @@ class Product extends Component {
 
     const res_type = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_TYPE,
+      url: Constants.LIST_TYPE + "/null",
       method: 'GET'
     });
 
@@ -153,7 +153,7 @@ class Product extends Component {
 
     const res_type = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id,
+      url: Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null",
       method: 'GET'
     });
 
@@ -455,7 +455,7 @@ class Product extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Loại</th>
+                        <th className="text-center">Danh mục cấp 2</th>
                         <th className="text-center">Thương hiệu</th>
                         <th className="text-center">Tên sản phẩm</th>
                         <th className="text-center">Đường dẫn</th>
