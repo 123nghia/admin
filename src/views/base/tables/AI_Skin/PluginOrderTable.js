@@ -155,7 +155,7 @@ class PluginOrder extends Component {
     });
 
     let val = res.data.data;
-    console.log(val)
+
     this.pagination(val);
     this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package, isLoading: false });
   }

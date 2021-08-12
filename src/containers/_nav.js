@@ -54,7 +54,7 @@ const _navSoida = [
   {
     _tag: 'CSidebarNavItem',
     name: 'Chăm sóc da hằng ngày',
-    to: '/K1',
+    to: '/items/0',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
@@ -67,7 +67,7 @@ const _navSoida = [
   {
     _tag: 'CSidebarNavItem',
     name: 'Hỗ trợ giảm lão hóa da',
-    to: '/K2',
+    to: '/items/1',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
@@ -80,7 +80,7 @@ const _navSoida = [
   {
     _tag: 'CSidebarNavItem',
     name: 'Hỗ trợ điều trị mụn',
-    to: '/K3',
+    to: '/items/2',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
@@ -93,7 +93,7 @@ const _navSoida = [
   {
     _tag: 'CSidebarNavItem',
     name: 'Hỗ trợ giảm quầng thâm mắt',
-    to: '/K4',
+    to: '/items/3',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
@@ -106,7 +106,7 @@ const _navSoida = [
   {
     _tag: 'CSidebarNavItem',
     name: 'Hỗ trợ giảm lỗ chân lông',
-    to: '/K5',
+    to: '/items/4',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
@@ -119,7 +119,7 @@ const _navSoida = [
   {
     _tag: 'CSidebarNavItem',
     name: 'Hỗ trợ giảm thâm nám da',
-    to: '/K6',
+    to: '/items/5',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {

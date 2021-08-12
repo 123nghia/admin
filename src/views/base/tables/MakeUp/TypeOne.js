@@ -73,6 +73,8 @@ class SuggestItem extends Component {
       isLoading: false,
       arrOptionSdkType: [],
       arrOptionProductType: [],
+      arrLevel: [],
+      idSDK: window.location.hash.split('/')[window.location.hash.split('/').length - 1]
     };
   }
   async componentDidMount() {
@@ -115,10 +117,11 @@ class SuggestItem extends Component {
   }
 
   getData = async () => {
+    const { idSDK } = this.state;
     this.setState({ isLoading: true });
     const res_suggest = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SUGGEST_ITEM_ADMIN + "0",
+      url: Constants.LIST_SUGGEST_ITEM_ADMIN + idSDK,
       method: 'GET'
     });
 
@@ -129,6 +132,7 @@ class SuggestItem extends Component {
     });
 
     let val = res_suggest.data.data;
+
     this.pagination(val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });
 
@@ -138,10 +142,11 @@ class SuggestItem extends Component {
   }
 
   getDataForCompany = async () => {
+    const { idSDK } = this.state;
     this.setState({ isLoading: true });
     const res_suggest = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(this.state.userData).company_id + "/0",
+      url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(this.state.userData).company_id + `/${idSDK}`,
       method: 'GET'
     });
 
@@ -152,7 +157,7 @@ class SuggestItem extends Component {
     });
 
     let val = res_suggest.data.data;
-    console.log(val)
+
     this.pagination(val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });
 
@@ -203,8 +208,10 @@ class SuggestItem extends Component {
 
     if (key != '') {
       let d = []
+
       this.state.dataApi.map(val => {
         if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.title.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
           val.type_product_id.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
           val.type_product_id.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
@@ -250,6 +257,8 @@ class SuggestItem extends Component {
   }
 
   async toggleModal(key) {
+    const { data } = this.state;
+
     if (key == 'new') {
       this.setState({
         modalCom: !this.state.modalCom,
@@ -263,7 +272,8 @@ class SuggestItem extends Component {
         sdktype: "1",
         type_sdk_id: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0]._id,
         type_product_id: this.state.arrOptionProductType.length == 0 ? '' : this.state.arrOptionProductType[0]._id,
-        companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id
+        companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
+        arrLevel: data[0].type_sdk_id.Level
       })
     }
   }
@@ -273,7 +283,7 @@ class SuggestItem extends Component {
   }
 
   async addRoles() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       title == null || title == '' ||
@@ -330,10 +340,10 @@ class SuggestItem extends Component {
       sdktype: item.sdktype,
       type_product_id: item.type_product_id._id,
       type_sdk_id: item.type_sdk_id._id,
-      sdktype: item.sdktype,
       companyid: item.companyid,
       id: item['_id'],
-      Status: item.Status
+      Status: item.Status,
+      arrLevel: item.type_sdk_id.Level
     })
   }
 
@@ -438,7 +448,7 @@ class SuggestItem extends Component {
   }
 
   render() {
-    const { data, arrPagination, arrOptionProductType, arrOptionSdkType, key } = this.state;
+    const { data, arrPagination, arrLevel, arrOptionSdkType, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -475,13 +485,14 @@ class SuggestItem extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên sản phẩm</th>
-                        <th className="text-center">Ảnh minh họa</th>
+                        <th className="text-center">Tên</th>
+                        <th className="text-center">Ảnh</th>
                         <th className="text-center">Tiều đề</th>
                         <th className="text-center">Mô tả</th>
                         <th className="text-center">Chi tiết</th>
-                        <th className="text-center">Loại sản phẩm</th>
+                        <th className="text-center">Loại</th>
                         <th className="text-center">Loại SDK</th>
+                        <th className="text-center">Level</th>
                         {/* <th className="text-center">Loại Sdk</th>
                         <th className="text-center">Level</th> */}
                         <th className="text-center">#</th>
@@ -510,13 +521,16 @@ class SuggestItem extends Component {
                                   {item.description}
                                 </td>
                                 <td className="text-center">
-                                  {item.linkdetail}
+                                  <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
                                 </td>
                                 <td className="text-center">
                                   {item.type_product_id.Name}
                                 </td>
                                 <td className="text-center">
                                   {item.type_sdk_id.Name}
+                                </td>
+                                <td className="text-center">
+                                  {item.sdktype}
                                 </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -643,13 +657,13 @@ class SuggestItem extends Component {
                 </CSelect>
               </div>
 
-              {/* <CLabel>Level:</CLabel>
+              <CLabel>Level:</CLabel>
               <div style={{ width: "100%" }}>
                 {
-                  currentSdkSelect.sdktype != undefined ? (
+                  arrLevel != undefined ? (
                     <CSelect onChange={async e => { this.changeLevel(e) }} custom size="sm" name="selectSm" id="SelectLm">
                       {
-                        currentSdkSelect.sdktype.split(",").map((item, i) => {
+                        arrLevel.map((item, i) => {
                           if (item == this.state.sdktype) {
                             return (
                               <option selected key={i} value={item}>{item}</option>
@@ -664,7 +678,7 @@ class SuggestItem extends Component {
                     </CSelect>
                   ) : null
                 }
-              </div> */}
+              </div>
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
