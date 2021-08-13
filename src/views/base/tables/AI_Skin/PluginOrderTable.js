@@ -88,7 +88,8 @@ class PluginOrder extends Component {
       type: localStorage.getItem('type'),
       arrName: [],
       arrPackage: [],
-      isLoading: false
+      isLoading: false,
+      isLoadingTable: false,
     };
   }
   async componentDidMount() {
@@ -125,7 +126,7 @@ class PluginOrder extends Component {
 
   // }
 
-  pagination(dataApi) {
+  pagination(dataApi, dataResult) {
     var i, j, temparray, chunk = 5;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
@@ -142,59 +143,85 @@ class PluginOrder extends Component {
         hidden: true
       })
     }
-
-    this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
+    this.setState({ arrPagination: arrTotal, data: dataResult });
   }
 
   getData = async () => {
     this.setState({ isLoading: true });
+
+    const totalOrder = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.COUNT_PLUGIN_ORDER,
+      method: 'POST'
+    });
+
+    let totalCount = totalOrder.data.data
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PLUGIN_ORDER,
       method: 'POST',
+      data: {
+        skip: Number(totalCount.length) - 5
+      }
     });
 
     let val = res.data.data;
 
-    this.pagination(val);
+    this.pagination(totalCount, val);
     this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package, isLoading: false });
+  }
+
+  getDataPagination = async (skip) => {
+    this.setState({ isLoadingTable: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_PLUGIN_ORDER,
+      method: 'POST',
+      data: {
+        skip: Number(skip)
+      }
+    });
+
+    let val = res.data.data;
+
+    this.setState({
+      dataApi: val,
+      arrName: res.data.data.company,
+      arrPackage: res.data.data.package,
+      isLoadingTable: false,
+      data: val
+    });
   }
 
   getDataBySale = async () => {
     this.setState({ isLoading: true });
+
+    const totalOrder = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.COUNT_PLUGIN_ORDER,
+      method: 'POST'
+    });
+
+    let totalCount = totalOrder.data.data
+
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_ORDER_BY_SALE,
       method: 'POST',
-      headers: this.state.token
+      headers: this.state.token,
+      data: {
+        skip: Number(totalCount.length) - 5
+      }
     });
 
     let val = res.data.data;
-    console.log("val: ", val)
-    for (let i = 0; i < val.length; i++) {
-      const name_sale = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.PLUGIN_GET_USER_BY_BODY,
-        method: 'POST',
-        data: {
-          id: val[i].Sale_Id
-        }
-      });
 
-      val[i].Sale = name_sale.data.data
-    }
-
-    this.pagination(val);
-    this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.pagination(totalCount, val);
+    this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package, isLoading: true });
   }
 
   searchKey() {
     const { indexPage, key, keyStatus } = this.state;
-    // this.setState({ key: key })
 
     if (key != '' || keyStatus != '') {
       let d = []
@@ -410,8 +437,8 @@ class PluginOrder extends Component {
 
   getBadge_type_string(status) {
     switch (status) {
-      case "0": return 'Đang kích hoạt'
-      case "1": return 'Đã ẩn'
+      case "0": return 'Đã duyệt'
+      case "1": return 'Chưa duyệt'
 
       default: return 'primary'
     }
@@ -649,7 +676,7 @@ class PluginOrder extends Component {
                               {
                                 [0, 1].map((item, i) => {
                                   return (
-                                    <option value={item}>{item == '0' ? 'Đã vô hiệu' : 'Đang kích hoạt'}</option>
+                                    <option value={item}>{item == '0' ? 'Chưa duyệt' : 'Đang chờ duyệt'}</option>
                                   );
                                 })
                               }
@@ -667,123 +694,115 @@ class PluginOrder extends Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        <th className="text-center">Công ty</th>
-                        <th className="text-center">Gói tính năng</th>
-                        <th className="text-center">Tính năng</th>
-                        <th className="text-center">Trạng thái</th>
-                        <th className="text-center">Sale giới thiệu</th>
-                        <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">#</th>
+                  {
+                    this.state.isLoadingTable == false ?
+                      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                        <thead className="thead-light">
+                          <tr>
+                            <th className="text-center">STT.</th>
+                            <th className="text-center">Công ty</th>
+                            <th className="text-center">Gói tính năng</th>
+                            <th className="text-center">Tính năng</th>
+                            <th className="text-center">Trạng thái</th>
+                            <th className="text-center">Sale giới thiệu</th>
+                            <th className="text-center">Ngày tạo</th>
+                            <th className="text-center">#</th>
 
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Company_Id == null ? "" : item.Company_Id.Name}</td>
-                                <td className="text-center">{item.Package_Id.Name}</td>
-                                <td className="text-center">
-                                  {item.Array_Feature.map((item, i) => {
-                                    if (i < 2) {
-                                      return (
-                                        <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
-                                      )
-                                    }
-                                  })}
-                                  {
-                                    (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
-                                  }
-                                </td>
-                                <td className="text-center">
-                                  <CBadge color={this.getBadge(item.Status)}>
-                                    {this.getBadge_string(item.Status)}
-                                  </CBadge>
-                                </td>
-                                <td className="text-center">
-                                  {
-                                    item.Sale_Id != undefined ? item.Sale_Id.Name : "admin"
-                                  }
-                                </td>
-                                <td className="text-center">
-                                  {
-                                    new Date(item.Create_Date).toLocaleDateString()
-                                  }
-                                </td>
-                                <td className="text-center">
-                                  {
-                                    type == '0' ? <CTooltip content="Duyệt đơn hàng">
-                                      <CButton style={{ margin: 1 }} outline color="success" size="sm" onClick={async (e) => {
-                                        this.openUpdate(item);
-                                        this.setState({ Company_Id: item.Company_Id, Package_Id: item.Package_Id });
-                                        this.getCompanyData();
-                                        this.getPackageData(item.Array_Feature);
-                                        this.getFeatureData();
-                                        await this.getCompanyName(item.Company_Id);
-                                        this.setState({ arrFeature: [], current_status: item.Status, isUpdate: false })
-                                      }}>
-                                        <CIcon name="cilCheck" />
-                                      </CButton>
-                                    </CTooltip> : ""
-                                  }
-                                  {' '}
-                                  <CTooltip content="Cập nhật đơn hàng">
-                                    <CButton style={{ margin: 1 }} outline color="primary" size="sm"
-                                      onClick={async (e) => {
-                                        this.openUpdate(item);
-                                        this.setState({ Company_Id: item.Company_Id, Package_Id: item.Package_Id });
-                                        this.getCompanyData();
-                                        this.getPackageData(item.Array_Feature);
-                                        this.getFeatureData();
-                                        await this.getCompanyName(item.Company_Id);
-                                        this.setState({ arrFeature: [], current_status: item.Status, isUpdate: true })
-                                      }}
-                                    ><CIcon name="cilPencil" /></CButton>
-                                  </CTooltip>{' '}
-                                  {
-                                    type == '0' ? <CButton style={{ margin: 1 }} outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                      <CIcon name="cilTrash" />
-                                    </CButton> : ""
-                                  }
-                                </td>
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </table>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                          {
+                            data != undefined ?
+                              data.map((item, i) => {
+                                return (
+                                  <tr key={i}>
+                                    <td className="text-center">{i + 1}</td>
+                                    <td className="text-center">{item.Company_Id == null ? "" : item.Company_Id.Name}</td>
+                                    <td className="text-center">{item.Package_Id.Name}</td>
+                                    <td className="text-center">
+                                      {item.Array_Feature.map((item, i) => {
+                                        if (i < 2) {
+                                          return (
+                                            <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
+                                          )
+                                        }
+                                      })}
+                                      {
+                                        (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
+                                      }
+                                    </td>
+                                    <td className="text-center">
+                                      <CBadge color={this.getBadge(item.Status)}>
+                                        {this.getBadge_string(item.Status)}
+                                      </CBadge>
+                                    </td>
+                                    <td className="text-center">
+                                      {
+                                        item.Sale_Id != undefined ? item.Sale_Id.Name : "admin"
+                                      }
+                                    </td>
+                                    <td className="text-center">
+                                      {
+                                        new Date(item.Create_Date).toLocaleDateString()
+                                      }
+                                    </td>
+                                    <td className="text-center">
+                                      {
+                                        type == '0' ? <CTooltip content="Duyệt đơn hàng">
+                                          <CButton style={{ margin: 1 }} outline color="success" size="sm" onClick={async (e) => {
+                                            this.openUpdate(item);
+                                            this.setState({ Company_Id: item.Company_Id, Package_Id: item.Package_Id });
+                                            this.getCompanyData();
+                                            this.getPackageData(item.Array_Feature);
+                                            this.getFeatureData();
+                                            await this.getCompanyName(item.Company_Id);
+                                            this.setState({ arrFeature: [], current_status: item.Status, isUpdate: false })
+                                          }}>
+                                            <CIcon name="cilCheck" />
+                                          </CButton>
+                                        </CTooltip> : ""
+                                      }
+                                      {' '}
+                                      <CTooltip content="Cập nhật đơn hàng">
+                                        <CButton style={{ margin: 1 }} outline color="primary" size="sm"
+                                          onClick={async (e) => {
+                                            this.openUpdate(item);
+                                            this.setState({ Company_Id: item.Company_Id, Package_Id: item.Package_Id });
+                                            this.getCompanyData();
+                                            this.getPackageData(item.Array_Feature);
+                                            this.getFeatureData();
+                                            await this.getCompanyName(item.Company_Id);
+                                            this.setState({ arrFeature: [], current_status: item.Status, isUpdate: true })
+                                          }}
+                                        ><CIcon name="cilPencil" /></CButton>
+                                      </CTooltip>{' '}
+                                      {
+                                        type == '0' ? <CButton style={{ margin: 1 }} outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                          <CIcon name="cilTrash" />
+                                        </CButton> : ""
+                                      }
+                                    </td>
+                                  </tr>
+                                );
+                              }) : ""
+                          }
+                        </tbody>
+                      </table> :
+                      <div className="sweet-loading">
+                        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoadingTable} speedMultiplier={1.5} />
+                      </div>
+                  }
+
 
                 </CardBody>
               </Card>
               <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
+                  //this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                  await this.getDataPagination(5 * (v - 1))
                 }} />
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
 
             </Col>
           </Row>

@@ -131,8 +131,8 @@ class SuggestItem extends Component {
       method: 'GET'
     });
 
-    let val = res_suggest.data.data;
-
+    let val = res_suggest.data.dataRes;
+    console.log(val)
     this.pagination(val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });
 
@@ -149,14 +149,14 @@ class SuggestItem extends Component {
       url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(this.state.userData).company_id + `/${idSDK}`,
       method: 'GET'
     });
-
+    console.log(res_suggest)
     const res_sdk = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_SDK,
       method: 'GET'
     });
 
-    let val = res_suggest.data.data;
+    let val = res_suggest.data.dataRes;
 
     this.pagination(val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });

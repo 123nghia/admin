@@ -116,6 +116,7 @@ export default {
   "DATA_CHOOSE_FEATURE" : "/api/get-feature-choose",
 
   "LIST_PLUGIN_ORDER" : "/api/plugin-list-order",
+  "COUNT_PLUGIN_ORDER" : "/api/plugin-count-order",
   "LIST_PLUGIN_ORDER_BY_ID" : "/api/plugin-list-order-by-id",
   "LIST_PLUGIN_ORDER_FOR_ADMIN" : "/api/plugin-list-order-for-admin",
   "LIST_ORDER_BY_SALE" : "/api/plugin-list-order-by-saleid",

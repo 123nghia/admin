@@ -127,7 +127,7 @@ class ListFeatureOfCustomer extends Component {
       headers: this.state.token
     });
     let val = res.data.data
-    //val.com_name = await this.getCompanyName(val.Company_Id)
+
     await this.onView(val.Name, val.Company_Id, val.Phone);
 
     this.setState({ dataApi: res.data.data, data: val, isLoading: false, current_slug: val.Company_Id.Slug });
@@ -155,23 +155,14 @@ class ListFeatureOfCustomer extends Component {
     return resPackage.data.data;
   }
 
-  async getPackageData(company_id) {
-    let arrTemp = []
+  async getPackageData() {
     const resPackage = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PLUGIN_ORDER_BY_ID,
       method: 'POST',
       headers: this.state.token
     });
-    let val = resPackage.data.data.result;
-
-    // for (let i = 0; i < val.length; i++) {
-    //   let data = await this.getPackageName(val[i].Package_Id);
-    //   val[i].Name = data.Name
-    //   val[i].Unit = data.Unit
-    //   val[i].Value = data.Value
-    //   arrTemp.push(val[i])
-    // }
+    let val = resPackage.data.data;
 
     this.setState({ arrTotalPackage: val, current_package: val.length == 0 ? '' : val[0].Package_Id.Name })
     return val;
@@ -334,11 +325,11 @@ class ListFeatureOfCustomer extends Component {
                           </th>
                           {
                             item.Status == "1" ? <th className="text-center" style={
-                              this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
-                                this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                              this.calDateLeft(item.End_Date, Date.now()) > 30 ? { color: 'green' } :
+                                this.calDateLeft(item.End_Date, Date.now()) < 15 ? { color: 'yellow' } : { color: 'red' }
                             }>
                               {
-                                this.calDateLeft(item.End_Date, item.Active_Date)
+                                this.calDateLeft(item.End_Date, Date.now())
                               } ngày nữa
                             </th> : <th className="text-center">-----</th>
                           }
@@ -379,7 +370,7 @@ class ListFeatureOfCustomer extends Component {
               </tbody>
             </table>
             <br />
-            <CardHeader closeButton>
+            <CardHeader>
               <CModalTitle>Chi tiết tính năng ({current_package})</CModalTitle>
             </CardHeader>
             {

@@ -735,11 +735,11 @@ class PluginCustomerManager extends Component {
                             </th>
                             {
                               item.Status == "1" ? <th className="text-center" style={
-                                this.calDateLeft(item.End_Date, item.Active_Date) > 30 ? { color: 'green' } :
-                                  this.calDateLeft(item.End_Date, item.Active_Date) < 15 ? { color: 'yellow' } : { color: 'red' }
+                                this.calDateLeft(item.End_Date, Date.now()) > 30 ? { color: 'green' } :
+                                  this.calDateLeft(item.End_Date, Date.now()) < 15 ? { color: 'yellow' } : { color: 'red' }
                               }>
                                 {
-                                  this.calDateLeft(item.End_Date, item.Active_Date)
+                                  this.calDateLeft(item.End_Date, Date.now())
                                 } ngày nữa
                               </th> : <th className="text-center">-----</th>
                             }

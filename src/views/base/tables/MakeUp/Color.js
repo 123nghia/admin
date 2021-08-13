@@ -430,7 +430,7 @@ class Color extends Component {
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
+                        {/* <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton> */}
                       </CCol>
                     </CRow>
 
@@ -469,7 +469,7 @@ class Color extends Component {
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
-                                  </CButton>{' '}
+                                  </CButton>
                                   <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                     <CIcon name="cilTrash" />
                                   </CButton>
@@ -663,7 +663,7 @@ const styles = {
     color: 'red'
   },
   mgl5: {
-    marginLeft: '5px'
+    margin: '5px'
   },
   tags: {
     float: "right",

@@ -444,7 +444,7 @@ class Product extends Component {
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
+                        {/* <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton> */}
                       </CCol>
                     </CRow>
                   </div>
