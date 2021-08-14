@@ -142,7 +142,8 @@ class Product extends Component {
     const res_product = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id,
-      method: 'GET'
+      method: 'GET',
+      headers: this.state.token
     });
 
     const res_brand = await axios({

@@ -133,17 +133,23 @@ class Color extends Component {
   }
 
   getData_Company = async () => {
+    const { user } = this.state
     this.setState({ isLoading: true });
     const res_color = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id,
-      method: 'GET'
+      method: 'GET',
+      headers: this.state.token,
+      // data: {
+      //   user: user.username
+      // }
     });
 
     const res_product = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id,
-      method: 'GET'
+      method: 'GET',
+      headers: this.state.token
     });
 
 

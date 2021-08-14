@@ -21,11 +21,10 @@ import {
   CTooltip
 } from '@coreui/react'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+// import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "./../../../../contants/contants";
-import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
@@ -34,13 +33,6 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class PluginOrder extends Component {
   constructor(props) {
     super(props);
@@ -90,6 +82,7 @@ class PluginOrder extends Component {
       arrPackage: [],
       isLoading: false,
       isLoadingTable: false,
+      totalCount: ''
     };
   }
   async componentDidMount() {
@@ -143,7 +136,7 @@ class PluginOrder extends Component {
         hidden: true
       })
     }
-    this.setState({ arrPagination: arrTotal, data: dataResult });
+    this.setState({ arrPagination: arrTotal, data: dataResult, totalCount: dataApi.length });
   }
 
   getData = async () => {
@@ -172,18 +165,20 @@ class PluginOrder extends Component {
   }
 
   getDataPagination = async (skip) => {
+    // console.log(Number(this.state.totalCount))
+    // console.log(Number(skip))
+
     this.setState({ isLoadingTable: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PLUGIN_ORDER,
       method: 'POST',
       data: {
-        skip: Number(skip)
+        skip: Number(this.state.totalCount) - Number(skip)
       }
     });
 
     let val = res.data.data;
-
     this.setState({
       dataApi: val,
       arrName: res.data.data.company,
@@ -226,8 +221,10 @@ class PluginOrder extends Component {
     if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-
+        if (val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase()) &&
+        (val.Company_Id.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+        val.Package_Id.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
+          console.log(val)
           d.push(val)
         }
       })
@@ -651,7 +648,7 @@ class PluginOrder extends Component {
 
   render() {
     const { data, arrPagination, currentSlug, type, Company_Id, Package_Id, arrayChooseFeature, arrFeature,
-      company_name, package_name, package_unit, package_key, package_time, dataPackage_All, current_status } = this.state;
+      company_name, package_name, package_unit, package_key, package_time, dataPackage_All, current_status, key } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -667,7 +664,14 @@ class PluginOrder extends Component {
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
-                          <CCol sm="12" lg="6">
+                          <CCol sm="12" lg="4">
+                            <div>
+                              <Input style={styles.searchInput} onChange={(e) => {
+                                this.actionSearch(e, "key");
+                              }} name="key" value={key} placeholder="Từ khóa" />
+                            </div>
+                          </CCol>
+                          <CCol sm="12" lg="4">
                             <CSelect style={styles.flexOption} onChange={e => {
 
                               this.actionSearch(e, "keyStatus");
@@ -682,7 +686,7 @@ class PluginOrder extends Component {
                               }
                             </CSelect>
                           </CCol>
-                          <CCol sm="12" lg="6">
+                          <CCol sm="12" lg="4">
                             <CButton color="primary" style={{ width: '100%', marginTop: 5, marginRight: 55 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
                           </CCol>
                         </CRow>
@@ -719,7 +723,7 @@ class PluginOrder extends Component {
                                   <tr key={i}>
                                     <td className="text-center">{i + 1}</td>
                                     <td className="text-center">{item.Company_Id == null ? "" : item.Company_Id.Name}</td>
-                                    <td className="text-center">{item.Package_Id.Name}</td>
+                                    <td className="text-center">{item.Package_Id == null ? "" : item.Package_Id.Name}</td>
                                     <td className="text-center">
                                       {item.Array_Feature.map((item, i) => {
                                         if (i < 2) {
@@ -789,7 +793,7 @@ class PluginOrder extends Component {
                           }
                         </tbody>
                       </table> :
-                      <div className="sweet-loading">
+                      <div className="sweet-loading" style={{ height: 370 }}>
                         <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoadingTable} speedMultiplier={1.5} />
                       </div>
                   }
@@ -800,7 +804,8 @@ class PluginOrder extends Component {
               <div style={{ float: 'right' }}>
                 <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
                   //this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                  await this.getDataPagination(5 * (v - 1))
+
+                  await this.getDataPagination(5 * (v))
                 }} />
               </div>
 
