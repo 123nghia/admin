@@ -490,7 +490,7 @@ class Users extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
 
             <ModalBody>
               {

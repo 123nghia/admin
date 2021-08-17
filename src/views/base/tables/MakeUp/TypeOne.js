@@ -113,7 +113,9 @@ class SuggestItem extends Component {
       })
     }
 
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    console.log(arrTotal)
+
+    this.setState({ arrPagination: arrTotal, data: arrTotal.length > 0 ? arrTotal[0] : [] });
   }
 
   getData = async () => {
@@ -149,7 +151,7 @@ class SuggestItem extends Component {
       url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(this.state.userData).company_id + `/${idSDK}`,
       method: 'GET'
     });
-    console.log(res_suggest)
+
     const res_sdk = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_SDK,
@@ -273,7 +275,7 @@ class SuggestItem extends Component {
         type_sdk_id: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0]._id,
         type_product_id: this.state.arrOptionProductType.length == 0 ? '' : this.state.arrOptionProductType[0]._id,
         companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
-        arrLevel: data[0].type_sdk_id.Level
+        arrLevel: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0].Level
       })
     }
   }
@@ -302,7 +304,7 @@ class SuggestItem extends Component {
       sdktype: sdktype,
       companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
       type_sdk_id: type_sdk_id,
-      type_product_id: "0"
+      type_product_id: window.location.hash.split('/')[window.location.hash.split('/').length - 1]
 
     }
 
@@ -573,7 +575,7 @@ class SuggestItem extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="name"
@@ -640,16 +642,18 @@ class SuggestItem extends Component {
 
               <CLabel>Loại SDK:</CLabel>
               <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.setState({ type_sdk_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+                <CSelect onChange={async e => {
+                  this.setState({ type_sdk_id: e.target.value.split("/")[0], arrLevel: JSON.parse(e.target.value.split("/")[1]) })
+                }} custom size="sm" name="selectSm" id="SelectLm">
                   {
                     arrOptionSdkType.map((item, i) => {
                       if (item._id == this.state.type_sdk_id) {
                         return (
-                          <option selected key={i} value={item._id}>{item.Name}</option>
+                          <option selected key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{item.Name}</option>
                         );
                       } else {
                         return (
-                          <option key={i} value={item._id}>{item.Name}</option>
+                          <option key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{item.Name}</option>
                         );
                       }
                     })

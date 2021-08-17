@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import CIcon from '@coreui/icons-react'
+import lodash from 'lodash';
+
 import {
   Card,
   CardBody,
@@ -7,7 +9,8 @@ import {
   Col,
   Row,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Input
+  Input,
+  Button
 } from 'reactstrap';
 
 import {
@@ -15,10 +18,12 @@ import {
   CLabel,
   CSelect,
   CRow,
-  CCol
+  CCol,
+  CListGroup,
+  CListGroupItem,
+  CCollapse,
 } from '@coreui/react'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
@@ -26,25 +31,20 @@ import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import API_CONNECT from "../../../../functions/callAPI";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-class SubType extends Component {
+class SubTypeMakeUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
+      keyColor: '',
       modalCom: false,
-      viewingUser: {},
-      communities: [],
       updated: '',
       dataApi: [],
       hidden: false,
@@ -53,16 +53,20 @@ class SubType extends Component {
       image: '',
       hover: '',
       sub_type: '',
+      color_id: [],
       isNull: false,
       modalDelete: false,
       delete: null,
       arrPagination: [],
+      arrColor: [],
+      arrColorChoose: [],
+      arrShowColor: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
       isLoading: false,
-
+      collapse: false
     };
   }
   async componentDidMount() {
@@ -72,6 +76,9 @@ class SubType extends Component {
     } else {
       this.getData_Company()
     }
+
+
+
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -105,38 +112,33 @@ class SubType extends Component {
 
   getData = async () => {
     this.setState({ isLoading: true });
-    const res_product = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_TYPE + "/0",
-      method: 'GET'
-    });
 
+    const res_product = await API_CONNECT(
+      Constants.LIST_TYPE + "/0", {}, "", "GET")
 
-    let val = res_product.data.data;
+    const res_color = await API_CONNECT(
+      Constants.LIST_COLOR_SELECT, { isADMIN: true, company_id: null }, "", "POST")
+
+    let val = res_product.data;
 
     this.pagination(val);
-    this.setState({ dataApi: val });
-    let active = 0
+    this.setState({ dataApi: val, isLoading: false, arrColor: res_color.data, arrColorChoose: res_color.data });
 
-    this.setState({ isLoading: false, totalActive: active });
   }
 
   getData_Company = async () => {
     this.setState({ isLoading: true });
-    const res_product = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/0",
-      method: 'GET'
-    });
+    const res_product = await API_CONNECT(
+      Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/0", {}, "", "GET")
 
+    const res_color = await API_CONNECT(
+      Constants.LIST_COLOR_SELECT, {
+      isADMIN: true, company_id: JSON.parse(this.state.user).company_id
+    }, "", "POST")
 
-    let val = res_product.data.data;
+    let val = res_product.data;
     this.pagination(val);
-    this.setState({ dataApi: val });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ dataApi: val, isLoading: false, arrColor: res_color.data, arrColorChoose: res_color.data });
   }
 
   searchKey() {
@@ -190,14 +192,53 @@ class SubType extends Component {
     });
   }
 
+  searchColor() {
+    const { keyColor, arrColorChoose, arrColor } = this.state;
+
+    if (keyColor != '') {
+      let d = []
+      arrColorChoose.map(val => {
+        if (val.hex.toLocaleUpperCase().includes(keyColor.toLocaleUpperCase())) {
+
+          d.push(val)
+        }
+      })
+
+      this.setState({ arrColorChoose: d })
+    } else {
+      this.setState({ arrColorChoose: arrColor })
+    }
+  }
+
+  actionSearchColor(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchColor();
+    });
+  }
+
   async toggleModal(key) {
+    const { type } = this.state;
+
+    if (type == '0' || type == '1') {
+      var res_color = await API_CONNECT(
+        Constants.LIST_COLOR, {}, "", "GET")
+    } else {
+      var res_color = await API_CONNECT(
+        Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+    }
+
     if (key == 'new') {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
         vi: "",
         image: "",
-        hover: ''
+        hover: '',
+        arrColorChoose: res_color.data,
+        arrShowColor: [],
+        collapse: false
       })
     }
   }
@@ -207,7 +248,7 @@ class SubType extends Component {
   }
 
   async addRoles() {
-    const { vi, image, hover, sub_type } = this.state
+    const { vi, image, hover, sub_type, color_id } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
       alert("Please fill in all the requirements");
@@ -219,7 +260,8 @@ class SubType extends Component {
       image: image,
       company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
       hover: hover,
-      sub_type: sub_type
+      sub_type: sub_type,
+      color_id: color_id
     }
 
     this.setState({ isLoading: true });
@@ -244,6 +286,20 @@ class SubType extends Component {
   }
 
   async openUpdate(item) {
+    const { type } = this.state;
+    if (type == '0' || type == '1') {
+      var res_color = await API_CONNECT(
+        Constants.LIST_COLOR, {}, "", "GET")
+    } else {
+      var res_color = await API_CONNECT(
+        Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+    }
+
+    let arrTemp = [];
+    for (let i = 0; i < item.color_id.length; i++) {
+      arrTemp.push(item.color_id[i])
+    }
+
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -252,17 +308,23 @@ class SubType extends Component {
       isNull: item.isNull,
       id: item['_id'],
       hover: item.hover,
-      sub_type: item.sub_type
+      sub_type: item.sub_type,
+      color_id: item.color_id == undefined ? [] : item.color_id,
+      arrColorChoose: res_color.data,
+      arrShowColor: arrTemp,
+      collapse: false
     })
   }
 
   async updateUser() {
-    const { image, vi, isNull, hover, sub_type } = this.state
+    const { image, vi, isNull, hover, sub_type, arrShowColor } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
       alert("Please fill in all the requirements");
       return
     }
+
+
 
     const body = {
       vi: vi,
@@ -270,7 +332,8 @@ class SubType extends Component {
       id: this.state.id,
       status: isNull,
       hover: hover,
-      sub_type: sub_type
+      sub_type: sub_type,
+      color_id: arrShowColor
     }
 
     this.setState({ isLoading: true });
@@ -349,6 +412,155 @@ class SubType extends Component {
     }
   }
 
+  onChooseColor(data) {
+    const { arrShowColor, arrColorChoose } = this.state;
+    const dataColor = data.split('/')
+    arrShowColor.push({ _id: dataColor[0], hex: dataColor[1] })
+    lodash.remove(arrColorChoose, {
+      hex: dataColor[1]
+    });
+
+    this.setState({ arrShowColor: arrShowColor, arrColorChoose: arrColorChoose })
+  }
+
+  onRemoveColor(data) {
+    const { arrShowColor, arrColorChoose } = this.state;
+
+    const dataColor = data.split('/')
+    arrColorChoose.push({ _id: dataColor[0], hex: dataColor[1] })
+
+    lodash.remove(arrShowColor, {
+      hex: dataColor[1]
+    });
+
+    this.setState({ arrShowColor: arrShowColor, arrColorChoose: arrColorChoose })
+  }
+
+  renderSelect() {
+    const { arrColorChoose, arrShowColor, collapse, keyColor } = this.state;
+
+    return (
+      <div>
+        <CCollapse show={collapse}>
+          <CListGroup>
+            <CListGroupItem>
+              <Input style={styles.searchInput} onChange={(e) => {
+                this.actionSearchColor(e, "keyColor");
+              }} name="keyColor" value={keyColor} placeholder="Từ khóa" />
+            </CListGroupItem>
+            <div style={{ height: '200px', overflowY: 'scroll' }}>
+              {
+                arrColorChoose.map((item, i) => {
+                  return (
+                    <CListGroupItem key={i} onClick={() => { this.onChooseColor(item._id + "/" + item.hex) }} style={{ backgroundColor: item.hex }}>
+                      {item.hex}
+                    </CListGroupItem>
+                  );
+                })
+              }
+            </div>
+          </CListGroup>
+        </CCollapse>
+
+        <CButton
+          color="primary"
+          style={{ width: '100%' }}
+          onClick={() => { this.setState({ collapse: !collapse }) }}
+          className={'mb-1'}
+        >{
+            !collapse ? "Chọn màu" : "Đóng"
+          }</CButton>
+
+        <div style={{ height: '100px', overflowY: 'scroll' }}>
+          <CRow>
+            {
+              arrShowColor.map((item, i) => {
+                return (
+                  <CCol xs="2" sm="2" lg="2" key={i}>
+
+                    {item.hex}
+                    <div style={{ backgroundColor: item.hex, width: '100%', height: '20px', margin: 1, border: "1px solid black" }}>
+                      <div onClick={() => { this.onRemoveColor(item._id + "/" + item.hex) }} style={{ marginTop: 3, cursor: 'pointer', marginLeft: 5, width: 15, height: 15, color: '#ffffff', float: 'right', fontSize: 10 }}>X</div>
+                    </div>
+
+                  </CCol>
+                );
+              })
+            }
+          </CRow>
+        </div>
+      </div>
+    )
+  }
+
+  renderSelectUpdate() {
+    const { arrColorChoose, arrShowColor, collapse, keyColor } = this.state;
+
+    for (let i = 0; i < arrShowColor.length; i++) {
+      lodash.remove(arrColorChoose, {
+        hex: arrShowColor[i].hex
+      });
+    }
+
+    return (
+      <div>
+        <CCollapse show={collapse}>
+          <CListGroup>
+            <CListGroupItem style={{ backgroundColor: "#000000" }}>
+              <Input style={{ width: '100%' }} onChange={(e) => {
+                this.actionSearchColor(e, "keyColor");
+              }} name="keyColor" value={keyColor} placeholder="Tìm kiếm" />
+            </CListGroupItem>
+            <div style={{ height: '200px', overflowY: 'scroll' }}>
+              {
+                arrColorChoose.map((item, i) => {
+                  return (
+                    <CListGroupItem style={{ cursor: 'pointer' }} key={i} onClick={() => { this.onChooseColor(item._id + "/" + item.hex) }}>
+                      <CRow>
+                        <CCol lg="2">{item.hex}</CCol>
+                        <CCol lg="10"><div style={{ backgroundColor: item.hex, width: '100%', height: 20 }}></div></CCol>
+                      </CRow>
+                    </CListGroupItem>
+                  );
+                })
+              }
+            </div>
+          </CListGroup>
+        </CCollapse>
+
+        <CButton
+          outline
+          color="primary"
+          style={{ width: '100%' }}
+          onClick={() => { this.setState({ collapse: !collapse }) }}
+          className={'mb-2'}
+        >{
+            !collapse ? "Nhấn để chọn màu" : "Đóng"
+          }</CButton>
+
+        <div style={{ height: '200px', overflowY: 'scroll', border: '1px solid black', padding: 10 }}>
+          <CLabel style={{ fontWeight: 'bolder' }}>Danh sách màu đã chọn</CLabel>
+          <CRow>
+            {
+              arrShowColor.map((item, i) => {
+                return (
+                  <CCol xs="3" sm="3" lg="3" key={i}>
+
+                    {item.hex}
+                    <div style={{ backgroundColor: item.hex, width: '100%', height: '20px', margin: 1, border: "1px solid black" }}>
+                      <div onClick={() => { this.onRemoveColor(item._id + "/" + item.hex) }} style={{ marginTop: 3, cursor: 'pointer', marginLeft: 5, width: 15, height: 15, color: '#ffffff', float: 'right', fontSize: 10 }}>X</div>
+                    </div>
+
+                  </CCol>
+                );
+              })
+            }
+          </CRow>
+        </div>
+      </div>
+    )
+  }
+
   render() {
     const { data, arrPagination, key } = this.state;
     if (!this.state.isLoading) {
@@ -390,6 +602,7 @@ class SubType extends Component {
                         <th className="text-center">Tên</th>
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">Vi</th>
+                        <th className="text-center">Màu</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -406,6 +619,15 @@ class SubType extends Component {
                                   <img src={item.image} style={{ width: '50px', height: '50px' }} />
                                 </td>
                                 <td className="text-center">{item.vi}</td>
+                                <td className="text-center" style={{ width: 200 }}>
+                                  <CListGroup>
+                                    <div style={{ height: 80, overflowY: 'scroll' }}>
+                                      {
+                                        item.color_id.length
+                                      }
+                                    </div>
+                                  </CListGroup>
+                                </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -427,63 +649,33 @@ class SubType extends Component {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+          <Modal size="lg" isOpen={this.state.modalCom} className={this.props.className}>
+            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="vi"
                 label="Tên"
                 value={this.state.vi}
                 placeholder={"Tên"}
-                // error={errors.title}
                 onChange={e => this.onChange("vi", e.target.value)}
-              // rows="5"
               />
-
-              {/* <TextFieldGroup
-                field="image"
-                label="Ảnh"
-                value={this.state.image}
-                placeholder={"Ảnh"}
-                // error={errors.title}
-                onChange={e => this.onChange("image", e.target.value)}
-              // rows="5"
-              /> */}
 
               <TextFieldGroup
                 field="image"
                 label="Ảnh thương hiệu"
                 type={"file"}
-                // error={errors.title}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null }}
-              // rows="5"
               />
               {
                 this.state.image == "" ? "" :
-                  <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
+                  <img width="100" height="150" src={this.state.image} style={{ marginBottom: 20 }} />
               }
 
-              <TextFieldGroup
+              {/* <TextFieldGroup
                 field="hover"
                 label="Hover"
                 value={this.state.hover}
@@ -491,7 +683,7 @@ class SubType extends Component {
                 // error={errors.title}
                 onChange={e => this.onChange("hover", e.target.value)}
               // rows="5"
-              />
+              /> */}
 
               <div>
                 <CLabel>Loại danh mục</CLabel>
@@ -515,7 +707,15 @@ class SubType extends Component {
                 </div>
               </div>
 
-              {
+              <div>
+                <CLabel>Chọn màu</CLabel>
+                <div style={{ width: "100%" }}>
+                  {
+                    this.state.action == 'new' ? this.renderSelect() : this.renderSelectUpdate()
+                  }
+                </div>
+              </div>
+              {/* {
                 this.state.action == 'new' ? "" :
                   <div>
                     <CLabel>Ẩn danh mục ?</CLabel>
@@ -538,17 +738,19 @@ class SubType extends Component {
                     </div>
                   </div>
 
-              }
+              } */}
 
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+              <CButton color="primary" onClick={e => {
+                this.state.action === 'new' ? this.addRoles() : this.updateUser()
+              }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
@@ -653,4 +855,4 @@ const styles = {
   },
 }
 
-export default SubType;
+export default SubTypeMakeUp;

@@ -15,10 +15,15 @@ import {
   CSelect,
   CButton,
   CRow,
-  CCol
+  CCol,
+  CCardFooter,
+  CCard,
+  CCardBody,
+  CCollapse,
+  CListGroup,
+  CListGroupItem
 } from '@coreui/react'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
@@ -26,6 +31,8 @@ import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import API_CONNECT from "../../../../functions/callAPI";
+import lodash from "lodash";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -37,6 +44,7 @@ class Product extends Component {
     this.state = {
       data: [],
       key: '',
+      keyColor: '',
       activePage: 1,
       page: 1,
       itemsCount: 0,
@@ -57,6 +65,7 @@ class Product extends Component {
       image: '',
       brands: [],
       types: [],
+      colors: [],
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -65,7 +74,9 @@ class Product extends Component {
       type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
       isLoading: false,
-      BASE_URL: Constants.BASE_URL_CURRENT
+      BASE_URL: Constants.BASE_URL_CURRENT,
+      arrProductColor: [],
+      colorItem: [],
     };
   }
   async componentDidMount() {
@@ -108,29 +119,27 @@ class Product extends Component {
 
   getData = async () => {
     this.setState({ isLoading: true });
-    const res_product = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_PRODUCT,
-      method: 'GET'
-    });
 
-    const res_brand = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_BRAND,
-      method: 'GET'
-    });
+    const res_product = await API_CONNECT(
+      Constants.LIST_PRODUCT, {}, "", "GET")
 
-    const res_type = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_TYPE + "/null",
-      method: 'GET'
-    });
+    const res_brand = await API_CONNECT(
+      Constants.LIST_BRAND, {}, "", "GET")
 
-    let val = res_product.data.data;
-    let brands = res_brand.data.data;
-    let types = res_type.data.data;
+    const res_type = await API_CONNECT(
+      Constants.LIST_TYPE + "/null", {}, "", "GET")
+
+    const res_color = await API_CONNECT(
+      Constants.LIST_COLOR, {}, "", "GET")
+
+    let val = res_product.data;
+    let brands = res_brand.data;
+    let types = res_type.data;
+    let colors = res_color.data;
+
     this.pagination(val);
-    this.setState({ dataApi: val, brands: brands, types: types });
+
+    this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
 
     let active = 0
 
@@ -139,31 +148,28 @@ class Product extends Component {
 
   getData_Company = async () => {
     this.setState({ isLoading: true });
-    const res_product = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id,
-      method: 'GET',
-      headers: this.state.token
-    });
 
-    const res_brand = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id,
-      method: 'GET'
-    });
+    const res_product = await API_CONNECT(
+      Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id, {}, this.state.token, "GET")
 
-    const res_type = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null",
-      method: 'GET'
-    });
+    const res_brand = await API_CONNECT(
+      Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
 
-    let val = res_product.data.data;
-    let brands = res_brand.data.data;
-    let types = res_type.data.data;
+    const res_type = await API_CONNECT(
+      Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", {}, "", "GET")
+
+    const res_color = await API_CONNECT(
+      Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+
+    let val = res_product.data;
+    let brands = res_brand.data;
+    let types = res_type.data;
+    let colors = res_color.data;
+
+    console.log(val)
 
     this.pagination(val);
-    this.setState({ dataApi: val, brands: brands, types: types });
+    this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
 
     let active = 0
 
@@ -205,8 +211,9 @@ class Product extends Component {
         name: "",
         image: "",
         href: "",
-        type_id: this.state.types.length == 0 ? '' : this.state.types[0]._id,
+        type_id: this.state.types.length == 0 ? '' : this.state.types[0].type_id,
         brand_id: this.state.brands.length == 0 ? '' : this.state.brands[0]._id,
+        arrProductColor: []
       })
     }
   }
@@ -224,10 +231,20 @@ class Product extends Component {
     }
   }
 
-  async addRoles() {
-    const { name, image, href, type_id, brand_id } = this.state
+  onChangeImage_ADD(e, index) {
+    const { arrProductColor } = this.state;
+    let files = e.target.files;
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      arrProductColor[Number(index)].image = e.target.result;
+      this.setState({ arrProductColor: arrProductColor })
+    }
+  }
+
+  async addProduct() {
+    const { name, image, href, type_id, brand_id, arrProductColor } = this.state
     if (name == null || name == '' ||
-      image == null || image == '' ||
       href == null || href == '' ||
       type_id == null || type_id == '' ||
       brand_id == null || brand_id == '') {
@@ -240,7 +257,7 @@ class Product extends Component {
       brand_id: brand_id,
       name: name,
       href: href,
-      image: image,
+      dataProductColor: arrProductColor,
       company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
     }
 
@@ -275,11 +292,12 @@ class Product extends Component {
       type_id: item.type_id._id,
       brand_id: item.brand_id._id,
       brand_name: item.brand_id.name,
-      id: item['_id']
+      id: item['_id'],
+      arrProductColor: []
     })
   }
 
-  async updateUser() {
+  async updateProducts() {
     const { name, image, href, type_id, brand_id } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -410,12 +428,203 @@ class Product extends Component {
     });
   }
 
+  onChooseColor(color_id, index, hex) {
+    const { arrProductColor } = this.state;
+    arrProductColor[Number(index)].color_id = color_id;
+    arrProductColor[Number(index)].collapse = false;
+    arrProductColor[Number(index)].hex = hex;
+    this.setState({ arrProductColor: arrProductColor, keyColor: '' })
+  }
+
   resetSearch() {
     this.setState({
       key: ''
     }, () => {
       this.searchKey();
     });
+  }
+
+  searchColor() {
+    const { keyColor, colorItem, colors } = this.state;
+
+    if (keyColor != '') {
+      let d = []
+      colorItem.map(val => {
+        if (val.hex.toLocaleUpperCase().includes(keyColor.toLocaleUpperCase())) {
+
+          d.push(val)
+        }
+      })
+
+      this.setState({ colorItem: d })
+    } else {
+      this.setState({ colorItem: colors })
+    }
+  }
+
+  actionSearchColor(e, name_action) {
+    this.setState({
+      [name_action]: e
+    }, () => {
+      this.searchColor();
+    });
+  }
+
+  renderFormAdd() {
+    const { brands, types, brand_name, arrProductColor, colorItem, keyColor } = this.state;
+    return (
+      <div>
+        <ModalHeader>Thêm mới</ModalHeader>
+        <ModalBody>
+          <TextFieldGroup
+            field="name"
+            label="Tên sản phẩm"
+            value={this.state.name}
+            placeholder={"Tên sản phẩm"}
+            onChange={e => this.onChange("name", e.target.value)}
+          />
+
+          <TextFieldGroup
+            field="href"
+            label="Đường dẫn"
+            value={this.state.href}
+            placeholder={"Đường dẫn"}
+            onChange={e => this.onChange("href", e.target.value)}
+          />
+
+          <div style={{ width: "100%" }}>
+            <CLabel>Thương hiệu:</CLabel>
+            <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+              {
+                brands.map((item, i) => {
+                  if (item.name == brand_name) {
+                    return (
+                      <option selected key={i} value={item._id}>{item.name}</option>
+                    );
+                  } else {
+                    return (
+                      <option key={i} value={item._id}>{item.name}</option>
+                    );
+                  }
+                })
+              }
+            </CSelect>
+          </div>
+
+          <CLabel>Danh mục:</CLabel>
+          <div style={{ width: "100%" }}>
+            <CSelect onChange={async e => {
+
+              var song = lodash.find(types, { _id: e.target.value });
+
+              this.setState({ type_id: e.target.value, colorItem: song.color_id });
+            }} custom size="sm" name="selectSm" id="SelectLm">
+              {
+                types.map((item, i) => {
+                  if (item.type_id == this.state.type_id) {
+                    return (
+                      <option selected key={i} value={item._id}>{item.name}</option>
+                    );
+                  } else {
+                    return (
+                      <option key={i} value={item._id}>{item.name}</option>
+                    );
+                  }
+                })
+              }
+            </CSelect>
+          </div>
+
+
+          <div className={"mt-2"}>
+            <CLabel>Màu và hình ảnh cho sản phẩm</CLabel>
+            <CCard>
+              <CRow>
+                {
+                  arrProductColor.map((item, i) => {
+                    var id = i;
+                    return (
+                      <CCol xs="6" sm="6" lg="6">
+                        <CCardBody style={{ border: '1px solid black', borderRadius: 20, margin: 2 }}>
+                          <CRow>
+                            <CCol xs="9" sm="9" lg="9">
+                              <CCollapse show={item.collapse}>
+                                <CListGroup>
+                                  <CListGroupItem style={{ backgroundColor: "#000000" }}>
+                                    <Input style={{ width: '100%' }} onChange={(e) => {
+                                      this.actionSearchColor(e.target.value, "keyColor");
+                                    }} name="keyColor" value={keyColor} placeholder="Tìm kiếm" />
+                                  </CListGroupItem>
+                                  <div style={{ height: '200px', overflowY: 'scroll' }}>
+                                    {
+
+                                      colorItem.map((item, i) => {
+                                        return (
+                                          <CListGroupItem style={{ cursor: 'pointer' }} key={i} onClick={() => {
+                                            this.onChooseColor(item._id, id, item.hex)
+                                          }}>
+                                            <CRow>
+                                              <CCol lg="3">{item.hex}</CCol>
+                                              <CCol lg="9"><div style={{ backgroundColor: item.hex, width: '100%', height: 20 }}></div></CCol>
+                                            </CRow>
+                                          </CListGroupItem>
+                                        );
+                                      })
+                                    }
+                                  </div>
+                                </CListGroup>
+                              </CCollapse>
+
+                              <CButton
+                                color="primary"
+                                style={{ width: '100%' }}
+                                onClick={() => { arrProductColor[i].collapse = !item.collapse; this.setState({ arrProductColor: arrProductColor }) }}
+                                className={'mb-1'}
+                              >{
+                                  !item.collapse ? "Chọn màu" : "Đóng"
+                                }</CButton>
+                            </CCol>
+                            <CCol xs="3" sm="3" lg="3">
+                              {arrProductColor[i].hex}
+                              <div style={{ backgroundColor: arrProductColor[i].hex, width: '100%', height: 14, borderRadius: 20 }}></div>
+                            </CCol>
+                          </CRow>
+
+                          <TextFieldGroup
+                            field="image"
+                            label="Ảnh thương hiệu"
+                            type={"file"}
+                            onChange={e => { this.onChangeImage_ADD(e, i) }}
+                            onClick={(e) => { e.target.value = null }}
+                          />
+
+                          <img width="100" height="150" src={arrProductColor[i].image} style={{ marginBottom: 20 }} />
+
+                        </CCardBody>
+                      </CCol>
+                    );
+                  })
+                }
+              </CRow>
+              <CCardFooter>
+                <CButton color="primary" style={{ float: 'right', width: '40%' }} onClick={e => {
+                  arrProductColor.push({ color_id: "", image: "", collapse: false, hex: '' })
+                  this.setState({ arrProductColor: arrProductColor })
+                }}>Thêm một màu và hình ảnh nữa</CButton>
+              </CCardFooter>
+            </CCard>
+          </div>
+
+
+        </ModalBody>
+        <ModalFooter>
+          <CButton color="primary" onClick={e => {
+            this.addProduct()
+          }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+          <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+        </ModalFooter>
+      </div>
+    )
   }
 
   render() {
@@ -444,9 +653,9 @@ class Product extends Component {
                           </CCol>
                         </CRow>
                       </CCol>
-                      <CCol sm="12" lg="12">
-                        {/* <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton> */}
-                      </CCol>
+                      {/* <CCol sm="12" lg="12">
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
+                      </CCol> */}
                     </CRow>
                   </div>
                 </CardHeader>
@@ -472,8 +681,8 @@ class Product extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.type_id == null ? "" : item.type_id.name}</td>
-                                <td className="text-center">{item.brand_id == null ? "" : item.brand_id.name}</td>
+                                <td className="text-center">{item.type_id == null ? "" : item.type_id[0].name}</td>
+                                <td className="text-center">{item.brand_id == null ? "" : item.brand_id[0].name}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   <a
@@ -505,114 +714,95 @@ class Product extends Component {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
-            <ModalBody>
-              <TextFieldGroup
-                field="name"
-                label="Tên sản phẩm"
-                value={this.state.name}
-                placeholder={"Tên sản phẩm"}
-                // error={errors.title}
-                onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
-              />
+          <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className}>
+            {
+              this.state.action == "new" ? this.renderFormAdd() :
+                <div>
+                  <ModalHeader>Cập nhật</ModalHeader>
+                  <ModalBody>
+                    <TextFieldGroup
+                      field="name"
+                      label="Tên sản phẩm"
+                      value={this.state.name}
+                      placeholder={"Tên sản phẩm"}
+                      // error={errors.title}
+                      onChange={e => this.onChange("name", e.target.value)}
+                    // rows="5"
+                    />
 
-              <TextFieldGroup
-                field="href"
-                label="Đường dẫn"
-                value={this.state.href}
-                placeholder={"Đường dẫn"}
-                // error={errors.title}
-                onChange={e => this.onChange("href", e.target.value)}
-              // rows="5"
-              />
+                    <TextFieldGroup
+                      field="href"
+                      label="Đường dẫn"
+                      value={this.state.href}
+                      placeholder={"Đường dẫn"}
+                      // error={errors.title}
+                      onChange={e => this.onChange("href", e.target.value)}
+                    // rows="5"
+                    />
 
-              {/* <TextFieldGroup
-                field="image"
-                label="Ảnh"
-                value={this.state.image}
-                placeholder={"Ảnh"}
-                // error={errors.title}
-                onChange={e => this.onChange("image", e.target.value)}
-              // rows="5"
-              /> */}
+                    <TextFieldGroup
+                      field="image"
+                      label="Ảnh thương hiệu"
+                      type={"file"}
+                      // error={errors.title}
+                      onChange={e => { this.onChangeImage(e) }}
+                      onClick={(e) => { e.target.value = null }}
+                    // rows="5"
+                    />
+                    {
+                      this.state.image == "" ? "" :
+                        <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
+                    }
 
-              <TextFieldGroup
-                field="image"
-                label="Ảnh thương hiệu"
-                type={"file"}
-                // error={errors.title}
-                onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null }}
-              // rows="5"
-              />
-              {
-                this.state.image == "" ? "" :
-                  <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
-              }
+                    <div style={{ width: "100%" }}>
+                      <CLabel>Thương hiệu:</CLabel>
+                      <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
+                        {
+                          brands.map((item, i) => {
+                            if (item.name == brand_name) {
+                              return (
+                                <option selected key={i} value={item._id}>{item.name}</option>
+                              );
+                            } else {
+                              return (
+                                <option key={i} value={item._id}>{item.name}</option>
+                              );
+                            }
+                          })
+                        }
+                      </CSelect>
+                    </div>
 
-              <div style={{ width: "100%" }}>
-                <CLabel>Thương hiệu:</CLabel>
-                <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    brands.map((item, i) => {
-                      if (item.name == brand_name) {
-                        return (
-                          <option selected key={i} value={item._id}>{item.name}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id}>{item.name}</option>
-                        );
-                      }
-                    })
-                  }
-                </CSelect>
-              </div>
-
-              <CLabel>Loại:</CLabel>
-              <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.setState({ type_id: e.target.value }); console.log(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    types.map((item, i) => {
-                      if (item.type_id == this.state.type_id) {
-                        return (
-                          <option selected key={i} value={item._id}>{item.name}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id}>{item.name}</option>
-                        );
-                      }
-                    })
-                  }
-                </CSelect>
-              </div>
-            </ModalBody>
-            <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
-            </ModalFooter>
+                    <CLabel>Danh mục:</CLabel>
+                    <div style={{ width: "100%" }}>
+                      <CSelect onChange={async e => {
+                        this.setState({ type_id: e.target.value })
+                      }} custom size="sm" name="selectSm" id="SelectLm">
+                        {
+                          types.map((item, i) => {
+                            if (item.type_id == this.state.type_id) {
+                              return (
+                                <option selected key={i} value={item._id}>{item.name}</option>
+                              );
+                            } else {
+                              return (
+                                <option key={i} value={item._id}>{item.name}</option>
+                              );
+                            }
+                          })
+                        }
+                      </CSelect>
+                    </div>
+                  </ModalBody>
+                  <ModalFooter>
+                    <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Save</CButton>{' '}
+                    <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+                  </ModalFooter>
+                </div>
+            }
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>

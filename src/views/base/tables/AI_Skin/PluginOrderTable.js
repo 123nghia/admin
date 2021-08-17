@@ -160,6 +160,8 @@ class PluginOrder extends Component {
 
     let val = res.data.data;
 
+    console.log(res)
+
     this.pagination(totalCount, val);
     this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package, isLoading: false });
   }
@@ -813,7 +815,7 @@ class PluginOrder extends Component {
           </Row>
 
           <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Cập nhật đơn hàng của ${this.state.company_name}`}</ModalHeader>
+            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật đơn hàng của ${this.state.company_name}`}</ModalHeader>
             <ModalBody>
               <CRow>
                 <CCol sm="12" lg="12">

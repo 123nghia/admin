@@ -139,17 +139,12 @@ class Color extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id,
       method: 'GET',
-      headers: this.state.token,
-      // data: {
-      //   user: user.username
-      // }
     });
 
     const res_product = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id,
       method: 'GET',
-      headers: this.state.token
     });
 
 
@@ -448,11 +443,11 @@ class Color extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">SKU</th>
+                        {/* <th className="text-center">SKU</th> */}
                         <th className="text-center">Hex</th>
                         <th className="text-center">MakeUp ID</th>
                         <th className="text-center">Alpha</th>
-                        <th className="text-center">Danh mục cấp 2</th>
+                        {/* <th className="text-center">Danh mục cấp 2</th> */}
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -464,14 +459,14 @@ class Color extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.product_id == null ? "" : item.product_id.name}</td>
+                                {/* <td className="text-center">{item.product_id == null ? "" : item.product_id.name}</td> */}
                                 <td className="text-center">
                                   {item.hex}
                                   <div style={{ backgroundColor: item.hex, width: '100%', height: '30px' }}> </div>
                                 </td>
                                 <td className="text-center">{item.makeup_id}</td>
                                 <td className="text-center">{item.alpha}</td>
-                                <td className="text-center">{item.subName}</td>
+                                {/* <td className="text-center">{item.subName}</td> */}
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -513,7 +508,7 @@ class Color extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <CLabel>Chọn sản phẩm:</CLabel>
               <div style={{ width: "100%" }}>
