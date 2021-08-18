@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import CIcon from '@coreui/icons-react'
+import { cifAU, freeSet } from '@coreui/icons';
+
 import {
   Card,
   CardBody,
@@ -59,6 +61,7 @@ class Product extends Component {
       action: 'new',
       type_id: '',
       brand_id: '',
+      color_id: '',
       brand_name: '',
       name: '',
       href: '',
@@ -77,6 +80,10 @@ class Product extends Component {
       BASE_URL: Constants.BASE_URL_CURRENT,
       arrProductColor: [],
       colorItem: [],
+      colorItemUpdate: [],
+      colorItemBase: [],
+      colorChooseUpdate: '',
+      collapse: false
     };
   }
   async componentDidMount() {
@@ -139,6 +146,7 @@ class Product extends Component {
 
     this.pagination(val);
 
+
     this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
 
     let active = 0
@@ -162,15 +170,13 @@ class Product extends Component {
       Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
 
     let val = res_product.data;
+
     let brands = res_brand.data;
     let types = res_type.data;
     let colors = res_color.data;
 
-    console.log(val)
-
     this.pagination(val);
     this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
-
     let active = 0
 
     this.setState({ isLoading: false, totalActive: active });
@@ -202,6 +208,19 @@ class Product extends Component {
     }
   }
 
+  onChange(key, val) {
+    this.setState({ [key]: val })
+  }
+
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image: e.target.result })
+    }
+  }
+
   async toggleModal(key) {
 
     if (key == 'new') {
@@ -213,21 +232,9 @@ class Product extends Component {
         href: "",
         type_id: this.state.types.length == 0 ? '' : this.state.types[0].type_id,
         brand_id: this.state.brands.length == 0 ? '' : this.state.brands[0]._id,
-        arrProductColor: []
+        arrProductColor: [],
+        collapse: false
       })
-    }
-  }
-
-  onChange(key, val) {
-    this.setState({ [key]: val })
-  }
-
-  onChangeImage(e) {
-    let files = e.target.files;
-    let reader = new FileReader();
-    reader.readAsDataURL(files[0])
-    reader.onload = (e) => {
-      this.setState({ image: e.target.result })
     }
   }
 
@@ -243,7 +250,8 @@ class Product extends Component {
   }
 
   async addProduct() {
-    const { name, image, href, type_id, brand_id, arrProductColor } = this.state
+    const { name, href, type_id, brand_id, arrProductColor } = this.state
+
     if (name == null || name == '' ||
       href == null || href == '' ||
       type_id == null || type_id == '' ||
@@ -258,7 +266,7 @@ class Product extends Component {
       name: name,
       href: href,
       dataProductColor: arrProductColor,
-      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id
+      company_id: this.state.type == '0' || this.state.type == '1' ? null : JSON.parse(this.state.user).company_id
     }
 
     this.setState({ isLoading: true });
@@ -289,18 +297,24 @@ class Product extends Component {
       name: item.name,
       image: item.image,
       href: item.href,
-      type_id: item.type_id._id,
+      type_id: item.type_id.type_id,
       brand_id: item.brand_id._id,
+      color_id: item.color_id == null ? '' : item.color_id,
       brand_name: item.brand_id.name,
       id: item['_id'],
-      arrProductColor: []
+      arrProductColor: [],
+      colorItemUpdate: item.type_id.color_id,
+      colorItemBase: item.type_id.color_id,
+      collapse: false
     })
   }
 
   async updateProducts() {
-    const { name, image, href, type_id, brand_id } = this.state
+    const { name, image, href, type_id, brand_id, color_id } = this.state
+
+
+
     if (name == null || name == '' ||
-      image == null || image == '' ||
       href == null || href == '' ||
       type_id == null || type_id == '' ||
       brand_id == null || brand_id == '') {
@@ -314,6 +328,7 @@ class Product extends Component {
       name: name,
       href: href,
       image: image,
+      color_id: color_id,
       id: this.state.id
     }
 
@@ -331,6 +346,7 @@ class Product extends Component {
       } else {
         this.getData_Company()
       };
+      console.log(this.state.id)
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -387,13 +403,13 @@ class Product extends Component {
   searchKey() {
     const { indexPage, key } = this.state;
     // this.setState({ key: key })
-
+    console.log(this.state.dataApi)
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
         if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.brand.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.type.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+          val.brand_id.name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.type_id.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -470,8 +486,34 @@ class Product extends Component {
     });
   }
 
+  searchColorUpdate() {
+    const { keyColor, colorItemBase, colorItemUpdate } = this.state;
+
+    if (keyColor != '') {
+      let d = []
+      colorItemUpdate.map(val => {
+        if (val.hex.toLocaleUpperCase().includes(keyColor.toLocaleUpperCase())) {
+
+          d.push(val)
+        }
+      })
+
+      this.setState({ colorItemUpdate: d })
+    } else {
+      this.setState({ colorItemUpdate: colorItemBase })
+    }
+  }
+
+  actionSearchColorUpdate(e, name_action) {
+    this.setState({
+      [name_action]: e
+    }, () => {
+      this.searchColorUpdate();
+    });
+  }
+
   renderFormAdd() {
-    const { brands, types, brand_name, arrProductColor, colorItem, keyColor } = this.state;
+    const { brands, types, brand_name, arrProductColor, colorItem, keyColor, type_id } = this.state;
     return (
       <div>
         <ModalHeader>Thêm mới</ModalHeader>
@@ -521,7 +563,7 @@ class Product extends Component {
             }} custom size="sm" name="selectSm" id="SelectLm">
               {
                 types.map((item, i) => {
-                  if (item.type_id == this.state.type_id) {
+                  if (item.type_id == type_id) {
                     return (
                       <option selected key={i} value={item._id}>{item.name}</option>
                     );
@@ -546,8 +588,12 @@ class Product extends Component {
                     return (
                       <CCol xs="6" sm="6" lg="6">
                         <CCardBody style={{ border: '1px solid black', borderRadius: 20, margin: 2 }}>
+                          <CButton className="mb-2" style={{ float: 'right' }} color="danger" onClick={e => {
+                            arrProductColor.splice(i, 1);
+                            this.setState({ arrProductColor: arrProductColor })
+                          }}>X</CButton>
                           <CRow>
-                            <CCol xs="9" sm="9" lg="9">
+                            <CCol xs="8" sm="8" lg="8">
                               <CCollapse show={item.collapse}>
                                 <CListGroup>
                                   <CListGroupItem style={{ backgroundColor: "#000000" }}>
@@ -564,8 +610,8 @@ class Product extends Component {
                                             this.onChooseColor(item._id, id, item.hex)
                                           }}>
                                             <CRow>
-                                              <CCol lg="3">{item.hex}</CCol>
-                                              <CCol lg="9"><div style={{ backgroundColor: item.hex, width: '100%', height: 20 }}></div></CCol>
+                                              <CCol lg="5">{item.hex}</CCol>
+                                              <CCol lg="7"><div style={{ backgroundColor: item.hex, width: '100%', height: 20 }}></div></CCol>
                                             </CRow>
                                           </CListGroupItem>
                                         );
@@ -584,7 +630,7 @@ class Product extends Component {
                                   !item.collapse ? "Chọn màu" : "Đóng"
                                 }</CButton>
                             </CCol>
-                            <CCol xs="3" sm="3" lg="3">
+                            <CCol xs="4" sm="4" lg="4">
                               {arrProductColor[i].hex}
                               <div style={{ backgroundColor: arrProductColor[i].hex, width: '100%', height: 14, borderRadius: 20 }}></div>
                             </CCol>
@@ -607,7 +653,7 @@ class Product extends Component {
                 }
               </CRow>
               <CCardFooter>
-                <CButton color="primary" style={{ float: 'right', width: '40%' }} onClick={e => {
+                <CButton color="primary" style={{ float: 'right', width: '100%' }} onClick={e => {
                   arrProductColor.push({ color_id: "", image: "", collapse: false, hex: '' })
                   this.setState({ arrProductColor: arrProductColor })
                 }}>Thêm một màu và hình ảnh nữa</CButton>
@@ -628,7 +674,7 @@ class Product extends Component {
   }
 
   render() {
-    const { data, arrPagination, brands, types, brand_name, key } = this.state;
+    const { data, arrPagination, brands, types, brand_name, key, collapse, keyColor, colorItemUpdate, colorChooseUpdate } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -653,9 +699,9 @@ class Product extends Component {
                           </CCol>
                         </CRow>
                       </CCol>
-                      {/* <CCol sm="12" lg="12">
+                      <CCol sm="12" lg="12">
                         <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
-                      </CCol> */}
+                      </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
@@ -668,6 +714,7 @@ class Product extends Component {
                         <th className="text-center">Danh mục cấp 2</th>
                         <th className="text-center">Thương hiệu</th>
                         <th className="text-center">Tên sản phẩm</th>
+                        <th className="text-center">Màu</th>
                         <th className="text-center">Đường dẫn</th>
                         <th className="text-center">Ảnh</th>
                         <th className="text-center">#</th>
@@ -681,9 +728,13 @@ class Product extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.type_id == null ? "" : item.type_id[0].name}</td>
-                                <td className="text-center">{item.brand_id == null ? "" : item.brand_id[0].name}</td>
+                                <td className="text-center">{item.type_id == null ? "" : item.type_id.name}</td>
+                                <td className="text-center">{item.brand_id == null ? "" : item.brand_id.name}</td>
                                 <td className="text-center">{item.name}</td>
+                                <td className="text-center">
+                                  {item.color_id == null ? "" : item.color_id.hex}
+                                  <div style={{ backgroundColor: item.color_id == null ? "" : item.color_id.hex, width: '100%', height: '30px' }}> </div>
+                                </td>
                                 <td className="text-center">
                                   <a
                                     href={item.href}
@@ -796,6 +847,48 @@ class Product extends Component {
                         }
                       </CSelect>
                     </div>
+                    <div className="mt-2">
+                      <CCollapse show={collapse}>
+                        <CListGroup>
+                          <CListGroupItem style={{ backgroundColor: "#000000" }}>
+                            <Input style={{ width: '100%' }} onChange={(e) => {
+                              this.actionSearchColorUpdate(e.target.value, "keyColor");
+                            }} name="keyColor" value={keyColor} placeholder="Tìm kiếm" />
+                          </CListGroupItem>
+                          <div style={{ height: '200px', overflowY: 'scroll' }}>
+                            {
+                              colorItemUpdate.map((item, i) => {
+                                return (
+                                  <CListGroupItem style={{ cursor: 'pointer' }} key={i} onClick={() => {
+                                    this.setState({ color_id: item._id, colorChooseUpdate: item.hex })
+                                  }}>
+                                    <CRow>
+                                      <CCol lg="2">{item.hex}</CCol>
+                                      <CCol lg="10"><div style={{ backgroundColor: item.hex, width: '100%', height: 20 }}></div></CCol>
+                                    </CRow>
+                                  </CListGroupItem>
+                                );
+                              })
+                            }
+                          </div>
+                        </CListGroup>
+                      </CCollapse>
+                    </div>
+                    <CButton
+                      color="primary"
+                      style={{ width: '100%' }}
+                      onClick={() => { this.setState({ collapse: !collapse }) }}
+                      className={'mb-1'}
+                    >{
+                        !collapse ? "Chọn màu" : "Đóng"
+                      }</CButton>
+
+                    <div className="text-center mt-2">
+                      <CLabel><strong>Màu đã chọn: </strong></CLabel> {' '}
+                      {colorChooseUpdate}
+                      <div style={{ backgroundColor: colorChooseUpdate, width: '100%', height: '30px' }}> </div>
+                    </div>
+
                   </ModalBody>
                   <ModalFooter>
                     <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Save</CButton>{' '}
