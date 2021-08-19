@@ -35,6 +35,7 @@ import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import API_CONNECT from "../../../../functions/callAPI";
 import lodash from "lodash";
+import { object } from 'prop-types';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -171,15 +172,15 @@ class Product extends Component {
 
     let val = res_product.data;
 
+    console.log(val[0].color_id)
     let brands = res_brand.data;
     let types = res_type.data;
     let colors = res_color.data;
 
     this.pagination(val);
     this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
-    let active = 0
 
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ isLoading: false });
   }
 
   searchKey(key) {
@@ -638,7 +639,7 @@ class Product extends Component {
 
                           <TextFieldGroup
                             field="image"
-                            label="Ảnh thương hiệu"
+                            label="Ảnh sản phẩm"
                             type={"file"}
                             onChange={e => { this.onChangeImage_ADD(e, i) }}
                             onClick={(e) => { e.target.value = null }}

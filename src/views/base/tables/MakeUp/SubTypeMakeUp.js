@@ -260,7 +260,7 @@ class SubTypeMakeUp extends Component {
       image: image,
       company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
       hover: hover,
-      sub_type: sub_type,
+      sub_type: "0",
       color_id: color_id
     }
 
@@ -443,8 +443,8 @@ class SubTypeMakeUp extends Component {
       <div>
         <CCollapse show={collapse}>
           <CListGroup>
-            <CListGroupItem>
-              <Input style={styles.searchInput} onChange={(e) => {
+            <CListGroupItem style={{ backgroundColor: "#000000" }}>
+              <Input style={{ width: '100%' }} onChange={(e) => {
                 this.actionSearchColor(e, "keyColor");
               }} name="keyColor" value={keyColor} placeholder="Từ khóa" />
             </CListGroupItem>
@@ -452,8 +452,11 @@ class SubTypeMakeUp extends Component {
               {
                 arrColorChoose.map((item, i) => {
                   return (
-                    <CListGroupItem key={i} onClick={() => { this.onChooseColor(item._id + "/" + item.hex) }} style={{ backgroundColor: item.hex }}>
-                      {item.hex}
+                    <CListGroupItem key={i} onClick={() => { this.onChooseColor(item._id + "/" + item.hex) }}>
+                      <CRow>
+                        <CCol xs="2" sm="2" lg="2">{item.hex}</CCol>
+                        <CCol xs="10" sm="10" lg="10"><div style={{ backgroundColor: item.hex, width: '100%', height: 20 }}></div></CCol>
+                      </CRow>
                     </CListGroupItem>
                   );
                 })
@@ -620,13 +623,9 @@ class SubTypeMakeUp extends Component {
                                 </td>
                                 <td className="text-center">{item.vi}</td>
                                 <td className="text-center" style={{ width: 200 }}>
-                                  <CListGroup>
-                                    <div style={{ height: 80, overflowY: 'scroll' }}>
-                                      {
-                                        item.color_id.length
-                                      }
-                                    </div>
-                                  </CListGroup>
+                                  {
+                                    item.color_id.length
+                                  }
                                 </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -685,7 +684,7 @@ class SubTypeMakeUp extends Component {
               // rows="5"
               /> */}
 
-              <div>
+              {/* <div>
                 <CLabel>Loại danh mục</CLabel>
                 <div style={{ width: "100%" }}>
                   <CSelect onChange={async e => { this.setState({ sub_type: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
@@ -705,7 +704,7 @@ class SubTypeMakeUp extends Component {
                     }
                   </CSelect>
                 </div>
-              </div>
+              </div> */}
 
               <div>
                 <CLabel>Chọn màu</CLabel>
