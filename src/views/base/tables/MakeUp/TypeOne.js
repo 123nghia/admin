@@ -18,7 +18,7 @@ import {
   CRow, CCol
 } from '@coreui/react'
 
-import { makeStyles } from '@material-ui/core/styles';
+import API_CONNECT from "../../../../functions/callAPI";
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
@@ -57,6 +57,7 @@ class SuggestItem extends Component {
       linkdetail: "",
       level: "K1",
       sdktype: "1",
+      brand_id: "",
       companyid: "",
       type_sdk_id: "",
       type_product_id: "",
@@ -74,6 +75,7 @@ class SuggestItem extends Component {
       arrOptionSdkType: [],
       arrOptionProductType: [],
       arrLevel: [],
+      arrBrand: [],
       idSDK: window.location.hash.split('/')[window.location.hash.split('/').length - 1]
     };
   }
@@ -113,8 +115,6 @@ class SuggestItem extends Component {
       })
     }
 
-    console.log(arrTotal)
-
     this.setState({ arrPagination: arrTotal, data: arrTotal.length > 0 ? arrTotal[0] : [] });
   }
 
@@ -133,10 +133,13 @@ class SuggestItem extends Component {
       method: 'GET'
     });
 
+    const res_brand = await API_CONNECT(
+      Constants.LIST_BRAND, {}, "", "GET")
+
     let val = res_suggest.data.dataRes;
-    console.log(val)
+    let brand = res_brand.data;
     this.pagination(val);
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: brand });
 
     let active = 0
 
@@ -158,14 +161,15 @@ class SuggestItem extends Component {
       method: 'GET'
     });
 
+    const res_brand = await API_CONNECT(
+      Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.userData).company_id, {}, "", "GET")
+
     let val = res_suggest.data.dataRes;
-
+    let brand = res_brand.data;
+    console.log(val)
     this.pagination(val);
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0] });
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: brand });
 
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
   }
 
   getListTypeProduct = async () => {
@@ -285,7 +289,7 @@ class SuggestItem extends Component {
   }
 
   async addRoles() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, arrBrand } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       title == null || title == '' ||
@@ -304,7 +308,8 @@ class SuggestItem extends Component {
       sdktype: sdktype,
       companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
       type_sdk_id: type_sdk_id,
-      type_product_id: window.location.hash.split('/')[window.location.hash.split('/').length - 1]
+      type_product_id: window.location.hash.split('/')[window.location.hash.split('/').length - 1],
+      brand_id: arrBrand[0]._id
 
     }
 
@@ -345,12 +350,13 @@ class SuggestItem extends Component {
       companyid: item.companyid,
       id: item['_id'],
       Status: item.Status,
-      arrLevel: item.type_sdk_id.Level
+      arrLevel: item.type_sdk_id.Level,
+      brand_id: item.brand_id == null ? "" : item.brand_id._id
     })
   }
 
   async updateUser() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id, brand_id } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -370,7 +376,8 @@ class SuggestItem extends Component {
       sdktype: sdktype,
       type_sdk_id: type_sdk_id,
       type_product_id: type_product_id,
-      companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id
+      companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
+      brand_id: brand_id
     }
 
     this.setState({ isLoading: true });
@@ -450,7 +457,7 @@ class SuggestItem extends Component {
   }
 
   render() {
-    const { data, arrPagination, arrLevel, arrOptionSdkType, key } = this.state;
+    const { data, arrPagination, arrLevel, arrOptionSdkType, key, arrBrand } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -491,7 +498,9 @@ class SuggestItem extends Component {
                         <th className="text-center">Ảnh</th>
                         <th className="text-center">Tiều đề</th>
                         <th className="text-center">Mô tả</th>
-                        <th className="text-center">Chi tiết</th>
+                        {/* <th className="text-center">Chi tiết</th> */}
+                        <th className="text-center">Thương hiệu</th>
+                        <th className="text-center">Ảnh thương hiệu</th>
                         <th className="text-center">Loại</th>
                         <th className="text-center">Loại SDK</th>
                         <th className="text-center">Mức độ</th>
@@ -511,9 +520,6 @@ class SuggestItem extends Component {
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
-                                  {/* <a href={item.image} target="_blank">
-                                    {item.image ? "View Image" : ""}
-                                  </a> */}
                                 </td>
                                 <td className="text-center">
                                   {item.title.substr(0, 100) +
@@ -522,8 +528,14 @@ class SuggestItem extends Component {
                                 <td className="text-center">
                                   {item.description}
                                 </td>
-                                <td className="text-center">
+                                {/* <td className="text-center">
                                   <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
+                                </td> */}
+                                <td className="text-center">
+                                  {item.brand_id == null ? "" : item.brand_id.name}
+                                </td>
+                                <td className="text-center">
+                                  <img src={item.brand_id == null ? "" : item.brand_id.image} width={"60px"} height={"60px"} />
                                 </td>
                                 <td className="text-center">
                                   {item.type_product_id.Name}
@@ -639,6 +651,27 @@ class SuggestItem extends Component {
                 onChange={e => this.onChange("linkdetail", e.target.value)}
               // rows="5"
               />
+
+              <CLabel>Danh mục:</CLabel>
+              <div style={{ width: "100%" }}>
+                <CSelect onChange={async e => {
+                  this.setState({ brand_id: e.target.value })
+                }} custom size="sm" name="selectSm" id="SelectLm">
+                  {
+                    arrBrand.map((item, i) => {
+                      if (item._id == this.state.brand_id) {
+                        return (
+                          <option selected key={i} value={item._id}>{item.name}</option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item._id}>{item.name}</option>
+                        );
+                      }
+                    })
+                  }
+                </CSelect>
+              </div>
 
               <CLabel>Loại SDK:</CLabel>
               <div style={{ width: "100%" }}>

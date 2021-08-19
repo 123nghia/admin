@@ -23,7 +23,8 @@ import {
   CCardBody,
   CCollapse,
   CListGroup,
-  CListGroupItem
+  CListGroupItem,
+  CInputFile
 } from '@coreui/react'
 
 import Pagination from '@material-ui/lab/Pagination';
@@ -172,7 +173,6 @@ class Product extends Component {
 
     let val = res_product.data;
 
-    console.log(val[0].color_id)
     let brands = res_brand.data;
     let types = res_type.data;
     let colors = res_color.data;
@@ -261,33 +261,46 @@ class Product extends Component {
       return
     }
 
-    const body = {
-      type_id: type_id,
-      brand_id: brand_id,
-      name: name,
-      href: href,
-      dataProductColor: arrProductColor,
-      company_id: this.state.type == '0' || this.state.type == '1' ? null : JSON.parse(this.state.user).company_id
-    }
-
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.ADD_PRODUCT,
-      method: 'POST',
-      data: body
-    });
-
-    if (res.status == 200) {
-      if (this.state.type == '0' || this.state.type == '1') {
-        this.getData()
-      } else {
-        this.getData_Company()
-      }
+    if (arrProductColor.length == 0) {
+      alert("Chưa thêm bất kì sản phẩm nào, thêm sản phẩm thất bại !!!");
       this.setState({ modalCom: !this.state.modalCom })
     } else {
-      alert("Thêm sản phẩm thất bại");
-      this.setState({ isLoading: false });
+      for (let i = 0; i < arrProductColor.length; i++) {
+        if (arrProductColor[i].color_id == "") {
+          alert("Sản phẩm thứ " + (i + 1) + " chưa được chọn màu");
+          this.setState({ modalCom: !this.state.modalCom })
+          return;
+        }
+      }
+
+      const body = {
+        type_id: type_id,
+        brand_id: brand_id,
+        name: name,
+        href: href,
+        dataProductColor: arrProductColor,
+        company_id: this.state.type == '0' || this.state.type == '1' ? null : JSON.parse(this.state.user).company_id
+      }
+
+      this.setState({ isLoading: true });
+      const res = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.ADD_PRODUCT,
+        method: 'POST',
+        data: body
+      });
+
+      if (res.status == 200) {
+        if (this.state.type == '0' || this.state.type == '1') {
+          this.getData()
+        } else {
+          this.getData_Company()
+        }
+        this.setState({ modalCom: !this.state.modalCom })
+      } else {
+        alert("Thêm sản phẩm thất bại");
+        this.setState({ isLoading: false });
+      }
     }
   }
 
@@ -637,16 +650,14 @@ class Product extends Component {
                             </CCol>
                           </CRow>
 
-                          <TextFieldGroup
-                            field="image"
-                            label="Ảnh sản phẩm"
-                            type={"file"}
-                            onChange={e => { this.onChangeImage_ADD(e, i) }}
-                            onClick={(e) => { e.target.value = null }}
-                          />
+                          <div className={"m-2"}>
+                            <CLabel>Ảnh sản phẩm</CLabel>
+                            <CInputFile name="image" onChange={e => { this.onChangeImage_ADD(e, i) }} onClick={(e) => { e.target.value = null }} id="file-input" name="file-input" />
+                          </div>
 
-                          <img width="100" height="150" src={arrProductColor[i].image} style={{ marginBottom: 20 }} />
-
+                          <center>
+                            <img width="150" height="180" src={arrProductColor[i].image} style={{ marginBottom: 20 }} />
+                          </center>
                         </CCardBody>
                       </CCol>
                     );
@@ -849,6 +860,11 @@ class Product extends Component {
                       </CSelect>
                     </div>
                     <div className="mt-2">
+                      <div className="text-center m-5">
+                        <CLabel><strong>Màu đã chọn: </strong></CLabel> {' '}
+                        {colorChooseUpdate}
+                        <div style={{ backgroundColor: colorChooseUpdate, width: '100%', height: '30px' }}> </div>
+                      </div>
                       <CCollapse show={collapse}>
                         <CListGroup>
                           <CListGroupItem style={{ backgroundColor: "#000000" }}>
@@ -883,12 +899,6 @@ class Product extends Component {
                     >{
                         !collapse ? "Chọn màu" : "Đóng"
                       }</CButton>
-
-                    <div className="text-center mt-2">
-                      <CLabel><strong>Màu đã chọn: </strong></CLabel> {' '}
-                      {colorChooseUpdate}
-                      <div style={{ backgroundColor: colorChooseUpdate, width: '100%', height: '30px' }}> </div>
-                    </div>
 
                   </ModalBody>
                   <ModalFooter>
