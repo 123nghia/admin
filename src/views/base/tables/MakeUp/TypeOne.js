@@ -494,7 +494,7 @@ class SuggestItem extends Component {
                         <th className="text-center">Chi tiết</th>
                         <th className="text-center">Loại</th>
                         <th className="text-center">Loại SDK</th>
-                        <th className="text-center">Level</th>
+                        <th className="text-center">Mức độ</th>
                         {/* <th className="text-center">Loại Sdk</th>
                         <th className="text-center">Level</th> */}
                         <th className="text-center">#</th>
@@ -532,7 +532,7 @@ class SuggestItem extends Component {
                                   {item.type_sdk_id.Name}
                                 </td>
                                 <td className="text-center">
-                                  {item.sdktype}
+                                  {item.name_level}
                                 </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >

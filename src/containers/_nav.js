@@ -150,19 +150,19 @@ const _navMakeUp = [
             </CTooltip>,
     }
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh mục tổng hợp',
-    to: '/subtype',
-    icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.subType}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
-    }
-  },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Danh mục tổng hợp',
+  //   to: '/subtype',
+  //   icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
+  //   role: ['0', '1', '2'],
+  //   badge: {
+  //     color: 'info',
+  //     text: <CTooltip placement={"right"} content={content.subType}>
+  //             <CIcon content={freeSet.cilBellExclamation} />
+  //           </CTooltip>,
+  //   }
+  // },
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Danh mục chi tiết',
