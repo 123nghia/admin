@@ -617,7 +617,6 @@ class Product extends Component {
                                   </CListGroupItem>
                                   <div style={{ height: '200px', overflowY: 'scroll' }}>
                                     {
-
                                       colorItem.map((item, i) => {
                                         return (
                                           <CListGroupItem style={{ cursor: 'pointer' }} key={i} onClick={() => {
@@ -759,7 +758,7 @@ class Product extends Component {
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
-                                  </CButton>{' '}
+                                  </CButton>
                                   <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                     <CIcon name="cilTrash" />
                                   </CButton>
@@ -989,7 +988,7 @@ const styles = {
     color: 'red'
   },
   mgl5: {
-    marginLeft: '5px'
+    margin: '5px'
   },
   tags: {
     float: "right",

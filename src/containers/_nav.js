@@ -40,6 +40,19 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Nhãn hiệu sản phẩm soi da',
+    to: '/brand_skin',
+    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.brand}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Tổng hợp sản phẩm da mặt',
     to: '/suggest',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
@@ -128,7 +141,7 @@ const _navSoida = [
               <CIcon content={freeSet.cilBellExclamation} />
             </CTooltip>,
     },
-  }
+  },
 ]
 
 const _navMakeUp = [
@@ -139,7 +152,7 @@ const _navMakeUp = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Nhãn hiệu',
+    name: 'Nhãn hiệu sản phẩm trang điểm',
     to: '/brand',
     icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],

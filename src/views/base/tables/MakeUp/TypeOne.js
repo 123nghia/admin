@@ -134,7 +134,7 @@ class SuggestItem extends Component {
     });
 
     const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND, {}, "", "GET")
+      Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
 
     let val = res_suggest.data.dataRes;
     let brand = res_brand.data;
@@ -652,7 +652,7 @@ class SuggestItem extends Component {
               // rows="5"
               />
 
-              <CLabel>Danh mục:</CLabel>
+              <CLabel>Nhãn hiệu:</CLabel>
               <div style={{ width: "100%" }}>
                 <CSelect onChange={async e => {
                   this.setState({ brand_id: e.target.value })
@@ -673,8 +673,9 @@ class SuggestItem extends Component {
                 </CSelect>
               </div>
 
-              <CLabel>Loại SDK:</CLabel>
-              <div style={{ width: "100%" }}>
+
+              <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Loại SDK:</CLabel>
                 <CSelect onChange={async e => {
                   this.setState({ type_sdk_id: e.target.value.split("/")[0], arrLevel: JSON.parse(e.target.value.split("/")[1]) })
                 }} custom size="sm" name="selectSm" id="SelectLm">
@@ -694,8 +695,8 @@ class SuggestItem extends Component {
                 </CSelect>
               </div>
 
-              <CLabel>Level:</CLabel>
-              <div style={{ width: "100%" }}>
+              <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Mức độ:</CLabel>
                 {
                   arrLevel != undefined ? (
                     <CSelect onChange={async e => { this.changeLevel(e) }} custom size="sm" name="selectSm" id="SelectLm">
@@ -703,11 +704,15 @@ class SuggestItem extends Component {
                         arrLevel.map((item, i) => {
                           if (item == this.state.sdktype) {
                             return (
-                              <option selected key={i} value={item}>{item}</option>
+                              <option selected key={i} value={item}>
+                                { item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng" }
+                              </option>
                             );
                           } else {
                             return (
-                              <option key={i} value={item}>{item}</option>
+                              <option key={i} value={item}>
+                                { item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng" }
+                              </option>
                             );
                           }
                         })
@@ -718,19 +723,19 @@ class SuggestItem extends Component {
               </div>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div>

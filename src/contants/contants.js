@@ -188,6 +188,12 @@ export default {
   "UPDATE_BRAND": "/update-brand",
   "DELETE_BRAND": "/delete-brand",
 
+  "LIST_BRAND_PLUGIN": "/brand-plugin",
+  "LIST_BRAND_PLUGIN_COMPANY": "/brand-plugin/",
+  "ADD_BRAND_PLUGIN": "/add-brand-plugin",
+  "UPDATE_BRAND_PLUGIN": "/update-brand-plugin",
+  "DELETE_BRAND_PLUGIN": "/delete-brand-plugin",
+
   "LIST_PRODUCT": "/product",
   "LIST_PRODUCT_COMPANY": "/product/",
   "ADD_PRODUCT": "/add-product",
