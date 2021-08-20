@@ -137,6 +137,9 @@ class SuggestItem extends Component {
       Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
 
     let val = res_suggest.data.dataRes;
+
+    console.log(val)
+
     let brand = res_brand.data;
     this.pagination(val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: brand });
@@ -162,7 +165,7 @@ class SuggestItem extends Component {
     });
 
     const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.userData).company_id, {}, "", "GET")
+      Constants.LIST_BRAND_PLUGIN_COMPANY + JSON.parse(this.state.userData).company_id, {}, "", "GET")
 
     let val = res_suggest.data.dataRes;
     let brand = res_brand.data;
@@ -263,7 +266,7 @@ class SuggestItem extends Component {
   }
 
   async toggleModal(key) {
-    const { data } = this.state;
+    const { data, arrBrand } = this.state;
 
     if (key == 'new') {
       this.setState({
@@ -274,6 +277,7 @@ class SuggestItem extends Component {
         title: "",
         description: "",
         linkdetail: "",
+        brand_id: arrBrand[0]._id,
         level: "K1",
         sdktype: "1",
         type_sdk_id: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0]._id,
@@ -289,12 +293,18 @@ class SuggestItem extends Component {
   }
 
   async addRoles() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, arrBrand } = this.state
-    if (name == null || name == '' ||
-      image == null || image == '' ||
-      title == null || title == '' ||
-      linkdetail == null || linkdetail == '') {
-      alert("Please fill in all the requirements");
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, brand_id } = this.state
+    if (name == null || name == ''){
+      alert("Thiếu tên sản phẩm");
+      return
+    } else if(brand_id == null || brand_id == '') {
+      alert("Thiếu tên nhãn hiệu cho sản phẩm");
+      return
+    } else if(title == null || title == '') {
+      alert("Thiếu tên tiêu đề cho sản phẩm");
+      return
+    } else if(image == null || image == ''){
+      alert("Thiếu hình ảnh cho sản phẩm");
       return
     }
 
@@ -309,7 +319,7 @@ class SuggestItem extends Component {
       companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
       type_sdk_id: type_sdk_id,
       type_product_id: window.location.hash.split('/')[window.location.hash.split('/').length - 1],
-      brand_id: arrBrand[0]._id
+      brand_id: brand_id
 
     }
 

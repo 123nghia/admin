@@ -206,6 +206,7 @@ class BrandPlugin extends Component {
   }
 
   async addBrand() {
+
     const { name, image, link } = this.state
     if (name == null || name == '' ||
       image == null || image == '') {
