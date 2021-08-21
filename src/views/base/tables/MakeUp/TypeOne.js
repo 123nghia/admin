@@ -51,7 +51,6 @@ class SuggestItem extends Component {
       action: 'new',
       name: "",
       image: "",
-      key: "",
       title: "",
       description: "",
       linkdetail: "",
@@ -67,16 +66,19 @@ class SuggestItem extends Component {
       modalDelete: false,
       delete: null,
       arrPagination: [],
-      indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       userData: localStorage.getItem('user'),
       isLoading: false,
+      indexPage: 1,
       arrOptionSdkType: [],
       arrOptionProductType: [],
       arrLevel: [],
       arrBrand: [],
-      idSDK: window.location.hash.split('/')[window.location.hash.split('/').length - 1]
+      idSDK: window.location.hash.split('/')[window.location.hash.split('/').length - 1],
+      totalCount: '',
+      isLoadingTable: false,
+      isSearch: false
     };
   }
   async componentDidMount() {
@@ -97,7 +99,115 @@ class SuggestItem extends Component {
     }
   }
 
-  pagination(dataApi) {
+  onSearch = async () => {
+    const { type, idSDK, key, userData } = this.state;
+    console.log(key)
+    if (type == '0' || type == '1') {
+      this.setState({ isLoadingTable: true });
+
+      const res_suggest = await API_CONNECT(
+        Constants.SEARCH_SUGGEST_ITEM_ADMIN + idSDK + "?&key=" + key, {}, "", "GET")
+
+      const res_sdk = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.LIST_SDK,
+        method: 'GET'
+      });
+
+      const res_brand = await API_CONNECT(
+        Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
+
+      let val = res_suggest.dataRes;
+
+      let brand = res_brand.data;
+
+      if (val.length == 0) {
+        this.setState({
+          hidden: false
+        })
+      } else {
+        this.setState({
+          hidden: true
+        })
+      }
+
+      this.setState({
+        dataApi: val,
+        sdkItem: res_sdk.data,
+        currentSdkSelect: res_sdk.data[0],
+        arrBrand: brand,
+        isLoadingTable: false,
+        data: val,
+        isSearch: true
+      });
+
+    } else {
+
+      this.setState({ isLoadingTable: true });
+
+      const res_suggest = await API_CONNECT(
+        //http://localhost:3002/itemSdk/search/611f1461ef623903dbb4f75d/1?&key=c
+        Constants.SEARCH_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?&key=` + key, {}, "", "GET")
+
+      const res_sdk = await axios({
+        baseURL: Constants.BASE_URL,
+        url: Constants.LIST_SDK,
+        method: 'GET'
+      });
+
+      const res_brand = await API_CONNECT(
+        Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
+
+      let val = res_suggest.dataRes;
+
+      let brand = res_brand.data;
+
+      if (val.length == 0) {
+        this.setState({
+          hidden: false
+        })
+      } else {
+        this.setState({
+          hidden: true
+        })
+      }
+
+      this.setState({
+        dataApi: val,
+        sdkItem: res_sdk.data,
+        currentSdkSelect: res_sdk.data[0],
+        arrBrand: brand,
+        isLoadingTable: false,
+        data: val,
+        isSearch: true
+      });
+    }
+
+  }
+
+  getDataPagination = async (skip) => {
+
+    const { idSDK, totalCount, userData, type } = this.state;
+
+    this.setState({ isLoadingTable: true });
+    if (type == '0' || type == '1') {
+      var res = await API_CONNECT(
+        Constants.LIST_SUGGEST_ITEM_ADMIN + `${idSDK}?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
+    } else {
+      var res = await API_CONNECT(
+        Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
+    }
+
+    let val = res.dataRes;
+    console.log(res)
+    this.setState({
+      dataApi: val,
+      isLoadingTable: false,
+      data: val
+    });
+  }
+
+  pagination(dataApi, dataResult) {
     var i, j, temparray, chunk = 5;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
@@ -105,7 +215,7 @@ class SuggestItem extends Component {
       arrTotal.push(temparray);
     }
 
-    if (arrTotal.length == 0) {
+    if (dataResult.length == 0) {
       this.setState({
         hidden: false
       })
@@ -115,7 +225,7 @@ class SuggestItem extends Component {
       })
     }
 
-    this.setState({ arrPagination: arrTotal, data: arrTotal.length > 0 ? arrTotal[0] : [] });
+    this.setState({ arrPagination: arrTotal, data: dataResult, totalCount: dataApi.length });
   }
 
   getData = async () => {
@@ -137,16 +247,11 @@ class SuggestItem extends Component {
       Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
 
     let val = res_suggest.data.dataRes;
-
-    console.log(val)
+    let totalItem = res_suggest.data.arrTotal;
 
     let brand = res_brand.data;
-    this.pagination(val);
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: brand });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.pagination(totalItem, val);
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: brand, isLoading: false });
   }
 
   getDataForCompany = async () => {
@@ -168,9 +273,10 @@ class SuggestItem extends Component {
       Constants.LIST_BRAND_PLUGIN_COMPANY + JSON.parse(this.state.userData).company_id, {}, "", "GET")
 
     let val = res_suggest.data.dataRes;
+    let totalItem = res_suggest.data.arrTotal;
     let brand = res_brand.data;
-    console.log(val)
-    this.pagination(val);
+
+    this.pagination(totalItem, val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: brand });
 
   }
@@ -212,7 +318,7 @@ class SuggestItem extends Component {
   };
 
   searchKey() {
-    const { indexPage, key } = this.state;
+    const { key, indexPage } = this.state;
     // this.setState({ key: key })
 
     if (key != '') {
@@ -237,15 +343,7 @@ class SuggestItem extends Component {
 
       this.setState({ data: d, totalActive: active })
     } else {
-      let active = 0
-
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
+      this.getDataPagination(5 * Number(indexPage))
     }
   }
 
@@ -258,11 +356,9 @@ class SuggestItem extends Component {
   }
 
   resetSearch() {
-    this.setState({
-      key: ''
-    }, () => {
-      this.searchKey();
-    });
+    const { indexPage } = this.state
+    this.setState({ isSearch: false })
+    this.getDataPagination(5 * Number(indexPage))
   }
 
   async toggleModal(key) {
@@ -294,16 +390,16 @@ class SuggestItem extends Component {
 
   async addRoles() {
     const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, brand_id } = this.state
-    if (name == null || name == ''){
+    if (name == null || name == '') {
       alert("Thiếu tên sản phẩm");
       return
-    } else if(brand_id == null || brand_id == '') {
+    } else if (brand_id == null || brand_id == '') {
       alert("Thiếu tên nhãn hiệu cho sản phẩm");
       return
-    } else if(title == null || title == '') {
+    } else if (title == null || title == '') {
       alert("Thiếu tên tiêu đề cho sản phẩm");
       return
-    } else if(image == null || image == ''){
+    } else if (image == null || image == '') {
       alert("Thiếu hình ảnh cho sản phẩm");
       return
     }
@@ -323,7 +419,7 @@ class SuggestItem extends Component {
 
     }
 
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, isSearch: false });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.ADD_SUGGEST_ITEM,
@@ -390,7 +486,7 @@ class SuggestItem extends Component {
       brand_id: brand_id
     }
 
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, isSearch: false });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.UPDATE_SUGGEST_ITEM + this.state.id,
@@ -419,7 +515,7 @@ class SuggestItem extends Component {
   }
 
   async delete() {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, isSearch: false });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.DELETE_SUGGEST_ITEM,
@@ -467,7 +563,7 @@ class SuggestItem extends Component {
   }
 
   render() {
-    const { data, arrPagination, arrLevel, arrOptionSdkType, key, arrBrand } = this.state;
+    const { data, arrPagination, arrLevel, arrOptionSdkType, key, arrBrand, isSearch, indexPage } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -480,14 +576,21 @@ class SuggestItem extends Component {
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
-                          <CCol sm="12" lg="6">
+                          <CCol sm="12" lg="4">
                             <div>
                               <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
+                                this.setState({ key: e.target.value })
+
+                                if(e.target.value == "") {
+                                  this.getDataPagination(5 * Number(indexPage))
+                                }
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
-                          <CCol sm="12" lg="6">
+                          <CCol sm="12" lg="4">
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm theo từ khoá</CButton>
+                          </CCol>
+                          <CCol sm="12" lg="4">
                             <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
                           </CCol>
                         </CRow>
@@ -499,100 +602,93 @@ class SuggestItem extends Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        <th className="text-center">Tên</th>
-                        <th className="text-center">Ảnh</th>
-                        <th className="text-center">Tiều đề</th>
-                        <th className="text-center">Mô tả</th>
-                        {/* <th className="text-center">Chi tiết</th> */}
-                        <th className="text-center">Thương hiệu</th>
-                        <th className="text-center">Ảnh thương hiệu</th>
-                        <th className="text-center">Loại</th>
-                        <th className="text-center">Loại SDK</th>
-                        <th className="text-center">Mức độ</th>
-                        {/* <th className="text-center">Loại Sdk</th>
+                  {
+                    this.state.isLoadingTable == false ?
+                      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                        <thead className="thead-light">
+                          <tr>
+                            <th className="text-center">STT.</th>
+                            <th className="text-center">Tên</th>
+                            <th className="text-center">Ảnh</th>
+                            <th className="text-center">Tiều đề</th>
+                            <th className="text-center">Mô tả</th>
+                            {/* <th className="text-center">Chi tiết</th> */}
+                            <th className="text-center">Thương hiệu</th>
+                            <th className="text-center">Ảnh thương hiệu</th>
+                            <th className="text-center">Loại</th>
+                            <th className="text-center">Loại SDK</th>
+                            <th className="text-center">Mức độ</th>
+                            {/* <th className="text-center">Loại Sdk</th>
                         <th className="text-center">Level</th> */}
-                        <th className="text-center">#</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.name}</td>
-                                <td className="text-center">
-                                  <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
-                                </td>
-                                <td className="text-center">
-                                  {item.title.substr(0, 100) +
-                                    (item.title.length > 100 ? "..." : "")}
-                                </td>
-                                <td className="text-center">
-                                  {item.description}
-                                </td>
-                                {/* <td className="text-center">
+                            <th className="text-center">#</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                          {
+                            data != undefined ?
+                              data.map((item, i) => {
+                                return (
+                                  <tr key={i}>
+                                    <td className="text-center">{i + 1}</td>
+                                    <td className="text-center">{item.name}</td>
+                                    <td className="text-center">
+                                      <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
+                                    </td>
+                                    <td className="text-center">
+                                      {item.title.substr(0, 100) +
+                                        (item.title.length > 100 ? "..." : "")}
+                                    </td>
+                                    <td className="text-center">
+                                      {item.description}
+                                    </td>
+                                    {/* <td className="text-center">
                                   <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
                                 </td> */}
-                                <td className="text-center">
-                                  {item.brand_id == null ? "" : item.brand_id.name}
-                                </td>
-                                <td className="text-center">
-                                  <img src={item.brand_id == null ? "" : item.brand_id.image} width={"60px"} height={"60px"} />
-                                </td>
-                                <td className="text-center">
-                                  {item.type_product_id.Name}
-                                </td>
-                                <td className="text-center">
-                                  {item.type_sdk_id.Name}
-                                </td>
-                                <td className="text-center">
-                                  {item.name_level}
-                                </td>
-                                <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                    <CIcon name="cilTrash" />
-                                  </CButton>
-                                </td>
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </table>
+                                    <td className="text-center">
+                                      {item.brand_id == null ? "" : item.brand_id.name}
+                                    </td>
+                                    <td className="text-center">
+                                      <img src={item.brand_id == null ? "" : item.brand_id.image} width={"60px"} height={"60px"} />
+                                    </td>
+                                    <td className="text-center">
+                                      {item.type_product_id.Name}
+                                    </td>
+                                    <td className="text-center">
+                                      {item.type_sdk_id.Name}
+                                    </td>
+                                    <td className="text-center">
+                                      {item.name_level}
+                                    </td>
+                                    <td className="text-center">
+                                      <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                        <CIcon name="cilPencil" />
+                                      </CButton>{' '}
+                                      <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                        <CIcon name="cilTrash" />
+                                      </CButton>
+                                    </td>
+                                  </tr>
+                                );
+                              }) : ""
+                          }
+                        </tbody>
+                      </table> :
+                      <div className="sweet-loading" style={{ height: 370 }}>
+                        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoadingTable} speedMultiplier={1.5} />
+                      </div>
+                  }
                 </CardBody>
               </Card>
               <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
+                {isSearch ? "" :
+                  <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
+                    this.setState({ indexPage: v })
+                    await this.getDataPagination(5 * (v))
+                  }} />
+                }
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
+
             </Col>
           </Row>
 
@@ -715,13 +811,13 @@ class SuggestItem extends Component {
                           if (item == this.state.sdktype) {
                             return (
                               <option selected key={i} value={item}>
-                                { item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng" }
+                                {item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng"}
                               </option>
                             );
                           } else {
                             return (
                               <option key={i} value={item}>
-                                { item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng" }
+                                {item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng"}
                               </option>
                             );
                           }

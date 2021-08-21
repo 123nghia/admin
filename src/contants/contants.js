@@ -177,6 +177,8 @@ export default {
   "LIST_SUGGEST_ITEM": "/itemSdk",
   "LIST_SUGGEST_ITEM_COMPANY": "/itemSdk/",
   "LIST_SUGGEST_ITEM_ADMIN": "/itemSdk/admin/",
+  "SEARCH_SUGGEST_ITEM_ADMIN": "/itemSdk/admin/search/",
+  "SEARCH_SUGGEST_ITEM_COMPANY": "/itemSdk/search/",
   "ADD_SUGGEST_ITEM": "/itemSdk",
   "UPDATE_SUGGEST_ITEM": "/itemSdk/",
   "DELETE_SUGGEST_ITEM": "/itemSdk/deleteItem",
