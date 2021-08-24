@@ -8,28 +8,28 @@ import { cifAU, freeSet } from '@coreui/icons';
 
 const css = {}
 const content = {
-                  profile: "Quản lý các thông tin cá nhân của bạn như số điện thoại, email, v.v",
-                  role: "Quản lý các cấp bậc phân quyền hiện tại của TIKITECH",
-                  package: "Quản lý các gói dịch vụ hiện có của TIKITECH, một gói dịch vụ sẽ chứa một hoặc nhiều tính năng",
-                  package_company: "Quản lý các gói dịch vụ mà bạn đăng ký của TIKITECH, một gói dịch vụ sẽ chứa một hoặc nhiều tính năng",
-                  feature: "Quản lý các tính năng hiện có của TIKITECH",
-                  accountSale: "Danh sách Sale của TIKITECH",
-                  accountCompany: "Danh sách khách hàng của TIKITECH",
-                  package_order: "Danh tất cả đơn hàng bao gồm các gói dịch vụ mà TIKITECH cung cấp cho khách hàng",
-                  create_order: "Tạo đơn hàng để TIKITECH cung cấp dịch vụ mà khách hàng cần",
-                  customer: "Danh sách mà người dùng đến và sử dụng dịch vụ",
-                  suggest: "Danh sách sản phẩm gợi ý khi người dùng sử dụng dịch vụ soi da",
-                  history_skin: "Danh sách lịch sử soi da của người dùng sử dụng dịch vụ soi da",
-                  brand: "Danh sách các thương hiệu hiện có",
-                  subType: "Danh sách các danh mục hiện có",
-                  color: "Danh sách các mã màu hiện có",
-                  product: "Danh sách các sản phẩm hiện có",
-                  reward_info: "Nội dung các chương trình khuyến mãi hiện tại",
-                  reward_customer: "Danh sách nhận quà của người dùng đã đến sử dụng dịch vụ",
-                  reward_type: "Danh sách các loại khuyến mãi",
-                  update_package: "Nâng cấp gói",
-                  contact: "Danh sach liên hệ",
-                }
+  profile: "Quản lý các thông tin cá nhân của bạn như số điện thoại, email, v.v",
+  role: "Quản lý các cấp bậc phân quyền hiện tại của TIKITECH",
+  package: "Quản lý các gói dịch vụ hiện có của TIKITECH, một gói dịch vụ sẽ chứa một hoặc nhiều tính năng",
+  package_company: "Quản lý các gói dịch vụ mà bạn đăng ký của TIKITECH, một gói dịch vụ sẽ chứa một hoặc nhiều tính năng",
+  feature: "Quản lý các tính năng hiện có của TIKITECH",
+  accountSale: "Danh sách Sale của TIKITECH",
+  accountCompany: "Danh sách khách hàng của TIKITECH",
+  package_order: "Danh tất cả đơn hàng bao gồm các gói dịch vụ mà TIKITECH cung cấp cho khách hàng",
+  create_order: "Tạo đơn hàng để TIKITECH cung cấp dịch vụ mà khách hàng cần",
+  customer: "Danh sách mà người dùng đến và sử dụng dịch vụ",
+  suggest: "Danh sách sản phẩm gợi ý khi người dùng sử dụng dịch vụ soi da",
+  history_skin: "Danh sách lịch sử soi da của người dùng sử dụng dịch vụ soi da",
+  brand: "Danh sách các thương hiệu hiện có",
+  subType: "Danh sách các danh mục hiện có",
+  color: "Danh sách các mã màu hiện có",
+  product: "Danh sách các sản phẩm hiện có",
+  reward_info: "Nội dung các chương trình khuyến mãi hiện tại",
+  reward_customer: "Danh sách nhận quà của người dùng đã đến sử dụng dịch vụ",
+  reward_type: "Danh sách các loại khuyến mãi",
+  update_package: "Nâng cấp gói",
+  contact: "Danh sach liên hệ",
+}
 
 
 const _navSoida = [
@@ -47,8 +47,8 @@ const _navSoida = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.brand}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -60,8 +60,8 @@ const _navSoida = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     },
   },
   {
@@ -73,8 +73,8 @@ const _navSoida = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     },
   },
   {
@@ -86,8 +86,8 @@ const _navSoida = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     },
   },
   {
@@ -99,8 +99,8 @@ const _navSoida = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     },
   },
   {
@@ -112,8 +112,8 @@ const _navSoida = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     },
   },
   {
@@ -125,8 +125,8 @@ const _navSoida = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     },
   },
   {
@@ -138,8 +138,8 @@ const _navSoida = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     },
   },
 ]
@@ -159,8 +159,8 @@ const _navMakeUp = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.brand}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   // {
@@ -188,8 +188,8 @@ const _navMakeUp = [
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.subType}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
       }
     }, {
       _tag: 'CSidebarNavItem',
@@ -199,8 +199,8 @@ const _navMakeUp = [
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.subType}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
       }
     }],
     role: ['0', '1', '2'],
@@ -214,8 +214,8 @@ const _navMakeUp = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.color}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -227,8 +227,8 @@ const _navMakeUp = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.product}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
 ]
@@ -248,8 +248,8 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.customer}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -261,8 +261,8 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.history_skin}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   // {
@@ -315,8 +315,8 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.profile}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -328,8 +328,8 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.role}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -341,8 +341,8 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.package_company}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -354,8 +354,8 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.update_package}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -370,8 +370,8 @@ const _navOrther = [
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.package}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
       }
     }, {
       _tag: 'CSidebarNavItem',
@@ -381,10 +381,11 @@ const _navOrther = [
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.feature}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
-      }
-    }],
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      },
+
+    },],
     role: ['0']
   },
   {
@@ -399,8 +400,8 @@ const _navOrther = [
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.accountSale}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
       }
     }, {
       _tag: 'CSidebarNavItem',
@@ -410,8 +411,8 @@ const _navOrther = [
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.accountCompany}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
       }
     }],
     role: ['0', '1'],
@@ -428,8 +429,8 @@ const _navOrther = [
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.package_order}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
       }
     }, {
       _tag: 'CSidebarNavItem',
@@ -439,11 +440,36 @@ const _navOrther = [
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.create_order}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
       }
     }],
     role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý đặt lịch',
+    to: '',
+    icon: <CIcon style={css} content={freeSet.cilCalendar} customClasses="c-sidebar-nav-icon" />,
+    role: ['0'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.role}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  }, {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý gian hàng',
+    to: '/update_package',
+    icon: <CIcon style={css} content={freeSet.cilCart} customClasses="c-sidebar-nav-icon" />,
+    role: ['0'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.role}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
   },
   {
     _tag: 'CSidebarNavTitle',
@@ -459,8 +485,8 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.contact}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -472,8 +498,8 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.contact}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
