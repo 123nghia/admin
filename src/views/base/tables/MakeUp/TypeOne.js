@@ -250,6 +250,7 @@ class SuggestItem extends Component {
     let totalItem = res_suggest.data.arrTotal;
 
     let brand = res_brand.data;
+
     this.pagination(totalItem, val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: brand, isLoading: false });
   }
@@ -271,6 +272,7 @@ class SuggestItem extends Component {
 
     const res_brand = await API_CONNECT(
       Constants.LIST_BRAND_PLUGIN_COMPANY + JSON.parse(this.state.userData).company_id, {}, "", "GET")
+
 
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;

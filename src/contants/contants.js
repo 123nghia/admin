@@ -130,6 +130,7 @@ export default {
   "PLUGIN_ADD_USER" : "/api/plugin-add-user",
   "PLUGIN_ADD_SALE" : "/api/plugin-add-sale",
   "PLUGIN_UPDATE_USER" : "/api/plugin-update-user",
+  "PLUGIN_UPDATE_USER_COMPANY" : "/api/plugin-update-user-company",
   "PLUGIN_DELETE_USER" : "/api/plugin-delete-user",
   "PLUGIN_RESET_PASSWORD" : "/api/plugin-reset-password",
   "PLUGIN_CHANGE_PASSWORD" : "/api/plugin-change",

@@ -296,13 +296,13 @@ class PluginCustomerManager extends Component {
       Email: item.Email,
       Phone: item.Phone,
       Fax: item.Fax,
-      Address: item.Address.length < 1 ? item.Address + ", " + this.state.province[0].province_name : item.Address,
+      Address: item.Address == null || item.Address == undefined ? "" : item.Address.length < 1 ? item.Address + ", " + this.state.province[0].province_name : item.Address,
       Slug: item.Slug,
       Website: item.Website,
       Code: item._id,
       id: item['_id'],
       Status: item.Status,
-      current_province: item.Address.length < 1 ? this.state.province[0].province_name :
+      current_province:  item.Address == null || item.Address == undefined ? "" : item.Address.length < 1 ? this.state.province[0].province_name :
         item.Address.split(',')[item.Address.split(',').length - 1]
     })
   }

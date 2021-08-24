@@ -476,6 +476,13 @@ const _navOrther = [
             </CTooltip>,
     }
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Đăng xuất',
+    to: '/login',
+    role: ['0', '1', '2'],
+    icon: <CIcon style={css} content={freeSet.cilAccountLogout} customClasses="c-sidebar-nav-icon" />
+  },
 ]
 
 export default [_navSoida, _navMakeUp, _navOrther]
