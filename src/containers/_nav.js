@@ -265,42 +265,42 @@ const _navOrther = [
             </CTooltip>,
     }
   },
-  {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Quản lý chương trình khuyến mãi'],
-    role: ['0', '1', '2'],
-  },
-  {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Chương trình khuyến mãi',
-    icon: <CIcon style={css} content={freeSet.cilBell} customClasses="c-sidebar-nav-icon" />,
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Nội dung khuyến mãi',
-      to: '/reward_info',
-      role: ['0', '1', '2'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.reward_info}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
-      }
-    }],
-    role: ['0', '1', '2'],
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách khuyến mãi',
-    to: '/cus_request',
-    icon: <CIcon style={css} content={freeSet.cilGift} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.reward_customer}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
-    }
-  },
+  // {
+  //   _tag: 'CSidebarNavTitle',
+  //   _children: ['Quản lý chương trình khuyến mãi'],
+  //   role: ['0', '1', '2'],
+  // },
+  // {
+  //   _tag: 'CSidebarNavDropdown',
+  //   name: 'Chương trình khuyến mãi',
+  //   icon: <CIcon style={css} content={freeSet.cilBell} customClasses="c-sidebar-nav-icon" />,
+  //   _children: [{
+  //     _tag: 'CSidebarNavItem',
+  //     name: 'Nội dung khuyến mãi',
+  //     to: '/reward_info',
+  //     role: ['0', '1', '2'],
+  //     badge: {
+  //       color: 'info',
+  //       text: <CTooltip placement={"right"} content={content.reward_info}>
+  //               <CIcon content={freeSet.cilBellExclamation} />
+  //             </CTooltip>,
+  //     }
+  //   }],
+  //   role: ['0', '1', '2'],
+  // },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Danh sách khuyến mãi',
+  //   to: '/cus_request',
+  //   icon: <CIcon style={css} content={freeSet.cilGift} customClasses="c-sidebar-nav-icon" />,
+  //   role: ['0', '1', '2'],
+  //   badge: {
+  //     color: 'info',
+  //     text: <CTooltip placement={"right"} content={content.reward_customer}>
+  //             <CIcon content={freeSet.cilBellExclamation} />
+  //           </CTooltip>,
+  //   }
+  // },
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Thông tin chung'],
