@@ -199,16 +199,16 @@ class SuggestItem extends Component {
     }
 
     let val = res.dataRes;
-    console.log(res)
     this.setState({
       dataApi: val,
       isLoadingTable: false,
-      data: val
+      data: val,
+      isSearch: false
     });
   }
 
   pagination(dataApi, dataResult) {
-    var i, j, temparray, chunk = 5;
+    var i, j, temparray, chunk = 4;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -278,6 +278,7 @@ class SuggestItem extends Component {
     let totalItem = res_suggest.data.arrTotal;
     let brand = res_brand.data;
 
+    console.log(res_suggest)
     this.pagination(totalItem, val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: brand });
 
@@ -345,7 +346,7 @@ class SuggestItem extends Component {
 
       this.setState({ data: d, totalActive: active })
     } else {
-      this.getDataPagination(5 * Number(indexPage))
+      this.getDataPagination(4 * Number(indexPage))
     }
   }
 
@@ -360,7 +361,7 @@ class SuggestItem extends Component {
   resetSearch() {
     const { indexPage } = this.state
     this.setState({ isSearch: false })
-    this.getDataPagination(5 * Number(indexPage))
+    this.getDataPagination(4 * Number(indexPage))
   }
 
   async toggleModal(key) {
@@ -405,6 +406,11 @@ class SuggestItem extends Component {
       alert("Thiếu hình ảnh cho sản phẩm");
       return
     }
+
+    // const form = new FormData();
+    // form.append("iamge", "789");
+
+    // console.log(form)
 
     const body = {
       name: name,
@@ -584,7 +590,7 @@ class SuggestItem extends Component {
                                 this.setState({ key: e.target.value })
 
                                 if(e.target.value == "") {
-                                  this.getDataPagination(5 * Number(indexPage))
+                                  this.getDataPagination(4 * Number(indexPage))
                                 }
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
@@ -686,7 +692,7 @@ class SuggestItem extends Component {
                 {isSearch ? "" :
                   <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
                     this.setState({ indexPage: v })
-                    await this.getDataPagination(5 * (v))
+                    await this.getDataPagination(3 * (v))
                   }} />
                 }
               </div>
@@ -702,29 +708,15 @@ class SuggestItem extends Component {
                 label="Tên sản phẩm"
                 value={this.state.name}
                 placeholder={"Tên sản phẩm"}
-                // error={errors.title}
                 onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
               />
-
-              {/* <TextFieldGroup
-                field="image"
-                label="Ảnh minh họa"
-                value={this.state.image}
-                placeholder={"Ảnh minh họa"}
-                // error={errors.title}
-                onChange={e => this.onChange("image", e.target.value)}
-              // rows="5"
-              /> */}
 
               <TextFieldGroup
                 field="image"
                 label="Ảnh thương hiệu"
                 type={"file"}
-                // error={errors.title}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null }}
-              // rows="5"
               />
               {
                 this.state.image == "" ? "" :
@@ -736,9 +728,7 @@ class SuggestItem extends Component {
                 label="Tiêu đề"
                 value={this.state.title}
                 placeholder={"Tiêu đề"}
-                // error={errors.title}
                 onChange={e => this.onChange("title", e.target.value)}
-              // rows="5"
               />
 
               <label className="control-label">Mô tả</label>
@@ -755,9 +745,7 @@ class SuggestItem extends Component {
                 label="Chi tiết"
                 value={this.state.linkdetail}
                 placeholder={"Chi tiết"}
-                // error={errors.title}
                 onChange={e => this.onChange("linkdetail", e.target.value)}
-              // rows="5"
               />
 
               <CLabel>Nhãn hiệu:</CLabel>

@@ -20,7 +20,7 @@ const TheHeaderDropdown = () => {
       direction="down"
     >
       <CDropdownToggle className="mr-10" className="c-header-nav-link" caret={false}>
-        <div className="c-avatar" style={{ width: 500 }}>
+        <div className="c-avatar" style={{ width: '100%' }}>
           <div className="mr-2" style={{ fontSize: 20, color: 'orange', fontFamily: 'Myriad Pro Regular' }}>
             <strong>
               {JSON.parse(localStorage.getItem('user')) == null || JSON.parse(localStorage.getItem('user')) == undefined ? "" : JSON.parse(localStorage.getItem('user')).username}

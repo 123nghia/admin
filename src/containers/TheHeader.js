@@ -139,7 +139,7 @@ const TheHeader = () => {
             </ModalBody>
 
             <ModalFooter style={{ backgroundColor: 'rgba(52, 52, 52, 0.8)' }}>
-              <CButton color="success" style={{ width: 300 }} onClick={e => { setShow(false) }}>Bỏ qua và không hiển thị lại</CButton>
+              <CButton color="success" style={{ width: 300 }} onClick={e => { setShow(false) }}>Bỏ qua</CButton>
             </ModalFooter>
           </Modal>
       }
