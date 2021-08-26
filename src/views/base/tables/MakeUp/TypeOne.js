@@ -234,8 +234,10 @@ class SuggestItem extends Component {
       })
     }
 
-    for(let i = 0; i < arrTotal[0].length; i++) {
-      dataResult[i].id = arrTotal[0][i]
+    if(arrTotal.length != 0) {
+      for(let i = 0; i < arrTotal[0].length; i++) {
+        dataResult[i].id = arrTotal[0][i]
+      }
     }
 
     this.setState({ arrPagination: arrTotal, data: dataResult, totalCount: dataApi.length });
