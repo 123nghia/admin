@@ -182,6 +182,8 @@ export default {
   "SEARCH_SUGGEST_ITEM_COMPANY": "/itemSdk/search/",
   "ADD_SUGGEST_ITEM": "/itemSdk",
   "UPDATE_SUGGEST_ITEM": "/itemSdk/",
+  "UPLOAD_IMAGE": "/itemSdk/upload_image",
+  "UPLOAD_IMAGE_MAKEUP": "/itemSdk/upload_image_makeup",
   "DELETE_SUGGEST_ITEM": "/itemSdk/deleteItem",
   "LIST_SDK": "/sdk",
 

@@ -55,7 +55,7 @@ class Product extends Component {
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
+      viewingUser: { },
       communities: [],
       updated: '',
       dataApi: [],
@@ -130,16 +130,16 @@ class Product extends Component {
     this.setState({ isLoading: true });
 
     const res_product = await API_CONNECT(
-      Constants.LIST_PRODUCT, {}, "", "GET")
+      Constants.LIST_PRODUCT, { }, "", "GET")
 
     const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND, {}, "", "GET")
+      Constants.LIST_BRAND, { }, "", "GET")
 
     const res_type = await API_CONNECT(
-      Constants.LIST_TYPE + "/null", {}, "", "GET")
+      Constants.LIST_TYPE + "/null", { }, "", "GET")
 
     const res_color = await API_CONNECT(
-      Constants.LIST_COLOR, {}, "", "GET")
+      Constants.LIST_COLOR, { }, "", "GET")
 
     let val = res_product.data;
     let brands = res_brand.data;
@@ -160,16 +160,16 @@ class Product extends Component {
     this.setState({ isLoading: true });
 
     const res_product = await API_CONNECT(
-      Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id, {}, this.state.token, "GET")
+      Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id, { }, this.state.token, "GET")
 
     const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+      Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
 
     const res_type = await API_CONNECT(
-      Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", {}, "", "GET")
+      Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", { }, "", "GET")
 
     const res_color = await API_CONNECT(
-      Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+      Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
 
     let val = res_product.data;
 
@@ -215,6 +215,7 @@ class Product extends Component {
 
   onChangeImage(e) {
     let files = e.target.files;
+    this.setState({ image_link: files[0] })
     let reader = new FileReader();
     reader.readAsDataURL(files[0])
     reader.onload = (e) => {
@@ -242,6 +243,10 @@ class Product extends Component {
   onChangeImage_ADD(e, index) {
     const { arrProductColor } = this.state;
     let files = e.target.files;
+    arrProductColor[Number(index)].image_link = files[0].name
+    arrProductColor[Number(index)].data_image = files[0]
+    this.setState({ arrProductColor: arrProductColor })
+
     let reader = new FileReader();
     reader.readAsDataURL(files[0])
     reader.onload = (e) => {
@@ -273,6 +278,8 @@ class Product extends Component {
         }
       }
 
+      //run api here
+
       const body = {
         type_id: type_id,
         brand_id: brand_id,
@@ -291,6 +298,13 @@ class Product extends Component {
       });
 
       if (res.status == 200) {
+        for (let i = 0; i < arrProductColor.length; i++) {
+          const form = new FormData();
+          form.append("image", arrProductColor[i].data_image);
+
+          await API_CONNECT(Constants.UPLOAD_IMAGE_MAKEUP, form, "", "POST")
+        }
+
         if (this.state.type == '0' || this.state.type == '1') {
           this.getData()
         } else {
@@ -313,7 +327,7 @@ class Product extends Component {
       href: item.href,
       type_id: item.type_id.type_id,
       brand_id: item.brand_id._id,
-      color_id: item.color_id == null ? '' : item.color_id,
+      color_id: item.color_id == null ? null : item.color_id,
       brand_name: item.brand_id.name,
       id: item['_id'],
       arrProductColor: [],
@@ -324,9 +338,12 @@ class Product extends Component {
   }
 
   async updateProducts() {
-    const { name, image, href, type_id, brand_id, color_id } = this.state
+    const { name, image, href, type_id, brand_id, color_id, image_link } = this.state
 
+    const form = new FormData();
+    form.append("image", image_link);
 
+    await API_CONNECT(Constants.UPLOAD_IMAGE_MAKEUP, form, "", "POST")
 
     if (name == null || name == '' ||
       href == null || href == '' ||
@@ -342,6 +359,7 @@ class Product extends Component {
       name: name,
       href: href,
       image: image,
+      image_link: image_link.name,
       color_id: color_id,
       id: this.state.id
     }

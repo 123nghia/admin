@@ -51,6 +51,7 @@ class SuggestItem extends Component {
       action: 'new',
       name: "",
       image: "",
+      image_link: "",
       title: "",
       description: "",
       linkdetail: "",
@@ -101,7 +102,6 @@ class SuggestItem extends Component {
 
   onSearch = async () => {
     const { type, idSDK, key, userData } = this.state;
-    console.log(key)
     if (type == '0' || type == '1') {
       this.setState({ isLoadingTable: true });
 
@@ -185,9 +185,9 @@ class SuggestItem extends Component {
 
   }
 
-  getDataPagination = async (skip) => {
+  getDataPagination = async (skip, v) => {
 
-    const { idSDK, totalCount, userData, type } = this.state;
+    const { idSDK, totalCount, userData, type, arrPagination } = this.state;
 
     this.setState({ isLoadingTable: true });
     if (type == '0' || type == '1') {
@@ -199,6 +199,15 @@ class SuggestItem extends Component {
     }
 
     let val = res.dataRes;
+
+    // console.log(arrPagination[v - 1])
+    // console.log(val)
+    // console.log(v)
+
+    for(let i = 0; i < arrPagination[v - 1].length; i++) {
+      val[i].id = arrPagination[v - 1][i]
+    }
+
     this.setState({
       dataApi: val,
       isLoadingTable: false,
@@ -208,7 +217,7 @@ class SuggestItem extends Component {
   }
 
   pagination(dataApi, dataResult) {
-    var i, j, temparray, chunk = 4;
+    var i, j, temparray, chunk = 20;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -223,6 +232,10 @@ class SuggestItem extends Component {
       this.setState({
         hidden: true
       })
+    }
+
+    for(let i = 0; i < arrTotal[0].length; i++) {
+      dataResult[i].id = arrTotal[0][i]
     }
 
     this.setState({ arrPagination: arrTotal, data: dataResult, totalCount: dataApi.length });
@@ -280,6 +293,7 @@ class SuggestItem extends Component {
 
     console.log(res_suggest)
     this.pagination(totalItem, val);
+
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: brand });
 
   }
@@ -346,7 +360,7 @@ class SuggestItem extends Component {
 
       this.setState({ data: d, totalActive: active })
     } else {
-      this.getDataPagination(4 * Number(indexPage))
+      this.getDataPagination(20 * Number(indexPage))
     }
   }
 
@@ -361,7 +375,7 @@ class SuggestItem extends Component {
   resetSearch() {
     const { indexPage } = this.state
     this.setState({ isSearch: false })
-    this.getDataPagination(4 * Number(indexPage))
+    this.getDataPagination(20 * Number(indexPage))
   }
 
   async toggleModal(key) {
@@ -392,7 +406,7 @@ class SuggestItem extends Component {
   }
 
   async addRoles() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, brand_id } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, brand_id, image_link } = this.state
     if (name == null || name == '') {
       alert("Thiếu tên sản phẩm");
       return
@@ -407,10 +421,10 @@ class SuggestItem extends Component {
       return
     }
 
-    // const form = new FormData();
-    // form.append("iamge", "789");
+    const form = new FormData();
+    form.append("image", image_link);
 
-    // console.log(form)
+    await API_CONNECT(Constants.UPLOAD_IMAGE, form, "", "POST")
 
     const body = {
       name: name,
@@ -418,6 +432,7 @@ class SuggestItem extends Component {
       title: title,
       description: description,
       linkdetail: linkdetail,
+      image_link: image_link.name,
       level: level,
       sdktype: sdktype,
       companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
@@ -454,6 +469,7 @@ class SuggestItem extends Component {
       action: "update",
       name: item.name,
       image: item.image,
+      image_link: item.image_link,
       title: item.title,
       description: item.description,
       linkdetail: item.linkdetail,
@@ -470,7 +486,7 @@ class SuggestItem extends Component {
   }
 
   async updateUser() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id, brand_id } = this.state
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id, brand_id, image_link } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -480,9 +496,15 @@ class SuggestItem extends Component {
       return
     }
 
+    const form = new FormData();
+    form.append("image", image_link);
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE, form, "", "POST")
+
     const body = {
       name: name,
       image: image,
+      image_link: image_link.name,
       title: title,
       description: description,
       linkdetail: linkdetail,
@@ -564,6 +586,7 @@ class SuggestItem extends Component {
   onChangeImage(e) {
     let files = e.target.files;
     let reader = new FileReader();
+    this.setState({ image_link: files[0] })
     reader.readAsDataURL(files[0])
     reader.onload = (e) => {
       this.setState({ image: e.target.result })
@@ -590,7 +613,7 @@ class SuggestItem extends Component {
                                 this.setState({ key: e.target.value })
 
                                 if(e.target.value == "") {
-                                  this.getDataPagination(4 * Number(indexPage))
+                                  this.getDataPagination(20 * Number(indexPage))
                                 }
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
@@ -638,10 +661,10 @@ class SuggestItem extends Component {
                               data.map((item, i) => {
                                 return (
                                   <tr key={i}>
-                                    <td className="text-center">{i + 1}</td>
+                                    <td className="text-center">{item.id + 1}</td>
                                     <td className="text-center">{item.name}</td>
                                     <td className="text-center">
-                                      <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
+                                      <img src={item.image} width={"60px"} height={"60px"} />
                                     </td>
                                     <td className="text-center">
                                       {item.title.substr(0, 100) +
@@ -692,7 +715,7 @@ class SuggestItem extends Component {
                 {isSearch ? "" :
                   <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
                     this.setState({ indexPage: v })
-                    await this.getDataPagination(3 * (v))
+                    await this.getDataPagination(20 * (v), v)
                   }} />
                 }
               </div>

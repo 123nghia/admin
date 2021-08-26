@@ -10,15 +10,9 @@ import {
 } from 'reactstrap';
 
 import {
-  CBadge,
   CLabel,
   CRow,
   CCol,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
   CButton,
   CTooltip
 } from '@coreui/react'
@@ -27,7 +21,6 @@ import 'moment-timezone';
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../contants/contants";
 import axios from 'axios'
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
