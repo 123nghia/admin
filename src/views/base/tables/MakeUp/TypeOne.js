@@ -509,7 +509,7 @@ class SuggestItem extends Component {
     const body = {
       name: name,
       image: image,
-      image_link: image_link.name,
+      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
       title: title,
       description: description,
       linkdetail: linkdetail,
