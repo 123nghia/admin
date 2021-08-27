@@ -43,7 +43,7 @@ class SuggestItem extends Component {
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
+      viewingUser: { },
       communities: [],
       updated: '',
       dataApi: [],
@@ -106,7 +106,7 @@ class SuggestItem extends Component {
       this.setState({ isLoadingTable: true });
 
       const res_suggest = await API_CONNECT(
-        Constants.SEARCH_SUGGEST_ITEM_ADMIN + idSDK + "?&key=" + key, {}, "", "GET")
+        Constants.SEARCH_SUGGEST_ITEM_ADMIN + idSDK + "?&key=" + key, { }, "", "GET")
 
       const res_sdk = await axios({
         baseURL: Constants.BASE_URL,
@@ -115,7 +115,7 @@ class SuggestItem extends Component {
       });
 
       const res_brand = await API_CONNECT(
-        Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
+        Constants.LIST_BRAND_PLUGIN_COMPANY, { }, "", "GET")
 
       let val = res_suggest.dataRes;
 
@@ -147,7 +147,7 @@ class SuggestItem extends Component {
 
       const res_suggest = await API_CONNECT(
         //http://localhost:3002/itemSdk/search/611f1461ef623903dbb4f75d/1?&key=c
-        Constants.SEARCH_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?&key=` + key, {}, "", "GET")
+        Constants.SEARCH_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?&key=` + key, { }, "", "GET")
 
       const res_sdk = await axios({
         baseURL: Constants.BASE_URL,
@@ -156,7 +156,7 @@ class SuggestItem extends Component {
       });
 
       const res_brand = await API_CONNECT(
-        Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
+        Constants.LIST_BRAND_PLUGIN_COMPANY, { }, "", "GET")
 
       let val = res_suggest.dataRes;
 
@@ -192,25 +192,28 @@ class SuggestItem extends Component {
     this.setState({ isLoadingTable: true });
     if (type == '0' || type == '1') {
       var res = await API_CONNECT(
-        Constants.LIST_SUGGEST_ITEM_ADMIN + `${idSDK}?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
+        Constants.LIST_SUGGEST_ITEM_ADMIN + `${idSDK}?skip=${Number(totalCount) - Number(skip)}`, { }, "", "GET")
     } else {
       var res = await API_CONNECT(
-        Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
+        Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?skip=${Number(totalCount) - Number(skip)}`, { }, "", "GET")
     }
 
     let val = res.dataRes;
 
-    // console.log(arrPagination[v - 1])
+    //console.log(arrPagination[v - 1])
     // console.log(val)
     // console.log(v)
 
-    for(let i = 0; i < arrPagination[v - 1].length; i++) {
-      val[i].id = arrPagination[v - 1][i]
+    if (arrPagination[v - 1].length != 0) {
+      for (let i = 0; i < arrPagination[v - 1].length; i++) {
+        val[i].id = arrPagination[v - 1][i]
+      }
     }
 
     this.setState({
       dataApi: val,
       isLoadingTable: false,
+      isLoading: false,
       data: val,
       isSearch: false
     });
@@ -234,8 +237,8 @@ class SuggestItem extends Component {
       })
     }
 
-    if(arrTotal.length != 0) {
-      for(let i = 0; i < arrTotal[0].length; i++) {
+    if (arrTotal.length != 0) {
+      for (let i = 0; i < arrTotal[0].length; i++) {
         dataResult[i].id = arrTotal[0][i]
       }
     }
@@ -259,7 +262,7 @@ class SuggestItem extends Component {
     });
 
     const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
+      Constants.LIST_BRAND_PLUGIN_COMPANY, { }, "", "GET")
 
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
@@ -286,14 +289,13 @@ class SuggestItem extends Component {
     });
 
     const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND_PLUGIN_COMPANY + JSON.parse(this.state.userData).company_id, {}, "", "GET")
+      Constants.LIST_BRAND_PLUGIN_COMPANY + JSON.parse(this.state.userData).company_id, { }, "", "GET")
 
 
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
     let brand = res_brand.data;
 
-    console.log(res_suggest)
     this.pagination(totalItem, val);
 
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: brand });
@@ -488,7 +490,8 @@ class SuggestItem extends Component {
   }
 
   async updateUser() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id, brand_id, image_link } = this.state
+    this.setState({ modalCom: !this.state.modalCom })
+    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id, brand_id, image_link, indexPage } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -518,7 +521,7 @@ class SuggestItem extends Component {
       brand_id: brand_id
     }
 
-    this.setState({ isLoading: true, isSearch: false });
+    this.setState({ isLoadingTable: true, isSearch: false });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.UPDATE_SUGGEST_ITEM + this.state.id,
@@ -527,12 +530,13 @@ class SuggestItem extends Component {
     });
 
     if (res.status == 200) {
-      if (this.state.type == '0' || this.state.type == '1') {
-        this.getData()
-      } else {
-        this.getDataForCompany()
-      };
-      this.setState({ modalCom: !this.state.modalCom })
+      this.getDataPagination(20 * Number(indexPage), Number(indexPage))
+      // if (this.state.type == '0' || this.state.type == '1') {
+      //   // this.getData()
+      //   this.getDataPagination(20 * Number(indexPage))
+      // } else {
+      //   this.getDataForCompany()
+      // };
     } else {
       alert("Cập nhật thất bại");
       this.setState({ isLoading: false });
@@ -614,7 +618,7 @@ class SuggestItem extends Component {
                               <Input style={styles.searchInput} onChange={(e) => {
                                 this.setState({ key: e.target.value })
 
-                                if(e.target.value == "") {
+                                if (e.target.value == "") {
                                   this.getDataPagination(20 * Number(indexPage))
                                 }
                               }} name="key" value={key} placeholder="Từ khóa" />
