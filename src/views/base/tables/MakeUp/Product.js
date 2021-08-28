@@ -52,7 +52,7 @@ class Product extends Component {
       activePage: 1,
       page: 1,
       itemsCount: 0,
-      limit: 20,
+      limit: 5,
       totalActive: 0,
       modalCom: false,
       viewingUser: { },
@@ -74,7 +74,7 @@ class Product extends Component {
       modalDelete: false,
       delete: null,
       arrPagination: [],
-      indexPage: 0,
+      indexPage: 1,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
@@ -85,7 +85,10 @@ class Product extends Component {
       colorItemUpdate: [],
       colorItemBase: [],
       colorChooseUpdate: '',
-      collapse: false
+      collapse: false,
+      totalCount: '',
+      isLoadingTable: false,
+      image_show: ""
     };
   }
   async componentDidMount() {
@@ -105,15 +108,50 @@ class Product extends Component {
     }
   }
 
-  pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
+  getDataPagination = async (skip, v) => {
+
+    const { token, totalCount, user, type, arrPagination, indexPage } = this.state;
+
+    this.setState({ isLoadingTable: true });
+    if (type == '0' || type == '1') {
+      var res = await API_CONNECT(
+        Constants.LIST_PRODUCT + `?skip=${Number(totalCount) - Number(skip)}`, { }, "", "GET")
+    } else {
+      var res = await API_CONNECT(
+        Constants.LIST_PRODUCT_COMPANY + JSON.parse(user).company_id + `?skip=${Number(totalCount) - Number(skip)}`, { }, token, "GET")
+    }
+
+    let val = res.data;
+
+    // console.log("arrPagination: ", arrPagination[v - 1])
+    // console.log("val:" , val)
+    // console.log(v)
+    // console.log(indexPage)
+
+    if (arrPagination[v - 1].length != 0) {
+      for (let i = 0; i < arrPagination[v - 1].length; i++) {
+        val[i].id = arrPagination[v - 1][i]
+      }
+    }
+
+    this.setState({
+      dataApi: val,
+      isLoadingTable: false,
+      isLoading: false,
+      data: val,
+      isSearch: false
+    });
+  }
+
+  pagination(dataApi, dataResult) {
+    var i, j, temparray, chunk = this.state.limit;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
 
-    if (arrTotal.length == 0) {
+    if (dataResult.length == 0) {
       this.setState({
         hidden: false
       })
@@ -123,7 +161,13 @@ class Product extends Component {
       })
     }
 
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    if (arrTotal.length != 0) {
+      for (let i = 0; i < arrTotal[0].length; i++) {
+        dataResult[i].id = arrTotal[0][i]
+      }
+    }
+
+    this.setState({ arrPagination: arrTotal, data: dataResult, totalCount: dataApi.length });
   }
 
   getData = async () => {
@@ -142,12 +186,13 @@ class Product extends Component {
       Constants.LIST_COLOR, { }, "", "GET")
 
     let val = res_product.data;
+    let totalItem = res_product.arrTotal;
+
     let brands = res_brand.data;
     let types = res_type.data;
     let colors = res_color.data;
 
-    this.pagination(val);
-
+    this.pagination(totalItem, val);
 
     this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
 
@@ -172,55 +217,16 @@ class Product extends Component {
       Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
 
     let val = res_product.data;
+    let totalItem = res_product.arrTotal;
 
     let brands = res_brand.data;
     let types = res_type.data;
     let colors = res_color.data;
 
-    this.pagination(val);
+    this.pagination(totalItem, val);
     this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
 
     this.setState({ isLoading: false });
-  }
-
-  searchKey(key) {
-    this.setState({ key: key })
-
-    if (key != '') {
-      let d = []
-      this.state.dataApi.map(val => {
-        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
-          d.push(val)
-        }
-      })
-      let active = 0
-
-      this.setState({ data: d, totalActive: active })
-    } else {
-      let active = 0
-
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: this.state.dataApi, totalActive: active })
-    }
-  }
-
-  onChange(key, val) {
-    this.setState({ [key]: val })
-  }
-
-  onChangeImage(e) {
-    let files = e.target.files;
-    this.setState({ image_link: files[0] })
-    let reader = new FileReader();
-    reader.readAsDataURL(files[0])
-    reader.onload = (e) => {
-      this.setState({ image: e.target.result })
-    }
   }
 
   async toggleModal(key) {
@@ -229,6 +235,7 @@ class Product extends Component {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
+        image_show: "",
         name: "",
         image: "",
         href: "",
@@ -237,6 +244,16 @@ class Product extends Component {
         arrProductColor: [],
         collapse: false
       })
+    }
+  }
+
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ image_link: files[0] })
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image: e.target.result, image_show: e.target.result })
     }
   }
 
@@ -324,21 +341,25 @@ class Product extends Component {
       action: "update",
       name: item.name,
       image: item.image,
+      image_link: item.image_link,
       href: item.href,
       type_id: item.type_id.type_id,
       brand_id: item.brand_id._id,
       color_id: item.color_id == null ? null : item.color_id,
+      colorChooseUpdate: item.color_id == null ? null : item.color_id.hex,
       brand_name: item.brand_id.name,
       id: item['_id'],
       arrProductColor: [],
       colorItemUpdate: item.type_id.color_id,
       colorItemBase: item.type_id.color_id,
-      collapse: false
+      collapse: false,
+      image_show: ""
     })
   }
 
   async updateProducts() {
-    const { name, image, href, type_id, brand_id, color_id, image_link } = this.state
+    this.setState({ modalCom: !this.state.modalCom })
+    const { name, image, href, type_id, brand_id, color_id, image_link, indexPage } = this.state
 
     const form = new FormData();
     form.append("image", image_link);
@@ -359,12 +380,12 @@ class Product extends Component {
       name: name,
       href: href,
       image: image,
-      image_link: image_link.name,
+      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
       color_id: color_id,
       id: this.state.id
     }
 
-    this.setState({ isLoading: true });
+    this.setState({ isLoadingTable: true, isSearch: false });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.UPDATE_PRODUCT,
@@ -373,16 +394,16 @@ class Product extends Component {
     });
 
     if (res.status == 200) {
-      if (this.state.type == '0' || this.state.type == '1') {
-        this.getData()
-      } else {
-        this.getData_Company()
-      };
-      console.log(this.state.id)
-      this.setState({ modalCom: !this.state.modalCom })
+      this.getDataPagination(this.state.limit * Number(indexPage), Number(indexPage))
+      // if (this.state.type == '0' || this.state.type == '1') {
+      //   this.getData()
+      // } else {
+      //   this.getData_Company()
+      // };
+
     } else {
       alert("Cập nhật thất bại");
-      this.setState({ isLoading: false });
+      this.setState({ isLoadingTable: false });
     }
   }
 
@@ -418,6 +439,10 @@ class Product extends Component {
 
   }
 
+  onChange(key, val) {
+    this.setState({ [key]: val })
+  }
+
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -433,9 +458,8 @@ class Product extends Component {
   }
 
   searchKey() {
-    const { indexPage, key } = this.state;
+    const { indexPage, key, type } = this.state;
     // this.setState({ key: key })
-    console.log(this.state.dataApi)
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
@@ -456,15 +480,11 @@ class Product extends Component {
 
       this.setState({ data: d, totalActive: active })
     } else {
-      let active = 0
-
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
+      if (type == '0' || type == '1') {
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
     }
   }
 
@@ -735,63 +755,69 @@ class Product extends Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        <th className="text-center">Danh mục cấp 2</th>
-                        <th className="text-center">Thương hiệu</th>
-                        <th className="text-center">Tên sản phẩm</th>
-                        <th className="text-center">Màu</th>
-                        <th className="text-center">Đường dẫn</th>
-                        <th className="text-center">Ảnh</th>
-                        <th className="text-center">#</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.type_id == null ? "" : item.type_id.name}</td>
-                                <td className="text-center">{item.brand_id == null ? "" : item.brand_id.name}</td>
-                                <td className="text-center">{item.name}</td>
-                                <td className="text-center">
-                                  {item.color_id == null ? "" : item.color_id.hex}
-                                  <div style={{ backgroundColor: item.color_id == null ? "" : item.color_id.hex, width: '100%', height: '30px' }}> </div>
-                                </td>
-                                <td className="text-center">
-                                  <a
-                                    href={item.href}
-                                    target="_blank"
-                                  >{`Open web`}</a>
-                                </td>
-                                <td className="text-center" style={{ width: '10%' }}>
-                                  <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
-                                </td>
-                                <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                    <CIcon name="cilTrash" />
-                                  </CButton>
-                                </td>
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </table>
+                  {
+                    this.state.isLoadingTable == false ?
+                      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                        <thead className="thead-light">
+                          <tr>
+                            <th className="text-center">STT.</th>
+                            <th className="text-center">Danh mục cấp 2</th>
+                            <th className="text-center">Thương hiệu</th>
+                            <th className="text-center">Tên sản phẩm</th>
+                            <th className="text-center">Màu</th>
+                            <th className="text-center">Đường dẫn</th>
+                            <th className="text-center">Ảnh</th>
+                            <th className="text-center">#</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                          {
+                            data != undefined ?
+                              data.map((item, i) => {
+                                return (
+                                  <tr key={i}>
+                                    <td className="text-center">{item.id + 1}</td>
+                                    <td className="text-center">{item.type_id == null ? "" : item.type_id.name}</td>
+                                    <td className="text-center">{item.brand_id == null ? "" : item.brand_id.name}</td>
+                                    <td className="text-center">{item.name}</td>
+                                    <td className="text-center">
+                                      {item.color_id == null ? "" : item.color_id.hex}
+                                      <div style={{ backgroundColor: item.color_id == null ? "" : item.color_id.hex, width: '100%', height: '30px' }}> </div>
+                                    </td>
+                                    <td className="text-center">
+                                      <a
+                                        href={item.href}
+                                        target="_blank"
+                                      >{`Open web`}</a>
+                                    </td>
+                                    <td className="text-center" style={{ width: '10%' }}>
+                                      <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
+                                    </td>
+                                    <td className="text-center">
+                                      <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                        <CIcon name="cilPencil" />
+                                      </CButton>
+                                      <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                        <CIcon name="cilTrash" />
+                                      </CButton>
+                                    </td>
+                                  </tr>
+                                );
+                              }) : ""
+                          }
+                        </tbody>
+                      </table> :
+                      <div className="sweet-loading" style={{ height: 370 }}>
+                        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoadingTable} speedMultiplier={1.5} />
+                      </div>
+                  }
                 </CardBody>
               </Card>
               <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
+                  this.setState({ indexPage: v })
+                  await this.getDataPagination(this.state.limit * (v), v)
                 }} />
               </div>
             </Col>
@@ -829,7 +855,7 @@ class Product extends Component {
                       type={"file"}
                       // error={errors.title}
                       onChange={e => { this.onChangeImage(e) }}
-                      onClick={(e) => { e.target.value = null }}
+                      onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
                     // rows="5"
                     />
                     {
