@@ -659,8 +659,8 @@ class SuggestItem extends Component {
                             <th className="text-center">STT.</th>
                             <th className="text-center">Tên</th>
                             <th className="text-center">Ảnh</th>
-                            <th className="text-center">Tiều đề</th>
-                            <th className="text-center">Mô tả</th>
+                            <th className="text-center">Tiêu đề</th>
+                            <th className="text-center">Chi tiết</th>
                             {/* <th className="text-center">Chi tiết</th> */}
                             <th className="text-center">Thương hiệu</th>
                             <th className="text-center">Ảnh thương hiệu</th>
@@ -690,7 +690,7 @@ class SuggestItem extends Component {
                                         (item.title.length > 100 ? "..." : "")}
                                     </td>
                                     <td className="text-center">
-                                      {item.description}
+                                      <a target="_blank" href={item.linkdetail}>Xem chi tiết sản phẩm</a>
                                     </td>
                                     {/* <td className="text-center">
                                   <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
