@@ -121,6 +121,10 @@ class SubTypeMakeUp extends Component {
 
     let val = res_product.data;
 
+    for(let i = 0; i < val.length; i++) {
+      val[i].id = i + 1
+    }
+
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false, arrColor: res_color.data, arrColorChoose: res_color.data });
 
@@ -137,6 +141,11 @@ class SubTypeMakeUp extends Component {
     }, "", "POST")
 
     let val = res_product.data;
+
+    for(let i = 0; i < val.length; i++) {
+      val[i].id = i + 1
+    }
+
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false, arrColor: res_color.data, arrColorChoose: res_color.data });
   }
@@ -483,7 +492,7 @@ class SubTypeMakeUp extends Component {
 
                     {item.hex}
                     <div style={{ backgroundColor: item.hex, width: '100%', height: '20px', margin: 1, border: "1px solid black" }}>
-                      <div onClick={() => { this.onRemoveColor(item._id + "/" + item.hex) }} style={{ marginTop: 3, cursor: 'pointer', marginLeft: 5, width: 15, height: 15, color: '#ffffff', float: 'right', fontSize: 10 }}>X</div>
+                      {/* <div onClick={() => { this.onRemoveColor(item._id + "/" + item.hex) }} style={{ marginTop: 3, cursor: 'pointer', marginLeft: 5, width: 15, height: 15, color: '#ffffff', float: 'right', fontSize: 10 }}>X</div> */}
                     </div>
 
                   </CCol>
@@ -551,7 +560,7 @@ class SubTypeMakeUp extends Component {
 
                     {item.hex}
                     <div style={{ backgroundColor: item.hex, width: '100%', height: '20px', margin: 1, border: "1px solid black" }}>
-                      <div onClick={() => { this.onRemoveColor(item._id + "/" + item.hex) }} style={{ marginTop: 3, cursor: 'pointer', marginLeft: 5, width: 15, height: 15, color: '#ffffff', float: 'right', fontSize: 10 }}>X</div>
+                      {/* <div onClick={() => { this.onRemoveColor(item._id + "/" + item.hex) }} style={{ marginTop: 3, cursor: 'pointer', marginLeft: 5, width: 15, height: 15, color: '#ffffff', float: 'right', fontSize: 10 }}>X</div> */}
                     </div>
 
                   </CCol>
@@ -616,7 +625,7 @@ class SubTypeMakeUp extends Component {
                           data.map((item, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.id}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   <img src={item.image} style={{ width: '50px', height: '50px' }} />

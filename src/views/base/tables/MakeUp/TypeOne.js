@@ -290,18 +290,18 @@ class SuggestItem extends Component {
       method: 'GET'
     });
 
-    const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND_PLUGIN_COMPANY + JSON.parse(this.state.userData).company_id, { }, "", "GET")
+    // const res_brand = await API_CONNECT(
+    //   Constants.LIST_BRAND_PLUGIN_COMPANY + JSON.parse(this.state.userData).company_id, { }, "", "GET")
 
 
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
-    let brand = res_brand.data;
+    //let brand = res_brand.data;
 
 
     this.pagination(totalItem, val);
 
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: brand });
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: res_suggest.data.brand });
 
   }
 
@@ -683,6 +683,7 @@ class SuggestItem extends Component {
                                     <td className="text-center">{item.name}</td>
                                     <td className="text-center">
                                       <img src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
+                                      {/* <img src={`${item.image}`} width={"60px"} height={"60px"} /> */}
                                     </td>
                                     <td className="text-center">
                                       {item.title.substr(0, 100) +

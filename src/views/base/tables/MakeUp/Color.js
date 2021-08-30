@@ -151,12 +151,9 @@ class Color extends Component {
 
     let val = res_color.data.data;
     let sub = res_color.data.sub;
+
     for(let i = 0; i < val.length; i++) {
-      if(sub[i] != undefined){
-        val[i].subName = sub[i].name
-      } else {
-        val[i].subName = ""
-      }
+      val[i].id = i + 1
     }
 
     let product = res_product.data.data;
@@ -458,7 +455,7 @@ class Color extends Component {
                           data.map((item, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.id}</td>
                                 {/* <td className="text-center">{item.product_id == null ? "" : item.product_id.name}</td> */}
                                 <td className="text-center">
                                   {item.hex}

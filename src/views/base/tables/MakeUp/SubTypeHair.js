@@ -121,6 +121,10 @@ class SubTypeHair extends Component {
 
     let val = res_product.data;
 
+    for(let i = 0; i < val.length; i++) {
+      val[i].id = i + 1
+    }
+
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false, arrColor: res_color.data, arrColorChoose: res_color.data });
 
@@ -137,6 +141,11 @@ class SubTypeHair extends Component {
     }, "", "POST")
 
     let val = res_product.data;
+
+    for(let i = 0; i < val.length; i++) {
+      val[i].id = i + 1
+    }
+
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false, arrColor: res_color.data, arrColorChoose: res_color.data });
   }
@@ -616,7 +625,7 @@ class SubTypeHair extends Component {
                           data.map((item, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.id}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   <img src={item.image} style={{ width: '50px', height: '50px' }} />
