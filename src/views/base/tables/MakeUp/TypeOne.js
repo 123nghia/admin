@@ -202,13 +202,16 @@ class SuggestItem extends Component {
 
     let val = res.dataRes;
 
-    console.log(arrPagination[v - 1])
-    console.log(val)
-    console.log(v)
+    // console.log(arrPagination[v - 1])
+    // console.log(arrPagination)
+    // console.log(res.dataRes)
+    // console.log(v)
 
     if (arrPagination[v - 1].length != 0) {
       for (let i = 0; i < arrPagination[v - 1].length; i++) {
-        val[i].id = arrPagination[v - 1][i]
+        if(i + 1 <= val.length) {
+          val[i].id = arrPagination[v - 1][i]
+        }
       }
     }
 
@@ -611,6 +614,18 @@ class SuggestItem extends Component {
     }
   }
 
+  getBadge(name, defaults) {
+    switch (name) {
+      case 'K1': return 'Chăm sóc da hằng ngày'
+      case 'K5': return 'Hỗ trợ giảm lão hoá'
+      case 'K6': return 'Hỗ trợ điều trị mụn'
+      case 'K7': return 'Hỗ trợ giảm quầng thâm mắt'
+      case 'K8': return 'Hỗ trợ giảm lỗ chân lông'
+      case 'K9': return 'Hỗ trợ giảm thâm nám da'
+      default: return defaults
+    }
+  }
+
   render() {
     const { data, arrPagination, arrLevel, arrOptionSdkType, key, arrBrand, isSearch, indexPage } = this.state;
     if (!this.state.isLoading) {
@@ -822,11 +837,11 @@ class SuggestItem extends Component {
                     arrOptionSdkType.map((item, i) => {
                       if (item._id == this.state.type_sdk_id) {
                         return (
-                          <option selected key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{item.Name}</option>
+                          <option selected key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
                         );
                       } else {
                         return (
-                          <option key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{item.Name}</option>
+                          <option key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
                         );
                       }
                     })
