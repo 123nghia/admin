@@ -43,7 +43,7 @@ const TheContent = () => {
             })}
             {
               type == '0' || type == '1' ?
-              <Redirect from="/" to="/list_order" /> : <Redirect from="/" to="/profile" />
+              <Redirect from="/" to="/suggest/K1" /> : <Redirect from="/" to="/profile" />
             }
           </Switch>
         </Suspense>

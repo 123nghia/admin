@@ -3,7 +3,7 @@ import { Button, Col, Row } from 'reactstrap';
 import validateInput from '../../../shared/validations/login';
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-import Constants from "./../../../contants/contants";
+import Constants from "./../../../contants/contants_app";
 import Logo from "./../../../../src/assets/img/logo_head.png";
 import md5 from "md5";
 import {
@@ -49,7 +49,7 @@ class Login extends Component {
       this.setState({ errors: {}, isLoading: true });
       const res = await axios({
         baseURL: Constants.BASE_URL,
-        url: Constants.PLUGIN_LOGIN_ADMIN,
+        url: Constants.LOGIN_ADMIN_APP,
         method: 'POST',
         data: {
           username: this.state.username,
@@ -68,16 +68,16 @@ class Login extends Component {
         localStorage.setItem('type', token.type);
         localStorage.setItem('token', res.data.data.token);
 
-        if (token.type == '0' || token.type == '1') {
+        if (token.type == '0') {
           localStorage.setItem('isAD', "0");
-          this.props.history.push('/list_order')
+          this.props.history.push('/suggest/K1')
         } else {
           localStorage.setItem('isAD', "1");
-          this.props.history.push('/profile')
+          this.props.history.push('/suggest/K1')
         }
       } else {
         console.log(this.state.username)
-        console.log(this.state.password)
+        console.log(md5(this.state.password))
         this.setState({ isLoading: false, errors: { common: 'Tên đăng nhập hoặc mật khẩu không chính xác' } });
       }
     }

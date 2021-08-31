@@ -238,4 +238,5 @@ export default {
   "DELETE_CONTACT_CUSTOMER": "/api/delete-contact-customers",
   "UPDATE_CONTACT_STATUS": "/api/update-contact-status",
 
+  "LOGIN_ADMIN_APP" : "/api/login-admin",
 };

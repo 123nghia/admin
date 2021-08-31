@@ -1,4 +1,5 @@
 import React from 'react';
+import UserAdmin from './views/base/tables/Admin_App/Users/UserAdmin';
 
 const Dashboard = React.lazy(() => import('./views/DashBoard/Dashboard'));
 const TableUser = React.lazy(() => import('./views/base/tables/TableUser'));
@@ -48,6 +49,18 @@ const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTyp
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 
+//ADMIN APP
+const UserApp = React.lazy(() => import('./views/base/tables/Admin_App/Users/UserTable'));
+const BrandApp = React.lazy(() => import('./views/base/tables/Admin_App/MakeUp/Brand'));
+const SubTypeApp = React.lazy(() => import('./views/base/tables/Admin_App/MakeUp/SubType'));
+const ColorApp = React.lazy(() => import('./views/base/tables/Admin_App/MakeUp/Color'));
+const SkuApp = React.lazy(() => import('./views/base/tables/Admin_App/MakeUp/Sku'));
+const SkuHairApp = React.lazy(() => import('./views/base/tables/Admin_App/Hair/Sku'));
+const HairColorApp = React.lazy(() => import('./views/base/tables/Admin_App/Hair/Color'));
+const SuggestOne = React.lazy(() => import('./views/base/tables/Admin_App/Skins/SuggestItem'));
+const ListCompany = React.lazy(() => import('./views/base/tables/Admin_App/Users/ListCompany'));
+const ListUserAdmin = React.lazy(() => import('./views/base/tables/Admin_App/Users/UserAdmin'));
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -89,7 +102,7 @@ const routes = [
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
 
   //Admin MakeUp
-  { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
+  // { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
   { path: '/brand', name: 'BRAND', component: Brand },
   { path: '/product', name: 'BRAND', component: Product },
   { path: '/subtype', name: 'Sub Type', component: SubType },
@@ -102,6 +115,23 @@ const routes = [
   { path: '/items/3', name: 'K4', component: TypeOne },
   { path: '/items/4', name: 'K5', component: TypeOne },
   { path: '/items/5', name: 'K6', component: TypeOne },
+
+  //Admin App
+  { path: '/users_table', name: 'User Table', component: UserApp },
+  { path: '/brand_table', name: 'Brand Table', component: BrandApp },
+  { path: '/subtype_table', name: 'Type Table', component: SubTypeApp },
+  { path: '/color_table', name: 'Color Table', component: ColorApp },
+  { path: '/sku_table', name: 'Color Table', component: SkuApp },
+  { path: '/sku_hair', name: 'Color Table', component: SkuHairApp },
+  { path: '/color_hair', name: 'Color Table', component: HairColorApp },
+  { path: '/suggest/K1', name: 'Color Table', component: SuggestOne },
+  { path: '/suggest/K5', name: 'Color Table', component: SuggestOne },
+  { path: '/suggest/K6', name: 'Color Table', component: SuggestOne },
+  { path: '/suggest/K7', name: 'Color Table', component: SuggestOne },
+  { path: '/suggest/K8', name: 'Color Table', component: SuggestOne },
+  { path: '/suggest/K9', name: 'Color Table', component: SuggestOne },
+  { path: '/list_company', name: 'List Company', component: ListCompany },
+  { path: '/user_admin', name: 'List Company', component: ListUserAdmin },
 ];
 
 export default routes;
