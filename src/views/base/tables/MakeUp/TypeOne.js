@@ -510,11 +510,7 @@ class SuggestItem extends Component {
     } else if (title == null || title == '') {
       alert("Thiếu tên tiêu đề cho sản phẩm");
       return
-    } else if (image_link == null || image_link == '') {
-      alert("Thiếu hình ảnh cho sản phẩm");
-      return
     }
-
 
     const form = new FormData();
     form.append("image", image_link);
@@ -697,8 +693,10 @@ class SuggestItem extends Component {
                                     <td className="text-center">{item.id + 1}</td>
                                     <td className="text-center">{item.name}</td>
                                     <td className="text-center">
-                                      <img src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
-                                      {/* <img src={`${item.image}`} width={"60px"} height={"60px"} /> */}
+                                      {
+                                        item.image_link == null ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
+                                        <img src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
+                                      }
                                     </td>
                                     <td className="text-center">
                                       {item.title.substr(0, 100) +
