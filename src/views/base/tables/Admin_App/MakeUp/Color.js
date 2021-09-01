@@ -114,9 +114,11 @@ class Color extends Component {
     if (key == 'new') {
       this.setState({
         modalCom: !this.state.modalCom,
-        action: key,
-        vi: '',
-        image: ''
+        action: "key",
+        hex: "",
+        makeup_id: "",
+        alpha: "",
+        ver: ""
       })
     }
   }
@@ -173,8 +175,10 @@ class Color extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      vi: item.vi,
-      image: item.image,
+      hex: item.hex,
+      makeup_id: item.makeup_id,
+      alpha: item.alpha,
+      ver: item.ver,
       id: item['_id'],
     })
   }
@@ -194,6 +198,7 @@ class Color extends Component {
     const res = await API_CONNECT(
       ConstantApp.UPDATE_COLOR, body, "", "POST")
 
+      console.log(res)
     if (res.status == 200) {
 
       this.getData()

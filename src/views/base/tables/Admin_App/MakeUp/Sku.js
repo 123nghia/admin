@@ -54,6 +54,7 @@ const colourStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
     const color = chroma(data.hex);
+    console.log(color)
     return {
       ...styles,
       backgroundColor: isDisabled
@@ -200,6 +201,8 @@ class Cards extends Component {
         hidden: true
       })
     }
+
+    console.log(arrTotal[4])
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
@@ -501,8 +504,8 @@ class Cards extends Component {
                                   >{`Open web`}</a>
                                 </th>
                                 <td className="text-center">
-                                  {item.color.hex}
-                                  <div style={{ backgroundColor: item.color.hex, width: '100%', height: '30px' }}> </div>
+                                  {item.color != null ? item.color.hex : "#ffffff"}
+                                  <div style={{ backgroundColor: item.color != null ? item.color.hex : "#ffffff", width: '100%', height: '30px' }}> </div>
                                 </td>
                                 <th style={styles.w15}>
                                   <img src={item.image} style={styles.image} />

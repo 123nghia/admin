@@ -23,6 +23,7 @@ import {
   CButton
 } from '@coreui/react'
 import TextArea from "../../../../Common/TextArea";
+import validateInput from "./../../../../../functions/news";
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import ConstantApp from "../../../../../contants/contants_app";
@@ -244,6 +245,71 @@ class News extends Component {
   goSearch() {
     this.loadData();
   }
+
+  isValid() {
+    const { errors, isValid } = validateInput(this.state);
+    if (!isValid) {
+      this.setState({ errors });
+    }
+    return isValid;
+  }
+
+  updateApp = () => {
+    console.log("this.state", this.state);
+    if (this.isValid()) {
+      this.setState({ errors: {}, isLoading: true });
+      const id = this.state.updateId;
+      // process utc time
+      // end process utc time
+      const body = {
+        name: this.state.name.trim() || "",
+        image: this.state.image.trim() || "",
+        title: this.state.title.trim() || "",
+        description: this.state.description.trim() || "",
+        linkdetail: this.state.linkdetail.trim() || "",
+        level: this.state.level || "",
+        sdktype: this.state.sdktype || "",
+        companyid: this.state.companyid || "",
+      };
+      if (this.state.action === "update") {
+        const fetchData = {
+          method: "PUT",
+          headers: headers,
+          body: JSON.stringify(body),
+        };
+        fetch(BASE_URL + `/itemSdk/${id}`, fetchData)
+          .then(async () => {
+            this.cancelCreate();
+            this.loadData();
+            this.setState({
+              created: "News updated successfully",
+              isLoading: false,
+              deleted: false,
+            });
+          })
+          .catch(console.log);
+      } else {
+        console.log("vodayko");
+        const fetchData = {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(body),
+        };
+        console.log(fetchData);
+        fetch(BASE_URL + "/itemSdk", fetchData)
+          .then(async () => {
+            this.cancelCreate();
+            this.loadData();
+            this.setState({
+              created: "News created successfully",
+              isLoading: false,
+              deleted: false,
+            });
+          })
+          .catch(console.log);
+      }
+    }
+  };
 
   render() {
     const {
@@ -479,7 +545,7 @@ class News extends Component {
             <ModalFooter>
               <Button
                 color="primary"
-                onClick={(e) => { }}
+                onClick={(e) => { this.updateApp() }}
                 disabled={this.state.isLoading}
               >
                 Lưu
