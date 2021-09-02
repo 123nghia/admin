@@ -511,4 +511,75 @@ const _navOrther = [
   },
 ]
 
-export default [_navSoida, _navMakeUp, _navOrther]
+const _navBooking = [
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý đặt lịch'],
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách đặt lịch ',
+    to: '/danh-sach-dat-lich',
+   icon: <CIcon style={css} content={freeSet.cilCalendar} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.customer}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách dịch vụ ',
+    to: '/danh-sach-dich-vu',
+icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content="">
+        <CIcon content={freeSet.cilHamburgerMenu} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách địa điểm',
+    to: '/danh-sach-dia-diem',
+   icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content="Danh sách địa điểm">
+        <CIcon content={freeSet.cilHamburgerMenu} />
+      </CTooltip>,
+    }
+  }
+  
+]
+
+const _navGH = [
+      {
+        _tag: 'CSidebarNavTitle',
+        _children: ['Quản lý gian hàng'],
+        role: ['0', '1', '2'],
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Bảng điều khiển ',
+        to: '/danh-sach-dat-lich',
+       icon: <CIcon style={css} content={freeSet.cilCalendar} customClasses="c-sidebar-nav-icon" />,
+        role: ['0', '1', '2'],
+        badge: {
+          color: 'info',
+          text: <CTooltip placement={"right"} content={content.customer}>
+            <CIcon content={freeSet.cilBellExclamation} />
+          </CTooltip>,
+        }
+      }
+ ]
+
+
+
+export default [_navSoida, _navMakeUp, _navOrther,_navBooking,_navGH]
