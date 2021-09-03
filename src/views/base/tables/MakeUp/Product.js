@@ -52,7 +52,7 @@ class Product extends Component {
       activePage: 1,
       page: 1,
       itemsCount: 0,
-      limit: 5,
+      limit: 10,
       totalActive: 0,
       modalCom: false,
       viewingUser: { },
@@ -88,7 +88,7 @@ class Product extends Component {
       collapse: false,
       totalCount: '',
       isLoadingTable: false,
-      image_show: ""
+      image_show: "",
     };
   }
   async componentDidMount() {
@@ -176,25 +176,13 @@ class Product extends Component {
     const res_product = await API_CONNECT(
       Constants.LIST_PRODUCT, { }, "", "GET")
 
-    const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND, { }, "", "GET")
-
-    const res_type = await API_CONNECT(
-      Constants.LIST_TYPE + "/null", { }, "", "GET")
-
-    const res_color = await API_CONNECT(
-      Constants.LIST_COLOR, { }, "", "GET")
-
     let val = res_product.data;
     let totalItem = res_product.arrTotal;
 
-    let brands = res_brand.data;
-    let types = res_type.data;
-    let colors = res_color.data;
 
     this.pagination(totalItem, val);
 
-    this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
+    this.setState({ dataApi: val });
 
     let active = 0
 
@@ -207,31 +195,54 @@ class Product extends Component {
     const res_product = await API_CONNECT(
       Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id, { }, this.state.token, "GET")
 
-    const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
+    if (res_product.status == 200) {
+      let val = res_product.data;
+      let totalItem = res_product.arrTotal;
 
-    const res_type = await API_CONNECT(
-      Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", { }, "", "GET")
-
-    const res_color = await API_CONNECT(
-      Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
-
-    let val = res_product.data;
-    let totalItem = res_product.arrTotal;
-
-    let brands = res_brand.data;
-    let types = res_type.data;
-    let colors = res_color.data;
-
-    this.pagination(totalItem, val);
-    this.setState({ dataApi: val, brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
-
-    this.setState({ isLoading: false });
+      this.pagination(totalItem, val);
+      this.setState({ isLoading: false, dataApi: val });
+    }
   }
 
   async toggleModal(key) {
 
+    if (this.state.brands.length == 0 && this.state.types.length == 0 && this.state.colors.length == 0) {
+      if (this.state.type == '0' || this.state.type == '1') {
+        const res_brand = await API_CONNECT(
+          Constants.LIST_BRAND, { }, "", "GET")
+
+        const res_type = await API_CONNECT(
+          Constants.LIST_TYPE + "/null", { }, "", "GET")
+
+        const res_color = await API_CONNECT(
+          Constants.LIST_COLOR, { }, "", "GET")
+
+        var brands = res_brand.data;
+        var types = res_type.data;
+        var colors = res_color.data;
+
+        this.setState({ brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
+
+      } else {
+        const res_brand = await API_CONNECT(
+          Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
+
+        const res_type = await API_CONNECT(
+          Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", { }, "", "GET")
+
+        const res_color = await API_CONNECT(
+          Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
+
+        var brands = res_brand.data;
+        var types = res_type.data;
+        var colors = res_color.data;
+
+        this.setState({ brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
+      }
+    }
+
     if (key == 'new') {
+      console.log(this.state.types.length)
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
@@ -245,6 +256,7 @@ class Product extends Component {
         collapse: false
       })
     }
+
   }
 
   onChangeImage(e) {
@@ -323,6 +335,7 @@ class Product extends Component {
         }
 
         if (this.state.type == '0' || this.state.type == '1') {
+          console.log(res.data)
           this.getData()
         } else {
           this.getData_Company()
@@ -336,6 +349,35 @@ class Product extends Component {
   }
 
   async openUpdate(item) {
+    const { brands, types, colors } = this.state;
+    if (brands.length == 0 && types.length == 0 && colors.length == 0) {
+      if (this.state.type == '0' || this.state.type == '1') {
+        const res_brand = await API_CONNECT(
+          Constants.LIST_BRAND, { }, "", "GET")
+
+        const res_type = await API_CONNECT(
+          Constants.LIST_TYPE + "/null", { }, "", "GET")
+
+        const res_color = await API_CONNECT(
+          Constants.LIST_COLOR, { }, "", "GET")
+
+        this.setState({ brands: res_brand.data, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
+
+      } else {
+        const res_brand = await API_CONNECT(
+          Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
+
+        const res_type = await API_CONNECT(
+          Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", { }, "", "GET")
+
+        const res_color = await API_CONNECT(
+          Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
+
+        this.setState({ brands: res_brand.data, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
+      }
+    }
+
+
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -361,6 +403,10 @@ class Product extends Component {
     this.setState({ modalCom: !this.state.modalCom })
     const { name, image, href, type_id, brand_id, color_id, image_link, indexPage } = this.state
 
+    console.log(name)
+    console.log(href)
+    console.log(type_id)
+    console.log(brand_id)
     const form = new FormData();
     form.append("image", image_link);
 
@@ -716,7 +762,7 @@ class Product extends Component {
           <CButton color="primary" onClick={e => {
             this.addProduct()
           }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-          <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+          <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</CButton>
         </ModalFooter>
       </div>
     )
@@ -946,7 +992,7 @@ class Product extends Component {
                   </ModalBody>
                   <ModalFooter>
                     <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Save</CButton>{' '}
-                    <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+                    <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Cancel</CButton>
                   </ModalFooter>
                 </div>
             }
@@ -959,7 +1005,7 @@ class Product extends Component {
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div>

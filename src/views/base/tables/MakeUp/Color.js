@@ -47,8 +47,6 @@ class Color extends Component {
       dataApi: [],
       hidden: false,
       action: 'new',
-      products: [],
-      product_id: '',
       hex: "",
       makeup_id: "",
       alpha: "",
@@ -109,12 +107,6 @@ class Color extends Component {
       method: 'GET'
     });
 
-    const res_product = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_PRODUCT,
-      method: 'GET'
-    });
-
 
     let val = res_color.data.data;
     let sub = res_color.data.sub;
@@ -126,27 +118,17 @@ class Color extends Component {
       }
     }
 
-    let product = res_product.data.data;
-
     this.pagination(val);
-    this.setState({ dataApi: val, products: product, isLoading: false })
+    this.setState({ dataApi: val, isLoading: false })
   }
 
   getData_Company = async () => {
-    const { user } = this.state
     this.setState({ isLoading: true });
     const res_color = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id,
       method: 'GET',
     });
-
-    const res_product = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id,
-      method: 'GET',
-    });
-
 
 
     let val = res_color.data.data;
@@ -156,10 +138,8 @@ class Color extends Component {
       val[i].id = i + 1
     }
 
-    let product = res_product.data.data;
-
     this.pagination(val);
-    this.setState({ dataApi: val, products: product, isLoading: false });
+    this.setState({ dataApi: val, isLoading: false });
 
   }
 
@@ -194,7 +174,6 @@ class Color extends Component {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
-        product_id: this.state.products.length == 0 ? '' : this.state.products[0]._id,
         hex: "",
         makeup_id: "",
         alpha: "",
@@ -208,18 +187,16 @@ class Color extends Component {
   }
 
   async addRoles() {
-    const { hex, makeup_id, alpha, product_id, version } = this.state;
+    const { hex, makeup_id, alpha, version } = this.state;
 
     if (hex == null || hex == '' ||
       makeup_id == null || makeup_id == '' ||
-      alpha == null || alpha == '' ||
-      product_id == null || product_id == '') {
+      alpha == null || alpha == '') {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
-      product_id: product_id,
       hex: hex,
       makeup_id: makeup_id,
       alpha: alpha,
@@ -252,7 +229,6 @@ class Color extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      product_id: item.product_id._id,
       hex: item.hex,
       makeup_id: item.makeup_id,
       alpha: item.alpha,
@@ -262,19 +238,16 @@ class Color extends Component {
   }
 
   async updateUser() {
-    const { hex, makeup_id, alpha, product_id, version } = this.state;
+    const { hex, makeup_id, alpha, version } = this.state;
 
-    console.log(product_id)
     if (hex == null || hex == '' ||
       makeup_id == null || makeup_id == '' ||
-      alpha == null || alpha == '' ||
-      product_id == null || product_id == '') {
+      alpha == null || alpha == '') {
       alert("Please fill in all the requirements");
       return
     }
 
     const body = {
-      product_id: product_id,
       hex: hex,
       makeup_id: makeup_id,
       alpha: alpha,
@@ -357,8 +330,7 @@ class Color extends Component {
       let d = []
       this.state.dataApi.map(val => {
         if (val.hex.toLocaleUpperCase().includes(key.toLocaleUpperCase())||
-        val.makeup_id.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-        val.product_id.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        val.makeup_id.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -402,7 +374,7 @@ class Color extends Component {
   }
 
   render() {
-    const { data, arrPagination, products, type, key } = this.state;
+    const { data, arrPagination, type, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -456,7 +428,6 @@ class Color extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{item.id}</td>
-                                {/* <td className="text-center">{item.product_id == null ? "" : item.product_id.name}</td> */}
                                 <td className="text-center">
                                   {item.hex}
                                   <div style={{ backgroundColor: item.hex, width: '100%', height: '30px' }}> </div>
@@ -507,25 +478,6 @@ class Color extends Component {
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
-              <CLabel>Chọn sản phẩm:</CLabel>
-              <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.setState({ product_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    products.map((item, i) => {
-                      if (item._id == this.state.product_id) {
-                        return (
-                          <option selected key={i} value={item._id}>{item.name}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id}>{item.name}</option>
-                        );
-                      }
-                    })
-                  }
-                </CSelect>
-              </div>
-
               <TextFieldGroup
                 field="hex"
                 label="Hex"

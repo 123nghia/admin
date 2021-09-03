@@ -465,6 +465,7 @@ class SuggestItem extends Component {
       if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
+        console.log(res)
         this.getDataForCompany()
       };
       this.setState({ modalCom: !this.state.modalCom })
@@ -694,7 +695,7 @@ class SuggestItem extends Component {
                                     <td className="text-center">{item.name}</td>
                                     <td className="text-center">
                                       {
-                                        item.image_link == null ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
+                                        item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
                                         <img src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
