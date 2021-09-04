@@ -120,6 +120,10 @@ class SuggestItem extends Component {
 
       let val = res_suggest.dataRes;
 
+      for(let i = 0; i < val.length; i++) {
+        val[i].id = i
+      }
+
       let brand = res_brand.data;
 
       if (val.length == 0) {
@@ -161,6 +165,10 @@ class SuggestItem extends Component {
 
       let val = res_suggest.dataRes;
 
+      for(let i = 0; i < val.length; i++) {
+        val[i].id = i
+      }
+
       let brand = res_brand.data;
 
       if (val.length == 0) {
@@ -173,7 +181,6 @@ class SuggestItem extends Component {
         })
       }
 
-      console.log(val)
       this.setState({
         dataApi: val,
         sdkItem: res_sdk.data,
@@ -201,11 +208,6 @@ class SuggestItem extends Component {
     }
 
     let val = res.dataRes;
-
-    // console.log(arrPagination[v - 1])
-    // console.log(arrPagination)
-    // console.log(res.dataRes)
-    // console.log(v)
 
     if (arrPagination[v - 1].length != 0) {
       for (let i = 0; i < arrPagination[v - 1].length; i++) {
@@ -266,16 +268,12 @@ class SuggestItem extends Component {
       method: 'GET'
     });
 
-    const res_brand = await API_CONNECT(
-      Constants.LIST_BRAND_PLUGIN_COMPANY, { }, "", "GET")
 
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
 
-    let brand = res_brand.data;
-
     this.pagination(totalItem, val);
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: brand, isLoading: false });
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: res_suggest.data.brand, isLoading: false });
   }
 
   getDataForCompany = async () => {
@@ -293,14 +291,9 @@ class SuggestItem extends Component {
       method: 'GET'
     });
 
-    // const res_brand = await API_CONNECT(
-    //   Constants.LIST_BRAND_PLUGIN_COMPANY + JSON.parse(this.state.userData).company_id, { }, "", "GET")
-
 
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
-    //let brand = res_brand.data;
-
 
     this.pagination(totalItem, val);
 

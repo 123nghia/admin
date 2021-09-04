@@ -52,7 +52,7 @@ class Product extends Component {
       activePage: 1,
       page: 1,
       itemsCount: 0,
-      limit: 10,
+      limit: 5,
       totalActive: 0,
       modalCom: false,
       viewingUser: { },
@@ -335,7 +335,6 @@ class Product extends Component {
         }
 
         if (this.state.type == '0' || this.state.type == '1') {
-          console.log(res.data)
           this.getData()
         } else {
           this.getData_Company()
@@ -403,10 +402,6 @@ class Product extends Component {
     this.setState({ modalCom: !this.state.modalCom })
     const { name, image, href, type_id, brand_id, color_id, image_link, indexPage } = this.state
 
-    console.log(name)
-    console.log(href)
-    console.log(type_id)
-    console.log(brand_id)
     const form = new FormData();
     form.append("image", image_link);
 
@@ -838,7 +833,10 @@ class Product extends Component {
                                       >{`Open web`}</a>
                                     </td>
                                     <td className="text-center" style={{ width: '10%' }}>
-                                      <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
+                                      {
+                                        item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
+                                          <img src={`https://api-soida.applamdep.com/public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
+                                      }
                                     </td>
                                     <td className="text-center">
                                       <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
