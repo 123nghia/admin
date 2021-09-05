@@ -295,6 +295,8 @@ class SuggestItem extends Component {
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
 
+    console.log(res_suggest)
+
     this.pagination(totalItem, val);
 
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: res_suggest.data.brand });
@@ -762,7 +764,7 @@ class SuggestItem extends Component {
 
               <TextFieldGroup
                 field="image"
-                label="Ảnh thương hiệu"
+                label="Ảnh sản phẩm"
                 type={"file"}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}

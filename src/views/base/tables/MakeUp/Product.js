@@ -55,7 +55,7 @@ class Product extends Component {
       limit: 5,
       totalActive: 0,
       modalCom: false,
-      viewingUser: { },
+      viewingUser: {},
       communities: [],
       updated: '',
       dataApi: [],
@@ -89,6 +89,8 @@ class Product extends Component {
       totalCount: '',
       isLoadingTable: false,
       image_show: "",
+      image_link: "",
+      image_link_save: "",
     };
   }
   async componentDidMount() {
@@ -115,10 +117,10 @@ class Product extends Component {
     this.setState({ isLoadingTable: true });
     if (type == '0' || type == '1') {
       var res = await API_CONNECT(
-        Constants.LIST_PRODUCT + `?skip=${Number(totalCount) - Number(skip)}`, { }, "", "GET")
+        Constants.LIST_PRODUCT + `?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
     } else {
       var res = await API_CONNECT(
-        Constants.LIST_PRODUCT_COMPANY + JSON.parse(user).company_id + `?skip=${Number(totalCount) - Number(skip)}`, { }, token, "GET")
+        Constants.LIST_PRODUCT_COMPANY + JSON.parse(user).company_id + `?skip=${Number(totalCount) - Number(skip)}`, {}, token, "GET")
     }
 
     let val = res.data;
@@ -174,7 +176,7 @@ class Product extends Component {
     this.setState({ isLoading: true });
 
     const res_product = await API_CONNECT(
-      Constants.LIST_PRODUCT, { }, "", "GET")
+      Constants.LIST_PRODUCT, {}, "", "GET")
 
     let val = res_product.data;
     let totalItem = res_product.arrTotal;
@@ -193,56 +195,22 @@ class Product extends Component {
     this.setState({ isLoading: true });
 
     const res_product = await API_CONNECT(
-      Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id, { }, this.state.token, "GET")
+      Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id, {}, this.state.token, "GET")
 
     if (res_product.status == 200) {
       let val = res_product.data;
       let totalItem = res_product.arrTotal;
 
       this.pagination(totalItem, val);
+
+
       this.setState({ isLoading: false, dataApi: val });
     }
   }
 
   async toggleModal(key) {
 
-    if (this.state.brands.length == 0 && this.state.types.length == 0 && this.state.colors.length == 0) {
-      if (this.state.type == '0' || this.state.type == '1') {
-        const res_brand = await API_CONNECT(
-          Constants.LIST_BRAND, { }, "", "GET")
-
-        const res_type = await API_CONNECT(
-          Constants.LIST_TYPE + "/null", { }, "", "GET")
-
-        const res_color = await API_CONNECT(
-          Constants.LIST_COLOR, { }, "", "GET")
-
-        var brands = res_brand.data;
-        var types = res_type.data;
-        var colors = res_color.data;
-
-        this.setState({ brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
-
-      } else {
-        const res_brand = await API_CONNECT(
-          Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
-
-        const res_type = await API_CONNECT(
-          Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", { }, "", "GET")
-
-        const res_color = await API_CONNECT(
-          Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
-
-        var brands = res_brand.data;
-        var types = res_type.data;
-        var colors = res_color.data;
-
-        this.setState({ brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
-      }
-    }
-
     if (key == 'new') {
-      console.log(this.state.types.length)
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
@@ -254,6 +222,41 @@ class Product extends Component {
         brand_id: this.state.brands.length == 0 ? '' : this.state.brands[0]._id,
         arrProductColor: [],
         collapse: false
+      }, async () => {
+        if (this.state.brands.length == 0 && this.state.types.length == 0 && this.state.colors.length == 0) {
+          if (this.state.type == '0' || this.state.type == '1') {
+            const res_brand = await API_CONNECT(
+              Constants.LIST_BRAND, {}, "", "GET")
+
+            const res_type = await API_CONNECT(
+              Constants.LIST_TYPE + "/null", {}, "", "GET")
+
+            const res_color = await API_CONNECT(
+              Constants.LIST_COLOR, {}, "", "GET")
+
+            var brands = res_brand.data;
+            var types = res_type.data;
+            var colors = res_color.data;
+
+            this.setState({ brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
+
+          } else {
+            const res_brand = await API_CONNECT(
+              Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+
+            const res_type = await API_CONNECT(
+              Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", {}, "", "GET")
+
+            const res_color = await API_CONNECT(
+              Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+
+            var brands = res_brand.data;
+            var types = res_type.data;
+            var colors = res_color.data;
+
+            this.setState({ brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
+          }
+        }
       })
     }
 
@@ -262,7 +265,7 @@ class Product extends Component {
   onChangeImage(e) {
     let files = e.target.files;
     let reader = new FileReader();
-    this.setState({ image_link: files[0] })
+    this.setState({ image_link: files[0].name, image_link_save: files[0] })
     reader.readAsDataURL(files[0])
     reader.onload = (e) => {
       this.setState({ image: e.target.result, image_show: e.target.result })
@@ -349,33 +352,6 @@ class Product extends Component {
 
   async openUpdate(item) {
     const { brands, types, colors } = this.state;
-    if (brands.length == 0 && types.length == 0 && colors.length == 0) {
-      if (this.state.type == '0' || this.state.type == '1') {
-        const res_brand = await API_CONNECT(
-          Constants.LIST_BRAND, { }, "", "GET")
-
-        const res_type = await API_CONNECT(
-          Constants.LIST_TYPE + "/null", { }, "", "GET")
-
-        const res_color = await API_CONNECT(
-          Constants.LIST_COLOR, { }, "", "GET")
-
-        this.setState({ brands: res_brand.data, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
-
-      } else {
-        const res_brand = await API_CONNECT(
-          Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
-
-        const res_type = await API_CONNECT(
-          Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", { }, "", "GET")
-
-        const res_color = await API_CONNECT(
-          Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, { }, "", "GET")
-
-        this.setState({ brands: res_brand.data, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
-      }
-    }
-
 
     this.setState({
       modalCom: !this.state.modalCom,
@@ -395,15 +371,41 @@ class Product extends Component {
       colorItemBase: item.type_id.color_id,
       collapse: false,
       image_show: ""
+    }, async () => {
+      if (brands.length == 0 && types.length == 0 && colors.length == 0) {
+        if (this.state.type == '0' || this.state.type == '1') {
+          const res_brand = await API_CONNECT(
+            Constants.LIST_BRAND, {}, "", "GET")
+
+          const res_type = await API_CONNECT(
+            Constants.LIST_TYPE + "/null", {}, "", "GET")
+
+          const res_color = await API_CONNECT(
+            Constants.LIST_COLOR, {}, "", "GET")
+
+          this.setState({ brands: res_brand.data, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
+
+        } else {
+          const res_brand = await API_CONNECT(
+            Constants.LIST_BRAND_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+
+          const res_type = await API_CONNECT(
+            Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", {}, "", "GET")
+
+          const res_color = await API_CONNECT(
+            Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
+
+          this.setState({ brands: res_brand.data, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
+        }
+      }
     })
   }
 
   async updateProducts() {
-    this.setState({ modalCom: !this.state.modalCom })
-    const { name, image, href, type_id, brand_id, color_id, image_link, indexPage } = this.state
+    const { name, image, href, type_id, brand_id, color_id, image_link, indexPage, image_link_save } = this.state
 
     const form = new FormData();
-    form.append("image", image_link);
+    form.append("image", image_link_save);
 
     await API_CONNECT(Constants.UPLOAD_IMAGE_MAKEUP, form, "", "POST")
 
@@ -415,13 +417,15 @@ class Product extends Component {
       return
     }
 
+    this.setState({ modalCom: !this.state.modalCom })
+
     const body = {
       type_id: type_id,
       brand_id: brand_id,
       name: name,
       href: href,
       image: image,
-      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
+      image_link: image_link,
       color_id: color_id,
       id: this.state.id
     }
@@ -894,7 +898,7 @@ class Product extends Component {
 
                     <TextFieldGroup
                       field="image"
-                      label="Ảnh thương hiệu"
+                      label="Ảnh sản phẩm"
                       type={"file"}
                       // error={errors.title}
                       onChange={e => { this.onChangeImage(e) }}
@@ -903,7 +907,9 @@ class Product extends Component {
                     />
                     {
                       this.state.image == "" ? "" :
-                        <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
+                        <img width="250" height="300" src={
+                          this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_makeup/${this.state.image_link}` : this.state.image
+                        } style={{ marginBottom: 20 }} />
                     }
 
                     <div style={{ width: "100%" }}>
@@ -928,17 +934,17 @@ class Product extends Component {
                     <CLabel>Danh mục:</CLabel>
                     <div style={{ width: "100%" }}>
                       <CSelect onChange={async e => {
-                        this.setState({ type_id: e.target.value })
+                        this.setState({ type_id: JSON.parse(e.target.value)._id, colorItemUpdate: JSON.parse(e.target.value).color_id });
                       }} custom size="sm" name="selectSm" id="SelectLm">
                         {
                           types.map((item, i) => {
                             if (item.type_id == this.state.type_id) {
                               return (
-                                <option selected key={i} value={item._id}>{item.name}</option>
+                                <option selected key={i} value={JSON.stringify(item)}>{item.name}</option>
                               );
                             } else {
                               return (
-                                <option key={i} value={item._id}>{item.name}</option>
+                                <option key={i} value={JSON.stringify(item)}>{item.name}</option>
                               );
                             }
                           })
