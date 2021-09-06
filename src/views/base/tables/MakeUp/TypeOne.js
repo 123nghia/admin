@@ -471,6 +471,7 @@ class SuggestItem extends Component {
   }
 
   async openUpdate(item) {
+    console.log(item.brand_id)
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",

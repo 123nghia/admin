@@ -305,7 +305,6 @@ class Product extends Component {
       for (let i = 0; i < arrProductColor.length; i++) {
         if (arrProductColor[i].color_id == "") {
           alert("Sản phẩm thứ " + (i + 1) + " chưa được chọn màu");
-          this.setState({ modalCom: !this.state.modalCom })
           return;
         }
       }
