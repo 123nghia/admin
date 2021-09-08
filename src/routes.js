@@ -42,6 +42,7 @@ const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPl
 const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestItem'));
 const Brand = React.lazy(() => import('./views/base/tables/MakeUp/Brand'));
 const Product = React.lazy(() => import('./views/base/tables/MakeUp/Product'));
+const ProductHair = React.lazy(() => import('./views/base/tables/MakeUp/ProductHair'));
 const SubType = React.lazy(() => import('./views/base/tables/MakeUp/SubType'));
 const SubTypeHair = React.lazy(() => import('./views/base/tables/MakeUp/SubTypeHair'));
 const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTypeMakeUp'));
@@ -92,6 +93,7 @@ const routes = [
   { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
   { path: '/brand', name: 'BRAND', component: Brand },
   { path: '/product', name: 'BRAND', component: Product },
+  { path: '/product_hair', name: 'BRAND', component: ProductHair },
   { path: '/subtype', name: 'Sub Type', component: SubType },
   { path: '/subtype_hair', name: 'Sub Type', component: SubTypeHair },
   { path: '/subtype_makeup', name: 'Sub Type', component: SubTypeMakeUp },

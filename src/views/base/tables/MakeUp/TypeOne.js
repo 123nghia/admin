@@ -272,6 +272,8 @@ class SuggestItem extends Component {
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
 
+    console.log(res_suggest.data)
+
     this.pagination(totalItem, val);
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: res_suggest.data.brand, isLoading: false });
   }
@@ -295,7 +297,7 @@ class SuggestItem extends Component {
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
 
-    console.log(res_suggest)
+    console.log(res_suggest.data.brand)
 
     this.pagination(totalItem, val);
 

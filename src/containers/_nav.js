@@ -220,6 +220,19 @@ const _navMakeUp = [
             </CTooltip>,
     }
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm',
+    to: '/product_hair',
+    icon: <CIcon style={css} content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.product}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>,
+    }
+  },
 ]
 
 const _navOrther = [

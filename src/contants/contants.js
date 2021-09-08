@@ -200,8 +200,11 @@ export default {
   "DELETE_BRAND_PLUGIN": "/delete-brand-plugin",
 
   "LIST_PRODUCT": "/product",
+  "LIST_PRODUCT_HAIR": "/product_hair",
   "LIST_PRODUCT_COMPANY": "/product/",
+  "LIST_PRODUCT_COMPANY_HAIR": "/product_hair/",
   "ADD_PRODUCT": "/add-product",
+  "ADD_PRODUCT_HAIR": "/add-product-hair",
   "UPDATE_PRODUCT": "/update-product",
   "DELETE_PRODUCT": "/delete-product",
 

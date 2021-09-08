@@ -42,7 +42,7 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-class Product extends Component {
+class ProductHair extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -176,7 +176,7 @@ class Product extends Component {
     this.setState({ isLoading: true });
 
     const res_product = await API_CONNECT(
-      Constants.LIST_PRODUCT, {}, "", "GET")
+      Constants.LIST_PRODUCT_HAIR, {}, "", "GET")
 
     let val = res_product.data;
     let totalItem = res_product.arrTotal;
@@ -195,7 +195,7 @@ class Product extends Component {
     this.setState({ isLoading: true });
 
     const res_product = await API_CONNECT(
-      Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id, {}, this.state.token, "GET")
+      Constants.LIST_PRODUCT_COMPANY_HAIR + JSON.parse(this.state.user).company_id, {}, this.state.token, "GET")
 
     if (res_product.status == 200) {
       let val = res_product.data;
@@ -323,7 +323,7 @@ class Product extends Component {
       this.setState({ isLoading: true });
       const res = await axios({
         baseURL: Constants.BASE_URL,
-        url: Constants.ADD_PRODUCT,
+        url: Constants.ADD_PRODUCT_HAIR,
         method: 'POST',
         data: body
       });
@@ -1106,4 +1106,4 @@ const styles = {
   },
 }
 
-export default Product;
+export default ProductHair;
