@@ -165,19 +165,6 @@ const _navMakeUp = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Danh mục tóc',
-    to: '/subtype_hair',
-    icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.subType}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
     name: 'Danh mục trang điểm',
     to: '/subtype_makeup',
     icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
@@ -189,35 +176,6 @@ const _navMakeUp = [
             </CTooltip>,
     }
   },
-  // {
-  //   _tag: 'CSidebarNavDropdown',
-  //   name: 'Danh mục chi tiết',
-  //   icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
-  //   _children: [{
-  //     _tag: 'CSidebarNavItem',
-  //     name: 'Danh mục tóc',
-  //     to: '/subtype_hair',
-  //     role: ['0', '1', '2'],
-  //     badge: {
-  //       color: 'info',
-  //       text: <CTooltip placement={"right"} content={content.subType}>
-  //               <CIcon content={freeSet.cilBellExclamation} />
-  //             </CTooltip>,
-  //     }
-  //   }, {
-  //     _tag: 'CSidebarNavItem',
-  //     name: 'Danh mục trang điểm',
-  //     to: '/subtype_makeup',
-  //     role: ['0', '1', '2'],
-  //     badge: {
-  //       color: 'info',
-  //       text: <CTooltip placement={"right"} content={content.subType}>
-  //               <CIcon content={freeSet.cilBellExclamation} />
-  //             </CTooltip>,
-  //     }
-  //   }],
-  //   role: ['0', '1', '2'],
-  // },
   {
     _tag: 'CSidebarNavItem',
     name: 'Mã màu',
@@ -240,6 +198,24 @@ const _navMakeUp = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.product}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý tóc'],
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh mục tóc',
+    to: '/subtype_hair',
+    icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.subType}>
               <CIcon content={freeSet.cilBellExclamation} />
             </CTooltip>,
     }

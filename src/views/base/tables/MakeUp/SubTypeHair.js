@@ -125,6 +125,8 @@ class SubTypeHair extends Component {
       val[i].id = i + 1
     }
 
+    console.log(val)
+
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false, arrColor: res_color.data, arrColorChoose: res_color.data });
 
@@ -257,7 +259,7 @@ class SubTypeHair extends Component {
   }
 
   async addRoles() {
-    const { vi, image, hover, sub_type, color_id } = this.state
+    const { vi, image, hover, arrShowColor, color_id } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
       alert("Please fill in all the requirements");
@@ -267,10 +269,10 @@ class SubTypeHair extends Component {
     const body = {
       vi: vi,
       image: image,
-      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
+      company_id: this.state.type == '0' || this.state.type == '1' ? null : JSON.parse(this.state.user).company_id,
       hover: hover,
       sub_type: "1",
-      color_id: color_id
+      color_id: arrShowColor
     }
 
     this.setState({ isLoading: true });
