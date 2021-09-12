@@ -184,6 +184,7 @@ export default {
   "UPDATE_SUGGEST_ITEM": "/itemSdk/",
   "UPLOAD_IMAGE": "/itemSdk/upload_image",
   "UPLOAD_IMAGE_MAKEUP": "/itemSdk/upload_image_makeup",
+  "UPLOAD_IMAGE_BRAND": "/itemSdk/upload_image_brand",
   "DELETE_SUGGEST_ITEM": "/itemSdk/deleteItem",
   "LIST_SDK": "/sdk",
 

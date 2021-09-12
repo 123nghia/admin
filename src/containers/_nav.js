@@ -64,19 +64,19 @@ const _navSoida = [
             </CTooltip>,
     },
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Chăm sóc da hằng ngày',
-    to: '/items/0',
-    icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
-    },
-  },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Chăm sóc da hằng ngày',
+  //   to: '/items/0',
+  //   icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  //   role: ['0', '1', '2'],
+  //   badge: {
+  //     color: 'info',
+  //     text: <CTooltip placement={"right"} content={content.suggest}>
+  //             <CIcon content={freeSet.cilBellExclamation} />
+  //           </CTooltip>,
+  //   },
+  // },
   {
     _tag: 'CSidebarNavItem',
     name: 'Hỗ trợ giảm lão hóa da',

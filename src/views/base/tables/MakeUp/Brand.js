@@ -16,6 +16,7 @@ import {
   CCol
 } from '@coreui/react'
 
+import API_CONNECT from "../../../../functions/callAPI";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
@@ -56,6 +57,8 @@ class Brand extends Component {
       action: 'new',
       name: "",
       image: "",
+      image_show: "",
+      image_link: "",
       link: "",
       modalDelete: false,
       delete: null,
@@ -196,6 +199,7 @@ class Brand extends Component {
         action: key,
         name: "",
         image: "",
+        image_show: "",
         link: ""
       })
     }
@@ -206,16 +210,22 @@ class Brand extends Component {
   }
 
   async addRoles() {
-    const { name, image, link } = this.state
+    const { name, image, link, image_link } = this.state
     if (name == null || name == '' ||
       image == null || image == '') {
       alert("Please fill in all the requirements");
       return
     }
 
+    const form = new FormData();
+    form.append("image", image_link);
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
+
     const body = {
       name: name,
       image: image,
+      image_link: image_link.name,
       company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
       link: link
     }
@@ -247,13 +257,15 @@ class Brand extends Component {
       action: "update",
       name: item.name,
       image: item.image,
+      image_show: "",
+      image_link: item.image_link,
       id: item['_id'],
       link: item.link
     })
   }
 
   async updateUser() {
-    const { name, image, link } = this.state
+    const { name, image, link, image_link } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '') {
@@ -261,9 +273,15 @@ class Brand extends Component {
       return
     }
 
+    const form = new FormData();
+    form.append("image", image_link);
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
+
     const body = {
       name: name,
       image: image,
+      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
       id: this.state.id,
       link: link
     }
@@ -399,7 +417,12 @@ class Brand extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                <td className="text-center"><img src={item.image} width={"90px"} height={"70px"} /></td>
+                                <td className="text-center">
+                                  {
+                                    item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
+                                      <img src={`https://api-soida.applamdep.com/public/image_brand/${item.image_link}`} width={"60px"} height={"60px"} />
+                                  }
+                                </td>
                                 <td className="text-center">
                                   <a href={item.link} target="_blank">{item.link}</a>
                                 </td>
@@ -462,12 +485,14 @@ class Brand extends Component {
                 type={"file"}
                 // error={errors.title}
                 onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null }}
+                onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               // rows="5"
               />
               {
-                this.state.image == "" ? "" :
-                  <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
+                this.state.image == "" || this.state.image == null || this.state.image == undefined ?
+                  "" :
+                  <img width="250" height="300" src={
+                    this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
               }
 
               <TextFieldGroup
