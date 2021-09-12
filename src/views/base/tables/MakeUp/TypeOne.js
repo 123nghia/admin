@@ -297,8 +297,6 @@ class SuggestItem extends Component {
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
 
-    console.log(res_suggest.data.brand)
-
     this.pagination(totalItem, val);
 
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: res_suggest.data.brand });
@@ -711,7 +709,7 @@ class SuggestItem extends Component {
                                       {item.brand_id == null ? "" : item.brand_id.name}
                                     </td>
                                     <td className="text-center">
-                                      <img src={item.brand_id == null ? "" : item.brand_id.image} width={"60px"} height={"60px"} />
+                                      {<img src={`https://api-soida.applamdep.com/public/image_brand/${item.brand_id.image_link}`} width={"60px"} height={"60px"} />}
                                     </td>
                                     <td className="text-center">
                                       {item.type_product_id.Name}
