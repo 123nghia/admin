@@ -18,6 +18,7 @@ import {
   CRow, CCol
 } from '@coreui/react'
 
+import CreatableSelect from 'react-select/creatable';
 import API_CONNECT from "../../../../functions/callAPI";
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
@@ -43,7 +44,7 @@ class SuggestItem extends Component {
       limit: 5,
       totalActive: 0,
       modalCom: false,
-      viewingUser: { },
+      viewingUser: {},
       communities: [],
       updated: '',
       dataApi: [],
@@ -77,6 +78,8 @@ class SuggestItem extends Component {
       arrOptionProductType: [],
       arrLevel: [],
       arrBrand: [],
+      arrOptionBrand: [],
+      objectValueBrand: {},
       idSDK: window.location.hash.split('/')[window.location.hash.split('/').length - 1],
       totalCount: '',
       isLoadingTable: false,
@@ -107,7 +110,7 @@ class SuggestItem extends Component {
       this.setState({ isLoadingTable: true });
 
       const res_suggest = await API_CONNECT(
-        Constants.SEARCH_SUGGEST_ITEM_ADMIN + idSDK + "?&key=" + key, { }, "", "GET")
+        Constants.SEARCH_SUGGEST_ITEM_ADMIN + idSDK + "?&key=" + key, {}, "", "GET")
 
       const res_sdk = await axios({
         baseURL: Constants.BASE_URL,
@@ -116,11 +119,11 @@ class SuggestItem extends Component {
       });
 
       const res_brand = await API_CONNECT(
-        Constants.LIST_BRAND_PLUGIN_COMPANY, { }, "", "GET")
+        Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
 
       let val = res_suggest.dataRes;
 
-      for(let i = 0; i < val.length; i++) {
+      for (let i = 0; i < val.length; i++) {
         val[i].id = i
       }
 
@@ -136,11 +139,19 @@ class SuggestItem extends Component {
         })
       }
 
+      let arrTempOptionBrand = [];
+      for (let i = 0; i < brand.length; i++) {
+        arrTempOptionBrand.push({
+          value: brand[i]._id, label: brand[i].name
+        })
+      }
+
       this.setState({
         dataApi: val,
         sdkItem: res_sdk.data,
         currentSdkSelect: res_sdk.data[0],
         arrBrand: brand,
+        arrOptionBrand: arrTempOptionBrand,
         isLoadingTable: false,
         data: val,
         isSearch: true
@@ -152,7 +163,7 @@ class SuggestItem extends Component {
 
       const res_suggest = await API_CONNECT(
         //http://localhost:3002/itemSdk/search/611f1461ef623903dbb4f75d/1?&key=c
-        Constants.SEARCH_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?&key=` + key, { }, "", "GET")
+        Constants.SEARCH_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?&key=` + key, {}, "", "GET")
 
       const res_sdk = await axios({
         baseURL: Constants.BASE_URL,
@@ -161,11 +172,11 @@ class SuggestItem extends Component {
       });
 
       const res_brand = await API_CONNECT(
-        Constants.LIST_BRAND_PLUGIN_COMPANY, { }, "", "GET")
+        Constants.LIST_BRAND_PLUGIN_COMPANY, {}, "", "GET")
 
       let val = res_suggest.dataRes;
 
-      for(let i = 0; i < val.length; i++) {
+      for (let i = 0; i < val.length; i++) {
         val[i].id = i
       }
 
@@ -181,11 +192,19 @@ class SuggestItem extends Component {
         })
       }
 
+      let arrTempOptionBrand = [];
+      for (let i = 0; i < brand.length; i++) {
+        arrTempOptionBrand.push({
+          value: brand[i]._id, label: brand[i].name
+        })
+      }
+
       this.setState({
         dataApi: val,
         sdkItem: res_sdk.data,
         currentSdkSelect: res_sdk.data[0],
         arrBrand: brand,
+        arrOptionBrand: arrTempOptionBrand,
         isLoadingTable: false,
         data: val,
         isSearch: true
@@ -201,17 +220,17 @@ class SuggestItem extends Component {
     this.setState({ isLoadingTable: true });
     if (type == '0' || type == '1') {
       var res = await API_CONNECT(
-        Constants.LIST_SUGGEST_ITEM_ADMIN + `${idSDK}?skip=${Number(totalCount) - Number(skip)}`, { }, "", "GET")
+        Constants.LIST_SUGGEST_ITEM_ADMIN + `${idSDK}?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
     } else {
       var res = await API_CONNECT(
-        Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?skip=${Number(totalCount) - Number(skip)}`, { }, "", "GET")
+        Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
     }
 
     let val = res.dataRes;
 
     if (arrPagination[v - 1].length != 0) {
       for (let i = 0; i < arrPagination[v - 1].length; i++) {
-        if(i + 1 <= val.length) {
+        if (i + 1 <= val.length) {
           val[i].id = arrPagination[v - 1][i]
         }
       }
@@ -271,11 +290,17 @@ class SuggestItem extends Component {
 
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
+    let arrB = res_suggest.data.brand;
 
-    console.log(res_suggest.data)
+    let arrTempOptionBrand = [];
+    for (let i = 0; i < arrB.length; i++) {
+      arrTempOptionBrand.push({
+        value: arrB[i]._id, label: arrB[i].name
+      })
+    }
 
     this.pagination(totalItem, val);
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: res_suggest.data.brand, isLoading: false });
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: arrB, arrOptionBrand: arrTempOptionBrand, isLoading: false });
   }
 
   getDataForCompany = async () => {
@@ -299,7 +324,16 @@ class SuggestItem extends Component {
 
     this.pagination(totalItem, val);
 
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: res_suggest.data.brand });
+    let arrB = res_suggest.data.brand;
+
+    let arrTempOptionBrand = [];
+    for (let i = 0; i < arrB.length; i++) {
+      arrTempOptionBrand.push({
+        value: arrB[i]._id, label: arrB[i].name
+      })
+    }
+
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: arrB, arrOptionBrand: arrTempOptionBrand });
 
   }
 
@@ -396,7 +430,9 @@ class SuggestItem extends Component {
         title: "",
         description: "",
         linkdetail: "",
-        brand_id: arrBrand[0]._id,
+        //brand_id: arrBrand[0]._id,
+        brand_id: this.state.arrOptionBrand[0].value,
+        objectValueBrand: this.state.arrOptionBrand[0],
         level: "K1",
         sdktype: "1",
         type_sdk_id: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0]._id,
@@ -472,6 +508,7 @@ class SuggestItem extends Component {
 
   async openUpdate(item) {
     console.log(item.brand_id)
+    let objValue = { value: item.brand_id == null ? "" : item.brand_id._id, label: item.brand_id == null ? "" : item.brand_id.name }
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -487,6 +524,7 @@ class SuggestItem extends Component {
       type_product_id: item.type_product_id._id,
       type_sdk_id: item.type_sdk_id._id,
       companyid: item.companyid,
+      objectValueBrand: objValue,
       id: item['_id'],
       Status: item.Status,
       arrLevel: item.type_sdk_id.Level,
@@ -619,8 +657,13 @@ class SuggestItem extends Component {
     }
   }
 
+  handleChange = (newValue, actionMeta) => {
+    this.setState({ objectValueBrand: newValue, brand_id: newValue.value })
+    console.log(newValue.value);
+  };
+
   render() {
-    const { data, arrPagination, arrLevel, arrOptionSdkType, key, arrBrand, isSearch, indexPage } = this.state;
+    const { data, arrPagination, arrLevel, arrOptionSdkType, key, arrBrand, isSearch, indexPage, arrOptionBrand, objectValueBrand } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -692,7 +735,7 @@ class SuggestItem extends Component {
                                     <td className="text-center">
                                       {
                                         item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
-                                        <img src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
+                                          <img src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
                                     <td className="text-center">
@@ -752,7 +795,7 @@ class SuggestItem extends Component {
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
+          <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
@@ -773,7 +816,7 @@ class SuggestItem extends Component {
               {
                 this.state.image == "" ? "" :
                   <img width="250" height="300" src={
-                  this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_plugin/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
+                    this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_plugin/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
               }
 
               <TextFieldGroup
@@ -787,7 +830,7 @@ class SuggestItem extends Component {
               <label className="control-label">Mô tả</label>
               <CTextarea
                 name="description"
-                rows="7"
+                rows="3"
                 value={this.state.description}
                 onChange={(e) => { this.setState({ description: e.target.value }) }}
                 placeholder="Mô tả"
@@ -801,7 +844,15 @@ class SuggestItem extends Component {
                 onChange={e => this.onChange("linkdetail", e.target.value)}
               />
 
-              <CLabel>Nhãn hiệu:</CLabel>
+              <CreatableSelect
+                isClearable
+                onChange={this.handleChange}
+                value={objectValueBrand}
+                // onInputChange={this.handleInputChange}
+                options={arrOptionBrand}
+              />
+
+              {/* <CLabel>Nhãn hiệu:</CLabel>
               <div style={{ width: "100%" }}>
                 <CSelect onChange={async e => {
                   this.setState({ brand_id: e.target.value })
@@ -820,7 +871,7 @@ class SuggestItem extends Component {
                     })
                   }
                 </CSelect>
-              </div>
+              </div> */}
 
 
               <div style={{ width: "100%" }} className="mt-3">

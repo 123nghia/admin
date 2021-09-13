@@ -27,6 +27,7 @@ import {
   CInputFile
 } from '@coreui/react'
 
+import CreatableSelect from 'react-select/creatable';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
@@ -69,6 +70,8 @@ class Product extends Component {
       href: '',
       image: '',
       brands: [],
+      arrOptionBrand: [],
+      objectValueBrand: {},
       types: [],
       colors: [],
       modalDelete: false,
@@ -238,7 +241,17 @@ class Product extends Component {
             var types = res_type.data;
             var colors = res_color.data;
 
-            this.setState({ brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
+            let arrTempOptionBrand = [];
+            for (let i = 0; i < brands.length; i++) {
+              arrTempOptionBrand.push({
+                value: brands[i]._id, label: brands[i].name
+              })
+            }
+
+            this.setState({
+              brands: brands, objectValueBrand: this.state.arrTempOptionBrand[0], brand_id: this.state.arrTempOptionBrand[0].value,
+              arrOptionBrand: arrTempOptionBrand, types: types, colors: colors, colorItem: types[0].color_id
+            });
 
           } else {
             const res_brand = await API_CONNECT(
@@ -254,7 +267,16 @@ class Product extends Component {
             var types = res_type.data;
             var colors = res_color.data;
 
-            this.setState({ brands: brands, types: types, colors: colors, colorItem: types[0].color_id });
+            let arrTempOptionBrand = [];
+            for (let i = 0; i < brands.length; i++) {
+              arrTempOptionBrand.push({
+                value: brands[i]._id, label: brands[i].name
+              })
+            }
+            this.setState({
+              brands: brands, objectValueBrand: arrTempOptionBrand[0], brand_id: arrTempOptionBrand[0].value,
+              arrOptionBrand: arrTempOptionBrand, types: types, colors: colors, colorItem: types[0].color_id
+            });
           }
         }
       })
@@ -351,7 +373,7 @@ class Product extends Component {
 
   async openUpdate(item) {
     const { brands, types, colors } = this.state;
-
+    let objValue = { value: item.brand_id == null ? "" : item.brand_id._id, label: item.brand_id == null ? "" : item.brand_id.name }
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -361,6 +383,7 @@ class Product extends Component {
       href: item.href,
       type_id: item.type_id.type_id,
       brand_id: item.brand_id._id,
+      objectValueBrand: objValue,
       color_id: item.color_id == null ? null : item.color_id,
       colorChooseUpdate: item.color_id == null ? null : item.color_id.hex,
       brand_name: item.brand_id.name,
@@ -382,7 +405,13 @@ class Product extends Component {
           const res_color = await API_CONNECT(
             Constants.LIST_COLOR, {}, "", "GET")
 
-          this.setState({ brands: res_brand.data, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
+          let arrTempOptionBrand = [];
+          for (let i = 0; i < res_brand.data.length; i++) {
+            arrTempOptionBrand.push({
+              value: res_brand.data[i]._id, label: res_brand.data[i].name
+            })
+          }
+          this.setState({ brands: res_brand.data, arrOptionBrand: arrTempOptionBrand, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
 
         } else {
           const res_brand = await API_CONNECT(
@@ -394,7 +423,13 @@ class Product extends Component {
           const res_color = await API_CONNECT(
             Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
 
-          this.setState({ brands: res_brand.data, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
+          let arrTempOptionBrand = [];
+          for (let i = 0; i < res_brand.data.length; i++) {
+            arrTempOptionBrand.push({
+              value: res_brand.data[i]._id, label: res_brand.data[i].name
+            })
+          }
+          this.setState({ brands: res_brand.data, arrOptionBrand: arrTempOptionBrand, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
         }
       }
     })
@@ -609,7 +644,7 @@ class Product extends Component {
   }
 
   renderFormAdd() {
-    const { brands, types, brand_name, arrProductColor, colorItem, keyColor, type_id } = this.state;
+    const { brands, types, brand_name, arrProductColor, colorItem, keyColor, type_id, objectValueBrand, arrOptionBrand } = this.state;
     return (
       <div>
         <ModalHeader>Thêm mới</ModalHeader>
@@ -630,7 +665,15 @@ class Product extends Component {
             onChange={e => this.onChange("href", e.target.value)}
           />
 
-          <div style={{ width: "100%" }}>
+          <CLabel>Thương hiệu:</CLabel>
+          <CreatableSelect
+            isClearable
+            onChange={this.handleChange}
+            value={objectValueBrand}
+            // onInputChange={this.handleInputChange}
+            options={arrOptionBrand}
+          />
+          {/* <div style={{ width: "100%" }}>
             <CLabel>Thương hiệu:</CLabel>
             <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
               {
@@ -647,7 +690,7 @@ class Product extends Component {
                 })
               }
             </CSelect>
-          </div>
+          </div> */}
 
           <CLabel>Danh mục:</CLabel>
           <div style={{ width: "100%" }}>
@@ -766,8 +809,14 @@ class Product extends Component {
     )
   }
 
+  handleChange = (newValue, actionMeta) => {
+    this.setState({ objectValueBrand: newValue, brand_id: newValue.value })
+    console.log(newValue.value);
+  };
+
   render() {
-    const { data, arrPagination, brands, types, brand_name, key, collapse, keyColor, colorItemUpdate, colorChooseUpdate } = this.state;
+    const { data, arrPagination, arrOptionBrand, objectValueBrand,
+      brands, types, brand_name, key, collapse, keyColor, colorItemUpdate, colorChooseUpdate } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -910,8 +959,17 @@ class Product extends Component {
                           this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_makeup/${this.state.image_link}` : this.state.image
                         } style={{ marginBottom: 20 }} />
                     }
-
-                    <div style={{ width: "100%" }}>
+                    {/* <div style={{ width: "100%" }}> */}
+                    <CLabel>Thương hiệu:</CLabel>
+                    <CreatableSelect
+                      isClearable
+                      onChange={this.handleChange}
+                      value={objectValueBrand}
+                      // onInputChange={this.handleInputChange}
+                      options={arrOptionBrand}
+                    />
+                    {/* </div> */}
+                    {/* <div style={{ width: "100%" }}>
                       <CLabel>Thương hiệu:</CLabel>
                       <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
                         {
@@ -928,7 +986,7 @@ class Product extends Component {
                           })
                         }
                       </CSelect>
-                    </div>
+                    </div> */}
 
                     <CLabel>Danh mục:</CLabel>
                     <div style={{ width: "100%" }}>
