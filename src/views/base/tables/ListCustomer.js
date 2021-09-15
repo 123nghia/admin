@@ -235,21 +235,10 @@ class Users extends Component {
       headers: this.state.token
     })
 
-    let arrCount_All_User = [];
+    let dataRes = resAll.data.data;
 
-    // this.getSaleDataOfUser()
-
-    for (let i = 0; i < resAll.data.data.length; i++) {
-      //check if exits in arr
-      //if (!arrCount_All_User.some(item => resAll.data.data[i].Name == item.Name)) {
-      var data = await this.getSaleDataOfUser(resAll.data.data[i].Sale_Id);
-      resAll.data.data[i].Address = data.Address;
-      resAll.data.data[i].NameSale = data.Name;
-      arrCount_All_User.push(resAll.data.data[i])
-      //}
-    }
-    // console.log(arrCount_All_User)
-    if (arrCount_All_User.length == 0) {
+    console.log(dataRes)
+    if (dataRes.length == 0) {
       this.setState({
         hidden_all: false
       })
@@ -259,9 +248,9 @@ class Users extends Component {
       })
     }
 
-    this.setState({ dataApi: arrCount_All_User });
+    this.setState({ dataApi: dataRes });
 
-    this.pagination_all(arrCount_All_User);
+    this.pagination_all(dataRes);
     this.setState({ isLoading: false });
   }
 
@@ -520,8 +509,8 @@ class Users extends Component {
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.NameSale}</td>
-                              <td className="text-center">{item.Address}</td>
+                              <td className="text-center">{item.Sale_Id.Name}</td>
+                              <td className="text-center">{item.Sale_Id.Address}</td>
                               <td className="text-center">{item.Email}</td>
                               <td className="text-center">{item.Phone}</td>
                               <td className="text-center">{item.Gender}</td>

@@ -438,13 +438,17 @@ class Users extends Component {
   }
 
   async toggleModal(key) {
+
+    this.setState({
+      modalCom: !this.state.modalCom,
+      action: key
+    })
+
     await this.getCompanyData()
     await this.getSaleData()
     await this.getRoleData()
     if (key == 'new') {
       this.setState({
-        modalCom: !this.state.modalCom,
-        action: key,
         Email: '',
         Name: '',
         Phone: '',
@@ -510,13 +514,17 @@ class Users extends Component {
   }
 
   async openUpdate(item) {
+
+    this.setState({
+      modalCom: !this.state.modalCom,
+      action: "update"
+    })
+
     await this.getCompanyData(item.Company_Id)
     await this.getSaleData(item.Sale_Id)
     await this.getRoleData(item.Role_Id)
 
     this.setState({
-      modalCom: !this.state.modalCom,
-      action: "update",
       Email: item.Email,
       Address: item.Address,
       Name: item.Name,
@@ -559,7 +567,6 @@ class Users extends Component {
       Role_Id: Role_Id,
       UserName: UserName,
       Password: Password,
-      Sale_Id: Sale_Id,
       Code: Code,
       id: this.state.id,
       Status: Status
@@ -637,17 +644,7 @@ class Users extends Component {
       method: 'POST',
     });
 
-    if (id != '' || id != undefined) {
-      const currentC = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.LIST_COMPANY_WITH_ID + id,
-        method: 'POST',
-      });
-      if (currentC.data.data != null || currentC.data.data != undefined) {
-        this.setState({ currentCompany: currentC.data.data.Name });
-      }
-    }
-    this.setState({ dataCompany: resCompany.data.data });
+    this.setState({ dataCompany: resCompany.data.data, currentCompany: id == null || id == undefined ? "" : id.Name });
   }
 
   async getSaleData(id) {
@@ -657,17 +654,7 @@ class Users extends Component {
       method: 'GET',
     });
 
-    if (id != '' || id != undefined) {
-      const currentSale = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.LIST_SALE_WITH_ID + id,
-        method: 'GET',
-      });
-      if (currentSale.data.data != null || currentSale.data.data != undefined) {
-        this.setState({ currentSale: currentSale.data.data.Name });
-      }
-    }
-    this.setState({ dataSale: resSale.data.data });
+    this.setState({ dataSale: resSale.data.data, currentSale: id == null || id == undefined ? "" : id.Name });
   }
 
   async getRoleData(id) {
@@ -678,18 +665,7 @@ class Users extends Component {
       headers: this.state.token
     });
 
-    if (id != '' || id != undefined) {
-      const currentRole = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.LIST_ROLE_WITH_ID + id,
-        method: 'GET',
-        headers: this.state.token
-      });
-      if (currentRole.data.data != null || currentRole.data.data != undefined) {
-        this.setState({ currentRole: currentRole.data.data.Name });
-      }
-    }
-    this.setState({ dataRole: resRole.data.data });
+    this.setState({ dataRole: resRole.data.data, currentRole: id == null || id == undefined ? "" : id.Name });
   }
 
   getBadge(status) {
@@ -755,46 +731,6 @@ class Users extends Component {
                   </CCol>
                 </CRow>
               </div>
-
-
-
-              {/* <CRow>
-                <CCol lg="5" sm="5" md="5" xs="12">
-                  <div style={styles.tags}>
-                    {
-                      role == 'SALES' ? "" :
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
-                          <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Add</Button>
-                        </div>
-                    }
-                  </div>
-                </CCol>
-                <CCol lg="7" sm="7" md="7" xs="12">
-                  <div>Choose Month</div>
-                  <CSelect style={{ width: 300, float: 'left', backgroundColor: '#ffff99' }} onChange={async e => { await this.check(e) }} custom size="sm" name="selectSm" id="SelectLm">
-                    {
-                      this.state.arrMonthWithDefault.map((item, i) => {
-                        if (item == "00") {
-                          return (
-                            <option selected value={item}>Get All</option>
-                          );
-                        } else {
-                          if (item == this.state.month) {
-                            return (
-                              <option selected value={item}>{item}</option>
-                            );
-                          } else {
-                            return (
-                              <option value={item}>{item}</option>
-                            );
-                          }
-                        }
-                      })
-                    }
-                  </CSelect>
-                </CCol>
-              </CRow> */}
             </CardHeader>
             <CardBody>
               {
@@ -1013,7 +949,7 @@ class Users extends Component {
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <Button color="secondary" onClick={e => {this.setState({ modalCom: !this.state.modalCom})}}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
@@ -1024,7 +960,7 @@ class Users extends Component {
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
             </ModalFooter>
           </Modal>
         </div>

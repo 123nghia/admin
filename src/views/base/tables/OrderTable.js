@@ -104,12 +104,14 @@ class Order extends Component {
       method: 'POST',
     });
 
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    let data = res.data.data
+
+    this.pagination(data);
+    this.setState({ dataApi: data });
 
     let active = 0
 
-    res.data.data.map(val => {
+    data.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
       }
@@ -473,7 +475,7 @@ class Order extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Company_Id}</td>
+                                <td className="text-center">{item.Company_Id.Name}</td>
                                 <td className="text-center">
                                   {(new Date(item.Purcharse_Date)).toLocaleDateString() + ' ' + (new Date(item.Purcharse_Date)).toLocaleTimeString()}
                                 </td>

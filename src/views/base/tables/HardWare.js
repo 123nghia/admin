@@ -61,6 +61,7 @@ class PackageSale extends Component {
       currentCompany: '',
       arrPagination: [],
       indexPage: 0,
+      hidden: false,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
   }
@@ -93,6 +94,16 @@ class PackageSale extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
+    if (arrTotal.length == 0) {
+      this.setState({
+        hidden: false
+      })
+    } else {
+      this.setState({
+        hidden: true
+      })
+    }
+
     this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
   }
 
@@ -105,12 +116,14 @@ class PackageSale extends Component {
       headers: this.state.token
     });
 
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    let data = res.data.data
+
+    this.pagination(data);
+    this.setState({ dataApi: data });
 
     let active = 0
 
-    res.data.data.map(val => {
+    data.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
       }
@@ -333,8 +346,7 @@ class PackageSale extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, End_Date, Active_Date,
-      dataCompany, currentCompany, arrPagination, indexPage, keyName, keyActive, keyEnd, keyCode, keyStatus } = this.state;
+    const { data, key, action, End_Date, Active_Date, arrPagination, indexPage, hidden} = this.state;
     if (!this.state.isLoading) {
       return (
         <div>
@@ -394,6 +406,7 @@ class PackageSale extends Component {
                   </tr>
                 </thead>
                 <tbody>
+                  <td colSpan="10" hidden={hidden} className="text-center">Không tìm thấy phần cứng nào trong kho</td>
                   {
                     data != undefined ?
                       data.map((item, i) => {

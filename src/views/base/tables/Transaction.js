@@ -105,26 +105,18 @@ class Transaction extends Component {
       method: 'POST',
     });
 
-    for (let i = 0; i < res.data.data.length; i++) {
-      const resCom = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.LIST_COMPANY,
-        method: 'POST',
-        data: {
-          condition: {
-            _id: res.data.data[i].Company_Id
-          }
-        }
-      });
-      res.data.data[i].Com_Name = resCom.data.data[0].Name;
+    let data = res.data.data
+
+    if(data.length > 0) {
+      await this.getOrderDetail(data[0]._id, data[0].Company_Id)
     }
 
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    this.pagination(data);
+    this.setState({ dataApi: data });
 
     let active = 0
 
-    res.data.data.map(val => {
+    data.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
       }
@@ -479,7 +471,7 @@ class Transaction extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Com_Name}</td>
+                                <td className="text-center">{item.Company_Id}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_At)).toLocaleDateString() + ' ' + (new Date(item.Create_At)).toLocaleTimeString()}
                                 </td>

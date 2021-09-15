@@ -58,7 +58,8 @@ class ShopManager extends Component {
       arrTemp: [],
       hidden: true,
       hidden_all: true,
-      arrAllUser: []
+      arrAllUser: [],
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
   }
 
