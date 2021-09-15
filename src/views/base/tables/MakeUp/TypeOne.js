@@ -333,6 +333,8 @@ class SuggestItem extends Component {
       })
     }
 
+    console.log(arrB)
+
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: arrB, arrOptionBrand: arrTempOptionBrand });
 
   }
@@ -435,10 +437,10 @@ class SuggestItem extends Component {
         objectValueBrand: this.state.arrOptionBrand[0],
         level: "K1",
         sdktype: "1",
-        type_sdk_id: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0]._id,
-        type_product_id: this.state.arrOptionProductType.length == 0 ? '' : this.state.arrOptionProductType[0]._id,
+        type_sdk_id: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[1]._id,
+        type_product_id: this.state.arrOptionProductType.length == 0 ? '' : this.state.arrOptionProductType[1]._id,
         companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
-        arrLevel: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[0].Level
+        arrLevel: this.state.arrOptionSdkType.length == 0 ? '' : this.state.arrOptionSdkType[1].Level
       })
     }
   }
@@ -843,7 +845,7 @@ class SuggestItem extends Component {
                 placeholder={"Chi tiết"}
                 onChange={e => this.onChange("linkdetail", e.target.value)}
               />
-
+              <CLabel>Nhãn hiệu:</CLabel>
               <CreatableSelect
                 isClearable
                 onChange={this.handleChange}

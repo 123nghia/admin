@@ -238,6 +238,12 @@ export default {
   "UPDATE_TYPE_SDK": "/api/update-type-sdk",
   "DELETE_TYPE_SDK": "/api/delete-type-sdk",
 
+  "LIST_END_USER": "/api/list-end-user",
+  "LOGIN_END_USER": "/api/login-end-user",
+  "ADD_END_USER": "/api/add-end-user",
+  "UPDATE_END_USER": "/api/update-end-user",
+  "DELETE_END_USER": "/api/delete-end-user",
+
   "LIST_CONTACT_CUSTOMER": "/api/list-contact-customers",
   "ADD_CONTACT_CUSTOMER": "/api/add-contact-customers",
   "UPDATE_CONTACT_CUSTOMER": "/api/update-contact-customers",

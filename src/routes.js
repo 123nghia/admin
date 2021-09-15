@@ -38,6 +38,9 @@ const ContactCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/Con
 const UpdatePackage = React.lazy(() => import('./views/base/tables/UpdatePackage'));
 const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPlugin'));
 
+//User
+const EndUserPlugin = React.lazy(() => import('./views/base/tables/User/EndUser'));
+
 //ADMIN MakeUp
 const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestItem'));
 const Brand = React.lazy(() => import('./views/base/tables/MakeUp/Brand'));
@@ -88,6 +91,9 @@ const routes = [
   { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
   { path: '/contact', name: 'Contact', component: ContactCustomer },
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
+
+  //User
+  { path: '/end_user', name: 'End User', component: EndUserPlugin },
 
   //Admin MakeUp
   { path: '/suggest', name: 'SuggestItem', component: SuggestItem },

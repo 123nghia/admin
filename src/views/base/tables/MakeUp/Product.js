@@ -665,8 +665,8 @@ class Product extends Component {
             onChange={e => this.onChange("href", e.target.value)}
           />
 
-          <CLabel>Thương hiệu:</CLabel>
           <CreatableSelect
+
             isClearable
             onChange={this.handleChange}
             value={objectValueBrand}

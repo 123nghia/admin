@@ -415,6 +415,17 @@ const _navOrther = [
                 <CIcon content={freeSet.cilBellExclamation} />
               </CTooltip>,
       }
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách end user',
+      to: '/end_user',
+      role: ['0', '1'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.accountCompany}>
+                <CIcon content={freeSet.cilBellExclamation} />
+              </CTooltip>,
+      }
     }],
     role: ['0', '1'],
   },
