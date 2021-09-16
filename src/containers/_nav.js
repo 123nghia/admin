@@ -415,7 +415,14 @@ const _navOrther = [
                 <CIcon content={freeSet.cilBellExclamation} />
               </CTooltip>,
       }
-    }, {
+    }],
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Danh sách người dùng',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách end user',
       to: '/end_user',
