@@ -115,29 +115,32 @@ class ShopManager extends Component {
       headers: this.state.token
     });
 
-    this.setState({ dataApi: res.data.data });
+    let data = res.data.data
+
+    this.setState({ dataApi: data });
 
 
     //STATISTICAL
     let arrCount_User_Company = [];
-    for (let i = 0; i < res.data.data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       //check if exits in arr
-      if (!arrCount_User_Company.some(item => res.data.data[i].Phone == item.Phone)) {
-        res.data.data[i].count = this.countType(res.data.data, res.data.data[i].Phone);
+      if (!arrCount_User_Company.some(item => data[i].Phone == item.Phone)) {
+        data[i].count = this.countType(data, data[i].Phone);
         const resCal_Compay = await axios({
           baseURL: Constants.BASE_URL,
           url: Constants.CALCULATOR_ALL_USER_OF_SALE,
           method: 'POST',
           data: {
             "company_id": id.company_id,
-            "phone": res.data.data[i].Phone,
+            "phone": data[i].Phone,
             "sale_id": id.sale_id
           }
         });
-        res.data.data[i].coefficient = resCal_Compay.data.data.calculator;
-        arrCount_User_Company.push(res.data.data[i])
+        data[i].coefficient = resCal_Compay.data.data.calculator;
+        arrCount_User_Company.push(data[i])
       }
     }
+
     if (arrCount_User_Company.length == 0) {
       this.setState({ hidden: false })
     } else {

@@ -30,6 +30,7 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 class Dashboard extends Component {
+
   render() {
     return (
       <div>

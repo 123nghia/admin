@@ -1,36 +1,37 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { cifAU } from '@coreui/icons';
-const arrRoleADMIN = ['SALES', 'ADMIN', 'SHOPMANAGER', 'ADMINSALES', 'COMPANY'];
-const arrRoleCOMPANY = ['SALES', 'SHOPMANAGER'];
-const arrRoleSHOPMANAGER = ['SALES'];
+
 const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Danh mục'],
+    role: ['ADMIN', 'ADMINSALE']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Tổng quan',
     to: '/dashboard',
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-    role: arrRoleADMIN
+    role: ['ADMIN', 'ADMINSALE']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Hồ sơ',
     to: '/profile',
     icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
-    role: arrRoleADMIN
+    role: ['ADMIN', 'ADMINSALE']
   },
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lí khách hàng TIKITECH'],
+    role: ['ADMIN', 'ADMINSALE']
   },
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Danh sách',
     icon: 'cil-star',
+    role: ['ADMIN', 'ADMINSALE'],
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách công ty',
@@ -41,10 +42,12 @@ const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lý phần cứng'],
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
   },
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Cấu hình phần cứng',
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES'],
     icon: 'cil-star',
     _children: [{
       _tag: 'CSidebarNavItem',
@@ -81,11 +84,13 @@ const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Thông tin đơn hàng'],
+    role: ['ADMIN', 'ADMINSALE']
   },
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Thông tin đơn hàng',
     icon: 'cil-star',
+    role: ['ADMIN', 'ADMINSALE'],
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Tạo đơn hàng',

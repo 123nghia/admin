@@ -16,27 +16,48 @@ import logoMainnet from './../assets/img/logo-test.png';
 import CIcon from '@coreui/icons-react'
 
 // sidebar nav config
-import navigation from './_nav'
+import navigations from './_nav'
 
 const TheSidebar = () => {
   const auth = localStorage.getItem('role');
 
+  var temp = []
+  var navigation = [];
+  for (let i = 0; i < navigations.length; i++) {
+    navigation = navigation.concat(navigations[i])
+  }
 
-  for(let i = 0; i < navigation.length; i++){
-    if(navigation[i]._children != undefined){
-      if(navigation[i]._children.length > 1){
-        var arr = navigation[i]._children;
-        for(let y = 0; y < arr.length; y++){
-          if(arr[y].role.includes(auth)){
-            arr[y].hidden = false;
-          } else {
-            arr[y].hidden = true;
+  //Phân quyền bên phía menu
+  for (let i = 0; i < navigation.length; i++) {
+    if (navigation[i].role.includes(auth)) {
+      navigation[i].hidden = false;
+      if (navigation[i]._children != undefined) {
+        var _child = navigation[i]._children;
+        for (let y = 0; y < _child.length; y++) {
+          var roleCheck = _child[y].role;
+          if (roleCheck != undefined) {
+            if (roleCheck.includes(auth)) {
+              _child[y].hidden = false
+            } else {
+              _child[y].hidden = true
+            }
           }
+        }
+      }
+    } else {
+      navigation[i].hidden = true;
+    }
+  }
+
+  for (let i = 0; i < navigation.length; i++) {
+    if (navigation[i]._children) {
+      for (let y = 0; y < navigation[i]._children.length; y++) {
+        if (navigation[i]._children[y].to) {
+          temp.push({ "url": "#" + navigation[i]._children[y].to, "isHidden": navigation[i].hidden })
         }
       }
     }
   }
-  var temp = navigation[4]._children.concat(navigation[6]._children.concat(navigation[8]._children));
 
   localStorage.setItem('url', JSON.stringify(temp))
 
