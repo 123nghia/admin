@@ -67,6 +67,7 @@ class ProductHair extends Component {
       brand_name: '',
       name: '',
       href: '',
+      price: 0,
       image: '',
       brands: [],
       types: [],
@@ -117,10 +118,10 @@ class ProductHair extends Component {
     this.setState({ isLoadingTable: true });
     if (type == '0' || type == '1') {
       var res = await API_CONNECT(
-        Constants.LIST_PRODUCT + `?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
+        Constants.LIST_PRODUCT_HAIR + `?skip=${Number(totalCount) - Number(skip)}`, {}, "", "GET")
     } else {
       var res = await API_CONNECT(
-        Constants.LIST_PRODUCT_COMPANY + JSON.parse(user).company_id + `?skip=${Number(totalCount) - Number(skip)}`, {}, token, "GET")
+        Constants.LIST_PRODUCT_COMPANY_HAIR + JSON.parse(user).company_id + `?skip=${Number(totalCount) - Number(skip)}`, {}, token, "GET")
     }
 
     let val = res.data;
@@ -217,6 +218,7 @@ class ProductHair extends Component {
         image_show: "",
         name: "",
         image: "",
+        price: 0,
         href: "",
         type_id: this.state.types.length == 0 ? '' : this.state.types[0].type_id,
         brand_id: this.state.brands.length == 0 ? '' : this.state.brands[0]._id,
@@ -288,7 +290,7 @@ class ProductHair extends Component {
   }
 
   async addProduct() {
-    const { name, href, type_id, brand_id, arrProductColor } = this.state
+    const { name, href, type_id, brand_id, arrProductColor, price } = this.state
 
     if (name == null || name == '' ||
       href == null || href == '' ||
@@ -315,6 +317,7 @@ class ProductHair extends Component {
         type_id: type_id,
         brand_id: brand_id,
         name: name,
+        price: price,
         href: href,
         dataProductColor: arrProductColor,
         company_id: this.state.type == '0' || this.state.type == '1' ? null : JSON.parse(this.state.user).company_id
@@ -359,6 +362,7 @@ class ProductHair extends Component {
       image: item.image,
       image_link: item.image_link,
       href: item.href,
+      price: item.price,
       type_id: item.type_id.type_id,
       brand_id: item.brand_id._id,
       color_id: item.color_id == null ? null : item.color_id,
@@ -401,7 +405,7 @@ class ProductHair extends Component {
   }
 
   async updateProducts() {
-    const { name, image, href, type_id, brand_id, color_id, image_link, indexPage, image_link_save } = this.state
+    const { name, image, href, type_id, brand_id, color_id, image_link, indexPage, image_link_save, price } = this.state
 
     const form = new FormData();
     form.append("image", image_link_save);
@@ -424,6 +428,7 @@ class ProductHair extends Component {
       name: name,
       href: href,
       image: image,
+      price: price,
       image_link: image_link,
       color_id: color_id,
       id: this.state.id
@@ -623,6 +628,14 @@ class ProductHair extends Component {
           />
 
           <TextFieldGroup
+            field="price"
+            label="Giá sản phẩm"
+            value={this.state.price}
+            placeholder={"Giá sản phẩm"}
+            onChange={e => this.onChange("price", e.target.value)}
+          />
+
+          <TextFieldGroup
             field="href"
             label="Đường dẫn"
             value={this.state.href}
@@ -767,7 +780,8 @@ class ProductHair extends Component {
   }
 
   render() {
-    const { data, arrPagination, brands, types, brand_name, key, collapse, keyColor, colorItemUpdate, colorChooseUpdate } = this.state;
+    const { data, arrPagination, brands, types, price,
+      brand_name, key, collapse, keyColor, colorItemUpdate, colorChooseUpdate } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -808,6 +822,7 @@ class ProductHair extends Component {
                             <th className="text-center">Danh mục cấp 2</th>
                             <th className="text-center">Thương hiệu</th>
                             <th className="text-center">Tên sản phẩm</th>
+                            <th className="text-center">Giá</th>
                             <th className="text-center">Màu</th>
                             <th className="text-center">Đường dẫn</th>
                             <th className="text-center">Ảnh</th>
@@ -825,6 +840,7 @@ class ProductHair extends Component {
                                     <td className="text-center">{item.type_id == null ? "" : item.type_id.name}</td>
                                     <td className="text-center">{item.brand_id == null ? "" : item.brand_id.name}</td>
                                     <td className="text-center">{item.name}</td>
+                                    <td className="text-center">{item.price}</td>
                                     <td className="text-center">
                                       {item.color_id == null ? "" : item.color_id.hex}
                                       <div style={{ backgroundColor: item.color_id == null ? "" : item.color_id.hex, width: '100%', height: '30px' }}> </div>
@@ -929,6 +945,15 @@ class ProductHair extends Component {
                         }
                       </CSelect>
                     </div>
+
+                    <TextFieldGroup
+                      field="price"
+                      label="Giá sản phẩm"
+                      value={price}
+                      // error={errors.title}
+                      onChange={e => { this.onChange("price", e.target.value) }}
+                    // rows="5"
+                    />
 
                     <CLabel>Danh mục:</CLabel>
                     <div style={{ width: "100%" }}>

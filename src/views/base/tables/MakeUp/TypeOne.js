@@ -61,6 +61,7 @@ class SuggestItem extends Component {
       sdktype: "1",
       brand_id: "",
       companyid: "",
+      price: 0,
       type_sdk_id: "",
       type_product_id: "",
       sdkItem: [],
@@ -430,6 +431,7 @@ class SuggestItem extends Component {
         name: "",
         image: "",
         title: "",
+        price: 0,
         description: "",
         linkdetail: "",
         //brand_id: arrBrand[0]._id,
@@ -450,7 +452,8 @@ class SuggestItem extends Component {
   }
 
   async addRoles() {
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, brand_id, image_link } = this.state
+    const { name, image, title, description, linkdetail, price,
+      level, sdktype, type_sdk_id, brand_id, image_link } = this.state
     if (name == null || name == '') {
       alert("Thiếu tên sản phẩm");
       return
@@ -478,6 +481,7 @@ class SuggestItem extends Component {
       linkdetail: linkdetail,
       image_link: image_link.name,
       level: level,
+      price: price,
       sdktype: sdktype,
       companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
       type_sdk_id: type_sdk_id,
@@ -522,6 +526,7 @@ class SuggestItem extends Component {
       description: item.description,
       linkdetail: item.linkdetail,
       level: item.level,
+      price: item.price,
       sdktype: item.sdktype,
       type_product_id: item.type_product_id._id,
       type_sdk_id: item.type_sdk_id._id,
@@ -536,7 +541,8 @@ class SuggestItem extends Component {
 
   async updateUser() {
     this.setState({ modalCom: !this.state.modalCom })
-    const { name, image, title, description, linkdetail, level, sdktype, type_sdk_id, type_product_id, brand_id, image_link, indexPage } = this.state
+    const { name, image, title, description, linkdetail, price,
+      level, sdktype, type_sdk_id, type_product_id, brand_id, image_link, indexPage } = this.state
 
     if (name == null || name == '') {
       alert("Thiếu tên sản phẩm");
@@ -561,6 +567,7 @@ class SuggestItem extends Component {
       title: title,
       description: description,
       linkdetail: linkdetail,
+      price: price,
       level: level,
       sdktype: sdktype,
       type_sdk_id: type_sdk_id,
@@ -714,14 +721,12 @@ class SuggestItem extends Component {
                             <th className="text-center">Ảnh</th>
                             <th className="text-center">Tiêu đề</th>
                             <th className="text-center">Chi tiết</th>
-                            {/* <th className="text-center">Chi tiết</th> */}
                             <th className="text-center">Thương hiệu</th>
                             <th className="text-center">Ảnh thương hiệu</th>
                             <th className="text-center">Loại</th>
                             <th className="text-center">Loại SDK</th>
                             <th className="text-center">Mức độ</th>
-                            {/* <th className="text-center">Loại Sdk</th>
-                        <th className="text-center">Level</th> */}
+                            <th className="text-center">Giá</th>
                             <th className="text-center">#</th>
                           </tr>
                         </thead>
@@ -764,6 +769,9 @@ class SuggestItem extends Component {
                                     </td>
                                     <td className="text-center">
                                       {item.name_level}
+                                    </td>
+                                    <td className="text-center">
+                                      {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
                                     </td>
                                     <td className="text-center">
                                       <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -923,6 +931,14 @@ class SuggestItem extends Component {
                   ) : null
                 }
               </div>
+
+              <TextFieldGroup
+                field="price"
+                label="Giá"
+                value={this.state.price}
+                placeholder={"Giá"}
+                onChange={e => this.onChange("price", e.target.value)}
+              />
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}

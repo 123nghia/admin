@@ -6,7 +6,7 @@ import {
   CardHeader,
   Col,
   Row,
-  Button, Input
+  Button, Input,
 } from 'reactstrap';
 
 import {
@@ -14,7 +14,8 @@ import {
   CRow,
   CCol,
   CButton,
-  CTooltip
+  CTooltip,
+  CTextarea,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import 'moment-timezone';
@@ -52,7 +53,8 @@ class Users extends Component {
       Name: "",
       Phone: "",
       Address: "",
-      UserName: ""
+      UserName: "",
+      Message_Code: ""
     };
   }
   async componentDidMount() {
@@ -78,15 +80,17 @@ class Users extends Component {
     });
     let val = res.data.data
 
-
     this.setState({
       dataApi: val, data: val, currentPassword: val.Password,
-      isLoading: false, current_slug: val.Company_Id.Slug, companyID: val.Company_Id._id,
+      isLoading: false,
+      current_slug: val.Company_Id == null || val.Company_Id == undefined ? null : val.Company_Id.Slug,
+      companyID: val.Company_Id == null || val.Company_Id == undefined ? null : val.Company_Id._id,
       Email: val.Email,
       Name: val.Name,
       Phone: val.Phone,
       Address: val.Address,
       UserName: val.UserName,
+      Message_Code: val.Message_Code,
       isDisable: true
     });
   }
@@ -158,7 +162,7 @@ class Users extends Component {
   }
 
   async updateCompany() {
-    const { Email, Name, Phone, Address, UserName, data } = this.state
+    const { Email, Name, Phone, Address, UserName, data, Message_Code } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -175,6 +179,7 @@ class Users extends Component {
       Phone: Phone == "" ? data.Phone : Phone,
       Address: Address == "" ? data.Address : Address,
       UserName: UserName == "" ? data.UserName : UserName,
+      Message_Code: Message_Code == "" || Message_Code == null ? data.Message_Code : Message_Code,
       Password: data.Password,
       Status: data.Status,
       id: data._id
@@ -198,7 +203,7 @@ class Users extends Component {
 
   render() {
     const { data, current_slug, isChange, currentPassword, isChangeSlug, type, isDisable,
-      Email, Name, Phone, Address, UserName } = this.state;
+      Email, Name, Phone, Address, UserName, Message_Code } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -331,6 +336,13 @@ class Users extends Component {
 
                             </CCol>
                           </CRow>
+                        </CCol>
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Mã code message (nhắn tin với khách hàng)</CLabel>
+                            <CTextarea style={styles.searchInput} rows={9} value={Message_Code} onChange={(e) => { this.setState({ Message_Code: e.target.value }) }} readOnly={isDisable} />
+                          </div>
                         </CCol>
 
 
