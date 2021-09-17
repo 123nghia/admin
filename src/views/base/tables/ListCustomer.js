@@ -491,8 +491,8 @@ class Users extends Component {
                     <tr>
                       <th className="text-center">STT.</th>
                       <th className="text-center">Tên</th>
-                      <th className="text-center">Tên Sale</th>
-                      <th className="text-center">Địa chỉ shop</th>
+                      {/* <th className="text-center">Tên Sale</th>
+                      <th className="text-center">Địa chỉ shop</th> */}
                       <th className="text-center">Email</th>
                       <th className="text-center">Số điện thoại</th>
                       <th className="text-center">Giới tính</th>
@@ -509,8 +509,8 @@ class Users extends Component {
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.Sale_Id.Name}</td>
-                              <td className="text-center">{item.Sale_Id.Address}</td>
+                              {/* <td className="text-center">{item.Sale_Id}</td>
+                              <td className="text-center">{item.Sale_Id}</td> */}
                               <td className="text-center">{item.Email}</td>
                               <td className="text-center">{item.Phone}</td>
                               <td className="text-center">{item.Gender}</td>

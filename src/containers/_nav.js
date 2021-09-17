@@ -13,7 +13,7 @@ const _nav = [
     name: 'Tổng quan',
     to: '/dashboard',
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-    role: ['ADMIN', 'ADMINSALE']
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
   },
   {
     _tag: 'CSidebarNavItem',
