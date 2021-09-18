@@ -35,7 +35,8 @@ class Dashboard extends Component {
     return (
       <div>
         {
-          localStorage.getItem('role') == 'SHOPMANAGER' ? <ShopManager /> : <SaleManager />
+          localStorage.getItem('role') == 'SALES' ? <SaleManager /> :
+            localStorage.getItem('role') == 'SHOPMANAGER' ? <ShopManager /> : <ShopManager />
         }
       </div>
     )

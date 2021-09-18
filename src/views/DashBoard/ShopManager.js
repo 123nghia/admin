@@ -1,17 +1,10 @@
 import React, { lazy, Component } from 'react'
 import {
-  CBadge,
-  CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
-  CCallout,
-  CForm,
   CFormGroup,
   CLabel,
   CSelect, CCardGroup
@@ -19,25 +12,14 @@ import {
 
 import {
   CChartBar,
-  CChartLine,
-  CChartDoughnut,
-  CChartRadar,
-  CChartPie,
-  CChartPolarArea
 } from '@coreui/react-chartjs'
-
-import { DocsLink } from 'src/reusable'
 
 import {
   Button
 } from 'reactstrap';
-import CIcon from '@coreui/icons-react'
 import axios from 'axios'
 import Constants from "./../../contants/contants";
-import MainChartExample from '../charts/MainChartExample.js'
 
-const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
-const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -58,15 +40,17 @@ class ShopManager extends Component {
       arrTemp: [],
       hidden: true,
       hidden_all: true,
-      arrAllUser: []
+      arrAllUser: [],
+      arrSale: [],
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
   }
 
   async componentDidMount() {
+    await this.getListSale();
     await this.getCustomer();
     await this.getCustomerByMonth("01");
     await this.getDataForCharts();
-
   }
 
   countType(arr, phone) {
@@ -94,6 +78,35 @@ class ShopManager extends Component {
     this.setState({ arrPaginationStatistical: arrTotal_Statistical, dataStatistical: arrTotal_Statistical[this.state.indexPageStatistical] });
   }
 
+  async getListSale() {
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.GET_SALE,
+      method: 'POST',
+      headers: this.state.token
+    })
+    let data = res.data.data;
+
+    this.setState({ arrSale: data })
+  }
+
+  async chooseSale(value) {
+    const { dataUserSale } = this.state;
+    const arrTemp = []
+    for(let i = 0; i < dataUserSale.length; i++) {
+      if(dataUserSale[i].Sale_Id._id == value) {
+        arrTemp.push(dataUserSale[i])
+      }
+    }
+
+    if(arrTemp.length == 0) {
+      await this.getCustomer();
+      this.setState({ dataUserSale: arrTemp, hidden_all: false })
+    } else {
+      this.setState({ dataUserSale: arrTemp, hidden_all: true })
+    }
+  }
+
   async getCustomer() {
 
     const { company_id } = this.state;
@@ -111,34 +124,12 @@ class ShopManager extends Component {
       headers: this.state.token
     });
 
-    this.setState({ dataApi: res.data.data });
+    let data = res.data.data
 
+    console.log(data)
+    this.setState({ dataApi: data });
 
-    //STATISTICAL
-    let arrCount_User_Company = [];
-    for (let i = 0; i < res.data.data.length; i++) {
-      //check if exits in arr
-      if (!arrCount_User_Company.some(item => res.data.data[i].Phone == item.Phone)) {
-        res.data.data[i].count = this.countType(res.data.data, res.data.data[i].Phone);
-        const resCal_Compay = await axios({
-          baseURL: Constants.BASE_URL,
-          url: Constants.CALCULATOR_ALL_USER_OF_COMPANY,
-          method: 'POST',
-          data: {
-            "company_id": id.company_id,
-            "phone": res.data.data[i].Phone
-          }
-        });
-        res.data.data[i].coefficient = resCal_Compay.data.data.calculator;
-        arrCount_User_Company.push(res.data.data[i])
-      }
-    }
-    if (arrCount_User_Company.length == 0) {
-      this.setState({ hidden: false })
-    } else {
-      this.setState({ hidden: true })
-    }
-    this.pagination(arrCount_User_Company);
+    this.pagination(data);
 
   }
 
@@ -157,7 +148,17 @@ class ShopManager extends Component {
           month: arrMonth[i]
         }
       });
-      arrTemp.push(res.data.data.length)
+
+      let data = res.data.data
+
+      let count = 0;
+      for (let i = 0; i < data.length; i++) {
+        count = count + data[i].count
+      }
+
+      arrTemp.push(count)
+      count = 0;
+
     }
     this.setState({ arrAllUser: arrTemp })
   }
@@ -180,40 +181,20 @@ class ShopManager extends Component {
         data: bodyUser
       });
 
-      if (res.data.data.length == 0) {
+      let data = res.data.data
+      if (data.length == 0) {
         this.setState({ hidden: false })
       } else {
         this.setState({ hidden: true })
       }
-      this.setState({ dataApi: res.data.data, arrTemp: res.data.data });
+      this.setState({ dataApi: data, arrTemp: data });
 
-      //STATISTICAL
-      let arrCount_User = [];
-      for (let i = 0; i < this.state.arrTemp.length; i++) {
-        //check if exits in arr
-        if (!arrCount_User.some(item => this.state.arrTemp[i].Phone == item.Phone)) {
-          this.state.arrTemp[i].count = this.countType(this.state.arrTemp, this.state.arrTemp[i].Phone);
-          const resCal = await axios({
-            baseURL: Constants.BASE_URL,
-            url: Constants.GET_COEFFICIENT,
-            method: 'POST',
-            data: {
-              "month": month,
-              "company_id": id.company_id,
-              "phone": this.state.arrTemp[i].Phone
-            }
-          });
-          this.state.arrTemp[i].coefficient = resCal.data.data.calculator;
-          arrCount_User.push(this.state.arrTemp[i])
-        }
-      }
-
-      this.pagination_statistical(arrCount_User);
+      this.pagination_statistical(data);
     }
   }
 
   render() {
-    const { dataUserSale, hidden, arrPagination, indexPage, hidden_all,
+    const { dataUserSale, hidden, arrPagination, indexPage, hidden_all, arrSale,
       dataStatistical, arrPaginationStatistical, indexPageStatistical } = this.state;
     return (
       <CRow>
@@ -221,11 +202,21 @@ class ShopManager extends Component {
           <CCard>
             <CCardHeader>
               <CFormGroup row>
-                <CCol md="3">
+                <CCol xs="12" sm="12" md="3" lg="3">
                   <CLabel htmlFor="selectSm">Thống kê tổng số lượt user</CLabel>
                 </CCol>
-                <CCol xs="12" md="9">
-                  {/*  */}
+                <CCol xs="12" sm="12" md="9" lg="9">
+                  <CLabel>Lọc theo Sale</CLabel>
+                  <CSelect onChange={e => { this.chooseSale(e.target.value) }} custom>
+                    <option value={""}>----------------</option>
+                    {
+                      arrSale.map((item, i) => {
+                        return (
+                          <option value={item._id}>{item.Name}</option>
+                        );
+                      })
+                    }
+                  </CSelect>
                 </CCol>
               </CFormGroup>
             </CCardHeader>
@@ -233,18 +224,19 @@ class ShopManager extends Component {
               <table className="table table-hover table-outline mb-0 d-none d-sm-table">
                 <thead className="thead-light">
                   <tr>
-                    <th className="text-center">No.</th>
-                    <th className="text-center">Name</th>
+                    <th className="text-center">STT.</th>
+                    <th className="text-center">Tên</th>
                     <th className="text-center">Email</th>
-                    <th className="text-center">Phone</th>
-                    <th className="text-center">Gender</th>
-                    <th className="text-center">Time Visits</th>
-                    <th className="text-center">Coefficient</th>
-                    <th className="text-center">Last Times Visit</th>
+                    <th className="text-center">Số điện thoại</th>
+                    <th className="text-center">Giới tính</th>
+                    <th className="text-center">Số lần đến</th>
+                    <th className="text-center">Hệ số</th>
+                    <th className="text-center">Lần cuối đến</th>
+                    <th className="text-center">Sale</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <td colSpan="9" hidden={hidden_all} className="text-center">No users in this month</td>
+                  <td colSpan="9" hidden={hidden_all} className="text-center">Không có dữ liệu</td>
                   {
                     dataUserSale != undefined ?
                       dataUserSale.map((item, i) => {
@@ -256,10 +248,11 @@ class ShopManager extends Component {
                             <td className="text-center">{item.Phone}</td>
                             <td className="text-center">{item.Gender}</td>
                             <td className="text-center">{item.count}</td>
-                            <td className="text-center">{item.coefficient}</td>
+                            <td className="text-center">{Number(item.coefficient).toFixed(2)}</td>
                             <td className="text-center">
                               {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                             </td>
+                            <td className="text-center">{item.Sale_Id.Name}</td>
                           </tr>
                         );
                       }) : ""
@@ -284,113 +277,116 @@ class ShopManager extends Component {
               }
               <br />
 
-              <CCardGroup rows className="cols-2">
-                <CCard backgroundColor="red">
-                  <CCardHeader>
-                    Bar Chart
-                  </CCardHeader>
-                  <CCardBody>
-                    <CChartBar
-                      datasets={[
-                        {
-                          label: 'Total user of month ',
-                          backgroundColor: '#f87979',
-                          data: this.state.arrAllUser
-                        }
-                      ]}
-                      labels="months"
-                      options={{
-                        tooltips: {
-                          enabled: true
-                        }
-                      }}
-                    />
-                  </CCardBody>
-                </CCard>
-                <CCard>
-                  <CCardHeader>
-                    <CFormGroup row>
-                      <CCol md="3">
-                        <CLabel htmlFor="selectSm">USER ON MONTH</CLabel>
-                      </CCol>
-                      <CCol xs="12" md="9">
-                        <div style={{ float: "right", width: "250px" }}>
-                          <CSelect onChange={async e => { await this.getCustomerByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                          </CSelect>
-                        </div>
-                      </CCol>
-                    </CFormGroup>
-                  </CCardHeader>
-                  <CCardBody>
-                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                      <thead className="thead-light">
-                        <tr>
-                          <th className="text-center">Name</th>
-                          <th className="text-center">Email</th>
-                          <th className="text-center">Phone</th>
-                          <th className="text-center">Gender</th>
-                          <th className="text-center">Times Count</th>
-                          <th className="text-center">Coefficient</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <td colSpan="7" hidden={hidden} className="text-center">No users in this month</td>
-                        {
-                          dataStatistical != undefined ?
-                            dataStatistical.map((item, i) => {
-                              return (
-                                <tr key={i}>
-                                  <td className="text-center">{item.Name}</td>
-                                  <td className="text-center">{item.Email}</td>
-                                  <td className="text-center">{item.Phone}</td>
-                                  <td className="text-center">{item.Gender}</td>
-                                  <td className="text-center">{item.count}</td>
-                                  <td className="text-center">{item.coefficient}</td>
-                                </tr>
-                              );
-                            }) : ""
-                        }
-                      </tbody>
-                    </table>
 
-                    {
-                      arrPaginationStatistical.length == 1 ? "" :
-                        <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                          <tr style={{ float: "left", width: "100%" }}>
-                            {
-                              arrPaginationStatistical.map((item, i) => {
-                                return (
-                                  <td>
-                                    <Button style={{ marginRight: '5px' }} color={i == indexPageStatistical ? 'primary' : 'danger'} onClick={e => { this.setState({ dataStatistical: arrPaginationStatistical[i], indexPageStatistical: i }) }}>{i + 1}</Button>
-                                  </td>
-                                );
-                              })
-                            }
+              <CRow>
+                <CCol xs="12" sm="5">
+                  <CCard backgroundColor="red">
+                    <CCardHeader>
+                      Biểu đồ thể hiện người dùng
+                    </CCardHeader>
+                    <CCardBody>
+                      <CChartBar
+                        datasets={[
+                          {
+                            label: 'Tổng người dùng trong tháng ',
+                            backgroundColor: '#0008ff',
+                            data: this.state.arrAllUser
+                          }
+                        ]}
+                        labels="months"
+                        options={{
+                          tooltips: {
+                            enabled: true
+                          }
+                        }}
+                      />
+                    </CCardBody>
+                  </CCard>
+                </CCol>
+                <CCol xs="12" sm="7">
+                  <CCard>
+                    <CCardHeader>
+                      <CFormGroup row>
+                        <CCol xs="12" md="8">
+                          <CLabel htmlFor="selectSm">Người dùng theo tháng</CLabel>
+                        </CCol>
+                        <CCol xs="12" md="4">
+                          <div style={{ float: "right", width: "250px" }}>
+                            <CSelect onChange={async e => { await this.getCustomerByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
+                              <option value="01">01</option>
+                              <option value="02">02</option>
+                              <option value="03">03</option>
+                              <option value="04">04</option>
+                              <option value="05">05</option>
+                              <option value="06">06</option>
+                              <option value="07">07</option>
+                              <option value="08">08</option>
+                              <option value="09">09</option>
+                              <option value="10">10</option>
+                              <option value="11">11</option>
+                              <option value="12">12</option>
+                            </CSelect>
+                          </div>
+                        </CCol>
+                      </CFormGroup>
+                    </CCardHeader>
+                    <CCardBody>
+                      <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                        <thead className="thead-light">
+                          <tr>
+                            <th className="text-center">Tên</th>
+                            <th className="text-center">Email</th>
+                            <th className="text-center">Số điện thoại</th>
+                            <th className="text-center">Giới tính</th>
+                            <th className="text-center">Số lần đến</th>
+                            <th className="text-center">Hệ số</th>
                           </tr>
-                        </div>
-                    }
-                  </CCardBody>
-                </CCard>
+                        </thead>
+                        <tbody>
+                          <td colSpan="7" hidden={hidden} className="text-center">Không có user trong tháng này</td>
+                          {
+                            dataStatistical != undefined ?
+                              dataStatistical.map((item, i) => {
+                                return (
+                                  <tr key={i}>
+                                    <td className="text-center">{item.Name}</td>
+                                    <td className="text-center">{item.Email}</td>
+                                    <td className="text-center">{item.Phone}</td>
+                                    <td className="text-center">{item.Gender}</td>
+                                    <td className="text-center">{item.count}</td>
+                                    <td className="text-center">{Number(item.coefficient).toFixed(2)}</td>
+                                  </tr>
+                                );
+                              }) : ""
+                          }
+                        </tbody>
+                      </table>
 
-              </CCardGroup>
+                      {
+                        arrPaginationStatistical.length == 1 ? "" :
+                          <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                            <tr style={{ float: "left", width: "100%" }}>
+                              {
+                                arrPaginationStatistical.map((item, i) => {
+                                  return (
+                                    <td>
+                                      <Button style={{ marginRight: '5px' }} color={i == indexPageStatistical ? 'primary' : 'danger'} onClick={e => { this.setState({ dataStatistical: arrPaginationStatistical[i], indexPageStatistical: i }) }}>{i + 1}</Button>
+                                    </td>
+                                  );
+                                })
+                              }
+                            </tr>
+                          </div>
+                      }
+                    </CCardBody>
+                  </CCard>
+                </CCol>
+              </CRow>
+
+
+
             </CCardBody>
           </CCard>
-
-
-
-
         </CCol>
       </CRow>
 

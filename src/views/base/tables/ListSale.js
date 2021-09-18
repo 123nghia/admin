@@ -728,24 +728,8 @@ class Users extends Component {
     }
   }
 
-  getCompanyName = async (company_id) => {
-    const resCom = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.DATA_COMPANY,
-      method: 'POST',
-      data: {
-        company_id: company_id
-      }
-    });
-
-    return resCom.data.data.Name;
-  }
-
-
   render() {
-    const { data, key, dataCompany, role, hidden, dataAll, arrPagination_All, indexPage_All,
-      currentCompany, action, dataRole, currentRole, arrPagination, indexPage,
-      hidden_all, isSale, keyName, keyEmail, keyPhone, keyCodeCompany, keyGender, keyStatus } = this.state;
+    const { data, key, hidden, action, dataRole, currentRole, arrPagination, indexPage } = this.state;
 
     if (!this.state.isLoading) {
       return (

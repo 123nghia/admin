@@ -20,7 +20,7 @@ const _nav = [
     name: 'Hồ sơ',
     to: '/profile',
     icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
-    role: ['ADMIN', 'ADMINSALE']
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
   },
   {
     _tag: 'CSidebarNavTitle',
@@ -44,42 +44,48 @@ const _nav = [
     _children: ['Quản lý phần cứng'],
     role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
   },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Cấu hình phần cứng',
+  //   role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES'],
+  //   // _children: []
+  // },
   {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Cấu hình phần cứng',
-    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES'],
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách shop',
+    to: '/shopmanager',
     icon: 'cil-star',
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách shop',
-      to: '/shopmanager',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách sale',
-      to: '/sales',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách khách hàng',
-      to: '/customers',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách phần cứng',
-      to: '/hardware',
-      role: ['ADMIN', 'ADMINSALE']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách sở hữu phần cứng',
-      to: '/hardwaremanager',
-      role: ['COMPANY']
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách key',
-      to: '/key',
-      role: ['ADMIN', 'ADMINSALE']
-    }]
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY']
+  }, {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách sale',
+    to: '/sales',
+    icon: 'cil-star',
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER']
+  }, {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách khách hàng',
+    to: '/customers',
+    icon: 'cil-star',
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
+  }, {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách phần cứng',
+    to: '/hardware',
+    icon: 'cil-star',
+    role: ['ADMIN', 'ADMINSALE']
+  }, {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách sở hữu phần cứng',
+    to: '/hardwaremanager',
+    icon: 'cil-star',
+    role: ['COMPANY']
+  }, {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách key',
+    to: '/key',
+    icon: 'cil-star',
+    role: ['ADMIN', 'ADMINSALE']
   },
   {
     _tag: 'CSidebarNavTitle',

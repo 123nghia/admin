@@ -168,28 +168,6 @@ class ShopManager extends Component {
       }
       this.setState({ dataApi: data, arrTemp: data });
 
-      // //STATISTICAL
-      // let arrCount_User = [];
-      // for (let i = 0; i < this.state.arrTemp.length; i++) {
-      //   //check if exits in arr
-      //   if (!arrCount_User.some(item => this.state.arrTemp[i].Phone == item.Phone)) {
-      //     this.state.arrTemp[i].count = this.countType(this.state.arrTemp, this.state.arrTemp[i].Phone);
-      //     const resCal = await axios({
-      //       baseURL: Constants.BASE_URL,
-      //       url: Constants.GET_COEFFICIENT_PER_SALE,
-      //       method: 'POST',
-      //       data: {
-      //         "month": month,
-      //         "company_id": id.company_id,
-      //         "phone": this.state.arrTemp[i].Phone,
-      //         "sale_id": id.sale_id
-      //       }
-      //     });
-      //     this.state.arrTemp[i].coefficient = resCal.data.data.calculator;
-      //     arrCount_User.push(this.state.arrTemp[i])
-      //   }
-      // }
-
       this.pagination_statistical(data);
     }
   }
@@ -280,7 +258,7 @@ class ShopManager extends Component {
                         datasets={[
                           {
                             label: 'Total user of month ',
-                            backgroundColor: '#f87979',
+                            backgroundColor: '#0008ff',
                             data: this.state.arrAllUser
                           }
                         ]}
