@@ -24,12 +24,13 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-class ShopManager extends Component {
+class AdminManager extends Component {
   constructor(props) {
     super(props);
     this.state = {
       month: 0,
       dataUserSale: [],
+      dataUserSale_Original: [],
       arrPagination: [],
       indexPage: 0,
       dataStatistical: [],
@@ -41,15 +42,16 @@ class ShopManager extends Component {
       hidden: true,
       hidden_all: true,
       arrAllUser: [],
+      arrSale: [],
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
   }
 
   async componentDidMount() {
+    await this.getListSale();
     await this.getCustomer();
     await this.getCustomerByMonth("01");
     await this.getDataForCharts();
-
   }
 
   countType(arr, phone) {
@@ -64,19 +66,49 @@ class ShopManager extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
-
-    console.log(arrTotal)
-    this.setState({ arrPagination: arrTotal, dataUserSale: arrTotal[this.state.indexPage] });
+    this.setState({ arrPagination: arrTotal, dataUserSale: arrTotal[this.state.indexPage], dataUserSale_Original: arrTotal[this.state.indexPage] });
   }
 
   pagination_statistical(dataApi) {
-    var i, j, temparray, chunk = 2;
+    var i, j, temparray, chunk = 5;
     var arrTotal_Statistical = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal_Statistical.push(temparray);
     }
     this.setState({ arrPaginationStatistical: arrTotal_Statistical, dataStatistical: arrTotal_Statistical[this.state.indexPageStatistical] });
+  }
+
+  async getListSale() {
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.GET_SALE,
+      method: 'POST',
+      headers: this.state.token
+    })
+    let data = res.data.data;
+
+    this.setState({ arrSale: data })
+  }
+
+  async chooseSale(value) {
+    const { dataUserSale_Original } = this.state;
+    const arrTemp = []
+    for(let i = 0; i < dataUserSale_Original.length; i++) {
+      if(dataUserSale_Original[i].Sale_Id._id == value) {
+        arrTemp.push(dataUserSale_Original[i])
+      }
+    }
+
+    if(value == "") {
+      await this.getCustomer();
+    } else {
+      if(arrTemp.length == 0) {
+        this.setState({ dataUserSale: arrTemp, hidden_all: false })
+      } else {
+        this.setState({ dataUserSale: arrTemp, hidden_all: true })
+      }
+    }
   }
 
   async getCustomer() {
@@ -88,24 +120,14 @@ class ShopManager extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_CUSTOMER,
       method: 'POST',
-      data: {
-        "condition": {
-          "Company_Id": id.company_id,
-          "Sale_Id": id.sale_id
-        }
-      },
       headers: this.state.token
     });
 
     let data = res.data.data
 
+    console.log(data)
     this.setState({ dataApi: data });
 
-    if (data.length == 0) {
-      this.setState({ hidden_all: false })
-    } else {
-      this.setState({ hidden_all: true })
-    }
     this.pagination(data);
 
   }
@@ -118,25 +140,24 @@ class ShopManager extends Component {
     for (let i = 0; i < arrMonth.length; i++) {
       const res = await axios({
         baseURL: Constants.BASE_URL,
-        url: Constants.GET_USER_SALE_BY_MONTH,
+        url: Constants.LIST_CUSTOMER_BY_MONTH_ADMIN,
         method: 'POST',
         data: {
-          company_id: id.company_id,
-          month: arrMonth[i],
-          sale_id: id.sale_id
+          month: arrMonth[i]
         }
       });
+
       let data = res.data.data
 
       // let count = 0;
-      // for(let i = 0; i < data.length; i++) {
+      // for (let i = 0; i < data.length; i++) {
       //   count = count + data[i].count
       // }
 
       arrTemp.push(data.length)
       //count = 0;
-    }
 
+    }
     this.setState({ arrAllUser: arrTemp })
   }
 
@@ -144,9 +165,7 @@ class ShopManager extends Component {
     const { company_id } = this.state;
     var id = JSON.parse(company_id);
     var bodyUser = {
-      company_id: id.company_id,
-      month: month,
-      sale_id: id.sale_id
+      month: month
     }
 
     if (month == 0) {
@@ -154,13 +173,12 @@ class ShopManager extends Component {
     } else {
       const res = await axios({
         baseURL: Constants.BASE_URL,
-        url: Constants.GET_USER_SALE_BY_MONTH,
+        url: Constants.LIST_CUSTOMER_BY_MONTH_ADMIN,
         method: 'POST',
         data: bodyUser
       });
 
       let data = res.data.data
-
       if (data.length == 0) {
         this.setState({ hidden: false })
       } else {
@@ -173,7 +191,7 @@ class ShopManager extends Component {
   }
 
   render() {
-    const { dataUserSale, hidden, arrPagination, indexPage, hidden_all,
+    const { dataUserSale, hidden, arrPagination, indexPage, hidden_all, arrSale,
       dataStatistical, arrPaginationStatistical, indexPageStatistical } = this.state;
     return (
       <CRow>
@@ -181,11 +199,21 @@ class ShopManager extends Component {
           <CCard>
             <CCardHeader>
               <CFormGroup row>
-                <CCol md="3">
+                <CCol xs="12" sm="12" md="3" lg="3">
                   <CLabel htmlFor="selectSm">Thống kê tổng số lượt user</CLabel>
                 </CCol>
-                <CCol xs="12" md="9">
-                  {/*  */}
+                <CCol xs="12" sm="12" md="9" lg="9">
+                  <CLabel>Lọc theo Sale</CLabel>
+                  <CSelect onChange={e => { this.chooseSale(e.target.value) }} custom>
+                    <option value={""}>----------------</option>
+                    {
+                      arrSale.map((item, i) => {
+                        return (
+                          <option value={item._id}>{item.Name}</option>
+                        );
+                      })
+                    }
+                  </CSelect>
                 </CCol>
               </CFormGroup>
             </CCardHeader>
@@ -193,7 +221,7 @@ class ShopManager extends Component {
               <table className="table table-hover table-outline mb-0 d-none d-sm-table">
                 <thead className="thead-light">
                   <tr>
-                    <th className="text-center">No.</th>
+                    <th className="text-center">STT.</th>
                     <th className="text-center">Tên</th>
                     <th className="text-center">Email</th>
                     <th className="text-center">Số điện thoại</th>
@@ -204,7 +232,7 @@ class ShopManager extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <td colSpan="9" hidden={hidden_all} className="text-center">Không có người dùng trong tháng</td>
+                  <td colSpan="9" hidden={hidden_all} className="text-center">Không có dữ liệu</td>
                   {
                     dataUserSale != undefined ?
                       dataUserSale.map((item, i) => {
@@ -225,39 +253,37 @@ class ShopManager extends Component {
                       }) : ""
                   }
                 </tbody>
-
               </table>
-              <tfoot>
-                {
-                  arrPagination.length == 1 ? "" :
-                    <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                      <tr style={{ float: "left", width: "100%" }}>
-                        {
-                          arrPagination.map((item, i) => {
-                            return (
-                              <td>
-                                <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ dataUserSale: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                              </td>
-                            );
-                          })
-                        }
-                      </tr>
-                    </div>
-                }
-              </tfoot>
+              {
+                arrPagination.length == 1 ? "" :
+                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                    <tr style={{ float: "left", width: "100%" }}>
+                      {
+                        arrPagination.map((item, i) => {
+                          return (
+                            <td>
+                              <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ dataUserSale: arrPagination[i], dataUserSale_Original: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                            </td>
+                          );
+                        })
+                      }
+                    </tr>
+                  </div>
+              }
               <br />
+
 
               <CRow>
                 <CCol xs="12" sm="5">
-                  <CCard>
+                  <CCard backgroundColor="red">
                     <CCardHeader>
-                      Biểu đồ người dùng qua từng tháng
+                      Biểu đồ thể hiện người dùng
                     </CCardHeader>
                     <CCardBody>
                       <CChartBar
                         datasets={[
                           {
-                            label: 'Total user of month ',
+                            label: 'Tổng người dùng trong tháng ',
                             backgroundColor: '#0008ff',
                             data: this.state.arrAllUser
                           }
@@ -276,10 +302,10 @@ class ShopManager extends Component {
                   <CCard>
                     <CCardHeader>
                       <CFormGroup row>
-                        <CCol xs="12" md="7" ls="12">
-                          <CLabel htmlFor="selectSm">Người dùng trong từng tháng</CLabel>
+                        <CCol xs="12" md="8">
+                          <CLabel htmlFor="selectSm">Người dùng theo tháng</CLabel>
                         </CCol>
-                        <CCol xs="12" md="5" ls="12">
+                        <CCol xs="12" md="4">
                           <div style={{ float: "right", width: "250px" }}>
                             <CSelect onChange={async e => { await this.getCustomerByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
                               <option value="01">01</option>
@@ -312,7 +338,7 @@ class ShopManager extends Component {
                           </tr>
                         </thead>
                         <tbody>
-                          <td colSpan="7" hidden={hidden} className="text-center">Không có người dùng nào trong tháng</td>
+                          <td colSpan="7" hidden={hidden} className="text-center">Không có user trong tháng này</td>
                           {
                             dataStatistical != undefined ?
                               dataStatistical.map((item, i) => {
@@ -351,6 +377,9 @@ class ShopManager extends Component {
                   </CCard>
                 </CCol>
               </CRow>
+
+
+
             </CCardBody>
           </CCard>
         </CCol>
@@ -360,4 +389,4 @@ class ShopManager extends Component {
   }
 }
 
-export default ShopManager
+export default AdminManager

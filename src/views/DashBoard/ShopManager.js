@@ -30,6 +30,7 @@ class ShopManager extends Component {
     this.state = {
       month: 0,
       dataUserSale: [],
+      dataUserSale_Original: [],
       arrPagination: [],
       indexPage: 0,
       dataStatistical: [],
@@ -65,7 +66,7 @@ class ShopManager extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
-    this.setState({ arrPagination: arrTotal, dataUserSale: arrTotal[this.state.indexPage] });
+    this.setState({ arrPagination: arrTotal, dataUserSale: arrTotal[this.state.indexPage], dataUserSale_Original: arrTotal[this.state.indexPage] });
   }
 
   pagination_statistical(dataApi) {
@@ -91,19 +92,22 @@ class ShopManager extends Component {
   }
 
   async chooseSale(value) {
-    const { dataUserSale } = this.state;
+    const { dataUserSale_Original } = this.state;
     const arrTemp = []
-    for(let i = 0; i < dataUserSale.length; i++) {
-      if(dataUserSale[i].Sale_Id._id == value) {
-        arrTemp.push(dataUserSale[i])
+    for(let i = 0; i < dataUserSale_Original.length; i++) {
+      if(dataUserSale_Original[i].Sale_Id._id == value) {
+        arrTemp.push(dataUserSale_Original[i])
       }
     }
 
-    if(arrTemp.length == 0) {
+    if(value == "") {
       await this.getCustomer();
-      this.setState({ dataUserSale: arrTemp, hidden_all: false })
     } else {
-      this.setState({ dataUserSale: arrTemp, hidden_all: true })
+      if(arrTemp.length == 0) {
+        this.setState({ dataUserSale: arrTemp, hidden_all: false })
+      } else {
+        this.setState({ dataUserSale: arrTemp, hidden_all: true })
+      }
     }
   }
 
@@ -151,13 +155,13 @@ class ShopManager extends Component {
 
       let data = res.data.data
 
-      let count = 0;
-      for (let i = 0; i < data.length; i++) {
-        count = count + data[i].count
-      }
+      // let count = 0;
+      // for (let i = 0; i < data.length; i++) {
+      //   count = count + data[i].count
+      // }
 
-      arrTemp.push(count)
-      count = 0;
+      arrTemp.push(data.length)
+      //count = 0;
 
     }
     this.setState({ arrAllUser: arrTemp })
@@ -232,7 +236,6 @@ class ShopManager extends Component {
                     <th className="text-center">Số lần đến</th>
                     <th className="text-center">Hệ số</th>
                     <th className="text-center">Lần cuối đến</th>
-                    <th className="text-center">Sale</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -252,7 +255,6 @@ class ShopManager extends Component {
                             <td className="text-center">
                               {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                             </td>
-                            <td className="text-center">{item.Sale_Id.Name}</td>
                           </tr>
                         );
                       }) : ""
@@ -267,7 +269,7 @@ class ShopManager extends Component {
                         arrPagination.map((item, i) => {
                           return (
                             <td>
-                              <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ dataUserSale: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
+                              <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ dataUserSale: arrPagination[i], indexPage: i, dataUserSale_Original: arrPagination[i] }) }}>{i + 1}</Button>
                             </td>
                           );
                         })
@@ -370,7 +372,9 @@ class ShopManager extends Component {
                                 arrPaginationStatistical.map((item, i) => {
                                   return (
                                     <td>
-                                      <Button style={{ marginRight: '5px' }} color={i == indexPageStatistical ? 'primary' : 'danger'} onClick={e => { this.setState({ dataStatistical: arrPaginationStatistical[i], indexPageStatistical: i }) }}>{i + 1}</Button>
+                                      <Button style={{ marginRight: '5px' }} color={i == indexPageStatistical ? 'primary' : 'danger'} onClick={e => {
+                                        this.setState({ dataStatistical: arrPaginationStatistical[i], indexPageStatistical: i })
+                                      }}>{i + 1}</Button>
                                     </td>
                                   );
                                 })

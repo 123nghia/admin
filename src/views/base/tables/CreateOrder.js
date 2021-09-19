@@ -62,6 +62,8 @@ class Order extends Component {
       dataCompany: [],
       currentCompany: '',
       arrHardWard: [],
+      arrHardWard_ID: [],
+      arrHardWard_render: [],
       dataHardWard: [],
       arrChooseHard: [],
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -71,7 +73,7 @@ class Order extends Component {
 
   async componentDidMount() {
     this.getCompanyData();
-
+    this.getHardWardData();
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -84,34 +86,39 @@ class Order extends Component {
   }
 
   async addOrder() {
-    const { arrHardWard, Company_Id, token } = this.state;
+    const { arrHardWard_render, Company_Id, token } = this.state;
 
-    if(Company_Id == '' || Company_Id == null){
+    if (Company_Id == '' || Company_Id == null) {
       alert("Vui lòng chọn chính xác công ty")
     }
+
     const resOrder = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.ADD_ORDER,
       method: 'PUT',
       data: {
         "Company_Id": Company_Id,
-        "Count": arrHardWard.length
+        "Count": arrHardWard_render.length
       },
       headers: token
     });
 
     if (resOrder.data.is_success == true) {
-      await axios({
+      const res = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.ADD_ORDER_DETAIL,
         method: 'PUT',
         data: {
           "OrderID": resOrder.data.data._id,
-          "arrHard": arrHardWard,
+          "arrHard": arrHardWard_render,
           "Company_Id": resOrder.data.data.Company_Id
         },
         headers: token
       });
+
+      if (resOrder.data.is_success == true) {
+        window.location.href = '#/order_table'
+      }
 
       this.setState({ arrHardWard: [] });
 
@@ -141,8 +148,11 @@ class Order extends Component {
   }
 
   async toggleModal(key) {
-    const { arrHardWard } = this.state;
     this.getHardWardData()
+
+    const { arrHardWard_ID } = this.state;
+
+    console.log(arrHardWard_ID)
     let arrTemp = new Array();
     if (key == 'new') {
       this.setState({
@@ -151,10 +161,10 @@ class Order extends Component {
       })
     }
 
-    for (let i = 0; i < arrHardWard.length; i++) {
+    for (let i = 0; i < arrHardWard_ID.length; i++) {
       const arrHW = await axios({
         baseURL: Constants.BASE_URL,
-        url: Constants.LIST_HARDWARE_WITH_ID + arrHardWard[i],
+        url: Constants.LIST_HARDWARE_WITH_ID + arrHardWard_ID[i],
         method: 'POST',
         headers: this.state.token
       });
@@ -162,7 +172,7 @@ class Order extends Component {
       arrTemp.push(arrHW.data.data)
     }
 
-    this.setState({ arrHardWard: arrTemp })
+    this.setState({ arrHardWard_render: arrTemp })
   }
 
   getBadge(status) {
@@ -189,14 +199,18 @@ class Order extends Component {
         onSelect={(e) => {
           arrChoose = new Array();
           for (let i = 0; i < e.length; i++) {
-            arrChoose.push(e[i].id); this.setState({ arrChooseHard: arrChoose});
+            arrChoose.push(e[i].id);
           }
+
+          this.setState({ arrChooseHard: arrChoose });
         }}
         onRemove={(e) => {
           arrChoose = new Array();
           for (let i = 0; i < e.length; i++) {
-            arrChoose.push(e[i].id); this.setState({ arrChooseHard: arrChoose});
+            arrChoose.push(e[i].id);
           }
+
+          this.setState({ arrChooseHard: arrChoose });
         }}
         displayValue="name"
       />
@@ -204,7 +218,7 @@ class Order extends Component {
   }
 
   render() {
-    const { dataCompany, currentCompany, dataHardWard, arrHardWard } = this.state;
+    const { dataCompany, arrHardWard_render } = this.state;
     const arrT = [];
     return (
       <div className="animated fadeIn">
@@ -254,8 +268,8 @@ class Order extends Component {
                     </thead>
                     <tbody>
                       {
-                        arrHardWard != undefined ?
-                          arrHardWard.map((item, i) => {
+                        arrHardWard_render != undefined ?
+                          arrHardWard_render.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
@@ -313,7 +327,7 @@ class Order extends Component {
             </div> */}
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</Button>{' '}
+            <Button color="primary" onClick={e => { this.setState({ arrHardWard_ID: this.state.arrChooseHard }); }}>Save</Button>{' '}
             <Button color="secondary" onClick={e => this.toggleModal("new")}>Close</Button>
           </ModalFooter>
         </Modal>

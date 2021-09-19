@@ -21,6 +21,8 @@ export default {
   "LIST_CUSTOMER" : "/api/list-customer",
   "LIST_CUSTOMER_BY_MONTH" : "/api/get-user-sale-by-month",
 
+  "LIST_CUSTOMER_BY_MONTH_ADMIN" : "/api/get-user-by-month-admin",
+
   "LIST_TYPEKEY" : "/api/list-typekey",
   "LIST_TYPEKEY_WITH_ID" : "/api/list-typekey?id=",
   "ADD_TYPEKEY" : "/api/add-typekey",
