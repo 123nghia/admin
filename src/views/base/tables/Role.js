@@ -295,8 +295,8 @@ class Users extends Component {
                               <td style={styles.wh25}>{item.Status}</td>
                               <td style={styles.wh25}>{item.Create_Date}</td>
                               <td style={styles.w5}>
-                                <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
+                                <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Cập nhật</Button>{' '}
+                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
                               </td>
                             </tr>
                           );
@@ -326,7 +326,7 @@ class Users extends Component {
         </Row>
 
         <Modal isOpen={this.state.modalCom} className={this.props.className}>
-          <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+          <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
           <ModalBody>
             <TextFieldGroup
               field="Name"
@@ -351,7 +351,7 @@ class Users extends Component {
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
-            <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+            <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
           </ModalFooter>
         </Modal>
 
@@ -361,8 +361,8 @@ class Users extends Component {
             <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-            <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+            <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
+            <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
           </ModalFooter>
         </Modal>
       </div>

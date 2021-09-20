@@ -23,6 +23,9 @@ import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import Pagination from '@material-ui/lab/Pagination';
 import API_CONNECT from "../../../../src/helpers/callAPI";
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
+
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -64,6 +67,7 @@ class Product extends Component {
       arrOptionBrand: [],
       objectValueBrand: {},
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      role: localStorage.getItem('role'),
       hidden: false
     };
   }
@@ -88,7 +92,7 @@ class Product extends Component {
       arrTotal.push(temparray);
     }
 
-    if(arrTotal.length == 0) {
+    if (arrTotal.length == 0) {
       this.setState({ hidden: false })
     } else {
       this.setState({ hidden: true })
@@ -262,6 +266,9 @@ class Product extends Component {
   }
 
   openUpdate(item) {
+    const { arrOptionBrand, arrOptionShop } = this.state;
+    let filterBrand = arrOptionBrand.filter(v => v.value == item.brand_id);
+    let filterShop = arrOptionShop.filter(v => v.value == item.shop_id);
 
     this.setState({
       modalCom: !this.state.modalCom,
@@ -271,6 +278,8 @@ class Product extends Component {
       image: item.image,
       image_update: "",
       link: item.link,
+      objectValueBrand: filterBrand[0],
+      objectValueShop: filterShop[0],
       price: item.price,
       code: item.code,
       brand_id: item.brand_id,
@@ -384,7 +393,8 @@ class Product extends Component {
   }
 
   render() {
-    const { data, key, objectValueBrand, objectValueShop, arrOptionBrand, arrOptionShop, arrPagination, hidden } = this.state;
+    const { data, key, objectValueBrand, objectValueShop, role,
+      arrOptionBrand, arrOptionShop, arrPagination, hidden } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -423,11 +433,10 @@ class Product extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên sản phẩm</th>
-                        <th className="text-center">Mã shop</th>
+                        <th className="text-center">Shop</th>
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">Đường dẫn</th>
                         <th className="text-center">Giá</th>
-                        <th className="text-center">Mã sản phẩm</th>
                         <th className="text-center">Thương hiệu</th>
                         <th className="text-center">#</th>
 
@@ -442,9 +451,11 @@ class Product extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                <td className="text-center">{item.shop_id}</td>
                                 <td className="text-center">
-                                  <img src={item.image} width={"60px"} height={"60px"} />
+                                  {arrOptionShop.filter(v => v.value == item.shop_id)[0].label}
+                                </td>
+                                <td className="text-center">
+                                  <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"60px"} height={"60px"} />
                                 </td>
                                 <td className="text-center">
                                   <a href={item.link} target="_blank">
@@ -452,10 +463,12 @@ class Product extends Component {
                                   </a>
                                 </td>
                                 <td className="text-center">{item.price}</td>
-                                <td className="text-center">{item.brand_id}</td>
                                 <td className="text-center">
-                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>
+                                  {arrOptionBrand.filter(v => v.value == item.brand_id)[0].label}
+                                </td>
+                                <td className="text-center">
+                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
+                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
                                 </td>
                               </tr>
                             );
@@ -475,7 +488,7 @@ class Product extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Create` : `Update`}</ModalHeader>
+            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="name"
@@ -487,14 +500,19 @@ class Product extends Component {
               // rows="5"
               />
 
-              <CLabel>Cửa hàng:</CLabel>
-              <CreatableSelect
-                isClearable
-                onChange={this.handleChange}
-                value={objectValueShop}
-                // onInputChange={this.handleInputChange}
-                options={arrOptionShop}
-              />
+              {
+                role == "COMPANY" || role == "SALES" ?
+                  <div>
+                    <CLabel>Cửa hàng:</CLabel>
+                    <CreatableSelect
+                      isClearable
+                      onChange={this.handleChange}
+                      value={objectValueShop}
+                      // onInputChange={this.handleInputChange}
+                      options={arrOptionShop}
+                    /></div> : ""
+
+              }
 
               <CLabel>Thương hiệu:</CLabel>
               <CreatableSelect
@@ -513,8 +531,9 @@ class Product extends Component {
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               />
               {
-                <img width="250" height="300" src={
-                  this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_plugin/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
+                this.state.image_show == "" ? "" :
+                  <img width="250" height="300" src={
+                    this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_product/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
               }
 
 
@@ -532,7 +551,7 @@ class Product extends Component {
                 field="price"
                 label="Gía"
                 value={this.state.price}
-                placeholder={"Gía"}
+                placeholder={"Giá"}
                 // error={errors.title}
                 onChange={e => this.onChange("price", e.target.value)}
               // rows="5"
@@ -541,7 +560,7 @@ class Product extends Component {
 
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
@@ -551,24 +570,26 @@ class Product extends Component {
               <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
+              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
             </ModalFooter>
           </Modal>
         </div >
       );
     }
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   pagination: {

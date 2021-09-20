@@ -127,21 +127,21 @@ const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lý sản phẩm sale PG'],
-    role: ['COMPANY']
+    role: ['COMPANY', 'SALES', 'ADMINSALE', 'SHOPMANAGER']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Thương hiệu',
     icon: 'cil-star',
     to: '/thuong_hieu',
-    role: ['COMPANY']
+    role: ['COMPANY', 'SALES', 'ADMINSALE', 'SHOPMANAGER']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Sản phẩm',
     icon: 'cil-star',
     to: '/san_pham',
-    role: ['COMPANY']
+    role: ['COMPANY', 'SALES', 'ADMINSALE', 'SHOPMANAGER']
   },
 
 ]
