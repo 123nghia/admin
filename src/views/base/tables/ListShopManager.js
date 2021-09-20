@@ -693,7 +693,7 @@ class Users extends Component {
           <Card>
             <CardHeader>
 
-              Danh sách chủ shop ( Page: {this.state.indexPage + 1} )
+              Danh sách chủ shop
 
               <div style={styles.tags}>
                 <CRow>

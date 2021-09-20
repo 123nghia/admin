@@ -94,4 +94,19 @@ export default {
   "DELETE_LINK" : "/api/delete-link",
   "GET-LINK-BY-ID" : "/api/link-by-id",
 
+  "LIST_CHECKED_ORDER": "/api/list-order-checked",
+  "ADD_CHECKED_ORDER": "/api/add-order-checked",
+
+  "LIST_BRAND_HARDWARE": "/api/list-brand-hardward",
+  "ADD_BRAND_HARDWARE": "/api/add-brand-hardward",
+  "UPDATE_BRAND_HARDWARE": "/api/update-brand-hardward",
+  "DELETE_BRAND_HARDWARE": "/api/delete-brand-hardward",
+  "UPLOAD_BRAND": "/api/upload-image-brand",
+
+  "LIST_PRODUCT_HARDWARE": "/api/list-product-hardward",
+  "ADD_PRODUCT_HARDWARE": "/api/add-product-hardward",
+  "UPDATE_PRODUCT_HARDWARE": "/api/update-product-hardward",
+  "DELETE_PRODUCT_HARDWARE": "/api/delete-product-hardward",
+  "UPLOAD_PRODUCT": "/api/upload-image-product",
+
 };

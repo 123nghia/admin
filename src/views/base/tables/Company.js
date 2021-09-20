@@ -23,7 +23,8 @@ import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
+import Pagination from '@material-ui/lab/Pagination';
+
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -425,8 +426,7 @@ class Company extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách công ty (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách công ty
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -518,7 +518,12 @@ class Company extends Component {
 
                 </CardBody>
               </Card>
-              {
+              <div style={{ float: 'right' }}>
+                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                }} />
+              </div>
+              {/* {
                 arrPagination.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
                     <tr style={styles.row}>
@@ -533,7 +538,7 @@ class Company extends Component {
                       }
                     </tr>
                   </div>
-              }
+              } */}
 
             </Col>
           </Row>

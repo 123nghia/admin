@@ -44,49 +44,44 @@ const _nav = [
     _children: ['Quản lý phần cứng'],
     role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
   },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Cấu hình phần cứng',
-  //   role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES'],
-  //   // _children: []
-  // },
   {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách shop',
-    to: '/shopmanager',
+    _tag: 'CSidebarNavDropdown',
+    name: 'Cấu hình phần cứng',
     icon: 'cil-star',
-    role: ['ADMIN', 'ADMINSALE', 'COMPANY']
-  }, {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách sale',
-    to: '/sales',
-    icon: 'cil-star',
-    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER']
-  }, {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách khách hàng',
-    to: '/customers',
-    icon: 'cil-star',
-    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
-  }, {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách phần cứng',
-    to: '/hardware',
-    icon: 'cil-star',
-    role: ['ADMIN', 'ADMINSALE']
-  }, {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách sở hữu phần cứng',
-    to: '/hardwaremanager',
-    icon: 'cil-star',
-    role: ['COMPANY']
-  }, {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách key',
-    to: '/key',
-    icon: 'cil-star',
-    role: ['ADMIN', 'ADMINSALE']
-  },
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES'],
+    _children: [{
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách shop',
+      to: '/shopmanager',
+      role: ['ADMIN', 'ADMINSALE', 'COMPANY']
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách sale',
+      to: '/sales',
+      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER']
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách khách hàng',
+      to: '/customers',
+      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách phần cứng',
+      to: '/hardware',
+      role: ['ADMIN', 'ADMINSALE']
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách sở hữu phần cứng',
+      to: '/hardwaremanager',
+      role: ['COMPANY']
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách key',
+      to: '/key',
+      role: ['ADMIN', 'ADMINSALE']
+    }]
+  }
+  ,
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Thông tin đơn hàng'],
@@ -121,7 +116,33 @@ const _nav = [
       //   role: ['COMPANY']
       // }
     ]
-  }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Doanh số',
+    icon: 'cil-star',
+    to: '/doanh_so',
+    role: ['ADMIN', 'ADMINSALE']
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý sản phẩm sale PG'],
+    role: ['COMPANY']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Thương hiệu',
+    icon: 'cil-star',
+    to: '/thuong_hieu',
+    role: ['COMPANY']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm',
+    icon: 'cil-star',
+    to: '/san_pham',
+    role: ['COMPANY']
+  },
 
 ]
 
