@@ -500,6 +500,16 @@ class Product extends Component {
               // rows="5"
               />
 
+              <TextFieldGroup
+                field="code"
+                label="Mã sản phẩm"
+                value={this.state.code}
+                placeholder={"Mã sản phẩm"}
+                // error={errors.title}
+                onChange={e => this.onChange("code", e.target.value)}
+              // rows="5"
+              />
+
               {
                 role == "COMPANY" || role == "SALES" ?
                   <div>
