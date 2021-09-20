@@ -452,7 +452,7 @@ class Product extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  {arrOptionShop.filter(v => v.value == item.shop_id)[0].label}
+                                  {item.shop_id}
                                 </td>
                                 <td className="text-center">
                                   <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"60px"} height={"60px"} />
