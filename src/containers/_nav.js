@@ -138,19 +138,19 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Doanh số'],
+    _children: ['Thông kê doanh số sale PG'],
     role: ['COMPANY', 'SALES', 'ADMIN', 'SHOPMANAGER']
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Doanh số theo đơn hàng',
+    name: 'Theo đơn hàng',
     icon: 'cil-star',
     to: '/doanh_so',
     role: ['ADMIN', 'ADMINSALE', 'COMPANY']
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Doanh số theo sản phẩm',
+    name: 'Theo sản phẩm',
     icon: 'cil-star',
     to: '/doanh_so_theo_san_pham',
     role: ['ADMIN', 'ADMINSALE', 'COMPANY']

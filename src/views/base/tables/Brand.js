@@ -104,25 +104,10 @@ class Brand extends Component {
       headers: this.state.token
     });
 
-    var res_shop = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.GET_SHOP,
-      method: 'POST',
-      headers: this.state.token
-    });
-
     let data = res.data.data
-    let data_shop = res_shop.data.data
-
-    let arrTempOptionBrand = [];
-    for (let i = 0; i < data_shop.length; i++) {
-      arrTempOptionBrand.push({
-        value: data_shop[i]._id, label: data_shop[i].Name
-      })
-    }
 
     this.pagination(data);
-    this.setState({ dataApi: data, arrOptionShop: arrTempOptionBrand });
+    this.setState({ dataApi: data });
 
     let active = 0
 
@@ -189,6 +174,27 @@ class Brand extends Component {
         image: '',
         image_show: '',
         image_update: ""
+      }, async () => {
+        const { arrOptionShop } = this.state;
+        if(arrOptionShop.length == 0) {
+          var res_shop = await axios({
+            baseURL: Constants.BASE_URL,
+            url: Constants.GET_SHOP,
+            method: 'POST',
+            headers: this.state.token
+          });
+
+          let data_shop = res_shop.data.data
+
+          let arrTempOptionBrand = [];
+          for (let i = 0; i < data_shop.length; i++) {
+            arrTempOptionBrand.push({
+              value: data_shop[i]._id, label: data_shop[i].Name
+            })
+          }
+
+          this.setState({ arrOptionShop: arrTempOptionBrand });
+        }
       })
     }
   }
@@ -250,6 +256,27 @@ class Brand extends Component {
       image_show: "",
       image_update: "",
       id: item['_id']
+    }, async () => {
+      const { arrOptionShop } = this.state;
+      if(arrOptionShop.length == 0) {
+        var res_shop = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.GET_SHOP,
+          method: 'POST',
+          headers: this.state.token
+        });
+
+        let data_shop = res_shop.data.data
+
+        let arrTempOptionBrand = [];
+        for (let i = 0; i < data_shop.length; i++) {
+          arrTempOptionBrand.push({
+            value: data_shop[i]._id, label: data_shop[i].Name
+          })
+        }
+
+        this.setState({ arrOptionShop: arrTempOptionBrand });
+      }
     })
   }
 
@@ -472,7 +499,7 @@ class Brand extends Component {
 
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addBrand() : this.updateBrand() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
+              <Button color="secondary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
