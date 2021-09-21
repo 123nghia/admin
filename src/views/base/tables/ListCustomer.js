@@ -445,7 +445,7 @@ class Users extends Component {
           <Card>
             <CardHeader>
 
-              Danh sách khách hàng ( Page: {this.state.indexPage + 1} )
+              Danh sách khách hàng
 
               <div style={styles.tags}>
                 <CRow>

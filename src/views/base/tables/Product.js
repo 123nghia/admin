@@ -208,6 +208,8 @@ class Product extends Component {
         name: "",
         shop_id: "",
         image: "",
+        image_show: "",
+        image_update: "",
         link: "",
         price: "",
         image_update: "",
@@ -276,6 +278,7 @@ class Product extends Component {
       name: item.name,
       shop_id: item.shop_id,
       image: item.image,
+      image_show: "",
       image_update: "",
       link: item.link,
       objectValueBrand: filterBrand[0],
@@ -540,6 +543,11 @@ class Product extends Component {
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               />
+              {
+                console.log("1: ", this.state.image),
+                console.log("2: ", this.state.image_update),
+                console.log("3: ", this.state.image_show)
+              }
               {
                 this.state.image_show == "" ? "" :
                   <img width="250" height="300" src={
