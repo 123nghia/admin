@@ -58,7 +58,7 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Danh sách sale',
       to: '/sales',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER']
+      role: ['ADMIN', 'ADMINSALE', 'COMPANY']
     }, {
       _tag: 'CSidebarNavItem',
       name: 'Danh sách khách hàng',
