@@ -111,40 +111,10 @@ class Product extends Component {
       headers: this.state.token
     });
 
-    var res_shop = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.GET_SHOP,
-      method: 'POST',
-      headers: this.state.token
-    });
-
-    const res_brand = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_BRAND_HARDWARE,
-      method: 'POST',
-      headers: this.state.token
-    });
-
     let data = res.data.data
-    let data_shop = res_shop.data.data
-    let data_brand = res_brand.data.data
-
-    let arrTempOptionShop = [];
-    for (let i = 0; i < data_shop.length; i++) {
-      arrTempOptionShop.push({
-        value: data_shop[i]._id, label: data_shop[i].Name
-      })
-    }
-
-    let arrTempOptionBrand = [];
-    for (let i = 0; i < data_brand.length; i++) {
-      arrTempOptionBrand.push({
-        value: data_brand[i]._id, label: data_brand[i].name
-      })
-    }
 
     this.pagination(data);
-    this.setState({ dataApi: data, arrOptionShop: arrTempOptionShop, arrOptionBrand: arrTempOptionBrand });
+    this.setState({ dataApi: data });
 
     let active = 0
 
@@ -217,6 +187,43 @@ class Product extends Component {
         code: "",
         sku_code: "",
         brand_id: ""
+      }, async () => {
+        const { arrOptionShop, arrOptionBrand } = this.state;
+
+        if (arrOptionShop.length == 0 || arrOptionBrand.length == 0) {
+          const res_shop = await axios({
+            baseURL: Constants.BASE_URL,
+            url: Constants.GET_SHOP,
+            method: 'POST',
+            headers: this.state.token
+          });
+
+          const res_brand = await axios({
+            baseURL: Constants.BASE_URL,
+            url: Constants.LIST_BRAND_HARDWARE,
+            method: 'POST',
+            headers: this.state.token
+          });
+
+          let data_shop = res_shop.data.data
+          let data_brand = res_brand.data.data
+
+          let arrTempOptionShop = [];
+          for (let i = 0; i < data_shop.length; i++) {
+            arrTempOptionShop.push({
+              value: data_shop[i]._id, label: data_shop[i].Name
+            })
+          }
+
+          let arrTempOptionBrand = [];
+          for (let i = 0; i < data_brand.length; i++) {
+            arrTempOptionBrand.push({
+              value: data_brand[i]._id, label: data_brand[i].name
+            })
+          }
+
+          this.setState({ arrOptionShop: arrTempOptionShop, arrOptionBrand: arrTempOptionBrand });
+        }
       })
     }
   }
@@ -291,6 +298,43 @@ class Product extends Component {
       sku_code: item.sku_code,
       brand_id: item.brand_id,
       id: item['_id'],
+    }, async () => {
+      const { arrOptionShop, arrOptionBrand } = this.state;
+
+      if (arrOptionShop.length == 0 || arrOptionBrand.length == 0) {
+        const res_shop = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.GET_SHOP,
+          method: 'POST',
+          headers: this.state.token
+        });
+
+        const res_brand = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.LIST_BRAND_HARDWARE,
+          method: 'POST',
+          headers: this.state.token
+        });
+
+        let data_shop = res_shop.data.data
+        let data_brand = res_brand.data.data
+
+        let arrTempOptionShop = [];
+        for (let i = 0; i < data_shop.length; i++) {
+          arrTempOptionShop.push({
+            value: data_shop[i]._id, label: data_shop[i].Name
+          })
+        }
+
+        let arrTempOptionBrand = [];
+        for (let i = 0; i < data_brand.length; i++) {
+          arrTempOptionBrand.push({
+            value: data_brand[i]._id, label: data_brand[i].name
+          })
+        }
+
+        this.setState({ arrOptionShop: arrTempOptionShop, arrOptionBrand: arrTempOptionBrand });
+      }
     })
   }
 
@@ -559,11 +603,6 @@ class Product extends Component {
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               />
               {
-                console.log("1: ", this.state.image),
-                console.log("2: ", this.state.image_update),
-                console.log("3: ", this.state.image_show)
-              }
-              {
                 this.state.image_show == "" ? "" :
                   <img width="250" height="300" src={
                     this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_product/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
@@ -593,7 +632,7 @@ class Product extends Component {
 
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
+              <Button color="secondary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
