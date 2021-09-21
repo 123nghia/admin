@@ -19,9 +19,10 @@ import {
   CInput
 } from '@coreui/react'
 
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import Pagination from '@material-ui/lab/Pagination';
 
@@ -203,8 +204,8 @@ class CheckOrder extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Mã sale</th>
-                        <th className="text-center">Mã shop</th>
+                        <th className="text-center">Tên sale</th>
+                        <th className="text-center">Tên shop</th>
                         <th className="text-center">Mã đơn hàng</th>
                         <th className="text-center">Thời gian</th>
                         <th className="text-center">Tổng giá trị</th>
@@ -243,16 +244,18 @@ class CheckOrder extends Component {
       );
     }
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   pagination: {

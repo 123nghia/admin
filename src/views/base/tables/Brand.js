@@ -386,7 +386,7 @@ class Brand extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên thương hiệu</th>
-                        <th className="text-center">Shop</th>
+                        <th className="text-center">Tên shop</th>
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">#</th>
 

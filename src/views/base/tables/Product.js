@@ -441,7 +441,7 @@ class Product extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên sản phẩm</th>
-                        <th className="text-center">Shop</th>
+                        <th className="text-center">Tên shop</th>
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">Đường dẫn</th>
                         <th className="text-center">Giá</th>
@@ -510,7 +510,7 @@ class Product extends Component {
 
               <TextFieldGroup
                 field="code"
-                label="Mã sản phẩm"
+                label="Mã sku"
                 value={this.state.code}
                 placeholder={"Mã sản phẩm"}
                 // error={errors.title}
@@ -520,7 +520,7 @@ class Product extends Component {
 
               <TextFieldGroup
                 field="sku_code"
-                label="Mã sku"
+                label="Mã barcode"
                 value={this.state.sku_code}
                 placeholder={"Mã sku"}
                 // error={errors.title}
