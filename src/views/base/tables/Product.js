@@ -55,6 +55,7 @@ class Product extends Component {
       link: "",
       price: "",
       code: "",
+      sku_code: "",
       brand_id: "",
       modalDelete: false,
       delete: null,
@@ -214,6 +215,7 @@ class Product extends Component {
         price: "",
         image_update: "",
         code: "",
+        sku_code: "",
         brand_id: ""
       })
     }
@@ -224,7 +226,7 @@ class Product extends Component {
   }
 
   async addProduct() {
-    const { name, shop_id, image, link, price, code, brand_id } = this.state
+    const { name, shop_id, image, link, price, code, brand_id, sku_code } = this.state
 
     if (name == null || name == ''
       || shop_id == null || shop_id == ''
@@ -246,6 +248,7 @@ class Product extends Component {
       link: link,
       price: price,
       code: code,
+      sku_code: sku_code,
       brand_id: brand_id
     }
 
@@ -285,13 +288,14 @@ class Product extends Component {
       objectValueShop: filterShop[0],
       price: item.price,
       code: item.code,
+      sku_code: item.sku_code,
       brand_id: item.brand_id,
       id: item['_id'],
     })
   }
 
   async updateCompany() {
-    const { name, shop_id, image, link, price, code, brand_id, image_update } = this.state
+    const { name, shop_id, image, link, price, code, brand_id, image_update, sku_code } = this.state
 
     if (name == null || name == ''
       || shop_id == null || shop_id == ''
@@ -315,6 +319,7 @@ class Product extends Component {
       "link": link,
       "price": price,
       "code": code,
+      "sku_code": sku_code,
       "brand_id": brand_id,
       id: this.state.id
     }
@@ -455,7 +460,7 @@ class Product extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  {item.shop_id}
+                                  {item.shop_id.Name}
                                 </td>
                                 <td className="text-center">
                                   <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"60px"} height={"60px"} />
@@ -467,7 +472,7 @@ class Product extends Component {
                                 </td>
                                 <td className="text-center">{item.price}</td>
                                 <td className="text-center">
-                                  {arrOptionBrand.filter(v => v.value == item.brand_id)[0].label}
+                                  {item.brand_id.name}
                                 </td>
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
@@ -510,6 +515,16 @@ class Product extends Component {
                 placeholder={"Mã sản phẩm"}
                 // error={errors.title}
                 onChange={e => this.onChange("code", e.target.value)}
+              // rows="5"
+              />
+
+              <TextFieldGroup
+                field="sku_code"
+                label="Mã sku"
+                value={this.state.sku_code}
+                placeholder={"Mã sku"}
+                // error={errors.title}
+                onChange={e => this.onChange("sku_code", e.target.value)}
               // rows="5"
               />
 

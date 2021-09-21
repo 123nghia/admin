@@ -24,6 +24,7 @@ const SPENDING = React.lazy(() => import('./views/base/tables/SpendingOrder'));
 const CheckOrder = React.lazy(() => import('./views/base/tables/CheckOrder'));
 const BrandHard = React.lazy(() => import('./views/base/tables/Brand'));
 const ProductHard = React.lazy(() => import('./views/base/tables/Product'));
+const CheckProduct = React.lazy(() => import('./views/base/tables/CheckOrderByProduct'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -51,6 +52,7 @@ const routes = [
   { path: '/doanh_so', name: 'SPENDING', component: CheckOrder },
   { path: '/thuong_hieu', name: 'SPENDING', component: BrandHard },
   { path: '/san_pham', name: 'SPENDING', component: ProductHard },
+  { path: '/doanh_so_theo_san_pham', name: 'SPENDING', component: CheckProduct },
 ];
 
 export default routes;

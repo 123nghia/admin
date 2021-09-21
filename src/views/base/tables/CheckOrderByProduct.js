@@ -121,7 +121,7 @@ class CheckOrder extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_CHECKED_ORDER,
+      url: Constants.LIST_CHECKED_PRODUCT,
       method: 'POST',
       headers: this.state.token
     });
@@ -205,7 +205,7 @@ class CheckOrder extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Mã sale</th>
                         <th className="text-center">Mã shop</th>
-                        <th className="text-center">Mã đơn hàng</th>
+                        <th className="text-center">Mã sản phẩm</th>
                         <th className="text-center">Thời gian</th>
                         <th className="text-center">Tổng giá trị</th>
                       </tr>
@@ -220,7 +220,7 @@ class CheckOrder extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.sale_id.Name}</td>
                                 <td className="text-center">{item.shop_id.Name}</td>
-                                <td className="text-center">{item.code_order}</td>
+                                <td className="text-center">{item.scan_code}</td>
                                 <td className="text-center">{item.time}</td>
                                 <td className="text-center">{item.total}</td>
                               </tr>

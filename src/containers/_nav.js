@@ -119,29 +119,36 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Doanh số',
+    name: 'Doanh số theo đơn hàng',
     icon: 'cil-star',
     to: '/doanh_so',
-    role: ['ADMIN', 'ADMINSALE']
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Doanh số theo sản phẩm',
+    icon: 'cil-star',
+    to: '/doanh_so_theo_san_pham',
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY']
   },
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lý sản phẩm sale PG'],
-    role: ['COMPANY', 'SALES', 'ADMINSALE', 'SHOPMANAGER']
+    role: ['COMPANY', 'SALES', 'ADMIN', 'SHOPMANAGER']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Thương hiệu',
     icon: 'cil-star',
     to: '/thuong_hieu',
-    role: ['COMPANY', 'SALES', 'ADMINSALE', 'SHOPMANAGER']
+    role: ['COMPANY', 'SALES', 'ADMIN', 'SHOPMANAGER']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Sản phẩm',
     icon: 'cil-star',
     to: '/san_pham',
-    role: ['COMPANY', 'SALES', 'ADMINSALE', 'SHOPMANAGER']
+    role: ['COMPANY', 'SALES', 'ADMIN', 'SHOPMANAGER']
   },
 
 ]

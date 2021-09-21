@@ -96,6 +96,8 @@ export default {
 
   "LIST_CHECKED_ORDER": "/api/list-order-checked",
   "ADD_CHECKED_ORDER": "/api/add-order-checked",
+  "LIST_CHECKED_PRODUCT": "/api/list-product-checked",
+  "ADD_CHECKED_PRODUCT": "/api/add-product-checked",
 
   "LIST_BRAND_HARDWARE": "/api/list-brand-hardward",
   "ADD_BRAND_HARDWARE": "/api/add-brand-hardward",
