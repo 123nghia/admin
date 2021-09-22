@@ -117,31 +117,39 @@ class ShopManager extends Component {
   async getDataForCharts() {
     const { company_id } = this.state;
     var id = JSON.parse(company_id);
-    let arrMonth = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
-    let arrTemp = [];
-    for (let i = 0; i < arrMonth.length; i++) {
-      const res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.GET_USER_SALE_BY_MONTH,
-        method: 'POST',
-        data: {
-          company_id: id.company_id,
-          month: arrMonth[i],
-          sale_id: id.sale_id
-        }
-      });
-      let data = res.data.data
+    // let arrMonth = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+    // let arrTemp = [];
+    // for (let i = 0; i < arrMonth.length; i++) {
+    //   const res = await axios({
+    //     baseURL: Constants.BASE_URL,
+    //     url: Constants.GET_USER_SALE_BY_MONTH,
+    //     method: 'POST',
+    //     data: {
+    //       company_id: id.company_id,
+    //       month: arrMonth[i],
+    //       sale_id: id.sale_id
+    //     }
+    //   });
+    //   let data = res.data.data
 
-      // let count = 0;
-      // for(let i = 0; i < data.length; i++) {
-      //   count = count + data[i].count
-      // }
 
-      arrTemp.push(data.length)
-      //count = 0;
-    }
 
-    this.setState({ arrAllUser: arrTemp, isLoading: false })
+    //   arrTemp.push(data.length)
+
+    // }
+
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.SALE_CHART,
+      method: 'POST',
+      data: {
+        company_id: id.company_id,
+        sale_id: id.sale_id
+      }
+    });
+
+    console.log(id.sale_id)
+    this.setState({ arrAllUser: res.data.data, isLoading: false })
   }
 
   async getCustomerByMonth(month) {
@@ -256,13 +264,13 @@ class ShopManager extends Component {
                   <CCol xs="12" sm="5">
                     <CCard>
                       <CCardHeader>
-                        Biểu đồ người dùng qua từng tháng
+                        Biểu đồ thể hiện lượt người dùng qua từng tháng
                       </CCardHeader>
                       <CCardBody>
                         <CChartBar
                           datasets={[
                             {
-                              label: 'Total user of month ',
+                              label: 'Tổng người lượt người dùng của tháng ',
                               backgroundColor: '#0008ff',
                               data: this.state.arrAllUser
                             }

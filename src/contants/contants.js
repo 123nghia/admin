@@ -111,4 +111,8 @@ export default {
   "DELETE_PRODUCT_HARDWARE": "/api/delete-product-hardward",
   "UPLOAD_PRODUCT": "/api/upload-image-product",
 
+  "ADMIN_CHART": "/api/admin-chart",
+  "COMPANY_CHART": "/api/company-chart",
+  "SALE_CHART": "/api/sale-chart",
+
 };
