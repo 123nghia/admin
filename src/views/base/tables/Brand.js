@@ -176,7 +176,7 @@ class Brand extends Component {
         image_update: ""
       }, async () => {
         const { arrOptionShop } = this.state;
-        if(arrOptionShop.length == 0) {
+        if (arrOptionShop.length == 0) {
           var res_shop = await axios({
             baseURL: Constants.BASE_URL,
             url: Constants.GET_SHOP,
@@ -258,7 +258,7 @@ class Brand extends Component {
       id: item['_id']
     }, async () => {
       const { arrOptionShop } = this.state;
-      if(arrOptionShop.length == 0) {
+      if (arrOptionShop.length == 0) {
         var res_shop = await axios({
           baseURL: Constants.BASE_URL,
           url: Constants.GET_SHOP,
@@ -300,7 +300,8 @@ class Brand extends Component {
       name: name,
       shop_id: shop_id,
       image: image_update == "" ? image : image_update.name,
-      id: this.state.id
+      id: this.state.id,
+      headers: this.state.token
     }
 
     this.setState({ isLoading: true });
@@ -413,7 +414,10 @@ class Brand extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên thương hiệu</th>
-                        <th className="text-center">Tên shop</th>
+                        {
+                          role == "COMPANY" || role == "SALES" ? "" :
+                            <th className="text-center">Tên shop</th>
+                        }
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">#</th>
 
@@ -428,11 +432,18 @@ class Brand extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
+                                {
+                                  role == "COMPANY" || role == "SALES" ? "" :
+                                    <td className="text-center">
+                                      {item.shop_id.Name}
+                                    </td>
+                                }
                                 <td className="text-center">
-                                  {item.shop_id.Name}
-                                </td>
-                                <td className="text-center">
-                                  <img src={`${Constants.BASE_URL}/public/image_brand/${item.image}`} width={"60px"} height={"60px"} />
+                                  {
+                                    item.image == "" || item.image == null ?
+                                      <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
+                                      <img src={`${Constants.BASE_URL}/public/image_brand/${item.image}`} width={"60px"} height={"60px"} />
+                                  }
                                 </td>
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}

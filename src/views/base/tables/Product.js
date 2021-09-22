@@ -113,6 +113,7 @@ class Product extends Component {
 
     let data = res.data.data
 
+    console.log(data)
     this.pagination(data);
     this.setState({ dataApi: data });
 
@@ -373,7 +374,8 @@ class Product extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.UPDATE_PRODUCT_HARDWARE,
       method: 'POST',
-      data: body
+      data: body,
+      headers: this.state.token
     });
 
     if (res.data.is_success == true) {
@@ -485,11 +487,16 @@ class Product extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên sản phẩm</th>
-                        <th className="text-center">Tên shop</th>
+                        <th className="text-center">Mã sku</th>
+                        <th className="text-center">Mã barcode</th>
+                        {
+                          role == "COMPANY" || role == "SALES" ? "" :
+                            <th className="text-center">Tên shop</th>
+                        }
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">Đường dẫn</th>
-                        <th className="text-center">Giá</th>
                         <th className="text-center">Thương hiệu</th>
+                        <th className="text-center">Giá</th>
                         <th className="text-center">#</th>
 
                       </tr>
@@ -503,21 +510,30 @@ class Product extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
+                                <td className="text-center">{item.code}</td>
+                                <td className="text-center">{item.sku_code}</td>
+                                {
+                                  role == "COMPANY" || role == "SALES" ? "" :
+                                    <td className="text-center">
+                                      {item.shop_id.Name}
+                                    </td>
+                                }
                                 <td className="text-center">
-                                  {item.shop_id.Name}
-                                </td>
-                                <td className="text-center">
-                                  <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"60px"} height={"60px"} />
+                                  {
+                                    item.image == "" || item.image == null ?
+                                      <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
+                                      <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"60px"} height={"60px"} />
+                                  }
                                 </td>
                                 <td className="text-center">
                                   <a href={item.link} target="_blank">
                                     {item.link}
                                   </a>
                                 </td>
-                                <td className="text-center">{item.price}</td>
                                 <td className="text-center">
                                   {item.brand_id.name}
                                 </td>
+                                <td className="text-center">{item.price}</td>
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
                                   <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
@@ -603,7 +619,7 @@ class Product extends Component {
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               />
               {
-                this.state.image_show == "" ? "" :
+                this.state.image == "" ? "" :
                   <img width="250" height="300" src={
                     this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_product/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
               }

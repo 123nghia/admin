@@ -22,6 +22,7 @@ import Constants from "./../../contants/contants";
 
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import Pagination from '@material-ui/lab/Pagination';
 
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -54,9 +55,9 @@ class ShopManager extends Component {
   async componentDidMount() {
     this.setState({ isLoading: true });
     await this.getListSale();
-    await this.getCustomer();
     await this.getCustomerByMonth("01");
     await this.getDataForCharts();
+    await this.getCustomer();
   }
 
   countType(arr, phone) {
@@ -271,25 +272,17 @@ class ShopManager extends Component {
                         }) : ""
                     }
                   </tbody>
-                </table>
-                {
-                  arrPagination.length == 1 ? "" :
-                    <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                      <tr style={{ float: "left", width: "100%" }}>
-                        {
-                          arrPagination.map((item, i) => {
-                            return (
-                              <td>
-                                <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ dataUserSale: arrPagination[i], indexPage: i, dataUserSale_Original: arrPagination[i] }) }}>{i + 1}</Button>
-                              </td>
-                            );
-                          })
-                        }
-                      </tr>
+                  <tfoot>
+                    <div style={{ width: '100%', margin: 10 }}>
+                      <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                        this.setState({
+                          dataUserSale: arrPagination[v - 1],
+                          indexPage: v - 1
+                        })
+                      }} />
                     </div>
-                }
-                <br />
-
+                  </tfoot>
+                </table>
 
                 <CRow>
                   <CCol xs="12" sm="5">
@@ -375,24 +368,13 @@ class ShopManager extends Component {
                           </tbody>
                         </table>
 
-                        {
-                          arrPaginationStatistical.length == 1 ? "" :
-                            <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                              <tr style={{ float: "left", width: "100%" }}>
-                                {
-                                  arrPaginationStatistical.map((item, i) => {
-                                    return (
-                                      <td>
-                                        <Button style={{ marginRight: '5px' }} color={i == indexPageStatistical ? 'primary' : 'danger'} onClick={e => {
-                                          this.setState({ dataStatistical: arrPaginationStatistical[i], indexPageStatistical: i })
-                                        }}>{i + 1}</Button>
-                                      </td>
-                                    );
-                                  })
-                                }
-                              </tr>
-                            </div>
-                        }
+                        <div style={{ float: 'right' }}>
+                          <Pagination count={arrPaginationStatistical.length} color="primary" onChange={(e, v) => {
+                            this.setState({
+                              dataStatistical: arrPaginationStatistical[v - 1], indexPageStatistical: v - 1
+                            })
+                          }} />
+                        </div>
                       </CCardBody>
                     </CCard>
                   </CCol>
