@@ -107,6 +107,8 @@ class Transaction extends Component {
 
     let data = res.data.data
 
+    console.log(data)
+
     if(data.length > 0) {
       await this.getOrderDetail(data[0]._id, data[0].Company_Id)
     }
@@ -149,7 +151,8 @@ class Transaction extends Component {
       }
     });
 
-    this.setState({ dataOrderDetail: res.data.data, currenCom: resCom.data.data[0].Name, currenCom_ID: company_id });
+    console.log(resCom.data.data[0])
+    this.setState({ dataOrderDetail: res.data.data, currenCom: resCom.data.data[0] == undefined ? "" : resCom.data.data[0].Name, currenCom_ID: company_id });
   }
 
   searchKey() {
@@ -456,7 +459,7 @@ class Transaction extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Mã công ty</th>
+                        <th className="text-center">Tên công ty</th>
                         <th className="text-center">Ngày mua</th>
                         <th className="text-center">Ngày kích hoạt</th>
                         <th className="text-center">Ngày hết hạn</th>
@@ -471,7 +474,7 @@ class Transaction extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Company_Id}</td>
+                                <td className="text-center">{item.company_name}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_At)).toLocaleDateString() + ' ' + (new Date(item.Create_At)).toLocaleTimeString()}
                                 </td>

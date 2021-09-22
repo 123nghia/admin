@@ -66,6 +66,7 @@ class Order extends Component {
       arrHardWard_render: [],
       dataHardWard: [],
       arrChooseHard: [],
+      isSave: false,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       company_id: localStorage.getItem('user')
     };
@@ -232,7 +233,10 @@ class Order extends Component {
                 <CCol sm="12" lg="12">
                   <div>
                     <label style={styles.flexLabel} htmlFor="tag">Chọn công ty:    </label>
-                    <select style={styles.flexOption} onChange={e => { this.setState({ Company_Id: e.target.value }); }}>
+                    <CSelect style={styles.flexOption}
+                      onChange={e => {
+                        this.setState({ Company_Id: e.target.value });
+                      }} custom>
                       <option value={this.state.Company_Id}>-----</option>
                       {
                         dataCompany.map((item, i) => {
@@ -241,7 +245,7 @@ class Order extends Component {
                           );
                         })
                       }
-                    </select>
+                    </CSelect>
                   </div>
                 </CCol>
 
@@ -306,7 +310,7 @@ class Order extends Component {
           </CardBody>
         </Card>
 
-        <Modal isOpen={this.state.modalCom} >
+        <Modal size="lg" isOpen={this.state.modalCom} >
           <ModalHeader>Danh sách phần cứng</ModalHeader>
 
           <ModalBody>
@@ -327,8 +331,11 @@ class Order extends Component {
             </div> */}
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard_ID: this.state.arrChooseHard }); }}>Save</Button>{' '}
-            <Button color="secondary" onClick={e => this.toggleModal("new")}>Close</Button>
+            <Button color="primary" onClick={e => { this.setState({ arrHardWard_ID: this.state.arrChooseHard,  }); this.setState({ isSave: true }) }}>Xác nhận chọn</Button>{' '}
+            <Button disabled={this.state.isSave ? false : true} color="secondary" onClick={e =>
+              {this.toggleModal("new"); this.setState({ isSave: false })
+            }}>Lưu và đóng</Button>
+            <Button color="secondary" onClick={e => {this.setState({modalCom: !this.state.modalCom}); this.setState({ isSave: false })}}>Thoát</Button>
           </ModalFooter>
         </Modal>
       </div >
@@ -346,8 +353,7 @@ const styles = {
     width: '100%'
   },
   flexOption: {
-    width: 160,
-    margin: '1px'
+    marginBottom: '20px',
   },
   a: {
     textDecoration: 'none'
