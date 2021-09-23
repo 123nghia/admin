@@ -43,6 +43,7 @@ import {
   onSaveSeed
 } from '../../../redux/data/actions'
 import 'moment-timezone';
+import Pagination from '@material-ui/lab/Pagination';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
@@ -531,22 +532,11 @@ class Users extends Component {
               }
             </CardBody>
           </Card>
-          {
-            arrPagination_All.length == 1 ? "" :
-              <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                <tr style={styles.row}>
-                  {
-                    arrPagination_All.map((item, i) => {
-                      return (
-                        <td>
-                          <Button style={styles.pagination} color={i == indexPage_All ? 'primary' : 'danger'} onClick={e => { this.setState({ dataAll: arrPagination_All[i], indexPage_All: i }) }}>{i + 1}</Button>
-                        </td>
-                      );
-                    })
-                  }
-                </tr>
-              </div>
-          }
+          <div style={{ float: 'right' }}>
+            <Pagination count={arrPagination_All.length} color="primary" onChange={(e, v) => {
+              this.setState({ dataAll: arrPagination_All[v - 1], indexPage_All: v - 1 })
+            }} />
+          </div>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>

@@ -46,6 +46,7 @@ class ShopManager extends Component {
       hidden_all: true,
       arrAllUser: [],
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      isLoadingCustomer: false
     };
   }
 
@@ -88,6 +89,7 @@ class ShopManager extends Component {
     const { company_id } = this.state;
     var id = JSON.parse(company_id);
 
+    this.setState({ isLoadingCustomer: true })
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_CUSTOMER,
@@ -101,39 +103,24 @@ class ShopManager extends Component {
       headers: this.state.token
     });
 
-    let data = res.data.data
+    if (res.data.status == 200) {
+      let data = res.data.data
 
-    this.setState({ dataApi: data });
+      this.setState({ dataApi: data });
 
-    if (data.length == 0) {
-      this.setState({ hidden_all: false, isLoading: false })
-    } else {
-      this.setState({ hidden_all: true, isLoading: false })
+      if (data.length == 0) {
+        this.setState({ hidden_all: false, isLoadingCustomer: false })
+      } else {
+        this.setState({ hidden_all: true, isLoadingCustomer: false })
+      }
+      this.pagination(data);
     }
-    this.pagination(data);
 
   }
 
   async getDataForCharts() {
     const { company_id } = this.state;
     var id = JSON.parse(company_id);
-    // let arrMonth = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
-    // let arrTemp = [];
-    // for (let i = 0; i < arrMonth.length; i++) {
-    //   const res = await axios({
-    //     baseURL: Constants.BASE_URL,
-    //     url: Constants.GET_USER_SALE_BY_MONTH,
-    //     method: 'POST',
-    //     data: {
-    //       company_id: id.company_id,
-    //       month: arrMonth[i],
-    //       sale_id: id.sale_id
-    //     }
-    //   });
-    //   let data = res.data.data
-    //   arrTemp.push(data.length)
-
-    // }
 
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -182,9 +169,9 @@ class ShopManager extends Component {
   }
 
   render() {
-    const { dataUserSale, hidden, arrPagination, indexPage, hidden_all,
-      dataStatistical, arrPaginationStatistical, indexPageStatistical } = this.state;
-    if (!this.state.isLoading) {
+    const { dataUserSale, hidden, arrPagination, hidden_all,
+      dataStatistical, arrPaginationStatistical, isLoadingCustomer, isLoading } = this.state;
+    if (!isLoading) {
       return (
         <CRow>
           <CCol>
@@ -200,52 +187,59 @@ class ShopManager extends Component {
                 </CFormGroup>
               </CCardHeader>
               <CCardBody>
-                <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">No.</th>
-                      <th className="text-center">Tên</th>
-                      <th className="text-center">Email</th>
-                      <th className="text-center">Số điện thoại</th>
-                      <th className="text-center">Giới tính</th>
-                      <th className="text-center">Số lần đến</th>
-                      <th className="text-center">Hệ số</th>
-                      <th className="text-center">Lần cuối đến</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <td colSpan="9" hidden={hidden_all} className="text-center">Không có người dùng trong tháng</td>
-                    {
-                      dataUserSale != undefined ?
-                        dataUserSale.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.Email}</td>
-                              <td className="text-center">{item.Phone}</td>
-                              <td className="text-center">{item.Gender}</td>
-                              <td className="text-center">{item.count}</td>
-                              <td className="text-center">{Number(item.coefficient).toFixed(2)}</td>
-                              <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                              </td>
-                            </tr>
-                          );
-                        }) : ""
-                    }
-                  </tbody>
-                  <tfoot>
-                    <div style={{ width: '100%', margin: 10 }}>
-                      <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                        this.setState({
-                          dataUserSale: arrPagination[v - 1],
-                          indexPage: v - 1
-                        })
-                      }} />
-                    </div>
-                  </tfoot>
-                </table>
+                {
+                  isLoadingCustomer ?
+                    <div className="sweet-loading">
+                      <DotLoader css={override} size={50} color={"#123abc"} loading={isLoadingCustomer} speedMultiplier={1.5} />
+                    </div> :
+                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">No.</th>
+                          <th className="text-center">Tên</th>
+                          <th className="text-center">Email</th>
+                          <th className="text-center">Số điện thoại</th>
+                          <th className="text-center">Giới tính</th>
+                          <th className="text-center">Số lần đến</th>
+                          <th className="text-center">Hệ số</th>
+                          <th className="text-center">Lần cuối đến</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td colSpan="9" hidden={hidden_all} className="text-center">Không có người dùng trong tháng</td>
+                        {
+                          dataUserSale != undefined ?
+                            dataUserSale.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{i + 1}</td>
+                                  <td className="text-center">{item.Name}</td>
+                                  <td className="text-center">{item.Email}</td>
+                                  <td className="text-center">{item.Phone}</td>
+                                  <td className="text-center">{item.Gender}</td>
+                                  <td className="text-center">{item.count}</td>
+                                  <td className="text-center">{Number(item.coefficient).toFixed(2)}</td>
+                                  <td className="text-center">
+                                    {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                  </td>
+                                </tr>
+                              );
+                            }) : ""
+                        }
+                      </tbody>
+                      <tfoot>
+                        <div style={{ width: '100%', margin: 10 }}>
+                          <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                            this.setState({
+                              dataUserSale: arrPagination[v - 1],
+                              indexPage: v - 1
+                            })
+                          }} />
+                        </div>
+                      </tfoot>
+                    </table>
+                }
+                <br />
 
                 <CRow>
                   <CCol xs="12" sm="5">

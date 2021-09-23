@@ -40,6 +40,7 @@ import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import LazyLoad from 'react-lazyload';
 import ReactLoading from 'react-loading';
+import Pagination from '@material-ui/lab/Pagination';
 
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -120,9 +121,9 @@ class Users extends Component {
     this.getData();
 
     let arr = JSON.parse(localStorage.getItem('url'));
-    for(let i = 0; i < arr.length; i++){
-      if("#" + arr[i].to == window.location.hash){
-        if(arr[i].hidden == true){
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
           window.location.href = '#/'
         }
       }
@@ -385,9 +386,9 @@ class Users extends Component {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+          val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
           d.push(val)
         }
       })
@@ -777,22 +778,11 @@ class Users extends Component {
               }
             </CardBody>
           </Card>
-          {
-            arrPagination.length == 1 ? "" :
-              <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                <tr style={styles.row}>
-                  {
-                    arrPagination.map((item, i) => {
-                      return (
-                        <td>
-                          <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                        </td>
-                      );
-                    })
-                  }
-                </tr>
-              </div>
-          }
+          <div style={{ float: 'right' }}>
+            <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+              this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+            }} />
+          </div>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
@@ -949,7 +939,7 @@ class Users extends Component {
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => {this.setState({ modalCom: !this.state.modalCom})}}>Đóng</Button>
+              <Button color="secondary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Đóng</Button>
             </ModalFooter>
           </Modal>
 

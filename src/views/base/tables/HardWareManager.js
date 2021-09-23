@@ -20,10 +20,11 @@ import {
 } from '@coreui/react'
 
 import 'moment-timezone';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+
 import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
+import Pagination from '@material-ui/lab/Pagination';
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 import axios from 'axios'
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -64,6 +65,7 @@ class PackageSale extends Component {
       role: localStorage.getItem('role'),
       company_id: localStorage.getItem('user'),
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      isLoading: false
     };
   }
   async componentDidMount() {
@@ -273,9 +275,8 @@ class PackageSale extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, End_Date, Active_Date,
-      dataCompany, currentCompany, arrPagination, indexPage } = this.state;
-    if (!this.state.isLoading) {
+    const { data, key, action, isLoading, arrPagination, indexPage } = this.state;
+    if (!isLoading) {
       return (
         <div>
           <Card>
@@ -360,27 +361,14 @@ class PackageSale extends Component {
               </table>
             </CardBody>
           </Card>
-          {
-            arrPagination.length == 1 ? "" :
-              <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                <tr style={styles.row}>
-                  {
-                    arrPagination.map((item, i) => {
-                      return (
-                        <td>
-                          <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>{' '}
-                        </td>
-                      );
-                    })
-                  }
-                </tr>
-              </div>
-          }
-
-
+          <div style={{ float: 'right' }}>
+            <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+              this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+            }} />
+          </div>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>{action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               {
                 action == 'new' ? "" : <div>
@@ -424,16 +412,18 @@ class PackageSale extends Component {
       );
     }
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   datePicker: {
