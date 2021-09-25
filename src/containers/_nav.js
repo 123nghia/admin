@@ -326,7 +326,7 @@ icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sid
       </CTooltip>,
     }
   }
-  
+
 ]
 
 const _navGH = [
@@ -338,15 +338,17 @@ const _navGH = [
       {
         _tag: 'CSidebarNavItem',
         name: 'Bảng điều khiển ',
-        to: '/danh-sach-dat-lich',
-       icon: <CIcon style={css} content={freeSet.cilCalendar} customClasses="c-sidebar-nav-icon" />,
+        //to: '/danh-sach-dat-lich',
+        icon: <CIcon style={css} content={freeSet.cilCalendar} customClasses="c-sidebar-nav-icon" />,
         role: ['0', '1', '2'],
         badge: {
           color: 'info',
           text: <CTooltip placement={"right"} content={content.customer}>
             <CIcon content={freeSet.cilBellExclamation} />
           </CTooltip>,
-        }
+        },
+        addLinkClass: 'c-disabled',
+        'disabled': true
       }
  ]
 
