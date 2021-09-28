@@ -14,7 +14,8 @@ import {
   CButton,
   CRow,
   CCol,
-  CLabel
+  CLabel,
+  CTextarea
 } from '@coreui/react'
 
 import CreatableSelect from 'react-select/creatable';
@@ -46,6 +47,8 @@ class Product extends Component {
       href: "",
       image_show: "",
       image: "",
+      description: "",
+      image_multiple: [],
       price: "",
       modalDelete: false,
       delete: null,
@@ -139,6 +142,17 @@ class Product extends Component {
     }
   }
 
+  onChangeImage_Multiple(e) {
+    let files = e.target.files;
+    console.log(files)
+    //let reader = new FileReader();
+    // this.setState({ image: files[0] })
+    // reader.readAsDataURL(files[0])
+    // reader.onload = (e) => {
+    //   this.setState({ image_show: e.target.result })
+    // }
+  }
+
   async toggleModal(key) {
     const { modalCom, token, arrOptionBrand, arrOptionCategory } = this.state;
     if (key == 'new') {
@@ -149,8 +163,12 @@ class Product extends Component {
         brand_id: "",
         name: "",
         href: "",
+        description: "",
         image_show: "",
         image: "",
+        image_multiple: [],
+        objectValueBrand: {},
+        objectValueCategory: {},
         price: "",
       }, async () => {
         if (arrOptionBrand.length == 0 || arrOptionCategory.length == 0) {
@@ -179,9 +197,6 @@ class Product extends Component {
             })
           }
 
-          console.log(arrTempOptionBrand)
-          console.log(arrTempOptionCategory)
-
           this.setState({ arrOptionBrand: arrTempOptionBrand, arrOptionCategory: arrTempOptionCategory })
         }
       })
@@ -194,7 +209,7 @@ class Product extends Component {
 
   async addProduct() {
 
-    const { category_id, brand_id, name, href, image, price } = this.state
+    const { category_id, brand_id, name, href, image, price, image_multiple, description } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       category_id == null || category_id == '' ||
@@ -208,12 +223,18 @@ class Product extends Component {
 
     await API_CONNECT(Constants.UPLOAD_PRODUCT, form, "", "POST")
 
+    // const formMultiple = new FormData();
+    // form.append("image", image_multiple);
+
+    // const resMultiple = await API_CONNECT(Constants.UPLOAD_PRODUCT_MULTIPLE, formMultiple, "", "POST")
+
     const body = {
       category_id: category_id,
       brand_id: brand_id,
       name: name,
       href: href,
       image: image.name,
+      description: description,
       price: price
     }
 
@@ -241,6 +262,7 @@ class Product extends Component {
       brand_id: item.brand_id,
       name: item.name,
       href: item.href,
+      description: item.description,
       image_show: "",
       image: item.image,
       price: item.price,
@@ -279,7 +301,7 @@ class Product extends Component {
   }
 
   async updateProduct() {
-    const { category_id, brand_id, name, href, image, price } = this.state
+    const { category_id, brand_id, name, href, image, price, description } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -300,6 +322,7 @@ class Product extends Component {
       name: name,
       href: href,
       image: image.name,
+      description: description,
       price: price,
       id: this.state.id,
     }
@@ -408,6 +431,7 @@ class Product extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên sản phẩm</th>
                         <th className="text-center">Hình ảnh</th>
+                        <th className="text-center">Mô tả</th>
                         <th className="text-center">Đường dẫn</th>
                         <th className="text-center">Thương hiệu</th>
                         <th className="text-center">Danh mục</th>
@@ -430,6 +454,11 @@ class Product extends Component {
                                       <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
                                       <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"80px"} height={"60px"} />
                                   }
+                                </td>
+                                <td className="text-center">
+                                  <div style={{ width: 250 }}>
+                                    {item.description}
+                                  </div>
                                 </td>
                                 <td className="text-center">
                                   <a href={item.href} target="_blank">Đường dẫn chi tiết</a>
@@ -484,6 +513,17 @@ class Product extends Component {
               // rows="5"
               />
 
+              <label className="control-label">Mô tả</label>
+              <CTextarea
+                name="description"
+                rows="5"
+                value={this.state.description}
+                onChange={(e) => { this.setState({ description: e.target.value }) }}
+                placeholder="Mô tả"
+              />
+
+              <br/>
+
               <CRow>
                 <CCol md="2" lg="2" sm="12" xm="12" lx="2">
                   <CLabel>Thương hiệu:</CLabel>
@@ -525,10 +565,18 @@ class Product extends Component {
               />
               {
                 image == "" ? "" :
-                  <img width="250" height="300" src={
+                  <img width="350" height="300" src={
                     image_show == "" ?
                       `${Constants.BASE_URL}/public/image_product/${image}` : image_show} style={{ marginBottom: 20 }} />
               }
+
+              {/* <TextFieldGroup
+                field="image_multiple"
+                label="Ảnh nổi bật"
+                type={"file"}
+                onChange={e => { this.onChangeImage_Multiple(e) }}
+                onClick={(e) => { e.target.value = null;}}
+              /> */}
 
               <TextFieldGroup
                 field="price"
@@ -626,7 +674,7 @@ const styles = {
     color: 'red'
   },
   mgl5: {
-    marginLeft: '5px'
+    margin: '5px'
   },
   tags: {
     float: "right",

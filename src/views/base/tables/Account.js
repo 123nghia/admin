@@ -13,9 +13,11 @@ import {
 import {
   CButton,
   CRow,
-  CCol
+  CCol,
+  CLabel
 } from '@coreui/react'
 
+import CreatableSelect from 'react-select/creatable';
 import API_CONNECT from "../../../functions/callAPI";
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
@@ -28,7 +30,7 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-class Category extends Component {
+class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,9 +41,12 @@ class Category extends Component {
       hidden: false,
       action: 'new',
       name: "",
-      image: "",
+      email: "",
+      avatar: "",
       image_show: "",
-      vi: "",
+      phone: "",
+      address: "",
+      username: "",
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -79,7 +84,7 @@ class Category extends Component {
   getData = async () => {
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.LIST_CATEGORY, {}, "", "POST")
+      Constants.LIST_USER, {}, "", "POST")
 
     let val = res.data;
     this.pagination(val);
@@ -92,7 +97,10 @@ class Category extends Component {
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.username.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -122,101 +130,147 @@ class Category extends Component {
 
   onChangeImage(e) {
     let files = e.target.files;
+    console.log(files)
     let reader = new FileReader();
-    this.setState({ image: files[0] })
+    this.setState({ avatar: files[0] })
     reader.readAsDataURL(files[0])
     reader.onload = (e) => {
       this.setState({ image_show: e.target.result })
     }
   }
 
-  async toggleModal(key) {
-    if (key == 'new') {
-      this.setState({
-        modalCom: !this.state.modalCom,
-        action: key,
-        name: "",
-        image_show: "",
-        image: "",
-        vi: ""
-      })
-    }
-  }
+  // async toggleModal(key) {
+  //   const { modalCom, token, arrOptionBrand, arrOptionCategory } = this.state;
+  //   if (key == 'new') {
+  //     this.setState({
+  //       modalCom: !modalCom,
+  //       action: key,
+  //       category_id: "",
+  //       brand_id: "",
+  //       name: "",
+  //       href: "",
+  //       image_show: "",
+  //       image: "",
+  //       price: "",
+  //     }, async () => {
+  //       if (arrOptionBrand.length == 0 || arrOptionCategory.length == 0) {
+
+  //         const res_brand = await API_CONNECT(
+  //           Constants.LIST_BRAND, {}, token, "POST")
+
+  //         const res_category = await API_CONNECT(
+  //           Constants.LIST_CATEGORY, {}, token, "POST")
+
+  //         let arrTempOptionBrand = [];
+  //         let arrTempOptionCategory = [];
+
+  //         let dataBrand = res_brand.data;
+  //         let dataCategory = res_category.data;
+
+  //         for (let i = 0; i < dataBrand.length; i++) {
+  //           arrTempOptionBrand.push({
+  //             value: dataBrand[i]._id, label: dataBrand[i].name
+  //           })
+  //         }
+
+  //         for (let i = 0; i < dataCategory.length; i++) {
+  //           arrTempOptionCategory.push({
+  //             value: dataCategory[i]._id, label: dataCategory[i].name
+  //           })
+  //         }
+
+  //         this.setState({ arrOptionBrand: arrTempOptionBrand, arrOptionCategory: arrTempOptionCategory })
+  //       }
+  //     })
+  //   }
+  // }
 
   onChange(key, val) {
     this.setState({ [key]: val })
   }
 
-  async addCategory() {
-    const { name, image, vi } = this.state
-    if (name == null || name == '' ||
-      image == null || image == '') {
-      alert("Hãy nhập đầy đủ dữ liệu !!!");
-      return
-    }
+  // async addProduct() {
 
-    const form = new FormData();
-    form.append("image", image);
+  //   const { category_id, brand_id, name, href, image, price } = this.state
+  //   if (name == null || name == '' ||
+  //     image == null || image == '' ||
+  //     category_id == null || category_id == '' ||
+  //     brand_id == null || brand_id == '') {
+  //     alert("Hãy nhập đầy đủ dữ liệu !!!");
+  //     return
+  //   }
 
-    await API_CONNECT(Constants.UPLOAD_CATEGORY, form, "", "POST")
+  //   const form = new FormData();
+  //   form.append("image", image);
 
-    const body = {
-      name: name,
-      image: image.name,
-      vi: vi
-    }
+  //   await API_CONNECT(Constants.UPLOAD_PRODUCT, form, "", "POST")
 
-    this.setState({ isLoading: true });
-    var res = await API_CONNECT(
-      Constants.ADD_CATEGORY, body, "", "POST")
+  //   const body = {
+  //     category_id: category_id,
+  //     brand_id: brand_id,
+  //     name: name,
+  //     href: href,
+  //     image: image.name,
+  //     price: price
+  //   }
 
-    if (res.status == 200) {
+  //   this.setState({ isLoading: true });
+  //   var res = await API_CONNECT(
+  //     Constants.ADD_PRODUCT, body, "", "POST")
 
-      this.getData()
+  //   if (res.status == 200) {
 
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert("Thêm danh mục thất bại");
-      this.setState({ isLoading: false });
-    }
-  }
+  //     this.getData()
+
+  //     this.setState({ modalCom: !this.state.modalCom })
+  //   } else {
+  //     alert("Thêm danh mục thất bại");
+  //     this.setState({ isLoading: false });
+  //   }
+  // }
 
   async openUpdate(item) {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
       name: item.name,
-      image: item.image,
+      email: item.email,
+      avatar: item.avatar,
       image_show: "",
-      vi: item.vi,
+      phone: item.phone,
+      address: item.address,
+      username: item.username,
       id: item['_id']
     })
   }
 
-  async updateCategory() {
-    const { name, image, vi, image_show } = this.state
+  async updataUser() {
+    const { name, email, avatar, phone, address, username } = this.state
 
     if (name == null || name == '' ||
-      image == null || image == '') {
-      alert("Hãy nhập đầy đủ trường !!!");
+      email == null || email == '') {
+      alert("Tên và email trống !!!");
       return
     }
 
     const form = new FormData();
-    form.append("image", image);
+    form.append("image", avatar);
 
-    await API_CONNECT(Constants.UPLOAD_CATEGORY, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_AVATAR, form, "", "POST")
 
     const body = {
       name: name,
-      image: image.name,
-      vi: vi,
+      email: email,
+      avatar: avatar.name,
+      phone: phone,
+      address: address,
+      username: username,
       id: this.state.id,
     }
 
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.UPDATE_CATEGORY, body, "", "POST")
+      Constants.UPDATE_USER, body, "", "POST")
 
     if (res.status == 200) {
 
@@ -239,7 +293,7 @@ class Category extends Component {
   async delete() {
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.DELETE_CATEGORY, {
+      Constants.DELETE_USER, {
       "id": this.state.id
     }, "", "POST")
 
@@ -268,7 +322,7 @@ class Category extends Component {
   }
 
   render() {
-    const { data, arrPagination, key, image, image_show } = this.state;
+    const { data, arrPagination, key, avatar, image_show } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -294,7 +348,7 @@ class Category extends Component {
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+                        {/* <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton> */}
                       </CCol>
                     </CRow>
 
@@ -306,8 +360,11 @@ class Category extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên danh mục</th>
-                        <th className="text-center">Hình ảnh</th>
+                        <th className="text-center">Tên</th>
+                        <th className="text-center">Avatar</th>
+                        <th className="text-center">Email</th>
+                        <th className="text-center">Phone</th>
+                        <th className="text-center">Address</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -322,11 +379,14 @@ class Category extends Component {
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   {
-                                    item.image == "" || item.image == null ?
+                                    item.avatar == "" || item.avatar == null ?
                                       <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
-                                      <img src={`${Constants.BASE_URL}/public/image_category/${item.image}`} width={"80px"} height={"60px"} />
+                                      <img src={`${Constants.BASE_URL}/public/image_avatar/${item.avatar}`} width={"60px"} height={"60px"}/>
                                   }
                                 </td>
+                                <td className="text-center">{item.email}</td>
+                                <td className="text-center">{item.phone}</td>
+                                <td className="text-center">{item.address}</td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -351,36 +411,66 @@ class Category extends Component {
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
+          <Modal size="lg" isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="name"
-                label="Tên danh mục"
+                label="Tên"
                 value={this.state.name}
-                placeholder={"Tên danh mục"}
+                placeholder={"Tên sản phẩm"}
                 // error={errors.title}
                 onChange={e => this.onChange("name", e.target.value)}
               // rows="5"
               />
 
               <TextFieldGroup
-                field="image"
-                label="Ảnh sản phẩm"
+                field="avatar"
+                label="Ảnh đại diện"
                 type={"file"}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               />
               {
-                image == "" ? "" :
-                  <img width="250" height="300" src={
+                avatar == "" ? "" :
+                  <img width="350" height="300" src={
                     image_show == "" ?
-                      `${Constants.BASE_URL}/public/image_category/${image}` : image_show} style={{ marginBottom: 20 }} />
+                      `${Constants.BASE_URL}/public/image_avatar/${avatar}` : image_show} style={{ marginBottom: 20 }} />
               }
+
+              <TextFieldGroup
+                field="email"
+                label="Email"
+                value={this.state.email}
+                placeholder={"Email"}
+                // error={errors.title}
+                onChange={e => this.onChange("email", e.target.value)}
+              // rows="5"
+              />
+
+              <TextFieldGroup
+                field="phone"
+                label="Số điện thoại"
+                value={this.state.phone}
+                placeholder={"Số điện thoại"}
+                // error={errors.title}
+                onChange={e => this.onChange("phone", e.target.value)}
+              // rows="5"
+              />
+
+              <TextFieldGroup
+                field="address"
+                label="Địa chỉ"
+                value={this.state.address}
+                placeholder={"Địa chỉ"}
+                // error={errors.title}
+                onChange={e => this.onChange("address", e.target.value)}
+              // rows="5"
+              />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCategory() : this.updateCategory() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updataUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="secondary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Cancel</CButton>
             </ModalFooter>
           </Modal>
 
@@ -490,4 +580,4 @@ const styles = {
   },
 }
 
-export default Category;
+export default Account;
