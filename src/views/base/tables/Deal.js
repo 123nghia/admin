@@ -562,7 +562,7 @@ class Product extends Component {
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <CRow>
-                <CCol md="4" lg="4" sm="12" xm="12" lx="4">
+                <CCol md="3" lg="3" sm="12" xm="12" lx="3">
                   <TextFieldGroup
                     field="name"
                     label="Tên banner"
@@ -630,22 +630,19 @@ class Product extends Component {
                   // rows="5"
                   />
 
-                  <CRow>
-                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
-                      <div style={styles.datePicker}>
-                        <label style={styles.flexLabel}>Ngày bắt đầu:</label>
-                        <DatePicker style={styles.flexOption} selected={new Date(time_start)} onChange={(date) => this.setState({ time_start: date })} />
-                      </div>
-                    </CCol>
-                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
-                      <div style={styles.datePicker}>
-                        <label style={styles.flexLabel}>Ngày kết thúc:</label>
-                        <DatePicker style={styles.flexOption} selected={new Date(time_finish)} onChange={(date) => this.setState({ time_finish: date })} />
-                      </div>
-                    </CCol>
-                  </CRow>
+
+                  <div style={styles.datePicker}>
+                    <label style={styles.flexLabel}>Ngày bắt đầu:</label>
+                    <DatePicker style={styles.flexOption} selected={new Date(time_start)} onChange={(date) => this.setState({ time_start: date })} />
+                  </div>
+
+                  <div style={styles.datePicker}>
+                    <label style={styles.flexLabel}>Ngày kết thúc:</label>
+                    <DatePicker style={styles.flexOption} selected={new Date(time_finish)} onChange={(date) => this.setState({ time_finish: date })} />
+                  </div>
+
                 </CCol>
-                <CCol md="8" lg="8" sm="12" xm="12" lx="8">
+                <CCol md="9" lg="9" sm="12" xm="12" lx="9">
 
                   {
                     action == "new" ?
@@ -654,7 +651,7 @@ class Product extends Component {
                         <CRow>
                           <CCol md="5" lg="5" sm="12" xm="12" lx="5">
                             <h3>
-                              <strong>Thiết lập dữ liệu cho banner</strong>
+                              <strong>Tạo dữ liệu cho banner</strong>
                             </h3>
                           </CCol>
                           <CCol md="7" lg="7" sm="12" xm="12" lx="7">
@@ -698,42 +695,41 @@ class Product extends Component {
                                             Danh sách sản phẩm
                                           </CardHeader>
                                           <CardBody style={{ height: 250, overflowY: 'scroll' }}>
-                                            {
-                                              arrAllProductOfAllCategory[idCategory].map((item_product, i_product) => {
-                                                return (
-                                                  <CFormGroup variant="custom-checkbox" inline>
-                                                    <CInputCheckbox
-                                                      custom
-                                                      id={`${item_product._id}`}
-                                                      onClick={(e) => {
-                                                        if (e.target.checked) {
-                                                          let data = arrAllProductOfAllCategory[idCategory][i_product]
+                                            <CRow>
+                                              {
+                                                arrAllProductOfAllCategory[idCategory].map((item_product, i_product) => {
+                                                  return (
+                                                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                                                      <CFormGroup variant="custom-checkbox" inline>
+                                                        <CInputCheckbox
+                                                          custom
+                                                          id={`${item_product._id}`}
+                                                          onClick={(e) => {
+                                                            if (e.target.checked) {
+                                                              let data = arrAllProductOfAllCategory[idCategory][i_product]
 
-                                                          arrAllProductChoosed[idCategory].push({
-                                                            name: data.name,
-                                                            image: data.image,
-                                                            brand_id: data.brand_id._id,
-                                                            price: data.price,
-                                                            slug: data.slug
-                                                          })
+                                                              arrAllProductChoosed[idCategory].push({
+                                                                name: data.name,
+                                                                image: data.image,
+                                                                brand_id: data.brand_id._id,
+                                                                price: data.price,
+                                                                slug: data.slug
+                                                              })
 
-                                                          this.setState({ arrAllProductChoosed: arrAllProductChoosed })
-                                                        } else {
-                                                          let data = arrAllProductOfAllCategory[idCategory][i_product]
-                                                          const findI = (element) => element.name == data.name;
-                                                          const index = arrAllProductChoosed[idCategory].findIndex(findI)
-                                                          arrAllProductChoosed[idCategory].splice(index, 1)
+                                                              this.setState({ arrAllProductChoosed: arrAllProductChoosed })
+                                                            } else {
+                                                              let data = arrAllProductOfAllCategory[idCategory][i_product]
+                                                              const findI = (element) => element.name == data.name;
+                                                              const index = arrAllProductChoosed[idCategory].findIndex(findI)
+                                                              arrAllProductChoosed[idCategory].splice(index, 1)
 
-                                                          this.setState({ arrAllProductChoosed: arrAllProductChoosed })
-                                                        }
-                                                      }}
-                                                    />
-                                                    <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
-                                                      <CRow>
-                                                        <CCol sm="12" lg="12">
+                                                              this.setState({ arrAllProductChoosed: arrAllProductChoosed })
+                                                            }
+                                                          }}
+                                                        />
+                                                        <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
+
                                                           <div><strong>Tên sp: </strong>{item_product.name}</div>
-                                                          <div><strong>Giá gốc: </strong>{item_product.price}</div>
-                                                          <div><strong>Số lượng deal: </strong></div>
                                                           <CInput placeholder={"Số lượng deal"} disabled={
                                                             arrAllProductChoosed[idCategory].findIndex(val => val.name == item_product.name) > -1 ?
                                                               false : true
@@ -745,13 +741,14 @@ class Product extends Component {
                                                             }} />
 
                                                           <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"100px"} height={"150px"} />
-                                                        </CCol>
-                                                      </CRow>
-                                                    </CLabel>
-                                                  </CFormGroup>
-                                                )
-                                              })
-                                            }
+
+                                                        </CLabel>
+                                                      </CFormGroup>
+                                                    </CCol>
+                                                  )
+                                                })
+                                              }
+                                            </CRow>
                                           </CardBody>
                                         </Card> : ""
                                     }
@@ -955,7 +952,8 @@ const override = css`
 
 const styles = {
   datePicker: {
-    marginBottom: 20
+    marginBottom: 20,
+    width: '100%'
   },
   pagination: {
     marginRight: '5px'
@@ -964,7 +962,7 @@ const styles = {
     width: 100
   },
   flexOption: {
-    width: 300
+    width: '100%'
   },
   a: {
     textDecoration: 'none'
