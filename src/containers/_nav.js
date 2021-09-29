@@ -45,12 +45,12 @@ const _nav = [
     to: '/product',
     icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Lượt mua từng sản phẩm',
-    to: '/countorder',
-    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
-  },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Lượt mua từng sản phẩm',
+  //   to: '/countorder',
+  //   icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
+  // },
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lí đơn hàng']
