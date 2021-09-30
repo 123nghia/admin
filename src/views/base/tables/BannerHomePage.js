@@ -199,7 +199,7 @@ class Banner extends Component {
     const form = new FormData();
     form.append("image", image);
 
-    await API_CONNECT(Constants.UPADTE_BANNER, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_BANNER, form, "", "POST")
 
     const body = {
       image: image.name,
@@ -312,7 +312,6 @@ class Banner extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   {
                                     item.image == "" || item.image == null ?
