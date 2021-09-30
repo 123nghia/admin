@@ -45,6 +45,8 @@ class Product extends Component {
       brand_id: "",
       name: "",
       href: "",
+      info_product: "",
+      how_to_use: "",
       image_show: "",
       image: "",
       description: "",
@@ -163,6 +165,8 @@ class Product extends Component {
         brand_id: "",
         name: "",
         href: "",
+        info_product: "",
+        how_to_use: "",
         description: "",
         image_show: "",
         image: "",
@@ -209,7 +213,7 @@ class Product extends Component {
 
   async addProduct() {
 
-    const { category_id, brand_id, name, href, image, price, image_multiple, description } = this.state
+    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       category_id == null || category_id == '' ||
@@ -223,14 +227,11 @@ class Product extends Component {
 
     await API_CONNECT(Constants.UPLOAD_PRODUCT, form, "", "POST")
 
-    // const formMultiple = new FormData();
-    // form.append("image", image_multiple);
-
-    // const resMultiple = await API_CONNECT(Constants.UPLOAD_PRODUCT_MULTIPLE, formMultiple, "", "POST")
-
     const body = {
       category_id: category_id,
       brand_id: brand_id,
+      info_product: info_product,
+      how_to_use: how_to_use,
       name: name,
       href: href,
       image: image.name,
@@ -262,6 +263,8 @@ class Product extends Component {
       brand_id: item.brand_id,
       name: item.name,
       href: item.href,
+      info_product: item.info_product,
+      how_to_use: item.how_to_use,
       description: item.description,
       image_show: "",
       image: item.image,
@@ -301,7 +304,7 @@ class Product extends Component {
   }
 
   async updateProduct() {
-    const { category_id, brand_id, name, href, image, price, description } = this.state
+    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -321,6 +324,8 @@ class Product extends Component {
       brand_id: brand_id,
       name: name,
       href: href,
+      info_product: info_product,
+      how_to_use: how_to_use,
       image: image.name,
       description: description,
       price: price,
@@ -522,7 +527,25 @@ class Product extends Component {
                 placeholder="Mô tả"
               />
 
-              <br/>
+              <label className="control-label">Thông tin sản phẩm</label>
+              <CTextarea
+                name="info_product"
+                rows="5"
+                value={this.state.info_product}
+                onChange={(e) => { this.setState({ info_product: e.target.value }) }}
+                placeholder="Thông tin sản phẩm"
+              />
+
+              <label className="control-label">Chất liệu và cách sử dụng</label>
+              <CTextarea
+                name="how_to_use"
+                rows="5"
+                value={this.state.how_to_use}
+                onChange={(e) => { this.setState({ how_to_use: e.target.value }) }}
+                placeholder="Chất liệu và cách sử dụng"
+              />
+
+              <br />
 
               <CRow>
                 <CCol md="2" lg="2" sm="12" xm="12" lx="2">

@@ -260,41 +260,13 @@ class Product extends Component {
     this.setState({ type: e.target.value })
   }
 
-  onGetCategory(item) {
-    let arrTemp = []
-
-    for (let i = 0; i < item.length; i++) {
-      arrTemp.push({
-        category_id: item[i].category_id._id,
-        product: []
-      })
-
-      for (let y = 0; y < item[i].product.length; y++) {
-        let dataItem = item[i].product[y];
-        dataItem.brand_id = dataItem.brand_id._id
-        arrTemp[i].product.push({
-          name: dataItem.name,
-          image: dataItem.image,
-          brand_id: dataItem.brand_id,
-          price: dataItem.price,
-          slug: dataItem.slug,
-          total_deal: dataItem.total_deal
-        })
-      }
-    }
-    return arrTemp;
-  }
-
   async openUpdate(item) {
     const { token, arrOptionCategory, arrRemoveOnUpdate } = this.state;
     for (let i = 0; i < arrRemoveOnUpdate.length; i++) {
       item.category.push(arrRemoveOnUpdate[i])
     }
 
-    const dataTemp = this.onGetCategory(item.category)
-
     this.setState({
-      arrUpdate: dataTemp,
       arrRemoveOnUpdate: [],
       modalCom: !this.state.modalCom,
       action: "update",
@@ -497,7 +469,7 @@ class Product extends Component {
             </CButton>
           </CCol>
         </CRow>
-        <div style={{ maxHeight: 400, overflowY: 'scroll', border: '1px solid red', marginTop: 15, borderRadius: 5 }}>
+        <div style={{ maxHeight: 450, overflowY: 'scroll', border: '1px solid red', marginTop: 15, borderRadius: 5 }}>
           {
             arrCategory.map((item, i) => {
               let idCategory = i;
@@ -539,13 +511,8 @@ class Product extends Component {
                                           onClick={(e) => {
                                             if (e.target.checked) {
                                               let data = arrAllProductOfAllCategory[idCategory][i_product]
-
                                               arrAllProductChoosed[idCategory].push({
-                                                name: data.name,
-                                                image: data.image,
-                                                brand_id: data.brand_id._id,
-                                                price: data.price,
-                                                slug: data.slug
+                                                product_id: data._id
                                               })
 
                                               this.setState({ arrAllProductChoosed: arrAllProductChoosed })
@@ -562,11 +529,11 @@ class Product extends Component {
                                         <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
                                           <div><strong>Tên sp: </strong>{item_product.name}</div>
                                           <CInput placeholder={"Số lượng deal"} disabled={
-                                            arrAllProductChoosed[idCategory].findIndex(val => val.name == item_product.name) > -1 ?
+                                            arrAllProductChoosed[idCategory].findIndex(val => val.product_id == item_product._id) > -1 ?
                                               false : true
                                           } type="number" style={{ marginBottom: 3 }}
                                             onChange={(e) => {
-                                              const index = arrAllProductChoosed[idCategory].findIndex(val => val.name == item_product.name);
+                                              const index = arrAllProductChoosed[idCategory].findIndex(val => val.product_id == item_product._id);
                                               arrAllProductChoosed[idCategory][index].total_deal = Number(e.target.value)
                                               this.setState({ arrAllProductChoosed: arrAllProductChoosed })
                                             }} />
