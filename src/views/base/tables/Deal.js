@@ -37,6 +37,7 @@ import Constants from "../../../contants/contants";
 import TextFieldGroup from "../../Common/TextFieldGroup";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import lodash from "lodash";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -75,7 +76,8 @@ class Product extends Component {
       arrAllProductOfAllCategory: [],
       arrAllProductChoosed: [],
       arrChooseCategory: [],
-      arrUpdate: []
+      arrUpdate: [],
+      arrRemoveOnUpdate: []
     };
   }
   async componentDidMount() {
@@ -165,6 +167,7 @@ class Product extends Component {
         action: key,
         name: "",
         category: [],
+        arrCategory: [],
         image: "",
         image_show: "",
         type: "0",
@@ -257,10 +260,42 @@ class Product extends Component {
     this.setState({ type: e.target.value })
   }
 
+  onGetCategory(item) {
+    let arrTemp = []
+
+    for (let i = 0; i < item.length; i++) {
+      arrTemp.push({
+        category_id: item[i].category_id._id,
+        product: []
+      })
+
+      for (let y = 0; y < item[i].product.length; y++) {
+        let dataItem = item[i].product[y];
+        dataItem.brand_id = dataItem.brand_id._id
+        arrTemp[i].product.push({
+          name: dataItem.name,
+          image: dataItem.image,
+          brand_id: dataItem.brand_id,
+          price: dataItem.price,
+          slug: dataItem.slug,
+          total_deal: dataItem.total_deal
+        })
+      }
+    }
+    return arrTemp;
+  }
+
   async openUpdate(item) {
-    const { token, arrOptionCategory } = this.state;
+    const { token, arrOptionCategory, arrRemoveOnUpdate } = this.state;
+    for (let i = 0; i < arrRemoveOnUpdate.length; i++) {
+      item.category.push(arrRemoveOnUpdate[i])
+    }
+
+    const dataTemp = this.onGetCategory(item.category)
+
     this.setState({
-      arrUpdate: item.category,
+      arrUpdate: dataTemp,
+      arrRemoveOnUpdate: [],
       modalCom: !this.state.modalCom,
       action: "update",
       name: item.name,
@@ -293,8 +328,7 @@ class Product extends Component {
   }
 
   async updateProduct() {
-    const { name, image, type, status, voucher, time_start, time_finish } = this.state
-
+    const { name, image, type, status, voucher, time_start, time_finish, arrUpdate } = this.state
     if (name == null || name == '' ||
       image == null || image == '') {
       alert("Hãy nhập đầy đủ dữ liệu !!!");
@@ -394,9 +428,9 @@ class Product extends Component {
 
   handleUpdateCategory = async (e, i) => {
     const { arrUpdate, arrOptionCategory } = this.state;
-    console.log(arrUpdate[i].category_id);
-    console.log(e.value);
-    console.log(arrOptionCategory.find(val => val.value == e.value));
+    console.log(arrUpdate[i]);
+    // console.log(e.value);
+    // console.log(arrOptionCategory.find(val => val.value == e.value));
   }
 
   pushCategory = () => {
@@ -446,10 +480,122 @@ class Product extends Component {
     });
   }
 
+  renderAddForm() {
+    const { arrCategory, arrChooseCategory, arrOptionCategory, arrAllProductOfAllCategory, arrAllProductChoosed } = this.state;
+    return (
+      <div>
+        <CRow>
+          <CCol md="5" lg="5" sm="12" xm="12" lx="5">
+            <h3>
+              <strong>Tạo dữ liệu cho banner</strong>
+            </h3>
+          </CCol>
+          <CCol md="7" lg="7" sm="12" xm="12" lx="7">
+            <CButton block active variant="ghost" color="success" aria-pressed="true"
+              onClick={() => { this.pushCategory() }}>
+              Thêm sản phẩm
+            </CButton>
+          </CCol>
+        </CRow>
+        <div style={{ maxHeight: 400, overflowY: 'scroll', border: '1px solid red', marginTop: 15, borderRadius: 5 }}>
+          {
+            arrCategory.map((item, i) => {
+              let idCategory = i;
+              return (
+                <Card style={{ margin: 20 }}>
+                  <CardHeader style={{ backgroundColor: '#339966', height: 50 }}>
+                    <CButton size="sm" color="danger" style={{ float: 'right' }} onClick={() => {
+                      this.onRemoveCard(idCategory)
+                    }}>X</CButton>
+                  </CardHeader>
+                  <CardBody>
+                    <CRow style={{ margin: 20 }}>
+                      <CCol md="3" lg="3" sm="12" xm="12" lx="3">
+                        <CLabel>Chọn danh mục:</CLabel>
+                      </CCol>
+                      <CCol md="9" lg="9" sm="12" xm="12" lx="9">
+                        <CreatableSelect
+                          isClearable
+                          value={arrChooseCategory[idCategory][0]}
+                          onChange={(e) => { this.handleChangeCategory(e, idCategory) }}
+                          options={arrOptionCategory}
+                        />
+                      </CCol>
+                    </CRow>
+                    {
+                      arrAllProductOfAllCategory[idCategory].length > 0 ?
+                        <Card>
+                          <CardHeader>
+                            Danh sách sản phẩm
+                          </CardHeader>
+                          <CardBody style={{ height: 250, overflowY: 'scroll' }}>
+                            <CRow>
+                              {
+                                arrAllProductOfAllCategory[idCategory].map((item_product, i_product) => {
+                                  return (
+                                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                                      <CFormGroup variant="custom-checkbox" inline>
+                                        <CInputCheckbox custom id={`${item_product._id}`}
+                                          onClick={(e) => {
+                                            if (e.target.checked) {
+                                              let data = arrAllProductOfAllCategory[idCategory][i_product]
+
+                                              arrAllProductChoosed[idCategory].push({
+                                                name: data.name,
+                                                image: data.image,
+                                                brand_id: data.brand_id._id,
+                                                price: data.price,
+                                                slug: data.slug
+                                              })
+
+                                              this.setState({ arrAllProductChoosed: arrAllProductChoosed })
+                                            } else {
+                                              let data = arrAllProductOfAllCategory[idCategory][i_product]
+                                              const findI = (element) => element.name == data.name;
+                                              const index = arrAllProductChoosed[idCategory].findIndex(findI)
+                                              arrAllProductChoosed[idCategory].splice(index, 1)
+
+                                              this.setState({ arrAllProductChoosed: arrAllProductChoosed })
+                                            }
+                                          }}
+                                        />
+                                        <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
+                                          <div><strong>Tên sp: </strong>{item_product.name}</div>
+                                          <CInput placeholder={"Số lượng deal"} disabled={
+                                            arrAllProductChoosed[idCategory].findIndex(val => val.name == item_product.name) > -1 ?
+                                              false : true
+                                          } type="number" style={{ marginBottom: 3 }}
+                                            onChange={(e) => {
+                                              const index = arrAllProductChoosed[idCategory].findIndex(val => val.name == item_product.name);
+                                              arrAllProductChoosed[idCategory][index].total_deal = Number(e.target.value)
+                                              this.setState({ arrAllProductChoosed: arrAllProductChoosed })
+                                            }} />
+
+                                          <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"70px"} height={"90px"} />
+
+                                        </CLabel>
+                                      </CFormGroup>
+                                    </CCol>
+                                  )
+                                })
+                              }
+                            </CRow>
+                          </CardBody>
+                        </Card> : ""
+                    }
+                  </CardBody>
+                </Card>
+              )
+            })
+          }
+        </div>
+      </div>
+    )
+  }
+
   render() {
-    const { data, arrPagination, key, image, action, arrCategory, arrAllProductOfAllCategory, time_start, time_finish,
-      image_show, modalDetail, arrDetailBanner, accordion, arrOptionCategory, arrAllProductChoosed, arrChooseCategory,
-      arrUpdate } = this.state;
+    const { data, arrPagination, key, image, action, time_start, time_finish,
+      image_show, modalDetail, arrDetailBanner, accordion} = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -643,211 +789,112 @@ class Product extends Component {
 
                 </CCol>
                 <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-
                   {
                     action == "new" ?
                       //Thêm mới banner
-                      <div>
-                        <CRow>
-                          <CCol md="5" lg="5" sm="12" xm="12" lx="5">
-                            <h3>
-                              <strong>Tạo dữ liệu cho banner</strong>
-                            </h3>
-                          </CCol>
-                          <CCol md="7" lg="7" sm="12" xm="12" lx="7">
-                            <CButton block active variant="ghost" color="success" aria-pressed="true"
-                              onClick={() => { this.pushCategory() }}>
-                              Tạo thêm một danh mục mới
-                            </CButton>
-                          </CCol>
-                        </CRow>
-                        <div style={{ maxHeight: 400, overflowY: 'scroll', border: '1px solid red', marginTop: 15, borderRadius: 5 }}>
-                          {
-                            arrCategory.map((item, i) => {
-                              let idCategory = i;
-                              return (
-                                <Card style={{ margin: 20 }}>
-                                  <CardHeader style={{ backgroundColor: '#339966', height: 50 }}>
-                                    <CButton size="sm" color="danger" style={{ float: 'right' }} onClick={() => {
-                                      this.onRemoveCard(idCategory)
-                                    }}>X</CButton>
-                                  </CardHeader>
-                                  <CardBody>
-                                    <CRow style={{ margin: 20 }}>
-                                      <CCol md="3" lg="3" sm="12" xm="12" lx="3">
-                                        <CLabel>Chọn danh mục:</CLabel>
-                                      </CCol>
-                                      <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                                        <CreatableSelect
-                                          isClearable
-                                          value={arrChooseCategory[idCategory][0]}
-                                          onChange={(e) => { this.handleChangeCategory(e, idCategory) }}
-                                          options={arrOptionCategory}
-                                        />
-                                      </CCol>
-                                    </CRow>
-                                    {
-                                      arrAllProductOfAllCategory[idCategory].length > 0 ?
+                      this.renderAddForm() : ""
+                      //Cập nhập banner
+                      // <div>
+                      //   <CRow>
+                      //     <CCol md="5" lg="5" sm="12" xm="12" lx="5">
+                      //       <h3>
+                      //         <strong>Thiết lập dữ liệu cho banner</strong>
+                      //       </h3>
+                      //     </CCol>
+                      //     <CCol md="7" lg="7" sm="12" xm="12" lx="7">
+                      //       <CButton block active variant="ghost" color="success" aria-pressed="true"
+                      //         onClick={() => { }}>
+                      //         Tạo thêm một danh mục mới
+                      //       </CButton>
+                      //     </CCol>
+                      //   </CRow>
+                      //   <div style={{ maxHeight: 500, overflowY: 'scroll', border: '1px solid red', marginTop: 15, borderRadius: 5 }}>
+                      //     {
+                      //       arrUpdate.map((item, i) => {
+                      //         return (
+                      //           <Card style={{ margin: 20 }}>
+                      //             <CardHeader style={{ backgroundColor: '#339966' }}>
+                      //               <CButton color="danger" style={{ float: 'right' }} onClick={() => {
+                      //                 arrRemoveOnUpdate.push(arrUpdate[i])
+                      //                 arrUpdate.splice(i, 1);
+                      //                 this.setState({ arrUpdate: arrUpdate, arrRemoveOnUpdate: arrRemoveOnUpdate });
+                      //               }}>X</CButton>
+                      //             </CardHeader>
+                      //             <CardBody>
+                      //               <CRow style={{ margin: 20 }}>
+                      //                 <CCol md="3" lg="3" sm="12" xm="12" lx="3">
+                      //                   <CLabel>Chọn danh mục cho banner:</CLabel>
+                      //                 </CCol>
+                      //                 <CCol md="9" lg="9" sm="12" xm="12" lx="9">
+                      //                   <CreatableSelect
+                      //                     isClearable
+                      //                     value={arrOptionCategory.find(val => val.value == item.category_id)}
+                      //                     onChange={(e) => {
+                      //                       this.handleUpdateCategory(e, i)
+                      //                     }}
+                      //                     options={arrOptionCategory}
+                      //                   />
+                      //                 </CCol>
+                      //               </CRow>
+                      //               {
+                      //                 item.product.length > 0 ?
+                      //                   <Card>
+                      //                     <CardHeader>
+                      //                       Danh sách sản phẩm
+                      //                     </CardHeader>
+                      //                     <CardBody style={{ height: 250, overflowY: 'scroll' }}>
+                      //                       <CRow>
+                      //                         {
+                      //                           item.product.map((item_product, i_product) => {
+                      //                             return (
+                      //                               <CCol md="4" lg="4" sm="12" xm="12" lx="4">
+                      //                                 <CFormGroup variant="custom-checkbox" inline>
+                      //                                   <CInputCheckbox
+                      //                                     custom
+                      //                                     id={`${item_product._id}`}
+                      //                                     defaultChecked
+                      //                                     onClick={(e) => {
+                      //                                       if (e.target.checked) {
 
+                      //                                       } else {
 
-                                        <Card>
-                                          <CardHeader>
-                                            Danh sách sản phẩm
-                                          </CardHeader>
-                                          <CardBody style={{ height: 250, overflowY: 'scroll' }}>
-                                            <CRow>
-                                              {
-                                                arrAllProductOfAllCategory[idCategory].map((item_product, i_product) => {
-                                                  return (
-                                                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
-                                                      <CFormGroup variant="custom-checkbox" inline>
-                                                        <CInputCheckbox
-                                                          custom
-                                                          id={`${item_product._id}`}
-                                                          onClick={(e) => {
-                                                            if (e.target.checked) {
-                                                              let data = arrAllProductOfAllCategory[idCategory][i_product]
+                      //                                       }
+                      //                                     }}
+                      //                                   />
+                      //                                   <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
 
-                                                              arrAllProductChoosed[idCategory].push({
-                                                                name: data.name,
-                                                                image: data.image,
-                                                                brand_id: data.brand_id._id,
-                                                                price: data.price,
-                                                                slug: data.slug
-                                                              })
+                      //                                     <div><strong>Tên sp: </strong>{item_product.name}</div>
+                      //                                     <CRow>
+                      //                                       <CCol md="5" lg="5" sm="12" xm="12" lx="5">
+                      //                                         <strong>SL deal:</strong>
+                      //                                       </CCol>
+                      //                                       <CCol md="7" lg="7" sm="12" xm="12" lx="7">
+                      //                                         <CInput placeholder={"Số lượng deal"} value={item_product.total_deal} disabled={true} type="number" style={{ marginBottom: 3, maxWidth: 150 }}
+                      //                                           onChange={(e) => {
 
-                                                              this.setState({ arrAllProductChoosed: arrAllProductChoosed })
-                                                            } else {
-                                                              let data = arrAllProductOfAllCategory[idCategory][i_product]
-                                                              const findI = (element) => element.name == data.name;
-                                                              const index = arrAllProductChoosed[idCategory].findIndex(findI)
-                                                              arrAllProductChoosed[idCategory].splice(index, 1)
+                      //                                           }} />
+                      //                                       </CCol>
+                      //                                     </CRow>
 
-                                                              this.setState({ arrAllProductChoosed: arrAllProductChoosed })
-                                                            }
-                                                          }}
-                                                        />
-                                                        <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
+                      //                                     <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"70px"} height={"90px"} />
 
-                                                          <div><strong>Tên sp: </strong>{item_product.name}</div>
-                                                          <CInput placeholder={"Số lượng deal"} disabled={
-                                                            arrAllProductChoosed[idCategory].findIndex(val => val.name == item_product.name) > -1 ?
-                                                              false : true
-                                                          } type="number" style={{ marginBottom: 3 }}
-                                                            onChange={(e) => {
-                                                              const index = arrAllProductChoosed[idCategory].findIndex(val => val.name == item_product.name);
-                                                              arrAllProductChoosed[idCategory][index].total_deal = Number(e.target.value)
-                                                              this.setState({ arrAllProductChoosed: arrAllProductChoosed })
-                                                            }} />
-
-                                                          <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"100px"} height={"150px"} />
-
-                                                        </CLabel>
-                                                      </CFormGroup>
-                                                    </CCol>
-                                                  )
-                                                })
-                                              }
-                                            </CRow>
-                                          </CardBody>
-                                        </Card> : ""
-                                    }
-                                  </CardBody>
-                                </Card>
-                              )
-                            })
-                          }
-                        </div>
-                      </div> : ""
-
-                    //Cập nhập banner
-                    // <div>
-                    //   <CRow>
-                    //     <CCol md="5" lg="5" sm="12" xm="12" lx="5">
-                    //       <h3>
-                    //         <strong>Thiết lập dữ liệu cho banner</strong>
-                    //       </h3>
-                    //     </CCol>
-                    //     <CCol md="7" lg="7" sm="12" xm="12" lx="7">
-                    //       <CButton block active variant="ghost" color="success" aria-pressed="true"
-                    //         onClick={() => { }}>
-                    //         Tạo thêm một danh mục mới
-                    //       </CButton>
-                    //     </CCol>
-                    //   </CRow>
-                    //   <div style={{ maxHeight: 500, overflowY: 'scroll', border: '1px solid red', marginTop: 15, borderRadius: 5 }}>
-                    //     {
-                    //       arrUpdate.map((item, i) => {
-                    //         return (
-                    //           <Card style={{ margin: 20 }}>
-                    //             <CardHeader style={{ backgroundColor: '#339966' }}>
-                    //               <CButton color="danger" style={{ float: 'right' }} onClick={() => {
-                    //                 arrUpdate.splice(i, 1); this.setState({ arrUpdate: arrUpdate });
-                    //               }}>X</CButton>
-                    //             </CardHeader>
-                    //             <CardBody>
-                    //               <CRow style={{ margin: 20 }}>
-                    //                 <CCol md="3" lg="3" sm="12" xm="12" lx="3">
-                    //                   <CLabel>Chọn danh mục cho banner:</CLabel>
-                    //                 </CCol>
-                    //                 <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                    //                   <CreatableSelect
-                    //                     isClearable
-                    //                     value={arrOptionCategory.find(val => val.value == item.category_id._id)}
-                    //                     onChange={(e) => {
-                    //                       this.handleUpdateCategory(e, i)
-                    //                     }}
-                    //                     options={arrOptionCategory}
-                    //                   />
-                    //                 </CCol>
-                    //               </CRow>
-                    //               {
-                    //                 item.product.length > 0 ?
-                    //                   <Card>
-                    //                     <CardHeader>
-                    //                       Danh sách sản phẩm
-                    //                     </CardHeader>
-                    //                     <CardBody style={{ height: 250, overflowY: 'scroll' }}>
-                    //                       {
-                    //                         item.product.map((item_product, i_product) => {
-                    //                           return (
-                    //                             <CFormGroup variant="custom-checkbox" inline>
-                    //                               <CInputCheckbox
-                    //                                 custom
-                    //                                 id={`${item_product._id}`}
-                    //                                 onClick={(e) => {
-                    //                                   if (e.target.checked) {
-                    //                                     console.log("Ok")
-                    //                                   } else {
-                    //                                     console.log("Fail")
-                    //                                   }
-                    //                                 }}
-                    //                               />
-                    //                               <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
-                    //                                 <CRow>
-                    //                                   <CCol sm="12" lg="4">
-                    //                                     <div><strong>Tên sp:</strong> {item_product.name}</div>
-                    //                                     <div><strong>Giá gốc:</strong> {item_product.price}</div>
-                    //                                   </CCol>
-                    //                                   <CCol sm="12" lg="8">
-                    //                                     <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"100px"} height={"150px"} />
-                    //                                   </CCol>
-                    //                                 </CRow>
-                    //                               </CLabel>
-                    //                             </CFormGroup>
-                    //                           )
-                    //                         })
-                    //                       }
-                    //                     </CardBody>
-                    //                   </Card> : ""
-                    //               }
-                    //             </CardBody>
-                    //           </Card>
-                    //         )
-                    //       })
-                    //     }
-                    //   </div>
-                    //</div>
+                      //                                   </CLabel>
+                      //                                 </CFormGroup>
+                      //                               </CCol>
+                      //                             )
+                      //                           })
+                      //                         }
+                      //                       </CRow>
+                      //                     </CardBody>
+                      //                   </Card> : ""
+                      //               }
+                      //             </CardBody>
+                      //           </Card>
+                      //         )
+                      //       })
+                      //     }
+                      //   </div>
+                      // </div>
                   }
 
                   <br />

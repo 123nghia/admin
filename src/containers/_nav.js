@@ -45,12 +45,12 @@ const _nav = [
     to: '/product',
     icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
   },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Lượt mua từng sản phẩm',
-  //   to: '/countorder',
-  //   icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
-  // },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Banner trang chủ',
+    to: '/banner_home_page',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
+  },
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lí đơn hàng']
@@ -59,6 +59,12 @@ const _nav = [
     _tag: 'CSidebarNavItem',
     name: 'Danh sách đơn hàng',
     to: '/order',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Giao hàng',
+    to: '',
     icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
   },
   {

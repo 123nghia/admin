@@ -40,4 +40,11 @@ export default {
   "UPLOAD_DEAL": "/api/upload_deal",
 
   "LIST_COUNT_ORDER": "/api/list_count_order",
+
+  "LIST_BANNER": "/api/get_banner",
+  "GET_BANNER_BY_ID": "/api/get_banner_by_id",
+  "ADD_BANNER": "/api/add_banners",
+  "UPADTE_BANNER": "/api/update_banner",
+  "DELETE_BANNER": "/api/delete_banner",
+  "UPLOAD_BANNER": "/api/upload_banner"
 };
