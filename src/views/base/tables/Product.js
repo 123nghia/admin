@@ -168,6 +168,7 @@ class Product extends Component {
         info_product: "",
         how_to_use: "",
         description: "",
+        description_brand: "",
         image_show: "",
         image: "",
         image_multiple: [],
@@ -213,7 +214,7 @@ class Product extends Component {
 
   async addProduct() {
 
-    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use } = this.state
+    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use, description_brand } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       category_id == null || category_id == '' ||
@@ -231,6 +232,7 @@ class Product extends Component {
       category_id: category_id,
       brand_id: brand_id,
       info_product: info_product,
+      description_brand: description_brand,
       how_to_use: how_to_use,
       name: name,
       href: href,
@@ -266,6 +268,7 @@ class Product extends Component {
       info_product: item.info_product,
       how_to_use: item.how_to_use,
       description: item.description,
+      description_brand: item.description_brand,
       image_show: "",
       image: item.image,
       price: item.price,
@@ -304,7 +307,7 @@ class Product extends Component {
   }
 
   async updateProduct() {
-    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use } = this.state
+    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use, description_brand } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -329,6 +332,7 @@ class Product extends Component {
       image: image.name,
       description: description,
       price: price,
+      description_brand: description_brand,
       id: this.state.id,
     }
 
@@ -436,7 +440,6 @@ class Product extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên sản phẩm</th>
                         <th className="text-center">Hình ảnh</th>
-                        <th className="text-center">Mô tả</th>
                         <th className="text-center">Đường dẫn</th>
                         <th className="text-center">Thương hiệu</th>
                         <th className="text-center">Danh mục</th>
@@ -459,11 +462,6 @@ class Product extends Component {
                                       <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
                                       <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"80px"} height={"60px"} />
                                   }
-                                </td>
-                                <td className="text-center">
-                                  <div style={{ width: 250 }}>
-                                    {item.description}
-                                  </div>
                                 </td>
                                 <td className="text-center">
                                   <a href={item.href} target="_blank">Đường dẫn chi tiết</a>
@@ -525,6 +523,15 @@ class Product extends Component {
                 value={this.state.description}
                 onChange={(e) => { this.setState({ description: e.target.value }) }}
                 placeholder="Mô tả"
+              />
+
+              <label className="control-label">Mô tả thương hiệu</label>
+              <CTextarea
+                name="info_product"
+                rows="5"
+                value={this.state.description_brand}
+                onChange={(e) => { this.setState({ description_brand: e.target.value }) }}
+                placeholder="Mô tả thương hiệu"
               />
 
               <label className="control-label">Thông tin sản phẩm</label>
