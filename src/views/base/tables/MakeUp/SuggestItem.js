@@ -174,7 +174,9 @@ class SuggestItem extends Component {
       method: 'POST'
     });
 
-    this.setState({ arrOptionProductType: res_pro.data.data, arrOptionSdkType: res_sdk.data.data })
+    let data = res_sdk.data.data;
+
+    this.setState({ arrOptionProductType: res_pro.data.data, arrOptionSdkType: data })
   }
 
   changeSdkType = (e) => {

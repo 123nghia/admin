@@ -27,6 +27,7 @@ import validateInput from "./../../../../../functions/news";
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import ConstantApp from "../../../../../contants/contants_app";
+
 let headers = new Headers();
 headers.append("Content-Type", "application/json");
 let BASE_URL = ConstantApp.BASE_URL
@@ -45,7 +46,7 @@ class News extends Component {
       description_jp: "",
       deleted: false,
       isLoading: false,
-      errors: { },
+      errors: {},
       action: "",
       created: "",
       activePage: 1,
@@ -88,12 +89,11 @@ class News extends Component {
     )
       .then((cards) => {
         cards.json().then((result) => {
-          if(result.data.length == 0) {
+          if (result.data.length == 0) {
             this.setState({ hidden: false })
           } else {
             this.setState({ hidden: true })
           }
-
           this.setState({
             data: result.data,
             itemsCount: result.totalItems,
@@ -127,7 +127,7 @@ class News extends Component {
       description_en: "",
       description_jp: "",
       deleted: false,
-      errors: { },
+      errors: {},
       openDate: new Date(),
       name: "",
       image: "",
@@ -192,7 +192,6 @@ class News extends Component {
   }
   deleteCard = (id) => {
     if (window.confirm("Are you sure to delete this item?")) {
-      console.log("id", id);
       const fetchData = {
         method: "POST",
         headers: headers,
@@ -289,7 +288,6 @@ class News extends Component {
           })
           .catch(console.log);
       } else {
-        console.log("vodayko");
         const fetchData = {
           method: "POST",
           headers: headers,
@@ -310,6 +308,22 @@ class News extends Component {
       }
     }
   };
+
+  getBadgeSDK(type, i) {
+    const { sdkItem } = this.state;
+    if(type == "K1" || type == "K2" || type == "K3" || type == "K4")
+    {
+      sdkItem.splice(i, 1)
+      this.setState({ sdkItem: sdkItem })
+    }
+    switch (type) {
+      case 'K5': return 'Hỗ trợ giảm lão hoá da'
+      case 'K6': return 'Hỗ trợ điều trị mụn'
+      case 'K7': return 'Hỗ trợ giảm quầng thâm mắt'
+      case 'K8': return 'Hỗ trợ giảm lỗ chân lông'
+      case 'K9': return 'Hỗ trợ giảm thâm nám da'
+    }
+  }
 
   render() {
     const {
@@ -464,28 +478,28 @@ class News extends Component {
                 {/*<FormGroup>*/}
                 <TextFieldGroup
                   field="name"
-                  label="Name"
+                  label="Tên sản phẩm"
                   value={name}
                   error={errors.name}
                   onChange={(e) => this.inputChange(e)}
                 />
                 <TextFieldGroup
                   field="image"
-                  label="Image"
+                  label="Hình ảnh"
                   value={image}
                   error={errors.image}
                   onChange={(e) => this.inputChange(e)}
                 />
                 <TextFieldGroup
                   field="title"
-                  label="Title"
+                  label="Tiêu đề"
                   value={title}
                   error={errors.title || ""}
                   onChange={(e) => this.inputChange(e)}
                 />
                 <TextArea
                   field="description"
-                  label="Description"
+                  label="Mô tả"
                   value={description}
                   error={errors.description}
                   onChange={(e) => this.inputChange(e)}
@@ -500,7 +514,7 @@ class News extends Component {
                 />
                 <FormGroup row>
                   <Col md="3">
-                    <label htmlFor="tag">Sdk Type:</label>
+                    <label htmlFor="tag">Loại SDK:</label>
                   </Col>
                   <Col md="9">
                     <select
@@ -508,19 +522,25 @@ class News extends Component {
                       value={currentSdkSelect.name}
                       onChange={(e) => this.changeSdkType(e)}
                     >
-                      {sdkItem.map((item, i) => {
-                        return (
-                          <option key={i} value={item.name}>
-                            {item.name}
-                          </option>
-                        );
-                      })}
+                      {
+                        sdkItem.map((item, i) => {
+                          return (
+                            <option key={i} value={item.name}>
+                              {
+                                this.getBadgeSDK(item.name, this.isValid)
+                              }
+                            </option>
+                          )
+                        })
+                      }
+
+
                     </select>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <label htmlFor="tag">Level:</label>
+                    <label htmlFor="tag">Cấp độ:</label>
                   </Col>
                   <Col md="9">
                     {currentSdkSelect.sdktype !== undefined ? (
