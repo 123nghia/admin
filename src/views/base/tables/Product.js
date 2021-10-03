@@ -43,6 +43,8 @@ class Product extends Component {
       action: 'new',
       category_id: "",
       brand_id: "",
+      weight: "",
+      description_brand: "",
       name: "",
       href: "",
       info_product: "",
@@ -165,6 +167,7 @@ class Product extends Component {
         brand_id: "",
         name: "",
         href: "",
+        weight: "",
         info_product: "",
         how_to_use: "",
         description: "",
@@ -214,7 +217,7 @@ class Product extends Component {
 
   async addProduct() {
 
-    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use, description_brand } = this.state
+    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use, description_brand, weight } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       category_id == null || category_id == '' ||
@@ -235,6 +238,7 @@ class Product extends Component {
       description_brand: description_brand,
       how_to_use: how_to_use,
       name: name,
+      weight: weight,
       href: href,
       image: image.name,
       description: description,
@@ -265,6 +269,7 @@ class Product extends Component {
       brand_id: item.brand_id,
       name: item.name,
       href: item.href,
+      weight: item.weight,
       info_product: item.info_product,
       how_to_use: item.how_to_use,
       description: item.description,
@@ -307,7 +312,7 @@ class Product extends Component {
   }
 
   async updateProduct() {
-    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use, description_brand } = this.state
+    const { category_id, brand_id, name, href, weight, image, price, description, info_product, how_to_use, description_brand } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -327,6 +332,7 @@ class Product extends Component {
       brand_id: brand_id,
       name: name,
       href: href,
+      weight: weight,
       info_product: info_product,
       how_to_use: how_to_use,
       image: image.name,
@@ -600,13 +606,15 @@ class Product extends Component {
                       `${Constants.BASE_URL}/public/image_product/${image}` : image_show} style={{ marginBottom: 20 }} />
               }
 
-              {/* <TextFieldGroup
-                field="image_multiple"
-                label="Ảnh nổi bật"
-                type={"file"}
-                onChange={e => { this.onChangeImage_Multiple(e) }}
-                onClick={(e) => { e.target.value = null;}}
-              /> */}
+              <TextFieldGroup
+                field="weight"
+                label="Cân nặng"
+                value={this.state.weight}
+                placeholder={"Cân nặng"}
+                // error={errors.title}
+                onChange={e => this.onChange("weight", e.target.value)}
+              // rows="5"
+              />
 
               <TextFieldGroup
                 field="price"
