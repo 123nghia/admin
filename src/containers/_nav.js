@@ -53,7 +53,7 @@ const _nav = [
       _tag: 'CSidebarNavItem',
       name: 'Danh sách shop',
       to: '/shopmanager',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY']
+      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SALES', 'SHOPMANAGER']
     }, {
       _tag: 'CSidebarNavItem',
       name: 'Danh sách sale',
