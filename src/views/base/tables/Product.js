@@ -195,7 +195,7 @@ class Product extends Component {
           const res_shop = await axios({
             baseURL: Constants.BASE_URL,
             url: Constants.GET_SHOP,
-            method: 'POST',
+            method: 'GET',
             headers: this.state.token
           });
 
@@ -306,7 +306,7 @@ class Product extends Component {
         const res_shop = await axios({
           baseURL: Constants.BASE_URL,
           url: Constants.GET_SHOP,
-          method: 'POST',
+          method: 'GET',
           headers: this.state.token
         });
 

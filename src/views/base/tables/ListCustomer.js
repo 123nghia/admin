@@ -274,7 +274,7 @@ class Users extends Component {
       var res = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.GET_SHOP,
-        method: 'POST',
+        method: 'GET',
         headers: this.state.token
       });
 
