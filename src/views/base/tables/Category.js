@@ -366,7 +366,7 @@ class Category extends Component {
 
               <TextFieldGroup
                 field="image"
-                label="Ảnh sản phẩm"
+                label="Ảnh danh mục"
                 type={"file"}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}

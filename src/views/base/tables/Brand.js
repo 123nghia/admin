@@ -306,7 +306,7 @@ class Brand extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên danh mục</th>
+                        <th className="text-center">Tên thương hiệu</th>
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">Đường dẫn</th>
                         <th className="text-center">#</th>
@@ -362,7 +362,7 @@ class Brand extends Component {
                 field="name"
                 label="Tên thương hiệu"
                 value={this.state.name}
-                placeholder={"Tên danh mục"}
+                placeholder={"Tên thương hiệu"}
                 // error={errors.title}
                 onChange={e => this.onChange("name", e.target.value)}
               // rows="5"
@@ -380,7 +380,7 @@ class Brand extends Component {
 
               <TextFieldGroup
                 field="image"
-                label="Ảnh sản phẩm"
+                label="Ảnh thương hiệu"
                 type={"file"}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}

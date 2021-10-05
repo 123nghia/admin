@@ -1,6 +1,7 @@
 export default {
   "BASE_URL" : "https://api.thulamua.com",
   //"BASE_URL" : "http://localhost:3008",
+  "GHTK_URL" : "https://services.ghtklab.com",
   "LOGIN" : "/api/login",
   "LIST_USER": "/api/list_user",
   "ADD_USER":"/api/add_user",
@@ -32,6 +33,7 @@ export default {
   "LIST_ORDER_DETAIL": "/api/list_order_detail",
   "LIST_ORDER_BY_USER": "/api/list_order_by_user",
   "ADD_ORDER": "/api/add_order",
+  "PRINT_ORDER": "/api/print_order",
 
   "LIST_DEAL": "/api/list_deal",
   "ADD_DEAL": "/api/add_deal",

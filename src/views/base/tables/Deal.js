@@ -383,6 +383,8 @@ class Product extends Component {
     }, "", "POST")
 
     let data = res.data;
+    console.log(data)
+    console.log(e.value)
     arrCategory[i].category_id = e.value;
     arrAllProductOfAllCategory[i] = data
     arrAllProductChoosed[i] = new Array()
@@ -453,7 +455,8 @@ class Product extends Component {
   }
 
   renderAddForm() {
-    const { arrCategory, arrChooseCategory, arrOptionCategory, arrAllProductOfAllCategory, arrAllProductChoosed } = this.state;
+    const { arrCategory, arrChooseCategory, arrOptionCategory,
+      arrAllProductOfAllCategory, arrAllProductChoosed } = this.state;
     return (
       <div>
         <CRow>

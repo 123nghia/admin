@@ -24,6 +24,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../contants/contants";
 import TextFieldGroup from "../../Common/TextFieldGroup";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
@@ -406,7 +408,8 @@ class Product extends Component {
   };
 
   render() {
-    const { data, arrPagination, key, image, image_show, objectValueBrand, arrOptionBrand, objectValueCategory, arrOptionCategory } = this.state;
+    const { data, arrPagination, key, image, image_show,
+      objectValueBrand, arrOptionBrand, objectValueCategory, arrOptionCategory } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -523,39 +526,45 @@ class Product extends Component {
               />
 
               <label className="control-label">Mô tả</label>
-              <CTextarea
-                name="description"
-                rows="5"
-                value={this.state.description}
-                onChange={(e) => { this.setState({ description: e.target.value }) }}
-                placeholder="Mô tả"
+
+              <CKEditor
+                editor={ClassicEditor}
+                data={this.state.description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  this.setState({ description: data })
+                }}
               />
 
               <label className="control-label">Mô tả thương hiệu</label>
-              <CTextarea
-                name="info_product"
-                rows="5"
-                value={this.state.description_brand}
-                onChange={(e) => { this.setState({ description_brand: e.target.value }) }}
-                placeholder="Mô tả thương hiệu"
+              <CKEditor
+                editor={ClassicEditor}
+                data={this.state.description_brand}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  this.setState({ description_brand: data })
+                }}
               />
 
               <label className="control-label">Thông tin sản phẩm</label>
-              <CTextarea
-                name="info_product"
-                rows="5"
-                value={this.state.info_product}
-                onChange={(e) => { this.setState({ info_product: e.target.value }) }}
-                placeholder="Thông tin sản phẩm"
+              <CKEditor
+                editor={ClassicEditor}
+                data={this.state.info_product}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  this.setState({ info_product: data })
+                }}
               />
 
               <label className="control-label">Chất liệu và cách sử dụng</label>
-              <CTextarea
-                name="how_to_use"
-                rows="5"
-                value={this.state.how_to_use}
-                onChange={(e) => { this.setState({ how_to_use: e.target.value }) }}
-                placeholder="Chất liệu và cách sử dụng"
+              <CKEditor
+                editor={ClassicEditor}
+                row="5"
+                data={this.state.how_to_use}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  this.setState({ how_to_use: data })
+                }}
               />
 
               <br />

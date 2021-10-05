@@ -6,21 +6,18 @@ import {
   CardHeader,
   Col,
   Row,
-  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
 
 import {
   CButton,
-  CRow,
-  CCol
 } from '@coreui/react'
 
 import API_CONNECT from "../../../functions/callAPI";
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
+import axios from 'axios';
 import Constants from "../../../contants/contants";
-import TextFieldGroup from "../../Common/TextFieldGroup";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
@@ -124,6 +121,11 @@ class Order extends Component {
     this.setState({ dataDetail: res.data.list_product })
   }
 
+  onDetailOrder = async (label) => {
+    var res = await API_CONNECT(Constants.PRINT_ORDER + "?label=" + label, {}, "", "GET")
+    console.log(res.data)
+  }
+
   render() {
     const { data, arrPagination, dataDetail } = this.state;
     if (!this.state.isLoading) {
@@ -166,7 +168,13 @@ class Order extends Component {
                                     await this.onDetail(item.detail_id)
                                   }} >
                                     Chi tiết
-                                  </CButton>{' '}
+                                  </CButton>
+
+                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
+                                    this.onDetailOrder(item.transport_id.res_order.label)
+                                  }} >
+                                    In đơn hàng
+                                  </CButton>
                                 </td>
                               </tr>
                             );
