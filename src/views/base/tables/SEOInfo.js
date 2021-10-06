@@ -13,10 +13,13 @@ import {
 import {
   CButton,
   CRow,
-  CCol
+  CCol,
+  CLabel,
+  CTextarea
 } from '@coreui/react'
 
 import API_CONNECT from "../../../functions/callAPI";
+import CreatableSelect from 'react-select/creatable';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../contants/contants";
@@ -28,7 +31,7 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-class Brand extends Component {
+class SEOInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,10 +41,12 @@ class Brand extends Component {
       dataApi: [],
       hidden: false,
       action: 'new',
-      name: "",
+      product_id: "",
       image: "",
       image_show: "",
-      link: "",
+      title: "",
+      keyword: "",
+      description: "",
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -49,6 +54,8 @@ class Brand extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       isLoading: false,
+      arrOptionProduct: [],
+      objectValueProduct: {},
     };
   }
   async componentDidMount() {
@@ -79,11 +86,24 @@ class Brand extends Component {
   getData = async () => {
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.LIST_BRAND, {}, "", "POST")
+      Constants.LIST_SEO_INFO, {}, "", "POST")
+
+    var res_product = await API_CONNECT(
+      Constants.LIST_PRODUCT, {}, "", "POST")
 
     let val = res.data;
+    let val_product = res_product.data;
+
+    let arrTempOptionProduct = [];
+
+    for (let i = 0; i < val_product.length; i++) {
+      arrTempOptionProduct.push({
+        value: val_product[i]._id, label: val_product[i].name
+      })
+    }
+
     this.pagination(val);
-    this.setState({ dataApi: val, isLoading: false })
+    this.setState({ dataApi: val, isLoading: false, arrOptionProduct: arrTempOptionProduct })
   }
 
   searchKey() {
@@ -92,7 +112,7 @@ class Brand extends Component {
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+        if (val.title.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -135,10 +155,13 @@ class Brand extends Component {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
-        name: "",
+        product_id: "",
         image: "",
         image_show: "",
-        link: ""
+        title: "",
+        keyword: "",
+        description: "",
+        objectValueCategory: {},
       })
     }
   }
@@ -147,9 +170,9 @@ class Brand extends Component {
     this.setState({ [key]: val })
   }
 
-  async addBrand() {
-    const { name, image, link } = this.state
-    if (name == null || name == '' ||
+  async addSEOInfo() {
+    const { product_id, title, image, keyword, description } = this.state
+    if (title == null || title == '' ||
       image == null || image == '') {
       alert("Hãy nhập đầy đủ dữ liệu !!!");
       return
@@ -158,17 +181,19 @@ class Brand extends Component {
     const form = new FormData();
     form.append("image", image);
 
-    await API_CONNECT(Constants.UPLOAD_BRAND, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_SEO_INFO, form, "", "POST")
 
     const body = {
-      name: name,
+      product_id: product_id,
       image: image.name,
-      link: link
+      title: title,
+      keyword: keyword,
+      description: description
     }
 
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.ADD_BRAND, body, "", "POST")
+      Constants.ADD_SEO_INFO, body, "", "POST")
 
     if (res.status == 200) {
 
@@ -185,38 +210,43 @@ class Brand extends Component {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      name: item.name,
-      image: item.image,
+      product_id: item.product_id,
+      image: item.product_id,
       image_show: "",
-      link: item.link,
+      title: item.product_id,
+      keyword: item.product_id,
+      description: item.product_id,
+      objectValueProduct: { value: item.product_id._id, label: item.product_id.name },
       id: item['_id']
     })
   }
 
   async updateBrand() {
-    const { name, image, link } = this.state
+    const { product_id, title, image, keyword, description } = this.state
 
-    if (name == null || name == '' ||
+    if (title == null || title == '' ||
       image == null || image == '') {
-      alert("Hãy nhập đầy đủ trường !!!");
+      alert("Hãy nhập đầy đủ dữ liệu !!!");
       return
     }
 
     const form = new FormData();
     form.append("image", image);
 
-    await API_CONNECT(Constants.UPLOAD_BRAND, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_SEO_INFO, form, "", "POST")
 
     const body = {
-      name: name,
+      product_id: product_id,
       image: image.name,
-      link: link,
-      id: this.state.id,
+      title: title,
+      keyword: keyword,
+      description: description,
+      id: this.state.id
     }
 
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.UPDATE_BRAND, body, "", "POST")
+      Constants.UPDATE_SEO_INFO, body, "", "POST")
 
     if (res.status == 200) {
 
@@ -239,7 +269,7 @@ class Brand extends Component {
   async delete() {
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.DELETE_BRAND, {
+      Constants.DELETE_SEO_INFOR, {
       "id": this.state.id
     }, "", "POST")
 
@@ -267,8 +297,12 @@ class Brand extends Component {
     }
   }
 
+  handleChangeProduct = (newValue, actionMeta) => {
+    this.setState({ objectValueProduct: newValue, product_id: newValue.value })
+  };
+
   render() {
-    const { data, arrPagination, key, image, image_show } = this.state;
+    const { data, arrPagination, key, image, image_show, objectValueProduct, arrOptionProduct } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -276,7 +310,7 @@ class Brand extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách danh mục
+                  <i className="fa fa-align-justify"></i> Danh sách
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -306,9 +340,11 @@ class Brand extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên thương hiệu</th>
+                        <th className="text-center">Sản phẩm</th>
+                        <th className="text-center">Tiêu đề</th>
                         <th className="text-center">Hình ảnh</th>
-                        <th className="text-center">Đường dẫn</th>
+                        <th className="text-center">Từ khoá</th>
+                        <th className="text-center">Mô tả</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -320,16 +356,17 @@ class Brand extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.name}</td>
+                                <td className="text-center">{item.product_id}</td>
+                                <td className="text-center">{item.title}</td>
                                 <td className="text-center">
                                   {
                                     item.image == "" || item.image == null ?
                                       <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
-                                      <img src={`${Constants.BASE_URL}/public/image_brand/${item.image}`} width={"80px"} height={"60px"} />
+                                      <img src={`${Constants.BASE_URL}/public/image_seo/${item.image}`} width={"80px"} height={"60px"} />
                                   }
                                 </td>
                                 <td className="text-center">
-                                  <a href={item.link} target="_blank">{item.link}</a>
+                                  {item.keyword}
                                 </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -358,29 +395,35 @@ class Brand extends Component {
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="name"
-                label="Tên thương hiệu"
-                value={this.state.name}
-                placeholder={"Tên thương hiệu"}
-                // error={errors.title}
-                onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
-              />
 
+              <CRow>
+                <CCol md="2" lg="2" sm="12" xm="12" lx="2">
+                  <CLabel>Sản phẩm:</CLabel>
+                </CCol>
+                <CCol md="10" lg="10" sm="12" xm="12" lx="10">
+                  <CreatableSelect
+                    isClearable
+                    onChange={this.handleChangeProduct}
+                    value={objectValueProduct}
+                    options={arrOptionProduct}
+                  />
+                </CCol>
+              </CRow>
+
+              <br />
               <TextFieldGroup
-                field="link"
-                label="Đường dẫn"
-                value={this.state.link}
-                placeholder={"Đường dẫn"}
+                field="title"
+                label="Tiêu đề"
+                value={this.state.title}
+                placeholder={"Tiêu đề"}
                 // error={errors.title}
-                onChange={e => this.onChange("link", e.target.value)}
+                onChange={e => this.onChange("title", e.target.value)}
               // rows="5"
               />
 
               <TextFieldGroup
                 field="image"
-                label="Ảnh thương hiệu"
+                label="Hình ảnh"
                 type={"file"}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
@@ -389,11 +432,27 @@ class Brand extends Component {
                 image == "" ? "" :
                   <img width="250" height="300" src={
                     image_show == "" ?
-                      `${Constants.BASE_URL}/public/image_brand/${image}` : image_show} style={{ marginBottom: 20 }} />
+                      `${Constants.BASE_URL}/public/image_seo/${image}` : image_show} style={{ marginBottom: 20 }} />
               }
+
+              <TextFieldGroup
+                field="keyword"
+                label="Từ khoá"
+                value={this.state.keyword}
+                placeholder={"Từ khoá"}
+                // error={errors.title}
+                onChange={e => this.onChange("keyword", e.target.value)}
+              // rows="5"
+              />
+
+
+
+              <CLabel>Mô tả</CLabel>
+              <CTextarea rows={9} value={this.state.description} onChange={(e) => { this.setState({ description: e.target.value }) }} />
+
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addBrand() : this.updateBrand() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addSEOInfo() : this.updateBrand() }} disabled={this.state.isLoading}>Save</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
             </ModalFooter>
           </Modal>
@@ -504,4 +563,4 @@ const styles = {
   },
 }
 
-export default Brand;
+export default SEOInfo;

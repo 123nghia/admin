@@ -48,5 +48,11 @@ export default {
   "ADD_BANNER": "/api/add_banners",
   "UPADTE_BANNER": "/api/update_banner",
   "DELETE_BANNER": "/api/delete_banner",
-  "UPLOAD_BANNER": "/api/upload_banner"
+  "UPLOAD_BANNER": "/api/upload_banner",
+
+  "LIST_SEO_INFO": "/api/get_seo_info",
+  "ADD_SEO_INFO": "/api/add_seo_info",
+  "UPDATE_SEO_INFO": "/api/update_seo_info",
+  "DELETE_SEO_INFOR": "/api/delete_seo_info",
+  "UPLOAD_SEO_INFO": "/api/upload_seo_info"
 };

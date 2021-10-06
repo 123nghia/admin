@@ -53,6 +53,16 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavTitle',
+    _children: ['Thông tin SEO']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Thông tin SEO',
+    to: '/seo',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
+  },
+  {
+    _tag: 'CSidebarNavTitle',
     _children: ['Quản lí đơn hàng']
   },
   {

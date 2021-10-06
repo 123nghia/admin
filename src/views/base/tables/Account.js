@@ -224,7 +224,7 @@ class Account extends Component {
 
   //     this.setState({ modalCom: !this.state.modalCom })
   //   } else {
-  //     alert("Thêm danh mục thất bại");
+  //     alert("Thêm thất bại");
   //     this.setState({ isLoading: false });
   //   }
   // }
@@ -301,7 +301,7 @@ class Account extends Component {
       this.getData()
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
-      alert("Xóa sản phẩm thất bại");
+      alert("Xoá thất bại");
       this.setState({ isLoading: false });
     }
 

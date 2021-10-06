@@ -257,7 +257,7 @@ class Product extends Component {
 
       this.setState({ modalCom: !this.state.modalCom })
     } else {
-      alert("Thêm danh mục thất bại");
+      alert("Thêm sản phẩm thất bại");
       this.setState({ isLoading: false });
     }
   }
@@ -377,7 +377,7 @@ class Product extends Component {
       this.getData()
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
-      alert("Xóa sản phẩm thất bại");
+      alert("Xoá thất bại");
       this.setState({ isLoading: false });
     }
 
@@ -620,6 +620,7 @@ class Product extends Component {
                 label="Cân nặng"
                 value={this.state.weight}
                 placeholder={"Cân nặng"}
+                type={"number"}
                 // error={errors.title}
                 onChange={e => this.onChange("weight", e.target.value)}
               // rows="5"
