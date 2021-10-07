@@ -54,5 +54,11 @@ export default {
   "ADD_SEO_INFO": "/api/add_seo_info",
   "UPDATE_SEO_INFO": "/api/update_seo_info",
   "DELETE_SEO_INFOR": "/api/delete_seo_info",
-  "UPLOAD_SEO_INFO": "/api/upload_seo_info"
+  "UPLOAD_SEO_INFO": "/api/upload_seo_info",
+
+  "LIST_MULTI_IMAGE": "/api/get_multi_image",
+  "LIST_IMAGE_BY_PRODUCT": "/api/get_multi_image_by_product",
+  "ADD_MULTI_IMAGE": "/api/add_multi_image",
+  "UPDATE_MULTI_IMAGE": "/api/update_multi_image",
+  "UPLOAD_MULTI_IMAGE": "/api/upload_multi_image"
 };

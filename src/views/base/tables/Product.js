@@ -14,14 +14,14 @@ import {
   CButton,
   CRow,
   CCol,
-  CLabel,
-  CTextarea
+  CLabel
 } from '@coreui/react'
 
 import CreatableSelect from 'react-select/creatable';
 import API_CONNECT from "../../../functions/callAPI";
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
+import { cifAU, freeSet } from '@coreui/icons';
 import Constants from "../../../contants/contants";
 import TextFieldGroup from "../../Common/TextFieldGroup";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -53,8 +53,8 @@ class Product extends Component {
       how_to_use: "",
       image_show: "",
       image: "",
+      image_multiple: "",
       description: "",
-      image_multiple: [],
       price: "",
       modalDelete: false,
       delete: null,
@@ -67,6 +67,8 @@ class Product extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       isLoading: false,
+      modalMultiple: false,
+      dataMultiImage: []
     };
   }
   async componentDidMount() {
@@ -148,15 +150,53 @@ class Product extends Component {
     }
   }
 
-  onChangeImage_Multiple(e) {
+  async onChangeImage_Multiple(e) {
     let files = e.target.files;
-    console.log(files)
-    //let reader = new FileReader();
-    // this.setState({ image: files[0] })
-    // reader.readAsDataURL(files[0])
-    // reader.onload = (e) => {
-    //   this.setState({ image_show: e.target.result })
-    // }
+    let image = files[0];
+
+    const form = new FormData();
+    form.append("image", image);
+
+    await API_CONNECT(Constants.UPLOAD_MULTI_IMAGE, form, "", "POST")
+
+    await API_CONNECT(Constants.ADD_MULTI_IMAGE, {
+      product_id: this.state.id,
+      image: image.name
+    }, "", "POST")
+
+    let res = await API_CONNECT(
+      Constants.LIST_IMAGE_BY_PRODUCT, {
+      "product_id": this.state.id
+    }, "", "POST")
+
+    console.log(res)
+    this.setState({
+      dataMultiImage: res.data
+    })
+  }
+
+  async onUpdateImage_Multiple(e, item) {
+    let files = e.target.files;
+    let image = files[0];
+
+    const form = new FormData();
+    form.append("image", image);
+
+    await API_CONNECT(Constants.UPLOAD_MULTI_IMAGE, form, "", "POST")
+
+    await API_CONNECT(Constants.UPDATE_MULTI_IMAGE, {
+      id: item._id,
+      image: image.name
+    }, "", "POST")
+
+    let res = await API_CONNECT(
+      Constants.LIST_IMAGE_BY_PRODUCT, {
+      "product_id": this.state.id
+    }, "", "POST")
+
+    this.setState({
+      dataMultiImage: res.data
+    })
   }
 
   async toggleModal(key) {
@@ -176,7 +216,6 @@ class Product extends Component {
         description_brand: "",
         image_show: "",
         image: "",
-        image_multiple: [],
         objectValueBrand: {},
         objectValueCategory: {},
         price: "",
@@ -383,6 +422,20 @@ class Product extends Component {
 
   }
 
+  async openMultipleImage(item) {
+
+    let res = await API_CONNECT(
+      Constants.LIST_IMAGE_BY_PRODUCT, {
+      "product_id": item._id
+    }, "", "POST")
+
+    this.setState({
+      modalMultiple: !this.state.modalMultiple,
+      id: item._id,
+      dataMultiImage: res.data
+    })
+  }
+
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -409,7 +462,7 @@ class Product extends Component {
 
   render() {
     const { data, arrPagination, key, image, image_show,
-      objectValueBrand, arrOptionBrand, objectValueCategory, arrOptionCategory } = this.state;
+      objectValueBrand, arrOptionBrand, objectValueCategory, arrOptionCategory, dataMultiImage } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -484,6 +537,9 @@ class Product extends Component {
                                   </CButton>{' '}
                                   <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                     <CIcon name="cilTrash" />
+                                  </CButton>{' '}
+                                  <CButton outline color="success" size="sm" onClick={(e) => { this.openMultipleImage(item) }}>
+                                    <CIcon content={freeSet.cilList} />
                                   </CButton>
                                 </td>
                               </tr>
@@ -502,145 +558,155 @@ class Product extends Component {
             </Col>
           </Row>
 
-          <Modal size="lg" isOpen={this.state.modalCom} className={this.props.className}>
+          <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="name"
-                label="Tên sản phẩm"
-                value={this.state.name}
-                placeholder={"Tên sản phẩm"}
-                // error={errors.title}
-                onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="href"
-                label="Đường dẫn"
-                value={this.state.href}
-                placeholder={"Đường dẫn"}
-                // error={errors.title}
-                onChange={e => this.onChange("href", e.target.value)}
-              // rows="5"
-              />
-
-              <label className="control-label">Mô tả</label>
-
-              <CKEditor
-                editor={ClassicEditor}
-                data={this.state.description}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  this.setState({ description: data })
-                }}
-              />
-
-              <label className="control-label">Mô tả thương hiệu</label>
-              <CKEditor
-                editor={ClassicEditor}
-                data={this.state.description_brand}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  this.setState({ description_brand: data })
-                }}
-              />
-
-              <label className="control-label">Thông tin sản phẩm</label>
-              <CKEditor
-                editor={ClassicEditor}
-                data={this.state.info_product}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  this.setState({ info_product: data })
-                }}
-              />
-
-              <label className="control-label">Chất liệu và cách sử dụng</label>
-              <CKEditor
-                editor={ClassicEditor}
-                row="5"
-                data={this.state.how_to_use}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  this.setState({ how_to_use: data })
-                }}
-              />
-
-              <br />
-
               <CRow>
-                <CCol md="2" lg="2" sm="12" xm="12" lx="2">
-                  <CLabel>Thương hiệu:</CLabel>
+                <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                  <TextFieldGroup
+                    field="name"
+                    label="Tên sản phẩm"
+                    value={this.state.name}
+                    placeholder={"Tên sản phẩm"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("name", e.target.value)}
+                  // rows="5"
+                  />
+
+                  <TextFieldGroup
+                    field="href"
+                    label="Đường dẫn"
+                    value={this.state.href}
+                    placeholder={"Đường dẫn"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("href", e.target.value)}
+                  // rows="5"
+                  />
+
+                  <CRow>
+                    <CCol md="3" lg="3" sm="12" xm="12" lx="3">
+                      <CLabel>Thương hiệu:</CLabel>
+                    </CCol>
+                    <CCol md="9" lg="9" sm="12" xm="12" lx="9">
+                      <CreatableSelect
+                        isClearable
+                        onChange={this.handleChangeBrand}
+                        value={objectValueBrand}
+                        options={arrOptionBrand}
+                      />
+                    </CCol>
+                  </CRow>
+
+                  <br />
+
+                  <CRow>
+                    <CCol md="3" lg="3" sm="12" xm="12" lx="3">
+                      <CLabel>Danh mục:</CLabel>
+                    </CCol>
+                    <CCol md="9" lg="9" sm="12" xm="12" lx="9">
+                      <CreatableSelect
+                        isClearable
+                        onChange={this.handleChangeCategory}
+                        value={objectValueCategory}
+                        options={arrOptionCategory}
+                      />
+                    </CCol>
+                  </CRow>
+
+                  <br />
+
+                  <TextFieldGroup
+                    field="image"
+                    label="Ảnh sản phẩm"
+                    type={"file"}
+                    onChange={e => { this.onChangeImage(e) }}
+                    onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
+                  />
+                  {
+                    image == "" ? "" :
+                      <img width="250" height="200" src={
+                        image_show == "" ?
+                          `${Constants.BASE_URL}/public/image_product/${image}` : image_show} style={{ marginBottom: 20 }} />
+                  }
+
+                  <TextFieldGroup
+                    field="weight"
+                    label="Cân nặng"
+                    value={this.state.weight}
+                    placeholder={"Cân nặng"}
+                    type={"number"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("weight", e.target.value)}
+                  // rows="5"
+                  />
+
+                  <TextFieldGroup
+                    field="price"
+                    label="Giá"
+                    value={this.state.price}
+                    placeholder={"Giá"}
+                    type={"number"}
+                    onChange={e => this.onChange("price", e.target.value)}
+                  // rows="5"
+                  />
+
                 </CCol>
-                <CCol md="10" lg="10" sm="12" xm="12" lx="10">
-                  <CreatableSelect
-                    isClearable
-                    onChange={this.handleChangeBrand}
-                    value={objectValueBrand}
-                    options={arrOptionBrand}
+                <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                  <label className="control-label">Mô tả</label>
+
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={this.state.description}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.setState({ description: data })
+                    }}
+                  />
+
+                  <br />
+                  <label className="control-label">Mô tả thương hiệu</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={this.state.description_brand}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.setState({ description_brand: data })
+                    }}
+                  />
+
+                  <br />
+
+                  <label className="control-label">Thông tin sản phẩm</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={this.state.info_product}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.setState({ info_product: data })
+                    }}
+                  />
+
+                  <br />
+
+                  <label className="control-label">Chất liệu và cách sử dụng</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    row="5"
+                    data={this.state.how_to_use}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.setState({ how_to_use: data })
+                    }}
                   />
                 </CCol>
               </CRow>
-
-              <br />
-
-              <CRow>
-                <CCol md="2" lg="2" sm="12" xm="12" lx="2">
-                  <CLabel>Danh mục:</CLabel>
-                </CCol>
-                <CCol md="10" lg="10" sm="12" xm="12" lx="10">
-                  <CreatableSelect
-                    isClearable
-                    onChange={this.handleChangeCategory}
-                    value={objectValueCategory}
-                    options={arrOptionCategory}
-                  />
-                </CCol>
-              </CRow>
-
-              <br />
-
-              <TextFieldGroup
-                field="image"
-                label="Ảnh sản phẩm"
-                type={"file"}
-                onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
-              />
-              {
-                image == "" ? "" :
-                  <img width="350" height="300" src={
-                    image_show == "" ?
-                      `${Constants.BASE_URL}/public/image_product/${image}` : image_show} style={{ marginBottom: 20 }} />
-              }
-
-              <TextFieldGroup
-                field="weight"
-                label="Cân nặng"
-                value={this.state.weight}
-                placeholder={"Cân nặng"}
-                type={"number"}
-                // error={errors.title}
-                onChange={e => this.onChange("weight", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="price"
-                label="Giá"
-                value={this.state.price}
-                placeholder={"Giá"}
-                // error={errors.title}
-                onChange={e => this.onChange("price", e.target.value)}
-              // rows="5"
-              />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateProduct() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateProduct() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
+
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
             <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
@@ -648,8 +714,59 @@ class Product extends Component {
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+            </ModalFooter>
+          </Modal>
+
+
+          <Modal size="xl" isOpen={this.state.modalMultiple} className={this.props.className}>
+            <ModalHeader>
+              Hình ảnh nổi bật của sản phẩm
+            </ModalHeader>
+            <ModalBody>
+              <input type="file" id="file" ref="fileUploader" onChange={(e) => { this.onChangeImage_Multiple(e) }} style={{ display: "none" }} />
+              <CButton outline color="primary" className="mb-1" size="sm" onClick={(e) => { this.refs.fileUploader.click() }}>
+                Thêm hình ảnh
+              </CButton>
+              <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <thead className="thead-light">
+                  <tr>
+                    <th className="text-center">STT.</th>
+                    <th className="text-center">Hình ảnh</th>
+                    <th className="text-center">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <td colSpan="10" hidden={this.state.dataMultiImage.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
+                  {
+                    dataMultiImage != undefined ?
+                      dataMultiImage.map((item, i) => {
+                        return (
+                          <tr key={i}>
+                            <td className="text-center">{i + 1}</td>
+                            <td className="text-center">
+                              {
+                                item.image == "" || item.image == null ?
+                                  <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
+                                  <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"80px"} height={"60px"} />
+                              }
+                            </td>
+                            <td className="text-center">
+                              <input type="file" id="file" ref="fileUpdate" onChange={(e) => { this.onUpdateImage_Multiple(e, item) }} style={{ display: "none" }} />
+                              <CButton outline color="success" size="sm" onClick={(e) => { this.refs.fileUpdate.click() }}>
+                                <CIcon content={freeSet.cilPen} />
+                              </CButton>
+                            </td>
+                          </tr>
+                        );
+                      }) : ""
+                  }
+                </tbody>
+              </table>
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="secondary" onClick={e => this.setState({ modalMultiple: !this.state.modalMultiple })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div>
