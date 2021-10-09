@@ -4,36 +4,16 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
+  Button, Input,
+  ModalHeader, ModalBody, ModalFooter, Modal
 } from 'reactstrap';
 
 import {
-  CLabel,
   CSelect,
-  CContainer,
   CRow,
   CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
   CBadge
 } from '@coreui/react'
-
-
-import {
-  CChartBar,
-  CChartLine,
-  CChartDoughnut,
-  CChartRadar,
-  CChartPie,
-  CChartPolarArea
-} from '@coreui/react-chartjs'
 
 import { connect } from 'react-redux';
 import {
@@ -45,8 +25,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import LazyLoad from 'react-lazyload';
-import ReactLoading from 'react-loading';
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -916,26 +896,6 @@ class Users extends Component {
                 </select>
               </div>
 
-              {/* <div>
-                <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
-                <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
-                  <option value={this.state.Company_Id}>-----</option>
-                  {
-                    dataCompany.map((item, i) => {
-                      if (item.Name == currentCompany) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div> */}
-
               <div>
                 <label style={styles.flexLabel} htmlFor="tag">Phân quyền:    </label>
                 <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
@@ -963,26 +923,6 @@ class Users extends Component {
                   }
                 </select>
               </div>
-
-              {/* <div>
-                <label style={styles.flexLabel} htmlFor="tag">Sale:    </label>
-                <select style={styles.flexOption} name="Sale_Id" onChange={e => this.onChange("Sale_Id", e.target.value)}>
-                  <option value={this.state.Sale_Id}>-----</option>
-                  {
-                    dataSale.map((item, i) => {
-                      if (item.Name == currentSale) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div> */}
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
@@ -1004,12 +944,18 @@ class Users extends Component {
       );
     }
     return (
-      <div className="d-flex justify-content-center">
-        <ReactLoading type={"balls"} color={"orange"} height={'5%'} width={'5%'} />
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   wa10: {

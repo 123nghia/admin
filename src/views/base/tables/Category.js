@@ -13,10 +13,8 @@ import {
 import {
   CRow,
   CCol,
-  CLabel
 } from '@coreui/react'
 
-import CreatableSelect from 'react-select/creatable';
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
@@ -30,7 +28,7 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-class Product extends Component {
+class Category extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,31 +46,21 @@ class Product extends Component {
       dataApi: [],
       action: 'new',
       name: "",
-      shop_id: "",
-      category_id: "",
+      product_id: "",
       image: "",
-      image_update: "",
       image_show: "",
-      link: "",
-      price: "",
-      code: "",
-      sku_code: "",
-      brand_id: "",
+      image_update: "",
       modalDelete: false,
       delete: null,
       arrPagination: [],
       indexPage: 0,
       dataCompany: [],
-      currentCompany: '',
       arrOptionShop: [],
       objectValueShop: {},
-      arrOptionBrand: [],
-      objectValueBrand: {},
-      arrOptionCategory: [],
-      objectValueCategory: {},
+      currentCompany: '',
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      role: localStorage.getItem('role'),
-      hidden: false
+      hidden: false,
+      role: localStorage.getItem('role')
     };
   }
   async componentDidMount() {
@@ -86,7 +74,6 @@ class Product extends Component {
       }
     }
   }
-
 
   pagination(dataApi) {
     var i, j, temparray, chunk = 5;
@@ -109,12 +96,13 @@ class Product extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_PRODUCT_HARDWARE,
+      url: Constants.LIST_CATEGORY,
       method: 'POST',
       headers: this.state.token
     });
 
     let data = res.data.data
+
     this.pagination(data);
     this.setState({ dataApi: data });
 
@@ -128,21 +116,6 @@ class Product extends Component {
 
     this.setState({ isLoading: false, totalActive: active });
   }
-
-  handleChange = (newValue, actionMeta) => {
-    this.setState({ objectValueShop: newValue, shop_id: newValue.value })
-    console.log(newValue);
-  };
-
-  handleChange_Brand = (newValue, actionMeta) => {
-    this.setState({ objectValueBrand: newValue, brand_id: newValue.value })
-    console.log(newValue);
-  };
-
-  handleChange_Category = (newValue, actionMeta) => {
-    this.setState({ objectValueCategory: newValue, category_id: newValue.value })
-    console.log(newValue);
-  };
 
   searchKey() {
     const { indexPage, key, keyStatus } = this.state;
@@ -178,60 +151,26 @@ class Product extends Component {
     }
   }
 
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ image: files[0], image_update: files[0] })
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image_show: e.target.result })
+    }
+  }
+
   toggleModal(key) {
     if (key == 'new') {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
-        name: "",
-        shop_id: "",
-        category_id: "",
-        image: "",
-        image_show: "",
-        image_update: "",
-        link: "",
-        price: "",
-        image_update: "",
-        code: "",
-        sku_code: "",
-        brand_id: ""
-      }, async () => {
-        const { arrOptionShop, arrOptionBrand, arrOptionCategory } = this.state;
-
-        if (arrOptionShop.length == 0 || arrOptionBrand.length == 0 || arrOptionCategory.length == 0) {
-          const res_shop = await API_CONNECT(Constants.GET_SHOP, {}, this.state.token, "GET")
-
-          const res_brand = await API_CONNECT(Constants.LIST_BRAND_HARDWARE, {}, this.state.token, "POST")
-
-          const res_category = await API_CONNECT(Constants.LIST_CATEGORY, {}, this.state.token, "POST")
-
-          let data_shop = res_shop.data
-          let data_brand = res_brand.data
-          let data_category = res_category.data
-
-          let arrTempOptionShop = [];
-          for (let i = 0; i < data_shop.length; i++) {
-            arrTempOptionShop.push({
-              value: data_shop[i]._id, label: data_shop[i].Name
-            })
-          }
-
-          let arrTempOptionBrand = [];
-          for (let i = 0; i < data_brand.length; i++) {
-            arrTempOptionBrand.push({
-              value: data_brand[i]._id, label: data_brand[i].name
-            })
-          }
-
-          let arrTempOptionCategory = [];
-          for (let i = 0; i < data_category.length; i++) {
-            arrTempOptionCategory.push({
-              value: data_category[i]._id, label: data_category[i].name
-            })
-          }
-
-          this.setState({ arrOptionShop: arrTempOptionShop, arrOptionBrand: arrTempOptionBrand, arrOptionCategory: arrTempOptionCategory });
-        }
+        name: '',
+        product_id: '',
+        image: '',
+        image_show: '',
+        image_update: ""
       })
     }
   }
@@ -240,41 +179,29 @@ class Product extends Component {
     this.setState({ [key]: val })
   }
 
-  async addProduct() {
-    const { name, shop_id, image, link, price, code, brand_id, sku_code, category_id } = this.state
+  async addCategory() {
+    const { name, image, product_id } = this.state
 
-    console.log(name)
-    console.log(shop_id)
-    console.log(link)
-    console.log(brand_id)
-    if (name == null || name == ''
-      || link == null || link == ''
-      || brand_id == null || brand_id == '') {
-      alert("Vui lòng nhập đầy đủ trường");
+    if (name == null || name == '') {
+      alert("Vui lòng nhập đầy đủ tất cả trường !!!");
       return
     }
 
     const form = new FormData();
     form.append("image", image);
 
-    await API_CONNECT(Constants.UPLOAD_PRODUCT, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_CATEGORY, form, "", "POST")
 
     const body = {
       name: name,
-      shop_id: shop_id,
+      product_id: product_id,
       image: image.name,
-      link: link,
-      price: price,
-      code: code,
-      sku_code: sku_code,
-      brand_id: brand_id,
-      category_id: category_id,
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.ADD_PRODUCT_HARDWARE,
+      url: Constants.ADD_CATEGORY,
       method: 'POST',
       data: body,
       headers: this.state.token
@@ -290,76 +217,23 @@ class Product extends Component {
   }
 
   openUpdate(item) {
-    const { arrOptionBrand, arrOptionShop } = this.state;
-    let filterBrand = arrOptionBrand.filter(v => v.value == item.brand_id);
-    let filterShop = arrOptionShop.filter(v => v.value == item.shop_id);
-
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
       name: item.name,
-      shop_id: item.shop_id,
+      product_id: item.product_id,
       image: item.image,
       image_show: "",
       image_update: "",
-      link: item.link,
-      objectValueBrand: filterBrand[0],
-      objectValueShop: filterShop[0],
-      objectValueBrand: { value: item.brand_id._id, label: item.brand_id.name },
-      objectValueCategory: { value: item.category_id._id, label: item.category_id.name },
-      price: item.price,
-      code: item.code,
-      sku_code: item.sku_code,
-      brand_id: item.brand_id,
-      category_id: item.category_id,
-      id: item['_id'],
-    }, async () => {
-      const { arrOptionShop, arrOptionBrand, arrOptionCategory } = this.state;
-
-      if (arrOptionShop.length == 0 || arrOptionBrand.length == 0 || arrOptionCategory.length == 0) {
-        const res_shop = await API_CONNECT(Constants.GET_SHOP, {}, this.state.token, "GET")
-
-        const res_brand = await API_CONNECT(Constants.LIST_BRAND_HARDWARE, {}, this.state.token, "POST")
-
-        const res_category = await API_CONNECT(Constants.LIST_CATEGORY, {}, this.state.token, "POST")
-
-        let data_shop = res_shop.data
-        let data_brand = res_brand.data
-        let data_category = res_category.data
-
-        let arrTempOptionShop = [];
-        for (let i = 0; i < data_shop.length; i++) {
-          arrTempOptionShop.push({
-            value: data_shop[i]._id, label: data_shop[i].Name
-          })
-        }
-
-        let arrTempOptionBrand = [];
-        for (let i = 0; i < data_brand.length; i++) {
-          arrTempOptionBrand.push({
-            value: data_brand[i]._id, label: data_brand[i].name
-          })
-        }
-
-        let arrTempOptionCategory = [];
-        for (let i = 0; i < data_category.length; i++) {
-          arrTempOptionCategory.push({
-            value: data_category[i]._id, label: data_category[i].name
-          })
-        }
-
-        this.setState({ arrOptionShop: arrTempOptionShop, arrOptionBrand: arrTempOptionBrand, arrOptionCategory: arrTempOptionCategory });
-      }
+      id: item['_id']
     })
   }
 
-  async updateCompany() {
-    const { name, shop_id, image, link, price, code, brand_id, image_update, sku_code, category_id } = this.state
+  async updateCategory() {
+    const { name, product_id, image, image_update } = this.state
 
-    if (name == null || name == ''
-      || link == null || link == ''
-      || brand_id == null || brand_id == '') {
-      alert("Vui lòng nhập đầy đủ trường");
+    if (name == null || name == '') {
+      alert("Vui lòng nhập đầy đủ tất cả các trường !!!");
       return
     }
 
@@ -367,26 +241,21 @@ class Product extends Component {
       const form = new FormData();
       form.append("image", image_update);
 
-      await API_CONNECT(Constants.UPLOAD_PRODUCT, form, "", "POST")
+      await API_CONNECT(Constants.UPLOAD_CATEGORY, form, "", "POST")
     }
 
     const body = {
-      "name": name,
-      "shop_id": shop_id,
-      "image": image_update == "" ? image : image_update.name,
-      "link": link,
-      "price": price,
-      "code": code,
-      "sku_code": sku_code,
-      "brand_id": brand_id,
-      "category_id": category_id,
-      id: this.state.id
+      name: name,
+      product_id: product_id,
+      image: image_update == "" ? image : image_update.name,
+      id: this.state.id,
+      headers: this.state.token
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_PRODUCT_HARDWARE,
+      url: Constants.UPDATE_CATEGORY,
       method: 'POST',
       data: body,
       headers: this.state.token
@@ -412,7 +281,7 @@ class Product extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_PRODUCT_HARDWARE,
+      url: Constants.DELETE_CATEGORY,
       method: 'POST',
       data: {
         "id": this.state.delete['_id']
@@ -433,7 +302,6 @@ class Product extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-
   actionSearch(e, name_action) {
     this.setState({
       [name_action]: e.target.value
@@ -450,19 +318,8 @@ class Product extends Component {
     });
   }
 
-  onChangeImage(e) {
-    let files = e.target.files;
-    let reader = new FileReader();
-    this.setState({ image: files[0], image_update: files[0] })
-    reader.readAsDataURL(files[0])
-    reader.onload = (e) => {
-      this.setState({ image_show: e.target.result })
-    }
-  }
-
   render() {
-    const { data, key, objectValueBrand, objectValueShop, objectValueCategory, role,
-      arrOptionBrand, arrOptionShop, arrOptionCategory, arrPagination, hidden } = this.state;
+    const { data, key, arrPagination, hidden, role } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -472,7 +329,7 @@ class Product extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm
+                  <i className="fa fa-align-justify"></i> Danh sách thương hiệu
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -500,17 +357,8 @@ class Product extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên sản phẩm</th>
-                        <th className="text-center">Mã sku</th>
-                        <th className="text-center">Mã barcode</th>
-                        {
-                          role == "COMPANY" || role == "SALES" ? "" :
-                            <th className="text-center">Tên shop</th>
-                        }
+                        <th className="text-center">Tên danh mục</th>
                         <th className="text-center">Hình ảnh</th>
-                        <th className="text-center">Đường dẫn</th>
-                        <th className="text-center">Thương hiệu</th>
-                        <th className="text-center">Giá</th>
                         <th className="text-center">#</th>
 
                       </tr>
@@ -524,30 +372,13 @@ class Product extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                <td className="text-center">{item.code}</td>
-                                <td className="text-center">{item.sku_code}</td>
-                                {
-                                  role == "COMPANY" || role == "SALES" ? "" :
-                                    <td className="text-center">
-                                      {item.shop_id.Name}
-                                    </td>
-                                }
                                 <td className="text-center">
                                   {
                                     item.image == "" || item.image == null ?
                                       <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
-                                      <img src={`${Constants.BASE_URL}/public/image_product/${item.image}`} width={"60px"} height={"60px"} />
+                                      <img src={`${Constants.BASE_URL}/public/image_category/${item.image}`} width={"60px"} height={"60px"} />
                                   }
                                 </td>
-                                <td className="text-center">
-                                  <a href={item.link} target="_blank">
-                                    {item.link}
-                                  </a>
-                                </td>
-                                <td className="text-center">
-                                  {item.brand_id.name}
-                                </td>
-                                <td className="text-center">{item.price}</td>
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
                                   <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
@@ -574,69 +405,17 @@ class Product extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="name"
-                label="Tên sản phẩm"
+                label="Tên danh mục"
                 value={this.state.name}
-                placeholder={"Tên sản phẩm"}
+                placeholder={"Tên danh mục"}
                 // error={errors.title}
                 onChange={e => this.onChange("name", e.target.value)}
               // rows="5"
               />
 
               <TextFieldGroup
-                field="code"
-                label="Mã sku"
-                value={this.state.code}
-                placeholder={"Mã sản phẩm"}
-                // error={errors.title}
-                onChange={e => this.onChange("code", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="sku_code"
-                label="Mã barcode"
-                value={this.state.sku_code}
-                placeholder={"Mã sku"}
-                // error={errors.title}
-                onChange={e => this.onChange("sku_code", e.target.value)}
-              // rows="5"
-              />
-
-              {
-                role == "COMPANY" || role == "SALES" ?
-                  <div>
-                    <CLabel>Cửa hàng:</CLabel>
-                    <CreatableSelect
-                      isClearable
-                      onChange={this.handleChange}
-                      value={objectValueShop}
-                      // onInputChange={this.handleInputChange}
-                      options={arrOptionShop}
-                    /></div> : ""
-
-              }
-
-              <CLabel>Thương hiệu:</CLabel>
-              <CreatableSelect
-                isClearable
-                onChange={this.handleChange_Brand}
-                value={objectValueBrand}
-                // onInputChange={this.handleInputChange}
-                options={arrOptionBrand}
-              />
-
-              <CLabel>Danh mục:</CLabel>
-              <CreatableSelect
-                isClearable
-                onChange={this.handleChange_Category}
-                value={objectValueCategory}
-                // onInputChange={this.handleInputChange}
-                options={arrOptionCategory}
-              />
-
-              <TextFieldGroup
                 field="image"
-                label="Ảnh sản phẩm"
+                label="Ảnh danh mục"
                 type={"file"}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
@@ -644,33 +423,13 @@ class Product extends Component {
               {
                 this.state.image == "" ? "" :
                   <img width="250" height="300" src={
-                    this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_product/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
+                    this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_category/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
               }
 
-
-              <TextFieldGroup
-                field="link"
-                label="Đường dẫn"
-                value={this.state.link}
-                placeholder={"Đường dẫn"}
-                // error={errors.title}
-                onChange={e => this.onChange("link", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="price"
-                label="Gía"
-                value={this.state.price}
-                placeholder={"Giá"}
-                // error={errors.title}
-                onChange={e => this.onChange("price", e.target.value)}
-              // rows="5"
-              />
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCategory() : this.updateCategory() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
               <Button color="secondary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Đóng</Button>
             </ModalFooter>
           </Modal>
@@ -791,4 +550,4 @@ const styles = {
   }
 }
 
-export default Product;
+export default Category;

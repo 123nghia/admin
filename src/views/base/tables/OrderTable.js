@@ -7,9 +7,8 @@ import {
   CardFooter,
   Col,
   Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
@@ -17,15 +16,15 @@ import {
   CRow,
   CCol,
   CSelect,
-  CInput,
   CLabel
 } from '@coreui/react'
 
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
+import Pagination from '@material-ui/lab/Pagination';
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -215,7 +214,7 @@ class Order extends Component {
     this.setState({ [key]: val })
   }
 
-  async addCompany() {
+  async addOrder() {
     const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password } = this.state
 
     if (Email == null || Email == ''
@@ -268,7 +267,6 @@ class Order extends Component {
         method: 'POST',
         data: bodyAddUser
       });
-      console.log(res.data.data)
 
       this.setState({ modalCom: !this.state.modalCom })
     } else {
@@ -311,7 +309,7 @@ class Order extends Component {
     const { Status, DATA_COMPANY } = this.state
 
     const body = {
-      Status: Status,
+      Status: "COMPLETE",
       id: this.state.id
     }
 
@@ -403,9 +401,7 @@ class Order extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus, dataOrderDetail } = this.state;
+    const { data, key, arrPagination, dataOrderDetail } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -469,6 +465,7 @@ class Order extends Component {
                       </tr>
                     </thead>
                     <tbody>
+                      <td colSpan="9" hidden={data ? true : false} className="text-center">Không có dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -491,7 +488,6 @@ class Order extends Component {
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
                                   <Button outline color="success" size="sm" onClick={async (e) => { await this.getOrderDetail(item.Company_Id, item.Sale_Id, item.Status) }} >Chi tiết</Button>
-                                  {/* <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button> */}
                                 </td>
                               </tr>
                             );
@@ -502,22 +498,11 @@ class Order extends Component {
 
                 </CardBody>
                 <CardFooter>
-                  {
-                    arrPagination.length == 1 ? "" :
-                      <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                        <tr style={styles.row}>
-                          {
-                            arrPagination.map((item, i) => {
-                              return (
-                                <td>
-                                  <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                                </td>
-                              );
-                            })
-                          }
-                        </tr>
-                      </div>
-                  }
+                  <div style={{ float: 'right' }}>
+                    <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                      this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                    }} />
+                  </div>
                 </CardFooter>
               </Card>
 
@@ -595,7 +580,7 @@ class Order extends Component {
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
-              {
+              {/* {
                 action == 'new' ? "" : <div>
                   <label style={styles.flexLabel} htmlFor="tag">Status    </label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
@@ -609,12 +594,12 @@ class Order extends Component {
                     }
                   </select>
                 </div>
-              }
-
+              } */}
+              <label htmlFor="tag">Xác nhận đơn hàng đã thanh toán !!!</label>
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateOrder() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addOrder() : this.updateOrder() }} disabled={this.state.isLoading}>Xác nhận</Button>{' '}
               <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>
@@ -633,16 +618,18 @@ class Order extends Component {
       );
     }
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   pagination: {

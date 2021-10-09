@@ -6,25 +6,24 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
   CBadge,
   CRow,
   CCol,
-  CSelect,
-  CInput
+  CSelect
 } from '@coreui/react'
 
 import 'moment-timezone';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
+import { css } from "@emotion/react";
+import Pagination from '@material-ui/lab/Pagination';
+import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -470,22 +469,11 @@ class Users extends Component {
                   </table>
                 </CardBody>
               </Card>
-              {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              }
+              <div style={{ float: 'right' }}>
+                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                }} />
+              </div>
             </Col>
           </Row>
 
@@ -526,17 +514,18 @@ class Users extends Component {
       );
     }
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
 
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 const styles = {
   datePicker: {
     marginBottom: 20

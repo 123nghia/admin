@@ -4,38 +4,17 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
+  Button, Input,
+  ModalHeader, ModalBody, ModalFooter, Modal
 } from 'reactstrap';
 
 import {
-  CLabel,
   CSelect,
-  CContainer,
   CRow,
   CCol,
-  CCardGroup,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CFormGroup,
-  CBadge,
-  CInput
+  CBadge
 
 } from '@coreui/react'
-
-
-import {
-  CChartBar,
-  CChartLine,
-  CChartDoughnut,
-  CChartRadar,
-  CChartPie,
-  CChartPolarArea
-} from '@coreui/react-chartjs'
 
 import { connect } from 'react-redux';
 import {
@@ -47,8 +26,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import LazyLoad from 'react-lazyload';
-import ReactLoading from 'react-loading';
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -66,14 +45,8 @@ class Users extends Component {
       keyPhone: '',
       keyGender: '',
       keyStatus: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
       updated: '',
       dataApi: [],
       action: 'new',
@@ -104,14 +77,6 @@ class Users extends Component {
       role: localStorage.getItem('role'),
       company_id: localStorage.getItem('user'),
       see_detail: true,
-      month: 0,
-      arrTemp: [],
-      arrMonth: [
-        "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
-      ],
-      arrMonthWithDefault: [
-        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
-      ],
       isLoading: true,
       hidden: false,
       nameSale: '',
@@ -132,19 +97,6 @@ class Users extends Component {
         }
       }
     }
-  }
-
-  async getSeeder() {
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.GET_SEEDER,
-      method: 'POST',
-      data: {
-        "email": "ktpm489@gmail.com"
-      }
-    })
-    this.props.onSaveSeed(res.data.data);
-    this.props.history.push('/history')
   }
 
   pagination(dataApi) {
@@ -238,7 +190,6 @@ class Users extends Component {
 
     let dataRes = resAll.data.data;
 
-    console.log(dataRes)
     if (dataRes.length == 0) {
       this.setState({
         hidden_all: false
@@ -253,62 +204,6 @@ class Users extends Component {
 
     this.pagination_all(dataRes);
     this.setState({ isLoading: false });
-  }
-
-  getData = async () => {
-    const { company_id, role } = this.state;
-    this.setState({ isLoading: true });
-    var id = JSON.parse(company_id);
-
-    var bodyUser = {
-      company_id: id.company_id
-    }
-
-    var bodyCustomer = {
-      condition: {
-        Company_Id: id.company_id,
-        Sale_Id: id.sale_id
-      }
-    }
-    if (role == 'ADMIN' || role == 'ADMINSALE') {
-      var res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.GET_SHOP,
-        method: 'GET',
-        headers: this.state.token
-      });
-
-    } else if (role == 'SHOPMANAGER') {
-      var res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.GET_SALE,
-        method: 'POST',
-        data: bodyUser,
-        headers: this.state.token
-      });
-
-    } else if (role == 'SALES') {
-      var res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.LIST_CUSTOMER,
-        method: 'POST',
-        data: bodyCustomer,
-        headers: this.state.token
-      })
-    }
-
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
-
-    let active = 0
-
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
-
-    this.setState({ isLoading: false, totalActive: active });
   }
 
   async getSaleDataOfUser(sale_id) {
@@ -349,24 +244,6 @@ class Users extends Component {
 
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-  }
-
-  async getDataUser_ForSale(month) {
-    const { role } = this.state;
-    if (role == 'SALES') {
-      this.setState({ isSale: true, month: month })
-      await this.tableUserSale_forSale(month);
-    }
-  }
-
-  async check(e) {
-    if (e.target.value == "00") {
-      this.getData();
-      this.setState({ isSale: false })
-    } else {
-      await this.getDataUser_ForSale(e.target.value);
-      this.setState({ month: e.target.value })
-    }
   }
 
   getBadge(status) {
@@ -436,9 +313,9 @@ class Users extends Component {
   }
 
   render() {
-    const { data, key, dataCompany, role, hidden, dataAll, arrPagination_All, indexPage_All,
-      currentCompany, action, dataRole, currentRole, arrPagination, indexPage,
-      hidden_all, isSale, keyName, keyEmail, keyPhone, keyGender, keyStatus } = this.state;
+    const { key, dataCompany, dataAll, arrPagination_All,
+      currentCompany, action, dataRole, currentRole,
+      hidden_all } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -502,7 +379,7 @@ class Users extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <td colSpan="8" hidden={hidden_all} className="text-center">No users in this month</td>
+                    <td colSpan="8" hidden={hidden_all} className="text-center">Không tìm thấy dữ liệu</td>
                     {
                       dataAll != undefined ?
                         dataAll.map((item, i) => {
@@ -658,26 +535,6 @@ class Users extends Component {
                   }
                 </select>
               </div>
-
-              {/* <div>
-                <label style={styles.flexLabel} htmlFor="tag">Sale:    </label>
-                <select style={styles.flexOption} name="Sale_Id" onChange={e => this.onChange("Sale_Id", e.target.value)}>
-                  <option value={this.state.Sale_Id}>-----</option>
-                  {
-                    dataSale.map((item, i) => {
-                      if (item.Name == currentSale) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div> */}
             </ModalBody>
             <ModalFooter>
 
@@ -698,12 +555,18 @@ class Users extends Component {
       );
     }
     return (
-      <div className="d-flex justify-content-center">
-        <ReactLoading type={"balls"} color={"orange"} height={'5%'} width={'5%'} />
-      </div>
+        <div className="sweet-loading">
+          <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
+        </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   wa10: {

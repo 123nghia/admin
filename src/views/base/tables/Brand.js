@@ -309,7 +309,8 @@ class Brand extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.UPDATE_BRAND_HARDWARE,
       method: 'POST',
-      data: body
+      data: body,
+      headers: this.state.token
     });
 
     if (res.data.is_success == true) {

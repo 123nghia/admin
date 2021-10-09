@@ -4,26 +4,20 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
+  Button,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 import Select from 'react-select'
 import {
   CBadge,
   CRow,
   CCol,
-  CSelect,
-  CInput
+  CSelect
 } from '@coreui/react'
 
 import 'moment-timezone';
 import Constants from "../../../contants/contants";
-import TextFieldGroup from "../../Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -145,7 +139,17 @@ class Order extends Component {
       method: 'POST',
       headers: this.state.token
     });
-    this.setState({ dataHardWard: res.data.data });
+
+    let data = res.data.data;
+
+    let arrTemp = [];
+    for(let i = 0; i < data.length; i++) {
+      if(data[i].Status != "AVAILABLE") {
+        arrTemp.push(data[i]);
+      }
+    }
+
+    this.setState({ dataHardWard: arrTemp });
   }
 
   async toggleModal(key) {
@@ -153,7 +157,6 @@ class Order extends Component {
 
     const { arrHardWard_ID } = this.state;
 
-    console.log(arrHardWard_ID)
     let arrTemp = new Array();
     if (key == 'new') {
       this.setState({
@@ -188,6 +191,7 @@ class Order extends Component {
 
   renderSelect(arrChoose) {
     const { dataHardWard } = this.state;
+
     let arrTemp = [];
     for (let i = 0; i < dataHardWard.length; i++) {
       arrTemp.push({ name: dataHardWard[i].Name, id: dataHardWard[i]._id })
@@ -317,22 +321,15 @@ class Order extends Component {
             {
               this.renderSelect(arrT)
             }
-            {/* <div>
-              <label style={styles.flexLabel} htmlFor="tag">Chọn phần cứng:    </label>
-              <select style={styles.flexOption} onChange={e => { arrT.push(e.target.value); }}>
-                {
-                  dataHardWard.map((item, i) => {
-                    return (
-                      <option value={item._id}>{item.Name}</option>
-                    );
-                  })
-                }
-              </select>
-            </div> */}
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard_ID: this.state.arrChooseHard,  }); this.setState({ isSave: true }) }}>Xác nhận chọn</Button>{' '}
-            <Button disabled={this.state.isSave ? false : true} color="secondary" onClick={e =>
+            <Button color="primary" onClick={e => {
+              this.setState({ arrHardWard_ID: this.state.arrChooseHard,  });
+              if(this.state.arrChooseHard.length > 0) {
+                this.setState({ isSave: true })
+              }
+            }}>Xác nhận chọn</Button>{' '}
+            <Button disabled={this.state.isSave ? false : true} color="success" onClick={e =>
               {this.toggleModal("new"); this.setState({ isSave: false })
             }}>Lưu và đóng</Button>
             <Button color="secondary" onClick={e => {this.setState({modalCom: !this.state.modalCom}); this.setState({ isSave: false })}}>Thoát</Button>

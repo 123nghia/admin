@@ -4,30 +4,16 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
+  Button, Input,
+  ModalHeader, ModalBody, ModalFooter, Modal
 } from 'reactstrap';
 
 import {
   CBadge,
   CRow,
   CCol,
-  CSelect,
-  CInput
+  CSelect
 } from '@coreui/react'
-
-
-import {
-  CChartBar,
-  CChartLine,
-  CChartDoughnut,
-  CChartRadar,
-  CChartPie,
-  CChartPolarArea
-} from '@coreui/react-chartjs'
 
 import { connect } from 'react-redux';
 import {
@@ -38,9 +24,9 @@ import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import LazyLoad from 'react-lazyload';
-import ReactLoading from 'react-loading';
 import Pagination from '@material-ui/lab/Pagination';
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
 
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -101,12 +87,6 @@ class Users extends Component {
       see_detail: true,
       month: 0,
       arrTemp: [],
-      arrMonth: [
-        "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
-      ],
-      arrMonthWithDefault: [
-        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
-      ],
       isLoading: true,
       hidden: false,
       nameSale: '',
@@ -547,7 +527,7 @@ class Users extends Component {
     var id = JSON.parse(company_id);
 
     const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id,
-      Company_Id, Sale_Id, Status, Address } = this.state
+      Company_Id, Status, Address } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -683,10 +663,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, key, dataCompany, role, hidden, dataAll, arrPagination_All, indexPage_All,
-      currentCompany, action, dataRole, currentRole, arrPagination, indexPage,
-      hidden_all, isSale, keyUserName, keyName, keyEmail, keyCompanyCode, keyPhone, keyGender, keyCode,
-      keyStatus } = this.state;
+    const { data, key, action, dataRole, currentRole, arrPagination } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -957,12 +934,18 @@ class Users extends Component {
       );
     }
     return (
-      <div className="d-flex justify-content-center">
-        <ReactLoading type={"balls"} color={"orange"} height={'5%'} width={'5%'} />
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   wa10: {

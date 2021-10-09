@@ -4,19 +4,15 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
   CBadge,
   CRow,
   CCol,
-  CSelect,
-  CInput
+  CSelect
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -25,6 +21,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
+import Pagination from '@material-ui/lab/Pagination';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -68,9 +67,9 @@ class PackageSale extends Component {
   async componentDidMount() {
     this.getData();
     let arr = JSON.parse(localStorage.getItem('url'));
-    for(let i = 0; i < arr.length; i++){
-      if("#" + arr[i].to == window.location.hash){
-        if(arr[i].hidden == true){
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
           window.location.href = '#/'
         }
       }
@@ -139,8 +138,8 @@ class PackageSale extends Component {
       let d = []
       this.state.dataApi.map(val => {
         if (val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-            d.push(val)
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+          d.push(val)
         }
       })
       let active = 0
@@ -346,7 +345,7 @@ class PackageSale extends Component {
   }
 
   render() {
-    const { data, key, action, End_Date, Active_Date, arrPagination, indexPage, hidden} = this.state;
+    const { data, key, action, End_Date, Active_Date, arrPagination, indexPage, hidden } = this.state;
     if (!this.state.isLoading) {
       return (
         <div>
@@ -441,22 +440,11 @@ class PackageSale extends Component {
               </table>
             </CardBody>
           </Card>
-          {
-            arrPagination.length == 1 ? "" :
-              <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                <tr style={styles.row}>
-                  {
-                    arrPagination.map((item, i) => {
-                      return (
-                        <td>
-                          <Button style={{ marginRight: '5px' }} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                        </td>
-                      );
-                    })
-                  }
-                </tr>
-              </div>
-          }
+          <div style={{ float: 'right' }}>
+            <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+              this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+            }} />
+          </div>
 
 
 
@@ -514,16 +502,18 @@ class PackageSale extends Component {
       );
     }
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   datePicker: {

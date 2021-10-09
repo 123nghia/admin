@@ -1,6 +1,6 @@
 export default {
-  "BASE_URL" : "https://admin-api.tikitech.vn",
-  //"BASE_URL" : "http://localhost:3006",
+  //"BASE_URL" : "https://admin-api.tikitech.vn",
+  "BASE_URL" : "http://localhost:3006",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
@@ -110,6 +110,12 @@ export default {
   "UPDATE_PRODUCT_HARDWARE": "/api/update-product-hardward",
   "DELETE_PRODUCT_HARDWARE": "/api/delete-product-hardward",
   "UPLOAD_PRODUCT": "/api/upload-image-product",
+
+  "LIST_CATEGORY": "/api/list-category",
+  "ADD_CATEGORY": "/api/add-category",
+  "UPDATE_CATEGORY": "/api/update-category",
+  "DELETE_CATEGORY": "/api/delete-category",
+  "UPLOAD_CATEGORY": "/api/upload-category",
 
   "ADMIN_CHART": "/api/admin-chart",
   "COMPANY_CHART": "/api/company-chart",

@@ -6,25 +6,19 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
+  Button, Input,
+
 } from 'reactstrap';
 
 import {
-  CBadge,
   CRow,
   CCol,
-  CSelect,
-  CInput,
   CLabel
 } from '@coreui/react'
 
 import 'moment-timezone';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../contants/contants";
-import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import axios from 'axios'
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -35,19 +29,8 @@ class Users extends Component {
     super(props);
     this.state = {
       data: [],
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
       totalActive: 0,
-      modalCom: false,
-      viewingUser: {},
-      communities: [],
-      updated: '',
       dataApi: [],
-      action: 'new',
-      modalDelete: false,
-      delete: null,
       dataCompany: [],
       currentCompany: '',
       dataTypeKey: [],
@@ -225,7 +208,7 @@ class Users extends Component {
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Company Id</CLabel>
+                          <CLabel>Company</CLabel>
                           <Input style={styles.searchInput} value={async () => { await this.getCompanyName(data.Company_Id) }} />
                         </div>
                       </CCol>
@@ -233,8 +216,8 @@ class Users extends Component {
 
                       <CCol sm="12" lg="12">
                         <div>
-                          <CLabel>Role Id</CLabel>
-                          <Input style={styles.searchInput} value={data.Role_Id} />
+                          <CLabel>Role</CLabel>
+                          <Input style={styles.searchInput} value={this.state.role} />
                         </div>
                       </CCol>
 
@@ -268,7 +251,7 @@ class Users extends Component {
                     </CRow>
                   </CCol>
                   <CCol sm="12" lg="6">
-                    <CLabel><strong>Quản lý dường dẫn</strong></CLabel>
+                    {/* <CLabel><strong>Quản lý dường dẫn</strong></CLabel>
                     <CCol sm="12" lg="12">
                       <CLabel>Đường dẫn gian hàng</CLabel>
                       <CRow>
@@ -327,7 +310,7 @@ class Users extends Component {
                           }
                         </CCol>
                       </CRow>
-                    </CCol>
+                    </CCol> */}
                   </CCol>
                 </CRow>
               </CardBody>

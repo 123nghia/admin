@@ -5,6 +5,7 @@ import './polyfill'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import './assets/css/sidebar.css';
 import * as serviceWorker from './serviceWorker';
 
 import { icons } from './assets/icons'

@@ -23,9 +23,8 @@ import {
 
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
+import Pagination from '@material-ui/lab/Pagination';
 import axios from 'axios'
-import md5 from "md5";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -109,7 +108,7 @@ class Transaction extends Component {
 
     console.log(data)
 
-    if(data.length > 0) {
+    if (data.length > 0) {
       await this.getOrderDetail(data[0]._id, data[0].Company_Id)
     }
 
@@ -503,22 +502,11 @@ class Transaction extends Component {
 
                 </CardBody>
                 <CardFooter>
-                  {
-                    arrPagination.length == 1 ? "" :
-                      <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                        <tr style={styles.row}>
-                          {
-                            arrPagination.map((item, i) => {
-                              return (
-                                <td>
-                                  <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                                </td>
-                              );
-                            })
-                          }
-                        </tr>
-                      </div>
-                  }
+                  <div style={{ float: 'right' }}>
+                    <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                      this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                    }} />
+                  </div>
                 </CardFooter>
               </Card>
 

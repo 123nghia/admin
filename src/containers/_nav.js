@@ -124,6 +124,13 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Danh mục',
+    icon: 'cil-star',
+    to: '/danh_muc',
+    role: ['COMPANY', 'SALES', 'ADMIN', 'SHOPMANAGER']
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Thương hiệu',
     icon: 'cil-star',
     to: '/thuong_hieu',
@@ -154,6 +161,18 @@ const _nav = [
     icon: 'cil-star',
     to: '/doanh_so_theo_san_pham',
     role: ['ADMIN', 'ADMINSALE', 'COMPANY']
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Cấu hình hệ thống'],
+    role: ['COMPANY']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Cấu hình gian hàng',
+    icon: 'cil-star',
+    to: '',
+    role: ['COMPANY']
   },
 
 ]
