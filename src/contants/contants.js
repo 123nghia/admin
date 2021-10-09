@@ -35,7 +35,7 @@ export default {
   "UPDATE_HARDWARE" : "/api/update-hardware",
   "DELETE_HARDWARE" : "/api/delete-hardware",
 
-  "LIST_ORDER" : "/api/list-order",
+  "LIST_ORDER" : "/api/list-order-hardward",
   "ADD_ORDER" : "/api/add-order",
   "UPDATE_STATUS_ORDER" : "/api/update-status-order",
 
