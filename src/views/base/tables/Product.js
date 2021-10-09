@@ -14,7 +14,8 @@ import {
   CButton,
   CRow,
   CCol,
-  CLabel
+  CLabel,
+  CSwitch
 } from '@coreui/react'
 
 import CreatableSelect from 'react-select/creatable';
@@ -38,6 +39,7 @@ class Product extends Component {
     super(props);
     this.state = {
       data: [],
+      dataPage: [],
       key: '',
       modalCom: false,
       dataApi: [],
@@ -67,8 +69,11 @@ class Product extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       isLoading: false,
+      isLoadingUpdate: false,
       modalMultiple: false,
-      dataMultiImage: []
+      dataMultiImage: [],
+      currentIDUpdate: "",
+      arrCapacity: [{ capacity: "", price: "" }]
     };
   }
   async componentDidMount() {
@@ -93,7 +98,12 @@ class Product extends Component {
       })
     }
 
+    // if (this.state.dataPage.length > 0) {
+    //   this.setState({ arrPagination: arrTotal, data: this.state.dataPage });
+    // } else {
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    //}
+
   }
 
   getData = async () => {
@@ -102,6 +112,9 @@ class Product extends Component {
       Constants.LIST_PRODUCT, {}, "", "POST")
 
     let val = res.data;
+    for (let i = 0; i < val.length; i++) {
+      val[i].id = i + 1
+    }
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false })
   }
@@ -175,7 +188,7 @@ class Product extends Component {
     })
   }
 
-  async onUpdateImage_Multiple(e, item) {
+  onUpdateImage_Multiple = async (e, id) => {
     let files = e.target.files;
     let image = files[0];
 
@@ -185,7 +198,7 @@ class Product extends Component {
     await API_CONNECT(Constants.UPLOAD_MULTI_IMAGE, form, "", "POST")
 
     await API_CONNECT(Constants.UPDATE_MULTI_IMAGE, {
-      id: item._id,
+      id: id,
       image: image.name
     }, "", "POST")
 
@@ -286,7 +299,7 @@ class Product extends Component {
       price: price
     }
 
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, dataPage: [] });
     var res = await API_CONNECT(
       Constants.ADD_PRODUCT, body, "", "POST")
 
@@ -495,7 +508,6 @@ class Product extends Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                     <thead className="thead-light">
                       <tr>
@@ -516,7 +528,7 @@ class Product extends Component {
                           data.map((item, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.id}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   {
@@ -552,7 +564,7 @@ class Product extends Component {
               </Card>
               <div style={{ float: 'right' }}>
                 <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                  this.setState({ data: arrPagination[v - 1], dataPage: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
             </Col>
@@ -629,26 +641,35 @@ class Product extends Component {
                           `${Constants.BASE_URL}/public/image_product/${image}` : image_show} style={{ marginBottom: 20 }} />
                   }
 
-                  <TextFieldGroup
-                    field="weight"
-                    label="Cân nặng"
-                    value={this.state.weight}
-                    placeholder={"Cân nặng"}
-                    type={"number"}
-                    // error={errors.title}
-                    onChange={e => this.onChange("weight", e.target.value)}
-                  // rows="5"
-                  />
+                  {/* <CButton color="success" style={{ width: '100%' }} onClick={() => {  }}>Thêm</CButton> */}
 
-                  <TextFieldGroup
-                    field="price"
-                    label="Giá"
-                    value={this.state.price}
-                    placeholder={"Giá"}
-                    type={"number"}
-                    onChange={e => this.onChange("price", e.target.value)}
-                  // rows="5"
-                  />
+                  <br />
+
+                  <CRow>
+                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                      <TextFieldGroup
+                        field="weight"
+                        label="Dung tích"
+                        value={this.state.weight}
+                        placeholder={"Dung tích"}
+                        type={"number"}
+                        // error={errors.title}
+                        onChange={e => this.onChange("weight", e.target.value)}
+                      // rows="5"
+                      />
+                    </CCol>
+                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                      <TextFieldGroup
+                        field="price"
+                        label="Giá"
+                        value={this.state.price}
+                        placeholder={"Giá"}
+                        type={"number"}
+                        onChange={e => this.onChange("price", e.target.value)}
+                      // rows="5"
+                      />
+                    </CCol>
+                  </CRow>
 
                 </CCol>
                 <CCol md="6" lg="6" sm="12" xm="12" lx="6">
@@ -753,8 +774,10 @@ class Product extends Component {
                               }
                             </td>
                             <td className="text-center">
-                              <input type="file" id="file" ref="fileUpdate" onChange={(e) => { this.onUpdateImage_Multiple(e, item) }} style={{ display: "none" }} />
-                              <CButton outline color="success" size="sm" onClick={(e) => { this.refs.fileUpdate.click() }}>
+                              <input type="file" id="file" ref="fileUpdate" onChange={(e) => {
+                                this.onUpdateImage_Multiple(e, this.state.currentIDUpdate)
+                              }} style={{ display: "none" }} />
+                              <CButton outline color="success" size="sm" onClick={(e) => { this.refs.fileUpdate.click(); this.setState({ currentIDUpdate: item._id }) }}>
                                 <CIcon content={freeSet.cilPen} />
                               </CButton>
                             </td>
