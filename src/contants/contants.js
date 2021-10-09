@@ -1,6 +1,6 @@
 export default {
-  //"BASE_URL" : "https://admin-api.tikitech.vn",
-  "BASE_URL" : "http://localhost:3006",
+  "BASE_URL" : "https://admin-api.tikitech.vn",
+  //"BASE_URL" : "http://localhost:3006",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
