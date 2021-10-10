@@ -135,7 +135,7 @@ class ShopManager extends Component {
       },
       headers: this.state.token
     });
-
+    console.log(res.data.data)
     if (res.data.is_success == true) {
       let data = res.data.data
 
@@ -221,11 +221,11 @@ class ShopManager extends Component {
                 </CFormGroup>
               </CCardHeader>
               <CCardBody>
-                {
+                {/* {
                   isLoadingCustomer ?
                     <div className="sweet-loading">
                       <DotLoader css={override} size={50} color={"#123abc"} loading={isLoadingCustomer} speedMultiplier={1.5} />
-                    </div> :
+                    </div> : */}
                     <table className="table table-hover table-outline mb-0 d-none d-sm-table">
                       <thead className="thead-light">
                         <tr>
@@ -272,7 +272,7 @@ class ShopManager extends Component {
                         </div>
                       </tfoot>
                     </table>
-                }
+
                 <br />
 
                 <CRow>
