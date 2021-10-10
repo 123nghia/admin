@@ -251,7 +251,7 @@ class Users extends Component {
                     </CRow>
                   </CCol>
                   <CCol sm="12" lg="6">
-                    {/* <CLabel><strong>Quản lý dường dẫn</strong></CLabel>
+                    <CLabel><strong>Quản lý dường dẫn</strong></CLabel>
                     <CCol sm="12" lg="12">
                       <CLabel>Đường dẫn gian hàng</CLabel>
                       <CRow>
@@ -310,7 +310,7 @@ class Users extends Component {
                           }
                         </CCol>
                       </CRow>
-                    </CCol> */}
+                    </CCol>
                   </CCol>
                 </CRow>
               </CardBody>

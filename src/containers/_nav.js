@@ -174,7 +174,18 @@ const _nav = [
     to: '',
     role: ['COMPANY']
   },
-
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Cấu hình hệ thống'],
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Cấu hình gian hàng',
+    icon: 'cil-star',
+    to: '/cau_hinh_gian_hang',
+    role: ['ADMIN']
+  },
 ]
 
 export default _nav

@@ -121,4 +121,8 @@ export default {
   "COMPANY_CHART": "/api/company-chart",
   "SALE_CHART": "/api/sale-chart",
 
+  "LIST_CONFIG": "/api/list-config",
+  "CONFIG_BY_ID": "/api/config-by-id",
+  "UPDATE_CONFIG": "/api/update-config",
+
 };
