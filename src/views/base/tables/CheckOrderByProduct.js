@@ -6,18 +6,7 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
-
-import {
-  CBadge,
-  CRow,
-  CCol,
-  CSelect,
-  CInput
-} from '@coreui/react'
 
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";

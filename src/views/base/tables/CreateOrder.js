@@ -324,7 +324,7 @@ class Order extends Component {
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={e => {
-              this.setState({ arrHardWard_ID: this.state.arrChooseHard,  });
+              this.setState({ arrHardWard_ID: this.state.arrChooseHard  });
               if(this.state.arrChooseHard.length > 0) {
                 this.setState({ isSave: true })
               }

@@ -39,20 +39,9 @@ class Users extends Component {
     this.state = {
       data: [],
       key: '',
-      keyName: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyCodeCompany: '',
-      keyGender: '',
-      keyStatus: '',
       activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
       updated: '',
       dataApi: [],
       action: 'new',
@@ -105,9 +94,9 @@ class Users extends Component {
     this.getData();
 
     let arr = JSON.parse(localStorage.getItem('url'));
-    for(let i = 0; i < arr.length; i++){
-      if("#" + arr[i].to == window.location.hash){
-        if(arr[i].hidden == true){
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
           window.location.href = '#/'
         }
       }
@@ -398,15 +387,15 @@ class Users extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyName, keyEmail, keyPhone, keyCodeCompany, keyGender, keyStatus } = this.state;
+    const { indexPage, key, keyStatus } = this.state;
 
-    if (key != '' ||  keyStatus != '') {
+    if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+          val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
           d.push(val)
         }
       })
@@ -460,8 +449,6 @@ class Users extends Component {
       action: key
     })
 
-    await this.getCompanyData()
-    await this.getSaleData()
     await this.getRoleData()
     if (key == 'new') {
       this.setState({
@@ -470,7 +457,6 @@ class Users extends Component {
         Phone: '',
         Gender: 'Nam',
         Company_Id: '',
-        Role_Id: '',
         UserName: '',
         Password: '',
         Sale_Id: '',
@@ -537,10 +523,6 @@ class Users extends Component {
       modalCom: !this.state.modalCom,
       action: "update"
     })
-
-    await this.getCompanyData(item.Company_Id)
-    await this.getSaleData(item.Sale_Id)
-    await this.getRoleData(item.Role_Id)
 
     this.setState({
       Email: item.Email,
@@ -656,27 +638,7 @@ class Users extends Component {
     }).catch(console.log);
   }
 
-  async getCompanyData(id) {
-    const resCompany = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_COMPANY,
-      method: 'POST',
-    });
-
-    this.setState({ dataCompany: resCompany.data.data, currentCompany: id == null || id == undefined ? "" : id.Name });
-  }
-
-  async getSaleData(id) {
-    const resSale = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SALE,
-      method: 'GET',
-    });
-
-    this.setState({ dataSale: resSale.data.data, currentSale: id == null || id == undefined ? "" : id.Name });
-  }
-
-  async getRoleData(id) {
+  async getRoleData() {
     const resRole = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_ROLE,
@@ -684,7 +646,15 @@ class Users extends Component {
       headers: this.state.token
     });
 
-    this.setState({ dataRole: resRole.data.data, currentRole: id == null || id == undefined ? "" : id.Name });
+    let data = resRole.data.data
+    let current_role_id = ""
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].Name == "SALES") {
+        current_role_id = data[i]._id
+      }
+    }
+
+    this.setState({ Role_Id: current_role_id });
   }
 
   inputChange(e) {
@@ -710,7 +680,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, key, hidden, action, dataRole, currentRole, arrPagination, indexPage } = this.state;
+    const { data, key, hidden, action, arrPagination, indexPage } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -887,46 +857,19 @@ class Users extends Component {
               // rows="5"
               />
 
-              <div>
+              {/* <div>
                 <label style={styles.flexLabel} htmlFor="tag">Giới tính:    </label>
                 <select style={styles.flexOption} name="Gender" onChange={e => this.onChange("Gender", e.target.value)}>
                   <option value={this.state.Gender}>{this.state.Gender == '' ? ` - - - - - - - - - - ` : this.state.Gender}</option>
                   <option value={'Nam'}>Nam</option>
                   <option value={'Nữ'}>Nữ</option>
                 </select>
-              </div>
+              </div> */}
 
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Phân quyền:    </label>
-                <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
-                  <option value={this.state.Role_Id}>-----</option>
-                  {
-                    this.state.role == 'ADMIN' || this.state.role == 'ADMINSALE' ?
-                      dataRole.map((item, i) => {
-                        if (item.Name == currentRole) {
-                          return (
-                            <option selected value={item._id}>{item.Name}</option>
-                          );
-                        }
-                        else {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        }
-                      }) : dataRole.map((item, i) => {
-                        if (item.Name == 'SALES') {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        }
-                      })
-                  }
-                </select>
-              </div>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => {this.setState({ modalCom: !this.state.modalCom })}}>Đóng</Button>
+              <Button color="secondary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Đóng</Button>
             </ModalFooter>
           </Modal>
 

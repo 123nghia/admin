@@ -72,12 +72,6 @@ class Users extends Component {
       Status: '',
       modalDelete: false,
       delete: null,
-      dataCompany: [],
-      currentCompany: '',
-      dataSale: [],
-      currentSale: '',
-      dataRole: [],
-      currentRole: '',
       arrPagination: [],
       indexPage: 0,
       arrPagination_All: [],
@@ -425,8 +419,6 @@ class Users extends Component {
       action: key
     })
 
-    await this.getCompanyData()
-    await this.getSaleData()
     await this.getRoleData()
     if (key == 'new') {
       this.setState({
@@ -435,7 +427,6 @@ class Users extends Component {
         Phone: '',
         Gender: 'Nam',
         Company_Id: '',
-        Role_Id: '',
         UserName: '',
         Password: '',
         Sale_Id: '',
@@ -500,10 +491,6 @@ class Users extends Component {
       modalCom: !this.state.modalCom,
       action: "update"
     })
-
-    await this.getCompanyData(item.Company_Id)
-    await this.getSaleData(item.Sale_Id)
-    await this.getRoleData(item.Role_Id)
 
     this.setState({
       Email: item.Email,
@@ -618,26 +605,6 @@ class Users extends Component {
     }).catch(console.log);
   }
 
-  async getCompanyData(id) {
-    const resCompany = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_COMPANY,
-      method: 'POST',
-    });
-
-    this.setState({ dataCompany: resCompany.data.data, currentCompany: id == null || id == undefined ? "" : id.Name });
-  }
-
-  async getSaleData(id) {
-    const resSale = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SALE,
-      method: 'GET',
-    });
-
-    this.setState({ dataSale: resSale.data.data, currentSale: id == null || id == undefined ? "" : id.Name });
-  }
-
   async getRoleData(id) {
     const resRole = await axios({
       baseURL: Constants.BASE_URL,
@@ -646,7 +613,15 @@ class Users extends Component {
       headers: this.state.token
     });
 
-    this.setState({ dataRole: resRole.data.data, currentRole: id == null || id == undefined ? "" : id.Name });
+    let data = resRole.data.data
+    let current_role_id = ""
+    for(let i = 0; i < data.length; i++) {
+      if(data[i].Name == "SHOPMANAGER") {
+        current_role_id = data[i]._id
+      }
+    }
+
+    this.setState({ Role_Id: current_role_id });
   }
 
   getBadge(status) {
@@ -663,7 +638,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, key, action, dataRole, currentRole, arrPagination } = this.state;
+    const { data, key, action, arrPagination } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -823,63 +798,6 @@ class Users extends Component {
               // rows="5"
               />
 
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Giới tính:    </label>
-                <select style={styles.flexOption} name="Gender" onChange={e => this.onChange("Gender", e.target.value)}>
-                  <option value={this.state.Gender}>{this.state.Gender == '' ? ` - - - - - - - - - - ` : this.state.Gender}</option>
-                  <option value={'Nam'}>Nam</option>
-                  <option value={'Nữ'}>Nữ</option>
-                </select>
-              </div>
-
-              {/* <div>
-                <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
-                <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
-                  <option value={this.state.Company_Id}>-----</option>
-                  {
-                    dataCompany.map((item, i) => {
-                      if (item.Name == currentCompany) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div> */}
-
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Phân quyền:    </label>
-                <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
-                  <option value={this.state.Role_Id}>-----</option>
-                  {
-                    this.state.role == 'ADMIN' || this.state.role == 'ADMINSALE' ?
-                      dataRole.map((item, i) => {
-                        if (item.Name == currentRole) {
-                          return (
-                            <option selected value={item._id}>{item.Name}</option>
-                          );
-                        }
-                        else {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        }
-                      }) : dataRole.map((item, i) => {
-                        if (item.Name == 'SHOPMANAGER') {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        }
-                      })
-                  }
-                </select>
-              </div>
-
               {
                 action == 'new' ? "" : <div>
                   <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
@@ -891,27 +809,6 @@ class Users extends Component {
                   </select>
                 </div>
               }
-              {/* {
-                this.state.role == 'ADMIN' ? <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Sale:    </label>
-                  <select style={styles.flexOption} name="Sale_Id" onChange={e => this.onChange("Sale_Id", e.target.value)}>
-                    <option value={this.state.Sale_Id}>-----</option>
-                    {
-                      dataSale.map((item, i) => {
-                        if (item.Name == currentSale) {
-                          return (
-                            <option selected value={item._id}>{item.Name}</option>
-                          );
-                        } else {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        }
-                      })
-                    }
-                  </select>
-                </div> : ""
-              } */}
 
             </ModalBody>
             <ModalFooter>
