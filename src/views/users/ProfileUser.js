@@ -53,8 +53,6 @@ class Users extends Component {
       UserName: '',
       Password: '',
       Status: '',
-      link_shop: true,
-      data_link_shop: '',
       link_recommand: true,
       data_link_recommand: '',
       link_sku: true,
@@ -97,7 +95,6 @@ class Users extends Component {
   }
 
   getData = async () => {
-    const { data_link_shop, data_link_recommand, data_link_sku } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -106,48 +103,22 @@ class Users extends Component {
       headers: this.state.token
     });
 
+    let data = res.data.data
     const resLink = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants['GET-LINK-BY-ID'],
+      url: Constants.CONFIG_BY_ID,
       method: 'POST',
-      headers: this.state.token
+      data: {
+        company_id: data.Company_Id
+      }
     });
 
-    this.setState({ data_link_shop: resLink.data.data.link_shop,
-                    data_link_recommand: resLink.data.data.link_recommand,
-                    data_link_sku: resLink.data.data.link_sku_hair
-                  })
-    res.data.data.link_shop = resLink.data.data.link_shop
-    res.data.data.link_recommand = resLink.data.data.link_recommand
-    res.data.data.link_sku_hair = resLink.data.data.link_sku_hair
-
-    console.log(resLink)
-    this.setState({ dataApi: res.data.data, data: res.data.data });
+    data.link_shop = resLink.data.data.value
+    this.setState({ dataApi: data, data: data });
   }
 
   onChange(key, val) {
     this.setState({ [key]: val })
-  }
-
-  openUpdate(name_link) {
-    this.setState({
-      [name_link]: !this.state[name_link]
-    });
-  }
-
-  async updateLink() {
-    const { data_link_shop, data_link_recommand, data_link_sku  } = this.state;
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_LINK,
-      method: 'POST',
-      data: {
-        link_shop: data_link_shop,
-        link_recommand: data_link_recommand,
-        link_sku_hair: data_link_sku,
-      },
-      headers: this.state.token
-    });
   }
 
   inputChange(e) {
@@ -155,7 +126,7 @@ class Users extends Component {
   }
 
   render() {
-    const { data, link_shop, link_recommand, link_sku } = this.state;
+    const { data } = this.state;
 
 
     return (
@@ -255,60 +226,7 @@ class Users extends Component {
                     <CCol sm="12" lg="12">
                       <CLabel>Đường dẫn gian hàng</CLabel>
                       <CRow>
-                        <CCol sm="9" lg="9">
-                          <Input style={styles.searchInput} readOnly={link_shop} onChange={(e) => { this.setState({ data_link_shop: e.target.value }) }} value={this.state.data_link_shop} />
-                        </CCol>
-                        <CCol sm="3" lg="3">
-                          {
-                            link_shop ?
-                              <Button color="primary" onClick={e => { this.openUpdate('link_shop') }}>Thay đổi</Button> :
-                              <Button color="primary" onClick={async e =>
-                                {
-                                  this.openUpdate('link_shop');
-                                  await this.updateLink();
-                                }}>Lưu thay đổi</Button>
-                          }
-                        </CCol>
-                      </CRow>
-                    </CCol>
-
-                    <CCol sm="12" lg="12">
-                      <CLabel>Đường dẫn RECOMMAND</CLabel>
-                      <CRow>
-                        <CCol sm="9" lg="9">
-                          <Input style={styles.searchInput} readOnly={link_recommand} onChange={(e) => { this.setState({ data_link_recommand: e.target.value})}} value={this.state.data_link_recommand} />
-                        </CCol>
-                        <CCol sm="3" lg="3">
-                          {
-                            link_recommand ?
-                              <Button color="primary" onClick={e => { this.openUpdate('link_recommand') }}>Thay đổi</Button> :
-                              <Button color="primary" onClick={async e =>
-                                {
-                                  this.openUpdate('link_recommand');
-                                  await this.updateLink();
-                                }}>Lưu thay đổi</Button>
-                          }
-                        </CCol>
-                      </CRow>
-                    </CCol>
-
-                    <CCol sm="12" lg="12">
-                      <CLabel>Đường dẫn SKU Tóc</CLabel>
-                      <CRow>
-                        <CCol sm="9" lg="9">
-                          <Input style={styles.searchInput} readOnly={link_sku} onChange={(e) => { this.setState({ data_link_sku: e.target.value })}} value={this.state.data_link_sku} />
-                        </CCol>
-                        <CCol sm="3" lg="3">
-                          {
-                            link_sku ?
-                              <Button color="primary" onClick={e => { this.openUpdate('link_sku') }}>Thay đổi</Button> :
-                              <Button color="primary" onClick={async e =>
-                                {
-                                  this.openUpdate('link_sku');
-                                  await this.updateLink();
-                                }}>Lưu thay đổi</Button>
-                          }
-                        </CCol>
+                        <Input style={styles.searchInput} readOnly={data.link_shop} value={data.link_shop} />
                       </CRow>
                     </CCol>
                   </CCol>

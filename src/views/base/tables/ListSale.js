@@ -754,7 +754,7 @@ class Users extends Component {
                           <tr key={i}>
                             <td className="text-center">{i + 1}</td>
                             <td className="text-center">{item.Name}</td>
-                            <td className="text-center">{item.Company_Id.Name}</td>
+                            <td className="text-center">{item.company_name}</td>
                             <td className="text-center">{item.Email}</td>
                             <td className="text-center">{item.Phone}</td>
                             <td className="text-center">{item.Address}</td>

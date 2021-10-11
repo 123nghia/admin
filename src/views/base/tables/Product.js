@@ -25,6 +25,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import API_CONNECT from "../../../../src/helpers/callAPI";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -42,8 +44,6 @@ class Product extends Component {
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
       updated: '',
       dataApi: [],
       action: 'new',
@@ -58,6 +58,11 @@ class Product extends Component {
       code: "",
       sku_code: "",
       brand_id: "",
+      weight: "",
+      info_product: "",
+      how_to_use: "",
+      description: "",
+      description_brand: "",
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -191,10 +196,14 @@ class Product extends Component {
         image_update: "",
         link: "",
         price: "",
-        image_update: "",
         code: "",
         sku_code: "",
-        brand_id: ""
+        brand_id: "",
+        weight: "",
+        info_product: "",
+        how_to_use: "",
+        description: "",
+        description_brand: "",
       }, async () => {
         const { arrOptionShop, arrOptionBrand, arrOptionCategory } = this.state;
 
@@ -241,7 +250,7 @@ class Product extends Component {
   }
 
   async addProduct() {
-    const { name, shop_id, image, link, price, code, brand_id, sku_code, category_id } = this.state
+    const { name, shop_id, image, link, price, code, brand_id, sku_code, category_id, weight, info_product, how_to_use, description, description_brand } = this.state
 
     console.log(name)
     console.log(shop_id)
@@ -269,6 +278,11 @@ class Product extends Component {
       sku_code: sku_code,
       brand_id: brand_id,
       category_id: category_id,
+      weight: weight,
+      info_product: info_product,
+      how_to_use: how_to_use,
+      description: description,
+      description_brand: description_brand,
     }
 
     this.setState({ isLoading: true });
@@ -312,6 +326,11 @@ class Product extends Component {
       sku_code: item.sku_code,
       brand_id: item.brand_id,
       category_id: item.category_id,
+      weight: item.weight,
+      info_product: item.info_product,
+      how_to_use: item.how_to_use,
+      description: item.description,
+      description_brand: item.description_brand,
       id: item['_id'],
     }, async () => {
       const { arrOptionShop, arrOptionBrand, arrOptionCategory } = this.state;
@@ -353,8 +372,8 @@ class Product extends Component {
     })
   }
 
-  async updateCompany() {
-    const { name, shop_id, image, link, price, code, brand_id, image_update, sku_code, category_id } = this.state
+  async updateProduct() {
+    const { name, shop_id, image, image_update, link, price, code, brand_id, sku_code, category_id, weight, info_product, how_to_use, description, description_brand } = this.state
 
     if (name == null || name == ''
       || link == null || link == ''
@@ -380,6 +399,11 @@ class Product extends Component {
       "sku_code": sku_code,
       "brand_id": brand_id,
       "category_id": category_id,
+      "weight": weight,
+      "info_product": info_product,
+      "how_to_use": how_to_use,
+      "description": description,
+      "description_brand": description_brand,
       id: this.state.id
     }
 
@@ -569,108 +593,160 @@ class Product extends Component {
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
+          <Modal size='xl' isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="name"
-                label="Tên sản phẩm"
-                value={this.state.name}
-                placeholder={"Tên sản phẩm"}
-                // error={errors.title}
-                onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
-              />
+              <CRow>
+                <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                  <TextFieldGroup
+                    field="name"
+                    label="Tên sản phẩm"
+                    value={this.state.name}
+                    placeholder={"Tên sản phẩm"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("name", e.target.value)}
+                  // rows="5"
+                  />
 
-              <TextFieldGroup
-                field="code"
-                label="Mã sku"
-                value={this.state.code}
-                placeholder={"Mã sản phẩm"}
-                // error={errors.title}
-                onChange={e => this.onChange("code", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="code"
+                    label="Mã sku"
+                    value={this.state.code}
+                    placeholder={"Mã sản phẩm"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("code", e.target.value)}
+                  // rows="5"
+                  />
 
-              <TextFieldGroup
-                field="sku_code"
-                label="Mã barcode"
-                value={this.state.sku_code}
-                placeholder={"Mã sku"}
-                // error={errors.title}
-                onChange={e => this.onChange("sku_code", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="sku_code"
+                    label="Mã barcode"
+                    value={this.state.sku_code}
+                    placeholder={"Mã sku"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("sku_code", e.target.value)}
+                  // rows="5"
+                  />
 
-              {
-                role == "COMPANY" || role == "SALES" ?
-                  <div>
-                    <CLabel>Cửa hàng:</CLabel>
-                    <CreatableSelect
-                      isClearable
-                      onChange={this.handleChange}
-                      value={objectValueShop}
-                      // onInputChange={this.handleInputChange}
-                      options={arrOptionShop}
-                    /></div> : ""
+                  {
+                    role == "COMPANY" || role == "SALES" ?
+                      <div>
+                        <CLabel>Cửa hàng:</CLabel>
+                        <CreatableSelect
+                          isClearable
+                          onChange={this.handleChange}
+                          value={objectValueShop}
+                          // onInputChange={this.handleInputChange}
+                          options={arrOptionShop}
+                        /></div> : ""
 
-              }
+                  }
 
-              <CLabel>Thương hiệu:</CLabel>
-              <CreatableSelect
-                isClearable
-                onChange={this.handleChange_Brand}
-                value={objectValueBrand}
-                // onInputChange={this.handleInputChange}
-                options={arrOptionBrand}
-              />
+                  <CLabel>Thương hiệu:</CLabel>
+                  <CreatableSelect
+                    isClearable
+                    onChange={this.handleChange_Brand}
+                    value={objectValueBrand}
+                    // onInputChange={this.handleInputChange}
+                    options={arrOptionBrand}
+                  />
 
-              <CLabel>Danh mục:</CLabel>
-              <CreatableSelect
-                isClearable
-                onChange={this.handleChange_Category}
-                value={objectValueCategory}
-                // onInputChange={this.handleInputChange}
-                options={arrOptionCategory}
-              />
+                  <CLabel>Danh mục:</CLabel>
+                  <CreatableSelect
+                    isClearable
+                    onChange={this.handleChange_Category}
+                    value={objectValueCategory}
+                    // onInputChange={this.handleInputChange}
+                    options={arrOptionCategory}
+                  />
 
-              <TextFieldGroup
-                field="image"
-                label="Ảnh sản phẩm"
-                type={"file"}
-                onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
-              />
-              {
-                this.state.image == "" ? "" :
-                  <img width="250" height="300" src={
-                    this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_product/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
-              }
+                  <TextFieldGroup
+                    field="image"
+                    label="Ảnh sản phẩm"
+                    type={"file"}
+                    onChange={e => { this.onChangeImage(e) }}
+                    onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
+                  />
+                  {
+                    this.state.image == "" ? "" :
+                      <img width="250" height="300" src={
+                        this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_product/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
+                  }
 
 
-              <TextFieldGroup
-                field="link"
-                label="Đường dẫn"
-                value={this.state.link}
-                placeholder={"Đường dẫn"}
-                // error={errors.title}
-                onChange={e => this.onChange("link", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="link"
+                    label="Đường dẫn"
+                    value={this.state.link}
+                    placeholder={"Đường dẫn"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("link", e.target.value)}
+                  // rows="5"
+                  />
 
-              <TextFieldGroup
-                field="price"
-                label="Gía"
-                value={this.state.price}
-                placeholder={"Giá"}
-                // error={errors.title}
-                onChange={e => this.onChange("price", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="price"
+                    label="Gía"
+                    value={this.state.price}
+                    placeholder={"Giá"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("price", e.target.value)}
+                  // rows="5"
+                  />
+                </CCol>
+                <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                  <label className="control-label">Mô tả</label>
+
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={this.state.description}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.setState({ description: data })
+                    }}
+                  />
+
+                  <br />
+                  <label className="control-label">Mô tả thương hiệu</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={this.state.description_brand}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.setState({ description_brand: data })
+                    }}
+                  />
+
+                  <br />
+
+                  <label className="control-label">Thông tin sản phẩm</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={this.state.info_product}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.setState({ info_product: data })
+                    }}
+                  />
+
+                  <br />
+
+                  <label className="control-label">Chất liệu và cách sử dụng</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    row="5"
+                    data={this.state.how_to_use}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.setState({ how_to_use: data })
+                    }}
+                  />
+                </CCol>
+              </CRow>
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateProduct() }} disabled={this.state.isLoading}>Save</Button>{' '}
               <Button color="secondary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Đóng</Button>
             </ModalFooter>
           </Modal>
