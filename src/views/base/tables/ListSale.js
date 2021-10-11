@@ -473,7 +473,7 @@ class Users extends Component {
 
     const { company_id } = this.state;
     var id = JSON.parse(company_id);
-
+    console.log(id.company_id)
     const { Email, Name, Phone, UserName, Code, Password, Gender, Role_Id, Company_Id, Sale_Id, Address } = this.state
 
     if (Email == null || Email == ''
