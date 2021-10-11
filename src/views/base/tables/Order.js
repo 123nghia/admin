@@ -157,7 +157,7 @@ class Order extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.user_id.name}</td>
+                                <td className="text-center">{item.user_id.username}</td>
                                 <td className="text-center">{item._id}</td>
                                 <td className="text-center">{item.total}</td>
                                 <td className="text-center">
