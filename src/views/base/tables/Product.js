@@ -15,7 +15,7 @@ import {
   CRow,
   CCol,
   CLabel,
-  CSwitch
+  CTextarea
 } from '@coreui/react'
 
 import CreatableSelect from 'react-select/creatable';
@@ -30,9 +30,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
+// const author = localStorage.getItem('author');
+// headers.append('authororization', 'Bearer ' + author);
+// headers.append('Content-Type', 'application/json');
 
 class Product extends Component {
   constructor(props) {
@@ -58,6 +58,13 @@ class Product extends Component {
       image_multiple: "",
       description: "",
       price: "",
+
+      //thông tin seo
+      title: "",
+      author: "",
+      keyword: "",
+      description_SEO: "",
+
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -66,7 +73,7 @@ class Product extends Component {
       arrOptionCategory: [],
       objectValueCategory: {},
       indexPage: 0,
-      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      token: { authororization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       isLoading: false,
       isLoadingUpdate: false,
@@ -232,6 +239,11 @@ class Product extends Component {
         objectValueBrand: {},
         objectValueCategory: {},
         price: "",
+        //Thông tin SEO
+        title: "",
+        author: "",
+        keyword: "",
+        description_SEO: ""
       }, async () => {
         if (arrOptionBrand.length == 0 || arrOptionCategory.length == 0) {
 
@@ -270,8 +282,8 @@ class Product extends Component {
   }
 
   async addProduct() {
-
-    const { category_id, brand_id, name, href, image, price, description, info_product, how_to_use, description_brand, weight } = this.state
+    const { category_id, brand_id, name, href, image, price, description,
+      info_product, how_to_use, description_brand, weight, title, author, keyword, description_SEO } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       category_id == null || category_id == '' ||
@@ -305,9 +317,19 @@ class Product extends Component {
 
     if (res.status == 200) {
 
-      this.getData()
+      let resSEO = await API_CONNECT(
+        Constants.ADD_SEO_INFO, {
+        product_id: res.data._id,
+        title: title,
+        author: author,
+        keyword: keyword,
+        description: description_SEO,
+      }, "", "POST")
 
-      this.setState({ modalCom: !this.state.modalCom })
+      if (resSEO.status == 200) {
+        this.getData()
+        this.setState({ modalCom: !this.state.modalCom })
+      }
     } else {
       alert("Thêm sản phẩm thất bại");
       this.setState({ isLoading: false });
@@ -316,6 +338,12 @@ class Product extends Component {
 
   async openUpdate(item) {
     const { token, arrOptionBrand, arrOptionCategory } = this.state;
+
+    const dataSEO = await API_CONNECT(
+      Constants.GET_SEO_INFO_BY_PRODUCT, {
+      product_id: item._id,
+    }, "", "POST")
+
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -333,7 +361,12 @@ class Product extends Component {
       price: item.price,
       objectValueBrand: { value: item.brand_id._id, label: item.brand_id.name },
       objectValueCategory: { value: item.category_id._id, label: item.category_id.name },
-      id: item['_id']
+      id: item['_id'],
+      //Thoong tin SEO
+      title: dataSEO.data.title,
+      author: dataSEO.data.author,
+      keyword: dataSEO.data.keyword,
+      description_SEO: dataSEO.data.description
     }, async () => {
       if (arrOptionBrand.length == 0 || arrOptionCategory.length == 0) {
         const res_brand = await API_CONNECT(
@@ -366,7 +399,8 @@ class Product extends Component {
   }
 
   async updateProduct() {
-    const { category_id, brand_id, name, href, weight, image, price, description, info_product, how_to_use, description_brand } = this.state
+    const { category_id, brand_id, name, href, weight, image, price,
+      description, info_product, how_to_use, description_brand, title, author, keyword, description_SEO } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '' ||
@@ -401,7 +435,14 @@ class Product extends Component {
       Constants.UPDATE_PRODUCT, body, "", "POST")
 
     if (res.status == 200) {
-
+      var resSEO = await API_CONNECT(
+        Constants.UPDATE_SEO_INFO, {
+        product_id: this.state.id,
+        title: title,
+        keyword: keyword,
+        author: author,
+        description: description_SEO,
+      }, "", "POST")
       this.getData()
 
       this.setState({ modalCom: !this.state.modalCom })
@@ -671,7 +712,56 @@ class Product extends Component {
                     </CCol>
                   </CRow>
 
+                  <CLabel><strong>Thông tin SEO</strong></CLabel>
+
+                  <TextFieldGroup
+                    field="title"
+                    label="Tiêu đề"
+                    value={this.state.title}
+                    placeholder={"Tiêu đề"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("title", e.target.value)}
+                  // rows="5"
+                  />
+
+                  <TextFieldGroup
+                    field="author"
+                    label="Author"
+                    value={this.state.author}
+                    placeholder={"Author"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("author", e.target.value)}
+                  // rows="5"
+                  />
+
+                  {/* <TextFieldGroup
+                    field="image"
+                    label="Hình ảnh"
+                    type={"file"}
+                    onChange={e => { this.onChangeImage(e) }}
+                    onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
+                  />
+                  {
+                    image == "" ? "" :
+                      <img width="250" height="300" src={
+                        image_show == "" ?
+                          `${Constants.BASE_URL}/public/image_seo/${image}` : image_show} style={{ marginBottom: 20 }} />
+                  } */}
+
+                  <TextFieldGroup
+                    field="keyword"
+                    label="Từ khoá"
+                    value={this.state.keyword}
+                    placeholder={"Từ khoá"}
+                    // error={errors.title}
+                    onChange={e => this.onChange("keyword", e.target.value)}
+                  // rows="5"
+                  />
+
+                  <CLabel>Mô tả</CLabel>
+                  <CTextarea placeholder='Mô tả SEO' rows={9} value={this.state.description_SEO} onChange={(e) => { this.setState({ description_SEO: e.target.value }) }} />
                 </CCol>
+
                 <CCol md="6" lg="6" sm="12" xm="12" lx="6">
                   <label className="control-label">Mô tả</label>
 

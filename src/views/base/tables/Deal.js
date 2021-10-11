@@ -266,11 +266,14 @@ class Product extends Component {
       item.category.push(arrRemoveOnUpdate[i])
     }
 
+    console.log(item.category)
+
     this.setState({
       arrRemoveOnUpdate: [],
       modalCom: !this.state.modalCom,
       action: "update",
       name: item.name,
+      category: item.category,
       image: item.image,
       image_show: "",
       type: item.type,
@@ -472,7 +475,7 @@ class Product extends Component {
             </CButton>
           </CCol>
         </CRow>
-        <div style={{ maxHeight: 450, overflowY: 'scroll', border: '1px solid red', marginTop: 15, borderRadius: 5 }}>
+        <div style={{ marginTop: 15 }}>
           {
             arrCategory.map((item, i) => {
               let idCategory = i;
@@ -500,10 +503,10 @@ class Product extends Component {
                     {
                       arrAllProductOfAllCategory[idCategory].length > 0 ?
                         <Card>
-                          <CardHeader>
+                          <CardHeader style={{ backgroundColor: '#a9c2af' }}>
                             Danh sách sản phẩm
                           </CardHeader>
-                          <CardBody style={{ height: 250, overflowY: 'scroll' }}>
+                          <CardBody style={{ height: 350, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
                             <CRow>
                               {
                                 arrAllProductOfAllCategory[idCategory].map((item_product, i_product) => {
@@ -541,7 +544,7 @@ class Product extends Component {
                                               this.setState({ arrAllProductChoosed: arrAllProductChoosed })
                                             }} />
 
-                                          <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"70px"} height={"90px"} />
+                                          <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"90px"} height={"110px"} style={{ border: '1px solid black', borderRadius: 5 }} />
 
                                         </CLabel>
                                       </CFormGroup>
@@ -678,7 +681,7 @@ class Product extends Component {
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <CRow>
-                <CCol md="3" lg="3" sm="12" xm="12" lx="3">
+                <CCol md="2" lg="2" sm="12" xm="12" lx="2">
                   <TextFieldGroup
                     field="name"
                     label="Tên banner"
@@ -758,7 +761,7 @@ class Product extends Component {
                   </div>
 
                 </CCol>
-                <CCol md="9" lg="9" sm="12" xm="12" lx="9">
+                <CCol md="10" lg="10" sm="12" xm="12" lx="10">
                   {
                     action == "new" ?
                       //Thêm mới banner

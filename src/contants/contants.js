@@ -51,6 +51,7 @@ export default {
   "UPLOAD_BANNER": "/api/upload_banner",
 
   "LIST_SEO_INFO": "/api/get_seo_info",
+  "GET_SEO_INFO_BY_PRODUCT": "/api/get_seo_info_by_product",
   "ADD_SEO_INFO": "/api/add_seo_info",
   "UPDATE_SEO_INFO": "/api/update_seo_info",
   "DELETE_SEO_INFOR": "/api/delete_seo_info",
