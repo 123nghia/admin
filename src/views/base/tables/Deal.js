@@ -422,8 +422,6 @@ class Product extends Component {
     }, "", "POST")
 
     let data = res.data;
-    console.log(data)
-    console.log(e.value)
     arrCategory[i].category_id = e.value;
     arrAllProductOfAllCategory[i] = data
     arrAllProductChoosed[i] = new Array()
@@ -836,7 +834,7 @@ class Product extends Component {
                                         <CLabel style={{ fontWeight: 900 }}>Tên danh mục: </CLabel>
                                       </CCol>
                                       <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                                        { item.category_id.name  }
+                                        {item.category_id.name}
                                         {/* <CreatableSelect
                                           isClearable
                                           value={arrOptionCategory.find(val => val.value == item.category_id)}
@@ -850,31 +848,31 @@ class Product extends Component {
                                     {
                                       item.product.length > 0 ?
                                         <Card>
-                                          <CardHeader>
+                                          <CardHeader style={{ backgroundColor: '#a9c2af' }}>
                                             Danh sách sản phẩm
                                           </CardHeader>
-                                          <CardBody style={{ height: 250, overflowY: 'scroll' }}>
+                                          <CardBody style={{ height: 350, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
                                             <CRow>
                                               {
                                                 item.product.map((item_product, i_product) => {
                                                   return (
-                                                    <CCol md="4" lg="4" sm="12" xm="12" lx="4">
+                                                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
                                                       <CFormGroup variant="custom-checkbox" inline>
                                                         <CInputCheckbox
                                                           custom
                                                           id={`${item_product._id}`}
                                                           defaultChecked
-                                                          // onClick={(e) => {
-                                                          //   if (e.target.checked) {
+                                                        // onClick={(e) => {
+                                                        //   if (e.target.checked) {
 
-                                                          //   } else {
+                                                        //   } else {
 
-                                                          //   }
-                                                          // }}
+                                                        //   }
+                                                        // }}
                                                         />
                                                         <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
 
-                                                          <div><strong>Tên sp: </strong>{item_product.name}</div>
+                                                          <div><strong>Tên sp: </strong>{item_product.product_id.name}</div>
                                                           <CRow>
                                                             <CCol md="5" lg="5" sm="12" xm="12" lx="5">
                                                               <strong>SL deal:</strong>
@@ -884,11 +882,12 @@ class Product extends Component {
                                                                 onChange={(e) => {
                                                                   arrUpdate[idCategory].product[i_product].total_deal = Number(e.target.value)
                                                                   this.setState({ arrUpdate: arrUpdate })
+                                                                  console.log(item_product)
                                                                 }} />
                                                             </CCol>
                                                           </CRow>
 
-                                                          <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"70px"} height={"90px"} />
+                                                          <img src={`${Constants.BASE_URL}/public/image_product/${item_product.product_id.image}`} width={"70px"} height={"90px"} style={{ border: '1px solid black', borderRadius: 5 }}/>
 
                                                         </CLabel>
                                                       </CFormGroup>
