@@ -60,11 +60,6 @@ const _nav = [
       role: ['ADMIN', 'ADMINSALE', 'COMPANY']
     }, {
       _tag: 'CSidebarNavItem',
-      name: 'Danh sách khách hàng',
-      to: '/customers',
-      role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
-    }, {
-      _tag: 'CSidebarNavItem',
       name: 'Danh sách phần cứng',
       to: '/hardware',
       role: ['ADMIN', 'ADMINSALE']
@@ -83,14 +78,21 @@ const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lý lịch sử soi da'],
-    role: ['ADMIN']
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách khách hàng',
+    icon: 'cil-star',
+    to: '/customers',
+    role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Lịch sử soi da',
     icon: 'cil-star',
     to: '/lich_su_soi_da',
-    role: ['ADMIN']
+    role: ['ADMIN', 'COMPANY']
   },
   {
     _tag: 'CSidebarNavTitle',

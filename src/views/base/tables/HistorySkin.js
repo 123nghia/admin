@@ -82,11 +82,11 @@ class HistorySkin extends Component {
 
   getData = async () => {
     this.setState({ isLoading: true });
-    console.log("Duy: ")
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY,
-      method: 'POST'
+      method: 'POST',
+      headers: this.state.token
     });
 
     let data = res.data.data;

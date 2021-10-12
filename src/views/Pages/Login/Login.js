@@ -71,14 +71,15 @@ class Login extends Component {
                 <CardGroup>
                   <Card className="p-4">
                     <CardBody>
-                      <h1>Login</h1>
+                      <h1>Đăng nhập</h1>
                       <span className="error">{errors.common}</span>
                       <InputGroup className="mb-3">
                         <TextFieldGroup
                           field="username"
-                          label="Username"
+                          label="Tên đăng nhập"
                           value={username}
                           error={errors.username}
+                          placeholder={"Tên đăng nhập"}
                           onChange={e => this.onChange(e)}
                         />
                       </InputGroup>
@@ -86,15 +87,16 @@ class Login extends Component {
                         <TextFieldGroup
                           type="password"
                           field="password"
-                          label="Password"
+                          label="Mật khẩu"
                           value={password}
+                          placeholder={"Mật khẩu"}
                           error={errors.password}
                           onChange={e => this.onChange(e)}
                         />
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="primary" className="px-4" disabled={isLoading}>Login</Button>
+                          <Button color="primary" className="px-4" disabled={isLoading}>Đăng nhập</Button>
                         </Col>
                       </Row>
                     </CardBody>
