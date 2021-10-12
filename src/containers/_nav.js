@@ -79,8 +79,19 @@ const _nav = [
       to: '/key',
       role: ['ADMIN', 'ADMINSALE']
     }]
-  }
-  ,
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý lịch sử soi da'],
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Lịch sử soi da',
+    icon: 'cil-star',
+    to: '/lich_su_soi_da',
+    role: ['ADMIN']
+  },
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Thông tin đơn hàng'],
@@ -152,7 +163,7 @@ const _nav = [
     name: 'Theo đơn hàng',
     icon: 'cil-star',
     to: '/doanh_so',
-    role: ['ADMIN', 'ADMINSALE', 'COMPANY']
+    role: []
   },
   {
     _tag: 'CSidebarNavItem',

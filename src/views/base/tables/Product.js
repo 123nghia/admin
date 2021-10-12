@@ -63,6 +63,13 @@ class Product extends Component {
       how_to_use: "",
       description: "",
       description_brand: "",
+
+      //thông tin seo
+      title: "",
+      author: "",
+      keyword: "",
+      description_SEO: "",
+
       modalDelete: false,
       delete: null,
       arrPagination: [],

@@ -373,8 +373,8 @@ class Users extends Component {
                       <th className="text-center">Địa chỉ shop</th> */}
                       <th className="text-center">Email</th>
                       <th className="text-center">Số điện thoại</th>
-                      <th className="text-center">Giới tính</th>
-                      <th className="text-center">Trạng thái</th>
+                      {/* <th className="text-center">Giới tính</th>
+                      <th className="text-center">Trạng thái</th> */}
                       <th className="text-center">Ngày tạo</th>
                     </tr>
                   </thead>
@@ -391,12 +391,12 @@ class Users extends Component {
                               <td className="text-center">{item.Sale_Id}</td> */}
                               <td className="text-center">{item.Email}</td>
                               <td className="text-center">{item.Phone}</td>
-                              <td className="text-center">{item.Gender}</td>
+                              {/* <td className="text-center">{item.Gender}</td>
                               <td className="text-center">
                                 <CBadge color={this.getBadge(item.Status)}>
                                   {item.Status}
                                 </CBadge>
-                              </td>
+                              </td> */}
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>
