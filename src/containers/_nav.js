@@ -77,15 +77,20 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Quản lý lịch sử soi da'],
+    _children: ['Quản lí người dùng'],
     role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Danh sách khách hàng',
+    name: 'Danh sách người dùng',
     icon: 'cil-star',
     to: '/customers',
     role: ['ADMIN', 'ADMINSALE', 'COMPANY', 'SHOPMANAGER', 'SALES']
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Lịch sử soi da'],
+    role: ['ADMIN', 'COMPANY']
   },
   {
     _tag: 'CSidebarNavItem',
