@@ -11,9 +11,7 @@ import {
 import {
   CSelect,
   CRow,
-  CCol,
-  CBadge
-
+  CCol
 } from '@coreui/react'
 
 import { connect } from 'react-redux';
@@ -24,8 +22,7 @@ import {
 import 'moment-timezone';
 import Pagination from '@material-ui/lab/Pagination';
 import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
-import axios from 'axios'
+import API_CONNECT from "../../../../src/helpers/callAPI";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 
@@ -40,51 +37,20 @@ class Users extends Component {
     this.state = {
       data: [],
       key: '',
-      keyName: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyGender: '',
       keyStatus: '',
-      totalActive: 0,
       modalCom: false,
-      updated: '',
       dataApi: [],
-      action: 'new',
-      Email: '',
-      Address: '',
-      Name: '',
-      Phone: '',
-      Gender: 'Nam',
-      Company_Id: '',
-      Role_Id: '',
-      UserName: '',
-      Password: '',
-      Sale_Id: '',
-      Code: '',
-      Status: '',
-      modalDelete: false,
-      delete: null,
-      dataCompany: [],
-      currentCompany: '',
-      dataSale: [],
-      currentSale: '',
-      dataRole: [],
-      currentRole: '',
-      arrPagination: [],
+      arrDetail: [],
       indexPage: 0,
       arrPagination_All: [],
       indexPage_All: 0,
       role: localStorage.getItem('role'),
       company_id: localStorage.getItem('user'),
-      see_detail: true,
       isLoading: true,
       hidden: false,
-      nameSale: '',
       dataAll: [],
       hidden_all: false,
-      isSale: false,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      arrAllUser: []
     };
   }
   async componentDidMount() {
@@ -97,25 +63,6 @@ class Users extends Component {
         }
       }
     }
-  }
-
-  pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
-    var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-    if (arrTotal.length == 0) {
-      this.setState({
-        hidden: false
-      })
-    } else {
-      this.setState({
-        hidden: true
-      })
-    }
-    this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
   }
 
   pagination_all(dataApi) {
@@ -137,40 +84,6 @@ class Users extends Component {
     this.setState({ arrPagination_All: arrTotal, dataAll: arrTotal[this.state.indexPage_All] });
   }
 
-  getUserSale = async (sale_id) => {
-    const { company_id } = this.state;
-    this.setState({ isLoading: true });
-    var id = JSON.parse(company_id);
-
-    var bodyCustomer = {
-      condition: {
-        Company_Id: id.company_id,
-        Sale_Id: sale_id
-      }
-    }
-
-    var res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_CUSTOMER,
-      method: 'POST',
-      data: bodyCustomer,
-      headers: this.state.token
-    })
-
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
-
-    let active = 0
-
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
-
-    this.setState({ isLoading: false, totalActive: active });
-  }
-
   countType(arr, phone) {
     const count = arr.filter(data => data.Phone == phone);
     return count.length;
@@ -179,14 +92,9 @@ class Users extends Component {
   getAllData = async () => {
     this.setState({ isLoading: true });
 
-    var resAll = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_CUSTOMER,
-      method: 'POST',
-      headers: this.state.token
-    })
+    var resAll = await API_CONNECT(Constants.LIST_CUSTOMER, {}, this.state.token, "POST")
 
-    let dataRes = resAll.data.data;
+    let dataRes = resAll.data;
 
     if (dataRes.length == 0) {
       this.setState({
@@ -204,58 +112,12 @@ class Users extends Component {
     this.setState({ isLoading: false });
   }
 
-  async getSaleDataOfUser(sale_id) {
-    let res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.DATA_SALE,
-      method: 'POST',
-      data: {
-        sale_id: sale_id
-      }
-    });
-    console.log(res.data.data[0])
-    return { Address: res.data.data[0].Address, Name: res.data.data[0].Name } ;
-
-  }
-
-  async getRoleData(id) {
-    const resRole = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_ROLE,
-      method: 'GET',
-      headers: this.state.token
-    });
-
-    if (id != '' || id != undefined) {
-      const currentRole = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.LIST_ROLE_WITH_ID + id,
-        method: 'GET',
-        headers: this.state.token
-      });
-      if (currentRole.data.data != null || currentRole.data.data != undefined) {
-        this.setState({ currentRole: currentRole.data.data.Name });
-      }
-    }
-    this.setState({ dataRole: resRole.data.data });
-  }
-
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  getBadge(status) {
-    switch (status) {
-      case 'Actived': return 'success'
-      case 'Inactive': return 'secondary'
-      case 'Locked': return 'warning'
-      case 'Deactived': return 'danger'
-      default: return 'primary'
-    }
-  }
-
   searchKey() {
-    const { indexPage, indexPage_All, key, keyName, keyEmail, keyPhone, keyGender, keyStatus } = this.state;
+    const { indexPage_All, key, keyStatus } = this.state;
 
     if (key != '' || keyStatus != '') {
       let d = []
@@ -310,10 +172,18 @@ class Users extends Component {
     });
   }
 
+  openDetailHistory = async (phone) => {
+    this.setState({ modalCom: !this.state.modalCom })
+    const result = await API_CONNECT(Constants.LIST_DETAIL_CUSTOMER, {
+      phone: phone
+    }, this.state.token, "POST")
+
+    this.setState({ arrDetail: result.data })
+  }
+
   render() {
-    const { key, dataCompany, dataAll, arrPagination_All,
-      currentCompany, action, dataRole, currentRole,
-      hidden_all } = this.state;
+    const { key, dataAll, arrPagination_All,
+      hidden_all, arrDetail } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -369,8 +239,9 @@ class Users extends Component {
                       <th className="text-center">Tên</th>
                       <th className="text-center">Email</th>
                       <th className="text-center">Số điện thoại</th>
-                      <th className="text-center">Số lần đến</th>
-                      <th className="text-center">Ngày tạo</th>
+                      <th className="text-center">Số lần ghé thăm</th>
+                      <th className="text-center">Lần cuối đến</th>
+                      <th className="text-center">#</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -388,6 +259,9 @@ class Users extends Component {
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>
+                              <td className="text-center">
+                                <Button outline color="info" size="sm" onClick={() => { this.openDetailHistory(item.Phone) }} >Chi tiết lịch sử đến</Button>
+                              </td>
                             </tr>
                           );
                         }) : ""
@@ -403,149 +277,53 @@ class Users extends Component {
             }} />
           </div>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+          <Modal size='xl' isOpen={this.state.modalCom} className={this.props.className}>
+            <ModalHeader>Chi tiết lịch sử đến</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="Email"
-                label="Email"
-                value={this.state.Email}
-                placeholder={"Email"}
-                type={'email'}
-                onChange={e => this.onChange("Email", e.target.value)}
-              // rows="5"
-              />
-              <TextFieldGroup
-                field="Address"
-                label="Address"
-                value={this.state.Address}
-                placeholder={"Email"}
-                type={'email'}
-                onChange={e => this.onChange("Address", e.target.value)}
-              // rows="5"
-              />
-              <TextFieldGroup
-                field="Name"
-                label="Name"
-                value={this.state.Name}
-                placeholder={"Name"}
-                // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Password"
-                label="Password"
-                value={this.state.Password}
-                type={"password"}
-                placeholder={"Password"}
-                readOnly={action == 'new' ? false : true}
-                onChange={e => this.onChange("Password", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Code"
-                label="Code"
-                placeholder={"Code"}
-                value={this.state.Code}
-                // error={errors.title}
-                onChange={e => this.onChange("Code", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="UserName"
-                label="UserName"
-                placeholder={"Username"}
-                value={this.state.UserName}
-                // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Phone"
-                label="Phone"
-                value={this.state.Phone}
-                placeholder={"Phone"}
-                // error={errors.title}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
-              />
-
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Gender:    </label>
-                <select style={styles.flexOption} name="Gender" onChange={e => this.onChange("Gender", e.target.value)}>
-                  <option value={this.state.Gender}>{this.state.Gender == '' ? ` - - - - - - - - - - ` : this.state.Gender}</option>
-                  <option value={'Nam'}>Nam</option>
-                  <option value={'Nữ'}>Nữ</option>
-                </select>
-              </div>
-
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
-                <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
-                  <option value={this.state.Company_Id}>-----</option>
-                  {
-                    dataCompany.map((item, i) => {
-                      if (item.Name == currentCompany) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div>
-
-              <div>
-                <label style={styles.flexLabel} htmlFor="tag">Role:    </label>
-                <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
-                  <option value={this.state.Role_Id}>-----</option>
-                  {
-                    dataRole.map((item, i) => {
-                      if (item.Name == currentRole) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
-                </select>
-              </div>
+              {
+                <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      <th className="text-center">Tên</th>
+                      <th className="text-center">Email</th>
+                      <th className="text-center">Số điện thoại</th>
+                      <th className="text-center">Ngày đến</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <td colSpan="8" hidden={arrDetail.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
+                    {
+                      arrDetail != undefined ?
+                      arrDetail.map((item, i) => {
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{item.Name}</td>
+                              <td className="text-center">{item.Email}</td>
+                              <td className="text-center">{item.Phone}</td>
+                              <td className="text-center">
+                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                              </td>
+                            </tr>
+                          );
+                        }) : ""
+                    }
+                  </tbody>
+                </table>
+              }
             </ModalBody>
             <ModalFooter>
-
-            </ModalFooter>
-          </Modal>
-
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
-            <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
+              <Button color="primary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Đóng</Button>
             </ModalFooter>
           </Modal>
         </div>
       );
     }
     return (
-        <div className="sweet-loading">
-          <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
+      </div>
     );
   }
 }

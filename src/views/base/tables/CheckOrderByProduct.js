@@ -5,7 +5,9 @@ import {
   CardBody,
   CardHeader,
   Col,
-  Row
+  Row,
+  Input,
+  Button
 } from 'reactstrap';
 
 import {
@@ -19,7 +21,6 @@ import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import axios from 'axios'
 import Pagination from '@material-ui/lab/Pagination';
-import { ExportCSV } from '../../XLSX/ExportCSV';
 
 class CheckOrder extends Component {
   constructor(props) {
@@ -81,7 +82,7 @@ class CheckOrder extends Component {
     });
     let data = res.data.data
 
-    for(let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       dataExcel.push({
         "Số điện thoại": data[i].customer_phone == "" || data[i].customer_phone == null ? "NULL" : data[i].customer_phone,
         "Tên khách hàng": data[i].name_customer == "" || data[i].name_customer == null ? "NULL" : data[i].name_customer,
@@ -98,8 +99,43 @@ class CheckOrder extends Component {
     this.setState({ dataApi: data, isLoading: false, dataExcel: dataExcel });
   }
 
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  searchKey() {
+    const { indexPage, key } = this.state;
+
+    if (key != '') {
+      let d = []
+      this.state.dataApi.map(val => {
+        if ((val.customer_phone.includes(key) ||
+          val.scan_code.includes(key))) {
+
+          d.push(val)
+        }
+      })
+
+      this.setState({ data: d })
+    } else {
+      this.setState({ data: this.state.arrPagination[indexPage] })
+    }
+  }
+
+  resetSearch() {
+    this.setState({
+      key: ''
+    }, () => {
+      this.searchKey();
+    });
+  }
+
   render() {
-    const { data, arrPagination, hidden, dataExcel } = this.state;
+    const { data, arrPagination, hidden, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -107,14 +143,21 @@ class CheckOrder extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <CRow>
-                    <CCol xl="8" lg="8" md="12" sm="12">
-                      <i className="fa fa-align-justify"></i> Danh sách đơn hàng
-                    </CCol>
-                    <CCol xl="4" lg="4" md="12" sm="12">
-                      <ExportCSV csvData={dataExcel} fileName={"thống_kê_sản_phẩm"}/>
-                    </CCol>
-                  </CRow>
+                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng
+                  <div style={styles.tags}>
+                    <CRow>
+                      <CCol sm="12" lg="6">
+                        <div>
+                          <Input style={styles.searchInput} onChange={(e) => {
+                            this.actionSearch(e, "key");
+                          }} name="key" value={key} placeholder="Từ khóa" />
+                        </div>
+                      </CCol>
+                      <CCol sm="12" lg="6">
+                        <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                      </CCol>
+                    </CRow>
+                  </div>
                 </CardHeader>
                 <CardBody>
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
@@ -180,4 +223,19 @@ const override = css`
   border-color: red;
 `;
 
+const styles = {
+  tags: {
+    float: "right",
+    marginRight: "5px"
+  },
+  searchInput: {
+    width: "160px",
+    display: 'inline-block',
+    margin: '1px'
+  },
+  floatRight: {
+    float: 'right',
+    marginTop: '3px'
+  },
+}
 export default CheckOrder;

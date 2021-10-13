@@ -126,6 +126,7 @@ export default {
   "UPDATE_CONFIG": "/api/update-config",
 
   "LIST_HISTORY": "/api/list-history",
+  "LIST_DETAIL_CUSTOMER": "/api/list-detail-customer",
   "LIST_HISTORY_BY_SALE": "/api/list-history-by-sale",
   "LIST_HISTORY_BY_PHONE": "/api/list-history-by-phone",
   "ADD_HISTORY": "/api/add-history"

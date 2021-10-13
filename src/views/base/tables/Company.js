@@ -6,17 +6,14 @@ import {
   CardHeader,
   Col,
   Row,
-  Table, Button, Input,
+  Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
   Alert
 } from 'reactstrap';
 
 import {
-  CBadge,
   CRow,
-  CCol,
-  CSelect,
-  CInput
+  CCol
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -35,13 +32,6 @@ class Company extends Component {
     this.state = {
       data: [],
       key: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyFax: '',
-      keyAddress: '',
-      keyWebsite: '',
-      keyCode: '',
-      keyCompany: '',
       UserName: "",
       Password: "",
       keyDateCreate: new Date(),
@@ -127,17 +117,15 @@ class Company extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyEmail, keyCompany, keyPhone, keyFax, keyAddress,
-      keyWebsite, keyCode, keyDateCreate, keyStatus } = this.state;
+    const { indexPage, key  } = this.state;
     // this.setState({ key: key })
 
-    if (key != '' || keyStatus != '') {
+    if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
             val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
 
           d.push(val)
         }
@@ -333,29 +321,6 @@ class Company extends Component {
 
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-  async handlePageChange(pageNumber) {
-    this.getUsers(pageNumber);
-  }
-
   getBadge(status) {
     switch (status) {
       case 'Actived': return 'success'
@@ -382,9 +347,6 @@ class Company extends Component {
   }
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-  }
-  goSearch() {
-    this.getUsers();
   }
 
   actionSearch(e, name_action) {
@@ -413,16 +375,12 @@ class Company extends Component {
   }
 
   render() {
-    const { data, key, viewingUser, communities, action, arrPagination,
-      indexPage, dataCompany, keyAddress, keyCode, keyCompany, keyEmail, keyFax, keyPhone, keyWebsite,
-      keyDateCreate, keyStatus } = this.state;
+    const { data, key, arrPagination } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
           <Row>
             <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify"></i> Danh sách công ty
@@ -443,7 +401,7 @@ class Company extends Component {
                             }} value={keyDateCreate} placeholder="Create Date" />
                           </CCol> */}
                           <CCol sm="12" lg="4">
-                            <CSelect style={styles.flexOption} onChange={e => {
+                            {/* <CSelect style={styles.flexOption} onChange={e => {
 
                               this.actionSearch(e, "keyStatus");
 
@@ -455,7 +413,7 @@ class Company extends Component {
                                   );
                                 })
                               }
-                            </CSelect>
+                            </CSelect> */}
                           </CCol>
                           <CCol sm="12" lg="4">
                             <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
@@ -479,7 +437,6 @@ class Company extends Component {
                         <th className="text-center">Fax</th>
                         <th className="text-center">Địa chỉ</th>
                         <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
 
                       </tr>
@@ -498,11 +455,6 @@ class Company extends Component {
                                 <td className="text-center">{item.Address}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                </td>
-                                <td className="text-center">
-                                  <CBadge color={this.getBadge(item.Status)}>
-                                    {item.Status}
-                                  </CBadge>
                                 </td>
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
@@ -624,7 +576,7 @@ class Company extends Component {
                 onChange={e => this.onChange("Website", e.target.value)}
               // rows="5"
               />
-              {
+              {/* {
                 action == 'new' ? "" : <div>
                   <label style={styles.flexLabel} htmlFor="tag">Status    </label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
@@ -634,7 +586,7 @@ class Company extends Component {
                     <option value={'Deactived'}>Deactived</option>
                   </select>
                 </div>
-              }
+              } */}
 
             </ModalBody>
 

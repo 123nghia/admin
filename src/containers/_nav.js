@@ -174,7 +174,7 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Theo sản phẩm',
+    name: 'Thống kê doanh số theo sản phẩm',
     icon: 'cil-star',
     to: '/doanh_so_theo_san_pham',
     role: ['ADMIN', 'ADMINSALE', 'COMPANY']

@@ -39,7 +39,6 @@ class ConfigSystem extends Component {
     this.state = {
       data: [],
       key: '',
-      keyStatus: '',
       totalActive: 0,
       dataApi: [],
       action: 'new',
@@ -110,9 +109,9 @@ class ConfigSystem extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyStatus } = this.state;
+    const { indexPage, key } = this.state;
 
-    if (key != '' || keyStatus != '') {
+    if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
@@ -178,16 +177,6 @@ class ConfigSystem extends Component {
     this.setState({ [key]: val })
   }
 
-  getBadge(status) {
-    switch (status) {
-      case 'Actived': return 'success'
-      case 'Inactive': return 'secondary'
-      case 'Locked': return 'warning'
-      case 'Deactived': return 'danger'
-      default: return 'primary'
-    }
-  }
-
   actionSearch(e, name_action) {
     this.setState({
       [name_action]: e.target.value
@@ -198,15 +187,7 @@ class ConfigSystem extends Component {
 
   resetSearch() {
     this.setState({
-      key: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyFax: '',
-      keyAddress: '',
-      keyWebsite: '',
-      keyCode: '',
-      keyCompany: '',
-      keyStatus: ''
+      key: ''
     }, () => {
       this.searchKey();
     });
@@ -247,7 +228,7 @@ class ConfigSystem extends Component {
   }
 
   render() {
-    const { data, key, action, arrPagination } = this.state;
+    const { data, key, arrPagination } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -260,29 +241,14 @@ class ConfigSystem extends Component {
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="6">
                             <div>
                               <Input style={styles.searchInput} onChange={(e) => {
                                 this.actionSearch(e, "key");
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
-                          <CCol sm="12" lg="4">
-                            <CSelect style={styles.flexOption} onChange={e => {
-
-                              this.actionSearch(e, "keyStatus");
-
-                            }} custom>
-                              {
-                                ['Actived', 'Deactived', 'Locked'].map((item, i) => {
-                                  return (
-                                    <option value={item}>{item}</option>
-                                  );
-                                })
-                              }
-                            </CSelect>
-                          </CCol>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="6">
                             <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                           </CCol>
                         </CRow>
@@ -301,7 +267,6 @@ class ConfigSystem extends Component {
                         <th className="text-center">Fax</th>
                         <th className="text-center">Địa chỉ</th>
                         <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
 
                       </tr>
@@ -320,11 +285,6 @@ class ConfigSystem extends Component {
                                 <td className="text-center">{item.Address}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                </td>
-                                <td className="text-center">
-                                  <CBadge color={this.getBadge(item.Status)}>
-                                    {item.Status}
-                                  </CBadge>
                                 </td>
                                 <td className="text-center">
                                   <Button outline color="primary" size="sm" onClick={async (e) => { this.toggleModal('new', item) }} >Cấu hình gian hàng </Button>
