@@ -21,6 +21,7 @@ import 'moment-timezone';
 import Constants from "./../../../contants/contants";
 import axios from 'axios'
 import Pagination from '@material-ui/lab/Pagination';
+import { ExportCSV } from '../../XLSX/ExportCSV';
 
 class CheckOrder extends Component {
   constructor(props) {
@@ -135,7 +136,7 @@ class CheckOrder extends Component {
   }
 
   render() {
-    const { data, arrPagination, hidden, key } = this.state;
+    const { data, arrPagination, hidden, key, dataExcel } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -146,15 +147,18 @@ class CheckOrder extends Component {
                   <i className="fa fa-align-justify"></i> Danh sách đơn hàng
                   <div style={styles.tags}>
                     <CRow>
-                      <CCol sm="12" lg="6">
+                      <CCol sm="12" lg="4">
                         <div>
                           <Input style={styles.searchInput} onChange={(e) => {
                             this.actionSearch(e, "key");
                           }} name="key" value={key} placeholder="Từ khóa" />
                         </div>
                       </CCol>
-                      <CCol sm="12" lg="6">
+                      <CCol sm="12" lg="4">
                         <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                      </CCol>
+                      <CCol sm="12" lg="4">
+                        <ExportCSV csvData={dataExcel} fileName={"thong_ke_doanh_so_san_pham"}/>
                       </CCol>
                     </CRow>
                   </div>
@@ -229,7 +233,6 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "160px",
     display: 'inline-block',
     margin: '1px'
   },
