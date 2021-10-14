@@ -154,7 +154,7 @@ class HistorySkin extends Component {
                                   }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
                                 </td>
                                 <td className="text-center">{item.Company_Id == null ? "EUCERIN VIỆT NAM" : item.Company_Id.Name}</td>
-                                <td className="text-center">{item.Sale_Id == null || item.Sale_Id == "admin" ? "ADMIN" : item.Sale_Id.Name}</td>
+                                <td className="text-center">{item.Sale_Id}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
