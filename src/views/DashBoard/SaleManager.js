@@ -228,7 +228,11 @@ class ShopManager extends Component {
                         }
                       </tbody>
                       <tfoot>
-                        <div style={{ width: '100%', margin: 10 }}>
+
+                      </tfoot>
+                    </table>
+                }
+                <div style={{ width: '100%', margin: 10 }}>
                           <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
                             this.setState({
                               dataUserSale: arrPagination[v - 1],
@@ -236,9 +240,7 @@ class ShopManager extends Component {
                             })
                           }} />
                         </div>
-                      </tfoot>
-                    </table>
-                }
+
                 <br />
 
                 <CRow>

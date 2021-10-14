@@ -146,14 +146,12 @@ class HistorySkin extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Customer_Phone}</td>
                                 <td className="text-center">
-                                  <img src={item.Image} style={{ width: '60px', height: '70px' }} />
+                                  <img src={item.Image} style={{ width: '75px', height: '70px' }} />
                                 </td>
                                 <td className="text-center">
                                   <CButton outline color="primary" onClick={e => {
                                     console.log(JSON.parse(item.Result))
                                   }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
-                                  {/* <img src={this.state.BASE_URL + "/images/calendar.png"} style={{ width: '10%' }} /> */}
-                                  {/* {item.Result} */}
                                 </td>
                                 <td className="text-center">{item.Company_Id == null ? "EUCERIN VIỆT NAM" : item.Company_Id.Name}</td>
                                 <td className="text-center">{item.Sale_Id == null || item.Sale_Id == "admin" ? "ADMIN" : item.Sale_Id.Name}</td>

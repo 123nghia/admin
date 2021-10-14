@@ -248,19 +248,20 @@ class AdminManager extends Component {
                         }
                       </tbody>
                       <tfoot>
-                        <div style={{ width: '100%', margin: 10 }}>
-                          <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                            this.setState({
-                              dataUserSale: arrPagination[v - 1],
-                              dataUserSale_Original: arrPagination[v - 1],
-                              indexPage: v - 1
-                            })
-                          }} />
-                        </div>
+
                       </tfoot>
                     </table>
-                }
 
+                }
+                <div style={{ width: '100%', margin: 10 }}>
+                  <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                    this.setState({
+                      dataUserSale: arrPagination[v - 1],
+                      dataUserSale_Original: arrPagination[v - 1],
+                      indexPage: v - 1
+                    })
+                  }} />
+                </div>
 
                 <br />
 

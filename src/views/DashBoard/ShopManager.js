@@ -226,53 +226,54 @@ class ShopManager extends Component {
                     <div className="sweet-loading">
                       <DotLoader css={override} size={50} color={"#123abc"} loading={isLoadingCustomer} speedMultiplier={1.5} />
                     </div> : */}
-                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                      <thead className="thead-light">
-                        <tr>
-                          <th className="text-center">STT.</th>
-                          <th className="text-center">Tên</th>
-                          <th className="text-center">Email</th>
-                          <th className="text-center">Số điện thoại</th>
-                          <th className="text-center">Giới tính</th>
-                          <th className="text-center">Số lần đến</th>
-                          <th className="text-center">Hệ số</th>
-                          <th className="text-center">Lần cuối đến</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <td colSpan="9" hidden={hidden_all} className="text-center">Không có dữ liệu</td>
-                        {
-                          dataUserSale != undefined ?
-                            dataUserSale.map((item, i) => {
-                              return (
-                                <tr key={i}>
-                                  <td className="text-center">{i + 1}</td>
-                                  <td className="text-center">{item.Name}</td>
-                                  <td className="text-center">{item.Email}</td>
-                                  <td className="text-center">{item.Phone}</td>
-                                  <td className="text-center">{item.Gender}</td>
-                                  <td className="text-center">{item.count}</td>
-                                  <td className="text-center">{Number(item.coefficient).toFixed(2)}</td>
-                                  <td className="text-center">
-                                    {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                  </td>
-                                </tr>
-                              );
-                            }) : ""
-                        }
-                      </tbody>
-                      <tfoot>
-                        <div style={{ width: '100%', margin: 10 }}>
-                          <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                            this.setState({
-                              dataUserSale: arrPagination[v - 1],
-                              indexPage: v - 1
-                            })
-                          }} />
-                        </div>
-                      </tfoot>
-                    </table>
+                <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      <th className="text-center">Tên</th>
+                      <th className="text-center">Email</th>
+                      <th className="text-center">Số điện thoại</th>
+                      <th className="text-center">Giới tính</th>
+                      <th className="text-center">Số lần đến</th>
+                      <th className="text-center">Hệ số</th>
+                      <th className="text-center">Lần cuối đến</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <td colSpan="9" hidden={hidden_all} className="text-center">Không có dữ liệu</td>
+                    {
+                      dataUserSale != undefined ?
+                        dataUserSale.map((item, i) => {
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{item.Name}</td>
+                              <td className="text-center">{item.Email}</td>
+                              <td className="text-center">{item.Phone}</td>
+                              <td className="text-center">{item.Gender}</td>
+                              <td className="text-center">{item.count}</td>
+                              <td className="text-center">{Number(item.coefficient).toFixed(2)}</td>
+                              <td className="text-center">
+                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                              </td>
+                            </tr>
+                          );
+                        }) : ""
+                    }
+                  </tbody>
+                  <tfoot>
 
+                  </tfoot>
+                </table>
+
+                <div style={{ width: '100%', margin: 10 }}>
+                  <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                    this.setState({
+                      dataUserSale: arrPagination[v - 1],
+                      indexPage: v - 1
+                    })
+                  }} />
+                </div>
                 <br />
 
                 <CRow>
