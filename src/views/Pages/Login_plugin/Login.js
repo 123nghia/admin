@@ -57,6 +57,8 @@ class Login extends Component {
         }
       });
 
+      console.log(res.data)
+
       if (res.data.is_success) {
         var token = jwt.decode(res.data.data.token);
         localStorage.setItem('user', JSON.stringify({

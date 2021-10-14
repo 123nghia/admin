@@ -112,18 +112,10 @@ class HistorySkin extends Component {
       method: 'POST'
     });
 
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
-
-    let active = 0
-
-    res.data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
-
-    this.setState({ isLoading: false, totalActive: active });
+    let data = res.data.data;
+    console.log(data)
+    this.pagination(data);
+    this.setState({ dataApi: data, isLoading: false });
   }
 
   getData_ByCondition = async () => {

@@ -24,8 +24,6 @@ import {
   CTooltip
 } from '@coreui/react'
 
-
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "./../../../../contants/contants";
@@ -33,18 +31,6 @@ import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class PluginCustomerManager extends Component {
   constructor(props) {
     super(props);
@@ -52,16 +38,9 @@ class PluginCustomerManager extends Component {
       data: [],
       key: '',
       UserName: "",
-      Password: "",
       keyStatus: '',
-      activePage: 1,
-      page: 1,
       itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
       updated: '',
       dataApi: [],
       action: 'new',
@@ -75,7 +54,6 @@ class PluginCustomerManager extends Component {
       Slug: '',
       Status: '',
       modalDelete: false,
-      delete: null,
       arrPagination: [],
       indexPage: 0,
       toggleView: false,
@@ -142,13 +120,9 @@ class PluginCustomerManager extends Component {
       method: 'POST',
     });
     let val = res.data.data;
-
+    console.log(val)
     this.pagination(val);
-    this.setState({ dataApi: val });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ dataApi: val, isLoading: false });
   }
 
   getData_ByID = async () => {
@@ -164,9 +138,7 @@ class PluginCustomerManager extends Component {
     this.pagination(val);
     this.setState({ dataApi: val });
 
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ isLoading: false });
   }
 
   async onView(name, com_id, phone_number, slug) {
@@ -188,103 +160,15 @@ class PluginCustomerManager extends Component {
     if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+        if ( val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
           d.push(val)
         }
       })
-      let active = 0
 
-      d.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: d, totalActive: active })
+      this.setState({ data: d })
     } else {
-      let active = 0
-
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
-    }
-  }
-
-  toggleModal(key) {
-    if (key == 'new') {
-      this.setState({
-        modalCom: !this.state.modalCom,
-        action: key,
-        Name: '',
-        Email: '',
-        Phone: '',
-        Fax: '',
-        Address: '',
-        Website: '',
-        Slug: '',
-        Code: '',
-        Status: '',
-        username: '',
-        password: '',
-        current_province: this.state.province[0]
-      })
-    }
-  }
-
-  onChange(key, val) {
-    this.setState({ [key]: val })
-  }
-
-  async addCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password, Slug, current_province } = this.state
-
-    if (Email == null || Email == ''
-      || Name == null || Name == ''
-      || Phone == null || Phone == ''
-      || Address == null || Address == ''
-      || Slug == null || Slug == ''
-      || UserName == null || UserName == ''
-      || Password == null || Password == '') {
-      alert("Please fill in all the requirements");
-      return
-    }
-
-    const body = {
-      Name: Name,
-      Email: Email,
-      Phone: Phone,
-      Fax: Fax,
-      Address: Address + "," + current_province,
-      Slug: Slug,
-      Website: Website,
-      Code: Code,
-      UserName: UserName,
-      Password: Password
-    }
-
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_ADD_COMPANY,
-      method: 'PUT',
-      data: body,
-      headers: this.state.token
-    });
-
-    if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert(res.data.message);
-      this.setState({ isLoading: false });
+      this.setState({ data: this.state.arrPagination[indexPage] })
     }
   }
 
@@ -299,6 +183,7 @@ class PluginCustomerManager extends Component {
       Address: item.Address == null || item.Address == undefined ? "" : item.Address.length < 1 ? item.Address + ", " + this.state.province[0].province_name : item.Address,
       Slug: item.Slug,
       Website: item.Website,
+      UserName: item.UserName,
       Code: item._id,
       id: item['_id'],
       Status: item.Status,
@@ -308,16 +193,16 @@ class PluginCustomerManager extends Component {
   }
 
   async updateCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Slug, Status, current_province } = this.state
+    const { Email, Name, Phone, Fax, Address, Website, Slug, Status, current_province, UserName } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
       || Phone == null || Phone == ''
-      || Slug == null || Slug == ''
-      || Address == null || Address == '') {
+      || Slug == null || Slug == '') {
       alert("Please fill in all the requirements");
       return
     }
+
     let add = Address.split(',');
     add.splice(Address.split(',').length - 1, 1)
 
@@ -331,6 +216,7 @@ class PluginCustomerManager extends Component {
       Slug: Slug,
       Code: this.state.id,
       Status: Status,
+      UserName: UserName,
       id: this.state.id
     }
 
@@ -353,8 +239,7 @@ class PluginCustomerManager extends Component {
 
   openDelete = (item) => {
     this.setState({
-      modalDelete: !this.state.modalDelete,
-      delete: item
+      modalDelete: !this.state.modalDelete
     })
   }
 
@@ -530,16 +415,19 @@ class PluginCustomerManager extends Component {
 
     this.setState({ province: res.data.results })
   }
+  onChange(key, val) {
+    this.setState({ [key]: val })
+  }
+
   render() {
-    const { data, key, action, arrPagination, type, current_province, arrTotalPackage, company_name, current_package, phone_number, province } = this.state;
+    const { data, key, action, arrPagination, type, current_province, UserName,
+      arrTotalPackage, company_name, current_package, phone_number, province } = this.state;
 
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
           <Row>
             <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify"></i> Danh sách công ty
@@ -547,41 +435,18 @@ class PluginCustomerManager extends Component {
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="6">
                             <div>
                               <Input style={styles.searchInput} onChange={(e) => {
                                 this.actionSearch(e, "key");
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
-                          {/* <CCol sm="6" lg="2">
-                            <CInput type="date" onChange={e => {
-                              this.actionSearch(e, "keyDateCreate");
-                            }} value={keyDateCreate} placeholder="Create Date" />
-                          </CCol> */}
-                          <CCol sm="12" lg="4">
-                            <CSelect style={styles.flexOption} onChange={e => {
-
-                              this.actionSearch(e, "keyStatus");
-
-                            }} custom>
-                              {
-                                ['Actived', 'Deactived', 'Locked'].map((item, i) => {
-                                  return (
-                                    <option value={item}>{item}</option>
-                                  );
-                                })
-                              }
-                            </CSelect>
-                          </CCol>
-                          <CCol sm="12" lg="4">
+                          <CCol sm="12" lg="6">
                             <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
                           </CCol>
                         </CRow>
                       </CCol>
-                      {/* <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
-                      </CCol> */}
                     </CRow>
                   </div>
                 </CardHeader>
@@ -592,10 +457,10 @@ class PluginCustomerManager extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên Công Ty</th>
                         <th className="text-center">Email - SĐT</th>
-                        <th className="text-center">Địa chỉ</th>
+                        {/* <th className="text-center">Địa chỉ</th> */}
                         <th className="text-center">Người tạo</th>
                         <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Trạng thái</th>
+                        {/* <th className="text-center">Trạng thái</th> */}
                         <th className="text-center">#</th>
 
                       </tr>
@@ -614,16 +479,16 @@ class PluginCustomerManager extends Component {
                                   <div>------------</div>
                                   <div>{item.Phone}</div>
                                 </td>
-                                <td className="text-center">{item.Address}</td>
+                                {/* <td className="text-center">{item.Address}</td> */}
                                 <td className="text-center">{item.Create_By == null ? "ADMIN" : item.Create_By.Name}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString()}
                                 </td>
-                                <td className="text-center">
+                                {/* <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
                                     {item.Status}
                                   </CBadge>
-                                </td>
+                                </td> */}
                                 <td className="text-center">
 
                                   <CButton style={{ margin: 1 }} outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
@@ -656,23 +521,6 @@ class PluginCustomerManager extends Component {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
-
             </Col>
           </Row>
 
@@ -806,21 +654,10 @@ class PluginCustomerManager extends Component {
               <TextFieldGroup
                 field="UserName"
                 label="Tên đăng nhập"
-                value={this.state.UserName}
+                value={UserName}
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="Password"
-                label="Mật khẩu"
-                type={"password"}
-                value={this.state.Password}
-                placeholder={"Mật khẩu"}
-                // error={errors.title}
-                onChange={e => this.onChange("Password", e.target.value)}
               // rows="5"
               />
 
@@ -904,18 +741,18 @@ class PluginCustomerManager extends Component {
 
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => {this.setState({ modalCom: !this.state.modalCom })}}>Cancel</CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete })} className={this.props.className}>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete })}>{`Delete`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete })}>Cancel</CButton>
             </ModalFooter>
           </Modal>
         </div >
