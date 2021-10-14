@@ -13,9 +13,9 @@ import {
 import {
   CRow,
   CCol,
-  CLabel
+  CLabel,
 } from '@coreui/react'
-
+import CIcon from '@coreui/icons-react'
 import CreatableSelect from 'react-select/creatable';
 import 'moment-timezone';
 import Constants from "./../../../contants/contants";
@@ -38,11 +38,9 @@ class Product extends Component {
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
       page: 1,
       itemsCount: 0,
       limit: 20,
-      totalActive: 0,
       modalCom: false,
       updated: '',
       dataApi: [],
@@ -130,15 +128,7 @@ class Product extends Component {
     this.pagination(data);
     this.setState({ dataApi: data });
 
-    let active = 0
-
-    data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ isLoading: false });
   }
 
   handleChange = (newValue, actionMeta) => {
@@ -168,25 +158,11 @@ class Product extends Component {
           d.push(val)
         }
       })
-      let active = 0
 
-      d.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: d, totalActive: active })
+      this.setState({ data: d })
     } else {
-      let active = 0
 
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
+      this.setState({ data: this.state.arrPagination[indexPage] })
     }
   }
 
@@ -259,10 +235,6 @@ class Product extends Component {
   async addProduct() {
     const { name, shop_id, image, link, price, code, brand_id, sku_code, category_id, weight, info_product, how_to_use, description, description_brand } = this.state
 
-    console.log(name)
-    console.log(shop_id)
-    console.log(link)
-    console.log(brand_id)
     if (name == null || name == ''
       || link == null || link == ''
       || brand_id == null || brand_id == '') {
@@ -580,8 +552,8 @@ class Product extends Component {
                                 </td>
                                 <td className="text-center">{item.price}</td>
                                 <td className="text-center">
-                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
+                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)}><CIcon name="cil-pencil" /></Button>
+                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}><CIcon name="cil-trash" /></Button>
                                 </td>
                               </tr>
                             );
