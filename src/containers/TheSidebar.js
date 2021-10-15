@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Nav, NavItem, NavLink } from 'reactstrap';
+import { NavLink } from 'reactstrap';
 import {
   CCreateElement,
   CSidebar,
@@ -14,16 +14,38 @@ import {
 } from '@coreui/react'
 import logoMainnet from './../assets/img/logo_head.png';
 import CIcon from '@coreui/icons-react'
+import API_CONNECT from '../functions/callAPI'
+import Constants from '../contants/contants'
 
 // sidebar nav config
 import navigations from './_nav'
 
+const callApiGetRoleSubAdmin = async (user) => {
+  const res = await API_CONNECT(Constants.GET_ROLE_SUBADMIN, {
+    user_id: JSON.parse(user).sale_id
+  }, "", "POST")
+  return res.data.sidebar_id
+}
+
 const TheSidebar = () => {
+  const [sidebar, setSidebar] = useState([]);
   const type = localStorage.getItem('type');
+  const user = localStorage.getItem('user');
+
+  useEffect(async () => {
+    var duy = await callApiGetRoleSubAdmin(user)
+    setSidebar(duy);
+  }, []);
 
   var temp = []
   var navigation = [];
+
   for (let i = 0; i < navigations.length; i++) {
+    for (let y = 0; y < sidebar.length; y++) {
+      for (let z = 0; z < navigations[sidebar[y]].length; z++) {
+        navigations[sidebar[y]][z].role.push("5")
+      }
+    }
     navigation = navigation.concat(navigations[i])
   }
 

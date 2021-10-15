@@ -1019,19 +1019,19 @@ class ProductHair extends Component {
                   </ModalBody>
                   <ModalFooter>
                     <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Save</CButton>{' '}
-                    <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Cancel</CButton>
+                    <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</CButton>
                   </ModalFooter>
                 </div>
             }
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
               <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>

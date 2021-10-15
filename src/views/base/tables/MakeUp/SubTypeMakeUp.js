@@ -763,8 +763,8 @@ class SubTypeMakeUp extends Component {
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div>

@@ -305,11 +305,12 @@ class SuggestItem extends Component {
   }
 
   getDataForCompany = async () => {
-    const { idSDK } = this.state;
+    const { idSDK, userData } = this.state;
+
     this.setState({ isLoading: true });
     const res_suggest = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(this.state.userData).company_id + `/${idSDK}`,
+      url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}`,
       method: 'GET'
     });
 
@@ -333,8 +334,6 @@ class SuggestItem extends Component {
         value: arrB[i]._id, label: arrB[i].name
       })
     }
-
-    console.log(arrB)
 
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: arrB, arrOptionBrand: arrTempOptionBrand });
 

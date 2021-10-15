@@ -37,6 +37,7 @@ const HistorySkin = React.lazy(() => import('./views/base/tables/AI_Skin/History
 const ContactCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ContactCustomer'));
 const UpdatePackage = React.lazy(() => import('./views/base/tables/UpdatePackage'));
 const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPlugin'));
+const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginSubSaleTable'));
 
 //User
 const EndUserPlugin = React.lazy(() => import('./views/base/tables/User/EndUser'));
@@ -91,6 +92,7 @@ const routes = [
   { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
   { path: '/contact', name: 'Contact', component: ContactCustomer },
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
+  { path: '/subsale', name: 'Sub Sale', component: PluginSubSaleTable },
 
   //User
   { path: '/end_user', name: 'End User', component: EndUserPlugin },

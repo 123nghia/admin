@@ -53,19 +53,6 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Tổng hợp sản phẩm da mặt',
-    to: '/suggest',
-    icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
-    role: [],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
-    },
-  },
-  {
-    _tag: 'CSidebarNavItem',
     name: 'Hỗ trợ giảm lão hóa da',
     to: '/items/1',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
@@ -383,6 +370,17 @@ const _navOrther = [
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách tài khoản Sale',
+      to: '/subsale',
+      role: ['2'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.accountSale}>
+                <CIcon content={freeSet.cilBellExclamation} />
+              </CTooltip>,
+      }
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách tài khoản Sale',
       to: '/saleAdmin',
       role: ['0'],
       badge: {
@@ -403,7 +401,7 @@ const _navOrther = [
               </CTooltip>,
       }
     }],
-    role: ['0', '1'],
+    role: ['0', '1', '2'],
   },
   {
     _tag: 'CSidebarNavDropdown',

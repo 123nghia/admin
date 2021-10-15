@@ -845,7 +845,7 @@ class Users extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={hidden} className="text-center">No users in this month</td>
+                      <td colSpan="10" hidden={hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -865,8 +865,8 @@ class Users extends Component {
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
-                                  {/* <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '} */}
+                                  {/* <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Cập nhật</Button>{' '}
+                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>{' '} */}
                                   <Button outline color="primary" size="sm" onClick={async (e) => { await this.getSeeder() }}>Detail</Button>
                                 </td>
                               </tr>
@@ -901,8 +901,8 @@ class Users extends Component {
                                   <td className="text-center">{item.Gender}</td>
                                   <td className="text-center">{item.Code}</td>
                                   <td className="text-center">
-                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
+                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Cập nhật</Button>{' '}
+                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>{' '}
                                   </td>
                                 </tr>
                               );
@@ -936,8 +936,8 @@ class Users extends Component {
                                   <td className="text-center">{item.Gender}</td>
                                   <td className="text-center">{item.Code}</td>
                                   <td className="text-center">
-                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Update</Button>{' '}
-                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</Button>{' '}
+                                    <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Cập nhật</Button>{' '}
+                                    <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>{' '}
                                     <Button outline color="primary" size="sm" onClick={async (e) => { await this.tableUserSale(item._id, item.Name); this.setState({ month: "01" }) }}>Detail</Button>
                                   </td>
                                 </tr>
@@ -990,7 +990,7 @@ class Users extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="8" hidden={hidden_all} className="text-center">No users in this month</td>
+                      <td colSpan="8" hidden={hidden_all} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         dataAll != undefined ?
                           dataAll.map((item, i) => {
@@ -1095,7 +1095,7 @@ class Users extends Component {
                           </tr>
                         </thead>
                         <tbody>
-                          <td colSpan="8" hidden={hidden} className="text-center">No users in this month</td>
+                          <td colSpan="8" hidden={hidden} className="text-center">Không tìm thấy dữ liệu</td>
                           {
                             data != undefined ?
                               data.map((item, i) => {
@@ -1280,18 +1280,18 @@ class Users extends Component {
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
+              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
             </ModalFooter>
           </Modal>
         </div>

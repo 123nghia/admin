@@ -19,13 +19,11 @@ import {
   CButton
 } from '@coreui/react'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "./../../../../contants/contants";
 import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-import md5 from "md5";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 let headers = new Headers();
@@ -33,13 +31,6 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class User extends Component {
   constructor(props) {
     super(props);
@@ -48,15 +39,7 @@ class User extends Component {
       key: '',
       keyRole: '',
       keyStatus: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
-      updated: '',
       dataApi: [],
       action: 'new',
       Name: '',
@@ -67,7 +50,6 @@ class User extends Component {
       Password: '',
       Status: '',
       modalDelete: false,
-      delete: null,
       arrPagination: [],
       indexPage: 0,
       dataCompany: [],
@@ -75,12 +57,13 @@ class User extends Component {
       currentCompany: '',
       isLoading: false,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      userData: localStorage.getItem('user'),
+      hidden: false
     };
   }
   async componentDidMount() {
     this.getData();
     this.getAllRole();
-    this.getCompanyData();
     let arr = JSON.parse(localStorage.getItem('url'));
 
     for (let i = 0; i < arr.length; i++) {
@@ -90,15 +73,6 @@ class User extends Component {
         }
       }
     }
-  }
-
-  async getCompanyData() {
-    const resCompany = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_COMPANY,
-      method: 'POST'
-    });
-    this.setState({ dataCompany: resCompany.data.data });
   }
 
   async getAllRole() {
@@ -118,6 +92,17 @@ class User extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
+
+    if (arrTotal.length == 0) {
+      this.setState({
+        hidden: false
+      })
+    } else {
+      this.setState({
+        hidden: true
+      })
+    }
+
     this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
   }
 
@@ -219,8 +204,8 @@ class User extends Component {
     this.setState({ [key]: val })
   }
 
-  async addCompany() {
-    const { Email, Name, Phone, Address, UserName, Password } = this.state
+  async addUsers() {
+    const { Email, Name, Phone, Address, UserName, Password, userData } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -239,6 +224,7 @@ class User extends Component {
       Address: Address,
       UserName: UserName,
       Password: Password,
+      Company_Id: JSON.parse(userData).company_id,
       isSale: true
     }
 
@@ -275,7 +261,7 @@ class User extends Component {
     })
   }
 
-  async updateCompany() {
+  async updateUsers() {
     const { Email, Name, Phone, Address, Status, UserName, Password } = this.state
 
     if (Email == null || Email == ''
@@ -454,6 +440,7 @@ class User extends Component {
                       </tr>
                     </thead>
                     <tbody>
+                      <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -470,8 +457,8 @@ class User extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Update</CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Delete</CButton>
+                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</CButton>{' '}
+                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</CButton>
                                 </td>
                               </tr>
                             );
@@ -585,19 +572,19 @@ class User extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addUsers() : this.updateUsers() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div >

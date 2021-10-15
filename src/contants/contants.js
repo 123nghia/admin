@@ -127,8 +127,10 @@ export default {
 
   "PLUGIN_LIST_USER" : "/api/plugin-list-user",
   "PLUGIN_ALL_USER" : "/api/plugin-all-user",
+  "PLUGIN_SUBSALE_USER" : "/api/plugin-subsale-user",
   "PLUGIN_ADD_USER" : "/api/plugin-add-user",
   "PLUGIN_ADD_SALE" : "/api/plugin-add-sale",
+  "PLUGIN_ADD_SUBSALE" : "/api/plugin-add-subsale",
   "PLUGIN_UPDATE_USER" : "/api/plugin-update-user",
   "PLUGIN_UPDATE_USER_COMPANY" : "/api/plugin-update-user-company",
   "PLUGIN_DELETE_USER" : "/api/plugin-delete-user",
@@ -249,5 +251,8 @@ export default {
   "UPDATE_CONTACT_CUSTOMER": "/api/update-contact-customers",
   "DELETE_CONTACT_CUSTOMER": "/api/delete-contact-customers",
   "UPDATE_CONTACT_STATUS": "/api/update-contact-status",
+
+  "ADD_ROLE_SUBADMIN": "/api/add-role-subadmin",
+  "GET_ROLE_SUBADMIN": "/api/get-role-subadmin-by-id"
 
 };

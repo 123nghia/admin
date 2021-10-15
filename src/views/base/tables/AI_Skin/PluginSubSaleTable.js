@@ -6,7 +6,7 @@ import {
   CardHeader,
   Col,
   Row,
-  Button, Input,
+  Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
 
@@ -15,80 +15,74 @@ import {
   CRow,
   CCol,
   CSelect,
+  CButton,
+  CFormGroup, CInputCheckbox, CLabel
 } from '@coreui/react'
 
+import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
-import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
+import Constants from "./../../../../contants/contants";
+import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
 import axios from 'axios'
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
-class Company extends Component {
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
+import API_CONNECT from "../../../../functions/callAPI";
+
+class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       key: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyFax: '',
-      keyAddress: '',
-      keyWebsite: '',
-      keyCode: '',
-      keyCompany: '',
-      UserName: "",
-      Password: "",
-      keyDateCreate: new Date(),
+      keyRole: '',
       keyStatus: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
-      updated: '',
       dataApi: [],
       action: 'new',
       Name: '',
       Email: '',
       Phone: '',
-      Fax: 'Nam',
       Address: '',
-      Website: '',
-      Code: '',
+      Company_Id: '',
+      UserName: '',
+      Password: '',
       Status: '',
       modalDelete: false,
-      delete: null,
+      modalRole: false,
       arrPagination: [],
       indexPage: 0,
       dataCompany: [],
-      currentCompany: '',
+      dataRole: [],
+      isLoading: false,
+      token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      userData: localStorage.getItem('user'),
+      hidden: false,
+      arrRoleSubAdmin: [],
+      idChangeRole: ""
     };
   }
   async componentDidMount() {
     this.getData();
-    this.getCompanyData();
+    this.getAllRole();
     let arr = JSON.parse(localStorage.getItem('url'));
+
     for (let i = 0; i < arr.length; i++) {
-      if ("#" + arr[i].to == window.location.hash) {
-        if (arr[i].hidden == true) {
+      if (arr[i].url == window.location.hash) {
+        if (arr[i].isHidden == true) {
           window.location.href = '#/'
         }
       }
     }
   }
 
-  async getCompanyData() {
-    const resCompany = await axios({
+  async getAllRole() {
+    const resRole = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_COMPANY,
-      method: 'POST'
+      url: Constants.PLUGIN_LIST_ROLE,
+      method: 'POST',
+      headers: this.state.token
     });
-    this.setState({ dataCompany: resCompany.data.data });
+    this.setState({ dataRole: resRole.data.data });
   }
 
   pagination(dataApi) {
@@ -98,22 +92,34 @@ class Company extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
+
+    if (arrTotal.length == 0) {
+      this.setState({
+        hidden: false
+      })
+    } else {
+      this.setState({
+        hidden: true
+      })
+    }
+
     this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
   }
 
   getData = async () => {
+    const { userData } = this.state;
     this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_COMPANY,
-      method: 'POST',
-    });
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    const res = await API_CONNECT(Constants.PLUGIN_SUBSALE_USER, {
+      company_id: JSON.parse(userData).company_id
+    }, this.state.token, "POST")
+
+    let val = res.data;
+    this.pagination(val);
+    this.setState({ dataApi: val });
 
     let active = 0
 
-    res.data.data.map(val => {
+    val.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
       }
@@ -123,16 +129,17 @@ class Company extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyStatus } = this.state;
+    const { indexPage, key, keyStatus, keyRole } = this.state;
     // this.setState({ key: key })
 
-    if (key != '' || keyStatus != '') {
+    if (key != '' || keyStatus != '' || keyRole != '') {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-            val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
+          val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
+          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase()) &&
+          val.Role_Id.toLocaleUpperCase().includes(keyRole.toLocaleUpperCase())) {
 
           d.push(val)
         }
@@ -159,6 +166,23 @@ class Company extends Component {
     }
   }
 
+  actionSearch(e, name_action) {
+    this.setState({
+      [name_action]: e.target.value
+    }, () => {
+      this.searchKey();
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      key: '',
+      keyStatus: ''
+    }, () => {
+      this.searchKey();
+    });
+  }
+
   toggleModal(key) {
     if (key == 'new') {
       this.setState({
@@ -167,13 +191,9 @@ class Company extends Component {
         Name: '',
         Email: '',
         Phone: '',
-        Fax: '',
         Address: '',
-        Website: '',
-        Code: '',
-        Status: '',
-        username: '',
-        password: ''
+        UserName: '',
+        Password: ''
       })
     }
   }
@@ -182,8 +202,8 @@ class Company extends Component {
     this.setState({ [key]: val })
   }
 
-  async addCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password } = this.state
+  async addUsers() {
+    const { Email, Name, Phone, Address, UserName, Password, userData } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -199,47 +219,22 @@ class Company extends Component {
       Name: Name,
       Email: Email,
       Phone: Phone,
-      Fax: Fax,
       Address: Address,
-      Website: Website,
-      Code: Code
+      UserName: UserName,
+      Password: Password,
+      Company_Id: JSON.parse(userData).company_id,
+      isSale: true
     }
 
     this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.ADD_COMPANY,
-      method: 'PUT',
-      data: body
-    });
 
-    if (res.data.is_success == true) {
+    const res = await API_CONNECT(Constants.PLUGIN_ADD_SUBSALE, body, "", "POST")
+
+    if (res.is_success == true) {
       this.getData();
-
-      const bodyAddUser = {
-        "Name": Name,
-        "Email": Email,
-        "Phone": Phone,
-        "Address": Address,
-        "Company_Id": res.data.data._id,
-        "Role_Id": "60e6a98b39d7243f689a123c",
-        "UserName": UserName,
-        "Password": Password,
-        "Code": res.data.data._id,
-        "Status": "Actived"
-      }
-
-      var test = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.ADD_USER,
-        method: 'POST',
-        data: bodyAddUser
-      });
-      console.log(test)
-
       this.setState({ modalCom: !this.state.modalCom })
     } else {
-      alert(res.data.message);
+      alert(res.message);
       this.setState({ isLoading: false });
     }
   }
@@ -252,17 +247,16 @@ class Company extends Component {
       Name: item.Name,
       Email: item.Email,
       Phone: item.Phone,
-      Fax: item.Fax,
       Address: item.Address,
-      Website: item.Website,
-      Code: item._id,
+      UserName: item.UserName,
+      Password: item.Password,
       id: item['_id'],
       Status: item.Status
     })
   }
 
-  async updateCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Status } = this.state
+  async updateUsers() {
+    const { Email, Name, Phone, Address, Status, UserName, Password } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -276,21 +270,15 @@ class Company extends Component {
       Name: Name,
       Email: Email,
       Phone: Phone,
-      Fax: Fax,
       Address: Address,
-      Website: Website,
-      Code: this.state.id,
+      UserName: UserName,
+      Password: Password,
       Status: Status,
       id: this.state.id
     }
 
     this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_COMPANY,
-      method: 'POST',
-      data: body
-    });
+    const res = await API_CONNECT(Constants.PLUGIN_UPDATE_USER, body, "", "POST")
 
     if (res.data.is_success == true) {
       this.getData();
@@ -310,14 +298,9 @@ class Company extends Component {
 
   async delete() {
     this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_COMPANY,
-      method: 'DELETE',
-      data: {
-        "id": this.state.delete['_id']
-      }
-    });
+    const res = await API_CONNECT(Constants.PLUGIN_DELETE_USER, {
+      "id": this.state.delete['_id']
+    }, "", "DELETE")
 
     if (res.data.is_success == true) {
       this.getData();
@@ -329,28 +312,6 @@ class Company extends Component {
 
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-  async handlePageChange(pageNumber) {
-    this.getUsers(pageNumber);
-  }
 
   getBadge(status) {
     switch (status) {
@@ -359,6 +320,14 @@ class Company extends Component {
       case 'Locked': return 'warning'
       case 'Deactived': return 'danger'
       default: return 'primary'
+    }
+  }
+
+  getLableRole(type) {
+    switch (type) {
+      case '0': return 'Quản lý soi da'
+      case '1': return 'Quản lý trang điểm và tóc'
+      case '2': return 'Quản lý khách hàng'
     }
   }
 
@@ -376,41 +345,43 @@ class Company extends Component {
       updated: '',
     });
   }
+
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+
   goSearch() {
     this.getUsers();
   }
 
-  actionSearch(e, name_action) {
-    this.setState({
-      [name_action]: e.target.value
-    }, () => {
-      this.searchKey();
-    });
+  async onChangeRole(item) {
+    let body = {
+      "user_id": item._id,
+    }
+    const res = await API_CONNECT(Constants.GET_ROLE_SUBADMIN, body, "", "POST")
+    this.setState({ modalRole: !this.state.modalRole, arrRoleSubAdmin: res.data.sidebar_id, idChangeRole: item._id })
   }
 
-  resetSearch() {
-    this.setState({
-      key: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyFax: '',
-      keyAddress: '',
-      keyWebsite: '',
-      keyCode: '',
-      keyCompany: '',
-      keyDateCreate: new Date(),
-      keyStatus: ''
-    }, () => {
-      this.searchKey();
-    });
+  async onSaveRole() {
+    const { arrRoleSubAdmin, idChangeRole } = this.state;
+    let body = {
+      "user_id": idChangeRole,
+      "sidebar": arrRoleSubAdmin
+    }
+
+    const res = await API_CONNECT(Constants.ADD_ROLE_SUBADMIN, body, "", "POST")
+    if (res.is_success == true) {
+      this.getData();
+      this.setState({ modalRole: !this.state.modalRole, arrRoleSubAdmin: [] })
+    } else {
+      alert(res.message);
+      this.setState({ isLoading: false });
+    }
   }
 
   render() {
-    const { data, key, action, arrPagination,
-      indexPage, } = this.state;
+    const { data, key, action, arrPagination, arrRoleSubAdmin } = this.state;
+    const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -420,8 +391,7 @@ class Company extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách công ty (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Quản lý tài khoản hệ thống
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -433,11 +403,6 @@ class Company extends Component {
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
-                          {/* <CCol sm="6" lg="2">
-                            <CInput type="date" onChange={e => {
-                              this.actionSearch(e, "keyDateCreate");
-                            }} value={keyDateCreate} placeholder="Create Date" />
-                          </CCol> */}
                           <CCol sm="12" lg="4">
                             <CSelect style={styles.flexOption} onChange={e => {
 
@@ -445,7 +410,7 @@ class Company extends Component {
 
                             }} custom>
                               {
-                                ['Actived', 'Deactived', 'Locked'].map((item, i) => {
+                                ["Actived", 'Deactived', 'Locked'].map((item, i) => {
                                   return (
                                     <option value={item}>{item}</option>
                                   );
@@ -454,12 +419,12 @@ class Company extends Component {
                             </CSelect>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
+                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới tài khoản Sale</CButton>
                       </CCol>
                     </CRow>
                   </div>
@@ -469,18 +434,17 @@ class Company extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên Công Ty</th>
+                        <th className="text-center">Tên Sale</th>
                         <th className="text-center">Email</th>
                         <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Fax</th>
                         <th className="text-center">Địa chỉ</th>
-                        <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
 
                       </tr>
                     </thead>
                     <tbody>
+                      <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -490,19 +454,16 @@ class Company extends Component {
                                 <td className="text-center">{item.Name}</td>
                                 <td className="text-center">{item.Email}</td>
                                 <td className="text-center">{item.Phone}</td>
-                                <td className="text-center">{item.Fax}</td>
                                 <td className="text-center">{item.Address}</td>
-                                <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
                                     {item.Status}
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
+                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</CButton>{' '}
+                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</CButton>{' '}
+                                  <CButton outline color="success" size="sm" onClick={(e) => { this.onChangeRole(item) }}>Quyền</CButton>
                                 </td>
                               </tr>
                             );
@@ -513,23 +474,11 @@ class Company extends Component {
 
                 </CardBody>
               </Card>
-              {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              }
-
+              <div style={{ float: 'right' }}>
+                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                }} />
+              </div>
             </Col>
           </Row>
 
@@ -548,9 +497,9 @@ class Company extends Component {
               />
               <TextFieldGroup
                 field="Name"
-                label="Tên công ty"
+                label="Tên Sale"
                 value={this.state.Name}
-                placeholder={"Tên công ty"}
+                placeholder={"Tên Sale"}
                 // error={errors.title}
                 onChange={e => this.onChange("Name", e.target.value)}
               // rows="5"
@@ -587,16 +536,6 @@ class Company extends Component {
               />
 
               <TextFieldGroup
-                field="Fax"
-                label="Fax"
-                value={this.state.Fax}
-                placeholder={"Fax"}
-                // error={errors.title}
-                onChange={e => this.onChange("Fax", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
                 field="Address"
                 label="Địa chỉ"
                 value={this.state.Address}
@@ -606,15 +545,6 @@ class Company extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
-                field="Website"
-                label="Website"
-                value={this.state.Website}
-                placeholder={"Website"}
-                // error={errors.title}
-                onChange={e => this.onChange("Website", e.target.value)}
-              // rows="5"
-              />
               {
                 action == 'new' ? "" : <div>
                   <label style={styles.flexLabel} htmlFor="tag">Status    </label>
@@ -630,35 +560,74 @@ class Company extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addUsers() : this.updateUsers() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+            </ModalFooter>
+          </Modal>
+
+          <Modal isOpen={this.state.modalRole} toggle={e => this.setState({ modalRole: !this.state.modalRole })} className={this.props.className}>
+            <ModalHeader toggle={e => this.setState({ modalRole: !this.state.modalRole })}>{`Phân quyền`}</ModalHeader>
+            <ModalBody>
+              {
+                ['0', '1', '2'].map((item, i) => {
+                  return (
+                    <CFormGroup variant="checkbox" className="checkbox">
+                      <CInputCheckbox
+                        id={item}
+                        defaultChecked={arrRoleSubAdmin.includes(item) == true ? true : false}
+                        name={item}
+                        value={item}
+                        onChange={(e) => {
+                          if(e.target.checked == true) {
+                            arrRoleSubAdmin.push(item);
+                            this.setState({ arrRoleSubAdmin: arrRoleSubAdmin })
+                          } else {
+                            const index = (indx) => indx == item;
+                            var currentIndex = arrRoleSubAdmin.findIndex(index)
+                            arrRoleSubAdmin.splice(currentIndex, 1);
+                            this.setState({ arrRoleSubAdmin: arrRoleSubAdmin })
+                          }
+                        }}
+                      />
+                      <CLabel variant="checkbox" className="form-check-label" htmlFor={item}>{this.getLableRole(item)}</CLabel>
+                    </CFormGroup>
+                  );
+                })
+              }
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="primary" onClick={e => { this.onSaveRole() }}>Lưu</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalRole: !this.state.modalRole })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
             <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div >
       );
     }
+
     return (
-      <div id="page-loading">
-        <div className="three-balls">
-          <div className="ball ball1"></div>
-          <div className="ball ball2"></div>
-          <div className="ball ball3"></div>
-        </div>
+      <div className="sweet-loading">
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
       </div>
     );
   }
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const styles = {
   pagination: {
@@ -746,4 +715,4 @@ const styles = {
   },
 }
 
-export default Company;
+export default User;

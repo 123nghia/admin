@@ -252,7 +252,7 @@ class ShopManager extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <td colSpan="9" hidden={hidden_all} className="text-center">No users in this month</td>
+                  <td colSpan="9" hidden={hidden_all} className="text-center">Không tìm thấy dữ liệu</td>
                   {
                     dataUserSale != undefined ?
                       dataUserSale.map((item, i) => {
@@ -354,7 +354,7 @@ class ShopManager extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        <td colSpan="7" hidden={hidden} className="text-center">No users in this month</td>
+                        <td colSpan="7" hidden={hidden} className="text-center">Không tìm thấy dữ liệu</td>
                         {
                           dataStatistical != undefined ?
                             dataStatistical.map((item, i) => {

@@ -741,18 +741,18 @@ class PluginCustomerManager extends Component {
 
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => {this.setState({ modalCom: !this.state.modalCom })}}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => {this.setState({ modalCom: !this.state.modalCom })}}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete })}>Cancel</CButton>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div >
