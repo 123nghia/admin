@@ -369,7 +369,7 @@ const _navOrther = [
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     _children: [{
       _tag: 'CSidebarNavItem',
-      name: 'Danh sách tài khoản Sale',
+      name: 'Danh sách Sale',
       to: '/subsale',
       role: ['2'],
       badge: {

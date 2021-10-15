@@ -31,7 +31,7 @@ const TheSidebar = () => {
   const [sidebar, setSidebar] = useState([]);
   const type = localStorage.getItem('type');
   const user = localStorage.getItem('user');
-
+  console.log(type)
   useEffect(async () => {
     var duy = await callApiGetRoleSubAdmin(user)
     setSidebar(duy);
