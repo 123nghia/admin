@@ -21,6 +21,11 @@ import Constants from '../contants/contants'
 import navigations from './_nav'
 
 const callApiGetRoleSubAdmin = async (user) => {
+
+  if(user == null || JSON.parse(user) == null )
+  {
+    return;
+  }
   const res = await API_CONNECT(Constants.GET_ROLE_SUBADMIN, {
     user_id: JSON.parse(user).sale_id
   }, "", "POST")
