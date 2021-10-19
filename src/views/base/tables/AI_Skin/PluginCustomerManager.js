@@ -195,10 +195,12 @@ class PluginCustomerManager extends Component {
   async updateCompany() {
     const { Email, Name, Phone, Fax, Address, Website, Slug, Status, current_province, UserName } = this.state
 
-    if (Email == null || Email == ''
-      || Name == null || Name == ''
-      || Phone == null || Phone == ''
-      || Slug == null || Slug == '') {
+    if (
+      // Email == null || Email == ''
+      // || Name == null || Name == ''
+      // || Phone == null || Phone == ''
+      // ||
+       Slug == null || Slug == '') {
       alert("Please fill in all the requirements");
       return
     }
