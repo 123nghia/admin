@@ -47,14 +47,14 @@ class CheckOrder extends Component {
       Password: "",
       keyDateCreate: new Date(),
       keyStatus: '',
-      activePage: 1,
+
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
+
+
       updated: '',
       dataApi: [],
       action: 'new',

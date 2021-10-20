@@ -37,14 +37,14 @@ class Brand extends Component {
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
+
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
+
+
       updated: '',
       dataApi: [],
       action: 'new',
@@ -105,19 +105,12 @@ class Brand extends Component {
     });
 
     let data = res.data.data
-
+    console.log(res)
     this.pagination(data);
     this.setState({ dataApi: data });
 
-    let active = 0
 
-    data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ isLoading: false });
   }
 
   searchKey() {
@@ -132,25 +125,10 @@ class Brand extends Component {
           d.push(val)
         }
       })
-      let active = 0
 
-      d.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: d, totalActive: active })
+      this.setState({ data: d })
     } else {
-      let active = 0
-
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
+      this.setState({ data: this.state.arrPagination[indexPage] })
     }
   }
 
@@ -516,9 +494,9 @@ class Brand extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Xác nhận xoá !!! "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}

@@ -23,20 +23,14 @@ import Constants from "./../../contants/contants";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import Pagination from '@material-ui/lab/Pagination';
+import API_CONNECT from "../../../src/helpers/callAPI";
 
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
 class ShopManager extends Component {
   constructor(props) {
     super(props);
     this.state = {
       month: 0,
       dataUserSale: [],
-      dataUserSale_Original: [],
-      arrPagination: [],
-      indexPage: 0,
       dataStatistical: [],
       arrPaginationStatistical: [],
       indexPageStatistical: 0,
@@ -46,34 +40,23 @@ class ShopManager extends Component {
       hidden: true,
       hidden_all: true,
       arrAllUser: [],
-      arrSale: [],
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
-      isLoadingCustomer: false
+      isLoadingCustomer: false,
+      lengthData: []
     };
   }
 
   async componentDidMount() {
     this.setState({ isLoading: true });
-    await this.getListSale();
     await this.getCustomerByMonth("01");
     await this.getDataForCharts();
-    await this.getCustomer();
+    await this.getCustomer(0);
   }
 
   countType(arr, phone) {
     const count = arr.filter(data => data.Phone == phone);
     return count.length;
-  }
-
-  pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
-    var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-    this.setState({ arrPagination: arrTotal, dataUserSale: arrTotal[this.state.indexPage], dataUserSale_Original: arrTotal[this.state.indexPage] });
   }
 
   pagination_statistical(dataApi) {
@@ -86,62 +69,24 @@ class ShopManager extends Component {
     this.setState({ arrPaginationStatistical: arrTotal_Statistical, dataStatistical: arrTotal_Statistical[this.state.indexPageStatistical] });
   }
 
-  async getListSale() {
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.GET_SALE,
-      method: 'POST',
-      headers: this.state.token
-    })
-    let data = res.data.data;
-
-    this.setState({ arrSale: data })
-  }
-
-  async chooseSale(value) {
-    const { dataUserSale_Original } = this.state;
-    const arrTemp = []
-    for (let i = 0; i < dataUserSale_Original.length; i++) {
-      if (dataUserSale_Original[i].Sale_Id._id == value) {
-        arrTemp.push(dataUserSale_Original[i])
-      }
-    }
-
-    if (value == "") {
-      await this.getCustomer();
-    } else {
-      if (arrTemp.length == 0) {
-        this.setState({ dataUserSale: arrTemp, hidden_all: false, isLoading: false })
-      } else {
-        this.setState({ dataUserSale: arrTemp, hidden_all: true, isLoading: false })
-      }
-    }
-  }
-
-  async getCustomer() {
+  async getCustomer(index) {
 
     const { company_id } = this.state;
     var id = JSON.parse(company_id);
     this.setState({ isLoadingCustomer: true })
 
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_CUSTOMER,
-      method: 'POST',
-      data: {
-        "condition": {
-          "Company_Id": id.company_id
-        }
+    const res = await API_CONNECT(Constants.LIST_CUSTOMER_V2, {
+      "condition": {
+        "Company_Id": id.company_id
       },
-      headers: this.state.token
-    });
-    console.log(res.data.data)
-    if (res.data.is_success == true) {
+      "index": index
+    }, this.state.token, "POST")
+
+
+    if (res.is_success == true) {
       let data = res.data.data
 
-      this.setState({ dataApi: data, isLoadingCustomer: false });
-
-      this.pagination(data);
+      this.setState({ dataApi: data, isLoadingCustomer: false, dataUserSale: data, lengthData: res.data.count });
     }
 
   }
@@ -171,7 +116,7 @@ class ShopManager extends Component {
     }
 
     if (month == 0) {
-      await this.getCustomer();
+      await this.getCustomer(0);
     } else {
       const res = await axios({
         baseURL: Constants.BASE_URL,
@@ -193,7 +138,7 @@ class ShopManager extends Component {
   }
 
   render() {
-    const { dataUserSale, hidden, arrPagination, isLoading, hidden_all, arrSale,
+    const { dataUserSale, hidden, isLoading, hidden_all, lengthData,
       dataStatistical, arrPaginationStatistical, isLoadingCustomer } = this.state;
     if (!isLoading) {
       return (
@@ -206,72 +151,59 @@ class ShopManager extends Component {
                     <CLabel htmlFor="selectSm">Thống kê tổng số lượt user</CLabel>
                   </CCol>
                   <CCol xs="12" sm="12" md="9" lg="9">
-                    <CLabel>Lọc theo Sale</CLabel>
-                    <CSelect onChange={e => { this.chooseSale(e.target.value) }} custom>
-                      <option value={""}>----------------</option>
-                      {
-                        arrSale.map((item, i) => {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        })
-                      }
-                    </CSelect>
+
                   </CCol>
                 </CFormGroup>
               </CCardHeader>
               <CCardBody>
-                {/* {
+                {
                   isLoadingCustomer ?
-                    <div className="sweet-loading">
+                    <div className="sweet-loading" style={{ height: 276 }}>
                       <DotLoader css={override} size={50} color={"#123abc"} loading={isLoadingCustomer} speedMultiplier={1.5} />
-                    </div> : */}
-                <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">STT.</th>
-                      <th className="text-center">Tên</th>
-                      <th className="text-center">Email</th>
-                      <th className="text-center">Số điện thoại</th>
-                      <th className="text-center">Giới tính</th>
-                      <th className="text-center">Số lần đến</th>
-                      <th className="text-center">Hệ số</th>
-                      <th className="text-center">Lần cuối đến</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <td colSpan="9" hidden={hidden_all} className="text-center">Không có dữ liệu</td>
-                    {
-                      dataUserSale != undefined ?
-                        dataUserSale.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.Email}</td>
-                              <td className="text-center">{item.Phone}</td>
-                              <td className="text-center">{item.Gender}</td>
-                              <td className="text-center">{item.count}</td>
-                              <td className="text-center">{Number(item.coefficient).toFixed(2)}</td>
-                              <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                              </td>
-                            </tr>
-                          );
-                        }) : ""
-                    }
-                  </tbody>
-                  <tfoot>
+                    </div> :
+                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">STT.</th>
+                          <th className="text-center">Tên</th>
+                          <th className="text-center">Email</th>
+                          <th className="text-center">Số điện thoại</th>
+                          <th className="text-center">Giới tính</th>
+                          <th className="text-center">Số lần đến</th>
+                          <th className="text-center">Hệ số</th>
+                          <th className="text-center">Lần cuối đến</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td colSpan="9" hidden={hidden_all} className="text-center">Không có dữ liệu</td>
+                        {
+                          dataUserSale != undefined ?
+                            dataUserSale.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{i + 1}</td>
+                                  <td className="text-center">{item.Name}</td>
+                                  <td className="text-center">{item.Email}</td>
+                                  <td className="text-center">{item.Phone}</td>
+                                  <td className="text-center">{item.Gender}</td>
+                                  <td className="text-center">{item.count}</td>
+                                  <td className="text-center">{Number(item.coefficient).toFixed(2)}</td>
+                                  <td className="text-center">
+                                    {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                  </td>
+                                </tr>
+                              );
+                            }) : ""
+                        }
+                      </tbody>
+                      <tfoot>
 
-                  </tfoot>
-                </table>
-
+                      </tfoot>
+                    </table>
+                }
                 <div style={{ width: '100%', margin: 10 }}>
-                  <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                    this.setState({
-                      dataUserSale: arrPagination[v - 1],
-                      indexPage: v - 1
-                    })
+                  <Pagination count={lengthData} color="primary" onChange={(e, v) => {
+                    this.getCustomer(v - 1)
                   }} />
                 </div>
                 <br />
@@ -333,7 +265,6 @@ class ShopManager extends Component {
                           <thead className="thead-light">
                             <tr>
                               <th className="text-center">Tên</th>
-                              <th className="text-center">Email</th>
                               <th className="text-center">Số điện thoại</th>
                               <th className="text-center">Giới tính</th>
                               <th className="text-center">Số lần đến</th>
@@ -348,7 +279,6 @@ class ShopManager extends Component {
                                   return (
                                     <tr key={i}>
                                       <td className="text-center">{item.Name}</td>
-                                      <td className="text-center">{item.Email}</td>
                                       <td className="text-center">{item.Phone}</td>
                                       <td className="text-center">{item.Gender}</td>
                                       <td className="text-center">{item.count}</td>

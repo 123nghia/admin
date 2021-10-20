@@ -7,7 +7,6 @@ import {
   Button,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
-import Select from 'react-select'
 import {
   CBadge,
   CRow,
@@ -18,10 +17,6 @@ import {
 import 'moment-timezone';
 import Constants from "../../../contants/contants";
 import axios from 'axios'
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
 class Order extends Component {
   constructor(props) {
     super(props);
@@ -30,14 +25,14 @@ class Order extends Component {
       Company_Id: '',
       keyDateCreate: new Date(),
       keyStatus: '',
-      activePage: 1,
+
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
+
+
       updated: '',
       dataApi: [],
       action: 'new',
@@ -84,7 +79,7 @@ class Order extends Component {
     const { arrHardWard_render, Company_Id, token } = this.state;
 
     if (Company_Id == '' || Company_Id == null) {
-      alert("Vui lòng chọn chính xác công ty")
+      alert("Vui lòng chọn chính xác công ty cần đặt phần cứng !!!")
     }
 
     const resOrder = await axios({
@@ -93,30 +88,15 @@ class Order extends Component {
       method: 'PUT',
       data: {
         "Company_Id": Company_Id,
-        "Count": arrHardWard_render.length
+        "Count": arrHardWard_render.length,
+        "arrHard": arrHardWard_render
       },
       headers: token
     });
 
     if (resOrder.data.is_success == true) {
-      const res = await axios({
-        baseURL: Constants.BASE_URL,
-        url: Constants.ADD_ORDER_DETAIL,
-        method: 'PUT',
-        data: {
-          "OrderID": resOrder.data.data._id,
-          "arrHard": arrHardWard_render,
-          "Company_Id": resOrder.data.data.Company_Id
-        },
-        headers: token
-      });
-
-      if (resOrder.data.is_success == true) {
-        window.location.href = '#/order_table'
-      }
-
+      window.location.href = '#/order_table'
       this.setState({ arrHardWard: [] });
-
     } else {
       alert(resOrder.data.message);
     }

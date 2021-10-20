@@ -9,7 +9,6 @@ import {
 } from 'reactstrap';
 
 import {
-  CSelect,
   CRow,
   CCol
 } from '@coreui/react'
@@ -26,11 +25,6 @@ import API_CONNECT from "../../../../src/helpers/callAPI";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
-
 class Users extends Component {
   constructor(props) {
     super(props);
@@ -42,19 +36,19 @@ class Users extends Component {
       dataApi: [],
       arrDetail: [],
       indexPage: 0,
-      arrPagination_All: [],
-      indexPage_All: 0,
       role: localStorage.getItem('role'),
       company_id: localStorage.getItem('user'),
-      isLoading: true,
+      isLoading: false,
+      isLoadingTable: false,
       hidden: false,
       dataAll: [],
       hidden_all: false,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      countPagination: 0
     };
   }
   async componentDidMount() {
-    this.getAllData();
+    this.getAllData(0);
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -65,36 +59,20 @@ class Users extends Component {
     }
   }
 
-  pagination_all(dataApi) {
-    var i, j, temparray, chunk = 5;
-    let arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-    if (arrTotal.length == 0) {
-      this.setState({
-        hidden_all: false
-      })
-    } else {
-      this.setState({
-        hidden_all: true
-      })
-    }
-    this.setState({ arrPagination_All: arrTotal, dataAll: arrTotal[this.state.indexPage_All] });
-  }
-
   countType(arr, phone) {
     const count = arr.filter(data => data.Phone == phone);
     return count.length;
   }
 
-  getAllData = async () => {
+  getAllData = async (index) => {
     this.setState({ isLoading: true });
 
-    var resAll = await API_CONNECT(Constants.LIST_CUSTOMER, {}, this.state.token, "POST")
+    var resAll = await API_CONNECT(Constants.LIST_CUSTOMER_V2, {
+      index: index
+    }, this.state.token, "POST")
 
-    let dataRes = resAll.data;
+    let dataRes = resAll.data.data;
+    let dataLength = resAll.data.count;
 
     if (dataRes.length == 0) {
       this.setState({
@@ -106,70 +84,34 @@ class Users extends Component {
       })
     }
 
-    this.setState({ dataApi: dataRes });
+    this.setState({ dataApi: dataRes, dataAll: dataRes, isLoading: false, isLoadingTable: false, countPagination: dataLength });
+  }
 
-    this.pagination_all(dataRes);
-    this.setState({ isLoading: false });
+  getDataPagination = async (index) => {
+    this.setState({ isLoadingTable: true });
+
+    var resAll = await API_CONNECT(Constants.LIST_CUSTOMER_V2, {
+      index: index
+    }, this.state.token, "POST")
+
+    let dataRes = resAll.data.data;
+    let dataLength = resAll.data.count;
+
+    if (dataRes.length == 0) {
+      this.setState({
+        hidden_all: false
+      })
+    } else {
+      this.setState({
+        hidden_all: true
+      })
+    }
+
+    this.setState({ dataApi: dataRes, dataAll: dataRes, isLoadingTable: false, countPagination: dataLength });
   }
 
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-  }
-
-  searchKey() {
-    const { indexPage_All, key, keyStatus } = this.state;
-
-    if (key != '' || keyStatus != '') {
-      let d = []
-      this.state.dataApi.map(val => {
-        if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-          d.push(val)
-        }
-      })
-      let active = 0
-
-      d.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ dataAll: d, totalActive: active })
-    } else {
-      let active = 0
-
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ dataAll: this.state.arrPagination_All[indexPage_All], totalActive: active })
-    }
-  }
-
-
-  actionSearch(e, name_action) {
-    this.setState({
-      [name_action]: e.target.value
-    }, () => {
-      this.searchKey();
-    });
-  }
-
-  resetSearch() {
-    this.setState({
-      keyName: '',
-      keyEmail: '',
-      keyPhone: '',
-      keyGender: '',
-      keyStatus: ''
-    }, () => {
-      this.searchKey();
-    });
   }
 
   openDetailHistory = async (phone) => {
@@ -182,50 +124,26 @@ class Users extends Component {
   }
 
   render() {
-    const { key, dataAll, arrPagination_All,
+    const { key, dataAll, countPagination, isLoading, isLoadingTable,
       hidden_all, arrDetail } = this.state;
 
-    if (!this.state.isLoading) {
+    if (!isLoading) {
       return (
         <div>
           <Card>
-            <CardHeader>
-
-              Danh sách khách hàng
-
+            <CardHeader> Danh sách khách hàng
               <div style={styles.tags}>
                 <CRow>
-                  <CCol sm="6" lg="12">
-                    <CRow>
-                      <CCol sm="6" lg="4">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "key");
-                          }} name="key" value={key} placeholder="Từ khóa" />
-                        </div>
-                      </CCol>
-                      <CCol sm="6" lg="4">
-                        <CSelect style={styles.flexOption} onChange={e => {
+                  <CCol sm="6" lg="6">
+                    <div>
+                      <Input style={styles.searchInput} onChange={(e) => {
 
-                          this.actionSearch(e, "keyStatus");
-
-                        }} custom>
-                          {
-                            ['Actived', 'Deactived', 'Locked'].map((item, i) => {
-                              return (
-                                <option value={item}>{item}</option>
-                              );
-                            })
-                          }
-                        </CSelect>
-                      </CCol>
-                      <CCol sm="6" lg="4">
-                        <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
-                      </CCol>
-                    </CRow>
+                      }} name="key" value={key} placeholder="Từ khóa" />
+                    </div>
                   </CCol>
-                  <CCol sm="6" lg="12">
-                    {/* <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button> */}
+
+                  <CCol sm="6" lg="6">
+                    <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
                   </CCol>
                 </CRow>
               </div>
@@ -244,36 +162,42 @@ class Users extends Component {
                       <th className="text-center">#</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <td colSpan="8" hidden={hidden_all} className="text-center">Không tìm thấy dữ liệu</td>
-                    {
-                      dataAll != undefined ?
-                        dataAll.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.Email}</td>
-                              <td className="text-center">{item.Phone}</td>
-                              <td className="text-center">{item.count}</td>
-                              <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                              </td>
-                              <td className="text-center">
-                                <Button outline color="info" size="sm" onClick={() => { this.openDetailHistory(item.Phone) }} >Chi tiết lịch sử đến</Button>
-                              </td>
-                            </tr>
-                          );
-                        }) : ""
-                    }
-                  </tbody>
+                  {
+                    isLoadingTable == false  ?
+                      <tbody>
+                        {
+                          dataAll != undefined ?
+                            dataAll.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{i + 1}</td>
+                                  <td className="text-center">{item.Name}</td>
+                                  <td className="text-center">{item.Email}</td>
+                                  <td className="text-center">{item.Phone}</td>
+                                  <td className="text-center">{item.count}</td>
+                                  <td className="text-center">
+                                    {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                  </td>
+                                  <td className="text-center">
+                                    <Button outline color="info" size="sm" onClick={() => { this.openDetailHistory(item.Phone) }} >Chi tiết lịch sử đến</Button>
+                                  </td>
+                                </tr>
+                              );
+                            }) : ""
+                        }
+                      </tbody> :
+                      <div className="sweet-loading" style={{ padding: 20, }}>
+                        <DotLoader css={override} size={50} color={"#123abc"} loading={isLoadingTable} speedMultiplier={1.5} />
+                      </div>
+                  }
+
                 </table>
               }
             </CardBody>
           </Card>
           <div style={{ float: 'right' }}>
-            <Pagination count={arrPagination_All.length} color="primary" onChange={(e, v) => {
-              this.setState({ dataAll: arrPagination_All[v - 1], indexPage_All: v - 1 })
+            <Pagination count={countPagination} color="primary" onChange={(e, v) => {
+              this.getDataPagination(v - 1)
             }} />
           </div>
 
@@ -295,7 +219,7 @@ class Users extends Component {
                     <td colSpan="8" hidden={arrDetail.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
                     {
                       arrDetail != undefined ?
-                      arrDetail.map((item, i) => {
+                        arrDetail.map((item, i) => {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>

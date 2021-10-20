@@ -41,14 +41,14 @@ class Users extends Component {
       keyEndDate: '',
       keyStatus: '',
       keyValue: '',
-      activePage: 1,
+
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
+
+
       updated: '',
       dataApi: [],
       action: 'new',
@@ -377,7 +377,7 @@ class Users extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  Quản lý khóa (Page: {this.state.indexPage + 1})
+                  Quản lý khóa
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="6" lg="12">
@@ -495,15 +495,15 @@ class Users extends Component {
               }
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.updateUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.updateUser() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
               <Button color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Xác nhận xoá !!! "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}

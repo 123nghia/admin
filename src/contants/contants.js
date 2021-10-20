@@ -19,6 +19,7 @@ export default {
   "GET_USER_BY_ID": "/api/get-user-byID",
 
   "LIST_CUSTOMER" : "/api/list-customer",
+  "LIST_CUSTOMER_V2" : "/api/list-customer-v2",
   "LIST_CUSTOMER_BY_MONTH" : "/api/get-user-sale-by-month",
 
   "LIST_CUSTOMER_BY_MONTH_ADMIN" : "/api/get-user-by-month-admin",
@@ -47,7 +48,6 @@ export default {
   "UPDATE_STATUS_CHECKOUT" : "/api/update-status-hardware",
 
   "LIST_ORDER_DETAIL" : "/api/list-orderdetail",
-  "ADD_ORDER_DETAIL" : "/api/add-orderdetail",
 
   "LIST_ROLE" : "/api/list-role",
   "LIST_ROLE_WITH_ID" : "/api/list-role?id=",

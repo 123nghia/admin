@@ -36,14 +36,14 @@ class Order extends Component {
       data: [],
       key: '',
       keyStatus: '',
-      activePage: 1,
+
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
+
+
       updated: '',
       Status: '',
       dataApi: [],
@@ -125,9 +125,11 @@ class Order extends Component {
       url: Constants.LIST_ORDER_DETAIL,
       method: 'POST',
       data: {
-        "company_id": company_id
+        "company_id": company_id._id
       }
     });
+
+    let dataOrder = res.data.data;
 
     const resCom = await axios({
       baseURL: Constants.BASE_URL,
@@ -135,7 +137,7 @@ class Order extends Component {
       method: 'POST',
       data: {
         condition: {
-          _id: company_id
+          _id: company_id._id
         }
       }
     });
@@ -148,10 +150,10 @@ class Order extends Component {
         sale_id: sale_id
       }
     });
-
+    console.log(dataOrder)
     this.setState({
-      dataApi: res.data.data, dataOrderDetail: res.data.data,
-      hiddenDetail: false, currentID: company_id, currentCom_ID: resCom.data.data[0].Name,
+      dataApi: dataOrder, dataOrderDetail: dataOrder,
+      hiddenDetail: false, currentID: company_id._id, currentCom_ID: resCom.data.data[0].Name,
       currentSale_ID: resSale.data.data[0].Name, curentStatus: status
     });
   }
@@ -411,7 +413,7 @@ class Order extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -509,7 +511,7 @@ class Order extends Component {
 
               <Card hidden={this.state.hiddenDetail}>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Chi tiết đơn hàng của {this.state.currentCom_ID} (Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"></i> Chi tiết đơn hàng của {this.state.currentCom_ID}
 
                   <CRow style={{ marginTop: 20 }}>
                     <CCol sm="6" lg="6">
@@ -605,9 +607,9 @@ class Order extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Xác nhận xoá !!! "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}

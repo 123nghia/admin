@@ -41,14 +41,14 @@ class PackageSale extends Component {
       keyEnd: '',
       keyStatus: '',
       keyCode: '',
-      activePage: 1,
+
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
+
+
       updated: '',
       dataApi: [],
       action: 'new',
@@ -234,42 +234,6 @@ class PackageSale extends Component {
 
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-  async handlePageChange(pageNumber) {
-    this.getUsers(pageNumber);
-  }
-  toggle(action = '') {
-    this.setState({
-      modal: !this.state.modal,
-      image: '',
-      url: '',
-      isActive: false,
-      isLoading: false,
-      errors: {},
-      action,
-      position: 1,
-      data: [],
-      updated: '',
-    });
-  }
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -281,7 +245,7 @@ class PackageSale extends Component {
         <div>
           <Card>
             <CardHeader>
-              Danh sách phần cứng chủ quản (Page: {this.state.indexPage + 1})
+              Danh sách phần cứng chủ quản
               <div style={styles.tags}>
                 <CRow>
                   <CCol sm="6" lg="12">
@@ -393,15 +357,15 @@ class PackageSale extends Component {
               }
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updateStatus() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updateStatus() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
               <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Xác nhận xoá !!! "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}

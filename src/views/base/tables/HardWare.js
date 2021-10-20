@@ -24,10 +24,7 @@ import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import Pagination from '@material-ui/lab/Pagination';
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
+
 class PackageSale extends Component {
   constructor(props) {
     super(props);
@@ -39,14 +36,14 @@ class PackageSale extends Component {
       keyEnd: '',
       keyStatus: '',
       keyCode: '',
-      activePage: 1,
+
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
+
+
       updated: '',
       dataApi: [],
       action: 'new',
@@ -62,6 +59,7 @@ class PackageSale extends Component {
       indexPage: 0,
       hidden: false,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      arrStatus: ['INSTOCK', 'AVAILABLE']
     };
   }
   async componentDidMount() {
@@ -132,7 +130,7 @@ class PackageSale extends Component {
   }
 
   searchKey() {
-    const { indexPage, key, keyName, keyActive, keyEnd, keyCode, keyStatus } = this.state;
+    const { key, keyStatus } = this.state;
 
     if (key != '' || keyStatus != '') {
       let d = []
@@ -200,7 +198,7 @@ class PackageSale extends Component {
     this.setState({ [key]: val })
   }
 
-  async addPackageSale() {
+  async addHardWare() {
     const { Name, Active_Date, End_Date } = this.state
 
     if (Name == null || Name == '') {
@@ -244,7 +242,7 @@ class PackageSale extends Component {
     })
   }
 
-  async updatePackageSale() {
+  async updateHardWare() {
     const { Name, Active_Date, End_Date, Status } = this.state
 
     if (Name == null || Name == '') {
@@ -304,54 +302,18 @@ class PackageSale extends Component {
     }
   }
 
-  getUsers(page = 1) {
-    const limit = this.state.limit;
-    const key = this.state.key || '';
-    const fetchData = {
-      method: 'GET',
-      headers: headers
-    };
-    fetch(global.BASE_URL + '/admin/users?key=' + key + '&page=' + page + '&limit=' + limit, fetchData).then(users => {
-      users.json().then(result => {
-        this.setState({
-          data: result.data,
-          itemsCount: result.total,
-          activePage: page,
-          totalActive: result.totalActive,
-          updated: '',
-        });
-      })
-    }).catch(console.log);
-  }
-  async handlePageChange(pageNumber) {
-    this.getUsers(pageNumber);
-  }
-  toggle(action = '') {
-    this.setState({
-      modal: !this.state.modal,
-      image: '',
-      url: '',
-      isActive: false,
-      isLoading: false,
-      errors: {},
-      action,
-      position: 1,
-      data: [],
-      updated: '',
-    });
-  }
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
   render() {
-    const { data, key, action, End_Date, Active_Date, arrPagination, indexPage, hidden } = this.state;
+    const { data, key, action, End_Date, Active_Date, arrPagination, arrStatus, hidden } = this.state;
     if (!this.state.isLoading) {
       return (
         <div>
           <Card>
             <CardHeader>
-              Quản lí phần cứng (Page: {this.state.indexPage + 1})
+              Quản lí phần cứng
               <div style={styles.tags}>
                 <CRow>
                   <CCol sm="6" lg="12">
@@ -371,7 +333,7 @@ class PackageSale extends Component {
 
                         }} custom>
                           {
-                            ['INSTOCK', 'AVAILABLE'].map((item, i) => {
+                            arrStatus.map((item, i) => {
                               return (
                                 <option value={item}>{item}</option>
                               );
@@ -475,23 +437,27 @@ class PackageSale extends Component {
                 action == 'new' ? "" : <div>
                   <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'INSTOCK'}>INSTOCK</option>
-                    <option value={'AVAILABLE'}>AVAILABLE</option>
+                    {
+                      arrStatus.map((item, i) => {
+                        return (
+                          <option selected={item == this.state.Status ? true : false} value={item}>{item}</option>
+                        );
+                      })
+                    }
                   </select>
                 </div>
               }
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addHardWare() : this.updateHardWare() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
               <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Xác nhận xoá !!! "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
