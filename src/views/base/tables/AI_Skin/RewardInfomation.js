@@ -398,7 +398,7 @@ class RewardInfomation extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 {
-                                  type == '0' || type == '1' ? <td className="text-center">{item.Company_Id.Name}</td> : ""
+                                  type == '0' || type == '1' ? <td className="text-center">{item.Company_Id == null || item.Company_Id == "null" ? "Admin" : item.Company_Id.Name }</td> : ""
                                 }
                                 <td className="text-center">{item.Subject}</td>
                                 <td className="text-center">{item.Content}</td>
