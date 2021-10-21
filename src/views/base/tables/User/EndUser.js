@@ -53,8 +53,7 @@ class EndUser extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
-      isLoading: false,
-      isChangePassword: false
+      isLoading: false
     };
   }
   async componentDidMount() {
@@ -220,9 +219,7 @@ class EndUser extends Component {
       action: "update",
       email: item.email,
       phone: item.phone,
-      password: item.password,
       username: item.username,
-      isChangePassword: false,
       id: item['_id']
     })
   }
@@ -232,7 +229,7 @@ class EndUser extends Component {
 
     if (email == null || email == '' ||
       phone == null || phone == '' ||
-      password == null || password == '' || username == null || username == '') {
+      username == null || username == '') {
       alert("Hãy nhập đầy đủ trường !!!");
       return
     }
@@ -240,7 +237,6 @@ class EndUser extends Component {
     const body = {
       email: email,
       phone: phone,
-      password: this.state.isChangePassword ? md5(password) : password,
       username: username,
       id: this.state.id,
     }
@@ -430,7 +426,7 @@ class EndUser extends Component {
                 placeholder={"Mật khẩu"}
                 type={"password"}
                 // error={errors.title}
-                onChange={e => { this.onChange("password", e.target.value); this.setState({ isChangePassword: true }) }}
+                onChange={e => { this.onChange("password", e.target.value); }}
               // rows="5"
               />
             </ModalBody>
