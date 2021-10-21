@@ -404,22 +404,18 @@ const _navOrther = [
     role: ['0', '1', '2'],
   },
   {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Danh sách người dùng',
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách người dùng End User',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách end user',
-      to: '/end_user',
-      role: ['0', '1'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.accountCompany}>
-                <CIcon content={freeSet.cilBellExclamation} />
-              </CTooltip>,
-      }
-    }],
+    to: '/end_user',
+    icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.role}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>,
+    }
   },
   {
     _tag: 'CSidebarNavDropdown',
