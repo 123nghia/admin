@@ -36,19 +36,14 @@ class EndUser extends Component {
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
       updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
       email: "",
+      username: "",
       phone: "",
       password: "",
       modalDelete: false,
@@ -100,13 +95,13 @@ class EndUser extends Component {
 
   getData = async () => {
     this.setState({ isLoading: true });
-    const res_brand = await axios({
+    const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_END_USER,
       method: 'POST'
     });
 
-    let val = res_brand.data.data;
+    let val = res.data.data;
     this.pagination(val);
     this.setState({ dataApi: val });
 
@@ -172,6 +167,7 @@ class EndUser extends Component {
         modalCom: !this.state.modalCom,
         action: key,
         email: "",
+        username: "",
         phone: "",
         password: ""
       })
@@ -183,10 +179,11 @@ class EndUser extends Component {
   }
 
   async addRoles() {
-    const { email, phone, password } = this.state
+    const { email, phone, password, username } = this.state
     if (email == null || email == '' ||
       phone == null || phone == '' ||
-      password == null || password == '') {
+      password == null || password == '' ||
+      username == null || username == '') {
       alert("Hãy nhập đầy đủ thông tin !!!");
       return
     }
@@ -194,7 +191,8 @@ class EndUser extends Component {
     const body = {
       email: email,
       phone: phone,
-      password: password
+      password: password,
+      username: username
     }
 
     this.setState({ isLoading: true });
@@ -223,17 +221,18 @@ class EndUser extends Component {
       email: item.email,
       phone: item.phone,
       password: item.password,
+      username: item.username,
       isChangePassword: false,
       id: item['_id']
     })
   }
 
   async updateUser() {
-    const { email, phone, password } = this.state
+    const { email, phone, password, username } = this.state
 
     if (email == null || email == '' ||
       phone == null || phone == '' ||
-      password == null || password == '') {
+      password == null || password == '' || username == null || username == '') {
       alert("Hãy nhập đầy đủ trường !!!");
       return
     }
@@ -242,6 +241,7 @@ class EndUser extends Component {
       email: email,
       phone: phone,
       password: this.state.isChangePassword ? md5(password) : password,
+      username: username,
       id: this.state.id,
     }
 
@@ -348,6 +348,7 @@ class EndUser extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
+                        <th className="text-center">Tên đăng nhập</th>
                         <th className="text-center">Email</th>
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">#</th>
@@ -361,6 +362,7 @@ class EndUser extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.username}</td>
                                 <td className="text-center">{item.email}</td>
                                 <td className="text-center">{item.phone}</td>
                                 <td className="text-center">
@@ -384,28 +386,22 @@ class EndUser extends Component {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
             </Col>
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
+              <TextFieldGroup
+                field="username"
+                label="Tên đăng nhập"
+                value={this.state.username}
+                placeholder={"Tên đăng nhập"}
+                // error={errors.title}
+                onChange={e => this.onChange("username", e.target.value)}
+              // rows="5"
+              />
+
               <TextFieldGroup
                 field="name"
                 label="Email"
