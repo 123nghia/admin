@@ -48,6 +48,8 @@ export default {
   "UPDATE_STATUS_CHECKOUT" : "/api/update-status-hardware",
 
   "LIST_ORDER_DETAIL" : "/api/list-orderdetail",
+  "LIST_ORDER_DETAIL_COMPANY" : "/api/list-order-detail",
+  "UPDATE_STATUS_HARDWARE_COMPANY" : "/api/update-status-hardware",
 
   "LIST_ROLE" : "/api/list-role",
   "LIST_ROLE_WITH_ID" : "/api/list-role?id=",

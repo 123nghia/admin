@@ -82,9 +82,8 @@ class PackageSale extends Component {
 
   getBadge(status) {
     switch (status) {
-      case 'ENABLE': return 'success'
-      case 'DISABLE': return 'secondary'
-      default: return 'primary'
+      case 'Active': return 'success'
+      default: return 'danger'
     }
   }
 
@@ -102,68 +101,24 @@ class PackageSale extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_HARDWARE_CHECKOUT,
+      url: Constants.LIST_ORDER_DETAIL_COMPANY,
       method: 'POST',
       headers: this.state.token
     });
 
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    let data = res.data.data
+    console.log(data)
+    this.pagination(data);
+    this.setState({ dataApi: data });
 
-    let active = 0
 
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ isLoading: false });
   }
 
-  searchKey() {
-    const { indexPage, key, keyName, keyActive, keyEnd, keyCode, keyStatus } = this.state;
-
-    if (key != '' || keyStatus != '') {
-      let d = []
-      this.state.dataApi.map(val => {
-        if ((val.Transaction_ID.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-          val.HardWard_ID.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-          val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
-          d.push(val)
-        }
-      })
-      let active = 0
-
-      d.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: d, totalActive: active })
-    } else {
-      let active = 0
-
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: this.state.dataApi, totalActive: active })
-    }
-  }
 
   actionSearch(e, name_action) {
     this.setState({
       [name_action]: e.target.value
-    }, () => {
-      this.searchKey();
-    });
-  }
-
-  resetSearch() {
-    this.setState({
-      keyName: '',
-      keyActive: new Date(),
-      keyEnd: new Date(),
-      keyStatus: '',
-      keyCode: ''
     }, () => {
       this.searchKey();
     });
@@ -185,9 +140,6 @@ class PackageSale extends Component {
     this.setState({ [key]: val })
   }
 
-  async addPackageSale() {
-
-  }
 
   async openUpdate(item) {
     this.setState({
@@ -203,13 +155,13 @@ class PackageSale extends Component {
 
     const body = {
       id: this.state.id,
-      Status: Status
+      status: Status
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_STATUS_CHECKOUT,
+      url: Constants.UPDATE_STATUS_HARDWARE_COMPANY,
       method: 'POST',
       data: body
     });
@@ -239,54 +191,19 @@ class PackageSale extends Component {
   }
 
   render() {
-    const { data, key, action, isLoading, arrPagination, indexPage } = this.state;
+    const { data, action, isLoading, arrPagination } = this.state;
     if (!isLoading) {
       return (
         <div>
           <Card>
             <CardHeader>
               Danh sách phần cứng chủ quản
-              <div style={styles.tags}>
-                <CRow>
-                  <CCol sm="6" lg="12">
-                    <CRow>
-                      <CCol sm="6" lg="4">
-                        <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "key");
-                          }} name="key" value={key} placeholder="Từ khóa" />
-                        </div>
-                      </CCol>
-
-                      <CCol sm="6" lg="4">
-                        <CSelect style={styles.flexOption} onChange={e => {
-
-                          this.actionSearch(e, "keyStatus");
-
-                        }} custom>
-                          {
-                            ['ENABLE', 'DISABLE'].map((item, i) => {
-                              return (
-                                <option value={item}>{item}</option>
-                              );
-                            })
-                          }
-                        </CSelect>
-                      </CCol>
-                      <CCol sm="6" lg="4">
-                        <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
-              </div>
             </CardHeader>
             <CardBody>
               <table className="table table-hover table-outline mb-0 d-none d-sm-table">
                 <thead className="thead-light">
                   <tr>
                     <th className="text-center">STT.</th>
-                    <th className="text-center">Mã giao dịch</th>
                     <th className="text-center">Mã phần cứng</th>
                     <th className="text-center">Ngày kích hoạt</th>
                     <th className="text-center">Ngày hết hạn</th>
@@ -301,13 +218,12 @@ class PackageSale extends Component {
                         return (
                           <tr key={i}>
                             <td className="text-center">{i + 1}</td>
-                            <td className="text-center">{item.Transaction_ID}</td>
-                            <td className="text-center">{item.HardWard_ID}</td>
+                            <td className="text-center">{item.HardWareID[0].Key}</td>
                             <td className="text-center">
                               {(new Date(item.Active_Date)).toLocaleDateString() + ' ' + (new Date(item.Active_Date)).toLocaleTimeString()}
                             </td>
                             <td className="text-center">
-                              {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
+                              {(new Date(item.HardWareID[0].End_Date)).toLocaleDateString() + ' ' + (new Date(item.HardWareID[0].End_Date)).toLocaleTimeString()}
                             </td>
                             <td className="text-center">
                               <CBadge color={this.getBadge(item.Status)}>
@@ -340,7 +256,7 @@ class PackageSale extends Component {
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
                     {
-                      ['ENABLE', 'DISABLE'].map((item, i) => {
+                      ['Active', 'DISABLE'].map((item, i) => {
                         if (item == this.state.Status) {
                           return (
                             <option selected value={item}>{item}</option>

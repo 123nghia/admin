@@ -599,7 +599,7 @@ class Order extends Component {
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
                     {
-                      ['SPENDING', 'COMPLETE'].map((item, i) => {
+                      ['SPENDING', 'ACTIVED'].map((item, i) => {
                         return (
                           <option value={item}>{item}</option>
                         );
