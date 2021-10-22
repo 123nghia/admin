@@ -129,7 +129,33 @@ export default {
   "LIST_DETAIL_CUSTOMER": "/api/list-detail-customer",
   "LIST_HISTORY_BY_SALE": "/api/list-history-by-sale",
   "LIST_HISTORY_BY_PHONE": "/api/list-history-by-phone",
-  "ADD_HISTORY": "/api/add-history"
+  "ADD_HISTORY": "/api/add-history",
+
+  "GET_LIST_BRAND": "/brands",
+  "ADD_BRAND": "/add-brand",
+  "UPDATE_BRAND": "/update-brand",
+  "DELETE_BRAND": "/delete-brand",
+
+  "GET_LIST_TYPE": "/types",
+  "ADD_TYPE": "/add-type",
+  "UPDATE_TYPE": "/update-type",
+  "DELETE_TYPE": "/delete-type",
+
+  "GET_LIST_COLOR": "/v2/color",
+  "ADD_COLOR": "/v2/add-color",
+  "UPDATE_COLOR": "/v2/update-color",
+  "DELETE_COLOR": "/delete-color",
+
+  "GET_LIST_HAIR_COLOR": "/v2/color-hair",
+
+  "GET_LIST_PRODUCT": "/v2/product",
+  "ADD_PRODUCT": "/v2/add-product",
+  "UPDATE_PRODUCT": "/v2/update-product",
+  "DELETE_PRODUCT": "/delete-product",
+
+  "GET_LIST_HAIR": "/v2/hair",
+
+  "GET_LIST_SUGGEST": "/itemSdk",
 
 
 };

@@ -28,6 +28,13 @@ const CheckProduct = React.lazy(() => import('./views/base/tables/CheckOrderByPr
 const Category = React.lazy(() => import('./views/base/tables/Category'));
 const ConfigSystem = React.lazy(() => import('./views/base/tables/ConfigSystem'));
 const HistorySkin = React.lazy(() => import('./views/base/tables/HistorySkin'));
+const SuggestItem = React.lazy(() => import('./views/base/tables/AdminApp/Skins/SuggestItems'));
+const BrandApp = React.lazy(() => import('./views/base/tables/AdminApp/MakeUp/Brand'));
+const SubTypeApp = React.lazy(() => import('./views/base/tables/AdminApp/MakeUp/SubType'));
+const ColorApp = React.lazy(() => import('./views/base/tables/AdminApp/MakeUp/Color'));
+const ProductApp = React.lazy(() => import('./views/base/tables/AdminApp/MakeUp/Product'));
+const ProductHair = React.lazy(() => import('./views/base/tables/AdminApp/Hair/Product'));
+const ColorHair = React.lazy(() => import('./views/base/tables/AdminApp/Hair/Color'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -59,6 +66,18 @@ const routes = [
   { path: '/danh_muc', name: 'SPENDING', component: Category },
   { path: '/cau_hinh_gian_hang', name: 'SPENDING', component: ConfigSystem },
   { path: '/lich_su_soi_da', name: 'SPENDING', component: HistorySkin },
+  { path: '/suggest/K1', name: 'SUGGEST_ITEM', component: SuggestItem },
+  { path: '/suggest/K5', name: 'SUGGEST_ITEM', component: SuggestItem },
+  { path: '/suggest/K6', name: 'SUGGEST_ITEM', component: SuggestItem },
+  { path: '/suggest/K7', name: 'SUGGEST_ITEM', component: SuggestItem },
+  { path: '/suggest/K8', name: 'SUGGEST_ITEM', component: SuggestItem },
+  { path: '/suggest/K9', name: 'SUGGEST_ITEM', component: SuggestItem },
+  { path: '/quan_ly_thuong_hieu_trang_diem', name: 'BRANDS', component: BrandApp },
+  { path: '/quan_ly_danh_muc_trang_diem', name: 'SUBTYPE', component: SubTypeApp },
+  { path: '/quan_ly_mau_trang_diem', name: 'COLOR', component: ColorApp },
+  { path: '/quan_ly_san_pham_trang_diem', name: 'PRODUCT', component: ProductApp },
+  { path: '/quan_ly_san_pham_toc', name: 'PRODUCT', component: ProductHair },
+  { path: '/quan_ly_ma_mau_toc', name: 'COLOR', component: ColorHair },
 ];
 
 export default routes;

@@ -19,11 +19,11 @@ import {
 
 import CreatableSelect from 'react-select/creatable';
 import 'moment-timezone';
-import Constants from "./../../../contants/contants";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
+import Constants from "../../../contants/contants";
+import TextFieldGroup from "../../Common/TextFieldGroup";
 import axios from 'axios'
 import Pagination from '@material-ui/lab/Pagination';
-import API_CONNECT from "../../../../src/helpers/callAPI";
+import API_CONNECT from "../../../helpers/callAPI";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 
@@ -105,7 +105,6 @@ class Brand extends Component {
     });
 
     let data = res.data.data
-    console.log(res)
     this.pagination(data);
     this.setState({ dataApi: data });
 

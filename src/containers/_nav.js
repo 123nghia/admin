@@ -1,6 +1,6 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-
+import { freeSet } from '@coreui/icons';
 const _nav = [
   {
     _tag: 'CSidebarNavTitle',
@@ -74,6 +74,98 @@ const _nav = [
       to: '/key',
       role: ['ADMIN', 'ADMINSALE']
     }]
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý soi da'],
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ giảm lão hóa da',
+    to: '/suggest/K5',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ điều trị mụn',
+    to: '/suggest/K6',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ giảm quầng thâm mắt',
+    to: '/suggest/K7',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ giảm lỗ chân lông',
+    to: '/suggest/K8',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ giảm thâm nám da',
+    to: '/suggest/K9',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý trang điểm'],
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nhãn hiệu sản phẩm trang điểm',
+    to: '/quan_ly_thuong_hieu_trang_diem',
+    icon: <CIcon content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh mục',
+    to: '/quan_ly_danh_muc_trang_diem',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Mã màu',
+    to: '/quan_ly_mau_trang_diem',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm',
+    to: '/quan_ly_san_pham_trang_diem',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý màu tóc'],
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm',
+    to: '/quan_ly_san_pham_toc',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Mã màu',
+    to: '/quan_ly_ma_mau_toc',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['ADMIN']
   },
   {
     _tag: 'CSidebarNavTitle',
@@ -163,7 +255,7 @@ const _nav = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Thông kê doanh số sale PG'],
-    role: ['COMPANY', 'SALES', 'ADMIN', 'SHOPMANAGER']
+    role: ['COMPANY', 'ADMIN']
   },
   {
     _tag: 'CSidebarNavItem',
