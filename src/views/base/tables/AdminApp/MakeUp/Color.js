@@ -140,7 +140,7 @@ class Color extends Component {
     return `${newD}-${newM}-${y}`
   }
 
-  async addType() {
+  async addColor() {
     const { hex, makeup_id, alpha, ver } = this.state
 
     const body = {
@@ -177,7 +177,7 @@ class Color extends Component {
     })
   }
 
-  async updateBrand() {
+  async updateColor() {
     const { hex, makeup_id, alpha, ver } = this.state
 
     const body = {
@@ -393,7 +393,7 @@ class Color extends Component {
               />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addType() : this.updateBrand() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addColor() : this.updateColor() }} disabled={this.state.isLoading}>Save</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
             </ModalFooter>
           </Modal>

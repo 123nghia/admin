@@ -4,19 +4,12 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Table, Button, Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
+  Button,
+  ModalHeader, ModalBody, ModalFooter, Modal
 } from 'reactstrap';
 
 import {
-  CBadge,
-  CRow,
-  CCol,
-  CSelect,
-  CInput
+  CBadge
 } from '@coreui/react'
 
 import 'moment-timezone';
@@ -26,10 +19,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import axios from 'axios'
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
+
 class PackageSale extends Component {
   constructor(props) {
     super(props);

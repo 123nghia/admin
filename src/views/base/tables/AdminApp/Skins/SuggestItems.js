@@ -18,6 +18,7 @@ import {
 import "moment-timezone";
 
 import TextArea from "../../../../Common/TextArea";
+import validateInput from "./../../../../../helpers/news";
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
 import Pagination from "react-js-pagination";
 import ConstantApp from "../../../../../contants/contants";
@@ -26,7 +27,7 @@ let headers = new Headers();
 headers.append("Content-Type", "application/json");
 let BASE_URL = ConstantApp.BASE_URL
 
-class SuggestItem extends Component {
+class News extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,20 +68,17 @@ class SuggestItem extends Component {
   async componentDidMount() {
     this.loadData();
   }
-
   loadData = () => {
-
-    const { activePage, itemPerPage, idSDK } = this.state;
-
-    const page = activePage || 1;
-    const limit = itemPerPage || 200;
+    const page = this.state.activePage || 1;
+    const limit = this.state.itemPerPage || 200;
     const key = this.state.key || "";
+    console.log("key", key);
     const fetchData = {
       method: "GET",
     };
-
+    // fetch(global.BASE_URL + "/news?limit=" + limit + "&page=" + page, fetchData)
     fetch(
-      BASE_URL + "/itemSdk/suggest?limit=" + limit + "&page=" + page + "&key=" + key + "&sdk_type=" + idSDK,
+      BASE_URL + "/itemSdk/suggest?limit=" + limit + "&page=" + page + "&key=" + key + "&sdk_type=" + this.state.idSDK,
       fetchData
     )
       .then((cards) => {
@@ -111,7 +109,6 @@ class SuggestItem extends Component {
       })
       .catch(console.log);
   };
-
   toggle(action) {
     this.setState({
       modal: !this.state.modal,
@@ -242,64 +239,74 @@ class SuggestItem extends Component {
     this.loadData();
   }
 
+  isValid() {
+    const { errors, isValid } = validateInput(this.state);
+    if (!isValid) {
+      this.setState({ errors });
+    }
+    return isValid;
+  }
 
   updateApp = () => {
-
-    const { updateId } = this.state
-    this.setState({ errors: {}, isLoading: true });
-
-    const body = {
-      name: this.state.name.trim() || "",
-      image: this.state.image.trim() || "",
-      title: this.state.title.trim() || "",
-      description: this.state.description.trim() || "",
-      linkdetail: this.state.linkdetail.trim() || "",
-      level: this.state.level || "",
-      sdktype: this.state.sdktype || "",
-      companyid: this.state.companyid || "",
-    };
-    if (this.state.action === "update") {
-      const fetchData = {
-        method: "PUT",
-        headers: headers,
-        body: JSON.stringify(body),
+    console.log("this.state", this.state);
+    if (this.isValid()) {
+      this.setState({ errors: {}, isLoading: true });
+      const id = this.state.updateId;
+      // process utc time
+      // end process utc time
+      const body = {
+        name: this.state.name.trim() || "",
+        image: this.state.image.trim() || "",
+        title: this.state.title.trim() || "",
+        description: this.state.description.trim() || "",
+        linkdetail: this.state.linkdetail.trim() || "",
+        level: this.state.level || "",
+        sdktype: this.state.sdktype || "",
+        companyid: this.state.companyid || "",
       };
-      fetch(BASE_URL + `/itemSdk/${updateId}`, fetchData)
-        .then(async () => {
-          this.cancelCreate();
-          this.loadData();
-          this.setState({
-            created: "News updated successfully",
-            isLoading: false,
-            deleted: false,
-          });
-        })
-        .catch(console.log);
-    } else {
-      const fetchData = {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body),
-      };
-      console.log(fetchData);
-      fetch(BASE_URL + "/itemSdk", fetchData)
-        .then(async () => {
-          this.cancelCreate();
-          this.loadData();
-          this.setState({
-            created: "News created successfully",
-            isLoading: false,
-            deleted: false,
-          });
-        })
-        .catch(console.log);
+      if (this.state.action === "update") {
+        const fetchData = {
+          method: "PUT",
+          headers: headers,
+          body: JSON.stringify(body),
+        };
+        fetch(BASE_URL + `/itemSdk/${id}`, fetchData)
+          .then(async () => {
+            this.cancelCreate();
+            this.loadData();
+            this.setState({
+              created: "News updated successfully",
+              isLoading: false,
+              deleted: false,
+            });
+          })
+          .catch(console.log);
+      } else {
+        const fetchData = {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(body),
+        };
+        console.log(fetchData);
+        fetch(BASE_URL + "/itemSdk", fetchData)
+          .then(async () => {
+            this.cancelCreate();
+            this.loadData();
+            this.setState({
+              created: "News created successfully",
+              isLoading: false,
+              deleted: false,
+            });
+          })
+          .catch(console.log);
+      }
     }
-
   };
 
   getBadgeSDK(type, i) {
     const { sdkItem } = this.state;
-    if (type == "K1" || type == "K2" || type == "K3" || type == "K4") {
+    if(type == "K1" || type == "K2" || type == "K3" || type == "K4")
+    {
       sdkItem.splice(i, 1)
       this.setState({ sdkItem: sdkItem })
     }
@@ -692,4 +699,4 @@ const styles = {
   },
 };
 
-export default SuggestItem;
+export default News;

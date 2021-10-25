@@ -12,8 +12,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Form,
-  Input,
+  Form
 } from "reactstrap";
 import "moment-timezone";
 import ConstantApp from "../../../../../contants/contants";
