@@ -36,7 +36,7 @@ const TheSidebar = () => {
   const [sidebar, setSidebar] = useState([]);
   const type = localStorage.getItem('type');
   const user = localStorage.getItem('user');
-  console.log(type)
+
   useEffect(async () => {
     var duy = await callApiGetRoleSubAdmin(user)
     setSidebar(duy);
@@ -85,8 +85,7 @@ const TheSidebar = () => {
       }
     }
   }
-  // console.log(navigation)
-  // console.log(temp)
+
   localStorage.setItem('url', JSON.stringify(temp))
 
   const dispatch = useDispatch()
@@ -133,6 +132,17 @@ const TheSidebar = () => {
         <div style={{ backgroundColor: '#333333' }}>
           <CCreateElement
             items={navigations[2]}
+            components={{
+              CSidebarNavDivider,
+              CSidebarNavDropdown,
+              CSidebarNavItem,
+              CSidebarNavTitle
+            }}
+          />
+        </div>
+        <div style={{ backgroundColor: '#333333' }}>
+          <CCreateElement
+            items={navigations[3]}
             components={{
               CSidebarNavDivider,
               CSidebarNavDropdown,
