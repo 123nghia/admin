@@ -31,14 +31,7 @@ class BrandApp extends Component {
       data: [],
       key: '',
       activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: { },
-      communities: [],
-      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
@@ -51,8 +44,7 @@ class BrandApp extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      type: localStorage.getItem('type'),
-      user: localStorage.getItem('user'),
+      companyid: localStorage.getItem('company_id'),
       isLoading: false
     };
   }
@@ -91,10 +83,12 @@ class BrandApp extends Component {
   }
 
   getData = async () => {
+    const { companyid } = this.state;
+    console.log(companyid)
     this.setState({ isLoading: true });
 
     const res_brand = await API_CONNECT(
-      ConstantApp.GET_LIST_BRAND, { }, "", "GET")
+      `${ConstantApp.GET_LIST_BRAND}?company_id=${companyid}`, { }, "", "GET")
 
     let val = res_brand.data;
 
@@ -137,7 +131,7 @@ class BrandApp extends Component {
   }
 
   async addBrand() {
-    const { name, image } = this.state
+    const { name, image, companyid } = this.state
 
     if (image == null || image == ''
       || name == null || name == '') {
@@ -147,7 +141,8 @@ class BrandApp extends Component {
 
     const body = {
       name: name,
-      image: image
+      image: image,
+      company_id: companyid
     }
 
     this.setState({ isLoading: true });
@@ -246,25 +241,11 @@ class BrandApp extends Component {
           d.push(val)
         }
       })
-      let active = 0
 
-      d.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: d, totalActive: active })
+      this.setState({ data: d })
     } else {
-      let active = 0
 
-      this.state.dataApi.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
+      this.setState({ data: this.state.arrPagination[indexPage] })
     }
   }
 

@@ -107,6 +107,7 @@ class Product extends Component {
       modalDelete: false,
       delete: null,
       auth: localStorage.getItem('auth'),
+      companyid: localStorage.getItem('company_id'),
       colors: [],
       color: null,
       arrPagination: [],
@@ -114,34 +115,15 @@ class Product extends Component {
     };
   }
   async componentDidMount() {
-    // const fetchData = {
-    //   method: 'GET',
-    //   headers: headers
-    // };
-
-    //   fetch(global.BASE_URL + '/admin/browser-links', fetchData).then( cards => {
-    //       cards.json().then(result => {
-    //           this.setState({
-    //               data: result.data
-    //           });
-    //       })
-    //   }).catch(console.log);
-    // fetch(global.BASE_URL + '/admin/browser-link-categories', fetchData).then( cards => {
-    //   cards.json().then(result => {
-    //     this.setState({
-    //         categories: result.data
-    //     });
-    //   })
-    // }).catch(console.log);
-
     this.getData();
   }
 
   getData = async () => {
+    const { companyid } = this.state;
     this.setState({ isLoading: true });
 
     const res = await API_CONNECT(
-      ConstantApp.GET_LIST_PRODUCT, { }, "", "GET")
+      `${ConstantApp.GET_LIST_PRODUCT}?company_id=${companyid}`, { }, "", "GET")
 
     var val = res.data
 
@@ -220,7 +202,7 @@ class Product extends Component {
   };
 
   createProduct = async () => {
-    const { title, image, url, type, brand, color } = this.state;
+    const { title, image, url, type, brand, color, companyid } = this.state;
     if (
       title == "" ||
       image == "" ||
@@ -238,6 +220,7 @@ class Product extends Component {
       name: title,
       href: url,
       image: image,
+      company_id: companyid,
       color_id: color.value
     };
 

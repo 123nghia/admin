@@ -30,15 +30,7 @@ class ColorHair extends Component {
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: { },
-      communities: [],
-      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
@@ -53,8 +45,7 @@ class ColorHair extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      type: localStorage.getItem('type'),
-      user: localStorage.getItem('user'),
+      companyid: localStorage.getItem('company_id'),
       isLoading: false
     };
   }
@@ -93,10 +84,11 @@ class ColorHair extends Component {
   }
 
   getData = async () => {
+    const { companyid } = this.state;
     this.setState({ isLoading: true });
 
     const res_brand = await API_CONNECT(
-      ConstantApp.GET_LIST_HAIR_COLOR, { }, "", "GET")
+      `${ConstantApp.GET_LIST_HAIR_COLOR}?company_id=${companyid}`, { }, "", "GET")
 
     let val = res_brand.data;
 
@@ -139,13 +131,14 @@ class ColorHair extends Component {
   }
 
   async addColor() {
-    const { hex, makeup_id, alpha, ver } = this.state
+    const { hex, makeup_id, alpha, ver, companyid } = this.state
 
     const body = {
       hex: hex,
       makeup_id: makeup_id,
       alpha: alpha,
-      ver: ver
+      ver: ver,
+      company_id: companyid
     }
 
     this.setState({ isLoading: true });

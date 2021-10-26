@@ -46,6 +46,7 @@ class Login extends Component {
         localStorage.setItem('user', JSON.stringify({ username: this.state.username,
           password: this.state.password, company_id: res.data.data.data.Company_Id, sale_id: res.data.data.data._id }));
         localStorage.setItem('auth', 'abv');
+        localStorage.setItem('company_id', token.company_id);
         localStorage.setItem('role', token.role);
         localStorage.setItem('token', res.data.data.token);
 

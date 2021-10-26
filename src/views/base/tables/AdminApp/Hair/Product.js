@@ -106,6 +106,7 @@ class ProductHair extends Component {
       modalDelete: false,
       delete: null,
       auth: localStorage.getItem('auth'),
+      companyid: localStorage.getItem('company_id'),
       colors: [],
       color: null,
       arrPagination: [],
@@ -117,10 +118,11 @@ class ProductHair extends Component {
   }
 
   getData = async () => {
+    const { companyid } = this.state
     this.setState({ isLoading: true });
 
     const res = await API_CONNECT(
-      ConstantApp.GET_LIST_HAIR, { }, "", "GET")
+      `${ConstantApp.GET_LIST_HAIR}?company_id=${companyid}`, { }, "", "GET")
 
     var val = res.data
 
@@ -197,7 +199,7 @@ class ProductHair extends Component {
   };
 
   createProduct = async () => {
-    const { title, image, url, type, brand, color } = this.state;
+    const { title, image, url, type, brand, color, companyid } = this.state;
     if (
       title == "" ||
       image == "" ||
@@ -215,7 +217,8 @@ class ProductHair extends Component {
       name: title,
       href: url,
       image: image,
-      color_id: color.value
+      color_id: color.value,
+      company_id: companyid
     };
 
     this.setState({ isLoading: true });
