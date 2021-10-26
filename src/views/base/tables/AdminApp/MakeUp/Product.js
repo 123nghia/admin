@@ -132,7 +132,7 @@ class Product extends Component {
     if (this.state.colors.length == 0) {
 
       const color = await API_CONNECT(
-        ConstantApp.GET_LIST_COLOR, { }, "", "GET")
+        `${ConstantApp.GET_LIST_COLOR}?company_id=${companyid}`, { }, "", "GET")
 
       let c = []
       color.data.map(val => {
@@ -148,7 +148,7 @@ class Product extends Component {
     if (this.state.brands.length == 0) {
 
       const brand = await API_CONNECT(
-        ConstantApp.GET_LIST_BRAND, { }, "", "GET")
+        `${ConstantApp.GET_LIST_BRAND}?company_id=${companyid}`, { }, "", "GET")
 
       this.setState({ brands: brand.data });
     }
@@ -156,7 +156,7 @@ class Product extends Component {
     if (this.state.types.length == 0) {
 
       const type = await API_CONNECT(
-        ConstantApp.GET_LIST_TYPE, { }, "", "GET")
+        `${ConstantApp.GET_LIST_TYPE}?company_id=${companyid}`, { }, "", "GET")
 
       this.setState({ types: type.data });
     }
