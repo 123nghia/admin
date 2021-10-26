@@ -83,6 +83,7 @@ export default {
   "DELETE_KEY" : "/api/delete-key",
 
   "LIST_COMPANY" : "/api/list-company",
+  "UPLOAD_COMPANY": "/api/upload-company",
   "LIST_COMPANY_WITH_ID" : "/api/list-company?id=",
   "ADD_COMPANY" : "/api/add-company",
   "UPDATE_COMPANY" : "/api/update-company",

@@ -8,7 +8,6 @@ import {
   Row,
   Button, Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
-  Alert
 } from 'reactstrap';
 
 import {
@@ -21,11 +20,8 @@ import Constants from "./../../../contants/contants";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import axios from 'axios'
 import Pagination from '@material-ui/lab/Pagination';
+import API_CONNECT from "../../../helpers/callAPI";
 
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
 class Company extends Component {
   constructor(props) {
     super(props);
@@ -36,14 +32,11 @@ class Company extends Component {
       Password: "",
       keyDateCreate: new Date(),
       keyStatus: '',
-
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-
-
       updated: '',
       dataApi: [],
       action: 'new',
@@ -55,6 +48,9 @@ class Company extends Component {
       Website: '',
       Code: '',
       Status: '',
+      image: "",
+      image_show: "",
+      image_update: "",
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -117,15 +113,15 @@ class Company extends Component {
   }
 
   searchKey() {
-    const { indexPage, key  } = this.state;
+    const { indexPage, key } = this.state;
     // this.setState({ key: key })
 
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
         if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-            val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
+          val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
 
           d.push(val)
         }
@@ -166,8 +162,21 @@ class Company extends Component {
         Code: '',
         Status: '',
         username: '',
-        password: ''
+        password: '',
+        image: '',
+        image_show: '',
+        image_update: ""
       })
+    }
+  }
+
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ image: files[0], image_update: files[0] })
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image_show: e.target.result })
     }
   }
 
@@ -176,7 +185,7 @@ class Company extends Component {
   }
 
   async addCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password } = this.state
+    const { Email, Name, Phone, Fax, Address, Website, Code, UserName, Password, image } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -188,6 +197,11 @@ class Company extends Component {
       return
     }
 
+    const form = new FormData();
+    form.append("image", image);
+
+    await API_CONNECT(Constants.UPLOAD_COMPANY, form, "", "POST")
+
     const body = {
       Name: Name,
       Email: Email,
@@ -195,7 +209,8 @@ class Company extends Component {
       Fax: Fax,
       Address: Address,
       Website: Website,
-      Code: Code
+      Code: Code,
+      Image: image.name,
     }
 
     this.setState({ isLoading: true });
@@ -248,13 +263,16 @@ class Company extends Component {
       Address: item.Address,
       Website: item.Website,
       Code: item._id,
+      image: item.Logo,
+      image_show: "",
+      image_update: "",
       id: item['_id'],
       Status: item.Status
     })
   }
 
   async updateCompany() {
-    const { Email, Name, Phone, Fax, Address, Website, Code, Status } = this.state
+    const { Email, Name, Phone, Fax, Address, Website, image, image_update, Status } = this.state
 
     if (Email == null || Email == ''
       || Name == null || Name == ''
@@ -264,11 +282,19 @@ class Company extends Component {
       return
     }
 
+    if (image_update != "") {
+      const form = new FormData();
+      form.append("image", image_update);
+
+      await API_CONNECT(Constants.UPLOAD_COMPANY, form, "", "POST")
+    }
+
     const body = {
       Name: Name,
       Email: Email,
       Phone: Phone,
       Fax: Fax,
+      Image: image_update == "" ? image : image_update.name,
       Address: Address,
       Website: Website,
       Code: this.state.id,
@@ -331,20 +357,6 @@ class Company extends Component {
     }
   }
 
-  toggle(action = '') {
-    this.setState({
-      modal: !this.state.modal,
-      image: '',
-      url: '',
-      isActive: false,
-      isLoading: false,
-      errors: {},
-      action,
-      position: 1,
-      data: [],
-      updated: '',
-    });
-  }
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -395,25 +407,8 @@ class Company extends Component {
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
-                          {/* <CCol sm="6" lg="2">
-                            <CInput type="date" onChange={e => {
-                              this.actionSearch(e, "keyDateCreate");
-                            }} value={keyDateCreate} placeholder="Create Date" />
-                          </CCol> */}
                           <CCol sm="12" lg="4">
-                            {/* <CSelect style={styles.flexOption} onChange={e => {
 
-                              this.actionSearch(e, "keyStatus");
-
-                            }} custom>
-                              {
-                                ['Actived', 'Deactived', 'Locked'].map((item, i) => {
-                                  return (
-                                    <option value={item}>{item}</option>
-                                  );
-                                })
-                              }
-                            </CSelect> */}
                           </CCol>
                           <CCol sm="12" lg="4">
                             <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
@@ -474,119 +469,95 @@ class Company extends Component {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
-
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
+          <Modal size='xl' isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="Email"
-                label="Email"
-                value={this.state.Email}
-                type={"email"}
-                placeholder={"Emal"}
-                // error={errors.title}
-                onChange={e => this.onChange("Email", e.target.value)}
-              // rows="5"
-              />
-              <TextFieldGroup
-                field="Name"
-                label="Tên công ty"
-                value={this.state.Name}
-                placeholder={"Tên công ty"}
-                // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
-              />
+              <CRow>
+                <CCol sm="12" lg="6">
+                  <TextFieldGroup
+                    field="Email"
+                    label="Email"
+                    value={this.state.Email}
+                    type={"email"}
+                    placeholder={"Email"}
+                    onChange={e => this.onChange("Email", e.target.value)}
+                  />
 
-              <TextFieldGroup
-                field="UserName"
-                label="Tên đăng nhập"
-                value={this.state.UserName}
-                placeholder={"Tên đăng nhập"}
-                // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="Name"
+                    label="Tên công ty"
+                    value={this.state.Name}
+                    placeholder={"Tên công ty"}
+                    onChange={e => this.onChange("Name", e.target.value)}
+                  />
 
-              <TextFieldGroup
-                field="Password"
-                label="Mật khẩu"
-                type={"password"}
-                value={this.state.Password}
-                placeholder={"Mật khẩu"}
-                // error={errors.title}
-                onChange={e => this.onChange("Password", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="UserName"
+                    label="Tên đăng nhập"
+                    value={this.state.UserName}
+                    placeholder={"Tên đăng nhập"}
+                    onChange={e => this.onChange("UserName", e.target.value)}
+                  />
 
-              <TextFieldGroup
-                field="Phone"
-                label="Số điện thoại"
-                value={this.state.Phone}
-                placeholder={"Số điện thoại"}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="Password"
+                    label="Mật khẩu"
+                    type={"password"}
+                    value={this.state.Password}
+                    placeholder={"Mật khẩu"}
+                    onChange={e => this.onChange("Password", e.target.value)}
+                  />
 
-              <TextFieldGroup
-                field="Fax"
-                label="Fax"
-                value={this.state.Fax}
-                placeholder={"Fax"}
-                // error={errors.title}
-                onChange={e => this.onChange("Fax", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="Phone"
+                    label="Số điện thoại"
+                    value={this.state.Phone}
+                    placeholder={"Số điện thoại"}
+                    onChange={e => this.onChange("Phone", e.target.value)}
+                  />
 
-              <TextFieldGroup
-                field="Address"
-                label="Địa chỉ"
-                value={this.state.Address}
-                placeholder={"Địa chỉ"}
-                // error={errors.title}
-                onChange={e => this.onChange("Address", e.target.value)}
-              // rows="5"
-              />
+                  <TextFieldGroup
+                    field="Fax"
+                    label="Fax"
+                    value={this.state.Fax}
+                    placeholder={"Fax"}
+                    onChange={e => this.onChange("Fax", e.target.value)}
+                  />
 
-              <TextFieldGroup
-                field="Website"
-                label="Website"
-                value={this.state.Website}
-                placeholder={"Website"}
-                // error={errors.title}
-                onChange={e => this.onChange("Website", e.target.value)}
-              // rows="5"
-              />
-              {/* {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Status    </label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'Actived'}>Actived</option>
-                    <option value={'Locked'}>Locked</option>
-                    <option value={'Deactived'}>Deactived</option>
-                  </select>
-                </div>
-              } */}
+                  <TextFieldGroup
+                    field="Address"
+                    label="Địa chỉ"
+                    value={this.state.Address}
+                    placeholder={"Địa chỉ"}
+                    onChange={e => this.onChange("Address", e.target.value)}
+                  />
+
+                  <TextFieldGroup
+                    field="Website"
+                    label="Website"
+                    value={this.state.Website}
+                    placeholder={"Website"}
+                    onChange={e => this.onChange("Website", e.target.value)}
+                  />
+                </CCol>
+                <CCol sm="12" lg="6">
+                  <TextFieldGroup
+                    field="image"
+                    label="Ảnh thương hiệu"
+                    type={"file"}
+                    onChange={e => { this.onChangeImage(e) }}
+                    onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
+                  />
+                  {
+                    this.state.image == "" ? "" :
+                      <img width="250" height="300" src={
+                        this.state.image_show == "" ? `${Constants.BASE_URL}/public/logo_company/${this.state.image}` : this.state.image_show} style={{ marginBottom: 20 }} />
+                  }
+                </CCol>
+              </CRow>
 
             </ModalBody>
 

@@ -27,24 +27,17 @@ import API_CONNECT from "../../../helpers/callAPI";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
 class Brand extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       key: '',
-
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-
-
       updated: '',
       dataApi: [],
       action: 'new',
