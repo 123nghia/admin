@@ -6,7 +6,6 @@ import {
   CardHeader,
   Col,
   Row,
-  Table,
   Button,
   Modal,
   ModalHeader,
@@ -14,14 +13,10 @@ import {
   ModalFooter,
   Form,
   FormGroup,
-  Label,
   Input,
 } from "reactstrap";
 import "moment-timezone";
-import CIcon from '@coreui/icons-react'
-import {
-  CButton
-} from '@coreui/react'
+
 import TextArea from "../../../../Common/TextArea";
 import validateInput from "./../../../../../functions/news";
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
@@ -63,28 +58,26 @@ class News extends Component {
       linkdetail: "",
       level: "K1",
       sdktype: "1",
-      companyid: "",
       sdkItem: [],
       currentSdkSelect: "",
       currentItemSelect: null,
       idSDK: window.location.hash.split('/')[window.location.hash.split('/').length - 1],
-      hidden: false
+      hidden: false,
+      role: localStorage.getItem('role'),
+      companyid: localStorage.getItem('company_id'),
     };
   }
   async componentDidMount() {
     this.loadData();
   }
   loadData = () => {
-    const page = this.state.activePage || 1;
-    const limit = this.state.itemPerPage || 200;
-    const key = this.state.key || "";
-    console.log("key", key);
+    const { activePage = 1, itemPerPage = 200, key = "", idSDK, companyid } = this.state;
     const fetchData = {
       method: "GET",
     };
-    // fetch(global.BASE_URL + "/news?limit=" + limit + "&page=" + page, fetchData)
+
     fetch(
-      BASE_URL + "/itemSdk/suggest?limit=" + limit + "&page=" + page + "&key=" + key + "&sdk_type=" + this.state.idSDK,
+      `${BASE_URL}/itemSdk/suggest?limit=${itemPerPage}&page=${activePage}&key=${key}&sdk_type=${idSDK}&companyid=${companyid}`,
       fetchData
     )
       .then((cards) => {
@@ -254,29 +247,28 @@ class News extends Component {
   }
 
   updateApp = () => {
-    console.log("this.state", this.state);
+    const { name, image, title, description, linkdetail, level, sdktype, action, updateId, companyid } = this.state;
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      const id = this.state.updateId;
       // process utc time
       // end process utc time
       const body = {
-        name: this.state.name.trim() || "",
-        image: this.state.image.trim() || "",
-        title: this.state.title.trim() || "",
-        description: this.state.description.trim() || "",
-        linkdetail: this.state.linkdetail.trim() || "",
-        level: this.state.level || "",
-        sdktype: this.state.sdktype || "",
-        companyid: this.state.companyid || "",
+        name: name.trim() || "",
+        image: image.trim() || "",
+        title: title.trim() || "",
+        description: description.trim() || "",
+        linkdetail: linkdetail.trim() || "",
+        level: level || "",
+        sdktype: sdktype || "",
+        companyid: companyid,
       };
-      if (this.state.action === "update") {
+      if (action === "update") {
         const fetchData = {
           method: "PUT",
           headers: headers,
           body: JSON.stringify(body),
         };
-        fetch(BASE_URL + `/itemSdk/${id}`, fetchData)
+        fetch(BASE_URL + `/itemSdk/${updateId}`, fetchData)
           .then(async () => {
             this.cancelCreate();
             this.loadData();

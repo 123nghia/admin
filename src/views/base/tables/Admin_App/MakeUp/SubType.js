@@ -11,8 +11,6 @@ import {
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
   CButton,
   CRow, CCol
 } from '@coreui/react'
@@ -22,7 +20,6 @@ import 'moment-timezone';
 import ConstantApp from "../../../../../contants/contants_app";
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
 import { css } from "@emotion/react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DotLoader from "react-spinners/DotLoader";
 import API_CONNECT from "../../../../../functions/callAPI_APP";
@@ -36,15 +33,7 @@ class SubType extends Component {
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: { },
-      communities: [],
-      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
@@ -57,8 +46,7 @@ class SubType extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      type: localStorage.getItem('type'),
-      user: localStorage.getItem('user'),
+      companyid: localStorage.getItem('company_id'),
       isLoading: false
     };
   }
@@ -97,16 +85,18 @@ class SubType extends Component {
   }
 
   getData = async () => {
+    const { companyid } = this.state;
     this.setState({ isLoading: true });
 
     const res_brand = await API_CONNECT(
-      ConstantApp.GET_LIST_TYPE, { }, "", "GET")
+      `${ConstantApp.GET_LIST_TYPE}?company_id=${companyid}`, {}, "", "GET")
 
     let val = res_brand.data;
 
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false })
   }
+
 
   async toggleModal(key) {
     if (key == 'new') {
@@ -143,7 +133,7 @@ class SubType extends Component {
   }
 
   async addType() {
-    const { vi, image } = this.state
+    const { vi, image, companyid } = this.state
 
     if (image == null || image == ''
       || vi == null || vi == '') {
@@ -153,7 +143,8 @@ class SubType extends Component {
 
     const body = {
       vi: vi,
-      image: image
+      image: image,
+      company_id: companyid
     }
 
     this.setState({ isLoading: true });

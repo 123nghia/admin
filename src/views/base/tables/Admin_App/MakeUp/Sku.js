@@ -12,15 +12,14 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Form,
-  Input,
+  Form
 } from "reactstrap";
 import "moment-timezone";
+
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
 import ConstantApp from "../../../../../contants/contants_app";
 import API_CONNECT from "../../../../../functions/callAPI_APP";
 import Pagination from '@material-ui/lab/Pagination';
-import axios from "axios";
 import chroma from 'chroma-js';
 import Select from 'react-select';
 import CIcon from '@coreui/icons-react'
@@ -85,7 +84,7 @@ const colourStyles = {
   singleValue: (styles, { data }) => ({ ...styles, ...dot(data.hex) }),
 };
 
-class Cards extends Component {
+class Product extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -109,6 +108,7 @@ class Cards extends Component {
       modalDelete: false,
       delete: null,
       auth: localStorage.getItem('auth'),
+      companyid: localStorage.getItem('company_id'),
       colors: [],
       color: null,
       arrPagination: [],
@@ -116,34 +116,15 @@ class Cards extends Component {
     };
   }
   async componentDidMount() {
-    // const fetchData = {
-    //   method: 'GET',
-    //   headers: headers
-    // };
-
-    //   fetch(global.BASE_URL + '/admin/browser-links', fetchData).then( cards => {
-    //       cards.json().then(result => {
-    //           this.setState({
-    //               data: result.data
-    //           });
-    //       })
-    //   }).catch(console.log);
-    // fetch(global.BASE_URL + '/admin/browser-link-categories', fetchData).then( cards => {
-    //   cards.json().then(result => {
-    //     this.setState({
-    //         categories: result.data
-    //     });
-    //   })
-    // }).catch(console.log);
-
     this.getData();
   }
 
   getData = async () => {
+    const { companyid } = this.state;
     this.setState({ isLoading: true });
 
     const res = await API_CONNECT(
-      ConstantApp.GET_LIST_PRODUCT, { }, "", "GET")
+      `${ConstantApp.GET_LIST_PRODUCT}?company_id=${companyid}`, { }, "", "GET")
 
     var val = res.data
 
@@ -168,7 +149,7 @@ class Cards extends Component {
     if (this.state.brands.length == 0) {
 
       const brand = await API_CONNECT(
-        ConstantApp.GET_LIST_BRAND, { }, "", "GET")
+        `${ConstantApp.GET_LIST_BRAND}?company_id=${companyid}`, { }, "", "GET")
 
       this.setState({ brands: brand.data });
     }
@@ -176,7 +157,7 @@ class Cards extends Component {
     if (this.state.types.length == 0) {
 
       const type = await API_CONNECT(
-        ConstantApp.GET_LIST_TYPE, { }, "", "GET")
+        `${ConstantApp.GET_LIST_TYPE}?company_id=${companyid}`, { }, "", "GET")
 
       this.setState({ types: type.data });
     }
@@ -222,7 +203,7 @@ class Cards extends Component {
   };
 
   createProduct = async () => {
-    const { title, image, url, type, brand, color } = this.state;
+    const { title, image, url, type, brand, color, companyid } = this.state;
     if (
       title == "" ||
       image == "" ||
@@ -240,6 +221,7 @@ class Cards extends Component {
       name: title,
       href: url,
       image: image,
+      company_id: companyid,
       color_id: color.value
     };
 
@@ -871,4 +853,4 @@ const styles = {
   },
 };
 
-export default Cards;
+export default Product;

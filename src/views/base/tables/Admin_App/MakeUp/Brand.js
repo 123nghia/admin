@@ -11,8 +11,6 @@ import {
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
   CButton,
   CRow, CCol
 } from '@coreui/react'
@@ -22,7 +20,6 @@ import 'moment-timezone';
 import ConstantApp from "../../../../../contants/contants_app";
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
 import { css } from "@emotion/react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DotLoader from "react-spinners/DotLoader";
 import API_CONNECT from "../../../../../functions/callAPI_APP";
@@ -37,14 +34,7 @@ class BrandApp extends Component {
       data: [],
       key: '',
       activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: { },
-      communities: [],
-      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
@@ -57,8 +47,7 @@ class BrandApp extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      type: localStorage.getItem('type'),
-      user: localStorage.getItem('user'),
+      companyid: localStorage.getItem('company_id'),
       isLoading: false
     };
   }
@@ -97,10 +86,12 @@ class BrandApp extends Component {
   }
 
   getData = async () => {
+    const { companyid } = this.state;
+    console.log(companyid)
     this.setState({ isLoading: true });
 
     const res_brand = await API_CONNECT(
-      ConstantApp.GET_LIST_BRAND, { }, "", "GET")
+      `${ConstantApp.GET_LIST_BRAND}?company_id=${companyid}`, { }, "", "GET")
 
     let val = res_brand.data;
 
@@ -143,7 +134,7 @@ class BrandApp extends Component {
   }
 
   async addBrand() {
-    const { name, image } = this.state
+    const { name, image, companyid } = this.state
 
     if (image == null || image == ''
       || name == null || name == '') {
@@ -153,7 +144,8 @@ class BrandApp extends Component {
 
     const body = {
       name: name,
-      image: image
+      image: image,
+      company_id: companyid
     }
 
     this.setState({ isLoading: true });

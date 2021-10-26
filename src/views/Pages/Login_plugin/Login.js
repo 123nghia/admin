@@ -65,15 +65,16 @@ class Login extends Component {
         }));
         localStorage.setItem('auth', 'abv');
         localStorage.setItem('role', token.role);
+        localStorage.setItem('company_id', token.company_id);
         localStorage.setItem('type', token.type);
         localStorage.setItem('token', res.data.data.token);
 
         if (token.type == '0') {
           localStorage.setItem('isAD', "0");
-          this.props.history.push('/suggest/K1')
+          this.props.history.push('/suggest/K5')
         } else {
           localStorage.setItem('isAD', "1");
-          this.props.history.push('/suggest/K1')
+          this.props.history.push('/suggest/K5')
         }
       } else {
         console.log(this.state.username)

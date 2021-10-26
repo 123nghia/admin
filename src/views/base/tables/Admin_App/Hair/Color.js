@@ -11,8 +11,6 @@ import {
 } from 'reactstrap';
 
 import {
-  CLabel,
-  CSelect,
   CButton,
   CRow, CCol
 } from '@coreui/react'
@@ -22,7 +20,6 @@ import 'moment-timezone';
 import ConstantApp from "../../../../../contants/contants_app";
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
 import { css } from "@emotion/react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DotLoader from "react-spinners/DotLoader";
 import API_CONNECT from "../../../../../functions/callAPI_APP";
@@ -36,15 +33,7 @@ class Color extends Component {
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: { },
-      communities: [],
-      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
@@ -59,8 +48,7 @@ class Color extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      type: localStorage.getItem('type'),
-      user: localStorage.getItem('user'),
+      companyid: localStorage.getItem('company_id'),
       isLoading: false
     };
   }
@@ -99,10 +87,11 @@ class Color extends Component {
   }
 
   getData = async () => {
+    const { companyid } = this.state;
     this.setState({ isLoading: true });
 
     const res_brand = await API_CONNECT(
-      ConstantApp.GET_LIST_HAIR_COLOR, { }, "", "GET")
+      `${ConstantApp.GET_LIST_HAIR_COLOR}?company_id=${companyid}`, { }, "", "GET")
 
     let val = res_brand.data;
 
@@ -144,14 +133,15 @@ class Color extends Component {
     return `${newD}-${newM}-${y}`
   }
 
-  async addType() {
-    const { hex, makeup_id, alpha, ver } = this.state
+  async addColor() {
+    const { hex, makeup_id, alpha, ver, companyid } = this.state
 
     const body = {
       hex: hex,
       makeup_id: makeup_id,
       alpha: alpha,
-      ver: ver
+      ver: ver,
+      company_id: companyid
     }
 
     this.setState({ isLoading: true });
@@ -394,7 +384,7 @@ class Color extends Component {
               />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addType() : this.updateBrand() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addColor() : this.updateBrand() }} disabled={this.state.isLoading}>Save</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
             </ModalFooter>
           </Modal>
