@@ -30,6 +30,7 @@ export default {
   "UPLOAD_PRODUCT_MULTIPLE": "/api/upload_product_multiple",
 
   "LIST_ORDER": "/api/list_order",
+  "GET_DETAIL_TRANSPORT": "/api/get_detail_transport",
   "LIST_ORDER_DETAIL": "/api/list_order_detail",
   "LIST_ORDER_BY_USER": "/api/list_order_by_user",
   "ADD_ORDER": "/api/add_order",
