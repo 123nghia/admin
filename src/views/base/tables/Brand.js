@@ -176,8 +176,7 @@ class Brand extends Component {
   async addBrand() {
     const { name, image, shop_id } = this.state
 
-    if (name == null || name == ''
-      || shop_id == null || shop_id == '') {
+    if (name == null || name == '') {
       alert("Vui lòng nhập đầy đủ tất cả trường !!!");
       return
     }
@@ -253,8 +252,7 @@ class Brand extends Component {
   async updateBrand() {
     const { name, shop_id, image, image_update } = this.state
 
-    if (name == null || name == ''
-      || shop_id == null || shop_id == '') {
+    if (name == null || name == '') {
       alert("Vui lòng nhập đầy đủ tất cả các trường !!!");
       return
     }
