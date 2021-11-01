@@ -216,7 +216,7 @@ class Product extends Component {
         return
       } else {
         for (let y = 0; y < arrAllProductChoosed[i].length; y++) {
-          if (arrAllProductChoosed[i][y].total_deal == undefined) {
+          if (arrAllProductChoosed[i][y].total_deal == undefined || arrAllProductChoosed[i][y].total_deal == 0) {
             alert(`Sản phẩm thứ ${y + 1} trong banner thứ ${i + 1} chưa thiết lập số lượng deal !!!`);
             return
           } else {
@@ -289,8 +289,8 @@ class Product extends Component {
       }
 
       arrCategoryOnUpdate.push({
-        "category_id": dataCategory[i].category_id._id,
-        "brand_id": dataCategory[i].brand_id == undefined ? "" : dataCategory[i].brand_id._id,
+        //"category_id": dataCategory[i].category_id._id,
+        "brand_id": dataCategory[i].brand_id._id,
         "product": arrProductOnUpdate
       })
     }
@@ -351,8 +351,8 @@ class Product extends Component {
       }
 
       arrCategoryOnUpdate.push({
-        "category_id": arrUpdate[i].category_id._id,
-        "brand_id": arrUpdate[i].brand_id == undefined ? "" : arrUpdate[i].brand_id._id,
+        //"category_id": arrUpdate[i].category_id._id,
+        "brand_id": arrUpdate[i].brand_id._id,
         "product": arrProductOnUpdate
       })
     }
@@ -464,6 +464,7 @@ class Product extends Component {
     const { arrCategory, arrAllProductOfAllCategory, arrAllProductOfAllCategory_Temp, arrAllProductChoosed, arrChooseCategory } = this.state;
     arrCategory.push({
       category_id: "",
+      brand_id: "",
       product: []
     })
     arrAllProductOfAllCategory.push([])
@@ -968,10 +969,10 @@ class Product extends Component {
                                   <CardBody>
                                     <CRow style={{ margin: 20 }}>
                                       <CCol md="3" lg="3" sm="12" xm="12" lx="3">
-                                        <CLabel style={{ fontWeight: 900 }}>Tên danh mục: </CLabel>
+                                        <CLabel style={{ fontWeight: 900 }}>Tên thương hiệu: </CLabel>
                                       </CCol>
                                       <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                                        {item.category_id.name}
+                                        {item.brand_id.name}
                                       </CCol>
                                     </CRow>
                                     {
@@ -1064,11 +1065,11 @@ class Product extends Component {
                             <CButton block color="link" className="text-left m-0 p-0"
                               onClick={() => { this.setState({ accordion: accordion == i ? null : i }) }}
                             >
-                              <h5 className="m-0 p-0">Danh mục {item.category_id.name}</h5>
+                              <h5 className="m-0 p-0">Thương hiệu {item.brand_id.name}</h5>
                             </CButton>
                           </CCol>
                           <CCol sm="12" lg="8">
-                            <img src={`${Constants.BASE_URL}/public/image_category/${item.category_id.image}`} width={"300px"} height={"150px"} />
+                            <img src={`${Constants.BASE_URL}/public/image_brand/${item.brand_id.image}`} width={"300px"} height={"150px"} />
                           </CCol>
                         </CRow>
                       </CCardHeader>
@@ -1076,29 +1077,26 @@ class Product extends Component {
                         <CCardBody>
                           <CDataTable
                             items={item.product}
-                            fields={['Tên sản phẩm', 'Hình ảnh', 'Thương hiệu', 'Số lượng Sale', 'Giá']}
+                            fields={['Tên sản phẩm', 'Hình ảnh', 'Số lượng deal', 'Giá']}
                             itemsPerPage={3}
                             pagination
                             size="sm"
                             scopedSlots={{
                               'Tên sản phẩm': (item) => (
-                                <td>{item.name}</td>)
+                                <td>{item.product_id.name}</td>)
                               , 'Hình ảnh': (item) => (
                                 <td>
                                   {
-                                    <img src={item.image == "" || item.image == null ?
+                                    <img src={item.product_id.image == "" || item.product_id.image == null ?
                                       "https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg" :
-                                      `${Constants.BASE_URL}/public/image_product/${item.image}`} width={"60px"} height={"40px"} />
+                                      `${Constants.BASE_URL}/public/image_product/${item.product_id.image}`} width={"60px"} height={"40px"} />
                                   }
                                 </td>)
-                              , 'Thương hiệu': (item) => (
-                                <td>{item.brand_id.name}
-                                </td>)
-                              , 'Số lượng Sale': (item) => (
+                              , 'Số lượng deal': (item) => (
                                 <td>{item.total_deal}
                                 </td>)
                               , 'Giá': (item) => (
-                                <td>{item.price}</td>)
+                                <td>{item.product_id.price}</td>)
                             }}
                           />
                         </CCardBody>
