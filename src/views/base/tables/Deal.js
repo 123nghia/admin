@@ -211,13 +211,21 @@ class Product extends Component {
     }
 
     for (let i = 0; i < arrCategory.length; i++) {
-      if (arrCategory[i].category_id == "" || arrAllProductChoosed[i].length == 0) {
-        alert(`Trong phần thiết lập banner, banner thứ ${i + 1} chưa chọn bất kì danh mục hoặc sản phẩm nào !!!`);
+      if (arrCategory[i].brand_id == "" || arrAllProductChoosed[i].length == 0) {
+        alert(`Trong phần thiết lập banner, banner thứ ${i + 1} chưa chọn bất kì thương hiệu hoặc sản phẩm nào !!!`);
         return
       } else {
-        arrCategory[i].product = arrAllProductChoosed[i]
+        for (let y = 0; y < arrAllProductChoosed[i].length; y++) {
+          if (arrAllProductChoosed[i][y].total_deal == undefined) {
+            alert(`Sản phẩm thứ ${y + 1} trong banner thứ ${i + 1} chưa thiết lập số lượng deal !!!`);
+            return
+          } else {
+            arrCategory[i].product = arrAllProductChoosed[i]
+          }
+        }
       }
     }
+
 
     if (name == null || name == '' ||
       image == null || image == '') {
@@ -264,6 +272,7 @@ class Product extends Component {
     const { token, arrOptionCategory, arrRemoveOnUpdate } = this.state;
     const arrCategoryOnUpdate = []
     const arrProductOnUpdate = []
+
     for (let i = 0; i < arrRemoveOnUpdate.length; i++) {
       item.category.push(arrRemoveOnUpdate[i])
     }
@@ -281,6 +290,7 @@ class Product extends Component {
 
       arrCategoryOnUpdate.push({
         "category_id": dataCategory[i].category_id._id,
+        "brand_id": dataCategory[i].brand_id == undefined ? "" : dataCategory[i].brand_id._id,
         "product": arrProductOnUpdate
       })
     }
@@ -342,9 +352,11 @@ class Product extends Component {
 
       arrCategoryOnUpdate.push({
         "category_id": arrUpdate[i].category_id._id,
+        "brand_id": arrUpdate[i].brand_id == undefined ? "" : arrUpdate[i].brand_id._id,
         "product": arrProductOnUpdate
       })
     }
+
     const form = new FormData();
     form.append("image", image);
 
@@ -422,7 +434,8 @@ class Product extends Component {
     }, "", "POST")
 
     let data = res.data;
-    arrCategory[i].category_id = e.value;
+    arrCategory[i].category_id = "";
+    arrCategory[i].brand_id = e.value;
     arrAllProductOfAllCategory[i] = data
     arrAllProductOfAllCategory_Temp[i] = new Array()
     arrAllProductChoosed[i] = new Array()
@@ -936,10 +949,7 @@ class Product extends Component {
                             </h3>
                           </CCol>
                           <CCol md="7" lg="7" sm="12" xm="12" lx="7">
-                            {/* <CButton block active variant="ghost" color="success" aria-pressed="true"
-                              onClick={() => { }}>
-                              Thêm sản phẩm
-                            </CButton> */}
+
                           </CCol>
                         </CRow>
                         <div style={{ marginTop: 15 }}>
@@ -949,11 +959,11 @@ class Product extends Component {
                               return (
                                 <Card style={{ margin: 20 }}>
                                   <CardHeader style={{ backgroundColor: '#339966' }}>
-                                    <CButton color="danger" style={{ float: 'right' }} onClick={() => {
+                                    {/* <CButton color="danger" style={{ float: 'right' }} onClick={() => {
                                       arrRemoveOnUpdate.push(arrUpdate[idCategory])
                                       arrUpdate.splice(idCategory, 1);
                                       this.setState({ arrUpdate: arrUpdate, arrRemoveOnUpdate: arrRemoveOnUpdate });
-                                    }}>X</CButton>
+                                    }}>X</CButton> */}
                                   </CardHeader>
                                   <CardBody>
                                     <CRow style={{ margin: 20 }}>
@@ -962,14 +972,6 @@ class Product extends Component {
                                       </CCol>
                                       <CCol md="9" lg="9" sm="12" xm="12" lx="9">
                                         {item.category_id.name}
-                                        {/* <CreatableSelect
-                                          isClearable
-                                          value={arrOptionCategory.find(val => val.value == item.category_id)}
-                                          onChange={(e) => {
-                                            this.handleUpdateCategory(e, i)
-                                          }}
-                                          options={arrOptionCategory}
-                                        /> */}
                                       </CCol>
                                     </CRow>
                                     {
@@ -989,13 +991,6 @@ class Product extends Component {
                                                           custom
                                                           id={`${item_product._id}`}
                                                           defaultChecked
-                                                        // onClick={(e) => {
-                                                        //   if (e.target.checked) {
-
-                                                        //   } else {
-
-                                                        //   }
-                                                        // }}
                                                         />
                                                         <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
 
