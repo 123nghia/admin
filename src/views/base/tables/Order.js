@@ -119,12 +119,33 @@ class Order extends Component {
     var res = await API_CONNECT(Constants.LIST_ORDER_DETAIL, { id: id }, "", "POST")
     let data = res.data.list_product;
     let transport = res.data.order_id.transport_id;
-    var resDetailTransport = this.state.objTransport;
+    var resDetailTransport = {
+      fee: 0,
+      insurance_fee: 0,
+      label: "",
+      status_id: 0
+    };
+
     if (transport != undefined) {
       resDetailTransport = await API_CONNECT(Constants.GET_DETAIL_TRANSPORT + "?id=" + transport, {}, "", "GET")
+      resDetailTransport = resDetailTransport.data.res_order
     }
 
-    this.setState({ dataDetail: data, objOrder: res.data.order_id, objTransport: resDetailTransport.data.res_order, name_customer: name })
+    console.log({
+      area: 2,
+      estimated_deliver_time: "Sáng 2021-10-29",
+      estimated_pick_time: "Chiều 2021-10-28",
+      fee: 24650,
+      insurance_fee: 6650,
+      is_xfast: 0,
+      label: "S1788269.300062636",
+      partner_id: "617a4326f563bf1da5911eb5",
+      products: [],
+      sorting_code: "",
+      status_id: 1,
+      tracking_id: 300062636
+    })
+    this.setState({ dataDetail: data, objOrder: res.data.order_id, objTransport: resDetailTransport, name_customer: name })
   }
 
   onDetailOrder = async (label) => {
@@ -172,7 +193,7 @@ class Order extends Component {
         switch (status) {
           case "00":
             return "Thành công"
-          default: return "Thất bại"
+          default: return "Chưa xác nhận"
         }
         break
     }
@@ -274,7 +295,7 @@ class Order extends Component {
                                   </CButton>
 
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
-                                    this.onDetailOrder(item.transport_id.res_order.label)
+                                    //this.onDetailOrder(item.transport_id.res_order.label)
                                   }} >
                                     In đơn hàng
                                   </CButton>
