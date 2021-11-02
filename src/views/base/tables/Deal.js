@@ -289,7 +289,6 @@ class Product extends Component {
       }
 
       arrCategoryOnUpdate.push({
-        //"category_id": dataCategory[i].category_id._id,
         "brand_id": dataCategory[i].brand_id._id,
         "product": arrProductOnUpdate
       })
@@ -351,65 +350,65 @@ class Product extends Component {
       }
 
       arrCategoryOnUpdate.push({
-        //"category_id": arrUpdate[i].category_id._id,
         "brand_id": arrUpdate[i].brand_id._id,
         "product": arrProductOnUpdate
       })
     }
 
-    const form = new FormData();
-    form.append("image", image);
+    console.log(arrCategoryOnUpdate)
+  //   const form = new FormData();
+  //   form.append("image", image);
 
-    await API_CONNECT(Constants.UPLOAD_DEAL, form, "", "POST")
+  //   await API_CONNECT(Constants.UPLOAD_DEAL, form, "", "POST")
 
-    const body = {
-      name: name,
-      image: image.name,
-      category: arrCategoryOnUpdate,
-      type: type,
-      status: status,
-      voucher: voucher,
-      time_start: time_start,
-      time_finish: time_finish,
-      id: this.state.id,
-    }
+  //   const body = {
+  //     name: name,
+  //     image: image.name,
+  //     category: arrCategoryOnUpdate,
+  //     type: type,
+  //     status: status,
+  //     voucher: voucher,
+  //     time_start: time_start,
+  //     time_finish: time_finish,
+  //     id: this.state.id,
+  //   }
 
-    this.setState({ isLoading: true });
-    var res = await API_CONNECT(
-      Constants.UPDATE_DEAL, body, "", "POST")
+  //   this.setState({ isLoading: true });
+  //   var res = await API_CONNECT(
+  //     Constants.UPDATE_DEAL, body, "", "POST")
 
-    if (res.status == 200) {
+  //   if (res.status == 200) {
 
-      this.getData()
+  //     this.getData()
 
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert("Cập nhật thất bại");
-      this.setState({ isLoading: false });
-    }
-  }
+  //     this.setState({ modalCom: !this.state.modalCom })
+  //   } else {
+  //     alert("Cập nhật thất bại");
+  //     this.setState({ isLoading: false });
+  //   }
+  // }
 
-  openDelete = (item) => {
-    this.setState({
-      modalDelete: !this.state.modalDelete,
-      id: item._id
-    })
-  }
+  // openDelete = (item) => {
+  //   this.setState({
+  //     modalDelete: !this.state.modalDelete,
+  //     id: item._id
+  //   })
+  // }
 
-  async delete() {
-    this.setState({ isLoading: true });
-    var res = await API_CONNECT(
-      Constants.DELETE_DEAL, {
-      "id": this.state.id
-    }, "", "POST")
+  // async delete() {
+  //   this.setState({ isLoading: true });
+  //   var res = await API_CONNECT(
+  //     Constants.DELETE_DEAL, {
+  //     "id": this.state.id
+  //   }, "", "POST")
 
-    if (res.status == 200) {
-      this.getData()
-      this.setState({ modalDelete: !this.state.modalDelete, delete: null })
-    } else {
-      alert("Xoá thất bại");
-      this.setState({ isLoading: false });
-    }
+  //   if (res.status == 200) {
+  //     this.getData()
+  //     this.setState({ modalDelete: !this.state.modalDelete, delete: null })
+  //   } else {
+  //     alert("Xoá thất bại");
+  //     this.setState({ isLoading: false });
+  //   }
 
   }
 
@@ -434,12 +433,12 @@ class Product extends Component {
     }, "", "POST")
 
     let data = res.data;
-    arrCategory[i].category_id = "";
     arrCategory[i].brand_id = e.value;
     arrAllProductOfAllCategory[i] = data
     arrAllProductOfAllCategory_Temp[i] = new Array()
     arrAllProductChoosed[i] = new Array()
 
+    console.log(data)
     const found = arrOptionCategory.find(element => element.value == e.value);
     console.log(found)
     arrChooseCategory[i] = new Array();
@@ -463,7 +462,6 @@ class Product extends Component {
   pushCategory = () => {
     const { arrCategory, arrAllProductOfAllCategory, arrAllProductOfAllCategory_Temp, arrAllProductChoosed, arrChooseCategory } = this.state;
     arrCategory.push({
-      category_id: "",
       brand_id: "",
       product: []
     })
