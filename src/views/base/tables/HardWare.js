@@ -36,18 +36,19 @@ class PackageSale extends Component {
       keyEnd: '',
       keyStatus: '',
       keyCode: '',
-
       page: 1,
       itemsCount: 0,
       limit: 20,
       totalActive: 0,
       modalCom: false,
-
-
       updated: '',
       dataApi: [],
       action: 'new',
       Name: "",
+      HardWare_Name: "",
+      Call_Name: "",
+      Serial_Number: "",
+      UniqueID: "",
       Active_Date: new Date(),
       End_Date: new Date(),
       Status: "",
@@ -115,6 +116,7 @@ class PackageSale extends Component {
 
     let data = res.data.data
 
+    console.log(data)
     this.pagination(data);
     this.setState({ dataApi: data });
 
@@ -135,7 +137,8 @@ class PackageSale extends Component {
     if (key != '' || keyStatus != '') {
       let d = []
       this.state.dataApi.map(val => {
-        if (val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) &&
+        if ((val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+          val.Key.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
           val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase())) {
           d.push(val)
         }
@@ -188,6 +191,10 @@ class PackageSale extends Component {
         modalCom: !this.state.modalCom,
         action: key,
         Name: "",
+        HardWare_Name: "",
+        Call_Name: "",
+        Serial_Number: "",
+        UniqueID: "",
         Active_Date: new Date(),
         End_Date: new Date()
       })
@@ -199,15 +206,19 @@ class PackageSale extends Component {
   }
 
   async addHardWare() {
-    const { Name, Active_Date, End_Date } = this.state
+    const { Name, Active_Date, End_Date, HardWare_Name, Call_Name, Serial_Number, UniqueID } = this.state
 
-    if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
+    if (Name == null || Name == '' || UniqueID == null || UniqueID == '') {
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
     const body = {
       Name: Name,
+      HardWare_Name: HardWare_Name,
+      Call_Name: Call_Name,
+      Serial_Number: Serial_Number,
+      UniqueID: UniqueID,
       Active_Date: Active_Date,
       End_Date: End_Date
     }
@@ -234,6 +245,10 @@ class PackageSale extends Component {
       modalCom: !this.state.modalCom,
       action: "update",
       Name: item.Name,
+      HardWare_Name: item.HardWare_Name,
+      Call_Name: item.Call_Name,
+      Serial_Number: item.Serial_Number,
+      UniqueID: item.UniqueID,
       Active_Date: item.Active_Date,
       End_Date: item.End_Date,
       Status: item.Status,
@@ -243,15 +258,19 @@ class PackageSale extends Component {
   }
 
   async updateHardWare() {
-    const { Name, Active_Date, End_Date, Status } = this.state
+    const { Name, Active_Date, End_Date, HardWare_Name, Call_Name, Serial_Number, UniqueID, Status } = this.state
 
-    if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
+    if (Name == null || Name == '' || UniqueID == null || UniqueID == '') {
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
     const body = {
       Name: Name,
+      HardWare_Name: HardWare_Name,
+      Call_Name: Call_Name,
+      Serial_Number: Serial_Number,
+      UniqueID: UniqueID,
       Active_Date: Active_Date,
       End_Date: End_Date,
       id: this.state.id,
@@ -418,9 +437,39 @@ class PackageSale extends Component {
                 label="Tên phần cứng"
                 value={this.state.Name}
                 placeholder={"Tên phần cứng"}
-                // error={errors.title}
                 onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
+              />
+
+              <TextFieldGroup
+                field="HardWare_Name"
+                label="Tên thiết bị"
+                value={this.state.HardWare_Name}
+                placeholder={"Tên thiết bị"}
+                onChange={e => this.onChange("HardWare_Name", e.target.value)}
+              />
+
+              <TextFieldGroup
+                field="Call_Name"
+                label="Tên gọi"
+                value={this.state.Call_Name}
+                placeholder={"Tên gọi"}
+                onChange={e => this.onChange("Call_Name", e.target.value)}
+              />
+
+              <TextFieldGroup
+                field="Serial_Number"
+                label="Mã thiết bị"
+                value={this.state.Serial_Number}
+                placeholder={"Mã thiết bị"}
+                onChange={e => this.onChange("Serial_Number", e.target.value)}
+              />
+
+              <TextFieldGroup
+                field="UniqueID"
+                label="Mã Unique"
+                value={this.state.UniqueID}
+                placeholder={"Mã Unique"}
+                onChange={e => this.onChange("UniqueID", e.target.value)}
               />
 
               <div style={styles.datePicker}>
