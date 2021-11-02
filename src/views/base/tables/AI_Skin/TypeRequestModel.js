@@ -188,7 +188,7 @@ class TypeRequest extends Component {
 
     if (Value == null || Value == '' ||
       Description == null || Description == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -229,7 +229,7 @@ class TypeRequest extends Component {
     const { Value, Description, Status } = this.state
     if (Value == null || Value == '' ||
       Description == null || Description == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
 
     }

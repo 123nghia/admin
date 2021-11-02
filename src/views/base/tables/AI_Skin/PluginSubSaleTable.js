@@ -211,7 +211,7 @@ class User extends Component {
       || Address == null || Address == ''
       || UserName == null || UserName == ''
       || Password == null || Password == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -262,7 +262,7 @@ class User extends Component {
       || Name == null || Name == ''
       || Phone == null || Phone == ''
       || Address == null || Address == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

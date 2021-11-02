@@ -318,7 +318,7 @@ class Product extends Component {
       href == null || href == '' ||
       type_id == null || type_id == '' ||
       brand_id == null || brand_id == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -451,7 +451,7 @@ class Product extends Component {
       href == null || href == '' ||
       type_id == null || type_id == '' ||
       brand_id == null || brand_id == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

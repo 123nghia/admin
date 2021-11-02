@@ -138,7 +138,7 @@ class PackageSale extends Component {
 
         if (End_Date == null || End_Date == ''
             || Name == null || Name == '') {
-            alert("Please fill in all the requirements");
+            alert("Vui lòng nhập đầy đủ trường !!!");
             return
         }
 
@@ -183,7 +183,7 @@ class PackageSale extends Component {
 
         if (End_Date == null || End_Date == ''
             || Name == null || Name == '') {
-            alert("Please fill in all the requirements");
+            alert("Vui lòng nhập đầy đủ trường !!!");
             return
         }
 

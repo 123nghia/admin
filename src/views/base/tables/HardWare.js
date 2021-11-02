@@ -188,7 +188,7 @@ class PackageSale extends Component {
     const { Name, Active_Date, End_Date } = this.state
 
     if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -232,7 +232,7 @@ class PackageSale extends Component {
     const { Name, Active_Date, End_Date, Status } = this.state
 
     if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

@@ -201,7 +201,7 @@ class PluginCustomerManager extends Component {
       // || Phone == null || Phone == ''
       // ||
        Slug == null || Slug == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

@@ -209,7 +209,7 @@ class Feature extends Component {
     if (Key == null || Key == ''
       || Value == null || Value == ''
       || Type == null || Type == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -257,7 +257,7 @@ class Feature extends Component {
     if (Key == null || Key == ''
       || Value == null || Value == ''
       || Type == null || Type == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

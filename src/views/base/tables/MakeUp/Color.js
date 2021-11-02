@@ -192,7 +192,7 @@ class Color extends Component {
     if (hex == null || hex == '' ||
       makeup_id == null || makeup_id == '' ||
       alpha == null || alpha == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -243,7 +243,7 @@ class Color extends Component {
     if (hex == null || hex == '' ||
       makeup_id == null || makeup_id == '' ||
       alpha == null || alpha == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

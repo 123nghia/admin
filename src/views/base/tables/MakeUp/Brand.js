@@ -213,7 +213,7 @@ class Brand extends Component {
     const { name, image, link, image_link } = this.state
     if (name == null || name == '' ||
       image == null || image == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -269,7 +269,7 @@ class Brand extends Component {
 
     if (name == null || name == '' ||
       image == null || image == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

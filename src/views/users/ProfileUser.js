@@ -164,11 +164,10 @@ class Users extends Component {
   async updateCompany() {
     const { Email, Name, Phone, Address, UserName, data, Message_Code } = this.state
 
-    if (Email == null || Email == ''
-      || Name == null || Name == ''
+    if (Name == null || Name == ''
       || Phone == null || Phone == ''
       || UserName == null || UserName == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

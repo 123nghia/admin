@@ -197,7 +197,7 @@ class PluginManager extends Component {
     if (Name == null || Name == ''
       || Value == null || Value == ''
       || Unit == null || Unit == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -249,7 +249,7 @@ class PluginManager extends Component {
         if (Name == null || Name == ''
           || Value == null || Value == ''
           || Unit == null || Unit == '') {
-          alert("Please fill in all the requirements");
+          alert("Vui lòng nhập đầy đủ trường !!!");
           return
         }
 

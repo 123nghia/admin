@@ -278,7 +278,7 @@ class SuggestItem extends Component {
       image == null || image == '' ||
       title == null || title == '' ||
       linkdetail == null || linkdetail == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -344,7 +344,7 @@ class SuggestItem extends Component {
       image == null || image == '' ||
       title == null || title == '' ||
       linkdetail == null || linkdetail == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

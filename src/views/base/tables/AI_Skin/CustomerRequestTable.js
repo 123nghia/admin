@@ -255,7 +255,7 @@ class CustomerRequest extends Component {
 
     if (UserName == null || UserName == '' ||
       Phone == null || Phone == '' || FullName == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -305,7 +305,7 @@ class CustomerRequest extends Component {
     const { UserName, Phone, Type, FullName, Status } = this.state
     if (UserName == null || UserName == '' ||
       Phone == null || Phone == '' || FullName == null || FullName == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
 
     }

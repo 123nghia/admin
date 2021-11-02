@@ -495,7 +495,7 @@ class Users extends Component {
       || UserName == null || UserName == ''
       || Role_Id == null || Role_Id == ''
       || Password == null || Password == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -565,7 +565,7 @@ class Users extends Component {
       || Phone == null || Phone == ''
       || UserName == null || UserName == ''
       || Password == null || Password == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

@@ -158,7 +158,7 @@ class PackageSale extends Component {
     const { Company_Id, link_shop, link_shopee, link_lazada, link_tiki } = this.state
 
     if (link_shop == null || link_shop == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -208,7 +208,7 @@ class PackageSale extends Component {
     var id = JSON.parse(company_id);
 
     if (link_shop == null || link_shop == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

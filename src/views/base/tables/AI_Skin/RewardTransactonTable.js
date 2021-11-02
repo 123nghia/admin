@@ -184,7 +184,7 @@ class RewardTransaction extends Component {
     const { Phone, Reward_Id, Company_Id } = this.state
 
     if (Phone == null || Phone == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -227,7 +227,7 @@ class RewardTransaction extends Component {
     const { Phone, Reward_Id, Status } = this.state
 
     if (Phone == null || Phone == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

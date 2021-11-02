@@ -171,7 +171,7 @@ class RoleManager extends Component {
     const { Name, Type } = this.state
 
     if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -211,7 +211,7 @@ class RoleManager extends Component {
     const { Name, Status } = this.state
 
     if (Name == null || Name == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

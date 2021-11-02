@@ -130,7 +130,7 @@ class Users extends Component {
         const { Name } = this.state
 
         if (Name == null || Name == '') {
-            alert("Please fill in all the requirements");
+            alert("Vui lòng nhập đầy đủ trường !!!");
             return
         }
 
@@ -170,7 +170,7 @@ class Users extends Component {
         const { Name, Status } = this.state
 
         if (Name == null || Name == '') {
-            alert("Please fill in all the requirements");
+            alert("Vui lòng nhập đầy đủ trường !!!");
             return
         }
 

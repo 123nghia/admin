@@ -22,8 +22,7 @@ import navigations from './_nav'
 
 const callApiGetRoleSubAdmin = async (user) => {
 
-  if(user == null || JSON.parse(user) == null )
-  {
+  if (user == null || JSON.parse(user) == null) {
     return;
   }
   const res = await API_CONNECT(Constants.GET_ROLE_SUBADMIN, {
@@ -38,8 +37,8 @@ const TheSidebar = () => {
   const user = localStorage.getItem('user');
 
   useEffect(async () => {
-    var duy = await callApiGetRoleSubAdmin(user)
-    setSidebar(duy);
+    var data = await callApiGetRoleSubAdmin(user)
+    setSidebar(data);
   }, []);
 
   var temp = []
@@ -107,7 +106,7 @@ const TheSidebar = () => {
         />
       </CSidebarBrand>
       <CSidebarNav>
-        <div style={{ backgroundColor: '#111111' }}>
+        <div>
           <CCreateElement
             items={navigations[0]}
             components={{
@@ -118,7 +117,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#222222' }}>
+        <div style={{ backgroundColor: '#111111' }}>
           <CCreateElement
             items={navigations[1]}
             components={{
@@ -129,7 +128,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#222222' }}>
           <CCreateElement
             items={navigations[2]}
             components={{
@@ -143,6 +142,17 @@ const TheSidebar = () => {
         <div style={{ backgroundColor: '#333333' }}>
           <CCreateElement
             items={navigations[3]}
+            components={{
+              CSidebarNavDivider,
+              CSidebarNavDropdown,
+              CSidebarNavItem,
+              CSidebarNavTitle
+            }}
+          />
+        </div>
+        <div style={{ backgroundColor: '#333333' }}>
+          <CCreateElement
+            items={navigations[4]}
             components={{
               CSidebarNavDivider,
               CSidebarNavDropdown,

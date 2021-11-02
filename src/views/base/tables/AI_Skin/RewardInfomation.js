@@ -212,7 +212,7 @@ class RewardInfomation extends Component {
       Content == null || Content == '' ||
       Templates == null || Templates == '' ||
       Link == null || Link == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -265,7 +265,7 @@ class RewardInfomation extends Component {
       Content == null || Content == '' ||
       Templates == null || Templates == '' ||
       Link == null || Link == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

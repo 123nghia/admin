@@ -286,7 +286,7 @@ class PluginOrder extends Component {
     if (Company_Id == null || Company_Id == ''
       || Package_Id == null || Package_Id == ''
       || arrFeature.length == 0) {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 

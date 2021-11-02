@@ -145,7 +145,7 @@ class Users extends Component {
             Email == null || Email == '' ||
             Address == null || Address == '' ||
             Phone == null || Phone == '') {
-            alert("Please fill in all the requirements");
+            alert("Vui lòng nhập đầy đủ trường !!!");
             return
         }
 
@@ -197,7 +197,7 @@ class Users extends Component {
             Email == null || Email == '' ||
             Address == null || Address == '' ||
             Phone == null || Phone == '') {
-            alert("Please fill in all the requirements");
+            alert("Vui lòng nhập đầy đủ trường !!!");
             return
         }
 

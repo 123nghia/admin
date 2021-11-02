@@ -262,7 +262,7 @@ class SubTypeHair extends Component {
     const { vi, image, hover, arrShowColor, color_id } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
@@ -331,7 +331,7 @@ class SubTypeHair extends Component {
     const { image, vi, isNull, hover, sub_type, arrShowColor } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
