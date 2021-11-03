@@ -55,7 +55,7 @@ class News extends Component {
       title: "",
       description: "",
       linkdetail: "",
-      level: "K1",
+      level: "K5",
       sdktype: "1",
       sdkItem: [],
       currentSdkSelect: "",
@@ -174,9 +174,8 @@ class News extends Component {
       title: "",
       description: "",
       linkdetail: "",
-      level: "K1",
+      level: "K5",
       sdktype: "1",
-      companyid: "",
       currentSdkSelect: this.state.sdkItem[0],
     });
   }
@@ -209,9 +208,6 @@ class News extends Component {
   };
   onDateChange = (date) => {
     if (date) {
-      // date.setMinutes(0);
-      // date.setSeconds(0);
-      // date.setMilliseconds(0);
       this.setState({ openDate: date });
     }
   };
