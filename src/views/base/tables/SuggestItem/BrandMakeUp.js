@@ -16,11 +16,12 @@ import {
   CCol
 } from '@coreui/react'
 
-import API_CONNECT from "../../../functions/callAPI";
+import API_CONNECT from "../../../../functions/callAPI";
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
-import Constants from "../../../contants/contants";
-import TextFieldGroup from "../../Common/TextFieldGroup";
+import Constants from "../../../../contants/contants";
+import TextFieldGroup from "../../../Common/TextFieldGroup";
+import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 
@@ -30,23 +31,34 @@ class Brand extends Component {
     this.state = {
       data: [],
       key: '',
+      activePage: 1,
+      page: 1,
+      itemsCount: 0,
+      limit: 20,
+      totalActive: 0,
       modalCom: false,
+      viewingUser: {},
+      communities: [],
+      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
       name: "",
       image: "",
       image_show: "",
+      image_link: "",
       link: "",
       modalDelete: false,
       delete: null,
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      isLoading: false,
+      user: localStorage.getItem('user'),
+      isLoading: false
     };
   }
   async componentDidMount() {
+
     this.getData()
   }
 
@@ -73,16 +85,24 @@ class Brand extends Component {
 
   getData = async () => {
     this.setState({ isLoading: true });
-    var res = await API_CONNECT(
-      Constants.LIST_BRAND, {}, "", "POST")
+    const res_brand = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_BRAND,
+      method: 'GET'
+    });
 
-    let val = res.data;
+    let val = res_brand.data.data;
     this.pagination(val);
-    this.setState({ dataApi: val, isLoading: false })
+    this.setState({ dataApi: val });
+
+    let active = 0
+
+    this.setState({ isLoading: false, totalActive: active });
   }
 
   searchKey() {
     const { indexPage, key } = this.state;
+    // this.setState({ key: key })
 
     if (key != '') {
       let d = []
@@ -92,10 +112,25 @@ class Brand extends Component {
           d.push(val)
         }
       })
+      let active = 0
 
-      this.setState({ data: d })
+      d.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
+
+      this.setState({ data: d, totalActive: active })
     } else {
-      this.setState({ data: this.state.arrPagination[indexPage] })
+      let active = 0
+
+      this.state.dataApi.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
+
+      this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
     }
   }
 
@@ -113,16 +148,6 @@ class Brand extends Component {
     }, () => {
       this.searchKey();
     });
-  }
-
-  onChangeImage(e) {
-    let files = e.target.files;
-    let reader = new FileReader();
-    this.setState({ image: files[0] })
-    reader.readAsDataURL(files[0])
-    reader.onload = (e) => {
-      this.setState({ image_show: e.target.result })
-    }
   }
 
   async toggleModal(key) {
@@ -143,35 +168,40 @@ class Brand extends Component {
   }
 
   async addBrand() {
-    const { name, image, link } = this.state
+    const { name, image, link, image_link } = this.state
     if (name == null || name == '' ||
       image == null || image == '') {
-      alert("Hãy nhập đầy đủ dữ liệu !!!");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
     const form = new FormData();
-    form.append("image", image);
+    form.append("image", image_link);
 
-    await API_CONNECT(Constants.UPLOAD_BRAND, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
 
     const body = {
       name: name,
-      image: image.name,
+      image: image,
+      image_link: image_link.name,
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
       link: link
     }
 
     this.setState({ isLoading: true });
-    var res = await API_CONNECT(
-      Constants.ADD_BRAND, body, "", "POST")
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.ADD_BRAND,
+      method: 'POST',
+      data: body
+    });
 
     if (res.status == 200) {
 
       this.getData()
-
       this.setState({ modalCom: !this.state.modalCom })
     } else {
-      alert("Thêm thất bại");
+      alert("Thêm thương hiệu thất bại");
       this.setState({ isLoading: false });
     }
   }
@@ -183,40 +213,45 @@ class Brand extends Component {
       name: item.name,
       image: item.image,
       image_show: "",
-      link: item.link,
-      id: item['_id']
+      image_link: item.image_link,
+      id: item['_id'],
+      link: item.link
     })
   }
 
   async updateBrand() {
-    const { name, image, link } = this.state
+    const { name, image, link, image_link } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '') {
-      alert("Hãy nhập đầy đủ trường !!!");
+      alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
     const form = new FormData();
-    form.append("image", image);
+    form.append("image", image_link);
 
-    await API_CONNECT(Constants.UPLOAD_BRAND, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
 
     const body = {
       name: name,
-      image: image.name,
-      link: link,
+      image: image,
+      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
       id: this.state.id,
+      link: link
     }
 
     this.setState({ isLoading: true });
-    var res = await API_CONNECT(
-      Constants.UPDATE_BRAND, body, "", "POST")
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.UPDATE_BRAND,
+      method: 'POST',
+      data: body
+    });
 
     if (res.status == 200) {
 
       this.getData()
-
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -233,16 +268,22 @@ class Brand extends Component {
 
   async delete() {
     this.setState({ isLoading: true });
-    var res = await API_CONNECT(
-      Constants.DELETE_BRAND, {
-      "id": this.state.id
-    }, "", "POST")
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.DELETE_BRAND,
+      method: 'POST',
+      data: {
+        "id": this.state.id
+      }
+    });
 
     if (res.status == 200) {
+
       this.getData()
+
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
-      alert("Xoá thất bại");
+      alert("Xóa sản phẩm thất bại");
       this.setState({ isLoading: false });
     }
 
@@ -262,8 +303,18 @@ class Brand extends Component {
     }
   }
 
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ image_link: files[0] })
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image: e.target.result, image_show: e.target.result })
+    }
+  }
+
   render() {
-    const { data, arrPagination, key, image, image_show } = this.state;
+    const { data, arrPagination, key } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -271,8 +322,9 @@ class Brand extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách danh mục
+                  <i className="fa fa-align-justify"></i> Danh sách thương hiệu
                   <div style={styles.tags}>
+
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
@@ -302,8 +354,8 @@ class Brand extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên thương hiệu</th>
-                        <th className="text-center">Hình ảnh</th>
-                        <th className="text-center">Đường dẫn</th>
+                        <th className="text-center">Ảnh thương hiệu</th>
+                        <th className="text-center">Link thương hiệu</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -318,9 +370,8 @@ class Brand extends Component {
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   {
-                                    item.image == "" || item.image == null ?
-                                      <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
-                                      <img src={`${Constants.BASE_URL}/public/image_brand/${item.image}`} width={"80px"} height={"60px"} />
+                                    item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
+                                      <img src={`${Constants.BASE_URL}/public/image_brand/${item.image_link}`} width={"60px"} height={"60px"} />
                                   }
                                 </td>
                                 <td className="text-center">
@@ -358,19 +409,7 @@ class Brand extends Component {
                 label="Tên thương hiệu"
                 value={this.state.name}
                 placeholder={"Tên thương hiệu"}
-                // error={errors.title}
                 onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="link"
-                label="Đường dẫn"
-                value={this.state.link}
-                placeholder={"Đường dẫn"}
-                // error={errors.title}
-                onChange={e => this.onChange("link", e.target.value)}
-              // rows="5"
               />
 
               <TextFieldGroup
@@ -381,25 +420,33 @@ class Brand extends Component {
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               />
               {
-                image == "" ? "" :
+                this.state.image == "" || this.state.image == null || this.state.image == undefined ?
+                  "" :
                   <img width="250" height="300" src={
-                    image_show == "" ?
-                      `${Constants.BASE_URL}/public/image_brand/${image}` : image_show} style={{ marginBottom: 20 }} />
+                    this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
               }
+
+              <TextFieldGroup
+                field="link"
+                label="Link thương hiệu"
+                value={this.state.link}
+                placeholder={"Link thương hiệu"}
+                onChange={e => this.onChange("link", e.target.value)}
+              />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addBrand() : this.updateBrand() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addBrand() : this.updateBrand() }} disabled={this.state.isLoading}>Save</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
               <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
@@ -473,7 +520,7 @@ const styles = {
     color: 'red'
   },
   mgl5: {
-    margin: '5px'
+    marginLeft: '5px'
   },
   tags: {
     float: "right",

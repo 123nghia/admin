@@ -25,10 +25,6 @@ import Constants from "../../../contants/contants";
 import TextFieldGroup from "../../Common/TextFieldGroup";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
 
 class Account extends Component {
   constructor(props) {
@@ -52,7 +48,6 @@ class Account extends Component {
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      type: localStorage.getItem('type'),
       isLoading: false,
     };
   }
@@ -469,7 +464,7 @@ class Account extends Component {
               />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updataUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updataUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
               <CButton color="secondary" onClick={e => { this.setState({ modalCom: !this.state.modalCom }) }}>Đóng</CButton>
             </ModalFooter>
           </Modal>

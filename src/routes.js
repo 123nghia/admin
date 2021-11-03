@@ -11,6 +11,16 @@ const CountOrder = React.lazy(() => import('./views/base/tables/CountOrder'));
 const BannerHomePage = React.lazy(() => import('./views/base/tables/BannerHomePage'));
 const SEOInfo = React.lazy(() => import('./views/base/tables/SEOInfo'));
 
+const BrandSuggest = React.lazy(() => import('./views/base/tables/SuggestItem/BrandSuggest'));
+const SuggestItem = React.lazy(() => import('./views/base/tables/SuggestItem/SuggestItem'));
+const BrandMakeUp = React.lazy(() => import('./views/base/tables/SuggestItem/BrandMakeUp'));
+const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/SuggestItem/SubTypeMakeUp'));
+const ColorMakeUp = React.lazy(() => import('./views/base/tables/SuggestItem/ColorMakeUp'));
+const ProductMakeUp = React.lazy(() => import('./views/base/tables/SuggestItem/ProductMakeUp'));
+const ColorHair = React.lazy(() => import('./views/base/tables/SuggestItem/ColorHair'));
+const ProductHair = React.lazy(() => import('./views/base/tables/SuggestItem/ProductHair'));
+const HistorySkin = React.lazy(() => import('./views/base/tables/SuggestItem/HistorySkin'));
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/category', name: 'CATEGORY', component: Category },
@@ -23,6 +33,21 @@ const routes = [
   { path: '/countorder', name: 'Count Order', component: CountOrder },
   { path: '/banner_home_page', name: 'BannerHomePage', component: BannerHomePage },
   { path: '/seo', name: 'SEO', component: SEOInfo },
+
+  { path: '/brand_suggest', name: 'BRAND SUGGEST', component: BrandSuggest },
+  { path: '/items/0', name: 'K1', component: SuggestItem },
+  { path: '/items/1', name: 'K2', component: SuggestItem },
+  { path: '/items/2', name: 'K3', component: SuggestItem },
+  { path: '/items/3', name: 'K4', component: SuggestItem },
+  { path: '/items/4', name: 'K5', component: SuggestItem },
+  { path: '/items/5', name: 'K6', component: SuggestItem },
+  { path: '/brand_makeup', name: 'BRAND MAKEUP', component: BrandMakeUp },
+  { path: '/subtype_makeup', name: 'SUBTYPE MAKEUP', component: SubTypeMakeUp },
+  { path: '/color_makeup', name: 'SUBTYPE MAKEUP', component: ColorMakeUp },
+  { path: '/product_makeup', name: 'SUBTYPE MAKEUP', component: ProductMakeUp },
+  { path: '/color_hair', name: 'SUBTYPE MAKEUP', component: ColorHair },
+  { path: '/product_hair', name: 'SUBTYPE MAKEUP', component: ProductHair },
+  { path: '/history_skin', name: 'SUBTYPE MAKEUP', component: HistorySkin },
 ];
 
 export default routes;

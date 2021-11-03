@@ -24,6 +24,96 @@ const _nav = [
     icon: <CIcon content={freeSet.cilUser} customClasses="c-sidebar-nav-icon" />
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Lịch sử soi da',
+    to: '/history_skin',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lí sản phẩm gợi ý']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nhãn hiệu sản phẩm soi da',
+    to: '/brand_suggest',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ giảm lão hóa da',
+    to: '/items/1',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ điều trị mụn',
+    to: '/items/2',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ giảm quầng thâm mắt',
+    to: '/items/3',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ giảm lỗ chân lông',
+    to: '/items/4',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Hỗ trợ giảm thâm nám da',
+    to: '/items/5',
+    icon: <CIcon content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lí sản phẩm trang điểm']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nhãn hiệu sản phẩm trang điểm',
+    to: '/brand_makeup',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh mục',
+    to: '/subtype_makeup',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Màu sắc',
+    to: '/color_makeup',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm',
+    to: '/product_makeup',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lí sản phẩm tóc']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Màu sắc',
+    to: '/color_hair',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm',
+    to: '/product_hair',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lí sản phẩm']
   },

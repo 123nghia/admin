@@ -29,10 +29,6 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-let headers = new Headers();
-// const author = localStorage.getItem('author');
-// headers.append('authororization', 'Bearer ' + author);
-// headers.append('Content-Type', 'application/json');
 
 class Product extends Component {
   constructor(props) {
@@ -74,7 +70,6 @@ class Product extends Component {
       objectValueCategory: {},
       indexPage: 0,
       token: { authororization: `Bearer ${localStorage.getItem('token')}` },
-      type: localStorage.getItem('type'),
       isLoading: false,
       isLoadingUpdate: false,
       modalMultiple: false,
@@ -734,19 +729,6 @@ class Product extends Component {
                   // rows="5"
                   />
 
-                  {/* <TextFieldGroup
-                    field="image"
-                    label="Hình ảnh"
-                    type={"file"}
-                    onChange={e => { this.onChangeImage(e) }}
-                    onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
-                  />
-                  {
-                    image == "" ? "" :
-                      <img width="250" height="300" src={
-                        image_show == "" ?
-                          `${Constants.BASE_URL}/public/image_seo/${image}` : image_show} style={{ marginBottom: 20 }} />
-                  } */}
 
                   <TextFieldGroup
                     field="keyword"

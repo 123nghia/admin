@@ -6,44 +6,54 @@ import {
   CardHeader,
   Col,
   Row,
-  Input,
-  ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
 
 import {
-  CButton,
-  CRow,
-  CCol
+  CButton
 } from '@coreui/react'
 
-import API_CONNECT from "../../../functions/callAPI";
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
-import Constants from "../../../contants/contants";
-import TextFieldGroup from "../../Common/TextFieldGroup";
+import Constants from "../../../../contants/contants";
+import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 
-class Brand extends Component {
+class HistorySkin extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       key: '',
+      activePage: 1,
+      page: 1,
+      itemsCount: 0,
+      limit: 20,
+      totalActive: 0,
       modalCom: false,
+      viewingUser: {},
+      communities: [],
+      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
+      UserName: '',
+      Result: '',
+      User_Id: '',
+      Company_Id: '',
       modalDelete: false,
       delete: null,
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
+      BASE_URL: Constants.BASE_URL_CURRENT
     };
   }
   async componentDidMount() {
+
     this.getData()
+
   }
 
   pagination(dataApi) {
@@ -69,16 +79,71 @@ class Brand extends Component {
 
   getData = async () => {
     this.setState({ isLoading: true });
-    var res = await API_CONNECT(
-      Constants.LIST_COUNT_ORDER, {}, "", "POST")
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_HISTORY_SKIN,
+      method: 'POST'
+    });
 
-    let val = res.data;
-    this.pagination(val);
-    this.setState({ dataApi: val, isLoading: false })
+    let data = res.data.data;
+    console.log(data)
+    this.pagination(data);
+    this.setState({ dataApi: data, isLoading: false });
+  }
+
+  searchKey(key) {
+    this.setState({ key: key })
+
+    if (key != '') {
+      let d = []
+      this.state.dataApi.map(val => {
+        if (val.UserName.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+          d.push(val)
+        }
+      })
+      let active = 0
+
+      d.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
+
+      this.setState({ data: d, totalActive: active })
+    } else {
+      let active = 0
+
+      this.state.dataApi.map(val => {
+        if (val.Status == "Actived") {
+          active = active + 1
+        }
+      })
+
+      this.setState({ data: this.state.dataApi, totalActive: active })
+    }
+  }
+
+  onChange(key, val) {
+    this.setState({ [key]: val })
+  }
+
+  inputChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  getBadge(status) {
+    switch (status) {
+      case 'Actived': return 'success'
+      case 'Inactive': return 'secondary'
+      case 'Locked': return 'warning'
+      case 'Deactived': return 'danger'
+      default: return 'primary'
+    }
   }
 
   render() {
-    const { data, arrPagination, key } = this.state;
+    const { data, arrPagination } = this.state;
+    const { classes } = this.props;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -86,16 +151,17 @@ class Brand extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách danh mục
+                  <i className="fa fa-align-justify"></i> Lịch sử soi da
                 </CardHeader>
                 <CardBody>
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Sản phẩm</th>
-                        <th className="text-center">Mã đơn hàng</th>
-                        <th className="text-center">Lượt mua</th>
+                        <th className="text-center">Tên</th>
+                        <th className="text-center">Hình ảnh</th>
+                        <th className="text-center">Kết quả</th>
+                        <th className="text-center">Ngày tạo</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -106,9 +172,18 @@ class Brand extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.product_data.name}</td>
-                                <td className="text-center">{item.order_id}</td>
-                                <td className="text-center">{item.count}</td>
+                                <td className="text-center">{item.UserName}</td>
+                                <td className="text-center">
+                                  <img src={item.Image} style={{ width: '50%', height: 50 }} />
+                                </td>
+                                <td className="text-center">
+                                  <CButton outline color="primary" onClick={e => {
+                                    console.log(JSON.parse(item.Result))
+                                  }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                                </td>
+                                <td className="text-center">
+                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                </td>
                               </tr>
                             );
                           }) : ""
@@ -194,11 +269,12 @@ const styles = {
     color: 'red'
   },
   mgl5: {
-    margin: '5px'
+    marginLeft: '5px'
   },
   tags: {
     float: "right",
-    marginRight: "5px"
+    marginRight: "5px",
+    width: "250px"
   },
   searchInput: {
     width: "190px",
@@ -218,6 +294,9 @@ const styles = {
     height: '100px',
     borderRadius: '99999px'
   },
+  mgl5: {
+    marginBottom: '0px'
+  }
 }
 
-export default Brand;
+export default HistorySkin;
