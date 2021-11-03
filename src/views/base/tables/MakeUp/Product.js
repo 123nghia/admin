@@ -251,8 +251,8 @@ class Product extends Component {
             }
 
             this.setState({
-              brands: brands, objectValueBrand: this.state.arrTempOptionBrand[0], brand_id: this.state.arrTempOptionBrand[0].value,
-              arrOptionBrand: arrTempOptionBrand, types: types, colors: colors, colorItem: types[0].color_id
+              brands: brands, objectValueBrand: arrTempOptionBrand[0], brand_id: arrTempOptionBrand.length == 0 ? "" : arrTempOptionBrand[0].value,
+              arrOptionBrand: arrTempOptionBrand, types: types, colors: colors, colorItem: types.length == 0 ? "" : types[0].color_id
             });
 
           } else {
@@ -415,7 +415,7 @@ class Product extends Component {
               value: res_brand.data[i]._id, label: res_brand.data[i].name
             })
           }
-          this.setState({ brands: res_brand.data, arrOptionBrand: arrTempOptionBrand, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
+          this.setState({ brands: res_brand.data, arrOptionBrand: arrTempOptionBrand, types: res_type.data, colors: res_color.data, colorItem: res_type.data.length == 0 ? "" : res_type.data[0].color_id });
 
         } else {
           const res_brand = await API_CONNECT(
@@ -433,7 +433,7 @@ class Product extends Component {
               value: res_brand.data[i]._id, label: res_brand.data[i].name
             })
           }
-          this.setState({ brands: res_brand.data, arrOptionBrand: arrTempOptionBrand, types: res_type.data, colors: res_color.data, colorItem: res_type.data[0].color_id });
+          this.setState({ brands: res_brand.data, arrOptionBrand: arrTempOptionBrand, types: res_type.data, colors: res_color.data, colorItem: res_type.data.length == 0 ? "" : res_type.data[0].color_id });
         }
       }
     })
@@ -479,11 +479,6 @@ class Product extends Component {
 
     if (res.status == 200) {
       this.getDataPagination(this.state.limit * Number(indexPage), Number(indexPage))
-      // if (this.state.type == '0' || this.state.type == '1') {
-      //   this.getData()
-      // } else {
-      //   this.getData_Company()
-      // };
 
     } else {
       alert("Cập nhật thất bại");
