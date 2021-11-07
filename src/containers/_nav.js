@@ -163,8 +163,8 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Giao hàng',
-    to: '',
+    name: 'Danh sách vận chuyển',
+    to: '/transport',
     icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
   },
   {

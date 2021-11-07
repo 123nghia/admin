@@ -6,6 +6,7 @@ const Dashboard = React.lazy(() => import('./views/DashBoard/Dashboard'));
 const Product = React.lazy(() => import('./views/base/tables/Product'));
 const Account = React.lazy(() => import('./views/base/tables/Account'));
 const Order = React.lazy(() => import('./views/base/tables/Order'));
+const Transport = React.lazy(() => import('./views/base/tables/Transport'));
 const Deal = React.lazy(() => import('./views/base/tables/Deal'));
 const CountOrder = React.lazy(() => import('./views/base/tables/CountOrder'));
 const BannerHomePage = React.lazy(() => import('./views/base/tables/BannerHomePage'));
@@ -29,6 +30,7 @@ const routes = [
   { path: '/product', name: 'Product', component: Product },
   { path: '/account', name: 'Account', component: Account },
   { path: '/order', name: 'Order', component: Order },
+  { path: '/transport', name: 'Order', component: Transport },
   { path: '/deal', name: 'Deal', component: Deal },
   { path: '/countorder', name: 'Count Order', component: CountOrder },
   { path: '/banner_home_page', name: 'BannerHomePage', component: BannerHomePage },
