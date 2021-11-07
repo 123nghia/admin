@@ -305,7 +305,7 @@ class Order extends Component {
             </div> */}
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</Button>{' '}
+            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Lưu</Button>{' '}
             <Button color="secondary" onClick={e => this.toggleModal("new")}>Close</Button>
           </ModalFooter>
         </Modal>

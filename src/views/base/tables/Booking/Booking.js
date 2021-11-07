@@ -16,67 +16,43 @@ import {
   CCol
 } from '@coreui/react'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
-import Constants from "../../../../contants/booking";
+import Constants from "../../../../contants/contants_app";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
+import styles from "../../../../assets/styles/styles";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
-class Booking extends Component {
+class Service extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
-      limit: 20,
       totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
       updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
       name: "",
-      image: "",
-      link: "",
-      text:"",
-      avatar: "",
-      ordered:"",
       modalDelete: false,
       delete: null,
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
+      companyid: localStorage.getItem('company_id'),
       isLoading: false
     };
   }
   async componentDidMount() {
     const { type } = this.state;
-    if (type == '0' || type == '1') {
-      this.getData()
-    } else {
-      this.getData_Company()
-    }
+
+    this.getData()
+
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -109,37 +85,20 @@ class Booking extends Component {
   }
 
   getData = async () => {
+    const { companyid } = this.state
     this.setState({ isLoading: true });
-    const res_brand = await axios({
+    const resLocation = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_BOOKING_SERVICES,
-      method: 'GET'
+      url: Constants.LIST_SERVICE,
+      data: {
+        company_id: companyid
+      },
+      method: 'POST'
     });
 
-    let val = res_brand.data.data;
+    let val = resLocation.data.data;
     this.pagination(val);
-    this.setState({ dataApi: val });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
-  }
-
-  getData_Company = async () => {
-    this.setState({ isLoading: true });
-    const res_brand = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_BOOKING_COMPANY + JSON.parse(this.state.user).company_id,
-      method: 'GET'
-    });
-
-    let val = res_brand.data.data;
-    this.pagination(val);
-    this.setState({ dataApi: val });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ dataApi: val, isLoading: false });
   }
 
   searchKey() {
@@ -197,9 +156,7 @@ class Booking extends Component {
       this.setState({
         modalCom: !this.state.modalCom,
         action: key,
-        name: "",
-        image: "",
-        link: ""
+        name: ""
       })
     }
   }
@@ -207,88 +164,72 @@ class Booking extends Component {
   onChange(key, val) {
     this.setState({ [key]: val })
   }
-  
 
-
-  async addRoles() {
-    const { text, avatar, ordered } = this.state
-    if (text == null || text == '' ||
-      avatar == null || avatar == '') {
-      alert("Please fill in all the requirements");
+  async addService() {
+    const { companyid, name } = this.state
+    if (name == null || name == '') {
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
     const body = {
-      text: text,
-      avatar: avatar,
-      companyId: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
-      ordered: ordered
+      "company_id": companyid,
+      "name": name
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.ADD_BOOKING_SERVICES,
+      url: Constants.ADD_SERVICE,
       method: 'POST',
       data: body
     });
 
     if (res.status == 200) {
-      if (this.state.type == '0' || this.state.type == '1') {
-        this.getData()
-      } else {
-        this.getData_Company()
-      }
+      this.getData()
+
       this.setState({ modalCom: !this.state.modalCom })
     } else {
-      alert("Thêm thương hiệu thất bại");
+      alert("Thêm thất bại");
       this.setState({ isLoading: false });
     }
   }
 
- 
+
   async openUpdate(item) {
     this.setState({
-          modalCom: !this.state.modalCom,
-          action: "update",
-          text: item.text,
-          avatar: item.avatar,
-          ordered: item.ordered,
-          update_date: item.update_date,
-           id: item['_id']
+      modalCom: !this.state.modalCom,
+      action: "update",
+      name: item.name,
+      id: item['_id']
     })
   }
 
-  async updateUser() {
-    const { text, avatar, ordered } = this.state
+  async updateService() {
+    const { name } = this.state
 
-    if (text == null || text == '' ||
-      avatar == null || avatar == '') {
-      alert("Please fill in all the requirements");
+    if (name == null || name == '') {
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
     const body = {
-      text: text,
-      avatar: avatar,
-      id: this.state.id,
-      ordered: ordered
+      "name": name,
+      "id": this.state.id
     }
 
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_BOOKING_SERVICES,
+      url: Constants.UPDATE_SERVICE,
       method: 'POST',
       data: body
     });
 
     if (res.status == 200) {
-      if (this.state.type == '0' || this.state.type == '1') {
-        this.getData()
-      } else {
-        this.getData_Company()
-      }
+
+      this.getData()
+
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -307,7 +248,7 @@ class Booking extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_BOOKING_SERVICES,
+      url: Constants.DELETE_SERVICE,
       method: 'POST',
       data: {
         "id": this.state.id
@@ -315,11 +256,9 @@ class Booking extends Component {
     });
 
     if (res.status == 200) {
-      if (this.state.type == '0' || this.state.type == '1') {
-        this.getData()
-      } else {
-        this.getData_Company()
-      }
+
+      this.getData()
+
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
       alert("Xóa sản phẩm thất bại");
@@ -330,26 +269,6 @@ class Booking extends Component {
 
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-  }
-
-  getBadge(status) {
-    switch (status) {
-      case 'Actived': return 'success'
-      case 'Inactive': return 'secondary'
-      case 'Locked': return 'warning'
-      case 'Deactived': return 'danger'
-      default: return 'primary'
-    }
-  }
-
-  onChangeImage(e) {
-    let files = e.target.files;
-    let reader = new FileReader();
-    reader.readAsDataURL(files[0])
-    reader.onload = (e) => {
-      this.setState({ avatar: e.target.result })
-
-    }
   }
 
   render() {
@@ -393,8 +312,6 @@ class Booking extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên dịch vụ</th>
-                        <th className="text-center">Hình ảnh (nếu có)</th>
-                        <th className="text-center">Độ ưu tiên</th>
                         <th className="text-center"></th>
                       </tr>
                     </thead>
@@ -406,11 +323,7 @@ class Booking extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.text}</td>
-                                <td className="text-center"><img src={item.avatar} width={"90px"} height={"70px"} /></td>
-                                <td className="text-center">
-                                    {item.ordered}
-                                </td>
+                                <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -432,22 +345,6 @@ class Booking extends Component {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
-              {/* {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              } */}
             </Col>
           </Row>
 
@@ -455,42 +352,16 @@ class Booking extends Component {
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
-                field="text"
-                label="Tên thương hiệu"
-                value={this.state.text}
-                placeholder={"Tên dịch vụ"}
-                // error={errors.title}
-                onChange={e => this.onChange("text", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="avatar"
-                label="Hỉnh đại diện"
-                type={"file"}
-                // error={errors.title}
-                onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null }}
-              // rows="5"
-              />
-              {
-                this.state.avatar == "" ? "" :
-                  <img width="250" height="300" src={this.state.avatar} style={{ marginBottom: 20 }} />
-              }
-
-              <TextFieldGroup
-                field="ordered"
-                label="Độ ưu tiên"
-                value={this.state.ordered}
-                placeholder={"Link thương hiệu"}
-                // error={errors.title}
-                onChange={e => this.onChange("ordered", e.target.value)}
-              // rows="5"
+                field="name"
+                label="Tên vị trí"
+                value={this.state.name}
+                placeholder={"Địa chỉ"}
+                onChange={e => this.onChange("name", e.target.value)}
               />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addService() : this.updateService() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
@@ -501,7 +372,7 @@ class Booking extends Component {
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div>
@@ -521,83 +392,4 @@ const override = css`
   border-color: red;
 `;
 
-const styles = {
-  pagination: {
-    marginRight: '5px'
-  },
-  flexLabel: {
-    width: 100
-  },
-  flexOption: {
-    width: 300
-  },
-  a: {
-    textDecoration: 'none'
-  },
-  floatRight: {
-    float: "right",
-    marginTop: '3px'
-  },
-  spinner: {
-    width: "30px"
-  },
-  center: {
-    textAlign: "center"
-  },
-  tbody: {
-    height: "380px",
-    overflowY: "auto"
-  },
-  wh25: {
-    width: "25%",
-    float: "left",
-    height: "80px"
-  },
-  w5: {
-    width: "15%",
-    float: "left",
-    height: "80px"
-  },
-  wa10: {
-    width: "5%",
-    float: "left",
-    height: "80px"
-  },
-  row: {
-    float: "left",
-    width: "100%"
-  },
-  success: {
-    color: 'green'
-  },
-  danger: {
-    color: 'red'
-  },
-  mgl5: {
-    marginLeft: '5px'
-  },
-  tags: {
-    float: "right",
-    marginRight: "5px"
-  },
-  searchInput: {
-    width: "190px",
-    display: 'inline-block',
-  },
-  userActive: {
-    color: 'green'
-  },
-  userPending: {
-    color: 'red'
-  },
-  nagemonNameCol: {
-    width: '328px'
-  },
-  image: {
-    width: '100px',
-    height: '100px',
-    borderRadius: '99999px'
-  },
-}
-
-export default Booking;
+export default Service;

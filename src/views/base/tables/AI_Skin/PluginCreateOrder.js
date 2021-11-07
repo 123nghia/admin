@@ -497,7 +497,7 @@ class PluginCreateOrder extends Component {
 
           </ModalBody>
           <ModalFooter>
-            <CButton color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</CButton>{' '}
+            <CButton color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Lưu</CButton>{' '}
             <CButton color="secondary" onClick={e => this.toggleModal("new")}>Close</CButton>
           </ModalFooter>
         </Modal>

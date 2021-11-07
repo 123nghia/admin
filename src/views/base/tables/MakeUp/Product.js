@@ -257,7 +257,7 @@ class Product extends Component {
       href == null || href == '' ||
       type_id == null || type_id == '' ||
       brand_id == null || brand_id == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -332,7 +332,7 @@ class Product extends Component {
       href == null || href == '' ||
       type_id == null || type_id == '' ||
       brand_id == null || brand_id == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -678,7 +678,7 @@ class Product extends Component {
           <CButton color="primary" onClick={e => {
             this.addProduct()
           }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-          <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+          <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
         </ModalFooter>
       </div>
     )
@@ -901,8 +901,8 @@ class Product extends Component {
 
                   </ModalBody>
                   <ModalFooter>
-                    <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Save</CButton>{' '}
-                    <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+                    <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+                    <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
                   </ModalFooter>
                 </div>
             }
@@ -915,7 +915,7 @@ class Product extends Component {
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div>

@@ -138,7 +138,7 @@ class PackageSale extends Component {
 
         if (End_Date == null || End_Date == ''
             || Name == null || Name == '') {
-            alert("Please fill in all the requirements");
+            alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
             return
         }
 
@@ -183,7 +183,7 @@ class PackageSale extends Component {
 
         if (End_Date == null || End_Date == ''
             || Name == null || Name == '') {
-            alert("Please fill in all the requirements");
+            alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
             return
         }
 
@@ -425,8 +425,8 @@ class PackageSale extends Component {
                             </div>
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Save</Button>{' '}
-                            <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+                            <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
+                            <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
                         </ModalFooter>
                     </Modal>
 
@@ -437,7 +437,7 @@ class PackageSale extends Component {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-                            <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+                            <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
                         </ModalFooter>
                     </Modal>
                 </div>

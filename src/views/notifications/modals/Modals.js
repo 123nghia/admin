@@ -34,8 +34,8 @@ const Modals = () => {
             <DocsLink name="CModal"/>
           </CCardHeader>
           <CCardBody>
-            <CButton 
-              onClick={() => setModal(!modal)} 
+            <CButton
+              onClick={() => setModal(!modal)}
               className="mr-1"
             >Launch demo modal</CButton>
             <CButton onClick={() => setLarge(!large)} className="mr-1">
@@ -44,8 +44,8 @@ const Modals = () => {
             <CButton onClick={() => setSmall(!large)} className="mr-1">
               Launch small modal
             </CButton>
-            <CModal 
-              show={modal} 
+            <CModal
+              show={modal}
               onClose={setModal}
             >
               <CModalHeader closeButton>
@@ -60,16 +60,16 @@ const Modals = () => {
               </CModalBody>
               <CModalFooter>
                 <CButton color="primary">Do Something</CButton>{' '}
-                <CButton 
-                  color="secondary" 
+                <CButton
+                  color="secondary"
                   onClick={() => setModal(false)}
-                >Cancel</CButton>
+                >Đóng</CButton>
               </CModalFooter>
             </CModal>
 
 
-            <CModal 
-              show={large} 
+            <CModal
+              show={large}
               onClose={() => setLarge(!large)}
               size="lg"
             >
@@ -85,12 +85,12 @@ const Modals = () => {
               </CModalBody>
               <CModalFooter>
                 <CButton color="primary" onClick={() => setLarge(!large)}>Do Something</CButton>{' '}
-                <CButton color="secondary" onClick={() => setLarge(!large)}>Cancel</CButton>
+                <CButton color="secondary" onClick={() => setLarge(!large)}>Đóng</CButton>
               </CModalFooter>
             </CModal>
 
-            <CModal 
-              show={small} 
+            <CModal
+              show={small}
               onClose={() => setSmall(!small)}
               size="sm"
             >
@@ -106,7 +106,7 @@ const Modals = () => {
               </CModalBody>
               <CModalFooter>
                 <CButton color="primary" onClick={() => setSmall(!small)}>Do Something</CButton>{' '}
-                <CButton color="secondary" onClick={() => setSmall(!small)}>Cancel</CButton>
+                <CButton color="secondary" onClick={() => setSmall(!small)}>Đóng</CButton>
               </CModalFooter>
             </CModal>
 
@@ -120,8 +120,8 @@ const Modals = () => {
             <CButton color="danger" onClick={() => setDanger(!danger)} className="mr-1">Danger modal</CButton>
             <CButton color="info" onClick={() => setInfo(!info)} className="mr-1">Info modal</CButton>
 
-            <CModal 
-              show={primary} 
+            <CModal
+              show={primary}
               onClose={() => setPrimary(!primary)}
               color="primary"
             >
@@ -145,8 +145,8 @@ const Modals = () => {
               </CModalFooter>
             </CModal>
 
-            <CModal 
-              show={success} 
+            <CModal
+              show={success}
               onClose={() => setSuccess(!success)}
               color="success"
             >
@@ -162,12 +162,12 @@ const Modals = () => {
               </CModalBody>
               <CModalFooter>
                 <CButton color="success" onClick={() => setSuccess(!success)}>Do Something</CButton>{' '}
-                <CButton color="secondary" onClick={() => setSuccess(!success)}>Cancel</CButton>
+                <CButton color="secondary" onClick={() => setSuccess(!success)}>Đóng</CButton>
               </CModalFooter>
             </CModal>
 
-            <CModal 
-              show={warning} 
+            <CModal
+              show={warning}
               onClose={() => setWarning(!warning)}
               color="warning"
             >
@@ -183,12 +183,12 @@ const Modals = () => {
               </CModalBody>
               <CModalFooter>
                 <CButton color="warning" onClick={() => setWarning(!warning)}>Do Something</CButton>{' '}
-                <CButton color="secondary" onClick={() => setWarning(!warning)}>Cancel</CButton>
+                <CButton color="secondary" onClick={() => setWarning(!warning)}>Đóng</CButton>
               </CModalFooter>
             </CModal>
 
-            <CModal 
-              show={danger} 
+            <CModal
+              show={danger}
               onClose={() => setDanger(!danger)}
               color="danger"
             >
@@ -204,12 +204,12 @@ const Modals = () => {
               </CModalBody>
               <CModalFooter>
                 <CButton color="danger" onClick={() => setDanger(!danger)}>Do Something</CButton>{' '}
-                <CButton color="secondary" onClick={() => setDanger(!danger)}>Cancel</CButton>
+                <CButton color="secondary" onClick={() => setDanger(!danger)}>Đóng</CButton>
               </CModalFooter>
             </CModal>
 
-            <CModal 
-              show={info} 
+            <CModal
+              show={info}
               onClose={() => setInfo(!info)}
               color="info"
             >
@@ -224,7 +224,7 @@ const Modals = () => {
                 culpa qui officia deserunt mollit anim id est laborum.
               </CModalBody>
               <CModalFooter>
-                <CButton color="secondary" onClick={() => setInfo(!info)}>Cancel</CButton>
+                <CButton color="secondary" onClick={() => setInfo(!info)}>Đóng</CButton>
                 <CButton color="info" onClick={() => setInfo(!info)}>Do Something</CButton>{' '}
               </CModalFooter>
             </CModal>

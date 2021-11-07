@@ -158,7 +158,7 @@ class PackageSale extends Component {
     const { Company_Id, link_shop, link_shopee, link_lazada, link_tiki } = this.state
 
     if (link_shop == null || link_shop == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -208,7 +208,7 @@ class PackageSale extends Component {
     var id = JSON.parse(company_id);
 
     if (link_shop == null || link_shop == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -493,8 +493,8 @@ class PackageSale extends Component {
 
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Save</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Cancel</Button>
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
+              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>
 
@@ -505,7 +505,7 @@ class PackageSale extends Component {
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</Button>
+              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
             </ModalFooter>
           </Modal>
         </div>

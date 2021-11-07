@@ -288,7 +288,7 @@ class PluginOrder extends Component {
     if (Company_Id == null || Company_Id == ''
       || Package_Id == null || Package_Id == ''
       || arrFeature.length == 0) {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -940,7 +940,7 @@ class PluginOrder extends Component {
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div >

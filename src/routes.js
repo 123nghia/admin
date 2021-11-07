@@ -2,129 +2,152 @@ import React from 'react';
 import UserAdmin from './views/base/tables/Admin_App/Users/UserAdmin';
 
 const Dashboard = React.lazy(() =>
-    import ('./views/DashBoard/Dashboard'));
+  import('./views/DashBoard/Dashboard'));
 const TableUser = React.lazy(() =>
-    import ('./views/base/tables/TableUser'));
+  import('./views/base/tables/TableUser'));
 const TableCompany = React.lazy(() =>
-    import ('./views/base/tables/Company'));
+  import('./views/base/tables/Company'));
 const TableKey = React.lazy(() =>
-    import ('./views/base/tables/Key'));
+  import('./views/base/tables/Key'));
 const TableKeyOrder = React.lazy(() =>
-    import ('./views/base/tables/KeyOrder'));
+  import('./views/base/tables/KeyOrder'));
 const TablePakageSale = React.lazy(() =>
-    import ('./views/base/tables/PakageSale'));
+  import('./views/base/tables/PakageSale'));
 const TablePakageSaleLog = React.lazy(() =>
-    import ('./views/base/tables/PakageSaleLog'));
+  import('./views/base/tables/PakageSaleLog'));
 const TableRole = React.lazy(() =>
-    import ('./views/base/tables/Role'));
+  import('./views/base/tables/Role'));
 const TableTypeKey = React.lazy(() =>
-    import ('./views/base/tables/TypeKey'));
+  import('./views/base/tables/TypeKey'));
 const TableLink = React.lazy(() =>
-    import ('./views/base/tables/Link'));
+  import('./views/base/tables/Link'));
 const HistorySkinUser = React.lazy(() =>
-    import ('./views/base/tables/HistorySkinUser'));
+  import('./views/base/tables/HistorySkinUser'));
 const ListShopManager = React.lazy(() =>
-    import ('./views/base/tables/ListShopManager'));
+  import('./views/base/tables/ListShopManager'));
 const ListSale = React.lazy(() =>
-    import ('./views/base/tables/ListSale'));
+  import('./views/base/tables/ListSale'));
 const ListCustomer = React.lazy(() =>
-    import ('./views/base/tables/ListCustomer'));
+  import('./views/base/tables/ListCustomer'));
 const HardWare = React.lazy(() =>
-    import ('./views/base/tables/HardWare'));
+  import('./views/base/tables/HardWare'));
 const Order = React.lazy(() =>
-    import ('./views/base/tables/CreateOrder'));
+  import('./views/base/tables/CreateOrder'));
 const OrderTable = React.lazy(() =>
-    import ('./views/base/tables/OrderTable'));
+  import('./views/base/tables/OrderTable'));
 const TransactionTable = React.lazy(() =>
-    import ('./views/base/tables/Transaction'));
+  import('./views/base/tables/Transaction'));
 const HardWareManager = React.lazy(() =>
-    import ('./views/base/tables/HardWareManager'));
+  import('./views/base/tables/HardWareManager'));
 const Profile = React.lazy(() =>
-    import ('./views/users/ProfileUser'));
+  import('./views/users/ProfileUser'));
 const SPENDING = React.lazy(() =>
-    import ('./views/base/tables/SpendingOrder'));
+  import('./views/base/tables/SpendingOrder'));
 const RoleManager = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/RoleManager'));
+  import('./views/base/tables/AI_Skin/RoleManager'));
 const PluginManager = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/PluginManager'));
+  import('./views/base/tables/AI_Skin/PluginManager'));
 const PluginCustomer = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/PluginCustomerManager'));
+  import('./views/base/tables/AI_Skin/PluginCustomerManager'));
 const PluginCreateOrder = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/PluginCreateOrder'));
+  import('./views/base/tables/AI_Skin/PluginCreateOrder'));
 const FeatureTable = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/FeatureTable'));
+  import('./views/base/tables/AI_Skin/FeatureTable'));
 const PluginOrderTable = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/PluginOrderTable'));
+  import('./views/base/tables/AI_Skin/PluginOrderTable'));
 const PluginUserTable = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/PluginUserTable'));
+  import('./views/base/tables/AI_Skin/PluginUserTable'));
 const RewardInfomation = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/RewardInfomation'));
+  import('./views/base/tables/AI_Skin/RewardInfomation'));
 const ListFeatureOfCustomer = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/ListFeatureOfCustomer'));
+  import('./views/base/tables/AI_Skin/ListFeatureOfCustomer'));
 const CusRequest = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/CustomerRequestTable'));
+  import('./views/base/tables/AI_Skin/CustomerRequestTable'));
 const TypeRequest = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/TypeRequestModel'));
+  import('./views/base/tables/AI_Skin/TypeRequestModel'));
 const CustomerManager = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/CustomerManager'));
+  import('./views/base/tables/AI_Skin/CustomerManager'));
 const HistorySkin = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/HistorySkin'));
+  import('./views/base/tables/AI_Skin/HistorySkin'));
 const ContactCustomer = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/ContactCustomer'));
+  import('./views/base/tables/AI_Skin/ContactCustomer'));
 const UpdatePackage = React.lazy(() =>
-    import ('./views/base/tables/UpdatePackage'));
+  import('./views/base/tables/UpdatePackage'));
 const BrandPlugin = React.lazy(() =>
-    import ('./views/base/tables/AI_Skin/BrandPlugin'));
+  import('./views/base/tables/AI_Skin/BrandPlugin'));
 
 //ADMIN MakeUp
 const SuggestItem = React.lazy(() =>
-    import ('./views/base/tables/MakeUp/SuggestItem'));
+  import('./views/base/tables/MakeUp/SuggestItem'));
 const Brand = React.lazy(() =>
-    import ('./views/base/tables/MakeUp/Brand'));
+  import('./views/base/tables/MakeUp/Brand'));
 const Product = React.lazy(() =>
-    import ('./views/base/tables/MakeUp/Product'));
+  import('./views/base/tables/MakeUp/Product'));
 const SubType = React.lazy(() =>
-    import ('./views/base/tables/MakeUp/SubType'));
+  import('./views/base/tables/MakeUp/SubType'));
 const SubTypeHair = React.lazy(() =>
-    import ('./views/base/tables/MakeUp/SubTypeHair'));
+  import('./views/base/tables/MakeUp/SubTypeHair'));
 const SubTypeMakeUp = React.lazy(() =>
-    import ('./views/base/tables/MakeUp/SubTypeMakeUp'));
+  import('./views/base/tables/MakeUp/SubTypeMakeUp'));
 const Color = React.lazy(() =>
-    import ('./views/base/tables/MakeUp/Color'));
+  import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() =>
-    import ('./views/base/tables/MakeUp/TypeOne'));
+  import('./views/base/tables/MakeUp/TypeOne'));
 
 //ADMIN APP
 const UserApp = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/Users/UserTable'));
+  import('./views/base/tables/Admin_App/Users/UserTable'));
 const BrandApp = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/MakeUp/Brand'));
+  import('./views/base/tables/Admin_App/MakeUp/Brand'));
 const SubTypeApp = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/MakeUp/SubType'));
+  import('./views/base/tables/Admin_App/MakeUp/SubType'));
 const ColorApp = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/MakeUp/Color'));
+  import('./views/base/tables/Admin_App/MakeUp/Color'));
 const SkuApp = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/MakeUp/Sku'));
+  import('./views/base/tables/Admin_App/MakeUp/Sku'));
 const SkuHairApp = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/Hair/Sku'));
+  import('./views/base/tables/Admin_App/Hair/Sku'));
 const HairColorApp = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/Hair/Color'));
+  import('./views/base/tables/Admin_App/Hair/Color'));
 const SuggestOne = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/Skins/SuggestItem'));
+  import('./views/base/tables/Admin_App/Skins/SuggestItem'));
 const ListCompany = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/Users/ListCompany'));
+  import('./views/base/tables/Admin_App/Users/ListCompany'));
 const ListUserAdmin = React.lazy(() =>
-    import ('./views/base/tables/Admin_App/Users/UserAdmin'));
+  import('./views/base/tables/Admin_App/Users/UserAdmin'));
 
 
 const Bookinghistory = React.lazy(() =>
-    import ('./views/base/tables/Booking/HistoryBooking'));
+  import('./views/base/tables/Booking/HistoryBooking'));
 const PlaceBooking = React.lazy(() =>
-    import ('./views/base/tables/Booking/PlaceBooking'));
+  import('./views/base/tables/Booking/PlaceBooking'));
 const ServiceBooking = React.lazy(() =>
-    import ('./views/base/tables/Booking/Booking'));
+  import('./views/base/tables/Booking/Booking'));
+
+const NotificationType = React.lazy(() =>
+  import('./views/base/tables/Notification/NotificationType'));
+const NotificationThemplate = React.lazy(() =>
+  import('./views/base/tables/Notification/NotificationThemplate'));
+const Notification = React.lazy(() =>
+  import('./views/base/tables/Notification/Notification'));
+
+const CategoryStore = React.lazy(() =>
+  import('./views/base/tables/Store/Category'));
+const BrandStore = React.lazy(() =>
+  import('./views/base/tables/Store/Brand'));
+const ProductStore = React.lazy(() =>
+  import('./views/base/tables/Store/Product'));
+
+const OrderStore = React.lazy(() =>
+  import('./views/base/tables/Order/Order'));
+const TransportStore = React.lazy(() =>
+  import('./views/base/tables/Order/Transport'));
+
+const Point = React.lazy(() =>
+  import('./views/base/tables/Points/Point'));
+
 const routes = [
-   { path: '/', exact: true, name: 'Home' },
+  { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', name: 'Users', component: TableUser },
   { path: '/company', name: 'Company', component: TableCompany },
@@ -196,9 +219,23 @@ const routes = [
   { path: '/user_admin', name: 'List Company', component: ListUserAdmin },
 
 
-    { path: '/danh-sach-dat-lich', name: 'historyBooking', component: Bookinghistory },
-    { path: '/danh-sach-dich-vu', name: 'history', component: ServiceBooking },
-    { path: '/danh-sach-dia-diem', name: 'places', component: PlaceBooking }
+  { path: '/danh-sach-dat-lich', name: 'historyBooking', component: Bookinghistory },
+  { path: '/danh-sach-dich-vu', name: 'history', component: ServiceBooking },
+  { path: '/danh-sach-dia-diem', name: 'places', component: PlaceBooking },
+
+  { path: '/danh_muc', name: 'places', component: CategoryStore },
+  { path: '/thuong_hieu', name: 'places', component: BrandStore },
+  { path: '/san_pham', name: 'places', component: ProductStore },
+
+  { path: '/loai_thong_bao', name: 'places', component: NotificationType },
+  { path: '/danh_sach_thong_bao', name: 'places', component: Notification },
+  { path: '/noi_dung_thong_bao', name: 'places', component: NotificationThemplate },
+
+  { path: '/don_hang', name: 'places', component: OrderStore },
+  { path: '/van_chuyen', name: 'places', component: TransportStore },
+
+  { path: '/tich_diem', name: 'places', component: Point },
+
 ];
 
 export default routes;

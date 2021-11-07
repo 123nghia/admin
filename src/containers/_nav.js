@@ -6,7 +6,7 @@ import {
 } from '@coreui/react'
 import { cifAU, freeSet } from '@coreui/icons';
 
-const css = { }
+const css = {}
 const content = {
   profile: "Quản lý các thông tin cá nhân của bạn như số điện thoại, email, v.v",
   role: "Quản lý các cấp bậc phân quyền hiện tại của TIKITECH",
@@ -133,8 +133,8 @@ const _navMakeUp = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.subType}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>,
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
     }
   },
   {
@@ -193,7 +193,33 @@ const _navMakeUp = [
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
-  }
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý sản phẩm'],
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh mục',
+    to: '/danh_muc',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Thương hiệu',
+    to: '/thuong_hieu',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm',
+    to: '/san_pham',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2']
+  },
 ]
 
 const _navOrther = [
@@ -259,73 +285,98 @@ const _navBooking = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lý đặt lịch'],
-    role: ['0', '1', '2'],
+    role: ['0', '1'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách đặt lịch ',
     to: '/danh-sach-dat-lich',
-   icon: <CIcon style={css} content={freeSet.cilCalendar} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.customer}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
+    icon: <CIcon style={css} content={freeSet.cilCalendar} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách dịch vụ ',
     to: '/danh-sach-dich-vu',
-icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content="">
-        <CIcon content={freeSet.cilHamburgerMenu} />
-      </CTooltip>,
-    }
+    icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách địa điểm',
     to: '/danh-sach-dia-diem',
-   icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content="Danh sách địa điểm">
-        <CIcon content={freeSet.cilHamburgerMenu} />
-      </CTooltip>,
-    }
+    icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
   }
 
 ]
 
+const _navNotification = [
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý thông báo'],
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách loại thông báo',
+    to: '/loai_thong_bao',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách thông báo',
+    to: '/danh_sach_thong_bao',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nội dung thông báo',
+    to: '/noi_dung_thong_bao',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
+  },
+]
+
 const _navGH = [
-      {
-        _tag: 'CSidebarNavTitle',
-        _children: ['Quản lý gian hàng'],
-        role: ['0', '1', '2'],
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Bảng điều khiển ',
-        //to: '/danh-sach-dat-lich',
-        icon: <CIcon style={css} content={freeSet.cilCalendar} customClasses="c-sidebar-nav-icon" />,
-        role: ['0', '1', '2'],
-        badge: {
-          color: 'info',
-          text: <CTooltip placement={"right"} content={content.customer}>
-            <CIcon content={freeSet.cilBellExclamation} />
-          </CTooltip>,
-        },
-        addLinkClass: 'c-disabled',
-        'disabled': true
-      }
- ]
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý đơn hàng'],
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách đơn hàng',
+    to: '/don_hang',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách vận chuyển',
+    to: '/van_chuyen',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
+  }
+]
+
+const _navTichDiem = [
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý tích điểm'],
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách tích điểm',
+    to: '/tich_diem',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1']
+  },
+]
 
 
 
-export default [_navSoida, _navMakeUp, _navOrther,_navBooking,_navGH]
+export default [_navSoida, _navMakeUp, _navOrther, _navBooking, _navNotification, _navGH, _navTichDiem]

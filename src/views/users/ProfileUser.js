@@ -171,7 +171,7 @@ class Users extends Component {
       || Name == null || Name == ''
       || Phone == null || Phone == ''
       || UserName == null || UserName == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 

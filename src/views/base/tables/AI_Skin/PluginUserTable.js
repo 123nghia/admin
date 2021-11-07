@@ -228,7 +228,7 @@ class User extends Component {
       || Address == null || Address == ''
       || UserName == null || UserName == ''
       || Password == null || Password == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -282,7 +282,7 @@ class User extends Component {
       || Name == null || Name == ''
       || Phone == null || Phone == ''
       || Address == null || Address == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -585,8 +585,8 @@ class User extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Cancel</CButton>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
@@ -597,7 +597,7 @@ class User extends Component {
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div >

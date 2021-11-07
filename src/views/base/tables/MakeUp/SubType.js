@@ -254,7 +254,7 @@ class SubType extends Component {
     const { vi, image, hover, sub_type, color_id } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -324,7 +324,7 @@ class SubType extends Component {
     const { image, vi, isNull, hover, sub_type, arrShowColor } = this.state
     if (vi == null || vi == '' ||
       image == null || image == '') {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return
     }
 
@@ -758,7 +758,7 @@ class SubType extends Component {
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Delete</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Cancel</CButton>
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
         </div>

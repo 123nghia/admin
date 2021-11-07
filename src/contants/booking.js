@@ -251,11 +251,10 @@ export default {
     "UPDATE_PLACE_BOOKING": "/api/booking/placeBooking/update",
     "DELETE_PLACE_BOOKING": "/api/booking/placeBooking/delete",
 
-
     "LIST_HISTORY_BOOKING_SERVICES": "/api/booking/history/getAll",
     "LIST_HISTORY_BOOKING_COMPANY": "/danh-sach-dat-lich/",
     "ADD_HISTORY_BOOKING": "/api/booking/history/add",
     "UPDATE_HISTORY_BOOKING": "/api/booking/history/update",
-    "DELETE_HISTORY_BOOKING": "/api/booking/history/delete",
+    "DELETE_HISTORY_BOOKING": "/api/booking/history/delete"
 
 };

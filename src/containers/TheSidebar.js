@@ -20,7 +20,6 @@ import navigations from './_nav'
 
 const TheSidebar = () => {
   const type = localStorage.getItem('type');
-
   var temp = []
   var navigation = [];
   for (let i = 0; i < navigations.length; i++) {
@@ -126,9 +125,34 @@ const TheSidebar = () => {
             }}
           />
         </div>
+
         <div style={{ backgroundColor: '#333333' }}>
           <CCreateElement
             items={navigations[4]}
+            components={{
+              CSidebarNavDivider,
+              CSidebarNavDropdown,
+              CSidebarNavItem,
+              CSidebarNavTitle
+            }}
+          />
+        </div>
+
+        <div style={{ backgroundColor: '#333333' }}>
+          <CCreateElement
+            items={navigations[5]}
+            components={{
+              CSidebarNavDivider,
+              CSidebarNavDropdown,
+              CSidebarNavItem,
+              CSidebarNavTitle
+            }}
+          />
+        </div>
+
+        <div style={{ backgroundColor: '#333333' }}>
+          <CCreateElement
+            items={navigations[6]}
             components={{
               CSidebarNavDivider,
               CSidebarNavDropdown,

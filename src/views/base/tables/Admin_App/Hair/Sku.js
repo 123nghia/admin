@@ -207,7 +207,7 @@ class Cards extends Component {
       brand == null,
       color == null
     ) {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return;
     }
     const body = {
@@ -282,7 +282,7 @@ class Cards extends Component {
       type == null ||
       brand == null
     ) {
-      alert("Please fill in all the requirements");
+      alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
       return;
     }
     const body = {
