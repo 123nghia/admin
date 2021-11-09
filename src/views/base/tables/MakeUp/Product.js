@@ -750,7 +750,7 @@ class Product extends Component {
                                   <a
                                     href={item.href}
                                     target="_blank"
-                                  >{`Open web`}</a>
+                                  >{`Chi tiết`}</a>
                                 </td>
                                 <td className="text-center" style={{ width: '10%' }}>
                                   <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />

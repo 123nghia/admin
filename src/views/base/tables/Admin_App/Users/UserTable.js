@@ -187,7 +187,6 @@ class UserTable extends Component {
   }
 
   async openUpdate(item) {
-    console.log(item.age)
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -197,7 +196,6 @@ class UserTable extends Component {
       type: item.type,
       id: item['_id'],
       phone: item.phone,
-      birthday: new Date(item.age),
     })
   }
 
@@ -358,7 +356,6 @@ class UserTable extends Component {
                         <th className="text-center">Ảnh đại diện</th>
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">Email</th>
-                        <th className="text-center">Sinh nhật</th>
                         <th className="text-center">Loại</th>
                         <th className="text-center">#</th>
                       </tr>
@@ -373,11 +370,10 @@ class UserTable extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  <img width="80" height="80" src={item.avatar} />
+                                  <img width="60" height="60" style={{ borderRadius: 50 }} src={item.avatar} />
                                 </td>
                                 <td className="text-center">{item.phone}</td>
                                 <td className="text-center">{item.email}</td>
-                                <td className="text-center">{(new Date(item.age)).toLocaleDateString() + ' ' + (new Date(item.age)).toLocaleTimeString()}</td>
                                 <td className="text-center">{item.type}</td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >

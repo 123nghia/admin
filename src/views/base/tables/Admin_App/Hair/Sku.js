@@ -22,7 +22,7 @@ import chroma from 'chroma-js';
 import Select from 'react-select';
 import CIcon from '@coreui/icons-react'
 import {
-  CButton,
+  CButton, CRow, CCol, CLabel, CTooltip
 } from '@coreui/react'
 import DotLoader from "react-spinners/DotLoader";
 import { css } from "@emotion/react";
@@ -95,7 +95,7 @@ class Cards extends Component {
       url: "",
       isActive100: false,
       isLoading: false,
-      errors: { },
+      errors: {},
       action: "",
       brands: [],
       types: [],
@@ -121,7 +121,7 @@ class Cards extends Component {
     this.setState({ isLoading: true });
 
     const res = await API_CONNECT(
-      `${ConstantApp.GET_LIST_HAIR}?company_id=${companyid}`, { }, "", "GET")
+      `${ConstantApp.GET_LIST_HAIR}?company_id=${companyid}`, {}, "", "GET")
 
     var val = res.data
 
@@ -130,7 +130,7 @@ class Cards extends Component {
     if (this.state.colors.length == 0) {
 
       const color = await API_CONNECT(
-        `${ConstantApp.GET_LIST_COLOR}?company_id=${companyid}`, { }, "", "GET")
+        `${ConstantApp.GET_LIST_COLOR}?company_id=${companyid}`, {}, "", "GET")
 
       let c = []
       color.data.map(val => {
@@ -146,7 +146,7 @@ class Cards extends Component {
     if (this.state.brands.length == 0) {
 
       const brand = await API_CONNECT(
-        `${ConstantApp.GET_LIST_BRAND}?company_id=${companyid}`, { }, "", "GET")
+        `${ConstantApp.GET_LIST_BRAND}?company_id=${companyid}`, {}, "", "GET")
 
       this.setState({ brands: brand.data });
     }
@@ -154,7 +154,7 @@ class Cards extends Component {
     if (this.state.types.length == 0) {
 
       const type = await API_CONNECT(
-        `${ConstantApp.GET_LIST_TYPE}?company_id=${companyid}`, { }, "", "GET")
+        `${ConstantApp.GET_LIST_TYPE}?company_id=${companyid}`, {}, "", "GET")
 
       this.setState({ types: type.data });
     }
@@ -322,8 +322,8 @@ class Cards extends Component {
 
     const res = await API_CONNECT(
       ConstantApp.DELETE_PRODUCT, {
-        id: this.state.delete["_id"],
-      }, "", "POST")
+      id: this.state.delete["_id"],
+    }, "", "POST")
 
     if (res.status == 200) {
       this.getData();
@@ -349,7 +349,7 @@ class Cards extends Component {
       url: "",
       isHide: false,
       isActive100: false,
-      errors: { },
+      errors: {},
       type: null,
       brand: null,
       productID: "",
@@ -417,15 +417,10 @@ class Cards extends Component {
   };
   render() {
     const {
-      isActive100,
       errors,
-      addresses,
       title,
-      description,
       image,
       url,
-      categories,
-      category,
       data,
       arrPagination
     } = this.state;
@@ -473,12 +468,17 @@ class Cards extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.type}</td>
                                 <td className="text-center">{item.brand}</td>
-                                <td className="text-center">{item.name}</td>
+                                <CTooltip content={item.name}>
+                                  <td className="text-center">
+                                    {item.name.substr(0, 45) +
+                                      (item.name.length > 45 ? "..." : "")}
+                                  </td>
+                                </CTooltip>
                                 <th className="text-center">
                                   <a
                                     href={item.href}
                                     target="_blank"
-                                  >{`Open web`}</a>
+                                  >{`Chi tiết`}</a>
                                 </th>
                                 <td className="text-center">
                                   {item.color.hex}
@@ -517,109 +517,127 @@ class Cards extends Component {
             className={this.props.className}
           >
             <ModalHeader toggle={() => this.toggle()}>
-              {this.state.action === "update" ? "Edit" : "Create "}
+              {this.state.action === "update" ? "Cập nhật" : "Tạo mới"}
             </ModalHeader>
             <ModalBody>
               <Form>
                 <TextFieldGroup
-                  field="name"
-                  label="Name"
+                  field="title"
+                  label="Tên sản phẩm"
                   value={title}
+                  placeholder={"Tên sản phẩm"}
                   error={errors.title}
                   onChange={(e) => this.onChange("title", e.target.value)}
                   rows="5"
                 />
                 <div>
-                  <label htmlFor="tag">Type:  </label>
-                  <select name="type" onChange={(e) => this.select("type", e)}>
-                    <option
-                      value={
-                        this.state.action === "update"
-                          ? `${this.state.type == null
-                            ? null
-                            : `${this.state.type["_id"]}`
-                          }`
-                          : null
-                      }
-                    >
-                      {this.state.action === "update"
-                        ? `${this.state.type == null
-                          ? " - - - - - - - - - - "
-                          : `${this.state.type.vi || this.state.type.name}`
-                        }`
-                        : " - - - - - - - - - - "}
-                    </option>
+                  <CRow>
+                    <CCol sm="12" lg="3">
+                      <label htmlFor="tag">Danh mục:  </label>
+                    </CCol>
+                    <CCol sm="12" lg="9">
+                      <select name="type" style={{ width: 200 }} onChange={(e) => this.select("type", e)}>
+                        <option
+                          value={
+                            this.state.action === "update"
+                              ? `${this.state.type == null
+                                ? null
+                                : `${this.state.type["_id"]}`
+                              }`
+                              : null
+                          }
+                        >
+                          {this.state.action === "update"
+                            ? `${this.state.type == null
+                              ? " - - - - - - - - - - "
+                              : `${this.state.type.vi || this.state.type.name}`
+                            }`
+                            : " - - - - - - - - - - "}
+                        </option>
 
-                    {this.state.types.map((cat, i) => {
-                      if (
-                        this.state.action == "update" &&
-                        cat["_id"] == this.state.type["_id"]
-                      ) {
-                        console.log("remove === ", cat);
-                      } else {
-                        return (
-                          <option key={String(i)} value={cat["_id"]}>
-                            {cat.vi || cat.name}
-                          </option>
-                        );
-                      }
-                    })}
-                  </select>
+                        {this.state.types.map((cat, i) => {
+                          if (
+                            this.state.action == "update" &&
+                            cat["_id"] == this.state.type["_id"]
+                          ) {
+                            console.log("remove === ", cat);
+                          } else {
+                            return (
+                              <option key={String(i)} value={cat["_id"]}>
+                                {cat.vi || cat.name}
+                              </option>
+                            );
+                          }
+                        })}
+                      </select>
+                    </CCol>
+                  </CRow>
                 </div>
                 <div>
-                  <label htmlFor="tag">Brand:   </label>
-                  <select
-                    name="category"
-                    onChange={(e) => this.select("brand", e)}
-                  >
-                    <option
-                      value={
-                        this.state.action === "update"
-                          ? `${this.state.brand == null
-                            ? null
-                            : `${this.state.brand["_id"]}`
-                          }`
-                          : null
-                      }
-                    >
-                      {this.state.action === "update"
-                        ? `${this.state.brand == null
-                          ? " - - - - - - - - - - "
-                          : `${this.state.brand.name}`
-                        }`
-                        : " - - - - - - - - - - "}
-                    </option>
+                  <CRow>
+                    <CCol sm="12" lg="3">
+                      <label htmlFor="tag">Thương hiệu:   </label>
+                    </CCol>
+                    <CCol sm="12" lg="9">
+                      <select
+                        name="category"
+                        style={{ width: 200 }}
+                        onChange={(e) => this.select("brand", e)}
+                      >
+                        <option
+                          value={
+                            this.state.action === "update"
+                              ? `${this.state.brand == null
+                                ? null
+                                : `${this.state.brand["_id"]}`
+                              }`
+                              : null
+                          }
+                        >
+                          {this.state.action === "update"
+                            ? `${this.state.brand == null
+                              ? " - - - - - - - - - - "
+                              : `${this.state.brand.name}`
+                            }`
+                            : " - - - - - - - - - - "}
+                        </option>
 
-                    {this.state.brands.map((cat, i) => {
-                      if (
-                        this.state.action == "update" &&
-                        cat["_id"] == this.state.brand["_id"]
-                      ) {
-                        console.log("remove === ", cat);
-                      } else {
-                        return (
-                          <option key={String(i)} value={cat["_id"]}>
-                            {cat.name}
-                          </option>
-                        );
-                      }
-                    })}
-                  </select>
+                        {this.state.brands.map((cat, i) => {
+                          if (
+                            this.state.action == "update" &&
+                            cat["_id"] == this.state.brand["_id"]
+                          ) {
+                            console.log("remove === ", cat);
+                          } else {
+                            return (
+                              <option key={String(i)} value={cat["_id"]}>
+                                {cat.name}
+                              </option>
+                            );
+                          }
+                        })}
+                      </select>
+                    </CCol>
+                  </CRow>
                 </div>
                 <TextFieldGroup
                   field="image"
-                  label="Image"
+                  label="Hình ảnh"
                   value={image}
+                  placeholder={"Hình ảnh"}
                   error={errors.image}
                   onChange={(e) => this.onChange("image", e.target.value)}
                 />
                 <TextFieldGroup
                   field="href"
-                  label="Href"
+                  label="Đường dẫn"
+                  placeholder={"Đường dẫn"}
                   value={url}
                   error={errors.url}
                   onChange={(e) => this.onChange("url", e.target.value)}
                 />
+
+                <CLabel>Mã màu</CLabel>
                 <Select
                   defaultValue={this.state.color}
                   label="Single select"

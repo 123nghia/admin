@@ -379,4 +379,4 @@ const _navTichDiem = [
 
 
 
-export default [_navSoida, _navMakeUp, _navOrther, _navBooking, _navNotification, _navGH, _navTichDiem]
+export default [_navSoida, _navMakeUp, _navBooking, _navNotification, _navGH, _navTichDiem, _navOrther]

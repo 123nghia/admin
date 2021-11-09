@@ -282,7 +282,7 @@ class Order extends Component {
                                     Chi tiết
                                   </CButton>
 
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
+                                  <CButton style={styles.mgl5} outline color="primary" disabled={item.transport_id == undefined ? true : false} size="sm" onClick={async (e) => {
                                     //this.onDetailOrder(item.transport_id.res_order.label)
                                   }} >
                                     In đơn hàng

@@ -470,7 +470,7 @@ class Feature extends Component {
                                 <td className="text-center">{item.Key}</td>
                                 <td className="text-center">{item.Value}</td>
                                 <td className="text-center">
-                                  <img width="80" height="80" src={item.Image} />
+                                  <img width="50" height="50" style={{ borderRadius: 50 }} borderRadius="50" src={item.Image} />
                                 </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge_type(item.Type)}>

@@ -124,7 +124,7 @@ class Company extends Component {
                         <a data-tip={`${item.Value + company_slug}`} style={{ cursor: "pointer", margin: 5 }} href={item.Value + "#" + "/" + company_slug} target="_blank">
                           <div style={styles.feature}>
                             <div style={{ height: '200px', width: '100%', 'marginTop': '24px' }}>
-                              <img width="80" height="80" src={item.Image} />
+                              <img width="50" height="50" style={{ borderRadius: 50 }} src={item.Image} />
                             </div>
                             <div className="feature__body">
                               <center>

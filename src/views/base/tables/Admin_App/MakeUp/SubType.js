@@ -334,7 +334,7 @@ class SubType extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.vi}</td>
                                 <td className="text-center">
-                                  <img width="80" height="80" src={item.image} />
+                                  <img width="50" height="50" style={{ borderRadius: 50 }} borderRadius="50" src={item.image} />
                                 </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
