@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import CIcon from '@coreui/icons-react'
 import {
   Card,
   CardBody,
@@ -17,6 +17,10 @@ import {
 } from "reactstrap";
 import "moment-timezone";
 
+import {
+  CButton,
+  CTooltip
+} from '@coreui/react'
 import TextArea from "../../../../Common/TextArea";
 import validateInput from "./../../../../../functions/news";
 import TextFieldGroup from "../../../../Common/TextFieldGroup";
@@ -47,7 +51,7 @@ class News extends Component {
       activePage: 1,
       numPage: 1,
       itemsCount: 0,
-      itemPerPage: 20,
+      itemPerPage: 5,
       openDate: new Date(),
       // new data
       name: "",
@@ -71,7 +75,7 @@ class News extends Component {
     this.loadData();
   }
   loadData = () => {
-    const { activePage = 1, itemPerPage = 200, key = "", idSDK, companyid } = this.state;
+    const { activePage, itemPerPage, key = "", idSDK, companyid } = this.state;
     const fetchData = {
       method: "GET",
     };
@@ -87,6 +91,7 @@ class News extends Component {
           } else {
             this.setState({ hidden: true })
           }
+
           this.setState({
             data: result.data,
             itemsCount: result.totalItems,
@@ -181,7 +186,10 @@ class News extends Component {
   }
 
   inputChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    console.log(e.target.name)
+    this.setState({ [e.target.name]: e.target.value }, () => {
+      this.goSearch()
+    });
   }
   deleteCard = (id) => {
     if (window.confirm("Are you sure to delete this item?")) {
@@ -208,9 +216,6 @@ class News extends Component {
   };
   onDateChange = (date) => {
     if (date) {
-      // date.setMinutes(0);
-      // date.setSeconds(0);
-      // date.setMilliseconds(0);
       this.setState({ openDate: date });
     }
   };
@@ -303,8 +308,7 @@ class News extends Component {
 
   getBadgeSDK(type, i) {
     const { sdkItem } = this.state;
-    if(type == "K1" || type == "K2" || type == "K3" || type == "K4")
-    {
+    if (type == "K1" || type == "K2" || type == "K3" || type == "K4") {
       sdkItem.splice(i, 1)
       this.setState({ sdkItem: sdkItem })
     }
@@ -317,24 +321,25 @@ class News extends Component {
     }
   }
 
+  getBadge(sdktype) {
+    switch (sdktype) {
+      case '1': return 'Nhẹ'
+      case '2': return 'Thường'
+      case '3': return 'Nặng'
+      default: return 'Không rõ'
+    }
+  }
+
   render() {
     const {
       data,
-      title_en,
-      title_jp,
-      description_en,
-      description_jp,
-      video,
       errors,
-      openDate,
       name,
       image,
       title,
       description,
       linkdetail,
-      level,
       sdktype,
-      companyid,
       sdkItem,
       key,
       currentSdkSelect,
@@ -361,15 +366,6 @@ class News extends Component {
                     />
                     <Button
                       outline
-                      color="success"
-                      style={styles.marginCenter}
-                      size="sm"
-                      onClick={(e) => this.goSearch()}
-                    >
-                      Tìm kiếm
-                    </Button>
-                    <Button
-                      outline
                       color="primary"
                       style={styles.marginCenter}
                       size="sm"
@@ -388,9 +384,7 @@ class News extends Component {
                         <th className="text-center">Tên</th>
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">Tiêu đề</th>
-                        <th className="text-center">Mô tả</th>
                         <th className="text-center">Đường dẫn chi tiết</th>
-                        <th className="text-center">Loại sdk</th>
                         <th className="text-center">Cấp độ</th>
                         <th className="text-center"></th>
                       </tr>
@@ -406,38 +400,25 @@ class News extends Component {
                             </td>
                             <td className="text-center">{item.name}</td>
                             <td className="text-center">
-                              <a href={item.image} target="_blank">
-                                {item.image ? "View Image" : ""}
-                              </a>
+                              <img src={item.image} style={{ width: '50px', height: '50px' }} />
                             </td>
-                            <td className="text-center">
-                              {item.title.substr(0, 100) +
-                                (item.title.length > 100 ? "..." : "")}
-                            </td>
-                            <td className="text-center">{item.description}</td>
+                            <CTooltip content={item.title}>
+                              <td className="text-center">
+                                {item.title.substr(0, 45) +
+                                  (item.title.length > 45 ? "..." : "")}
+                              </td>
+                            </CTooltip>
                             <td className="text-center">
                               <a target="_blank" href={item.linkdetail}>Chi tiết sản phẩm</a>
                             </td>
-                            <td className="text-center">{item.level}</td>
-                            <td className="text-center">{item.sdktype}</td>
+                            <td className="text-center">{this.getBadge(item.sdktype)}</td>
                             <td className="text-center">
-                              <Button
-                                outline
-                                color="primary"
-                                size="sm"
-                                onClick={(e) => this.execUpdate(item)}
-                              >
-                                Cập nhật
-                              </Button>
-                              &nbsp;
-                              <Button
-                                outline
-                                color="danger"
-                                size="sm"
-                                onClick={(e) => this.deleteCard(item._id)}
-                              >
-                                Xóa
-                              </Button>
+                              <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => this.execUpdate(item)} >
+                                <CIcon name="cilPencil" />
+                              </CButton>
+                              <CButton outline color="danger" size="sm" onClick={(e) => { this.deleteCard(item._id) }}>
+                                <CIcon name="cilTrash" />
+                              </CButton>
                             </td>
                           </tr>
                         );
@@ -446,15 +427,17 @@ class News extends Component {
                   </table>
                 </CardBody>
               </Card>
-              <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={this.state.itemPerPage}
-                totalItemsCount={this.state.itemsCount}
-                pageRangeDisplayed={10} // so luong item hien thi tren pagination number
-                onChange={(e) => this.handlePageChange(e)}
-                itemClass="page-item"
-                linkClass="page-link"
-              />
+              <div style={{ float: 'right' }}>
+                <Pagination
+                  activePage={this.state.activePage}
+                  itemsCountPerPage={this.state.itemPerPage}
+                  totalItemsCount={this.state.itemsCount}
+                  pageRangeDisplayed={10} // so luong item hien thi tren pagination number
+                  onChange={(e) => this.handlePageChange(e)}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
+              </div>
             </Col>
           </Row>
           <Modal
@@ -544,7 +527,9 @@ class News extends Component {
                         {currentSdkSelect.sdktype.split(",").map((item, i) => {
                           return (
                             <option key={i} value={item}>
-                              {item}
+                              {
+                                this.getBadge(item)
+                              }
                             </option>
                           );
                         })}
@@ -681,7 +666,7 @@ const styles = {
     color: "red",
   },
   mgl5: {
-    marginLeft: "5px",
+    margin: "5px",
   },
   tags: {
     float: "right",
