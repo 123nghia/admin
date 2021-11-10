@@ -21,6 +21,8 @@ import 'moment-timezone';
 import Constants from "../../../../contants/contants_app";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import styles from "../../../../assets/styles/styles";
@@ -354,7 +356,7 @@ class NotificationThemplate extends Component {
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
+          <Modal size='xl' isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
               <TextFieldGroup
@@ -365,12 +367,15 @@ class NotificationThemplate extends Component {
                 onChange={e => this.onChange("code", e.target.value)}
               />
 
-              <TextFieldGroup
-                field="content"
-                label="Nội dung"
-                value={this.state.content}
-                placeholder={"Nội dung"}
-                onChange={e => this.onChange("content", e.target.value)}
+              <br />
+              <label className="control-label">Mô tả thương hiệu</label>
+              <CKEditor
+                editor={ClassicEditor}
+                data={this.state.description_brand}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  this.setState({ content: data })
+                }}
               />
             </ModalBody>
             <ModalFooter>

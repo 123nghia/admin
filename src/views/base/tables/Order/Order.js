@@ -138,19 +138,20 @@ class Order extends Component {
 
   onDetailOrder = async (label) => {
     //var res = await API_CONNECT(Constants.PRINT_ORDER + "?label=" + label, {}, "", "GET")
-    const fetchData = {
-      mode: 'no-cors',
-      method: 'GET',
-      headers: {
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Token': 'dFC8c89c6b8108f46b8e653B929634c7cfe98E6c',
-        'Access-Control-Allow-Origin': '*'
-      }
-    };
-    fetch('https://services.ghtklab.com/services/label/S1788269.300062990', fetchData)
+    //console.log(res)
+    // const fetchData = {
+    //   mode: 'no-cors',
+    //   method: 'GET',
+    //   headers: {
+    //     "Content-Type": "application/pdf",
+    //     "Content-Transfer-Encoding": "binary",
+    //     'Token': 'dFC8c89c6b8108f46b8e653B929634c7cfe98E6c',
+    //     'Access-Control-Allow-Origin': '*'
+    //   }
+    // };
+    // let duy = await fetch('https://services.ghtklab.com/services/label/S1788269.300062990', fetchData)
+    window.location.href = 'https://services.ghtklab.com/services/label/S1788269.300062990'
+    // console.log(duy)
   }
 
   setContent(status, type) {
@@ -283,7 +284,7 @@ class Order extends Component {
                                   </CButton>
 
                                   <CButton style={styles.mgl5} outline color="primary" disabled={item.transport_id == undefined ? true : false} size="sm" onClick={async (e) => {
-                                    //this.onDetailOrder(item.transport_id.res_order.label)
+                                    this.onDetailOrder(item.transport_id.res_order.label)
                                   }} >
                                     In đơn hàng
                                   </CButton>

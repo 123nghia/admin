@@ -1,6 +1,6 @@
 export default {
-  "BASE_URL": "http://localhost:3004",
-  //"BASE_URL" : "https://admin-api-app.applamdep.com",
+  //"BASE_URL": "http://localhost:3004",
+  "BASE_URL" : "https://admin-api-app.applamdep.com",
   "GET_LIST_USERS": "/users",
   "ADD_USERS": "/add-user",
   "UPDATE_USERS": "/update-user",
