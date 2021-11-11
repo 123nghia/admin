@@ -77,8 +77,6 @@ class Login extends Component {
           this.props.history.push('/suggest/K5')
         }
       } else {
-        console.log(this.state.username)
-        console.log(md5(this.state.password))
         this.setState({ isLoading: false, errors: { common: 'Tên đăng nhập hoặc mật khẩu không chính xác' } });
       }
     }

@@ -243,7 +243,6 @@ class PluginManager extends Component {
 
   async updateCompany() {
     const { Name, Value, Unit, Status, arrFeature_Save, arrFeature_Update } = this.state
-    console.log(arrFeature_Update)
     setTimeout(
       async function () {
         if (Name == null || Name == ''
@@ -706,7 +705,7 @@ class PluginManager extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

@@ -55,6 +55,7 @@ class Product extends Component {
       description: "",
       point: "",
       price: "",
+      exchange_point: "",
       //thông tin seo
       title: "",
       author: "",
@@ -228,7 +229,7 @@ class Product extends Component {
 
   async addProduct() {
     const { category_id, brand_id, name, href, image, price, description, companyid, point,
-      info_product, how_to_use, description_brand, weight } = this.state
+      info_product, how_to_use, description_brand, weight, exchange_point } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       category_id == null || category_id == '' ||
@@ -256,6 +257,7 @@ class Product extends Component {
       description: description,
       price: price,
       company_id: companyid,
+      exchange_point: exchange_point
     }
 
     this.setState({ isLoading: true, dataPage: [] });
@@ -289,6 +291,7 @@ class Product extends Component {
       image_show: "",
       image: item.image,
       price: item.price,
+      exchange_point: item.exchange_point,
       objectValueBrand: { value: item.brand_id._id, label: item.brand_id.name },
       objectValueCategory: { value: item.category_id._id, label: item.category_id.name },
       id: item['_id'],
@@ -327,10 +330,9 @@ class Product extends Component {
 
   async updateProduct() {
     const { category_id, brand_id, name, href, weight, image, price,
-      description, info_product, how_to_use, description_brand, point } = this.state
+      description, info_product, how_to_use, description_brand, point, exchange_point } = this.state
 
     if (name == null || name == '' ||
-      image == null || image == '' ||
       category_id == null || category_id == '' ||
       brand_id == null || brand_id == '') {
       alert("Hãy nhập đầy đủ dữ liệu !!!");
@@ -355,6 +357,7 @@ class Product extends Component {
       point: point,
       price: price,
       description_brand: description_brand,
+      exchange_point: exchange_point,
       id: this.state.id,
     }
 
@@ -426,12 +429,10 @@ class Product extends Component {
 
   handleChangeBrand = (newValue, actionMeta) => {
     this.setState({ objectValueBrand: newValue, brand_id: newValue.value })
-    console.log(newValue.value);
   };
 
   handleChangeCategory = (newValue, actionMeta) => {
     this.setState({ objectValueCategory: newValue, category_id: newValue.value })
-    console.log(newValue.value);
   };
 
   render() {
@@ -480,6 +481,7 @@ class Product extends Component {
                         <th className="text-center">Danh mục</th>
                         <th className="text-center">Giá</th>
                         <th className="text-center">Điểm</th>
+                        <th className="text-center">Điểm yêu cầu</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -506,6 +508,7 @@ class Product extends Component {
                                 <td className="text-center">{item.category_id.name}</td>
                                 <td className="text-center">{item.price}</td>
                                 <td className="text-center">{item.point}</td>
+                                <td className="text-center">{item.exchange_point}</td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -627,13 +630,29 @@ class Product extends Component {
                     </CCol>
                   </CRow>
 
-                  <TextFieldGroup
-                    field="point"
-                    label="Tích điểm"
-                    value={this.state.point}
-                    placeholder={"Tích điểm"}
-                    type={"number"}
-                    onChange={e => this.onChange("point", e.target.value)} />
+                  <CRow>
+                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                      <TextFieldGroup
+                        field="point"
+                        label="Tích điểm"
+                        value={this.state.point}
+                        placeholder={"Tích điểm"}
+                        type={"number"}
+                        onChange={e => this.onChange("point", e.target.value)} />
+                    </CCol>
+
+                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                      <TextFieldGroup
+                        field="exchange_point"
+                        label="Điểm yêu cầu"
+                        value={this.state.exchange_point}
+                        placeholder={"Điểm yêu cầu"}
+                        type={"number"}
+                        onChange={e => this.onChange("exchange_point", e.target.value)} />
+                    </CCol>
+                  </CRow>
+
+
                 </CCol>
 
 
@@ -695,7 +714,7 @@ class Product extends Component {
 
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

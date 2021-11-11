@@ -192,8 +192,6 @@ class Cards extends Component {
       }
     });
 
-    console.log(t);
-
     this.setState({ [key]: t });
   };
 
@@ -239,7 +237,6 @@ class Cards extends Component {
   };
 
   changeColor = (val) => {
-    console.log(val)
     this.setState({ color: val })
   }
 
@@ -683,7 +680,7 @@ class Cards extends Component {
                   delete: null,
                 })
               }
-            >{`Delete`}</ModalHeader>
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Do you want to delete product "${this.state.delete
                 ? this.state.delete.vi || this.state.delete.name

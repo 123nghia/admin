@@ -101,7 +101,6 @@ class SuggestItem extends Component {
 
   onSearch = async () => {
     const { type, idSDK, key, userData } = this.state;
-    console.log(key)
     if (type == '0' || type == '1') {
       this.setState({ isLoadingTable: true });
 
@@ -199,7 +198,6 @@ class SuggestItem extends Component {
     }
 
     let val = res.dataRes;
-    console.log(res)
     this.setState({
       dataApi: val,
       isLoadingTable: false,

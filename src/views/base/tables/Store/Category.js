@@ -79,7 +79,6 @@ class Category extends Component {
     var res = await API_CONNECT(
       Constants.LIST_CATEGORY, { company_id: companyid }, "", "POST")
 
-    console.log(res)
     let val = res.data;
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false })
@@ -386,7 +385,7 @@ class Category extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

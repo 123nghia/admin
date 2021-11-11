@@ -360,7 +360,6 @@ class Product extends Component {
       } else {
         this.getData_Company()
       };
-      console.log(this.state.id)
       this.setState({ modalCom: !this.state.modalCom })
     } else {
       alert("Cập nhật thất bại");
@@ -417,7 +416,6 @@ class Product extends Component {
   searchKey() {
     const { indexPage, key } = this.state;
     // this.setState({ key: key })
-    console.log(this.state.dataApi)
     if (key != '') {
       let d = []
       this.state.dataApi.map(val => {
@@ -909,7 +907,7 @@ class Product extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

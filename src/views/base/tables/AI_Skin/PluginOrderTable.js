@@ -160,8 +160,6 @@ class PluginOrder extends Component {
 
     let val = res.data.data;
 
-    console.log(res)
-
     this.pagination(totalCount, val);
     this.setState({ dataApi: val, arrName: res.data.data.company, arrPackage: res.data.data.package, isLoading: false });
   }
@@ -226,7 +224,6 @@ class PluginOrder extends Component {
         if (val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase()) &&
         (val.Company_Id.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
         val.Package_Id.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()))) {
-          console.log(val)
           d.push(val)
         }
       })
@@ -934,7 +931,7 @@ class PluginOrder extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

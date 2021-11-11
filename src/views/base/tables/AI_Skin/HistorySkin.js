@@ -66,7 +66,6 @@ class HistorySkin extends Component {
     };
   }
   async componentDidMount() {
-    console.log(this.state.type)
     if (this.state.type == '0') {
       this.getData()
     } else {

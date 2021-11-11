@@ -227,7 +227,6 @@ class Feature extends Component {
       method: 'PUT',
       data: body
     });
-    console.log(res.data.data)
     if (res.data.is_success == true) {
       this.getData();
       this.setState({ modalCom: !this.state.modalCom })
@@ -238,7 +237,6 @@ class Feature extends Component {
   }
 
   openUpdate(item) {
-    console.log(item.Image)
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -612,7 +610,7 @@ class Feature extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

@@ -257,8 +257,6 @@ class ListFeatureOfCustomer extends Component {
   }
 
   async updatePassword(id, password) {
-    console.log(id)
-    console.log(password)
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.PLUGIN_UPDATE_PASSWORD,

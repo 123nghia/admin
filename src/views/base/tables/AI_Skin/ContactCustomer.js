@@ -117,8 +117,6 @@ class ContactCustomer extends Component {
     let val = res.data.data
     this.pagination(val);
 
-    console.log(val)
-
     this.setState({ dataApi: val });
 
     let active = 0

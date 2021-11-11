@@ -6,7 +6,11 @@ import {
   CardHeader,
   Col,
   Row,
-  Input
+  Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from 'reactstrap';
 
 import {
@@ -35,14 +39,14 @@ class Point extends Component {
       dataApi: [],
       hidden: false,
       action: 'new',
-      modalDelete: false,
-      delete: null,
       arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       user: localStorage.getItem('user'),
       companyid: localStorage.getItem('company_id'),
-      isLoading: false
+      isLoading: false,
+      modalDetail: false,
+      dataDetail: []
     };
   }
   async componentDidMount() {
@@ -95,10 +99,25 @@ class Point extends Component {
 
     let val = resLocation.data.data;
 
-    console.log(val)
-
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false });
+  }
+
+  getPointByIUD = async (user_id) => {
+    const { companyid, modalDetail } = this.state
+
+    const resLocation = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_POINT_BY_UID,
+      data: {
+        company_id: companyid,
+        user_id: user_id
+      },
+      method: 'POST'
+    });
+
+    let val = resLocation.data.data;
+    this.setState({ modalDetail: !modalDetail, dataDetail: val })
   }
 
   searchKey() {
@@ -160,7 +179,7 @@ class Point extends Component {
   }
 
   render() {
-    const { data, arrPagination, key } = this.state;
+    const { data, arrPagination, key, dataDetail } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -168,7 +187,7 @@ class Point extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách dịch vụ
+                  <i className="fa fa-align-justify"></i> Danh sách tích điểm
                   <div style={styles.tags}>
 
                     <CRow>
@@ -199,8 +218,9 @@ class Point extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên user</th>
-                        <th className="text-center">Tên sản phẩm</th>
+                        <th className="text-center">Tên người dùng</th>
+                        <th className="text-center">Điểm đã dùng</th>
+                        <th className="text-center">Điểm chưa dùng</th>
                         <th className="text-center">Tổng điểm</th>
                         <th className="text-center">Ngày tạo</th>
                       </tr>
@@ -214,16 +234,19 @@ class Point extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">
-                                  {item.user_id.name}
+                                  {item.name}
                                 </td>
                                 <td className="text-center">
-                                  {item.product_id.name}
+                                  <CButton onClick={() => { this.getPointByIUD(item.UID) }} variant="outline" color='info' style={{ width: 100, color: '#000000' }}>{item.point_used}</CButton>
+                                </td>
+                                <td className="text-center">
+                                  {item.point_instock}
                                 </td>
                                 <td className="text-center">
                                   {item.total_point}
                                 </td>
                                 <td className="text-center">
-                                  {new Date(item.create_date).toLocaleDateString() + " "  + new Date(item.create_date).toLocaleTimeString()}
+                                  {new Date(item.create_date).toLocaleDateString() + " " + new Date(item.create_date).toLocaleTimeString()}
                                 </td>
                               </tr>
                             );
@@ -240,6 +263,47 @@ class Point extends Component {
               </div>
             </Col>
           </Row>
+
+          <Modal size='xl' isOpen={this.state.modalDetail} className={this.props.className}>
+            <ModalHeader>Chi tiết sử dụng điểm</ModalHeader>
+            <ModalBody>
+              <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <thead className="thead-light">
+                  <tr>
+                    <th className="text-center">STT.</th>
+                    <th className="text-center">Tên sản phẩm</th>
+                    <th className="text-center">Tổng điểm	</th>
+                    <th className="text-center">Ngày đổi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <td colSpan="10" hidden={dataDetail.length == 0 ? false : true} className="text-center">Không tìm thấy dữ liệu</td>
+                  {
+                    dataDetail != undefined ?
+                      dataDetail.map((item, i) => {
+                        return (
+                          <tr key={i}>
+                            <td className="text-center">{i + 1}</td>
+                            <td className="text-center">
+                              {item.product_name}
+                            </td>
+                            <td className="text-center">
+                              {item.total_point}
+                            </td>
+                            <td className="text-center">
+                              {new Date(item.create_date).toLocaleDateString() + " " + new Date(item.create_date).toLocaleTimeString()}
+                            </td>
+                          </tr>
+                        );
+                      }) : ""
+                  }
+                </tbody>
+              </table>
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="secondary" onClick={e => this.setState({ modalDetail: !this.state.modalDetail })}>Đóng</CButton>
+            </ModalFooter>
+          </Modal>
         </div>
       );
     }

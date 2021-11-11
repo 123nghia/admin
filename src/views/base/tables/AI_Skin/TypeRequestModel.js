@@ -76,7 +76,6 @@ class TypeRequest extends Component {
     if(this.state.type == '0' || this.state.type == '1'){
       this.getData()
     } else {
-      console.log(this.state.isError)
       //window.history.back();
     }
     //this.getData()
@@ -435,7 +434,7 @@ class TypeRequest extends Component {
             </Modal>
 
             <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-              <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+              <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
               <ModalBody>
                 <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
               </ModalBody>

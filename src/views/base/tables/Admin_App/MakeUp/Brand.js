@@ -87,7 +87,6 @@ class BrandApp extends Component {
 
   getData = async () => {
     const { companyid } = this.state;
-    console.log(companyid)
     this.setState({ isLoading: true });
 
     const res_brand = await API_CONNECT(
@@ -164,7 +163,6 @@ class BrandApp extends Component {
   }
 
   async openUpdate(item) {
-    console.log(item.age)
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -387,7 +385,7 @@ class BrandApp extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

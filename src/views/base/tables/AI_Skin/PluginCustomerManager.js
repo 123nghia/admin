@@ -752,8 +752,6 @@ class PluginCustomerManager extends Component {
                             <td className="text-center">
                               <CButton outline color="info" size="sm"
                                 onClick={async (e) => {
-                                  console.log(item.Company_Id)
-                                  console.log(item.Package_Id)
                                   this.setState({
                                     arrDetailPackage: item.Array_Feature, current_package: item.Name
                                   })
@@ -909,7 +907,7 @@ class PluginCustomerManager extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

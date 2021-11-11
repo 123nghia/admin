@@ -107,8 +107,6 @@ class SubType extends Component {
       })
     }
 
-    console.log(arrTotal[0])
-
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
 

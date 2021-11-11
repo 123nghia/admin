@@ -351,7 +351,6 @@ class Order extends Component {
                                 <td className="text-center">{item.product_id.name}</td>
                                 <td className="text-center">
                                   {
-                                    console.log(item),
                                     item.product_id.image == "" || item.product_id.image == null ?
                                       <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
                                       <img src={`${Constants.BASE_URL}/public/image_product/${item.product_id.image}`} width={"80px"} height={"60px"} />

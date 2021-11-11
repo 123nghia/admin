@@ -267,7 +267,6 @@ class Color extends Component {
   async updateUser() {
     const { hex, makeup_id, alpha, product_id, version } = this.state;
 
-    console.log(product_id)
     if (hex == null || hex == '' ||
       makeup_id == null || makeup_id == '' ||
       alpha == null || alpha == '' ||
@@ -585,7 +584,7 @@ class Color extends Component {
           </Modal>
 
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Delete`}</ModalHeader>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>

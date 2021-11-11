@@ -96,8 +96,6 @@ class Transport extends Component {
 
     let val = resLocation.data.data;
 
-    console.log(val)
-
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false });
   }

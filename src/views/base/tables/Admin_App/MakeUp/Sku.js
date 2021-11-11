@@ -52,7 +52,6 @@ const colourStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
     const color = chroma(data.hex);
-    console.log(color)
     return {
       ...styles,
       backgroundColor: isDisabled
@@ -182,8 +181,6 @@ class Product extends Component {
       })
     }
 
-    console.log(arrTotal[4])
-
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
 
@@ -195,8 +192,6 @@ class Product extends Component {
         t = val;
       }
     });
-
-    console.log(t);
 
     this.setState({ [key]: t });
   };
@@ -691,7 +686,7 @@ class Product extends Component {
                   delete: null,
                 })
               }
-            >{`Delete`}</ModalHeader>
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Do you want to delete product "${this.state.delete
                 ? this.state.delete.vi || this.state.delete.name

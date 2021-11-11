@@ -111,4 +111,5 @@ export default {
   "PRINT_ORDER": "/api/print_order",
 
   "LIST_POINT": "/api/list_point",
+  "LIST_POINT_BY_UID": "/api/list_point_by_UID",
 };
