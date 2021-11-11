@@ -13,7 +13,8 @@ import {
 import {
   CButton,
   CRow,
-  CCol
+  CCol,
+  CLabel
 } from '@coreui/react'
 
 import Pagination from '@material-ui/lab/Pagination';
@@ -26,6 +27,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import styles from "../../../../assets/styles/styles";
+
+import CreatableSelect from 'react-select/creatable';
 
 class NotificationThemplate extends Component {
   constructor(props) {
@@ -49,12 +52,15 @@ class NotificationThemplate extends Component {
       user: localStorage.getItem('user'),
       isLoading: false,
       companyid: localStorage.getItem('company_id'),
+      dataType: [],
+      objTypeNotification: {},
+      arrOptionType: []
     };
   }
   async componentDidMount() {
 
     this.getData()
-
+    this.getDataNotificationType()
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -102,6 +108,32 @@ class NotificationThemplate extends Component {
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false });
   }
+
+  getDataNotificationType = async () => {
+    const { companyid } = this.state
+    const resLocation = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_NOTIFICATION_TYPE,
+      data: {
+        company_id: companyid
+      },
+      method: 'POST'
+    });
+
+    let val = resLocation.data.data;
+    const arrTempOptionCategory = [];
+    for (let i = 0; i < val.length; i++) {
+      arrTempOptionCategory.push({
+        value: val[i].code, label: val[i].name
+      })
+    }
+    this.setState({ dataType: val, arrOptionType: arrTempOptionCategory })
+  }
+
+  handleChangeCategory = (newValue, actionMeta) => {
+    this.setState({ objTypeNotification: newValue, code: newValue.value })
+    console.log(newValue)
+  };
 
   searchKey() {
     const { indexPage, key } = this.state;
@@ -202,11 +234,17 @@ class NotificationThemplate extends Component {
 
 
   async openUpdate(item) {
+    const { dataType } = this.state;
+    const I = (element) => element.code == item.code;
+    const index = dataType.findIndex(I);
+
+
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
       content: item.content,
       code: item.code,
+      objTypeNotification: dataType[index] && dataType.length > 0 ? { value: dataType[index].code, label: dataType[index].name } : { value: "", label: "" },
       id: item['_id']
     })
   }
@@ -280,7 +318,7 @@ class NotificationThemplate extends Component {
   }
 
   render() {
-    const { data, arrPagination, key, isLoading } = this.state;
+    const { data, arrPagination, key, isLoading, objTypeNotification, arrOptionType } = this.state;
     if (!isLoading) {
       return (
         <div className="animated fadeIn">
@@ -361,19 +399,26 @@ class NotificationThemplate extends Component {
           <Modal size='xl' isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="code"
-                label="Mã loại"
-                value={this.state.code}
-                placeholder={"Mã loại"}
-                onChange={e => this.onChange("code", e.target.value)}
-              />
+
+              <CRow>
+                <CCol md="3" lg="3" sm="12" xm="12" lx="3">
+                  <CLabel>Danh mục:</CLabel>
+                </CCol>
+                <CCol md="9" lg="9" sm="12" xm="12" lx="9">
+                  <CreatableSelect
+                    isClearable
+                    onChange={this.handleChangeCategory}
+                    value={objTypeNotification}
+                    options={arrOptionType}
+                  />
+                </CCol>
+              </CRow>
 
               <br />
               <label className="control-label">Mô tả thương hiệu</label>
               <CKEditor
                 editor={ClassicEditor}
-                data={this.state.description_brand}
+                data={this.state.content}
                 onChange={(event, editor) => {
                   const data = editor.getData();
                   this.setState({ content: data })

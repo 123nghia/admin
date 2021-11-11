@@ -271,6 +271,8 @@ class Point extends Component {
                 <thead className="thead-light">
                   <tr>
                     <th className="text-center">STT.</th>
+                    <th className="text-center">Mã đơn hàng</th>
+                    <th className="text-center">Mã sản phẩm</th>
                     <th className="text-center">Tên sản phẩm</th>
                     <th className="text-center">Tổng điểm	</th>
                     <th className="text-center">Ngày đổi</th>
@@ -284,6 +286,8 @@ class Point extends Component {
                         return (
                           <tr key={i}>
                             <td className="text-center">{i + 1}</td>
+                            <td className="text-center">{item.order_id}</td>
+                            <td className="text-center">{item.product_id._id}</td>
                             <td className="text-center">
                               {item.product_name}
                             </td>

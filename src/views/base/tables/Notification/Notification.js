@@ -95,7 +95,7 @@ class Notification extends Component {
     });
 
     let val = resLocation.data.data;
-
+    console.log(val)
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false });
   }
@@ -167,7 +167,7 @@ class Notification extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách dịch vụ
+                  <i className="fa fa-align-justify"></i> Danh sách thông báo
                   <div style={styles.tags}>
 
                     <CRow>
@@ -199,9 +199,8 @@ class Notification extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên user</th>
-                        <th className="text-center">Công ty</th>
                         <th className="text-center">Loại</th>
-                        <th className="text-center">Đối tượng</th>
+                        <th className="text-center">Nội dụng</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -216,13 +215,10 @@ class Notification extends Component {
                                   {item.user_data[0].name}
                                 </td>
                                 <td className="text-center">
-                                  {item.company_data[0].name}
-                                </td>
-                                <td className="text-center">
                                   {item.type}
                                 </td>
                                 <td className="text-center">
-                                  {JSON.stringify(item.object)}
+
                                 </td>
                               </tr>
                             );
