@@ -228,7 +228,7 @@ class Product extends Component {
 
   async addProduct() {
     const { category_id, brand_id, name, href, image, price, description, companyid, point,
-      info_product, how_to_use, description_brand, weight, title, author, keyword, description_SEO } = this.state
+      info_product, how_to_use, description_brand, weight } = this.state
     if (name == null || name == '' ||
       image == null || image == '' ||
       category_id == null || category_id == '' ||

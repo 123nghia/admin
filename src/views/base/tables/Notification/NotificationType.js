@@ -45,7 +45,8 @@ class NotificationType extends Component {
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       user: localStorage.getItem('user'),
-      isLoading: false
+      isLoading: false,
+      companyid: localStorage.getItem('company_id'),
     };
   }
   async componentDidMount() {
@@ -167,7 +168,7 @@ class NotificationType extends Component {
   }
 
   async addNotificationType() {
-    const {name, code } = this.state
+    const {name, code, companyid } = this.state
     if (name == null || name == '' ||
       code == null || code == '') {
       alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
@@ -177,6 +178,7 @@ class NotificationType extends Component {
     const body = {
       "name": name,
       "code": code,
+      "company_id": companyid
     }
 
     this.setState({ isLoading: true });

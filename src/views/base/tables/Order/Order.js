@@ -137,8 +137,8 @@ class Order extends Component {
   }
 
   onDetailOrder = async (label) => {
-    //var res = await API_CONNECT(Constants.PRINT_ORDER + "?label=" + label, {}, "", "GET")
-    //console.log(res)
+    var res = await API_CONNECT(Constants.PRINT_ORDER + "?label=" + label, {}, "", "GET")
+    console.log(res)
     // const fetchData = {
     //   mode: 'no-cors',
     //   method: 'GET',
@@ -150,7 +150,7 @@ class Order extends Component {
     //   }
     // };
     // let duy = await fetch('https://services.ghtklab.com/services/label/S1788269.300062990', fetchData)
-    window.location.href = 'https://services.ghtklab.com/services/label/S1788269.300062990'
+    //window.location.href = 'https://services.ghtklab.com/services/label/S1788269.300062990'
     // console.log(duy)
   }
 

@@ -47,7 +47,8 @@ class NotificationThemplate extends Component {
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       user: localStorage.getItem('user'),
-      isLoading: false
+      isLoading: false,
+      companyid: localStorage.getItem('company_id'),
     };
   }
   async componentDidMount() {
@@ -168,7 +169,7 @@ class NotificationThemplate extends Component {
   }
 
   async addNotificationThemplate() {
-    const { code, content } = this.state
+    const { code, content, companyid } = this.state
     if (code == null || code == '' ||
       content == null || content == '') {
       alert("Vui lòng nhập đầy đủ trường dữ liệu !!!");
@@ -178,6 +179,7 @@ class NotificationThemplate extends Component {
     const body = {
       "code": code,
       "content": content,
+      "company_id": companyid
     }
 
     this.setState({ isLoading: true });
