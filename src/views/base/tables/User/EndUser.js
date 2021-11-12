@@ -45,7 +45,6 @@ class EndUser extends Component {
       email: "",
       username: "",
       phone: "",
-      password: "",
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -160,57 +159,8 @@ class EndUser extends Component {
     });
   }
 
-  async toggleModal(key) {
-    if (key == 'new') {
-      this.setState({
-        modalCom: !this.state.modalCom,
-        action: key,
-        email: "",
-        username: "",
-        phone: "",
-        password: ""
-      })
-    }
-  }
-
   onChange(key, val) {
     this.setState({ [key]: val })
-  }
-
-  async addRoles() {
-    const { email, phone, password, username } = this.state
-    if (email == null || email == '' ||
-      phone == null || phone == '' ||
-      password == null || password == '' ||
-      username == null || username == '') {
-      alert("Hãy nhập đầy đủ thông tin !!!");
-      return
-    }
-
-    const body = {
-      email: email,
-      phone: phone,
-      password: password,
-      username: username
-    }
-
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.ADD_END_USER,
-      method: 'POST',
-      data: body
-    });
-
-    if (res.status == 200) {
-
-      this.getData()
-
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert("Thêm end user thất bại");
-      this.setState({ isLoading: false });
-    }
   }
 
   async openUpdate(item) {
@@ -332,7 +282,7 @@ class EndUser extends Component {
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+
                       </CCol>
                     </CRow>
 
@@ -419,20 +369,10 @@ class EndUser extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
-                field="password"
-                label="Mật khẩu"
-                value={this.state.password}
-                placeholder={"Mật khẩu"}
-                type={"password"}
-                // error={errors.title}
-                onChange={e => { this.onChange("password", e.target.value); }}
-              // rows="5"
-              />
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 

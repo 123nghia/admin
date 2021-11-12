@@ -253,6 +253,20 @@ const _navOrther = [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Danh sách end user',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    to: '/end_user',
+    icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.role}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Lịch sử soi da',
     to: '/historyskin',
     icon: <CIcon style={css} content={freeSet.cilHistory} customClasses="c-sidebar-nav-icon" />,
@@ -357,6 +371,9 @@ const _navOrther = [
       </CTooltip>,
     }
   },
+]
+
+const _navContact = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý tính năng AI AR',
@@ -427,15 +444,32 @@ const _navOrther = [
     role: ['0', '1', '2'],
   },
   {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách người dùng End User',
-    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    to: '/end_user',
-    icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
+    _tag: 'CSidebarNavTitle',
+    _children: ['Thông tin liên hệ'],
     role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách liên hệ',
+    to: '/contact',
+    role: ['0', '1'],
+    icon: <CIcon style={css} content={freeSet.cilContact} customClasses="c-sidebar-nav-icon" />,
     badge: {
       color: 'info',
-      text: <CTooltip placement={"right"} content={content.role}>
+      text: <CTooltip placement={"right"} content={content.contact}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách loại yêu cầu',
+    to: '/type_request',
+    role: ['0', '1'],
+    icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.contact}>
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
@@ -469,39 +503,7 @@ const _navOrther = [
     }],
     role: ['0', '1'],
   },
-  {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Thông tin liên hệ'],
-    role: ['0', '1'],
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách liên hệ',
-    to: '/contact',
-    role: ['0', '1'],
-    icon: <CIcon style={css} content={freeSet.cilContact} customClasses="c-sidebar-nav-icon" />,
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.contact}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách loại yêu cầu',
-    to: '/type_request',
-    role: ['0', '1'],
-    icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.contact}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
 ]
-
 const _navLogOut = [
   {
     _tag: 'CSidebarNavItem',
@@ -512,4 +514,4 @@ const _navLogOut = [
   },
 ]
 
-export default [_navDashboard, _navSoida, _navMakeUp, _navOrther, _navLogOut]
+export default [_navSoida, _navMakeUp, _navOrther, _navContact, _navLogOut]

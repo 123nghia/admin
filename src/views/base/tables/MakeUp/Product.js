@@ -185,7 +185,6 @@ class Product extends Component {
     let val = res_product.data;
     let totalItem = res_product.arrTotal;
 
-    console.log(val)
     this.pagination(totalItem, val);
 
     this.setState({ dataApi: val });

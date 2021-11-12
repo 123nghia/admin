@@ -18,8 +18,7 @@ import {
   CLabel
 } from '@coreui/react'
 
-
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import CreatableSelect from 'react-select/creatable';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import axios from 'axios'
@@ -28,13 +27,6 @@ const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class PluginCreateOrder extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +44,6 @@ class PluginCreateOrder extends Component {
       modalDelete: false,
       delete: null,
       arrPagination: [],
-      dataCompany: [],
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       company_id: localStorage.getItem('user'),
       dataPackage: [],
@@ -69,7 +60,9 @@ class PluginCreateOrder extends Component {
       //So sách 2 slug nếu trùng thì thôi còn khác nhau thì update lại slug của công ty
       currentSlug: '',
       confirmSlug: '',
-      isLoading: false
+      isLoading: false,
+      arrOptionCompany: [],
+      objectValueCompany: {},
     };
   }
 
@@ -96,7 +89,17 @@ class PluginCreateOrder extends Component {
       method: 'POST',
     });
 
-    this.setState({ dataCompany: resCompany.data.data });
+    let data = resCompany.data.data;
+    let arrTempOptionCompany = [];
+    for (let i = 0; i < data.length; i++) {
+      arrTempOptionCompany.push({
+        value: data[i]._id, label: data[i].Name
+      })
+    }
+
+    this.setState({
+      arrOptionCompany: arrTempOptionCompany, objectValueCompany: arrTempOptionCompany.length > 0 ? arrTempOptionCompany[0] : { value: "", label: "" }
+    });
   }
 
   getCompanyName = async (company_id) => {
@@ -374,10 +377,16 @@ class PluginCreateOrder extends Component {
     this.setState({ disableNext: true, time_create: Date.now(), time_expried: this.getCurrentMonth(package_unit, Number(package_key)) })
   }
 
+  handleChange = async (newValue, actionMeta) => {
+    this.setState({ objectValueCompany: newValue, Company_Id: newValue.value })
+    await this.getCompanyName(newValue.value)
+    console.log(newValue.value);
+  };
+
   render() {
-    const { dataCompany, dataPackage, Company_Id, Package_Id, arrayChooseFeature,
+    const { dataPackage, Company_Id, Package_Id, arrayChooseFeature,
       company_name, package_name, package_time, arrFeature, package_key,
-      package_unit, currentSlug } = this.state;
+      package_unit, currentSlug, objectValueCompany, arrOptionCompany } = this.state;
 
     return (
       <div className="animated fadeIn">
@@ -389,23 +398,20 @@ class PluginCreateOrder extends Component {
             <div style={styles.tags}>
               <CRow>
                 <CCol sm="12" lg="12">
-                  <div>
-                    <label style={styles.flexLabel} htmlFor="tag">Chọn công ty:    </label>
-                    <CSelect style={styles.flexOption}
-                      onChange={async e => {
-                        this.setState({ Company_Id: e.target.value });
-                        await this.getCompanyName(e.target.value)
-                      }}>
-                      <option value={this.state.Company_Id}>-----</option>
-                      {
-                        dataCompany.map((item, i) => {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        })
-                      }
-                    </CSelect>
-                  </div>
+                  <CRow>
+                    <CCol md="2" lg="2" sm="12" xm="12" lx="2">
+                      <CLabel>Chọn công ty:</CLabel>
+                    </CCol>
+                    <CCol md="10" lg="10" sm="12" xm="12" lx="10">
+                      <CreatableSelect
+                        isClearable
+                        onChange={this.handleChange}
+                        value={objectValueCompany}
+                        // onInputChange={this.handleInputChange}
+                        options={arrOptionCompany}
+                      />
+                    </CCol>
+                  </CRow>
                 </CCol>
 
                 <CCol sm="12" lg="12">
