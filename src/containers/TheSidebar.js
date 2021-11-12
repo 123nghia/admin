@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Nav, NavItem, NavLink } from 'reactstrap';
 import {
@@ -19,47 +19,50 @@ import CIcon from '@coreui/icons-react'
 import navigations from './_nav'
 
 const TheSidebar = () => {
-  const type = localStorage.getItem('type');
-  var temp = []
-  var navigation = [];
-  for (let i = 0; i < navigations.length; i++) {
-    navigation = navigation.concat(navigations[i])
-  }
 
-  //Phân quyền bên phía menu
-  for (let i = 0; i < navigation.length; i++) {
-    if (navigation[i].role.includes(type)) {
-      navigation[i].hidden = false;
-      if (navigation[i]._children != undefined) {
-        var _child = navigation[i]._children;
-        for (let y = 0; y < _child.length; y++) {
-          var roleCheck = _child[y].role;
-          if (roleCheck != undefined) {
-            if (roleCheck.includes(type)) {
-              _child[y].hidden = false
-            } else {
-              _child[y].hidden = true
+  useEffect(() => {
+    const type = localStorage.getItem('type');
+    var temp = []
+    var navigation = [];
+    for (let i = 0; i < navigations.length; i++) {
+      navigation = navigation.concat(navigations[i])
+    }
+
+    //Phân quyền bên phía menu
+    for (let i = 0; i < navigation.length; i++) {
+      if (navigation[i].role.includes(type)) {
+        navigation[i].hidden = false;
+        if (navigation[i]._children != undefined) {
+          var _child = navigation[i]._children;
+          for (let y = 0; y < _child.length; y++) {
+            var roleCheck = _child[y].role;
+            if (roleCheck != undefined) {
+              if (roleCheck.includes(type)) {
+                _child[y].hidden = false
+              } else {
+                _child[y].hidden = true
+              }
             }
           }
         }
+      } else {
+        navigation[i].hidden = true;
       }
-    } else {
-      navigation[i].hidden = true;
     }
-  }
 
-  for (let i = 0; i < navigation.length; i++) {
-    if (navigation[i]._children) {
-      for (let y = 0; y < navigation[i]._children.length; y++) {
-        if (navigation[i]._children[y].to) {
-          temp.push({ "url": "#" + navigation[i]._children[y].to, "isHidden": navigation[i].hidden })
+    for (let i = 0; i < navigation.length; i++) {
+      if (navigation[i]._children) {
+        for (let y = 0; y < navigation[i]._children.length; y++) {
+          if (navigation[i]._children[y].to) {
+            temp.push({ "url": "#" + navigation[i]._children[y].to, "isHidden": navigation[i].hidden })
+          }
         }
       }
     }
-  }
-  // console.log(navigation)
-  // console.log(temp)
-  localStorage.setItem('url', JSON.stringify(temp))
+
+    localStorage.setItem('url', JSON.stringify(temp))
+  }, [navigations]);
+
 
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)

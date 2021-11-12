@@ -14,7 +14,8 @@ import {
   CButton,
   CRow,
   CCol,
-  CLabel
+  CLabel,
+  CTextarea
 } from '@coreui/react'
 
 import Pagination from '@material-ui/lab/Pagination';
@@ -415,15 +416,23 @@ class NotificationThemplate extends Component {
               </CRow>
 
               <br />
-              <label className="control-label">Mô tả thương hiệu</label>
-              <CKEditor
+
+              <label className="control-label">Nội dung thông báo</label>
+              <CTextarea
+                name="content"
+                rows="7"
+                value={this.state.content}
+                onChange={(e) => { this.setState({ content: e.target.value }) }}
+                placeholder="Nội dung thông báo"
+              />
+              {/* <CKEditor
                 editor={ClassicEditor}
                 data={this.state.content}
                 onChange={(event, editor) => {
                   const data = editor.getData();
                   this.setState({ content: data })
                 }}
-              />
+              /> */}
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addNotificationThemplate() : this.updateNotificationThemplate() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}

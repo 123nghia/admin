@@ -46,7 +46,9 @@ class Point extends Component {
       companyid: localStorage.getItem('company_id'),
       isLoading: false,
       modalDetail: false,
-      dataDetail: []
+      dataDetail: [],
+      totalItem: 0,
+      chunkData: []
     };
   }
   async componentDidMount() {
@@ -117,7 +119,25 @@ class Point extends Component {
     });
 
     let val = resLocation.data.data;
-    this.setState({ modalDetail: !modalDetail, dataDetail: val })
+    console.log(val.data)
+    this.setState({ modalDetail: !modalDetail, dataDetail: val.data.length > 0 ? val.data[0] : [], totalItem: val.total, chunkData: val.data })
+  }
+
+  getPointInstockByIUD = async (user_id) => {
+    const { companyid, modalDetail } = this.state
+
+    const resLocation = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_POINT_INSTOCK_BY_UID,
+      data: {
+        company_id: companyid,
+        user_id: user_id
+      },
+      method: 'POST'
+    });
+
+    let val = resLocation.data.data;
+    this.setState({ modalDetail: !modalDetail, dataDetail: val.data[0], totalItem: val.total, chunkData: val.data })
   }
 
   searchKey() {
@@ -179,7 +199,7 @@ class Point extends Component {
   }
 
   render() {
-    const { data, arrPagination, key, dataDetail } = this.state;
+    const { data, arrPagination, key, chunkData, totalItem, dataDetail } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -237,10 +257,14 @@ class Point extends Component {
                                   {item.name}
                                 </td>
                                 <td className="text-center">
-                                  <CButton onClick={() => { this.getPointByIUD(item.UID) }} variant="outline" color='info' style={{ width: 100, color: '#000000' }}>{item.point_used}</CButton>
+                                  <CButton onClick={() => { this.getPointByIUD(item.UID) }} variant="outline" color='info' style={{ width: 100, color: '#000000' }}>
+                                    {item.point_used}
+                                  </CButton>
                                 </td>
                                 <td className="text-center">
-                                  {item.point_instock}
+                                  <CButton onClick={() => { this.getPointInstockByIUD(item.UID) }} variant="outline" color='info' style={{ width: 100, color: '#000000' }}>
+                                    {item.point_instock}
+                                  </CButton>
                                 </td>
                                 <td className="text-center">
                                   {item.total_point}
@@ -279,7 +303,7 @@ class Point extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <td colSpan="10" hidden={dataDetail.length == 0 ? false : true} className="text-center">Không tìm thấy dữ liệu</td>
+                  <td colSpan="10" hidden={dataDetail.length == 0 || dataDetail == undefined ? false : true} className="text-center">Không tìm thấy dữ liệu</td>
                   {
                     dataDetail != undefined ?
                       dataDetail.map((item, i) => {
@@ -303,6 +327,11 @@ class Point extends Component {
                   }
                 </tbody>
               </table>
+              <div style={{ float: 'right', margin: 5 }}>
+                <Pagination count={totalItem} color="primary" onChange={(e, v) => {
+                  this.setState({ dataDetail: chunkData[v - 1] })
+                }} />
+              </div>
             </ModalBody>
             <ModalFooter>
               <CButton color="secondary" onClick={e => this.setState({ modalDetail: !this.state.modalDetail })}>Đóng</CButton>
