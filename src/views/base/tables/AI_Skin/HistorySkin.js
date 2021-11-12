@@ -12,8 +12,8 @@ import {
   CButton
 } from '@coreui/react'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Pagination from '@material-ui/lab/Pagination';
+//import Pagination from '@material-ui/lab/Pagination';
+import Pagination from "react-js-pagination";
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import axios from 'axios'
@@ -24,29 +24,20 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class HistorySkin extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
       page: 1,
-      itemsCount: 0,
       limit: 20,
       totalActive: 0,
+      activePage: 1,
+      numPage: 1,
+      itemsCount: 0,
+      itemPerPage: 5,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
-      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
@@ -57,12 +48,11 @@ class HistorySkin extends Component {
       Sale_Id: '',
       modalDelete: false,
       delete: null,
-      arrPagination: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
       type: localStorage.getItem('type'),
-      BASE_URL: Constants.BASE_URL_CURRENT
+      BASE_URL: Constants.BASE_URL_CURRENT,
     };
   }
   async componentDidMount() {
@@ -83,40 +73,29 @@ class HistorySkin extends Component {
     }
   }
 
-  pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
-    var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-
-    if (arrTotal.length == 0) {
-      this.setState({
-        hidden: false
-      })
-    } else {
-      this.setState({
-        hidden: true
-      })
-    }
-
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
-  }
-
   getData = async () => {
+    const { activePage, itemPerPage } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN,
+      data: {
+        page: activePage,
+        limit: itemPerPage
+      },
       method: 'POST'
     });
 
     let data = res.data.data;
-    console.log(data)
-    this.pagination(data);
-    this.setState({ dataApi: data, isLoading: false });
+
+    this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });
   }
+
+  handlePageChange = async (pageNumber) => {
+    this.setState({ activePage: pageNumber }, () => {
+      this.getData();
+    });
+  };
 
   getData_ByCondition = async () => {
     this.setState({ isLoading: true });
@@ -127,18 +106,18 @@ class HistorySkin extends Component {
       headers: this.state.token
     });
 
-    this.pagination(res.data.data);
-    this.setState({ dataApi: res.data.data });
+    let data = res.data.data
+    this.setState({ dataApi: data.data, data: data.data });
 
     let active = 0
 
-    res.data.data.map(val => {
+    data.data.map(val => {
       if (val.Status == "Actived") {
         active = active + 1
       }
     })
 
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ isLoading: false, totalActive: active, itemsCount: data.total });
   }
 
   searchKey(key) {
@@ -192,8 +171,8 @@ class HistorySkin extends Component {
   }
 
   render() {
-    const { data, arrPagination } = this.state;
-    const { classes } = this.props;
+    const { data, activePage, itemPerPage, itemsCount } = this.state;
+
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -217,7 +196,7 @@ class HistorySkin extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                      <td colSpan="10" hidden={data.length > 0 ? true : false } className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -248,10 +227,17 @@ class HistorySkin extends Component {
                   </table>
                 </CardBody>
               </Card>
+
               <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
+                <Pagination
+                  activePage={activePage}
+                  itemsCountPerPage={itemPerPage}
+                  totalItemsCount={itemsCount}
+                  pageRangeDisplayed={10}
+                  onChange={(e) => this.handlePageChange(e)}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
               </div>
             </Col>
           </Row>
@@ -271,88 +257,5 @@ const override = css`
   margin: 0 auto;
   border-color: red;
 `;
-
-const styles = {
-  pagination: {
-    marginRight: '5px'
-  },
-  flexLabel: {
-    width: 100
-  },
-  flexOption: {
-    width: 300
-  },
-  a: {
-    textDecoration: 'none'
-  },
-  floatRight: {
-    float: "right",
-    marginTop: '3px'
-  },
-  spinner: {
-    width: "30px"
-  },
-  center: {
-    textAlign: "center"
-  },
-  tbody: {
-    height: "380px",
-    overflowY: "auto"
-  },
-  wh25: {
-    width: "25%",
-    float: "left",
-    height: "80px"
-  },
-  w5: {
-    width: "15%",
-    float: "left",
-    height: "80px"
-  },
-  wa10: {
-    width: "5%",
-    float: "left",
-    height: "80px"
-  },
-  row: {
-    float: "left",
-    width: "100%"
-  },
-  success: {
-    color: 'green'
-  },
-  danger: {
-    color: 'red'
-  },
-  mgl5: {
-    marginLeft: '5px'
-  },
-  tags: {
-    float: "right",
-    marginRight: "5px",
-    width: "250px"
-  },
-  searchInput: {
-    width: "190px",
-    display: 'inline-block',
-  },
-  userActive: {
-    color: 'green'
-  },
-  userPending: {
-    color: 'red'
-  },
-  nagemonNameCol: {
-    width: '328px'
-  },
-  image: {
-    width: '100px',
-    height: '100px',
-    borderRadius: '99999px'
-  },
-  mgl5: {
-    marginBottom: '0px'
-  }
-}
 
 export default HistorySkin;

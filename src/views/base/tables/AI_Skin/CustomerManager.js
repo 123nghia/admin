@@ -17,7 +17,6 @@ import {
   CChartBar
 } from '@coreui/react-chartjs'
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
@@ -28,14 +27,6 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
 class CustomerManager extends Component {
   constructor(props) {
     super(props);
@@ -434,8 +425,6 @@ class CustomerManager extends Component {
         <div className="animated fadeIn">
           <Row>
             <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify"></i> Thống kê lượt khách hàng
@@ -458,7 +447,6 @@ class CustomerManager extends Component {
                         }
                         <th className="text-center">Lần đến gần nhất</th>
                         <th className="text-center">Số lần đến</th>
-                        {/* <th className="text-center">Trạng thái</th> */}
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -505,11 +493,9 @@ class CustomerManager extends Component {
           </Row>
 
           {
-            type == "2" ?
+            type == "2" || type == "5" ?
               <Row>
                 <Col>
-                  <p style={styles.success}>{this.state.updated}</p>
-                  <p style={styles.danger}>{this.state.deleted}</p>
                   <Card>
                     <CardHeader>
                       <i className="fa fa-align-justify"></i> Thống kê lượt khách hàng theo từng tháng
@@ -587,11 +573,9 @@ class CustomerManager extends Component {
           }
 
           {
-            type == "2" ?
+            type == "2" || type == "5" ?
               <Row>
                 <Col>
-                  <p style={styles.success}>{this.state.updated}</p>
-                  <p style={styles.danger}>{this.state.deleted}</p>
                   <Card>
                     <CardHeader>
                       <i className="fa fa-align-justify"></i> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)
