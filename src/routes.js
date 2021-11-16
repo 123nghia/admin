@@ -146,6 +146,9 @@ const TransportStore = React.lazy(() =>
 const Point = React.lazy(() =>
   import('./views/base/tables/Points/Point'));
 
+const VNPayConfig = React.lazy(() =>
+  import('./views/base/tables/VNPayConfig/VNPayConfig'));
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -235,6 +238,8 @@ const routes = [
   { path: '/van_chuyen', name: 'places', component: TransportStore },
 
   { path: '/tich_diem', name: 'places', component: Point },
+
+  { path: '/cau_hinh_vnpay', name: 'places', component: VNPayConfig },
 
 ];
 

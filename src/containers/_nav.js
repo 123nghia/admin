@@ -360,6 +360,21 @@ const _navTichDiem = [
   },
 ]
 
+const _navVNPAY = [
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Cấu hình VNPAY'],
+    role: ['0'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Thiết lập cấu hình',
+    to: '/cau_hinh_vnpay',
+    icon: <CIcon style={css} content={freeSet.cilSettings} customClasses="c-sidebar-nav-icon" />,
+    role: ['0']
+  },
+]
 
 
-export default [_navSoida, _navMakeUp, _navBooking, _navNotification, _navGH, _navTichDiem, _navOrther]
+
+export default [_navSoida, _navMakeUp, _navBooking, _navNotification, _navGH, _navTichDiem, _navVNPAY, _navOrther]

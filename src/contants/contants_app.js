@@ -113,4 +113,7 @@ export default {
   "LIST_POINT": "/api/list_point",
   "LIST_POINT_BY_UID": "/api/list_point_by_UID",
   "LIST_POINT_INSTOCK_BY_UID": "/api/list_point_instock_by_UID",
+
+  "GET_CONFIG_VNPAY": "/api/get-vnpay-config",
+  "CHANGE_CONFIG_VNPAY": "/api/change-vnpay-config",
 };
