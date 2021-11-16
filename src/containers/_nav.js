@@ -225,52 +225,35 @@ const _navMakeUp = [
 const _navOrther = [
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Thông tin chung'],
+    _children: ['Quản lý tài khoản'],
     role: ["0"],
   },
-
   {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Quản lý tài khoản',
-    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    _children: [
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Danh sách công ty',
-        to: '/list_company',
-        role: ['0', '1'],
-        badge: {
-          color: 'info',
-          text: <CTooltip placement={"right"} content={content.accountCompany}>
-            <CIcon content={freeSet.cilFactory} />
-          </CTooltip>,
-        }
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Danh sách tài khoản công ty',
-        to: '/user_admin',
-        role: ['0', '1'],
-        badge: {
-          color: 'info',
-          text: <CTooltip placement={"right"} content={content.cilP}>
-            <CIcon content={freeSet.cilFactory} />
-          </CTooltip>,
-        }
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Danh sách người dùng',
-        to: '/users_table',
-        role: ['0', '1'],
-        badge: {
-          color: 'info',
-          text: <CTooltip placement={"right"} content={content.cilUserFollow}>
-            <CIcon content={freeSet.cilBellExclamation} />
-          </CTooltip>,
-        }
-      }],
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách công ty',
+    to: '/list_company',
+    icon: <CIcon style={css} content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách tài khoản công ty',
+    to: '/user_admin',
+    icon: <CIcon style={css} content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách người dùng',
+    to: '/users_table',
+    icon: <CIcon style={css} content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: '',
+    to: '',
+    role: ['0', '1', '2'],
   },
   {
     _tag: 'CSidebarNavItem',
