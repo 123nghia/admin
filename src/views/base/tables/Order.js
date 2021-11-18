@@ -21,7 +21,6 @@ import axios from 'axios';
 import DotLoader from "react-spinners/DotLoader";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-
 class Order extends Component {
   constructor(props) {
     super(props);
@@ -149,20 +148,14 @@ class Order extends Component {
   }
 
   onDetailOrder = async (label) => {
-    //var res = await API_CONNECT(Constants.PRINT_ORDER + "?label=" + label, {}, "", "GET")
-    const fetchData = {
-      mode: 'no-cors',
-      method: 'GET',
-      headers: {
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Token': 'dFC8c89c6b8108f46b8e653B929634c7cfe98E6c',
-        'Access-Control-Allow-Origin': '*'
-      }
-    };
-    fetch('https://services.ghtklab.com/services/label/S1788269.300062990', fetchData)
+    var res = await API_CONNECT(Constants.PRINT_ORDER + "?label=" + label, {}, "", "GET")
+    console.log(res)
+    // const fetchData = {
+    //   mode: 'no-cors',
+    //   method: 'GET',
+    //   headers: { Token: 'dFC8c89c6b8108f46b8e653B929634c7cfe98E6c' }
+    // };
+    // fetch('https://services.ghtklab.com/services/label/S1788269.SG15.C11.300060570', fetchData)
   }
 
   setContent(status, type) {
@@ -294,8 +287,8 @@ class Order extends Component {
                                     Chi tiết
                                   </CButton>
 
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
-                                    //this.onDetailOrder(item.transport_id.res_order.label)
+                                  <CButton style={styles.mgl5} outline color="primary" size="sm" disabled={item.transport_id == undefined ? true : false} onClick={async (e) => {
+                                    this.onDetailOrder(item.transport_id.res_order.label)
                                   }} >
                                     In đơn hàng
                                   </CButton>

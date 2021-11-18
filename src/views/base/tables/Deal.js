@@ -180,7 +180,7 @@ class Product extends Component {
         if (arrOptionCategory.length == 0) {
 
           const res_category = await API_CONNECT(
-            Constants.LIST_BRAND, {}, token, "POST")
+            Constants.LIST_BRAND, {}, token, "GET")
 
           let arrTempOptionCategory = [];
 
@@ -312,7 +312,7 @@ class Product extends Component {
     }, async () => {
       if (arrOptionCategory.length == 0) {
         const res_category = await API_CONNECT(
-          Constants.LIST_BRAND, {}, token, "POST")
+          Constants.LIST_BRAND, {}, token, "GET")
 
         let arrTempOptionCategory = [];
 
@@ -355,61 +355,59 @@ class Product extends Component {
       })
     }
 
-    console.log(arrCategoryOnUpdate)
-  //   const form = new FormData();
-  //   form.append("image", image);
+    const form = new FormData();
+    form.append("image", image);
 
-  //   await API_CONNECT(Constants.UPLOAD_DEAL, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_DEAL, form, "", "POST")
 
-  //   const body = {
-  //     name: name,
-  //     image: image.name,
-  //     category: arrCategoryOnUpdate,
-  //     type: type,
-  //     status: status,
-  //     voucher: voucher,
-  //     time_start: time_start,
-  //     time_finish: time_finish,
-  //     id: this.state.id,
-  //   }
+    const body = {
+      name: name,
+      image: image.name,
+      category: arrCategoryOnUpdate,
+      type: type,
+      status: status,
+      voucher: voucher,
+      time_start: time_start,
+      time_finish: time_finish,
+      id: this.state.id,
+    }
 
-  //   this.setState({ isLoading: true });
-  //   var res = await API_CONNECT(
-  //     Constants.UPDATE_DEAL, body, "", "POST")
+    this.setState({ isLoading: true });
+    var res = await API_CONNECT(
+      Constants.UPDATE_DEAL, body, "", "POST")
 
-  //   if (res.status == 200) {
+    if (res.status == 200) {
 
-  //     this.getData()
+      this.getData()
 
-  //     this.setState({ modalCom: !this.state.modalCom })
-  //   } else {
-  //     alert("Cập nhật thất bại");
-  //     this.setState({ isLoading: false });
-  //   }
-  // }
+      this.setState({ modalCom: !this.state.modalCom })
+    } else {
+      alert("Cập nhật thất bại");
+      this.setState({ isLoading: false });
+    }
+  }
 
-  // openDelete = (item) => {
-  //   this.setState({
-  //     modalDelete: !this.state.modalDelete,
-  //     id: item._id
-  //   })
-  // }
+  openDelete = (item) => {
+    this.setState({
+      modalDelete: !this.state.modalDelete,
+      id: item._id
+    })
+  }
 
-  // async delete() {
-  //   this.setState({ isLoading: true });
-  //   var res = await API_CONNECT(
-  //     Constants.DELETE_DEAL, {
-  //     "id": this.state.id
-  //   }, "", "POST")
+  async delete() {
+    this.setState({ isLoading: true });
+    var res = await API_CONNECT(
+      Constants.DELETE_DEAL, {
+      "id": this.state.id
+    }, "", "POST")
 
-  //   if (res.status == 200) {
-  //     this.getData()
-  //     this.setState({ modalDelete: !this.state.modalDelete, delete: null })
-  //   } else {
-  //     alert("Xoá thất bại");
-  //     this.setState({ isLoading: false });
-  //   }
-
+    if (res.status == 200) {
+      this.getData()
+      this.setState({ modalDelete: !this.state.modalDelete, delete: null })
+    } else {
+      alert("Xoá thất bại");
+      this.setState({ isLoading: false });
+    }
   }
 
   inputChange(e) {
