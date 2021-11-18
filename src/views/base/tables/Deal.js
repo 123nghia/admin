@@ -653,14 +653,10 @@ class Product extends Component {
                         </Card>
                       </CCol>
                       <CCol md="6" lg="6" sm="12" xm="12" lx="6">
-
-
                         <Card>
                           <CardHeader style={{ backgroundColor: '#a9c2af', height: '65px' }}>
                             <CRow>
-
                               Danh sách sản phẩm đã chọn
-
                             </CRow>
                           </CardHeader>
                           <CardBody style={{ height: 250, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
