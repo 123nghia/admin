@@ -138,20 +138,9 @@ class Order extends Component {
 
   onDetailOrder = async (label) => {
     var res = await API_CONNECT(Constants.PRINT_ORDER + "?label=" + label, {}, "", "GET")
-    console.log(res)
-    // const fetchData = {
-    //   mode: 'no-cors',
-    //   method: 'GET',
-    //   headers: {
-    //     "Content-Type": "application/pdf",
-    //     "Content-Transfer-Encoding": "binary",
-    //     'Token': 'dFC8c89c6b8108f46b8e653B929634c7cfe98E6c',
-    //     'Access-Control-Allow-Origin': '*'
-    //   }
-    // };
-    // let duy = await fetch('https://services.ghtklab.com/services/label/S1788269.300062990', fetchData)
-    //window.location.href = 'https://services.ghtklab.com/services/label/S1788269.300062990'
-    // console.log(duy)
+    if(res.is_success) {
+      window.open(`${Constants.BASE_URL}/public/pdf/${label}.pdf`, '_blank');
+    }
   }
 
   setContent(status, type) {
