@@ -180,7 +180,7 @@ class Product extends Component {
         if (arrOptionCategory.length == 0) {
 
           const res_category = await API_CONNECT(
-            Constants.LIST_BRAND, {}, token, "GET")
+            Constants.LIST_BRAND, {}, token, "POST")
 
           let arrTempOptionCategory = [];
 
@@ -192,6 +192,7 @@ class Product extends Component {
             })
           }
 
+          console.log(res_category)
           this.setState({ arrOptionCategory: arrTempOptionCategory })
         }
       })
@@ -312,7 +313,7 @@ class Product extends Component {
     }, async () => {
       if (arrOptionCategory.length == 0) {
         const res_category = await API_CONNECT(
-          Constants.LIST_BRAND, {}, token, "GET")
+          Constants.LIST_BRAND, {}, token, "POST")
 
         let arrTempOptionCategory = [];
 

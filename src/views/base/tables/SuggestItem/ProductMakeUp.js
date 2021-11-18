@@ -152,7 +152,7 @@ class Product extends Component {
     this.setState({ isLoading: true });
 
     const res_product = await API_CONNECT(
-      Constants.LIST_PRODUCT, {}, "", "GET")
+      Constants.LIST_PRODUCT_MAKEUP, {}, "", "GET")
 
     let val = res_product.data;
     let totalItem = res_product.arrTotal;
@@ -185,7 +185,7 @@ class Product extends Component {
         if (this.state.brands.length == 0 && this.state.types.length == 0 && this.state.colors.length == 0) {
 
           const res_brand = await API_CONNECT(
-            Constants.LIST_BRAND, {}, "", "GET")
+            Constants.LIST_BRAND_MAKEUP, {}, "", "GET")
 
           const res_type = await API_CONNECT(
             Constants.LIST_TYPE + "/null", {}, "", "GET")
@@ -196,8 +196,6 @@ class Product extends Component {
           var brands = res_brand.data;
           var types = res_type.data;
           var colors = res_color.data;
-
-          console.log("Duy: ", brands)
 
           let arrTempOptionBrand = [];
           for (let i = 0; i < brands.length; i++) {
@@ -279,7 +277,7 @@ class Product extends Component {
       this.setState({ isLoading: true });
       const res = await axios({
         baseURL: Constants.BASE_URL,
-        url: Constants.ADD_PRODUCT,
+        url: Constants.ADD_PRODUCT_MAKEUP,
         method: 'POST',
         data: body
       });
@@ -330,7 +328,7 @@ class Product extends Component {
       if (brands.length == 0 && types.length == 0 && colors.length == 0) {
 
         const res_brand = await API_CONNECT(
-          Constants.LIST_BRAND, {}, "", "GET")
+          Constants.LIST_BRAND_MAKEUP, {}, "", "GET")
 
         const res_type = await API_CONNECT(
           Constants.LIST_TYPE + "/null", {}, "", "GET")
@@ -384,7 +382,7 @@ class Product extends Component {
     this.setState({ isLoadingTable: true, isSearch: false });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_PRODUCT,
+      url: Constants.UPDATE_PRODUCT_MAKEUP,
       method: 'POST',
       data: body
     });
@@ -408,7 +406,7 @@ class Product extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_PRODUCT,
+      url: Constants.DELETE_PRODUCT_MAKEUP,
       method: 'POST',
       data: {
         "id": this.state.id

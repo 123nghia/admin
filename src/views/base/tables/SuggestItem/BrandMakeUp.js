@@ -87,7 +87,7 @@ class Brand extends Component {
     this.setState({ isLoading: true });
     const res_brand = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_BRAND,
+      url: Constants.LIST_BRAND_MAKEUP,
       method: 'GET'
     });
 
@@ -191,7 +191,7 @@ class Brand extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.ADD_BRAND,
+      url: Constants.ADD_BRAND_MAKEUP,
       method: 'POST',
       data: body
     });
@@ -244,7 +244,7 @@ class Brand extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_BRAND,
+      url: Constants.UPDATE_BRAND_MAKEUP,
       method: 'POST',
       data: body
     });
@@ -270,7 +270,7 @@ class Brand extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_BRAND,
+      url: Constants.DELETE_BRAND_MAKEUP,
       method: 'POST',
       data: {
         "id": this.state.id
