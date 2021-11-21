@@ -30,7 +30,7 @@ function Iframe({ toggleView, link, closeModal }) {
       <CModalBody>
         <Iframes url={link}
           width="100%"
-          height="100%"
+          height="500px"
           display="initial"
           position="relative" />
       </CModalBody>

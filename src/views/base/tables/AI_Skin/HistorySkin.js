@@ -201,7 +201,7 @@ class HistorySkin extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">
-                                    <img src={item.Result.data.facedata.image_info.url} style={{ width: '50%', height: 50 }} />
+                                    <img src={item.Result != undefined ? JSON.parse(item.Result).data.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
                                 </td>
                                 <td className="text-center">
                                   <CButton outline color="primary" onClick={e => {
@@ -211,7 +211,7 @@ class HistorySkin extends Component {
                                     })
                                   }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
                                 </td>
-                                <td className="text-center">{item.Company_Id.Name}</td>
+                                <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
                                 <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td>
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
