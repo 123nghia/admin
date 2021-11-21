@@ -12,7 +12,7 @@ import {
   CButton
 } from '@coreui/react'
 
-//import Pagination from '@material-ui/lab/Pagination';
+import IframeModal from '../../../components/Iframe';
 import Pagination from "react-js-pagination";
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
@@ -37,26 +37,17 @@ class HistorySkin extends Component {
       numPage: 1,
       itemsCount: 0,
       itemPerPage: 5,
-      modalCom: false,
-      dataApi: [],
       hidden: false,
-      action: 'new',
-      UserName: '',
-      Result: '',
-      User_Id: '',
-      Company_Id: '',
-      Sale_Id: '',
-      modalDelete: false,
-      delete: null,
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
       type: localStorage.getItem('type'),
-      BASE_URL: Constants.BASE_URL_CURRENT,
+      toggleHistory: false,
+      idHistory: ""
     };
+    this.closeModal = this.closeModal.bind(this)
   }
   async componentDidMount() {
-    console.log(this.state.type)
     if (this.state.type == '0') {
       this.getData()
     } else {
@@ -160,6 +151,11 @@ class HistorySkin extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  closeModal() {
+    const { toggleHistory } = this.state;
+    this.setState({ toggleHistory: !toggleHistory });
+  }
+
   getBadge(status) {
     switch (status) {
       case 'Actived': return 'success'
@@ -171,7 +167,7 @@ class HistorySkin extends Component {
   }
 
   render() {
-    const { data, activePage, itemPerPage, itemsCount } = this.state;
+    const { data, activePage, itemPerPage, itemsCount, toggleHistory, idHistory } = this.state;
 
     if (!this.state.isLoading) {
       return (
@@ -205,14 +201,15 @@ class HistorySkin extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">
-                                  <img src={item.Image} style={{ width: '50%', height: 50 }} />
+                                    <img src={item.Result.data.facedata.image_info.url} style={{ width: '50%', height: 50 }} />
                                 </td>
                                 <td className="text-center">
                                   <CButton outline color="primary" onClick={e => {
-                                    console.log(JSON.parse(item.Result))
+                                    this.setState({
+                                      idHistory: item._id,
+                                      toggleHistory: !toggleHistory
+                                    })
                                   }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
-                                  {/* <img src={this.state.BASE_URL + "/images/calendar.png"} style={{ width: '10%' }} /> */}
-                                  {/* {item.Result} */}
                                 </td>
                                 <td className="text-center">{item.Company_Id.Name}</td>
                                 <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td>
@@ -241,6 +238,8 @@ class HistorySkin extends Component {
               </div>
             </Col>
           </Row>
+
+          <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={this.closeModal}/>
         </div>
       );
     }
