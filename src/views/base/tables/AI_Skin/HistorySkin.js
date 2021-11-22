@@ -83,17 +83,28 @@ class HistorySkin extends Component {
   }
 
   handlePageChange = async (pageNumber) => {
+    const { type } = this.state;
+    console.log(type)
     this.setState({ activePage: pageNumber }, () => {
-      this.getData();
+      if (type == '0' || type == '1') {
+        this.getData()
+      } else {
+        this.getData_ByCondition()
+      }
     });
   };
 
   getData_ByCondition = async () => {
+    const { activePage, itemPerPage } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN_BY_CONDITION,
       method: 'POST',
+      data: {
+        page: activePage,
+        limit: itemPerPage
+      },
       headers: this.state.token
     });
 
@@ -192,7 +203,7 @@ class HistorySkin extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={data.length > 0 ? true : false } className="text-center">Không tìm thấy dữ liệu</td>
+                      <td colSpan="10" hidden={data.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -201,7 +212,7 @@ class HistorySkin extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">
-                                    <img src={item.Result != undefined ? JSON.parse(item.Result).data.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
+                                  <img src={item.Result != undefined ? JSON.parse(item.Result).data.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
                                 </td>
                                 <td className="text-center">
                                   <CButton outline color="primary" onClick={e => {
@@ -231,7 +242,9 @@ class HistorySkin extends Component {
                   itemsCountPerPage={itemPerPage}
                   totalItemsCount={itemsCount}
                   pageRangeDisplayed={10}
-                  onChange={(e) => this.handlePageChange(e)}
+                  onChange={(e) => {
+                    this.handlePageChange(e)
+                  }}
                   itemClass="page-item"
                   linkClass="page-link"
                 />
@@ -239,7 +252,7 @@ class HistorySkin extends Component {
             </Col>
           </Row>
 
-          <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={this.closeModal}/>
+          <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={this.closeModal} />
         </div>
       );
     }
