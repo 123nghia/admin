@@ -450,9 +450,10 @@ class SuggestItem extends Component {
     this.setState({ [key]: val })
   }
 
-  async addRoles() {
+  async addProduct() {
     const { name, image, title, description, linkdetail, price,
-      level, sdktype, type_sdk_id, brand_id, image_link } = this.state
+      level, sdktype, type_sdk_id, brand_id, image_link, arrOptionSdkType, idSDK } = this.state
+
     if (name == null || name == '') {
       alert("Thiếu tên sản phẩm");
       return
@@ -483,7 +484,7 @@ class SuggestItem extends Component {
       price: price,
       sdktype: sdktype,
       companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
-      type_sdk_id: type_sdk_id,
+      type_sdk_id: arrOptionSdkType[idSDK]._id,
       type_product_id: window.location.hash.split('/')[window.location.hash.split('/').length - 1],
       brand_id: brand_id
 
@@ -538,7 +539,7 @@ class SuggestItem extends Component {
     })
   }
 
-  async updateUser() {
+  async updateProduct() {
     this.setState({ modalCom: !this.state.modalCom })
     const { name, image, title, description, linkdetail, price,
       level, sdktype, type_sdk_id, type_product_id, brand_id, image_link, indexPage } = this.state
@@ -671,7 +672,7 @@ class SuggestItem extends Component {
   };
 
   render() {
-    const { data, arrPagination, arrLevel, arrOptionSdkType, key, arrBrand, isSearch, indexPage, arrOptionBrand, objectValueBrand } = this.state;
+    const { data, arrPagination, arrLevel, arrOptionSdkType, key, action, isSearch, indexPage, arrOptionBrand, objectValueBrand } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -847,9 +848,9 @@ class SuggestItem extends Component {
 
               <TextFieldGroup
                 field="linkdetail"
-                label="Chi tiết"
+                label="Đường dẫn chi tiết sản phẩm"
                 value={this.state.linkdetail}
-                placeholder={"Chi tiết"}
+                placeholder={"Đường dẫn chi tiết sản phẩm"}
                 onChange={e => this.onChange("linkdetail", e.target.value)}
               />
               <CLabel>Nhãn hiệu:</CLabel>
@@ -861,48 +862,31 @@ class SuggestItem extends Component {
                 options={arrOptionBrand}
               />
 
-              {/* <CLabel>Nhãn hiệu:</CLabel>
-              <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => {
-                  this.setState({ brand_id: e.target.value })
-                }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    arrBrand.map((item, i) => {
-                      if (item._id == this.state.brand_id) {
-                        return (
-                          <option selected key={i} value={item._id}>{item.name}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id}>{item.name}</option>
-                        );
-                      }
-                    })
-                  }
-                </CSelect>
-              </div> */}
 
-
-              <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Loại SDK:</CLabel>
-                <CSelect onChange={async e => {
-                  this.setState({ type_sdk_id: e.target.value.split("/")[0], arrLevel: JSON.parse(e.target.value.split("/")[1]) })
-                }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    arrOptionSdkType.map((item, i) => {
-                      if (item._id == this.state.type_sdk_id) {
-                        return (
-                          <option selected key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
-                        );
+              {
+                action == "new" ? "" :
+                  <div style={{ width: "100%" }} className="mt-3">
+                    <CLabel>Loại SDK:</CLabel>
+                    <CSelect onChange={async e => {
+                      this.setState({ type_sdk_id: e.target.value.split("/")[0], arrLevel: JSON.parse(e.target.value.split("/")[1]) })
+                    }} custom size="sm" name="selectSm" id="SelectLm">
+                      {
+                        arrOptionSdkType.map((item, i) => {
+                          if (item._id == this.state.type_sdk_id) {
+                            return (
+                              <option selected key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
+                            );
+                          } else {
+                            return (
+                              <option key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
+                            );
+                          }
+                        })
                       }
-                    })
-                  }
-                </CSelect>
-              </div>
+                    </CSelect>
+                  </div>
+              }
+
 
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Mức độ:</CLabel>
@@ -934,13 +918,14 @@ class SuggestItem extends Component {
               <TextFieldGroup
                 field="price"
                 label="Giá"
+                type={'number'}
                 value={this.state.price}
                 placeholder={"Giá"}
                 onChange={e => this.onChange("price", e.target.value)}
               />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateProduct() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>

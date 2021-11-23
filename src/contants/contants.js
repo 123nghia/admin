@@ -254,6 +254,11 @@ export default {
   "UPDATE_CONTACT_STATUS": "/api/update-contact-status",
 
   "ADD_ROLE_SUBADMIN": "/api/add-role-subadmin",
-  "GET_ROLE_SUBADMIN": "/api/get-role-subadmin-by-id"
+  "GET_ROLE_SUBADMIN": "/api/get-role-subadmin-by-id",
+
+  "ADD_BANNER": "/api/add-banner",
+  "GET_BANNER": "/api/get-banner",
+  "UPLOAD_BANNER": "/api/upload-banner",
+
 
 };

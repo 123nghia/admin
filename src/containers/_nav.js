@@ -503,6 +503,13 @@ const _navContact = [
     }],
     role: ['0', '1'],
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý banner',
+    to: '/banner',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['2']
+  },
 ]
 const _navLogOut = [
   {

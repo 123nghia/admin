@@ -593,7 +593,7 @@ const styles = {
     color: 'red'
   },
   mgl5: {
-    marginLeft: '5px'
+    margin: '5px'
   },
   tags: {
     float: "right",

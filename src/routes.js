@@ -53,6 +53,8 @@ const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTyp
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 
+const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -96,6 +98,9 @@ const routes = [
 
   //User
   { path: '/end_user', name: 'End User', component: EndUserPlugin },
+
+
+  { path: '/banner', name: 'End User', component: Banner },
 
   //Admin MakeUp
   { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
