@@ -122,7 +122,7 @@ class Banner extends Component {
                     <CCol sm="12" lg="12">
                       <CRow>
                         <CCol sm="12" lg="12">
-                          <CLabel><strong>Banner chính</strong></CLabel>
+                          <CLabel><strong>Banner chính: <a href={`${banner}`}>{`${banner}`}</a></strong></CLabel>
                           <TextFieldGroup
                             field="image"
                             type={"file"}
@@ -135,7 +135,7 @@ class Banner extends Component {
                           }
                         </CCol>
                         <CCol sm="12" lg="12">
-                          <CLabel><strong>Banner phụ</strong></CLabel>
+                          <CLabel><strong>Banner phụ: <a href={`${sub_banner}`}>{`${sub_banner}`}</a></strong></CLabel>
                           <TextFieldGroup
                             field="image"
                             type={"file"}
