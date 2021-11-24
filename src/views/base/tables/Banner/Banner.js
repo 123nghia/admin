@@ -131,7 +131,7 @@ class Banner extends Component {
                           {
                             banner != "" ?
                               <img width="100%" height="400" src={`${banner}`} style={{ marginBottom: 20, paddingLeft: 50, paddingRight: 50 }} /> :
-                              <img width="100%" height="400" src={`${image_banner}`} style={{ marginBottom: 20, paddingLeft: 50, paddingRight: 50 }} />
+                              <img width="100%" height="400" src={`${image_banner}`} style={{ marginBottom: 20, paddingLeft: 50, paddingRight: 50 }} onError={(e)=>{e.target.onerror = null; e.target.src="https://aina.vn/wp-content/uploads/2021/08/default-image-620x600-1.jpg"}}/>
                           }
                         </CCol>
                         <CCol sm="12" lg="12">
@@ -144,7 +144,7 @@ class Banner extends Component {
                           {
                             sub_banner != "" ?
                               <img width="100%" height="400" src={`${sub_banner}`} style={{ marginBottom: 20, paddingLeft: 50, paddingRight: 50 }} /> :
-                              <img width="100%" height="400" src={`${image_sub_banner}`} style={{ marginBottom: 20, paddingLeft: 50, paddingRight: 50 }} />
+                              <img width="100%" height="400" src={`${image_sub_banner}`} style={{ marginBottom: 20, paddingLeft: 50, paddingRight: 50 }} onError={(e)=>{e.target.onerror = null; e.target.src="https://aina.vn/wp-content/uploads/2021/08/default-image-620x600-1.jpg"}}/>
                           }
 
                         </CCol>
