@@ -398,7 +398,7 @@ class PackageSale extends Component {
               }
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updateStatus() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updateStatus() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
               <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>

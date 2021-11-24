@@ -240,7 +240,7 @@ class ContactCustomer extends Component {
                 <p style={styles.danger}>{this.state.deleted}</p>
                 <Card>
                   <CardHeader>
-                    <i className="fa fa-align-justify"></i> Danh sách liên hệ
+                    <i className="fa fa-align-justify"> Danh sách liên hệ</i>
                     <div style={styles.tags}>
                       <CRow>
                         <CCol sm="12" lg="12">

@@ -403,7 +403,7 @@ class CustomerRequest extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách nhận quà
+                  <i className="fa fa-align-justify"> Danh sách nhận quà</i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -597,7 +597,7 @@ class CustomerRequest extends Component {
               }
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>

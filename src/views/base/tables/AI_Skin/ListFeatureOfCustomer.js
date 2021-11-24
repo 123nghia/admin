@@ -15,6 +15,7 @@ import {
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import CIcon from '@coreui/icons-react'
+import { freeSet } from '@coreui/icons';
 import 'moment-timezone';
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../../../contants/contants";
@@ -207,7 +208,7 @@ class ListFeatureOfCustomer extends Component {
                       <CTooltip content="Copy">
                         <CopyToClipboard text={item.Value + this.state.current_slug}
                           onCopy={() => { }}>
-                          <CIcon name="cil-pencil" />
+                          <CIcon content={freeSet.cilCopy} />
                         </CopyToClipboard>
                       </CTooltip>
                     </td>
@@ -376,11 +377,7 @@ class ListFeatureOfCustomer extends Component {
             {
               this.renderDetailPackage()
             }
-            {/* <CardFooter>
-              <CButton color="primary" onClick={() => {
 
-              }}>Hướng dẫn sử dụng</CButton>
-            </CardFooter> */}
           </Card>
         </div>
       );

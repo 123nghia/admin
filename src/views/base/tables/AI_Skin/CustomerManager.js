@@ -427,7 +427,7 @@ class CustomerManager extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Thống kê lượt khách hàng
+                  <i className="fa fa-align-justify"> Thống kê lượt khách hàng</i>
                   <div style={styles.tags}>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" />
                   </div>
@@ -438,7 +438,7 @@ class CustomerManager extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên</th>
+                        <th className="text-center">Số điện thoại</th>
                         <th className="text-center">Tên đầy đủ</th>
                         <th className="text-center">Số điện thoại</th>
                         {
@@ -447,7 +447,6 @@ class CustomerManager extends Component {
                         }
                         <th className="text-center">Lần đến gần nhất</th>
                         <th className="text-center">Số lần đến</th>
-                        <th className="text-center">#</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -469,12 +468,6 @@ class CustomerManager extends Component {
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">{item.Count}</td>
-
-                                <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => { }} >
-                                    Lịch sử soi da
-                                  </CButton>
-                                </td>
                               </tr>
                             );
                           }) : ""
@@ -498,7 +491,7 @@ class CustomerManager extends Component {
                 <Col>
                   <Card>
                     <CardHeader>
-                      <i className="fa fa-align-justify"></i> Thống kê lượt khách hàng theo từng tháng
+                      <i className="fa fa-align-justify"> Thống kê lượt khách hàng theo từng tháng</i>
                       <div style={styles.tags}>
                         Tháng
                         <CSelect onChange={async e => { this.getDataForCompanyByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
@@ -578,7 +571,7 @@ class CustomerManager extends Component {
                 <Col>
                   <Card>
                     <CardHeader>
-                      <i className="fa fa-align-justify"></i> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)
+                      <i className="fa fa-align-justify"> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)</i>
                     </CardHeader>
                     <CardBody>
 

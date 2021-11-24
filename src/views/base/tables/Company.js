@@ -420,8 +420,8 @@ class Company extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách công ty (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                  <i className="fa fa-align-justify"> Danh sách công ty (Total: {this.state.data != undefined || this.state.data != null ?
+                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})</i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -630,7 +630,7 @@ class Company extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
               <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>

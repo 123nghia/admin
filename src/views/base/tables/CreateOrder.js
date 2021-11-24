@@ -202,7 +202,7 @@ class Order extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i> Quản lý đơn hàng
+            <i className="fa fa-align-justify">Quản lý đơn hàng</i>
           </CardHeader>
           <CardBody>
             <div style={styles.tags}>
@@ -305,7 +305,7 @@ class Order extends Component {
             </div> */}
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</Button>{' '}
+            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Lưu</Button>{' '}
             <Button color="secondary" onClick={e => this.toggleModal("new")}>Close</Button>
           </ModalFooter>
         </Modal>

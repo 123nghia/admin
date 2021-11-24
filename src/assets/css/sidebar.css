@@ -1,6 +1,9 @@
 /* .c-sidebar-nav-title {
   background-color: #363636;
 } */
+.card .card-header .fa {
+  font-weight: bold;
+}
 
 .c-sidebar ul li.c-sidebar-nav-title {
   /* color: #252525; */

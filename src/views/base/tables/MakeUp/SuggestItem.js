@@ -446,7 +446,7 @@ class SuggestItem extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm da mặt
+                  <i className="fa fa-align-justify">Danh sách sản phẩm da mặt</i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -686,7 +686,7 @@ class SuggestItem extends Component {
               </div> */}
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>

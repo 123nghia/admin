@@ -739,9 +739,9 @@ class Users extends Component {
               <div class="container">
                 <div class="row">
                   <div class="col">
-                    <i className="fa fa-align-justify"></i> {
+                    <i className="fa fa-align-justify"> {
                       role == 'ADMIN' ? "SHOP LIST" : role == 'SHOPMANAGER' ? 'SALE LIST' : 'USER LIST'
-                    } ( Page: {this.state.indexPage + 1} )
+                    } ( Page: {this.state.indexPage + 1} )</i>
                   </div>
                   <div class="col">
                     <div style={styles.tags}>
@@ -973,7 +973,7 @@ class Users extends Component {
             {/* dawdaefakwdhlkawjdkl */}
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i>LIST USER SALE OF SALER ( Sale Name: {this.state.nameSale}, Page: {this.state.indexPage + 1})
+                <i className="fa fa-align-justify">LIST USER SALE OF SALER ( Sale Name: {this.state.nameSale}, Page: {this.state.indexPage + 1})</i>
               </CardHeader>
               <CardBody>
                 {
@@ -1279,7 +1279,7 @@ class Users extends Component {
               </div> */}
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
               <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
             </ModalFooter>
           </Modal>

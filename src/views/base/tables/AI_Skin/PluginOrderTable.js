@@ -659,7 +659,7 @@ class PluginOrder extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách đơn hàng
+                  <i className="fa fa-align-justify">Danh sách đơn hàng</i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">

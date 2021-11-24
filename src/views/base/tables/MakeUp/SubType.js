@@ -578,7 +578,7 @@ class SubType extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh mục
+                  <i className="fa fa-align-justify">Danh mục</i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">

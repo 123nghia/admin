@@ -507,7 +507,7 @@ class Users extends Component {
               }
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.updateUser() : this.updateUser() }} disabled={this.state.isLoading}>Save</Button>{' '}
+              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.updateUser() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
               <Button color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</Button>
             </ModalFooter>
           </Modal>

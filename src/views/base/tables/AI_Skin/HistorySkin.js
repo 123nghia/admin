@@ -13,7 +13,8 @@ import {
 } from '@coreui/react'
 
 import IframeModal from '../../../components/Iframe';
-import Pagination from "react-js-pagination";
+import styles from '../../../../../src/assets/styles/styles';
+import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import axios from 'axios'
@@ -109,17 +110,8 @@ class HistorySkin extends Component {
     });
 
     let data = res.data.data
-    this.setState({ dataApi: data.data, data: data.data });
 
-    let active = 0
-
-    data.data.map(val => {
-      if (val.Status == "Actived") {
-        active = active + 1
-      }
-    })
-
-    this.setState({ isLoading: false, totalActive: active, itemsCount: data.total });
+    this.setState({ isLoading: false, itemsCount: data.total, dataApi: data.data, data: data.data });
   }
 
   searchKey(key) {
@@ -187,7 +179,7 @@ class HistorySkin extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Lịch sử soi da
+                  <i className="fa fa-align-justify">Lịch sử soi da</i>
                 </CardHeader>
                 <CardBody>
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
@@ -236,18 +228,11 @@ class HistorySkin extends Component {
                 </CardBody>
               </Card>
 
+
               <div style={{ float: 'right' }}>
-                <Pagination
-                  activePage={activePage}
-                  itemsCountPerPage={itemPerPage}
-                  totalItemsCount={itemsCount}
-                  pageRangeDisplayed={10}
-                  onChange={(e) => {
-                    this.handlePageChange(e)
-                  }}
-                  itemClass="page-item"
-                  linkClass="page-link"
-                />
+                <Pagination count={Math.ceil(itemsCount / itemPerPage)} color="primary" onChange={(e, v) => {
+                  this.handlePageChange(v)
+                }} />
               </div>
             </Col>
           </Row>

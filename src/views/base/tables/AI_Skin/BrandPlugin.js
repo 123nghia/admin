@@ -373,7 +373,7 @@ class BrandPlugin extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách thương hiệu
+                  <i className="fa fa-align-justify"> Danh sách thương hiệu</i>
                   <div style={styles.tags}>
 
                     <CRow>
@@ -508,7 +508,7 @@ class BrandPlugin extends Component {
               />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addBrand() : this.updateBrand() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addBrand() : this.updateBrand() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>

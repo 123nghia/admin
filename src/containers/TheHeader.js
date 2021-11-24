@@ -121,25 +121,20 @@ const TheHeader = () => {
                   </CCarouselItem>
                 </CCarouselInner>
                 {
-                  close ? <CCarouselControl style={{ opacity: 1 }} direction="next">
-                    <CButton color="info" style={{ width: 200 }}>
-                      Nhấn để tiếp tục
+                  close ? <CCarouselControl style={{ opacity: 1, top: 530 }} direction="next">
+                    <CButton color="info">
+                      Tiếp
                     </CButton>
                   </CCarouselControl> :
-                    <CCarouselControl style={{ opacity: 1 }} direction="next">
-                      <CButton color="success" style={{ width: 300 }} onClick={e => { setShow(false) }}>Đã hiểu</CButton>
+                    <CCarouselControl style={{ opacity: 1, top: 530 }} direction="next">
+                      <CButton color="success" onClick={e => { setShow(false) }}>Đã hiểu</CButton>
                     </CCarouselControl>
                 }
-                {/* <CCarouselControl style={{ opacity: 1 }} direction="next">
-              <CButton color="info" style={{ width: 100 }}>
-                Nhấn để tiếp tục
-              </CButton>
-            </CCarouselControl> */}
               </CCarousel>
             </ModalBody>
 
             <ModalFooter style={{ backgroundColor: 'rgba(52, 52, 52, 0.8)' }}>
-              <CButton color="success" style={{ width: 300 }} onClick={e => { setShow(false) }}>Bỏ qua</CButton>
+              <CButton color="success" style={{ width: 400, marginRight: 150 }} onClick={e => { setShow(false) }}>Bỏ qua</CButton>
             </ModalFooter>
           </Modal>
       }

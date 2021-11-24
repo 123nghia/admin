@@ -263,7 +263,7 @@ class EndUser extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách end user
+                  <i className="fa fa-align-justify">Danh sách end user</i>
                   <div style={styles.tags}>
 
                     <CRow>
@@ -371,7 +371,7 @@ class EndUser extends Component {
 
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
               <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</CButton>
             </ModalFooter>
           </Modal>

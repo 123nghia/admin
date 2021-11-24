@@ -432,7 +432,7 @@ class PluginCustomerManager extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách công ty
+                  <i className="fa fa-align-justify"> Danh sách công ty</i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -742,7 +742,7 @@ class PluginCustomerManager extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
               <CButton color="secondary" onClick={e => {this.setState({ modalCom: !this.state.modalCom })}}>Đóng</CButton>
             </ModalFooter>
           </Modal>

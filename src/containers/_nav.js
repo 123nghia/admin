@@ -321,7 +321,7 @@ const _navOrther = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Thông tin shop',
+    name: 'Thông tin tài khoản',
     to: '/profile',
     icon: <CIcon style={css} name="cil-user" customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],

@@ -789,7 +789,7 @@ class ProductHair extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm
+                  <i className="fa fa-align-justify">Danh sách sản phẩm</i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -1018,7 +1018,7 @@ class ProductHair extends Component {
 
                   </ModalBody>
                   <ModalFooter>
-                    <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Save</CButton>{' '}
+                    <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Lưu</CButton>{' '}
                     <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</CButton>
                   </ModalFooter>
                 </div>

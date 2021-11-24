@@ -356,7 +356,7 @@ class PluginCreateOrder extends Component {
       await this.getFeatureChoose(arrayChooseFeature);
 
       if (currentSlug != confirmSlug) {
-        await axios({
+        const res = await axios({
           baseURL: Constants.BASE_URL,
           url: Constants.UPDATE_SLUG,
           method: 'POST',
@@ -366,10 +366,14 @@ class PluginCreateOrder extends Component {
           }
         });
 
-        this.setState({ currentSlug: currentSlug })
+        if(res.is_success == true) {
+          this.setState({ currentSlug: currentSlug })
+        }
       }
-    } else {
-      alert('Vui lòng nhập đầy đủ thông tin !!!')
+    } else if (Company_Id == '') {
+      alert('Chưa chọn công ty !!!')
+    } else if (Package_Id != '') {
+      alert('Chưa chọn gói !!!')
     }
 
     this.getCurrentDate();
@@ -378,9 +382,8 @@ class PluginCreateOrder extends Component {
   }
 
   handleChange = async (newValue, actionMeta) => {
-    this.setState({ objectValueCompany: newValue, Company_Id: newValue.value })
+    this.setState({ objectValueCompany: newValue, Company_Id: newValue.value, disableNext: false })
     await this.getCompanyName(newValue.value)
-    console.log(newValue.value);
   };
 
   render() {
@@ -392,7 +395,7 @@ class PluginCreateOrder extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i> Quản lý đơn hàng
+            <i className="fa fa-align-justify"> Quản lý đơn hàng</i>
           </CardHeader>
           <CardBody>
             <div style={styles.tags}>
@@ -422,7 +425,7 @@ class PluginCreateOrder extends Component {
                 <CCol sm="12" lg="12">
                   <div>
                     <label style={styles.flexLabel} htmlFor="tag">Chọn gói sản phẩm:    </label>
-                    <CSelect style={styles.flexOption} onChange={async e => { this.setState({ Package_Id: e.target.value }); await this.getPackageName(e.target.value) }}>
+                    <CSelect style={styles.flexOption} onChange={async e => { this.setState({ Package_Id: e.target.value, disableNext: false }); await this.getPackageName(e.target.value) }}>
                       <option value={this.state.Package_Id}>-----</option>
                       {
                         dataPackage.map((item, i) => {
@@ -503,7 +506,7 @@ class PluginCreateOrder extends Component {
 
           </ModalBody>
           <ModalFooter>
-            <CButton color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Save</CButton>{' '}
+            <CButton color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Lưu</CButton>{' '}
             <CButton color="secondary" onClick={e => this.toggleModal("new")}>Close</CButton>
           </ModalFooter>
         </Modal>

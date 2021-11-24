@@ -318,7 +318,7 @@ class TypeRequest extends Component {
                 <p style={styles.danger}>{this.state.deleted}</p>
                 <Card>
                   <CardHeader>
-                    <i className="fa fa-align-justify"></i> Quản lý loại yêu cầu
+                    <i className="fa fa-align-justify">Quản lý loại yêu cầu</i>
                     <div style={styles.tags}>
                       {/* <div>
                       <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
@@ -429,7 +429,7 @@ class TypeRequest extends Component {
               } */}
               </ModalBody>
               <ModalFooter>
-                <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Save</CButton>{' '}
+                <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
                 <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
               </ModalFooter>
             </Modal>

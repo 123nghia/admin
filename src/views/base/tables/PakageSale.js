@@ -311,8 +311,8 @@ class PackageSale extends Component {
                             <p style={styles.danger}>{this.state.deleted}</p>
                             <Card>
                                 <CardHeader>
-                                    <i className="fa fa-align-justify"></i> PAKAGE SALE (Total: {this.state.data != undefined || this.state.data != null ?
-                                        this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})
+                                    <i className="fa fa-align-justify"> PAKAGE SALE (Total: {this.state.data != undefined || this.state.data != null ?
+                                        this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})</i>
                                     <div style={styles.tags}>
                                         <div>
                                             <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
@@ -425,7 +425,7 @@ class PackageSale extends Component {
                             </div>
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Save</Button>{' '}
+                            <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
                             <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
                         </ModalFooter>
                     </Modal>
