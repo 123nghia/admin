@@ -172,78 +172,78 @@ class HistorySkin extends Component {
   render() {
     const { data, activePage, itemPerPage, itemsCount, toggleHistory, idHistory } = this.state;
 
-    if (!this.state.isLoading) {
-      return (
-        <div className="animated fadeIn">
-          <Row>
-            <Col>
-              <Card>
-                <CardHeader>
-                  <i className="fa fa-align-justify">Lịch sử soi da</i>
-                </CardHeader>
-                <CardBody>
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        <th className="text-center">Tên</th>
-                        <th className="text-center">Hình ảnh</th>
-                        <th className="text-center">Kết quả</th>
-                        <th className="text-center">Công ty</th>
-                        <th className="text-center">Sale</th>
-                        <th className="text-center">Ngày tạo</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td colSpan="10" hidden={data.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.UserName}</td>
-                                <td className="text-center">
-                                  <img src={item.Result != undefined ? JSON.parse(item.Result).data.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
-                                </td>
-                                <td className="text-center">
-                                  <CButton outline color="primary" onClick={e => {
-                                    this.setState({
-                                      idHistory: item._id,
-                                      toggleHistory: !toggleHistory
-                                    })
-                                  }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
-                                </td>
-                                <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
-                                <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td>
-                                <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                </td>
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </table>
-                </CardBody>
-              </Card>
 
-
-              <div style={{ float: 'right' }}>
-                <Pagination count={Math.ceil(itemsCount / itemPerPage)} color="primary" onChange={(e, v) => {
-                  this.handlePageChange(v)
-                }} />
-              </div>
-            </Col>
-          </Row>
-
-          <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={this.closeModal} />
-        </div>
-      );
-    }
     return (
-      <div className="sweet-loading">
-        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
+      <div className="animated fadeIn">
+        <Row>
+          <Col>
+            <Card>
+              <CardHeader>
+                <i className="fa fa-align-justify">Lịch sử soi da</i>
+              </CardHeader>
+              <CardBody>
+                <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      <th className="text-center">Tên</th>
+                      <th className="text-center">Hình ảnh</th>
+                      <th className="text-center">Kết quả</th>
+                      <th className="text-center">Công ty</th>
+                      <th className="text-center">Sale</th>
+                      <th className="text-center">Ngày tạo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <td colSpan="10" hidden={data.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
+                    {
+                      data != undefined ?
+                        data.map((item, i) => {
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">
+                                <img src={item.Result != undefined ? JSON.parse(item.Result).data.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
+                              </td>
+                              <td className="text-center">
+                                <CButton outline color="primary" onClick={e => {
+                                  this.setState({
+                                    idHistory: item._id,
+                                    toggleHistory: !toggleHistory
+                                  })
+                                }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                              </td>
+                              <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
+                              <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td>
+                              <td className="text-center">
+                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                              </td>
+                            </tr>
+                          );
+                        }) : ""
+                    }
+                  </tbody>
+                </table>
+                {/* :
+                    <div className="sweet-loading">
+                      <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
+                    </div> */}
+
+
+              </CardBody>
+            </Card>
+
+
+            <div style={{ float: 'right' }}>
+              <Pagination count={Math.ceil(itemsCount / itemPerPage)} color="primary" onChange={(e, v) => {
+                this.handlePageChange(v)
+              }} />
+            </div>
+          </Col>
+        </Row>
+
+        <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={this.closeModal} />
       </div>
     );
   }
