@@ -173,7 +173,7 @@ const TheSidebar = () => {
           />
         </div>
       </CSidebarNav>
-      <CSidebarMinimizer className="c-d-md-down-none" />
+      {/* <CSidebarMinimizer className="c-d-md-down-none" /> */}
     </CSidebar>
   )
 }
