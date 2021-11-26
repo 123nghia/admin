@@ -312,7 +312,7 @@ class User extends Component {
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.PLUGIN_DELETE_USER,
-      method: 'DELETE',
+      method: 'POST',
       data: {
         "id": this.state.delete['_id']
       }
@@ -559,7 +559,7 @@ class User extends Component {
 
               {
                 action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Status    </label>
+                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:    </label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
                     <option value={'Actived'}>Actived</option>

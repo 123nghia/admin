@@ -280,16 +280,17 @@ class User extends Component {
     this.setState({ isLoading: true });
     const res = await API_CONNECT(Constants.PLUGIN_UPDATE_USER, body, "", "POST")
 
-    if (res.data.is_success == true) {
+    if (res.is_success == true) {
       this.getData();
       this.setState({ modalCom: !this.state.modalCom })
     } else {
-      alert(res.data.message);
+      alert(res.message);
       this.setState({ isLoading: false });
     }
   }
 
   openDelete = (item) => {
+    console.log(item)
     this.setState({
       modalDelete: !this.state.modalDelete,
       delete: item
@@ -298,15 +299,16 @@ class User extends Component {
 
   async delete() {
     this.setState({ isLoading: true });
+    console.log(this.state.delete['_id'])
     const res = await API_CONNECT(Constants.PLUGIN_DELETE_USER, {
       "id": this.state.delete['_id']
-    }, "", "DELETE")
+    }, "", "POST")
 
-    if (res.data.is_success == true) {
+    if (res.is_success == true) {
       this.getData();
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
-      alert(res.data.message);
+      alert(res.message);
       this.setState({ isLoading: false });
     }
 
@@ -547,7 +549,7 @@ class User extends Component {
 
               {
                 action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Status    </label>
+                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:    </label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
                     <option value={'Actived'}>Actived</option>

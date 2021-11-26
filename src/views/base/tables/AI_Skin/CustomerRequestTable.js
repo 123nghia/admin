@@ -587,7 +587,7 @@ class CustomerRequest extends Component {
 
               {
                 action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Status:</label>
+                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
                   <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
                     <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
                     <option value={'0'}>Chưa nhận quà</option>
