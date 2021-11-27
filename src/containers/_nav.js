@@ -31,6 +31,16 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavTitle',
+    _children: ['Quản lí sản phẩm ưu tiên']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm ưu tiên',
+    to: '/priority_product',
+    icon: <CIcon content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />
+  },
+  {
+    _tag: 'CSidebarNavTitle',
     _children: ['Quản lí sản phẩm gợi ý']
   },
   {

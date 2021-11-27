@@ -13,7 +13,9 @@ import {
 import {
   CButton,
   CRow,
-  CCol
+  CCol,
+  CLabel,
+  CSelect
 } from '@coreui/react'
 
 import API_CONNECT from "../../../functions/callAPI";
@@ -24,7 +26,7 @@ import TextFieldGroup from "../../Common/TextFieldGroup";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 
-class Brand extends Component {
+class PriorityProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,6 +40,8 @@ class Brand extends Component {
       image: "",
       image_show: "",
       link: "",
+      priority: "",
+      publics: false,
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -74,7 +78,7 @@ class Brand extends Component {
   getData = async () => {
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.LIST_BRAND, {}, "", "POST")
+      Constants.LIST_PRIORITY, {}, "", "POST")
 
     let val = res.data;
     this.pagination(val);
@@ -133,7 +137,8 @@ class Brand extends Component {
         name: "",
         image: "",
         image_show: "",
-        link: ""
+        link: "",
+        priority: ""
       })
     }
   }
@@ -142,8 +147,8 @@ class Brand extends Component {
     this.setState({ [key]: val })
   }
 
-  async addBrand() {
-    const { name, image, link } = this.state
+  async addPriorityProduct() {
+    const { name, image, link, priority, publics } = this.state
     if (name == null || name == '' ||
       image == null || image == '') {
       alert("Hãy nhập đầy đủ dữ liệu !!!");
@@ -153,17 +158,19 @@ class Brand extends Component {
     const form = new FormData();
     form.append("image", image);
 
-    await API_CONNECT(Constants.UPLOAD_BRAND, form, "", "POST")
+    await API_CONNECT(Constants.UPLOAD_PRIORITY, form, "", "POST")
 
     const body = {
       name: name,
-      image: image.name,
-      link: link
+      image: `${Constants.BASE_URL}/public/image_priority/${image.name}`,
+      link: link,
+      priority: priority,
+      public: publics
     }
 
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.ADD_BRAND, body, "", "POST")
+      Constants.ADD_PRIORITY, body, "", "POST")
 
     if (res.status == 200) {
 
@@ -184,12 +191,14 @@ class Brand extends Component {
       image: item.image,
       image_show: "",
       link: item.link,
+      priority: item.priority,
+      publics: item.public,
       id: item['_id']
     })
   }
 
-  async updateBrand() {
-    const { name, image, link } = this.state
+  async updatePriorityProduct() {
+    const { name, image, link, priority, publics, image_show } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '') {
@@ -197,21 +206,26 @@ class Brand extends Component {
       return
     }
 
-    const form = new FormData();
-    form.append("image", image);
 
-    await API_CONNECT(Constants.UPLOAD_BRAND, form, "", "POST")
+    if (image_show != "") {
+      const form = new FormData();
+      form.append("image", image);
+
+      await API_CONNECT(Constants.UPLOAD_PRIORITY, form, "", "POST")
+    }
 
     const body = {
       name: name,
-      image: image.name,
+      image: image_show != "" ? `${Constants.BASE_URL}/public/image_priority/${image.name}` : image,
       link: link,
+      priority: priority,
+      public: publics,
       id: this.state.id,
     }
 
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.UPDATE_BRAND, body, "", "POST")
+      Constants.UPDATE_PRIORITY, body, "", "POST")
 
     if (res.status == 200) {
 
@@ -234,7 +248,7 @@ class Brand extends Component {
   async delete() {
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.DELETE_BRAND, {
+      Constants.DELETE_PRIORITY, {
       "id": this.state.id
     }, "", "POST")
 
@@ -252,16 +266,6 @@ class Brand extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  getBadge(status) {
-    switch (status) {
-      case 'Actived': return 'success'
-      case 'Inactive': return 'secondary'
-      case 'Locked': return 'warning'
-      case 'Deactived': return 'danger'
-      default: return 'primary'
-    }
-  }
-
   render() {
     const { data, arrPagination, key, image, image_show } = this.state;
     if (!this.state.isLoading) {
@@ -271,7 +275,7 @@ class Brand extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách thương hiệu
+                  <i className="fa fa-align-justify"></i> Danh sách danh mục
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -301,9 +305,11 @@ class Brand extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên thương hiệu</th>
+                        <th className="text-center">Tên sản phẩm</th>
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">Đường dẫn</th>
+                        <th className="text-center">Độ ưu tiên</th>
+                        <th className="text-center">Công khai</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -320,12 +326,14 @@ class Brand extends Component {
                                   {
                                     item.image == "" || item.image == null ?
                                       <img src={"https://www.chanchao.com.tw/VietnamPrintPack/images/default.jpg"} width={"60px"} height={"60px"} /> :
-                                      <img src={`${Constants.BASE_URL}/public/image_brand/${item.image}`} width={"80px"} height={"60px"} />
+                                      <img src={item.image} width={"80px"} height={"60px"} />
                                   }
                                 </td>
                                 <td className="text-center">
                                   <a href={item.link} target="_blank">{item.link}</a>
                                 </td>
+                                <td className="text-center">{item.priority}</td>
+                                <td className="text-center">{String(item.public)}</td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -355,9 +363,9 @@ class Brand extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="name"
-                label="Tên thương hiệu"
+                label="Tên sản phẩm"
                 value={this.state.name}
-                placeholder={"Tên thương hiệu"}
+                placeholder={"Tên sản phẩm"}
                 // error={errors.title}
                 onChange={e => this.onChange("name", e.target.value)}
               // rows="5"
@@ -374,8 +382,18 @@ class Brand extends Component {
               />
 
               <TextFieldGroup
+                field="priority"
+                label="Độ ưu tiên"
+                value={this.state.priority}
+                placeholder={"Độ ưu tiên"}
+                // error={errors.title}
+                onChange={e => this.onChange("priority", e.target.value)}
+              // rows="5"
+              />
+
+              <TextFieldGroup
                 field="image"
-                label="Ảnh thương hiệu"
+                label="Ảnh sản phẩm"
                 type={"file"}
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
@@ -384,11 +402,33 @@ class Brand extends Component {
                 image == "" ? "" :
                   <img width="250" height="300" src={
                     image_show == "" ?
-                      `${Constants.BASE_URL}/public/image_brand/${image}` : image_show} style={{ marginBottom: 20 }} />
+                      `${image}` : image_show} style={{ marginBottom: 20 }} />
               }
+
+
+              <div style={{ width: "100%" }}>
+                <CLabel>Công khai:</CLabel>
+                <CSelect onChange={async e => {
+                  this.setState({ publics: e.target.value })
+                }} custom size="sm" name="selectSm" id="SelectLm">
+                  {
+                    [false, true].map((item, i) => {
+                      if (item == this.state.publics) {
+                        return (
+                          <option selected key={i} value={item}>{String(item)}</option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item}>{String(item)}</option>
+                        );
+                      }
+                    })
+                  }
+                </CSelect>
+              </div>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addBrand() : this.updateBrand() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addPriorityProduct() : this.updatePriorityProduct() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
               <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
@@ -499,4 +539,4 @@ const styles = {
   },
 }
 
-export default Brand;
+export default PriorityProduct;

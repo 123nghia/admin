@@ -2,6 +2,7 @@ import React from 'react';
 
 const Category = React.lazy(() => import('./views/base/tables/Category'));
 const Brand = React.lazy(() => import('./views/base/tables/Brand'));
+const PriorityProduct = React.lazy(() => import('./views/base/tables/PriorityProduct'));
 const Dashboard = React.lazy(() => import('./views/DashBoard/Dashboard'));
 const Product = React.lazy(() => import('./views/base/tables/Product'));
 const Account = React.lazy(() => import('./views/base/tables/Account'));
@@ -26,6 +27,7 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/category', name: 'CATEGORY', component: Category },
   { path: '/brand', name: 'BRAND', component: Brand },
+  { path: '/priority_product', name: 'PriorityProduct', component: PriorityProduct },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/product', name: 'Product', component: Product },
   { path: '/account', name: 'Account', component: Account },

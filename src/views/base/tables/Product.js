@@ -519,7 +519,7 @@ class Product extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách danh mục
+                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">

@@ -126,5 +126,12 @@ export default {
   "LIST_TYPE_SDK": "/api/list-type-sdk",
   "ADD_TYPE_SDK": "/api/add-type-sdk",
   "UPDATE_TYPE_SDK": "/api/update-type-sdk",
-  "DELETE_TYPE_SDK": "/api/delete-type-sdk"
+  "DELETE_TYPE_SDK": "/api/delete-type-sdk",
+
+  "LIST_PRIORITY": "/api/get-list-priority",
+  "ADD_PRIORITY": "/api/add-priority",
+  "UPDATE_PRIORITY": "/api/update-priority",
+  "DELETE_PRIORITY": "/api/delete-priority",
+  "UPLOAD_PRIORITY": "/api/upload-priority",
+
 };

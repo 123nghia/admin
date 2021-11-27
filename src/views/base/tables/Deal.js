@@ -1,47 +1,26 @@
+import CIcon from '@coreui/icons-react';
+import {
+  CBadge, CButton, CCard, CCardBody, CCardHeader, CCol, CCollapse, CDataTable,
+  CFormGroup, CInput, CInputCheckbox, CLabel, CRow, CSelect
+} from '@coreui/react';
+import { css } from "@emotion/react";
+import Pagination from '@material-ui/lab/Pagination';
+import 'moment-timezone';
 import React, { Component } from 'react';
-import CIcon from '@coreui/icons-react'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import DotLoader from "react-spinners/DotLoader";
 import {
   Card,
   CardBody,
   CardHeader,
-  Col,
-  Row,
-  Input,
-  ModalHeader, ModalBody, ModalFooter, Modal, CardFooter,
+  Col, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row
 } from 'reactstrap';
-
-import {
-  CButton,
-  CRow,
-  CCol,
-  CLabel,
-  CSelect,
-  CBadge,
-  CCard,
-  CCardHeader,
-  CCollapse,
-  CCardBody,
-  CDataTable,
-  CFormGroup,
-  CInputCheckbox,
-  CInput
-} from '@coreui/react'
-
-import CreatableSelect from 'react-select/creatable';
-import API_CONNECT from "../../../functions/callAPI";
-import Pagination from '@material-ui/lab/Pagination';
-import 'moment-timezone';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import Constants from "../../../contants/contants";
+import API_CONNECT from "../../../functions/callAPI";
 import TextFieldGroup from "../../Common/TextFieldGroup";
-import { css } from "@emotion/react";
-import DotLoader from "react-spinners/DotLoader";
-import { cifAU, freeSet } from '@coreui/icons';
-let headers = new Headers();
-const auth = localStorage.getItem('auth');
-headers.append('Authorization', 'Bearer ' + auth);
-headers.append('Content-Type', 'application/json');
+import RenderAddForms from "../../components/Deals/deal_add_form";
+import RenderUpdateForms from "../../components/Deals/deal_update_form";
 
 class Product extends Component {
   constructor(props) {
@@ -80,6 +59,14 @@ class Product extends Component {
       arrUpdate: [],
       arrRemoveOnUpdate: []
     };
+
+    this.onRemoveCard = this.onRemoveCard.bind(this);
+    this.handleChangeCategory = this.handleChangeCategory.bind(this);
+    this.addAllProduct = this.addAllProduct.bind(this);
+    this.addProduct = this.addProduct.bind(this);
+    this.decreaseProduct = this.decreaseProduct.bind(this);
+    this.totalDeal = this.totalDeal.bind(this);
+    this.pushCategory = this.pushCategory.bind(this);
   }
   async componentDidMount() {
     this.getData()
@@ -192,7 +179,6 @@ class Product extends Component {
             })
           }
 
-          console.log(res_category)
           this.setState({ arrOptionCategory: arrTempOptionCategory })
         }
       })
@@ -203,9 +189,7 @@ class Product extends Component {
     this.setState({ [key]: val })
   }
 
-  async addDeal() {
-    const { name, image, type, status, voucher, arrCategory, arrAllProductChoosed, time_start, time_finish } = this.state;
-
+  setProductForArrCategory = (arrCategory, arrAllProductChoosed) => {
     if (arrCategory.length == 0) {
       alert(`Chưa thiết lập banner !!!`);
       return
@@ -218,8 +202,10 @@ class Product extends Component {
       } else {
         for (let y = 0; y < arrAllProductChoosed[i].length; y++) {
           if (arrAllProductChoosed[i][y].total_deal == undefined || arrAllProductChoosed[i][y].total_deal == 0) {
-            alert(`Sản phẩm thứ ${y + 1} trong banner thứ ${i + 1} chưa thiết lập số lượng deal !!!`);
-            return
+            arrAllProductChoosed[i][y].total_deal = 100;
+            arrCategory[i].product = arrAllProductChoosed[i]
+            //alert(`Sản phẩm thứ ${y + 1} trong banner thứ ${i + 1} chưa thiết lập số lượng deal !!!`);
+            //return
           } else {
             arrCategory[i].product = arrAllProductChoosed[i]
           }
@@ -227,6 +213,13 @@ class Product extends Component {
       }
     }
 
+    return arrCategory
+  }
+
+  async addDeal() {
+    const { name, image, type, status, voucher, arrCategory, arrAllProductChoosed, time_start, time_finish } = this.state;
+
+    let resCategory = this.setProductForArrCategory(arrCategory, arrAllProductChoosed);
 
     if (name == null || name == '' ||
       image == null || image == '') {
@@ -242,7 +235,7 @@ class Product extends Component {
     const body = {
       name: name,
       image: image.name,
-      category: arrCategory,
+      category: resCategory,
       type: type,
       status: status,
       voucher: voucher,
@@ -267,6 +260,10 @@ class Product extends Component {
 
   changeDealType(e) {
     this.setState({ type: e.target.value })
+  }
+
+  onShowProductOnUpdate(arrCategoryOnUpdate) {
+    console.log(arrCategoryOnUpdate)
   }
 
   async openUpdate(item) {
@@ -294,6 +291,8 @@ class Product extends Component {
         "product": arrProductOnUpdate
       })
     }
+
+    this.onShowProductOnUpdate(arrCategoryOnUpdate)
 
     this.setState({
       arrRemoveOnUpdate: [],
@@ -331,29 +330,14 @@ class Product extends Component {
   }
 
   async updateDeal() {
-    const { name, image, type, status, voucher, time_start, time_finish, arrUpdate } = this.state
+    const { name, image, type, status, voucher, time_start, time_finish, category, arrCategory, arrAllProductChoosed } = this.state
+
+    let resCategory = this.setProductForArrCategory(arrCategory, arrAllProductChoosed);
+
     if (name == null || name == '' ||
       image == null || image == '') {
       alert("Hãy nhập đầy đủ dữ liệu !!!");
       return
-    }
-
-    const arrCategoryOnUpdate = []
-    const arrProductOnUpdate = []
-
-    for (let i = 0; i < arrUpdate.length; i++) {
-      let dataProduct = arrUpdate[i].product;
-      for (let y = 0; y < dataProduct.length; y++) {
-        arrProductOnUpdate.push({
-          "product_id": dataProduct[y].product_id._id,
-          "total_deal": dataProduct[y].total_deal
-        })
-      }
-
-      arrCategoryOnUpdate.push({
-        "brand_id": arrUpdate[i].brand_id._id,
-        "product": arrProductOnUpdate
-      })
     }
 
     const form = new FormData();
@@ -364,7 +348,7 @@ class Product extends Component {
     const body = {
       name: name,
       image: image.name,
-      category: arrCategoryOnUpdate,
+      category: category,
       type: type,
       status: status,
       voucher: voucher,
@@ -437,9 +421,8 @@ class Product extends Component {
     arrAllProductOfAllCategory_Temp[i] = new Array()
     arrAllProductChoosed[i] = new Array()
 
-    console.log(data)
     const found = arrOptionCategory.find(element => element.value == e.value);
-    console.log(found)
+
     arrChooseCategory[i] = new Array();
     arrChooseCategory[i].push(found)
     this.setState({
@@ -451,15 +434,7 @@ class Product extends Component {
     });
   };
 
-  handleUpdateCategory = async (e, i) => {
-    const { arrUpdate, arrOptionCategory } = this.state;
-    console.log(arrUpdate[i]);
-    // console.log(e.value);
-    // console.log(arrOptionCategory.find(val => val.value == e.value));
-  }
-
-  pushCategory = () => {
-    const { arrCategory, arrAllProductOfAllCategory, arrAllProductOfAllCategory_Temp, arrAllProductChoosed, arrChooseCategory } = this.state;
+  pushCategory = (arrCategory, arrAllProductOfAllCategory, arrAllProductOfAllCategory_Temp, arrAllProductChoosed, arrChooseCategory) => {
     arrCategory.push({
       brand_id: "",
       product: []
@@ -511,223 +486,76 @@ class Product extends Component {
     });
   }
 
-  renderAddForm() {
-    const { arrCategory, arrChooseCategory, arrOptionCategory,
-      arrAllProductOfAllCategory, arrAllProductChoosed, arrAllProductOfAllCategory_Temp } = this.state;
-    return (
-      <div>
-        <CRow>
-          <CCol md="5" lg="5" sm="12" xm="12" lx="5">
-            <h3>
-              <strong>Tạo dữ liệu cho banner</strong>
-            </h3>
-          </CCol>
-          <CCol md="7" lg="7" sm="12" xm="12" lx="7">
+  addAllProduct(idCategory, arrAllProductOfAllCategory, arrAllProductOfAllCategory_Temp, arrAllProductChoosed) {
 
-          </CCol>
-        </CRow>
-        <div style={{ marginTop: 15 }}>
-          {
-            arrCategory.map((item, i) => {
-              let idCategory = i;
-              return (
-                <Card style={{ margin: 20 }}>
-                  <CardHeader style={{ backgroundColor: '#339966', height: 50 }}>
-                    <CButton size="sm" color="danger" style={{ float: 'right' }} onClick={() => {
-                      this.onRemoveCard(idCategory)
-                    }}>X</CButton>
-                  </CardHeader>
-                  <CardBody>
-                    <CRow style={{ margin: 20 }}>
-                      <CCol md="3" lg="3" sm="12" xm="12" lx="3">
-                        <CLabel>Chọn thương hiệu:</CLabel>
-                      </CCol>
-                      <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                        <CreatableSelect
-                          isClearable
-                          value={arrChooseCategory[idCategory][0]}
-                          onChange={(e) => { this.handleChangeCategory(e, idCategory) }}
-                          options={arrOptionCategory}
-                        />
-                      </CCol>
-                    </CRow>
-                    <CRow>
-                      <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+    let dataProduct = arrAllProductOfAllCategory[idCategory]
+    let dataProduct_Temp = arrAllProductOfAllCategory_Temp[idCategory]
 
-                        <Card>
-                          <CardHeader style={{ backgroundColor: '#a9c2af' }}>
-                            <CRow>
-                              <CCol md="4" lg="4" sm="12" xm="12" lx="4">
-                                Danh sách sản phẩm
-                              </CCol>
-                              <CCol md="5" lg="5" sm="12" xm="12" lx="5" style={{ display: 'inline-block' }}>
-                                <Input style={{
-                                  width: "130px",
-                                  display: 'inline',
-                                }} onChange={(e) => {
+    arrAllProductOfAllCategory_Temp[idCategory] = new Array();
+    arrAllProductChoosed[idCategory] = new Array();
+    this.setState({
+      arrAllProductOfAllCategory_Temp: arrAllProductOfAllCategory_Temp
+    })
+    let currentData = dataProduct.concat(dataProduct_Temp)
 
-                                }} name="key" placeholder="Từ khóa" />
-                                <CButton size='sm' color="info" className={"mb-1"} style={{ height: '35px', width: '35px' }} onClick={e => {
+    for (let i = 0; i < currentData.length; i++) {
+      arrAllProductChoosed[idCategory].push({
+        product_id: currentData[i]._id
+      })
+      arrAllProductOfAllCategory_Temp[idCategory].push(currentData[i])
+    }
 
-                                }}>
-                                  <CIcon content={freeSet.cilMagnifyingGlass}></CIcon>
-                                </CButton>
+    arrAllProductOfAllCategory[idCategory] = new Array();
+    this.setState({
+      arrAllProductChoosed: arrAllProductChoosed,
+      arrAllProductOfAllCategory_Temp: arrAllProductOfAllCategory_Temp,
+      arrAllProductOfAllCategory: arrAllProductOfAllCategory,
+    })
+  }
 
-                              </CCol>
-                              <CCol md="3" lg="3" sm="12" xm="12" lx="3">
-                                <CButton size='sm' color="info" style={{ height: '35px' }} onClick={e => {
+  addProduct(idCategory, i_product, arrAllProductOfAllCategory, arrAllProductOfAllCategory_Temp, arrAllProductChoosed) {
+    let data = arrAllProductOfAllCategory[idCategory][i_product]
+    arrAllProductChoosed[idCategory].push({
+      product_id: data._id
+    })
+    let findIndex_choose_product = (element) => element.name == data.name;
+    let index = arrAllProductOfAllCategory[idCategory].findIndex(findIndex_choose_product)
+    arrAllProductOfAllCategory_Temp[idCategory].unshift(arrAllProductOfAllCategory[idCategory][index])
+    arrAllProductOfAllCategory[idCategory].splice(index, 1)
 
-                                  let dataProduct = arrAllProductOfAllCategory[idCategory]
-                                  let dataProduct_Temp = arrAllProductOfAllCategory_Temp[idCategory]
+    this.setState({
+      arrAllProductChoosed: arrAllProductChoosed,
+      arrAllProductOfAllCategory_Temp: arrAllProductOfAllCategory_Temp,
+      arrAllProductOfAllCategory: arrAllProductOfAllCategory,
+    })
+  }
 
-                                  arrAllProductOfAllCategory_Temp[idCategory] = new Array();
-                                  arrAllProductChoosed[idCategory] = new Array();
-                                  this.setState({
-                                    arrAllProductOfAllCategory_Temp: arrAllProductOfAllCategory_Temp
-                                  })
-                                  let currentData = dataProduct.concat(dataProduct_Temp)
+  decreaseProduct(idCategory, i_product, arrAllProductOfAllCategory, arrAllProductOfAllCategory_Temp, arrAllProductChoosed) {
+    let data = arrAllProductOfAllCategory_Temp[idCategory][i_product]
+    const findI = (element) => element._id == data._id;
+    const index = arrAllProductOfAllCategory_Temp[idCategory].findIndex(findI)
 
-                                  for (let i = 0; i < currentData.length; i++) {
-                                    arrAllProductChoosed[idCategory].push({
-                                      product_id: currentData[i]._id
-                                    })
-                                    arrAllProductOfAllCategory_Temp[idCategory].push(currentData[i])
-                                  }
+    arrAllProductChoosed[idCategory].splice(index, 1)
+    arrAllProductOfAllCategory[idCategory].unshift(arrAllProductOfAllCategory_Temp[idCategory][index])
+    arrAllProductOfAllCategory_Temp[idCategory].splice(index, 1)
+    this.setState({
+      arrAllProductChoosed: arrAllProductChoosed,
+      arrAllProductOfAllCategory: arrAllProductOfAllCategory,
+      arrAllProductOfAllCategory_Temp: arrAllProductOfAllCategory_Temp,
+    })
+  }
 
-                                  arrAllProductOfAllCategory[idCategory] = new Array();
-                                  this.setState({
-                                    arrAllProductChoosed: arrAllProductChoosed,
-                                    arrAllProductOfAllCategory_Temp: arrAllProductOfAllCategory_Temp,
-                                    arrAllProductOfAllCategory: arrAllProductOfAllCategory,
-                                  })
-                                }}>
-                                  Thêm tất cả
-                                </CButton>
-                              </CCol>
-                            </CRow>
-                          </CardHeader>
-                          <CardBody style={{ height: 250, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
-                            <CRow>
-                              {
-                                arrAllProductOfAllCategory[idCategory].map((item_product, i_product) => {
-                                  return (
-                                    <CCol md="12" lg="12" sm="12" xm="12" lx="12">
-                                      <CFormGroup variant="custom-checkbox" inline>
-                                        <CButton size='sm' color="success" style={{ height: '30px', width: '40px', transform: 'translate(-50%, 50%)' }} onClick={e => {
-                                          let data = arrAllProductOfAllCategory[idCategory][i_product]
-                                          arrAllProductChoosed[idCategory].push({
-                                            product_id: data._id
-                                          })
-                                          let findIndex_choose_product = (element) => element.name == data.name;
-                                          let index = arrAllProductOfAllCategory[idCategory].findIndex(findIndex_choose_product)
-                                          arrAllProductOfAllCategory_Temp[idCategory].unshift(arrAllProductOfAllCategory[idCategory][index])
-                                          arrAllProductOfAllCategory[idCategory].splice(index, 1)
-                                          this.setState({
-                                            arrAllProductChoosed: arrAllProductChoosed,
-                                            arrAllProductOfAllCategory_Temp: arrAllProductOfAllCategory_Temp,
-                                            arrAllProductOfAllCategory: arrAllProductOfAllCategory,
-                                          })
-                                        }}>
-                                          <CIcon content={freeSet.cilPlus}></CIcon>
-                                        </CButton>
-
-                                        <CLabel style={{ margin: 10 }}>
-                                          <CRow>
-                                            <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                                              <div><strong>Tên sp: </strong>{item_product.name}</div>
-                                            </CCol>
-                                            <CCol md="2" lg="2" sm="12" xm="12" lx="2">
-                                              <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"90px"} height={"110px"}
-                                                style={{ border: '1px solid black', borderRadius: 5 }} />
-                                            </CCol>
-                                            <CCol md="1" lg="1" sm="12" xm="12" lx="1"></CCol>
-                                          </CRow>
-                                        </CLabel>
-                                      </CFormGroup>
-                                    </CCol>
-                                  )
-                                })
-                              }
-                            </CRow>
-                          </CardBody>
-                        </Card>
-                      </CCol>
-                      <CCol md="6" lg="6" sm="12" xm="12" lx="6">
-                        <Card>
-                          <CardHeader style={{ backgroundColor: '#a9c2af', height: '65px' }}>
-                            <CRow>
-                              Danh sách sản phẩm đã chọn
-                            </CRow>
-                          </CardHeader>
-                          <CardBody style={{ height: 250, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
-                            <CRow>
-                              {
-                                arrAllProductOfAllCategory_Temp[idCategory].map((item_product, i_product) => {
-                                  return (
-                                    <CCol md="12" lg="12" sm="12" xm="12" lx="12">
-                                      <CFormGroup variant="custom-checkbox" inline>
-                                        <CButton size='sm' color="danger" style={{ height: '30px', width: '40px', transform: 'translate(-50%, 50%)' }} onClick={e => {
-                                          let data = arrAllProductOfAllCategory_Temp[idCategory][i_product]
-                                          const findI = (element) => element._id == data._id;
-                                          const index = arrAllProductOfAllCategory_Temp[idCategory].findIndex(findI)
-
-                                          arrAllProductChoosed[idCategory].splice(index, 1)
-                                          arrAllProductOfAllCategory[idCategory].unshift(arrAllProductOfAllCategory_Temp[idCategory][index])
-                                          arrAllProductOfAllCategory_Temp[idCategory].splice(index, 1)
-                                          this.setState({
-                                            arrAllProductChoosed: arrAllProductChoosed,
-                                            arrAllProductOfAllCategory: arrAllProductOfAllCategory,
-                                            arrAllProductOfAllCategory_Temp: arrAllProductOfAllCategory_Temp,
-                                          })
-                                        }}>
-                                          <CIcon content={freeSet.cilMinus}></CIcon>
-                                        </CButton>
-                                        <CLabel style={{ margin: 10 }}>
-                                          <CRow>
-                                            <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                                              <div><strong>Tên sp: </strong>{item_product.name}</div>
-                                              <CInput placeholder={"Số lượng deal"} type="number" style={{ marginBottom: 3 }} onChange={(e) => {
-                                                const index = arrAllProductChoosed[idCategory].findIndex(val => val.product_id == item_product._id);
-                                                arrAllProductChoosed[idCategory][index].total_deal = Number(e.target.value)
-                                                this.setState({ arrAllProductChoosed: arrAllProductChoosed })
-                                              }} />
-                                            </CCol>
-                                            <CCol md="2" lg="2" sm="12" xm="12" lx="2">
-                                              <img src={`${Constants.BASE_URL}/public/image_product/${item_product.image}`} width={"90px"} height={"110px"}
-                                                style={{ border: '1px solid black', borderRadius: 5 }} />
-                                            </CCol>
-                                            <CCol md="1" lg="1" sm="12" xm="12" lx="1"></CCol>
-                                          </CRow>
-                                        </CLabel>
-                                      </CFormGroup>
-                                    </CCol>
-                                  )
-                                })
-                              }
-                            </CRow>
-                          </CardBody>
-
-                        </Card>
-                      </CCol>
-                    </CRow>
-
-                  </CardBody>
-                </Card>
-              )
-            })
-          }
-          <CButton block active variant="ghost" color="success" aria-pressed="true"
-            onClick={() => { this.pushCategory() }}>
-            Thêm mới
-          </CButton>
-        </div>
-      </div>
-    )
+  totalDeal(e, idCategory, item_product, arrAllProductChoosed) {
+    const index = arrAllProductChoosed[idCategory].findIndex(val => val.product_id == item_product._id);
+    arrAllProductChoosed[idCategory][index].total_deal = Number(e)
+    this.setState({ arrAllProductChoosed: arrAllProductChoosed })
   }
 
   render() {
     const { data, arrPagination, key, image, action, time_start, time_finish,
-      image_show, modalDetail, arrDetailBanner, accordion, arrUpdate, arrRemoveOnUpdate, arrOptionCategory } = this.state;
+      image_show, modalDetail, arrDetailBanner, accordion, arrUpdate, arrOptionCategory, arrCategory,
+      arrChooseCategory, arrAllProductOfAllCategory, arrAllProductChoosed,
+      arrAllProductOfAllCategory_Temp } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -735,7 +563,7 @@ class Product extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"></i> Danh sách danh mục
+                  <i className="fa fa-align-justify"></i> Danh sách sản phẩm ưu tiên
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -931,96 +759,125 @@ class Product extends Component {
                 </CCol>
                 <CCol md="12" lg="12" sm="12" xm="12" lx="12">
                   {
-                    action == "new" ?
-                      //Thêm mới banner
-                      this.renderAddForm() :
-                      //Cập nhập banner
-                      <div>
-                        <CRow>
-                          <CCol md="5" lg="5" sm="12" xm="12" lx="5">
-                            <h3>
-                              <strong>Thiết lập dữ liệu cho banner</strong>
-                            </h3>
-                          </CCol>
-                          <CCol md="7" lg="7" sm="12" xm="12" lx="7">
+                    action == "new" ? //Thêm mới banner
+                      <RenderAddForms
+                        arrCategory={arrCategory}
+                        arrChooseCategory={arrChooseCategory}
+                        arrOptionCategory={arrOptionCategory}
+                        arrAllProductChoosed={arrAllProductChoosed}
+                        arrAllProductOfAllCategory={arrAllProductOfAllCategory}
+                        arrAllProductOfAllCategory_Temp={arrAllProductOfAllCategory_Temp}
+                        onRemoveCard={this.onRemoveCard}
+                        handleChangeCategory={this.handleChangeCategory}
+                        addAllProduct={this.addAllProduct}
+                        addProduct={this.addProduct}
+                        decreaseProduct={this.decreaseProduct}
+                        totalDeal={this.totalDeal}
+                        pushCategory={this.pushCategory} />
+                      :
+                      //Cập nhật banner
+                      // <RenderUpdateForms
+                      //   arrCategory={arrCategory}
+                      //   arrChooseCategory={arrChooseCategory}
+                      //   arrOptionCategory={arrOptionCategory}
+                      //   arrAllProductChoosed={arrAllProductChoosed}
+                      //   arrAllProductOfAllCategory={arrAllProductOfAllCategory}
+                      //   arrAllProductOfAllCategory_Temp={arrAllProductOfAllCategory_Temp}
+                      //   onRemoveCard={this.onRemoveCard}
+                      //   handleChangeCategory={this.handleChangeCategory}
+                      //   addAllProduct={this.addAllProduct}
+                      //   addProduct={this.addProduct}
+                      //   decreaseProduct={this.decreaseProduct}
+                      //   totalDeal={this.totalDeal}
+                      //   pushCategory={this.pushCategory} />
 
-                          </CCol>
-                        </CRow>
-                        <div style={{ marginTop: 15 }}>
-                          {
-                            arrUpdate.map((item, i) => {
-                              let idCategory = i;
-                              return (
-                                <Card style={{ margin: 20 }}>
-                                  <CardHeader style={{ backgroundColor: '#339966' }}>
-                                    {/* <CButton color="danger" style={{ float: 'right' }} onClick={() => {
-                                      arrRemoveOnUpdate.push(arrUpdate[idCategory])
-                                      arrUpdate.splice(idCategory, 1);
-                                      this.setState({ arrUpdate: arrUpdate, arrRemoveOnUpdate: arrRemoveOnUpdate });
-                                    }}>X</CButton> */}
-                                  </CardHeader>
-                                  <CardBody>
-                                    <CRow style={{ margin: 20 }}>
-                                      <CCol md="3" lg="3" sm="12" xm="12" lx="3">
-                                        <CLabel style={{ fontWeight: 900 }}>Tên thương hiệu: </CLabel>
-                                      </CCol>
-                                      <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                                        {item.brand_id.name}
-                                      </CCol>
-                                    </CRow>
-                                    {
-                                      item.product.length > 0 ?
-                                        <Card>
-                                          <CardHeader style={{ backgroundColor: '#a9c2af' }}>
-                                            Danh sách sản phẩm
-                                          </CardHeader>
-                                          <CardBody style={{ height: 350, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
-                                            <CRow>
-                                              {
-                                                item.product.map((item_product, i_product) => {
-                                                  return (
-                                                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
-                                                      <CFormGroup variant="custom-checkbox" inline>
-                                                        <CInputCheckbox
-                                                          custom
-                                                          id={`${item_product._id}`}
-                                                          defaultChecked
-                                                        />
-                                                        <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
+                    //Cập nhập banner
+                    <div>
+                      <CRow>
+                        <CCol md="5" lg="5" sm="12" xm="12" lx="5">
+                          <h3>
+                            <strong>Thiết lập dữ liệu cho banner</strong>
+                          </h3>
+                        </CCol>
+                        <CCol md="7" lg="7" sm="12" xm="12" lx="7">
 
-                                                          <div><strong>Tên sp: </strong>{item_product.product_id.name}</div>
-                                                          <CRow>
-                                                            <CCol md="5" lg="5" sm="12" xm="12" lx="5">
-                                                              <strong>SL deal:</strong>
-                                                            </CCol>
-                                                            <CCol md="7" lg="7" sm="12" xm="12" lx="7">
-                                                              <CInput placeholder={"Số lượng deal"} value={item_product.total_deal} type="number" style={{ marginBottom: 3, maxWidth: 150 }}
-                                                                onChange={(e) => {
-                                                                  arrUpdate[idCategory].product[i_product].total_deal = Number(e.target.value)
-                                                                  this.setState({ arrUpdate: arrUpdate })
-                                                                }} />
-                                                            </CCol>
-                                                          </CRow>
+                        </CCol>
+                      </CRow>
+                      <div style={{ marginTop: 15 }}>
+                        {
+                          arrUpdate.map((item, i) => {
+                            let idCategory = i;
+                            return (
+                              <Card style={{ margin: 20 }}>
+                                <CardHeader style={{ backgroundColor: '#339966' }}>
+                                  {/* <CButton color="danger" style={{ float: 'right' }} onClick={() => {
+                                    arrRemoveOnUpdate.push(arrUpdate[idCategory])
+                                    arrUpdate.splice(idCategory, 1);
+                                    this.setState({ arrUpdate: arrUpdate, arrRemoveOnUpdate: arrRemoveOnUpdate });
+                                  }}>X</CButton> */}
+                                </CardHeader>
+                                <CardBody>
+                                  <CRow style={{ margin: 20 }}>
+                                    <CCol md="3" lg="3" sm="12" xm="12" lx="3">
+                                      <CLabel style={{ fontWeight: 900 }}>Tên thương hiệu: </CLabel>
+                                    </CCol>
+                                    <CCol md="9" lg="9" sm="12" xm="12" lx="9">
+                                      {item.brand_id.name}
+                                    </CCol>
+                                  </CRow>
+                                  {
+                                    item.product.length > 0 ?
+                                      <Card>
+                                        <CardHeader style={{ backgroundColor: '#a9c2af' }}>
+                                          Danh sách sản phẩm
+                                        </CardHeader>
+                                        <CardBody style={{ height: 350, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
+                                          <CRow>
+                                            {
+                                              item.product.map((item_product, i_product) => {
+                                                return (
+                                                  <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                                                    <CFormGroup variant="custom-checkbox" inline>
+                                                      <CInputCheckbox
+                                                        custom
+                                                        id={`${item_product._id}`}
+                                                        defaultChecked
+                                                      />
+                                                      <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
 
-                                                          <img src={`${Constants.BASE_URL}/public/image_product/${item_product.product_id.image}`} width={"70px"} height={"90px"} style={{ border: '1px solid black', borderRadius: 5 }} />
+                                                        <div><strong>Tên sp: </strong>{item_product.product_id.name}</div>
+                                                        <CRow>
+                                                          <CCol md="5" lg="5" sm="12" xm="12" lx="5">
+                                                            <strong>SL deal:</strong>
+                                                          </CCol>
+                                                          <CCol md="7" lg="7" sm="12" xm="12" lx="7">
+                                                            <CInput placeholder={"Số lượng deal"} value={item_product.total_deal} type="number" style={{ marginBottom: 3, maxWidth: 150 }}
+                                                              onChange={(e) => {
+                                                                arrUpdate[idCategory].product[i_product].total_deal = Number(e.target.value)
+                                                                this.setState({ arrUpdate: arrUpdate })
+                                                              }} />
+                                                          </CCol>
+                                                        </CRow>
 
-                                                        </CLabel>
-                                                      </CFormGroup>
-                                                    </CCol>
-                                                  )
-                                                })
-                                              }
-                                            </CRow>
-                                          </CardBody>
-                                        </Card> : ""
-                                    }
-                                  </CardBody>
-                                </Card>
-                              )
-                            })
-                          }
-                        </div>
+                                                        <img src={`${Constants.BASE_URL}/public/image_product/${item_product.product_id.image}`} width={"70px"} height={"90px"} style={{ border: '1px solid black', borderRadius: 5 }} />
+
+                                                      </CLabel>
+                                                    </CFormGroup>
+                                                  </CCol>
+                                                )
+                                              })
+                                            }
+                                          </CRow>
+                                        </CardBody>
+                                      </Card> : ""
+                                  }
+                                </CardBody>
+                              </Card>
+                            )
+                          })
+                        }
                       </div>
+                    </div>
                   }
 
                   <br />
