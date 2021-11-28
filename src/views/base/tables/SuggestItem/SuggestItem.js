@@ -15,8 +15,13 @@ import {
   CSelect,
   CButton,
   CTextarea,
-  CRow, CCol
+  CRow, CCol,
+  CCard,
+  CCardBody,
+  CCardHeader
 } from '@coreui/react'
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import CreatableSelect from 'react-select/creatable';
 import API_CONNECT from "../../../../functions/callAPI";
@@ -38,15 +43,8 @@ class SuggestItem extends Component {
     this.state = {
       data: [],
       key: '',
-      activePage: 1,
-      page: 1,
-      itemsCount: 0,
       limit: 5,
-      totalActive: 0,
       modalCom: false,
-      viewingUser: {},
-      communities: [],
-      updated: '',
       dataApi: [],
       hidden: false,
       action: 'new',
@@ -77,6 +75,10 @@ class SuggestItem extends Component {
       arrOptionProductType: [],
       arrLevel: [],
       arrBrand: [],
+      objectBrand: {},
+      arrProduct: [],
+      arrProductChoosed: [],
+      objectProduct: {},
       arrOptionBrand: [],
       objectValueBrand: {},
       idSDK: window.location.hash.split('/')[window.location.hash.split('/').length - 1],
@@ -136,7 +138,6 @@ class SuggestItem extends Component {
         dataApi: val,
         sdkItem: res_sdk.data,
         currentSdkSelect: res_sdk.data[0],
-        arrBrand: brand,
         arrOptionBrand: arrTempOptionBrand,
         isLoadingTable: false,
         data: val,
@@ -189,7 +190,6 @@ class SuggestItem extends Component {
         dataApi: val,
         sdkItem: res_sdk.data,
         currentSdkSelect: res_sdk.data[0],
-        arrBrand: brand,
         arrOptionBrand: arrTempOptionBrand,
         isLoadingTable: false,
         data: val,
@@ -278,7 +278,6 @@ class SuggestItem extends Component {
     let totalItem = res_suggest.data.arrTotal;
     let arrB = res_suggest.data.brand;
 
-    console.log(arrB)
     let arrTempOptionBrand = [];
     for (let i = 0; i < arrB.length; i++) {
       arrTempOptionBrand.push({
@@ -287,7 +286,7 @@ class SuggestItem extends Component {
     }
 
     this.pagination(totalItem, val);
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: arrB, arrOptionBrand: arrTempOptionBrand, isLoading: false });
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrOptionBrand: arrTempOptionBrand, isLoading: false });
   }
 
   getDataForCompany = async () => {
@@ -321,7 +320,7 @@ class SuggestItem extends Component {
       })
     }
 
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: arrB, arrOptionBrand: arrTempOptionBrand });
+    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrOptionBrand: arrTempOptionBrand });
 
   }
 
@@ -377,15 +376,8 @@ class SuggestItem extends Component {
           d.push(val)
         }
       })
-      let active = 0
 
-      d.map(val => {
-        if (val.Status == "Actived") {
-          active = active + 1
-        }
-      })
-
-      this.setState({ data: d, totalActive: active })
+      this.setState({ data: d })
     } else {
       this.getDataPagination(this.state.limit * Number(indexPage))
     }
@@ -419,7 +411,6 @@ class SuggestItem extends Component {
         price: 0,
         description: "",
         linkdetail: "",
-        //brand_id: arrBrand[0]._id,
         brand_id: arrOptionBrand.length == 0 ? "" : arrOptionBrand[0].value,
         objectValueBrand: arrOptionBrand[0],
         level: "K1",
@@ -427,6 +418,19 @@ class SuggestItem extends Component {
         type_sdk_id: arrOptionSdkType.length == 0 ? '' : arrOptionSdkType[1]._id,
         type_product_id: arrOptionProductType.length == 0 ? '' : arrOptionProductType[1]._id,
         arrLevel: arrOptionSdkType.length == 0 ? '' : arrOptionSdkType[1].Level
+      }, async () => {
+        const result_brand = await API_CONNECT(Constants.LIST_BRAND, {}, "", "POST")
+        const data = result_brand.data;
+        let arrBrandFilter = [];
+        for (let i = 0; i < data.length; i++) {
+          arrBrandFilter.push({
+            value: data[i]._id, label: data[i].name
+          })
+        }
+        this.setState({
+          arrBrand: arrBrandFilter,
+          objectBrand: data.length > 0 ? { value: data[0]._id, label: data[0].name } : { value: "", label: "" }
+        })
       })
     }
   }
@@ -437,7 +441,7 @@ class SuggestItem extends Component {
 
   async addSuggestItem() {
     const { name, image, title, description, linkdetail, price,
-      level, sdktype, type_sdk_id, brand_id, image_link } = this.state
+      level, sdktype, type_sdk_id, brand_id, image_link, arrOptionSdkType, idSDK } = this.state
     if (name == null || name == '') {
       alert("Thiếu tên sản phẩm");
       return
@@ -467,8 +471,8 @@ class SuggestItem extends Component {
       level: level,
       price: price,
       sdktype: sdktype,
-      type_sdk_id: type_sdk_id,
-      type_product_id: window.location.hash.split('/')[window.location.hash.split('/').length - 1],
+      type_sdk_id: arrOptionSdkType[idSDK]._id,
+      type_product_id: idSDK,
       brand_id: brand_id
 
     }
@@ -641,8 +645,44 @@ class SuggestItem extends Component {
     console.log(newValue.value);
   };
 
+  handleChangeBrand = async (newValue, actionMeta) => {
+    this.setState({ objectBrand: newValue })
+
+    const result = await API_CONNECT(Constants.LIST_PRODUCT_BY_BRAND, { brand_id: newValue.value }, "", "POST")
+    const data = result.data;
+    let arrProductFilter = [];
+    for (let i = 0; i < data.length; i++) {
+      arrProductFilter.push({
+        value: data[i]._id, label: data[i].name
+      })
+    }
+    this.setState({
+      arrProduct: arrProductFilter,
+      arrProductChoosed: data,
+      objectProduct: data.length > 0 ? { value: data[0]._id, label: data[0].name } : { value: "", label: "" }
+    })
+  };
+
+  handleChangeProduct = (newValue, actionMeta) => {
+    const { arrProductChoosed, name, image, title, description, linkdetail, price,
+      level, sdktype, type_sdk_id, brand_id, image_link, arrOptionSdkType, idSDK } = this.state;
+    const found = arrProductChoosed.find(element => element._id == newValue.value);
+    console.log(found)
+    this.setState({
+      objectProduct: newValue,
+      name: found.name,
+      title: found.name,
+      description: found.description,
+      linkdetail: found.href,
+      price: found.price,
+      type_sdk_id: arrOptionSdkType[idSDK]._id,
+      type_product_id: idSDK
+    })
+  };
+
   render() {
-    const { data, arrPagination, arrLevel, arrOptionSdkType, key, arrBrand, isSearch, indexPage, arrOptionBrand, objectValueBrand } = this.state;
+    const { data, arrPagination, arrLevel, action, arrBrand, objectBrand, arrProduct, objectProduct,
+      arrOptionSdkType, key, isSearch, indexPage, arrOptionBrand, objectValueBrand } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -722,10 +762,6 @@ class SuggestItem extends Component {
                                     <td className="text-center">
                                       <a target="_blank" href={item.linkdetail}>Xem chi tiết sản phẩm</a>
                                     </td>
-                                    {/* <td className="text-center">
-                                          <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
-                                        </td> */
-                                    }
                                     <td className="text-center">
                                       {item.brand_id == null ? "" : item.brand_id.name}
                                     </td>
@@ -779,6 +815,41 @@ class SuggestItem extends Component {
           <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
+              <CCard>
+                <CCardHeader>
+                  Form tự động điền
+                </CCardHeader>
+                <CCardBody>
+                  <CRow>
+                    <CCol sm="12" lg="6">
+                      <div style={{ width: "100%" }}>
+                        <CLabel>Thương hiệu:</CLabel>
+                        <CreatableSelect
+                          isClearable
+                          onChange={this.handleChangeBrand}
+                          value={objectBrand}
+                          options={arrBrand}
+                        />
+
+                      </div>
+                    </CCol>
+                    <CCol sm="12" lg="6">
+                      <div style={{ width: "100%" }}>
+                        <CLabel>Sản phẩm:</CLabel>
+                        <CreatableSelect
+                          isClearable
+                          onChange={this.handleChangeProduct}
+                          value={objectProduct}
+                          options={arrProduct}
+                        />
+
+                      </div>
+                    </CCol>
+                  </CRow>
+
+                </CCardBody>
+              </CCard>
+
               <TextFieldGroup
                 field="name"
                 label="Tên sản phẩm"
@@ -809,12 +880,13 @@ class SuggestItem extends Component {
               />
 
               <label className="control-label">Mô tả</label>
-              <CTextarea
-                name="description"
-                rows="3"
-                value={this.state.description}
-                onChange={(e) => { this.setState({ description: e.target.value }) }}
-                placeholder="Mô tả"
+              <CKEditor
+                editor={ClassicEditor}
+                data={this.state.description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  this.setState({ description: data })
+                }}
               />
 
               <TextFieldGroup
@@ -833,28 +905,29 @@ class SuggestItem extends Component {
                 options={arrOptionBrand}
               />
 
-
-              <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Loại SDK:</CLabel>
-                <CSelect onChange={async e => {
-                  this.setState({ type_sdk_id: e.target.value.split("/")[0], arrLevel: JSON.parse(e.target.value.split("/")[1]) })
-                }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    arrOptionSdkType.map((item, i) => {
-                      if (item._id == this.state.type_sdk_id) {
-                        return (
-                          <option selected key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
-                        );
+              {
+                action == "new" ? "" :
+                  <div style={{ width: "100%" }} className="mt-3">
+                    <CLabel>Loại SDK:</CLabel>
+                    <CSelect onChange={async e => {
+                      this.setState({ type_sdk_id: e.target.value.split("/")[0], arrLevel: JSON.parse(e.target.value.split("/")[1]) })
+                    }} custom size="sm" name="selectSm" id="SelectLm">
+                      {
+                        arrOptionSdkType.map((item, i) => {
+                          if (item._id == this.state.type_sdk_id) {
+                            return (
+                              <option selected key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
+                            );
+                          } else {
+                            return (
+                              <option key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
+                            );
+                          }
+                        })
                       }
-                    })
-                  }
-                </CSelect>
-              </div>
-
+                    </CSelect>
+                  </div>
+              }
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Mức độ:</CLabel>
                 {

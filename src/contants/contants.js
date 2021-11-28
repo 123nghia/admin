@@ -23,6 +23,7 @@ export default {
 
   "LIST_PRODUCT": "/api/list_product",
   "LIST_PRODUCT_CATEGORY": "/api/list_product_category",
+  "LIST_PRODUCT_BY_BRAND": "/api/list_product_by_brand",
   "ADD_PRODUCT": "/api/add_product",
   "UPDATE_PRODUCT": "/api/update_product",
   "DELETE_PRODUCT": "/api/delete_product",
