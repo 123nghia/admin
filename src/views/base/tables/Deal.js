@@ -96,7 +96,7 @@ class Product extends Component {
   getData = async () => {
     this.setState({ isLoading: true });
     var res = await API_CONNECT(
-      Constants.LIST_DEAL, {}, "", "POST")
+      Constants.LIST_ALL_DEAL, {}, "", "POST")
 
     let val = res.data.dataAdmin;
     this.pagination(val);
@@ -408,6 +408,14 @@ class Product extends Component {
     }
   }
 
+  getBadgeStatus(type) {
+    switch (type) {
+      case '0': return { title: 'Đang áp dụng', color: "success" }
+      case '1': return { title: 'Đang ẩn', color: "danger" }
+      default: return 'Lỗi'
+    }
+  }
+
   handleChangeCategory = async (e, i) => {
     const { arrCategory, arrAllProductOfAllCategory, arrAllProductOfAllCategory_Temp, arrAllProductChoosed, arrOptionCategory, arrChooseCategory } = this.state;
     let res = await API_CONNECT(
@@ -555,8 +563,8 @@ class Product extends Component {
     const { data, arrPagination, key, image, action, time_start, time_finish,
       image_show, modalDetail, arrDetailBanner, accordion, arrUpdate, arrOptionCategory, arrCategory,
       arrChooseCategory, arrAllProductOfAllCategory, arrAllProductChoosed,
-      arrAllProductOfAllCategory_Temp } = this.state;
-    if (!this.state.isLoading) {
+      arrAllProductOfAllCategory_Temp, isLoading, hidden, modalCom } = this.state;
+    if (!isLoading) {
       return (
         <div className="animated fadeIn">
           <Row>
@@ -595,7 +603,7 @@ class Product extends Component {
                         <th className="text-center">Tên banner</th>
                         <th className="text-center">Hình ảnh</th>
                         <th className="text-center">Loại deal</th>
-                        {/* <th className="text-center">Trạng thái</th> */}
+                        <th className="text-center">Trạng thái</th>
                         <th className="text-center">Voucher</th>
                         <th className="text-center">Thời gian bắt đầu</th>
                         <th className="text-center">Thời gian kết thúc</th>
@@ -603,7 +611,7 @@ class Product extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                      <td colSpan="10" hidden={hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
                         data != undefined ?
                           data.map((item, i) => {
@@ -623,7 +631,10 @@ class Product extends Component {
                                     {this.getBadge_Type(item.type).title}
                                   </CBadge>
                                 </td>
-                                {/* <td className="text-center">{item.status}</td> */}
+                                <td className="text-center">
+                                  <CBadge color={this.getBadgeStatus(item.type).color}>
+                                    {this.getBadgeStatus(item.type).title}
+                                  </CBadge></td>
                                 <td className="text-center">{item.voucher} %</td>
                                 <td className="text-center">
                                   {
@@ -664,8 +675,8 @@ class Product extends Component {
             </Col>
           </Row>
 
-          <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className} >
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+          <Modal size="xl" isOpen={modalCom} className={this.props.className} >
+            <ModalHeader>{action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody style={{ height: '500px', overflowY: 'scroll' }}>
               <CRow>
                 <CCol md="12" lg="12" sm="12" xm="12" lx="12">
@@ -694,19 +705,53 @@ class Product extends Component {
                       }
                     </CCol>
                     <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                      {
+                        action == "new" ? "" : <div style={{ width: "100%" }}>
+                          <CLabel>Loại deal:</CLabel>
+                          {
+                            <CSelect onChange={async e => { this.changeDealType(e) }} custom size="sm" name="selectSm" id="SelectLm">
+                              {
+                                ["0", "1", "2"].map((item, i) => {
+                                  if (item == this.state.type) {
+                                    return (
+                                      <option selected key={i} value={item}>
+                                        {
+                                          item == "0" ?
+                                            "Ưu đãi mới nhất" : item == "1" ?
+                                              "Đang diễn ra" : "Đã kết thúc"
+                                        }
+                                      </option>
+                                    );
+                                  } else {
+                                    return (
+                                      <option key={i} value={item}>
+                                        {
+                                          item == "0" ?
+                                            "Ưu đãi mới nhất" : item == "1" ?
+                                              "Đang diễn ra" : "Đã kết thúc"
+                                        }
+                                      </option>
+                                    );
+                                  }
+                                })
+                              }
+                            </CSelect>
+                          }
+                        </div>
+                      }
+
                       <div style={{ width: "100%" }}>
-                        <CLabel>Loại deal:</CLabel>
+                        <CLabel>Trạng thái:</CLabel>
                         {
                           <CSelect onChange={async e => { this.changeDealType(e) }} custom size="sm" name="selectSm" id="SelectLm">
                             {
-                              ["0", "1", "2"].map((item, i) => {
-                                if (item == this.state.type) {
+                              ["0", "1"].map((item, i) => {
+                                if (item == this.state.status) {
                                   return (
                                     <option selected key={i} value={item}>
                                       {
                                         item == "0" ?
-                                          "Ưu đãi mới nhất" : item == "1" ?
-                                            "Đang diễn ra" : "Đã kết thúc"
+                                          "Áp dụng" : "Ẩn deal"
                                       }
                                     </option>
                                   );
@@ -715,8 +760,7 @@ class Product extends Component {
                                     <option key={i} value={item}>
                                       {
                                         item == "0" ?
-                                          "Ưu đãi mới nhất" : item == "1" ?
-                                            "Đang diễn ra" : "Đã kết thúc"
+                                          "Áp dụng" : "Ẩn deal"
                                       }
                                     </option>
                                   );
@@ -791,93 +835,93 @@ class Product extends Component {
                       //   totalDeal={this.totalDeal}
                       //   pushCategory={this.pushCategory} />
 
-                    //Cập nhập banner
-                    <div>
-                      <CRow>
-                        <CCol md="5" lg="5" sm="12" xm="12" lx="5">
-                          <h3>
-                            <strong>Thiết lập dữ liệu cho banner</strong>
-                          </h3>
-                        </CCol>
-                        <CCol md="7" lg="7" sm="12" xm="12" lx="7">
+                      //Cập nhập banner
+                      <div>
+                        <CRow>
+                          <CCol md="5" lg="5" sm="12" xm="12" lx="5">
+                            <h3>
+                              <strong>Thiết lập dữ liệu cho banner</strong>
+                            </h3>
+                          </CCol>
+                          <CCol md="7" lg="7" sm="12" xm="12" lx="7">
 
-                        </CCol>
-                      </CRow>
-                      <div style={{ marginTop: 15 }}>
-                        {
-                          arrUpdate.map((item, i) => {
-                            let idCategory = i;
-                            return (
-                              <Card style={{ margin: 20 }}>
-                                <CardHeader style={{ backgroundColor: '#339966' }}>
-                                  {/* <CButton color="danger" style={{ float: 'right' }} onClick={() => {
+                          </CCol>
+                        </CRow>
+                        <div style={{ marginTop: 15 }}>
+                          {
+                            arrUpdate.map((item, i) => {
+                              let idCategory = i;
+                              return (
+                                <Card style={{ margin: 20 }}>
+                                  <CardHeader style={{ backgroundColor: '#339966' }}>
+                                    {/* <CButton color="danger" style={{ float: 'right' }} onClick={() => {
                                     arrRemoveOnUpdate.push(arrUpdate[idCategory])
                                     arrUpdate.splice(idCategory, 1);
                                     this.setState({ arrUpdate: arrUpdate, arrRemoveOnUpdate: arrRemoveOnUpdate });
                                   }}>X</CButton> */}
-                                </CardHeader>
-                                <CardBody>
-                                  <CRow style={{ margin: 20 }}>
-                                    <CCol md="3" lg="3" sm="12" xm="12" lx="3">
-                                      <CLabel style={{ fontWeight: 900 }}>Tên thương hiệu: </CLabel>
-                                    </CCol>
-                                    <CCol md="9" lg="9" sm="12" xm="12" lx="9">
-                                      {item.brand_id.name}
-                                    </CCol>
-                                  </CRow>
-                                  {
-                                    item.product.length > 0 ?
-                                      <Card>
-                                        <CardHeader style={{ backgroundColor: '#a9c2af' }}>
-                                          Danh sách sản phẩm
-                                        </CardHeader>
-                                        <CardBody style={{ height: 350, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
-                                          <CRow>
-                                            {
-                                              item.product.map((item_product, i_product) => {
-                                                return (
-                                                  <CCol md="6" lg="6" sm="12" xm="12" lx="6">
-                                                    <CFormGroup variant="custom-checkbox" inline>
-                                                      <CInputCheckbox
-                                                        custom
-                                                        id={`${item_product._id}`}
-                                                        defaultChecked
-                                                      />
-                                                      <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
+                                  </CardHeader>
+                                  <CardBody>
+                                    <CRow style={{ margin: 20 }}>
+                                      <CCol md="3" lg="3" sm="12" xm="12" lx="3">
+                                        <CLabel style={{ fontWeight: 900 }}>Tên thương hiệu: </CLabel>
+                                      </CCol>
+                                      <CCol md="9" lg="9" sm="12" xm="12" lx="9">
+                                        {item.brand_id.name}
+                                      </CCol>
+                                    </CRow>
+                                    {
+                                      item.product.length > 0 ?
+                                        <Card>
+                                          <CardHeader style={{ backgroundColor: '#a9c2af' }}>
+                                            Danh sách sản phẩm
+                                          </CardHeader>
+                                          <CardBody style={{ height: 350, overflowY: 'scroll', backgroundColor: '#dfebe2' }}>
+                                            <CRow>
+                                              {
+                                                item.product.map((item_product, i_product) => {
+                                                  return (
+                                                    <CCol md="6" lg="6" sm="12" xm="12" lx="6">
+                                                      <CFormGroup variant="custom-checkbox" inline>
+                                                        <CInputCheckbox
+                                                          custom
+                                                          id={`${item_product._id}`}
+                                                          defaultChecked
+                                                        />
+                                                        <CLabel variant="custom-checkbox" htmlFor={item_product._id} style={{ margin: 10 }}>
 
-                                                        <div><strong>Tên sp: </strong>{item_product.product_id.name}</div>
-                                                        <CRow>
-                                                          <CCol md="5" lg="5" sm="12" xm="12" lx="5">
-                                                            <strong>SL deal:</strong>
-                                                          </CCol>
-                                                          <CCol md="7" lg="7" sm="12" xm="12" lx="7">
-                                                            <CInput placeholder={"Số lượng deal"} value={item_product.total_deal} type="number" style={{ marginBottom: 3, maxWidth: 150 }}
-                                                              onChange={(e) => {
-                                                                arrUpdate[idCategory].product[i_product].total_deal = Number(e.target.value)
-                                                                this.setState({ arrUpdate: arrUpdate })
-                                                              }} />
-                                                          </CCol>
-                                                        </CRow>
+                                                          <div><strong>Tên sp: </strong>{item_product.product_id.name}</div>
+                                                          <CRow>
+                                                            <CCol md="5" lg="5" sm="12" xm="12" lx="5">
+                                                              <strong>SL deal:</strong>
+                                                            </CCol>
+                                                            <CCol md="7" lg="7" sm="12" xm="12" lx="7">
+                                                              <CInput placeholder={"Số lượng deal"} value={item_product.total_deal} type="number" style={{ marginBottom: 3, maxWidth: 150 }}
+                                                                onChange={(e) => {
+                                                                  arrUpdate[idCategory].product[i_product].total_deal = Number(e.target.value)
+                                                                  this.setState({ arrUpdate: arrUpdate })
+                                                                }} />
+                                                            </CCol>
+                                                          </CRow>
 
-                                                        <img src={`${Constants.BASE_URL}/public/image_product/${item_product.product_id.image}`} width={"70px"} height={"90px"} style={{ border: '1px solid black', borderRadius: 5 }} />
+                                                          <img src={`${Constants.BASE_URL}/public/image_product/${item_product.product_id.image}`} width={"70px"} height={"90px"} style={{ border: '1px solid black', borderRadius: 5 }} />
 
-                                                      </CLabel>
-                                                    </CFormGroup>
-                                                  </CCol>
-                                                )
-                                              })
-                                            }
-                                          </CRow>
-                                        </CardBody>
-                                      </Card> : ""
-                                  }
-                                </CardBody>
-                              </Card>
-                            )
-                          })
-                        }
+                                                        </CLabel>
+                                                      </CFormGroup>
+                                                    </CCol>
+                                                  )
+                                                })
+                                              }
+                                            </CRow>
+                                          </CardBody>
+                                        </Card> : ""
+                                    }
+                                  </CardBody>
+                                </Card>
+                              )
+                            })
+                          }
+                        </div>
                       </div>
-                    </div>
                   }
 
                   <br />

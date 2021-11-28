@@ -39,6 +39,7 @@ export default {
   "PRINT_ORDER": "/api/print_order",
 
   "LIST_DEAL": "/api/list_deal",
+  "LIST_ALL_DEAL": "/api/list_all_deal",
   "ADD_DEAL": "/api/add_deal",
   "UPDATE_DEAL": "/api/update_deal",
   "DELETE_DEAL": "/api/delete_deal",
