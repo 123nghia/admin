@@ -545,14 +545,14 @@ const _navContact = [
     name: 'Quản lý banner',
     to: '/banner',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2']
+    role: ['0', '1'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách banner',
     to: '/quan-ly-banner',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2']
+    role: ['0', '1'],
   }
 ]
 const _navLogOut = [
