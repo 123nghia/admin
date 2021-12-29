@@ -1,9 +1,9 @@
 export default {
-  "BASE_URL" : "https://api-soida.applamdep.com",
-  //"BASE_URL" : "http://localhost:3002",
-  "BASE_URL_CURRENT" : "https://id.applamdep.com/",
+  // "BASE_URL" : "https://api-soida.applamdep.com",
+  "BASE_URL" : "http://localhost:3002",
+  // "BASE_URL_CURRENT" : "https://id.applamdep.com/",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/soida/xemchitietlichsu/",
-  //"BASE_URL_CURRENT" : "http://localhost:3003",
+  "BASE_URL_CURRENT" : "http://localhost:3003",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
@@ -259,6 +259,20 @@ export default {
   "ADD_BANNER": "/api/add-banner",
   "GET_BANNER": "/api/get-banner",
   "UPLOAD_BANNER": "/api/upload-banner",
+
+
+  "LIST_ProductSpecial": "/product-special/all",
+  "LIST_ProductSpecial_COMPANY": "/product-special/all/",
+  "ADD_ProductSpecial": "/api/prodcut-special/add",
+  "UPDATE_ProductSpecial": "/api/prodcut-special/update",
+  "DELETE_ProductSpecial": "/product-special/delete",
+
+
+  "LIST_Banner": "/api/banner/all",
+  "LIST_Banner_COMPANY": "/api/banner/all/",
+  "ADD_Banner": "/api/banner/add",
+  "UPDATE_Banner": "/api/banner/update",
+  "DELETE_Banner": "/api/banner/delete",
 
 
 };

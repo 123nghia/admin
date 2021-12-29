@@ -139,8 +139,45 @@ const _navSoida = [
       </CTooltip>,
     },
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Cấu hình hiển thị',
+    to: '/skin/config',
+    icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.suggest}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    },
+  }
+
+
+  
 ]
 
+
+const _navSpecialProduct = [
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý sản phẩm'],
+    role: ['0', '1', '2']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sản phẩm nổi bật',
+    to: '/products-special',
+    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.brand}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  }
+]
 const _navMakeUp = [
   {
     _tag: 'CSidebarNavTitle',
@@ -510,6 +547,13 @@ const _navContact = [
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     role: ['2']
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách banner',
+    to: '/quan-ly-banner',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['2']
+  }
 ]
 const _navLogOut = [
   {
@@ -521,4 +565,4 @@ const _navLogOut = [
   },
 ]
 
-export default [_navSoida, _navMakeUp, _navOrther, _navContact, _navLogOut]
+export default [_navSoida, _navMakeUp, _navOrther, _navContact, _navLogOut,_navSpecialProduct]

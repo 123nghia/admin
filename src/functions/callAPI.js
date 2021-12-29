@@ -24,6 +24,7 @@ const connect = async function (url = "", data = {}, token = "", type) {
         if (post.is_success == false) {
           return null;
         }
+        console.log(post.data);
         return post.data;
       case "PUT":
         let put = await axios.put(url, data, options);
@@ -36,6 +37,7 @@ const connect = async function (url = "", data = {}, token = "", type) {
         if (del.is_success == false) {
           return null;
         }
+
         return del.data;
     }
 

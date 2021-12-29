@@ -37,10 +37,15 @@ const HistorySkin = React.lazy(() => import('./views/base/tables/AI_Skin/History
 const ContactCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ContactCustomer'));
 const UpdatePackage = React.lazy(() => import('./views/base/tables/UpdatePackage'));
 const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPlugin'));
+const ProductPlugin = React.lazy(() => import('./views/base/tables/Prouduct/ProductSpecialPlugin'));
+
+const BrandSlider = React.lazy(() => import('./views/base/tables/Banner/BrandSlider'));
 const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginSubSaleTable'));
 
 //User
 const EndUserPlugin = React.lazy(() => import('./views/base/tables/User/EndUser'));
+// config skin AI
+const configSkinDisplay = React.lazy(() => import('./views/skin/configDisplay'));
 
 //ADMIN MakeUp
 const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestItem'));
@@ -77,6 +82,7 @@ const routes = [
   { path: '/transaction', name: 'Transaction', component: TransactionTable },
   { path: '/hardwaremanager', name: 'HardWare', component: HardWareManager },
   { path: '/profile', name: 'Profile', component: Profile },
+
   { path: '/spending_order', name: 'SPENDING', component: SPENDING },
   { path: '/role_manager', name: 'Role Manager', component: RoleManager },
   { path: '/plugin_manager', name: 'Plugin Manager', component: PluginManager },
@@ -95,12 +101,18 @@ const routes = [
   { path: '/contact', name: 'Contact', component: ContactCustomer },
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
   { path: '/subsale', name: 'Sub Sale', component: PluginSubSaleTable },
+  { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
+  //admin product
+  { path: '/products-special', name: 'productSpecial', component: ProductPlugin },
+
 
   //User
   { path: '/end_user', name: 'End User', component: EndUserPlugin },
 
 
-  { path: '/banner', name: 'End User', component: Banner },
+  { path: '/banner', name: 'Banner User', component: Banner },
+
+  { path: '/quan-ly-banner', name: 'BannerSlider', component: BrandSlider },
 
   //Admin MakeUp
   { path: '/suggest', name: 'SuggestItem', component: SuggestItem },

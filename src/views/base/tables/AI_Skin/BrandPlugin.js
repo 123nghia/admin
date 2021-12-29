@@ -134,6 +134,7 @@ class BrandPlugin extends Component {
     });
 
     let val = res_brand.data.data;
+  
     this.pagination(val);
     this.setState({ dataApi: val });
 

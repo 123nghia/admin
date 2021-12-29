@@ -717,16 +717,17 @@ class SuggestItem extends Component {
                         <thead className="thead-light">
                           <tr>
                             <th className="text-center">STT.</th>
-                            <th className="text-center">Tên</th>
-                            <th className="text-center">Ảnh</th>
+                            {/* <th className="text-center">Tên</th> */}
                             <th className="text-center">Tiêu đề</th>
+                            <th className="text-center">Ảnh</th>
+  
                             <th className="text-center">Chi tiết</th>
                             <th className="text-center">Thương hiệu</th>
-                            <th className="text-center">Ảnh thương hiệu</th>
-                            <th className="text-center">Loại</th>
-                            <th className="text-center">Loại SDK</th>
+                            {/* <th className="text-center">Ảnh thương hiệu</th> */}
+                            {/* <th className="text-center">Loại</th>
+                            <th className="text-center">Loại SDK </th> */}
                             <th className="text-center">Mức độ</th>
-                            <th className="text-center">Giá</th>
+                            {/* <th className="text-center">Giá</th> */}
                             <th className="text-center">#</th>
                           </tr>
                         </thead>
@@ -738,17 +739,18 @@ class SuggestItem extends Component {
                                 return (
                                   <tr key={i}>
                                     <td className="text-center">{item.id + 1}</td>
-                                    <td className="text-center">{item.name}</td>
+                                    <td className="text-center">
+                                      {item.title.substr(0, 100) +
+                                        (item.title.length > 100 ? "..." : "")}
+                                    </td>
+                                    {/* <td className="text-center">{item.name}</td> */}
                                     <td className="text-center">
                                       {
                                         item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
                                           <img src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
-                                    <td className="text-center">
-                                      {item.title.substr(0, 100) +
-                                        (item.title.length > 100 ? "..." : "")}
-                                    </td>
+       
                                     <td className="text-center">
                                       <a target="_blank" href={item.linkdetail}>Xem chi tiết sản phẩm</a>
                                     </td>
@@ -758,21 +760,21 @@ class SuggestItem extends Component {
                                     <td className="text-center">
                                       {item.brand_id == null ? "" : item.brand_id.name}
                                     </td>
-                                    <td className="text-center">
+                                    {/* <td className="text-center">
                                       {<img src={`https://api-soida.applamdep.com/public/image_brand/${item.brand_id.image_link}`} width={"60px"} height={"60px"} />}
-                                    </td>
-                                    <td className="text-center">
+                                    </td> */}
+                                    {/* <td className="text-center">
                                       {item.type_product_id.Name}
                                     </td>
                                     <td className="text-center">
                                       {item.type_sdk_id.Name}
-                                    </td>
+                                    </td> */}
                                     <td className="text-center">
                                       {item.name_level}
                                     </td>
-                                    <td className="text-center">
+                                    {/* <td className="text-center">
                                       {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
-                                    </td>
+                                    </td> */}
                                     <td className="text-center">
                                       <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                         <CIcon name="cilPencil" />
