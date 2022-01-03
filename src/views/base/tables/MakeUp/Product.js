@@ -884,7 +884,7 @@ class Product extends Component {
                                     </td>
                                     <td className="text-center" style={{ width: '10%' }}>
                                       {
-                                        <img src={item.image_link == null ? item.image : `https://api-soida.applamdep.com/public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
+                                        <img src={item.image_link == null ? item.image : Constants.BASE_URL + `/public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
                                     <td className="text-center">

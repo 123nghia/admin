@@ -22,9 +22,11 @@ import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
-import axios from 'axios'
+import axios from 'axios';
+import API_CONNECT from "../../../../functions/callAPI";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import { constant } from 'lodash';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -58,7 +60,10 @@ class Color extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
-      isLoading: false
+      isLoading: false,
+      image_show: "",
+      image_link: "",
+      image_link_save: "",
     };
   }
   async componentDidMount() {
@@ -186,6 +191,16 @@ class Color extends Component {
     this.setState({ [key]: val })
   }
 
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ image_link: files[0].name, image_link_save: files[0] })
+    reader.readAsDataURL(files[0])
+    reader.onload = (e) => {
+      this.setState({ image: e.target.result, image_show: e.target.result })
+    }
+  }
+
   async addRoles() {
     const { hex, makeup_id, alpha, version } = this.state;
 
@@ -226,19 +241,22 @@ class Color extends Component {
   }
 
   async openUpdate(item) {
+  
+   
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
       hex: item.hex,
       makeup_id: item.makeup_id,
       alpha: item.alpha,
+      image_link: item.image_link,
       id: item['_id'],
       ver: item.version
     })
   }
 
   async updateUser() {
-    const { hex, makeup_id, alpha, version } = this.state;
+    const { hex, makeup_id, alpha, version,image,image_link,image_link_save } = this.state;
 
     if (hex == null || hex == '' ||
       makeup_id == null || makeup_id == '' ||
@@ -247,14 +265,25 @@ class Color extends Component {
       return
     }
 
+    
+  
+
+    const form = new FormData();
+    form.append("image", image_link_save);
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_MAKEUP, form, "", "POST")
+    console.log(this.state);
+
     const body = {
       hex: hex,
       makeup_id: makeup_id,
       alpha: alpha,
+      image_link:  image_link, 
       ver: version,
+      image_link_save: image_link_save,
       id: this.state.id
-    }
-
+    };
+   
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -416,6 +445,7 @@ class Color extends Component {
                         <th className="text-center">Hex</th>
                         <th className="text-center">MakeUp ID</th>
                         <th className="text-center">Alpha</th>
+                        <th className="text-center">Hình đại diện(nếu có)</th>
                         {/* <th className="text-center">Danh mục cấp 2</th> */}
                         <th className="text-center">#</th>
                       </tr>
@@ -434,6 +464,12 @@ class Color extends Component {
                                 </td>
                                 <td className="text-center">{item.makeup_id}</td>
                                 <td className="text-center">{item.alpha}</td>
+                                <td className="text-center" style={{ width: '10%' }}>
+                                      {
+                                        <img src={item.image_link == null ? item.image : Constants.BASE_URL + `/public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
+                                      }
+                                    </td>
+                                
                                 {/* <td className="text-center">{item.subName}</td> */}
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -497,6 +533,21 @@ class Color extends Component {
                 onChange={e => this.onChange("makeup_id", e.target.value)}
               // rows="5"
               />
+               <TextFieldGroup
+                      field="image"
+                      label="Ảnh màu"
+                      type={"file"}
+                      // error={errors.title}
+                      onChange={e => { this.onChangeImage(e) }}
+                      onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
+                    // rows="5"
+                    />
+                    {
+                      this.state.image == "" ? "" :
+                        <img width="250" height="300" src={
+                          this.state.image_show == "" ? Constants.BASE_URL +  `/public/image_makeup/${this.state.image_link}` : this.state.image
+                        } style={{ marginBottom: 20 }} />
+                    }
 
               <TextFieldGroup
                 field="alpha"
