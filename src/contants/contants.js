@@ -1,9 +1,9 @@
 export default {
-   "BASE_URL" : "https://api-soida.applamdep.com",
-  // "BASE_URL" : "http://localhost:3012",
-   "BASE_URL_CURRENT" : "https://pensilia-admin.applamdep.com/",
+  "BASE_URL" : "https://api-soida.applamdep.com",
+  //  "BASE_URL" : "http://localhost:3012",
+  "BASE_URL_CURRENT" : "https://pensilia-admin.applamdep.com/",
   "BASE_URL_HISTORY_SKIN" : "https://pensilia.applamdep.com/soida/xemchitietlichsu/",
-   //"BASE_URL_CURRENT" : "http://localhost:3013",
+  // "BASE_URL_CURRENT" : "http://localhost:3013",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
@@ -273,6 +273,10 @@ export default {
   "ADD_Banner": "/api/banner/add",
   "UPDATE_Banner": "/api/banner/update",
   "DELETE_Banner": "/api/banner/delete",
+
+
+  "CONFIG_THEME_UPDATE": "/api/get-config-color/update",
+  "CONFIG_THEME_GET": "/api/get-config-color",
 
 
 };

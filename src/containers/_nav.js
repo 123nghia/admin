@@ -541,14 +541,21 @@ const _navContact = [
     name: 'Quản lý banner',
     to: '/banner',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1'],
+    role: ['0', '1', '2'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách banner',
     to: '/quan-ly-banner',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1'],
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Cấu hình template',
+    to: '/config-theme',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
   }
 ]
 const _navLogOut = [

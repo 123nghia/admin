@@ -51,6 +51,7 @@ class Color extends Component {
       action: 'new',
       hex: "",
       makeup_id: "",
+      name: "",
       alpha: "",
       version: "v4",
       modalDelete: false,
@@ -181,6 +182,7 @@ class Color extends Component {
         action: key,
         hex: "",
         makeup_id: "",
+        name:"",
         alpha: "",
         version: "v4",
       })
@@ -202,10 +204,10 @@ class Color extends Component {
   }
 
   async addRoles() {
-    const { hex, makeup_id, alpha, version } = this.state;
+    const { hex, makeup_id, alpha, version , name} = this.state;
 
     if (hex == null || hex == '' ||
-      makeup_id == null || makeup_id == '' ||
+      makeup_id == null || makeup_id == '' || 
       alpha == null || alpha == '') {
       alert("Vui lòng nhập đầy đủ trường !!!");
       return
@@ -213,6 +215,7 @@ class Color extends Component {
 
     const body = {
       hex: hex,
+      name:name,
       makeup_id: makeup_id,
       alpha: alpha,
       ver: version,
@@ -242,10 +245,11 @@ class Color extends Component {
 
   async openUpdate(item) {
   
-   
+    
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
+      name: item.name,
       hex: item.hex,
       makeup_id: item.makeup_id,
       alpha: item.alpha,
@@ -256,7 +260,7 @@ class Color extends Component {
   }
 
   async updateUser() {
-    const { hex, makeup_id, alpha, version,image,image_link,image_link_save } = this.state;
+    const { hex, makeup_id, alpha, version,image,image_link,image_link_save ,name} = this.state;
 
     if (hex == null || hex == '' ||
       makeup_id == null || makeup_id == '' ||
@@ -277,6 +281,7 @@ class Color extends Component {
     const body = {
       hex: hex,
       makeup_id: makeup_id,
+      name: name,
       alpha: alpha,
       image_link:  image_link, 
       ver: version,
@@ -521,6 +526,15 @@ class Color extends Component {
                 placeholder={"Hex"}
                 // error={errors.title}
                 onChange={e => this.onChange("hex", e.target.value)}
+              // rows="5"
+              />
+               <TextFieldGroup
+                field="makeup_id"
+                label="Tên gợi nhớ"
+                value={this.state.name}
+                placeholder={"Tên gợi nhớ"}
+                // error={errors.title}
+                onChange={e => this.onChange("name", e.target.value)}
               // rows="5"
               />
 

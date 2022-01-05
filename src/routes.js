@@ -40,6 +40,10 @@ const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPl
 const ProductPlugin = React.lazy(() => import('./views/base/tables/Prouduct/ProductSpecialPlugin'));
 
 const BrandSlider = React.lazy(() => import('./views/base/tables/Banner/BrandSlider'));
+
+const ConfigTheme = React.lazy(() => import('./views/base/tables/configSystem/ColorTheme'));
+
+
 const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginSubSaleTable'));
 
 //User
@@ -113,6 +117,8 @@ const routes = [
   { path: '/banner', name: 'Banner User', component: Banner },
 
   { path: '/quan-ly-banner', name: 'BannerSlider', component: BrandSlider },
+
+  { path: '/config-theme', name: 'Config themes', component: ConfigTheme },
 
   //Admin MakeUp
   { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
