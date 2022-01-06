@@ -63,6 +63,9 @@ class BrandSlider extends Component {
       image_mobile_link: "",
       image_link: "",
       link: "",
+      imageMobile: "",
+
+
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -216,7 +219,7 @@ class BrandSlider extends Component {
 
   async addBrand() {
 
-    const { name, image, link, image_link } = this.state
+    const { name, image, link, image_link, image_mobile_link} = this.state
     if (name == null || name == '' ||
       image == null || image == '') {
       alert("Vui lòng nhập đầy đủ trường !!!");
@@ -225,13 +228,18 @@ class BrandSlider extends Component {
 
     const form = new FormData();
     form.append("image", image_link);
-
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
+    const form2 = new FormData();
+    form2.append("image", image_mobile_link);
+
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST")
 
     const body = {
       name: name,
       image: image,
       image_link: image_link.name,
+      image_mobile_link: image_mobile_link == undefined  || image_mobile_link == "" ? "" : image_mobile_link.name,
       company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
       link: link
     }
@@ -266,7 +274,7 @@ class BrandSlider extends Component {
       name: item.name,
       image:"",
       image_show: "",
-      image_show_mobile: "",
+      image_show_mobile: item.image_mobile_link,
       image_link: item.image_link,
       image_mobile_link: item.image_mobile_link,
       id: item['_id'],
@@ -277,7 +285,7 @@ class BrandSlider extends Component {
   }
 
   async updateBrand() {
-    const { name, image, link, image_link } = this.state
+    const { name, image, link, image_link,image_mobile_link } = this.state
 
     if (name == null || name == '' ||
       image == null || image == '') {
@@ -287,17 +295,21 @@ class BrandSlider extends Component {
 
     const form = new FormData();
     form.append("image", image_link);
-
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
+    const form2 = new FormData();
+    form2.append("image", image_mobile_link);
+
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST")
 
     const body = {
       name: name,
       image: image,
       image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
+      image_mobile_link: image_mobile_link == undefined || image_link == null || image_mobile_link == "" ? "" : image_mobile_link.name,
       id: this.state.id,
       link: link
     }
-
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -378,10 +390,10 @@ class BrandSlider extends Component {
   onChangeImageMobile(e) {
     let files = e.target.files;
     let reader = new FileReader();
-    this.setState({ image_link: files[0] })
+    this.setState({ image_mobile_link: files[0] })
     reader.readAsDataURL(files[0])
     reader.onload = (e) => {
-      this.setState({ image_mobile: e.target.result, image_show_mobile: e.target.result })
+      this.setState({ imageMobile: e.target.result, image_show_mobile: e.target.result })
     }
   }
 
@@ -447,6 +459,8 @@ class BrandSlider extends Component {
                                       <img src= {`${Constants.BASE_URL}/public/image_brand/${item.image_link}`} width={"400px"}  />
                                   }
                                 </td>
+
+                              
                                 <td className="text-center">
                                   <a href={item.hrefLink} target="_blank">{item.hrefLink}</a>
                                 </td>
@@ -519,6 +533,27 @@ class BrandSlider extends Component {
                     this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
               }
 
+
+
+              <TextFieldGroup
+                field="image"
+                label="Ảnh banner"
+                type={"file"}
+                // error={errors.title}
+                onChange={e => { this.onChangeImageMobile(e) }}
+                onClick={(e) => { e.target.value = null; this.setState({ image_show_mobile: "" }) }}
+              // rows="5"
+              />
+              {
+                   this.state.imageMobile == "" || this.state.imageMobile == null || this.state.imageMobile == undefined ?
+                  "" :
+                    <img width="80%" height="auto" src={
+                    this.state.image_show_mobile == "" ? `${Constants.BASE_URL}/public/image_brand/${this.state.image_link}` : this.state.imageMobile} style={{ marginBottom: 20 }} />
+              }
+
+
+
+          
 
 
               <TextFieldGroup
