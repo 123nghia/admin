@@ -242,7 +242,7 @@ class Users extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  Over View
+                 Cấu hình tổng quan
                 </CardHeader>
                 <CardBody>
                   <CRow>

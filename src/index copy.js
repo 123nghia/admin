@@ -11,28 +11,20 @@ import { icons } from './assets/icons'
 
 import { Provider } from 'react-redux'
 import store from './store'
-import { createStore, applyMiddleware ,compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import rootReducers from "./../src/redux/reducers";
-import createSagaMiddleware from 'redux-saga';
-import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga'
 import root from "./../src/redux/sagas"
 import './assets/css/sidebar.css';
+// import thunk from 'redux-thunk';
 
+const sagaMiddleware = createSagaMiddleware()
 
-
-
-const sagaMiddleware = createSagaMiddleware();
-
-const middleWares = [sagaMiddleware, thunk]
-
-const storeS = createStore(rootReducers,
-  applyMiddleware(...middleWares)
-  
-  )
+const storeS = createStore(rootReducers, applyMiddleware(createSagaMiddleware))
+sagaMiddleware.run(root)
 
 React.icons = icons
 
-sagaMiddleware.run(root)
 
 ReactDOM.render(
   <Provider store={store}>
