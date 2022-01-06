@@ -50,6 +50,8 @@ const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/
 const EndUserPlugin = React.lazy(() => import('./views/base/tables/User/EndUser'));
 // config skin AI
 const configSkinDisplay = React.lazy(() => import('./views/skin/configDisplay'));
+const configContent = React.lazy(() => import('./views/skin/content'));
+const configOverView = React.lazy(() => import('./views/skin/overView'));
 
 //ADMIN MakeUp
 const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestItem'));
@@ -106,6 +108,10 @@ const routes = [
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
   { path: '/subsale', name: 'Sub Sale', component: PluginSubSaleTable },
   { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
+  { path: '/skin/configContent', name: 'configContent', component: configContent },
+  { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
+
+  
   //admin product
   { path: '/products-special', name: 'productSpecial', component: ProductPlugin },
 
