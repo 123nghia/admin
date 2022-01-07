@@ -69,21 +69,36 @@ class Users extends Component {
       UserName: "",
       Message_Code: "",
       productsSuggest: ["k5", "k6", "k7", "k8", "k9"],
-      listK5 : [],
-      listK6 : [],
-      listK7 : [],
-      listK8 : [],
-      listK9 : [],
+      listK5: [],
+      listK6: [],
+      listK7: [],
+      listK8: [],
+      listK9: [],
+      modalEdit : null,
       modal: null,
+      statusModal : true,
+      // titleModal : "",
+      nameProductsSuggest : null,
+      titleProductsSuggest : null,
+      valueModal : {
+        title : "",
+        content : "",
+        level : "",
+        priorites : "",
+        type : "",
+        groupProduct : "",
+        icon :"",
+        status: ""
+      },
+      // image :"",
+      link  :"",
+      // image_show : "",
+      // image_link : "",
+
     };
   }
   async componentDidMount() {
-    this.getProductsSuggestRequest("0","K5",this.state.listK5);
-    this.getProductsSuggestRequest("0","K6",this.state.listK6);
-    this.getProductsSuggestRequest("0","K7",this.state.listK7);
-    this.getProductsSuggestRequest("0","K8",this.state.listK8);
-    this.getProductsSuggestRequest("0","K9",this.state.listK9);
-
+    this.getProductsSuggestRequest("0");
     this.getData();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
@@ -91,24 +106,67 @@ class Users extends Component {
         if (arr[i].hidden == true) {
           window.location.href = "#/";
         }
-      };
-    };
-  };
-  getProductsSuggestRequest = async (number,item,listId) => {
-  
-    const res = await axios.get("https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll", {
-      params: {
-        "typeFilter": number,
-        "groupProduct": item
       }
-    
-    })
-    let val = res.data;
-    // this.setState({
-    //   listK5 : val
-    // });
-    console.log(val)
-    
+    }
+  }
+  getProductsSuggestRequest = async (number) => {
+    let list5 = null;
+    let list6 = null;
+    let list7 = null;
+    let list8 = null;
+    let list9 = null;
+    list5 = await axios.get(
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      {
+        params: {
+          typeFilter: number,
+          groupProduct: "K5",
+        },
+      }
+    );
+    list6 = await axios.get(
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      {
+        params: {
+          typeFilter: number,
+          groupProduct: "K6",
+        },
+      }
+    );
+    list7 = await axios.get(
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      {
+        params: {
+          typeFilter: number,
+          groupProduct: "K7",
+        },
+      }
+    );
+    list8 = await axios.get(
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      {
+        params: {
+          typeFilter: number,
+          groupProduct: "K8",
+        },
+      }
+    );
+    list9 = await axios.get(
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      {
+        params: {
+          typeFilter: number,
+          groupProduct: "K9",
+        },
+      }
+    );
+    this.setState({
+      listK5: list5.data.data,
+      listK6: list6.data.data,
+      listK7: list7.data.data,
+      listK8: list8.data.data,
+      listK9: list9.data.data,
+    });
   };
   getData = async () => {
     this.setState({ isLoading: true });
@@ -145,8 +203,20 @@ class Users extends Component {
 
   onChange(key, val) {
     this.setState({ [key]: val });
+    
   }
+  onChangeModal = (e) => {
+  
+    var target = e.target;
+    var name = target.name;
+    var value = target.value;
 
+    this.setState({
+      [name]: value,
+    });
+  
+    
+  };
   openUpdate(name_link) {
     this.setState({
       [name_link]: !this.state[name_link],
@@ -256,12 +326,6 @@ class Users extends Component {
       this.setState({ isLoading: false });
     }
   }
-  openFormAdd = () => {
-    this.setState({ modalCom: true });
-  };
-  closeFormAdd = () => {
-    this.setState({ modalCom: false });
-  };
   onChangeImage(e) {
     let files = e.target.files;
     let reader = new FileReader();
@@ -270,30 +334,32 @@ class Users extends Component {
     reader.onload = (e) => {
       this.setState({ image: e.target.result, image_show: e.target.result });
     };
+    console.log(this.state.image,this.state.image_show)
   }
-  updateForm = (product) => {
-    this.state.modal = product.map((item, i) => {
+  openFormAdd = (item) => {
+    
+    let x = (
       <Modal
         size="xl"
-        isOpen={this.state.modalCom}
+        isOpen={this.state.statusModal}
         className={this.props.className}
       >
         <ModalHeader>
-          {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+         Tạo mới
         </ModalHeader>
         <ModalBody>
           <TextFieldGroup
-            field="name"
+            field="nameProductsSuggest"
             label="Tên sản phẩm"
-            value={this.state.name}
+            value={this.state.nameProductsSuggest}
             placeholder={"Tên sản phẩm"}
-            onChange={(e) => this.onChange("name", e.target.value)}
+            onChange={(e)=> this.setState({nameProductsSuggest : e.target.value})}
           />
-
           <TextFieldGroup
             field="image"
             label="Ảnh sản phẩm"
             type={"file"}
+            value={this.state.image}
             onChange={(e) => {
               this.onChangeImage(e);
             }}
@@ -306,6 +372,7 @@ class Users extends Component {
             ""
           ) : (
             <img
+            alt =""
               width="250"
               height="300"
               src={
@@ -318,30 +385,30 @@ class Users extends Component {
           )}
 
           <TextFieldGroup
-            field="title"
+            field="titleProductsSuggest"
             label="Tiêu đề"
-            value={this.state.title}
+            value={this.state.titleProductsSuggest}
             placeholder={"Tiêu đề"}
-            onChange={(e) => this.onChange("title", e.target.value)}
+            onChange={(e) => this.setState({titleProductsSuggest : e.target.value})}
           />
 
           <label className="control-label">Mô tả</label>
           <CTextarea
-            name="description"
+            name="descriptionProductsSuggest"
             rows="4"
-            value={this.state.description}
+            value={this.state.descriptionProductsSuggest}
             onChange={(e) => {
-              this.setState({ description: e.target.value });
+              this.setState({ "descriptionProductsSuggest": e.target.value });
             }}
             placeholder="Mô tả"
           />
 
           <TextFieldGroup
-            field="linkdetail"
+            field="linkProductsSuggest"
             label="Đường dẫn chi tiết sản phẩm"
-            value={this.state.linkdetail}
+            value={this.state.linkProductsSuggest}
             placeholder={"Đường dẫn chi tiết sản phẩm"}
-            onChange={(e) => this.onChange("linkdetail", e.target.value)}
+            onChange={(e) => this.onChange("linkProductsSuggest", e.target.value)}
           />
           <CLabel>Nhãn hiệu:</CLabel>
           <CreatableSelect
@@ -382,51 +449,340 @@ class Users extends Component {
         <ModalFooter>
           <CButton
             color="primary"
-            onClick={(e) => {
-              this.state.action === "new"
-                ? this.addProduct()
-                : this.updateProduct();
-            }}
+            onClick={()=>{this.saveAdd(item)}}
             disabled={this.state.isLoading}
           >
             Lưu
           </CButton>{" "}
           <CButton
             color="secondary"
-            onClick={(e) => {
-              this.closeFormAdd();
-            }}
+            onClick={()=>{this.closeAdd()}}
           >
             Đóng
           </CButton>
         </ModalFooter>
-      </Modal>;
-    });
-    return this.state.modal;
+      </Modal>
+    );
+    this.setState({ modal: x });
   };
-  renderProductsSuggest = () => {
-    const { productsSuggest } = this.props;
-    let html = null;
-    if (productsSuggest) {
-      html = productsSuggest.map((product, i) => {
+  async openFormEdit(item){
+
+
+    const { Title } =  item;
+     
+    let x = (
+      <Modal
+        size="xl"
+        isOpen={this.state.statusModal}
+        className={this.props.className}
+      >
+        <ModalHeader>
+         Chỉnh sửa
+        </ModalHeader>
+        <ModalBody>
+          <TextFieldGroup
+            field="nameProductsSuggest"
+            label="Tên sản phẩm"
+            value={this.state.nameProductsSuggest}
+            placeholder={"Tên sản phẩm"}
+            onChange={(e) =>this.onChangeModal(e)}
+          />
+          <TextFieldGroup
+            field="image"
+            label="Ảnh sản phẩm"
+            type={"file"}
+            value={this.state.image}
+            onChange={(e) => {
+              this.onChangeImage(e);
+            }}
+            onClick={(e) => {
+              e.target.value = null;
+              this.setState({ image_show: "" });
+            }}
+          />
+          {this.state.image === "" ? (
+            ""
+          ) : (
+            <img
+            alt =""
+              width="250"
+              height="300"
+              src={
+                this.state.image_show === ""
+                  ? `https://api-soida.applamdep.com/public/image_plugin/${this.state.image_link}`
+                  : this.state.image
+              }
+              style={{ marginBottom: 20 }}
+            />
+          )}
+
+          <TextFieldGroup
+            field="titleProductsSuggest"
+            
+            label="Tiêu đề"
+            value={this.state.titleProductsSuggest}
+            placeholder={"Tiêu đề"}
+            onChange={(e) =>this.onChangeModal(e)}
+
+            />
+
+          <label className="control-label">Mô tả</label>
+          <CTextarea
+            name="descriptionProductsSuggest"
+            rows="4"
+            value={this.state.descriptionProductsSuggest}
+            onChange={(e) => {
+              this.setState({ descriptionProductsSuggest: e.target.value });
+            }}
+            placeholder="Mô tả"
+          />
+
+          <TextFieldGroup
+            field="linkProductsSuggest"
+            label="Đường dẫn chi tiết sản phẩm"
+            value={this.state.linkProductsSuggest}
+            placeholder={"Đường dẫn chi tiết sản phẩm"}
+            onChange={(e) => this.onChange("linkProductsSuggest", e.target.value)}
+          />
+          <CLabel>Nhãn hiệu:</CLabel>
+          <CreatableSelect
+            isClearable
+            onChange={this.handleChange}
+
+            // onInputChange={this.handleInputChange}
+          />
+          {/* <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Mức độ:</CLabel>
+                {
+                  arrLevel != undefined ? (
+                    <CSelect onChange={async e => { this.changeLevel(e) }} custom size="sm" name="selectSm" id="SelectLm">
+                      {
+                        arrLevel.map((item, i) => {
+                          
+                            return (
+                              <option selected key={i} value={item}>
+                                {item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng"}
+                              </option>
+                            );
+                          })
+                      }
+                    </CSelect>
+                  ) : null
+                }
+              </div> */}
+
+          <TextFieldGroup
+            field="price"
+            label="Giá"
+            type={"number"}
+            value={this.state.price}
+            placeholder={"Giá"}
+            onChange={(e) => this.onChange("price", e.target.value)}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <CButton
+            color="primary"
+            onClick={()=>{this.saveEdit(item)}}
+            disabled={this.state.isLoading}
+          >
+            Lưu
+          </CButton>{" "}
+          <CButton
+            color="secondary"
+            onClick={()=>{this.closeFormEdit()}}
+          >
+            Đóng
+          </CButton>
+        </ModalFooter>
+      </Modal>
+    );
+    
+    this.setState({ modalEdit: x });
+    
+  };
+  closeFormEdit=()=>{
+    this.setState({ modalEdit: null });
+
+  }
+  
+  async saveAdd(item){
+    const {
+      nameProductsSuggest,
+      image_show,
+      titleProductsSuggest,
+      descriptionProductsSuggest,
+      linkProductsSuggest
+    } = this.state;
+    await axios.post(
+      "http://192.168.1.3:3012/api/paramenterRecomed/add",{
+        "title": titleProductsSuggest,
+        "content": descriptionProductsSuggest,
+        "level": "1",
+        "priorites" : "1",
+        "type": "0",
+        "groupProduct": item.GroupProduct,
+        "icon":"",
+        "status":"1"
+      }
+    ).then((res)=>{
+      console.log(res)
+    });
+  }
+  async saveEdit(item){
+    const {
+      nameProductsSuggest,
+      image_show,
+      titleProductsSuggest,
+      descriptionProductsSuggest,
+      linkProductsSuggest
+    } = this.state
+    await axios.post(
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/add",{
+        data: {
+          title : titleProductsSuggest,
+          content: descriptionProductsSuggest,
+          level: "1",
+          priorites: "1",
+          type: "0",
+          groupProduct: item.groupProduct,
+          icon:image_show,
+        }
+      }
+    ).then((res)=>{
+      console.log(res)
+    });
+  }
+  closeAdd=()=>{
+    this.setState({ modal: null });
+  }
+  closeFormAdd = () => {
+    this.setState({ modalCom: false });
+  };
+  
+  renderProductsSuggest(products,idSelect,idSelect2,name,activeCollapse){
+    if(products){
+      let x = products.map((item,i) => {
         return (
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-              <button
+                  <tbody>
+                    <td
+                      colSpan="10"
+                      hidden={this.state.hidden}
+                      className="text-center"
+                    >
+                      Không tìm thấy dữ liệu
+                    </td>
+                                     
+                            <tr key={i}>
+                              <td className="text-center">
+                                {i + 1}
+                              </td>
+                              <td className="text-center">
+                                {item.Title}
+                                 
+                              </td>
+                              {/* <td className="text-center">{item.name}</td> */}
+                              <td className="text-center">
+                               
+                                  <img
+                                    src={`${item.Icon}`}
+                                    width={"60px"}
+                                    height={"60px"}
+                                    alt=""
+                                  />
+                              
+                                
+                              </td>
+  
+                              <td className="text-center">
+                                <a target="_blank" href={item.Icon}>
+                                  Xem chi tiết sản phẩm
+                                </a>
+                              </td>
+                              {/* <td className="text-center">
+                            <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
+                          </td> */}
+                              <td className="text-center">
+                                {item.brand_id == null
+                                  ? ""
+                                  : item.brand_id.name}
+                              </td>
+                              {/* <td className="text-center">
+                                {<img src={`https://api-soida.applamdep.com/public/image_brand/${item.brand_id.image_link}`} width={"60px"} height={"60px"} />}
+                              </td> */}
+                              {/* <td className="text-center">
+                                {item.type_product_id.Name}
+                              </td>
+                              <td className="text-center">
+                                {item.type_sdk_id.Name}
+                              </td> */}
+                              <td className="text-center">
+                                {item.Level}
+                              </td>
+                              {/* <td className="text-center">
+                                {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
+                              </td> */}
+                              <td className="">
+                                <CButton
+                                  style={styles.mgl5}
+                                  outline
+                                  color="primary"
+                                  size="sm"
+                                  onClick={() =>
+                                     this.openFormAdd(item)
+                                  }
+                                >
+                                  {/* <CIcon name="cilPencil" /> */}
+                                  Thêm mới
+                                </CButton>{" "}
+                                <CButton
+                                  outline
+                                  color="success"
+                                  size="sm"
+                                  onClick={() => this.openFormEdit(item)}
+                                >
+                                  {/* <CIcon name="cilTrash" /> */}
+                                  Chỉnh sửa
+                                </CButton>
+                              </td>
+                            </tr>
+                  </tbody>         
+                          
+                )
+      })         
+      let idSelectActive = `#${idSelect2}`     
+      
+      let render = (
+        <div class="accordion-item">
+            <h2 class="accordion-header" id={idSelect}>
+            {
+              activeCollapse ? <button
                 class="accordion-button"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#collapseOne"
+                data-bs-target={idSelectActive}
                 aria-expanded="true"
-                aria-controls="collapseOne"
+                aria-controls={idSelect2}
               >
-                Accordion Item #1
+                {name}
+              </button> : <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={idSelectActive}
+                aria-expanded="true"
+                aria-controls={idSelect2}
+              >
+                {name}
               </button>
+            }
+              
             </h2>
-            <div
-              id="collapseOne"
+            {
+              activeCollapse ? <div
+              id={idSelect2}
               class="accordion-collapse collapse show"
-              aria-labelledby="headingOne"
+              aria-labelledby={idSelect}
               data-bs-parent="#accordionExample"
             >
               <div class="accordion-body">
@@ -440,116 +796,62 @@ class Users extends Component {
                       {/* <th className="text-center">Tên</th> */}
                       <th className="text-center">Tiêu đề</th>
                       <th className="text-center">Ảnh</th>
-
+  
                       <th className="text-center">Chi tiết</th>
                       <th className="text-center">Thương hiệu</th>
                       {/* <th className="text-center">Ảnh thương hiệu</th> */}
                       {/* <th className="text-center">Loại</th>
-                            <th className="text-center">Loại SDK </th> */}
+                      <th className="text-center">Loại SDK </th> */}
                       <th className="text-center">Mức độ</th>
                       {/* <th className="text-center">Giá</th> */}
                       <th className="text-center">#</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <td
-                      colSpan="10"
-                      hidden={this.state.hidden}
-                      className="text-center"
-                    >
-                      Không tìm thấy dữ liệu
-                    </td>
-                    {product !== undefined
-                      ? product.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{item.id + 1}</td>
-                              <td className="text-center">
-                                {item.title.substr(0, 100) +
-                                  (item.title.length > 100 ? "..." : "")}
-                              </td>
-                              {/* <td className="text-center">{item.name}</td> */}
-                              <td className="text-center">
-                                {item.image_link == null ||
-                                item.image_link == "" ? (
-                                  <img
-                                    src={`${item.image}`}
-                                    width={"60px"}
-                                    height={"60px"}
-                                  />
-                                ) : (
-                                  <img
-                                    src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`}
-                                    width={"60px"}
-                                    height={"60px"}
-                                  />
-                                )}
-                              </td>
-
-                              <td className="text-center">
-                                <a target="_blank" href={item.linkdetail}>
-                                  Xem chi tiết sản phẩm
-                                </a>
-                              </td>
-                              {/* <td className="text-center">
-                                  <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
-                                </td> */}
-                              <td className="text-center">
-                                {item.brand_id == null
-                                  ? ""
-                                  : item.brand_id.name}
-                              </td>
-                              {/* <td className="text-center">
-                                      {<img src={`https://api-soida.applamdep.com/public/image_brand/${item.brand_id.image_link}`} width={"60px"} height={"60px"} />}
-                                    </td> */}
-                              {/* <td className="text-center">
-                                      {item.type_product_id.Name}
-                                    </td>
-                                    <td className="text-center">
-                                      {item.type_sdk_id.Name}
-                                    </td> */}
-                              <td className="text-center">{item.name_level}</td>
-                              {/* <td className="text-center">
-                                      {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
-                                    </td> */}
-                              <td className="">
-                                <CButton
-                                  style={styles.mgl5}
-                                  outline
-                                  color="primary"
-                                  size="sm"
-                                  onClick={async (e) =>
-                                    await this.openFormAdd()
-                                  }
-                                >
-                                  {/* <CIcon name="cilPencil" /> */}
-                                  Thêm mới
-                                </CButton>{" "}
-                                <CButton
-                                  outline
-                                  color="success"
-                                  size="sm"
-                                  onClick={() => this.updateForm(product)}
-                                >
-                                  {/* <CIcon name="cilTrash" /> */}
-                                  Chỉnh sửa
-                                </CButton>
-                              </td>
-                            </tr>
-                          );
-                        })
-                      : ""}
-                  </tbody>
-                </table>
+                    {x}
+                  </table>
+              </div>
+            </div> : 
+            <div
+              id={idSelect2}
+              class="accordion-collapse collapse"
+              aria-labelledby={idSelect}
+              data-bs-parent="#accordionExample"
+            >
+              <div class="accordion-body">
+                <table
+                  ble
+                  className="table table-hover table-outline mb-0 d-none d-sm-table"
+                >
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      {/* <th className="text-center">Tên</th> */}
+                      <th className="text-center">Tiêu đề</th>
+                      <th className="text-center">Ảnh</th>
+  
+                      <th className="text-center">Chi tiết</th>
+                      <th className="text-center">Thương hiệu</th>
+                      {/* <th className="text-center">Ảnh thương hiệu</th> */}
+                      {/* <th className="text-center">Loại</th>
+                      <th className="text-center">Loại SDK </th> */}
+                      <th className="text-center">Mức độ</th>
+                      {/* <th className="text-center">Giá</th> */}
+                      <th className="text-center">#</th>
+                    </tr>
+                  </thead>
+                    {x}
+                  </table>
               </div>
             </div>
-          </div>
-        );
-      });
-    }
-    return html;
-  };
+            }
+            
+        </div>
+      )
+      return render
+    } 
+  }
   render() {
+    
     const {
       data,
       current_slug,
@@ -566,24 +868,8 @@ class Users extends Component {
       Message_Code,
     } = this.state;
 
-    const temp = [
-      {
-        title: "hello",
-        image:
-          "https://upanh123.com/wp-content/uploads/2019/04/hinh-anh-tam-trang-buon.jpg",
-        details: "No",
-        brand: "IT",
-        level: "300",
-      },
-    ];
-    const arrLevel = [
-      {
-        item: "1",
-        item: "2",
-        item: "3",
-      },
-    ];
-
+    
+   
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -647,205 +933,17 @@ class Users extends Component {
           </Row>
 
           <div class="accordion" id="accordionExample">
-            {this.renderProductsSuggest()}
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button
-                  class="accordion-button"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseOne"
-                  aria-expanded="true"
-                  aria-controls="collapseOne"
-                >
-                  Accordion Item #1
-                </button>
-              </h2>
-              <div
-                id="collapseOne"
-                class="accordion-collapse collapse show"
-                aria-labelledby="headingOne"
-                data-bs-parent="#accordionExample"
-              >
-                <div class="accordion-body">
-                  <table
-                    ble
-                    className="table table-hover table-outline mb-0 d-none d-sm-table"
-                  >
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        {/* <th className="text-center">Tên</th> */}
-                        <th className="text-center">Tiêu đề</th>
-                        <th className="text-center">Ảnh</th>
-
-                        <th className="text-center">Chi tiết</th>
-                        <th className="text-center">Thương hiệu</th>
-                        {/* <th className="text-center">Ảnh thương hiệu</th> */}
-                        {/* <th className="text-center">Loại</th>
-                            <th className="text-center">Loại SDK </th> */}
-                        <th className="text-center">Mức độ</th>
-                        {/* <th className="text-center">Giá</th> */}
-                        <th className="text-center">#</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td
-                        colSpan="10"
-                        hidden={this.state.hidden}
-                        className="text-center"
-                      >
-                        Không tìm thấy dữ liệu
-                      </td>
-                      {temp !== undefined
-                        ? temp.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{item.id + 1}</td>
-                                <td className="text-center">
-                                  {item.title.substr(0, 100) +
-                                    (item.title.length > 100 ? "..." : "")}
-                                </td>
-                                {/* <td className="text-center">{item.name}</td> */}
-                                <td className="text-center">
-                                  {item.image_link == null ||
-                                  item.image_link == "" ? (
-                                    <img
-                                      src={`${item.image}`}
-                                      width={"60px"}
-                                      height={"60px"}
-                                    />
-                                  ) : (
-                                    <img
-                                      src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`}
-                                      width={"60px"}
-                                      height={"60px"}
-                                    />
-                                  )}
-                                </td>
-
-                                <td className="text-center">
-                                  <a target="_blank" href={item.linkdetail}>
-                                    Xem chi tiết sản phẩm
-                                  </a>
-                                </td>
-                                {/* <td className="text-center">
-                                  <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
-                                </td> */}
-                                <td className="text-center">
-                                  {item.brand_id == null
-                                    ? ""
-                                    : item.brand_id.name}
-                                </td>
-                                {/* <td className="text-center">
-                                      {<img src={`https://api-soida.applamdep.com/public/image_brand/${item.brand_id.image_link}`} width={"60px"} height={"60px"} />}
-                                    </td> */}
-                                {/* <td className="text-center">
-                                      {item.type_product_id.Name}
-                                    </td>
-                                    <td className="text-center">
-                                      {item.type_sdk_id.Name}
-                                    </td> */}
-                                <td className="text-center">
-                                  {item.name_level}
-                                </td>
-                                {/* <td className="text-center">
-                                      {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
-                                    </td> */}
-                                <td className="">
-                                  <CButton
-                                    style={styles.mgl5}
-                                    outline
-                                    color="primary"
-                                    size="sm"
-                                    onClick={async (e) =>
-                                      await this.openFormAdd()
-                                    }
-                                  >
-                                    {/* <CIcon name="cilPencil" /> */}
-                                    Thêm mới
-                                  </CButton>{" "}
-                                  <CButton outline color="success" size="sm">
-                                    {/* <CIcon name="cilTrash" /> */}
-                                    Chỉnh sửa
-                                  </CButton>
-                                </td>
-                              </tr>
-                            );
-                          })
-                        : ""}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingTwo">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseTwo"
-                  aria-expanded="false"
-                  aria-controls="collapseTwo"
-                >
-                  Accordion Item #2
-                </button>
-              </h2>
-              <div
-                id="collapseTwo"
-                class="accordion-collapse collapse"
-                aria-labelledby="headingTwo"
-                data-bs-parent="#accordionExample"
-              >
-                <div class="accordion-body">
-                  <strong>This is the second item's accordion body.</strong> It
-                  is hidden by default, until the collapse plugin adds the
-                  appropriate classes that we use to style each element. These
-                  classes control the overall appearance, as well as the showing
-                  and hiding via CSS transitions. You can modify any of this
-                  with custom CSS or overriding our default variables. It's also
-                  worth noting that just about any HTML can go within the{" "}
-                  <code>.accordion-body</code>, though the transition does limit
-                  overflow.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseThree"
-                  aria-expanded="false"
-                  aria-controls="collapseThree"
-                >
-                  Accordion Item #3
-                </button>
-              </h2>
-              <div
-                id="collapseThree"
-                class="accordion-collapse collapse"
-                aria-labelledby="headingThree"
-                data-bs-parent="#accordionExample"
-              >
-                <div class="accordion-body">
-                  <strong>This is the third item's accordion body.</strong> It
-                  is hidden by default, until the collapse plugin adds the
-                  appropriate classes that we use to style each element. These
-                  classes control the overall appearance, as well as the showing
-                  and hiding via CSS transitions. You can modify any of this
-                  with custom CSS or overriding our default variables. It's also
-                  worth noting that just about any HTML can go within the{" "}
-                  <code>.accordion-body</code>, though the transition does limit
-                  overflow.
-                </div>
-              </div>
-            </div>
+            {this.renderProductsSuggest(this.state.listK5,"headingOne","collapser1","Hỗ trợ giảm lão hóa da",true)}
+            {this.renderProductsSuggest(this.state.listK6,"headingTwo","collapser2","Hỗ trợ điều trị mụn",false)}
+            {this.renderProductsSuggest(this.state.listK7,"headingThree","collapser3","Hỗ trợ giảm quầng thâm mắt",false)}
+            {this.renderProductsSuggest(this.state.listK8,"headingFour","collapser4","Hỗ trợ giảm lỗ chân lông",false)}
+            {this.renderProductsSuggest(this.state.listK9,"headingFive","collapser5","Hỗ trợ giảm thâm nám da",false)}
+                                  
           </div>
           {this.state.modal}
-          <Modal
+          {this.state.modalEdit}
+
+          {/* <Modal
             size="xl"
             isOpen={this.state.modalCom}
             className={this.props.className}
@@ -975,7 +1073,7 @@ class Users extends Component {
                 Đóng
               </CButton>
             </ModalFooter>
-          </Modal>
+          </Modal> */}
         </div>
       );
     }
@@ -1089,5 +1187,4 @@ const styles = {
   },
 };
 
-
-export default Users
+export default Users;
