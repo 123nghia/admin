@@ -141,7 +141,7 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Cấu hình hiển thị',
+    name: 'Bộ lọc sản phẩm gợi ý',
     to: '/skin/config',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
@@ -575,6 +575,13 @@ const _navContact = [
     _tag: 'CSidebarNavItem',
     name: 'Danh sách banner',
     to: '/quan-ly-banner',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Cấu hình trang web',
+    to: '/cau-hinh-trang-web',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
   },

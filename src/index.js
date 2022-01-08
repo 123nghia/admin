@@ -17,7 +17,7 @@ import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 import root from "./../src/redux/sagas"
 import './assets/css/sidebar.css';
-
+import './all.css';
 
 
 

@@ -8,7 +8,11 @@ import {
   Row,
   Button, Input,
 } from 'reactstrap';
-
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import {
   CLabel,
   CRow,
@@ -33,6 +37,7 @@ headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 class Users extends Component {
   constructor(props) {
+
     super(props);
     this.state = {
       data: [],
@@ -59,99 +64,47 @@ class Users extends Component {
       Address: "",
       UserName: "",
       Message_Code: "",
-      key : "showHideRecomendGroup",
-      configData : [
-      ]
+     
     };
   }
-  
-  async getDataConfig (){
-    let url = "http://192.168.1.8:3012/api/config/getAll?key=showHideRecomendGroup"
-    await axios.get(
-      url,{
-        key : "showHideRecomendGroup"
-      }
-    ).then((res)=>{
-     
-      if(res.data.data.length > 0){
-        let dataConfig = res.data.data[0];
-        
 
-        let valueConfig = JSON.parse(dataConfig.Value);
-        this.setState({
-          configData: valueConfig,
-          idUpdate: dataConfig._id
-        });
-      }else{
-        
-        let dataTemplate = [
-          {
-            lable: "Hỗ trợ giảm lão hóa da",
-            key: "k5",
-            value:  true
-          },
-          {
-            lable: "Hỗ trợ điều trị mụn",
-        
-            key: "k6",
-            value:  true 
-          },
-          {
-            lable: "Hỗ trợ giảm quang thầm mắt",
-            key: "k7",
-            value:  true 
-          },
-          {
-            lable: "Hỗ trợ lỗ chân lông",
-            key: "k8",
-            value:  true
-          },
-          {
-            lable: "Hỗ trợ giảm thâm nám da",
-            key: "k9",
-            value:  true 
-          }
-        ]
-        this.setState({
-          configData: dataTemplate
-      }, () => {
 
-          this.addDataConfig();
-      });
+  changeConfigWeb(id){
+   
+      var i,tabcontent, tablinks
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
        
-       
+        if(i === id){
+          tabcontent[i].classList.add("defaultOpen");
+          tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
+
+          
+        }else{
+          tabcontent[i].classList.remove("defaultOpen")
+          tabcontent[i].style.animation = "none";
+
+        }
+
       }
-    })
-  };
-  async onUpdate(){
-    
-    let url = "http://192.168.1.8:3012/api/config/update"
-    await axios.post(
-      url,{
-        value : JSON.stringify(this.state.configData),
-        dataType: "1",
-        type : "system",
-          id : this.state.idUpdate,
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        if(i === id){
+          tablinks[i].classList.add("active")
+
+        } else{
+          tablinks[i].classList.remove("defaultOpen")
+          tablinks[i].classList.remove("active")
+
+
+        }
+        
       }
-    ).then((res)=>{
-      console.log(res)
-    })
+
   }
-  async addDataConfig (){
-    let url = "http://192.168.1.8:3012/api/config/add";
-    await axios.post(
-      url,{
-        dataType: "1",
-        key : "showHideRecomendGroup",
-        value : JSON.stringify(this.state.configData),
-        type : "system",
-        
-
-      }
-    )
-  };
+ 
   async componentDidMount() {
-  this.getDataConfig();
+  
   
     this.getData();
 
@@ -302,95 +255,32 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          <Row>
-            <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
-              <Card>
-                <CardHeader>
-                  LỰA CHỌN KẾT QỦA KHI RECOMEND SẢN PHẨM THEO NHÓM SẢN PHẨM 
-                </CardHeader>
-                <CardBody>
-                  <CRow>
-                    <CCol sm="12" lg="12">
-                      <CRow>
-                        <CCol sm="12" lg="10">
-                          <CLabel><strong>ẨN/HIỆN DANH SÁCH SẢN PHẨM GỢI Ý THEO NHÓM VẤN ĐỀ DA</strong></CLabel>
-                        </CCol>
-                        {
-                          type == '0' || type == '1' ? "" :
-                            <CCol sm="12" lg="2">
-                              <CTooltip content="Xem chi tiết đơn hàng">
+         
 
-                                
-                                    <CButton outline color="info" size="xm" onClick={async (e) => {
-                                      this.updateCompany()
-                                      this.onUpdate()
-                                    }}>
-                                      <CIcon name="cil-pencil" /> Cập nhật
-                                    </CButton> 
+<div class="tab">
+  <button class="tablinks" onClick={()=>this.changeConfigWeb(0)}>Cấu hình trang web</button>
+  <button class="tablinks" onClick={()=>this.changeConfigWeb(1)}>Cấu hình Facebook </button>
+  <button class="tablinks" onClick={()=>this.changeConfigWeb(2)}>Cấu hình Google</button>
+</div>
 
-                              </CTooltip>
-                            </CCol>
-                        }
-                      </CRow>
-                      <CRow>
-                        <CCol sm="12" lg="12">
-                           
-                        </CCol>
+<div id="tabcontent1" class="tabcontent defaultOpen" >
+  <h3>London</h3>
+  <p>London is the capital city of England.</p>
+</div>
 
-                      
+<div id="tabcontent2" class="tabcontent" >
+  <h3>Paris</h3>
+  <p>Paris is the capital of France.</p> 
+</div>
 
-                      
-
-                     
-
-                        
-                       
-
-
-                        
-
-                        
-
-                      
-
-                      </CRow>
-                    </CCol>
-                  </CRow>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-          {
-            this.state.configData.map((product,i)=>{
-              return (
-                <div class="configData_item">
-                  <div class="">
-                  <strong>{product.lable}</strong>
-                  </div>
-                  <div class="">
-                  <FormGroup>
-                      <FormControlLabel onChange={e=>{
-                        let x = [...this.state.configData]
-                        x[i].value = !x[i].value
-
-                        this.setState({
-                          configData : x
-                      })
-                        
-                      }} checked={product.value} control={<Switch defaultChecked />} label="" />
-                  
-                  </FormGroup>
-                  <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
-                  </div>
-                </div>
-              )
-            })
-          }
-        </div>
-      );
+<div id="tabcontent3" class="tabcontent" >
+  <h3>Tokyo</h3>
+  <p>Tokyo is the capital of Japan.</p>
+</div>
+      </div>
+      )
     }
+          
     
     return (
       <div className="sweet-loading">
