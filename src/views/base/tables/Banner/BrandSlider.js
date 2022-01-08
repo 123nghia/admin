@@ -391,7 +391,7 @@ class BrandSlider extends Component {
     let files = e.target.files;
     let reader = new FileReader();
     this.setState({ image_mobile_link: files[0] })
-    reader.readAsDataURL(files[0])
+    reader.readAsDataURL(files[0])                    
     reader.onload = (e) => {
       this.setState({ imageMobile: e.target.result, image_show_mobile: e.target.result })
     }

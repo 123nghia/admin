@@ -35,7 +35,7 @@ import DotLoader from "react-spinners/DotLoader";
 // import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 // import * as actionProductSuggest from "../../redux/actionsForder/productSuggest";
-
+import API_CONNECT from "../../functions/callAPI";
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
@@ -45,6 +45,7 @@ class Users extends Component {
     super(props);
     this.state = {
       data: [],
+      action : "new",
       modalCom: false,
       updated: "",
       dataApi: [],
@@ -70,16 +71,22 @@ class Users extends Component {
       Message_Code: "",
       productsSuggest: ["k5", "k6", "k7", "k8", "k9"],
       listK5: [],
+      kCurrent : "",
       listK6: [],
       listK7: [],
       listK8: [],
       listK9: [],
+      updateLevel : "",
+
+      updateId : "",
+      updateName : "",
+      updateDesc : "",
+      updategroupProduct : "",
+      updateTitle : "",
       modalEdit : null,
       modal: null,
       statusModal : true,
-      // titleModal : "",
-      nameProductsSuggest : null,
-      titleProductsSuggest : null,
+      statusModalUpdate : false,
       valueModal : {
         title : "",
         content : "",
@@ -90,10 +97,10 @@ class Users extends Component {
         icon :"",
         status: ""
       },
-      // image :"",
+      image :"",
       link  :"",
-      // image_show : "",
-      // image_link : "",
+      image_show : "",
+      image_link : "",
 
     };
   }
@@ -200,16 +207,65 @@ class Users extends Component {
       isDisable: true,
     });
   };
+  async addBrand() {
+
+    const { name, image, link, image_link, image_mobile_link} = this.state
+    if (name == null || name == '' ||
+      image == null || image == '') {
+      alert("Vui lòng nhập đầy đủ trường !!!");
+      return
+    }
+
+    const form = new FormData();
+    form.append("image", image_link);
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
+    const form2 = new FormData();
+    form2.append("image", image_mobile_link);
+
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST")
+
+    const body = {
+      name: name,
+      image: image,
+      image_link: image_link.name,
+      image_mobile_link: image_mobile_link == undefined  || image_mobile_link == "" ? "" : image_mobile_link.name,
+      company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
+      link: link
+    }
+
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.ADD_Banner,
+      method: 'POST',
+      data: body
+    });
+ 
+    if (res.status == 200) {
+        
+      if (this.state.type == '0' || this.state.type == '1') {
+        this.getData()
+      } else {
+        this.getData_Company()
+      }
+      this.setState({ modalCom: !this.state.modalCom })
+    } else {
+      alert("Thêm thương hiệu thất bại");
+      this.setState({ isLoading: false });
+    }
+  }
 
   onChange(key, val) {
     this.setState({ [key]: val });
-    
+      console.log(key,val)
   }
   onChangeModal = (e) => {
   
     var target = e.target;
     var name = target.name;
     var value = target.value;
+  console.log(value);
 
     this.setState({
       [name]: value,
@@ -223,6 +279,12 @@ class Users extends Component {
     });
   }
 
+  changeLevel = (e) => {
+    e.preventDefault();
+    this.setState({
+      updateLevel: e.target.value,
+    });
+  };
   getPackageName = async (package_id) => {
     const resPackage = await axios({
       baseURL: Constants.BASE_URL,
@@ -336,331 +398,129 @@ class Users extends Component {
     };
     console.log(this.state.image,this.state.image_show)
   }
-  openFormAdd = (item) => {
+  openFormAdd = (k) => {
+    this.setState({ 
+      action: "new", 
+      updateLevel: "1",
+      statusModalUpdate : true ,
+      updateId : "",
+      updateName : "",
+      updateDesc : "",
+      updategroupProduct: k,
+      updateTitle : "",
+      image :"",
+      link  :"",
+      image_show : "",
+      image_link : "",
     
-    let x = (
-      <Modal
-        size="xl"
-        isOpen={this.state.statusModal}
-        className={this.props.className}
-      >
-        <ModalHeader>
-         Tạo mới
-        </ModalHeader>
-        <ModalBody>
-          <TextFieldGroup
-            field="nameProductsSuggest"
-            label="Tên sản phẩm"
-            value={this.state.nameProductsSuggest}
-            placeholder={"Tên sản phẩm"}
-            onChange={(e)=> this.setState({nameProductsSuggest : e.target.value})}
-          />
-          <TextFieldGroup
-            field="image"
-            label="Ảnh sản phẩm"
-            type={"file"}
-            value={this.state.image}
-            onChange={(e) => {
-              this.onChangeImage(e);
-            }}
-            onClick={(e) => {
-              e.target.value = null;
-              this.setState({ image_show: "" });
-            }}
-          />
-          {this.state.image == "" ? (
-            ""
-          ) : (
-            <img
-            alt =""
-              width="250"
-              height="300"
-              src={
-                this.state.image_show == ""
-                  ? `https://api-soida.applamdep.com/public/image_plugin/${this.state.image_link}`
-                  : this.state.image
-              }
-              style={{ marginBottom: 20 }}
-            />
-          )}
-
-          <TextFieldGroup
-            field="titleProductsSuggest"
-            label="Tiêu đề"
-            value={this.state.titleProductsSuggest}
-            placeholder={"Tiêu đề"}
-            onChange={(e) => this.setState({titleProductsSuggest : e.target.value})}
-          />
-
-          <label className="control-label">Mô tả</label>
-          <CTextarea
-            name="descriptionProductsSuggest"
-            rows="4"
-            value={this.state.descriptionProductsSuggest}
-            onChange={(e) => {
-              this.setState({ "descriptionProductsSuggest": e.target.value });
-            }}
-            placeholder="Mô tả"
-          />
-
-          <TextFieldGroup
-            field="linkProductsSuggest"
-            label="Đường dẫn chi tiết sản phẩm"
-            value={this.state.linkProductsSuggest}
-            placeholder={"Đường dẫn chi tiết sản phẩm"}
-            onChange={(e) => this.onChange("linkProductsSuggest", e.target.value)}
-          />
-          <CLabel>Nhãn hiệu:</CLabel>
-          <CreatableSelect
-            isClearable
-            onChange={this.handleChange}
-
-            // onInputChange={this.handleInputChange}
-          />
-          {/* <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Mức độ:</CLabel>
-                {
-                  arrLevel != undefined ? (
-                    <CSelect onChange={async e => { this.changeLevel(e) }} custom size="sm" name="selectSm" id="SelectLm">
-                      {
-                        arrLevel.map((item, i) => {
-                          
-                            return (
-                              <option selected key={i} value={item}>
-                                {item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng"}
-                              </option>
-                            );
-                          })
-                      }
-                    </CSelect>
-                  ) : null
-                }
-              </div> */}
-
-          <TextFieldGroup
-            field="price"
-            label="Giá"
-            type={"number"}
-            value={this.state.price}
-            placeholder={"Giá"}
-            onChange={(e) => this.onChange("price", e.target.value)}
-          />
-        </ModalBody>
-        <ModalFooter>
-          <CButton
-            color="primary"
-            onClick={()=>{this.saveAdd(item)}}
-            disabled={this.state.isLoading}
-          >
-            Lưu
-          </CButton>{" "}
-          <CButton
-            color="secondary"
-            onClick={()=>{this.closeAdd()}}
-          >
-            Đóng
-          </CButton>
-        </ModalFooter>
-      </Modal>
-    );
-    this.setState({ modal: x });
+    });
+    
   };
   async openFormEdit(item){
 
-
-    const { Title } =  item;
-     
-    let x = (
-      <Modal
-        size="xl"
-        isOpen={this.state.statusModal}
-        className={this.props.className}
-      >
-        <ModalHeader>
-         Chỉnh sửa
-        </ModalHeader>
-        <ModalBody>
-          <TextFieldGroup
-            field="nameProductsSuggest"
-            label="Tên sản phẩm"
-            value={this.state.nameProductsSuggest}
-            placeholder={"Tên sản phẩm"}
-            onChange={(e) =>this.onChangeModal(e)}
-          />
-          <TextFieldGroup
-            field="image"
-            label="Ảnh sản phẩm"
-            type={"file"}
-            value={this.state.image}
-            onChange={(e) => {
-              this.onChangeImage(e);
-            }}
-            onClick={(e) => {
-              e.target.value = null;
-              this.setState({ image_show: "" });
-            }}
-          />
-          {this.state.image === "" ? (
-            ""
-          ) : (
-            <img
-            alt =""
-              width="250"
-              height="300"
-              src={
-                this.state.image_show === ""
-                  ? `https://api-soida.applamdep.com/public/image_plugin/${this.state.image_link}`
-                  : this.state.image
-              }
-              style={{ marginBottom: 20 }}
-            />
-          )}
-
-          <TextFieldGroup
-            field="titleProductsSuggest"
-            
-            label="Tiêu đề"
-            value={this.state.titleProductsSuggest}
-            placeholder={"Tiêu đề"}
-            onChange={(e) =>this.onChangeModal(e)}
-
-            />
-
-          <label className="control-label">Mô tả</label>
-          <CTextarea
-            name="descriptionProductsSuggest"
-            rows="4"
-            value={this.state.descriptionProductsSuggest}
-            onChange={(e) => {
-              this.setState({ descriptionProductsSuggest: e.target.value });
-            }}
-            placeholder="Mô tả"
-          />
-
-          <TextFieldGroup
-            field="linkProductsSuggest"
-            label="Đường dẫn chi tiết sản phẩm"
-            value={this.state.linkProductsSuggest}
-            placeholder={"Đường dẫn chi tiết sản phẩm"}
-            onChange={(e) => this.onChange("linkProductsSuggest", e.target.value)}
-          />
-          <CLabel>Nhãn hiệu:</CLabel>
-          <CreatableSelect
-            isClearable
-            onChange={this.handleChange}
-
-            // onInputChange={this.handleInputChange}
-          />
-          {/* <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Mức độ:</CLabel>
-                {
-                  arrLevel != undefined ? (
-                    <CSelect onChange={async e => { this.changeLevel(e) }} custom size="sm" name="selectSm" id="SelectLm">
-                      {
-                        arrLevel.map((item, i) => {
-                          
-                            return (
-                              <option selected key={i} value={item}>
-                                {item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng"}
-                              </option>
-                            );
-                          })
-                      }
-                    </CSelect>
-                  ) : null
-                }
-              </div> */}
-
-          <TextFieldGroup
-            field="price"
-            label="Giá"
-            type={"number"}
-            value={this.state.price}
-            placeholder={"Giá"}
-            onChange={(e) => this.onChange("price", e.target.value)}
-          />
-        </ModalBody>
-        <ModalFooter>
-          <CButton
-            color="primary"
-            onClick={()=>{this.saveEdit(item)}}
-            disabled={this.state.isLoading}
-          >
-            Lưu
-          </CButton>{" "}
-          <CButton
-            color="secondary"
-            onClick={()=>{this.closeFormEdit()}}
-          >
-            Đóng
-          </CButton>
-        </ModalFooter>
-      </Modal>
-    );
+    this.setState({
+      updateLevel : item.Level,
+      action: "edit", 
+      updategroupProduct : item.GroupProduct,
+      updateTitle : item.Title,
+      image_show : item.Icon,
+      updateDesc : item.Content,
+      statusModalUpdate : true,
+      updateId : item._id
+    })
     
-    this.setState({ modalEdit: x });
     
-  };
+  }
+ 
   closeFormEdit=()=>{
-    this.setState({ modalEdit: null });
+    this.setState({ statusModalUpdate: false });
 
   }
-  
-  async saveAdd(item){
+ 
+  async saveAdd(){
     const {
-      nameProductsSuggest,
-      image_show,
-      titleProductsSuggest,
-      descriptionProductsSuggest,
-      linkProductsSuggest
+      updateId ,
+      updateName ,
+      updateLevel,
+      updateDesc  ,
+      updategroupProduct ,
+      updateTitle ,
+      image ,
+      link  ,
+      image_show  ,
+      image_link  ,
     } = this.state;
     await axios.post(
-      "http://192.168.1.3:3012/api/paramenterRecomed/add",{
-        "title": titleProductsSuggest,
-        "content": descriptionProductsSuggest,
-        "level": "1",
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/add",{
+        "title": updateTitle,
+        "content": updateDesc,
+        "level": updateLevel,
         "priorites" : "1",
         "type": "0",
-        "groupProduct": item.GroupProduct,
-        "icon":"",
+        "groupProduct": updategroupProduct,
+        "icon":image_show,
         "status":"1"
       }
-    ).then((res)=>{
-      console.log(res)
+    ).then(()=>{
+      this.setState({ statusModalUpdate: false });
+
+
+      this.getProductsSuggestRequest("0")
     });
   }
-  async saveEdit(item){
+  async saveEdit(){
     const {
-      nameProductsSuggest,
-      image_show,
-      titleProductsSuggest,
-      descriptionProductsSuggest,
-      linkProductsSuggest
-    } = this.state
+      updateId ,
+      updateName ,
+      updateDesc  ,
+      updategroupProduct ,
+      updateTitle ,
+      updateLevel,
+      image,
+      link  ,
+      image_show  ,
+      image_link  ,
+    } = this.state;
+   
+
+  
     await axios.post(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/add",{
-        data: {
-          title : titleProductsSuggest,
-          content: descriptionProductsSuggest,
-          level: "1",
-          priorites: "1",
-          type: "0",
-          groupProduct: item.groupProduct,
-          icon:image_show,
-        }
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/update",{
+      "id":updateId,
+          "title" : updateTitle,
+          "content": updateDesc,
+          "level": updateLevel,
+          "priorites": "1",
+          "type": "0",
+          "groupProduct": updategroupProduct,
+          "icon":image_show,
+        
       }
-    ).then((res)=>{
-      console.log(res)
-    });
+    ).then(()=>{
+      this.setState({ statusModalUpdate: false });
+      this.getProductsSuggestRequest("0")
+    })
+  }
+  async removeItem(id,k){
+    await axios.post(
+      "https://api-pensilia.applamdep.com/api/paramenterRecomed/delete",{
+        id: id,
+      }
+    ).then(()=>{
+   
+      this.getProductsSuggestRequest("0")
+    })
   }
   closeAdd=()=>{
     this.setState({ modal: null });
   }
-  closeFormAdd = () => {
-    this.setState({ modalCom: false });
-  };
+
+  closeForm=()=>{
+    this.setState({ statusModalUpdate: false });
+    
+  }
   
-  renderProductsSuggest(products,idSelect,idSelect2,name,activeCollapse){
+  renderProductsSuggest(products,idSelect,idSelect2,name,activeCollapse,valueK){
     if(products){
       let x = products.map((item,i) => {
         return (
@@ -723,19 +583,7 @@ class Users extends Component {
                                 {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
                               </td> */}
                               <td className="">
-                                <CButton
-                                  style={styles.mgl5}
-                                  outline
-                                  color="primary"
-                                  size="sm"
-                                  onClick={() =>
-                                     this.openFormAdd(item)
-                                  }
-                                >
-                                  {/* <CIcon name="cilPencil" /> */}
-                                  Thêm mới
-                                </CButton>{" "}
-                                <CButton
+                              <CButton
                                   outline
                                   color="success"
                                   size="sm"
@@ -743,7 +591,20 @@ class Users extends Component {
                                 >
                                   {/* <CIcon name="cilTrash" /> */}
                                   Chỉnh sửa
+                                </CButton>{" "}
+                                <CButton
+                                  style={styles.mgl5}
+                                  outline
+                                  color="danger"
+                                  size="sm"
+                                  onClick={() =>
+                                     this.removeItem(item._id, item.GroupProduct)
+                                  }
+                                >
+                                  {/* <CIcon name="cilPencil" /> */}
+                                 Xóa
                                 </CButton>
+                               
                               </td>
                             </tr>
                   </tbody>         
@@ -751,7 +612,8 @@ class Users extends Component {
                 )
       })         
       let idSelectActive = `#${idSelect2}`     
-      
+  
+ 
       let render = (
         <div class="accordion-item">
             <h2 class="accordion-header" id={idSelect}>
@@ -786,9 +648,23 @@ class Users extends Component {
               data-bs-parent="#accordionExample"
             >
               <div class="accordion-body">
+              <div class="flex-center">
+              <CButton
+                                  style={styles.mgl5}
+                                  outline
+                                  color="primary"
+                                  size="md"
+                                  onClick={() =>
+                                     this.openFormAdd(valueK)
+                                  }
+                                >
+                                  {/* <CIcon name="cilPencil" /> */}
+                                 Thêm mới
+                                </CButton>
+              </div>
                 <table
                   ble
-                  className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
                 >
                   <thead className="thead-light">
                     <tr>
@@ -817,10 +693,25 @@ class Users extends Component {
               aria-labelledby={idSelect}
               data-bs-parent="#accordionExample"
             >
+            
               <div class="accordion-body">
+              <div class="flex-center">
+              <CButton
+                                  style={styles.mgl5}
+                                  outline
+                                  color="primary"
+                                  size="md"
+                                  onClick={() =>
+                                     this.openFormAdd(valueK)
+                                  }
+                                >
+                                  {/* <CIcon name="cilPencil" /> */}
+                                 Thêm mới
+                                </CButton>
+              </div>
                 <table
                   ble
-                  className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
                 >
                   <thead className="thead-light">
                     <tr>
@@ -868,7 +759,17 @@ class Users extends Component {
       Message_Code,
     } = this.state;
 
-    
+    const arrLevel = [
+      {
+        item : "1"
+      },
+      {
+        item : "2"
+      },
+      {
+        item : "3"
+      },
+    ];
    
     if (!this.state.isLoading) {
       return (
@@ -933,147 +834,142 @@ class Users extends Component {
           </Row>
 
           <div class="accordion" id="accordionExample">
-            {this.renderProductsSuggest(this.state.listK5,"headingOne","collapser1","Hỗ trợ giảm lão hóa da",true)}
-            {this.renderProductsSuggest(this.state.listK6,"headingTwo","collapser2","Hỗ trợ điều trị mụn",false)}
-            {this.renderProductsSuggest(this.state.listK7,"headingThree","collapser3","Hỗ trợ giảm quầng thâm mắt",false)}
-            {this.renderProductsSuggest(this.state.listK8,"headingFour","collapser4","Hỗ trợ giảm lỗ chân lông",false)}
-            {this.renderProductsSuggest(this.state.listK9,"headingFive","collapser5","Hỗ trợ giảm thâm nám da",false)}
+            {this.renderProductsSuggest(this.state.listK5,"headingOne","collapser1","Hỗ trợ giảm lão hóa da",true,"K5")}
+            {this.renderProductsSuggest(this.state.listK6,"headingTwo","collapser2","Hỗ trợ điều trị mụn",false,"K6")}
+            {this.renderProductsSuggest(this.state.listK7,"headingThree","collapser3","Hỗ trợ giảm quầng thâm mắt",false,"K7")}
+            {this.renderProductsSuggest(this.state.listK8,"headingFour","collapser4","Hỗ trợ giảm lỗ chân lông",false,"K8")}
+            {this.renderProductsSuggest(this.state.listK9,"headingFive","collapser5","Hỗ trợ giảm thâm nám da",false,"K9")}
                                   
           </div>
-          {this.state.modal}
-          {this.state.modalEdit}
+    
 
-          {/* <Modal
-            size="xl"
-            isOpen={this.state.modalCom}
-            className={this.props.className}
-          >
-            <ModalHeader>
-              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
-            </ModalHeader>
-            <ModalBody>
-              <TextFieldGroup
-                field="name"
-                label="Tên sản phẩm"
-                value={this.state.name}
-                placeholder={"Tên sản phẩm"}
-                onChange={(e) => this.onChange("name", e.target.value)}
-              />
+          <Modal
+        size="xl"
+        isOpen={this.state.statusModalUpdate}
+        className={this.props.className}
+      >
+        <ModalHeader>
+        {this.state.action === 'new' ? `Tạo mới` : `Cập nhật`}
+        </ModalHeader>
+        <ModalBody>
+          <TextFieldGroup
+            field="updateName"
+            label="Tên sản phẩm"
+            value={this.state.updateName}
+            placeholder={"Tên sản phẩm"}
+            onChange={e => this.setState({updateName : e.target.value})}
+          />
+          <TextFieldGroup
+            field="image"
+            label="Ảnh sản phẩm"
+            type={"file"}
+            // value={this.state.image}
+            onChange={(e) => {
+              this.onChangeImage(e);
+            }}
+            onClick={(e) => {
+              e.target.value = null;
+              this.setState({ image_show: "" });
+            }}
+          />
+          {
+                   this.state.image == "" || this.state.image == null || this.state.image == undefined ?
+                  "" :
+                    <img alt="" width="200px" height="auto" src={
+                    this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
+          }
 
-              <TextFieldGroup
-                field="image"
-                label="Ảnh sản phẩm"
-                type={"file"}
-                onChange={(e) => {
-                  this.onChangeImage(e);
-                }}
-                onClick={(e) => {
-                  e.target.value = null;
-                  this.setState({ image_show: "" });
-                }}
-              />
-              {this.state.image == "" ? (
-                ""
-              ) : (
-                <img
-                  width="250"
-                  height="300"
-                  src={
-                    this.state.image_show == ""
-                      ? `https://api-soida.applamdep.com/public/image_plugin/${this.state.image_link}`
-                      : this.state.image
-                  }
-                  style={{ marginBottom: 20 }}
-                />
-              )}
+          <TextFieldGroup
+            field="updateTitle"
+            label="Tiêu đề"
+            value={this.state.updateTitle}
+            placeholder={"Tiêu đề"}
+            onChange={e => {
+            this.setState({ updateTitle: e.target.value });
+            
+           
+       }}
 
-              <TextFieldGroup
-                field="title"
-                label="Tiêu đề"
-                value={this.state.title}
-                placeholder={"Tiêu đề"}
-                onChange={(e) => this.onChange("title", e.target.value)}
-              />
+            />
 
-              <label className="control-label">Mô tả</label>
-              <CTextarea
-                name="description"
-                rows="4"
-                value={this.state.description}
-                onChange={(e) => {
-                  this.setState({ description: e.target.value });
-                }}
-                placeholder="Mô tả"
-              />
+          <label className="control-label">Mô tả</label>
+          <CTextarea
+            name="updateDesc"
+            rows="4"
+            value={this.state.updateDesc}
+            onChange={(e) => {
+              this.setState({ updateDesc: e.target.value });
+            }}
+            placeholder="Mô tả"
+          />
 
-              <TextFieldGroup
-                field="linkdetail"
-                label="Đường dẫn chi tiết sản phẩm"
-                value={this.state.linkdetail}
-                placeholder={"Đường dẫn chi tiết sản phẩm"}
-                onChange={(e) => this.onChange("linkdetail", e.target.value)}
-              />
-              <CLabel>Nhãn hiệu:</CLabel>
-              <CreatableSelect
-                isClearable
-                onChange={this.handleChange}
-
-                // onInputChange={this.handleInputChange}
-              />
-              <div style={{ width: "100%" }} className="mt-3">
+          {/* <TextFieldGroup
+            field="linkProductsSuggest"
+            label="Đường dẫn chi tiết sản phẩm"
+            value={this.state.linkProductsSuggest}
+            placeholder={"Đường dẫn chi tiết sản phẩm"}
+            onChange={(e) => this.onChange("linkProductsSuggest", e.target.value)}
+          /> */}
+         
+          <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Mức độ:</CLabel>
-                {arrLevel != undefined ? (
-                  <CSelect
-                    onChange={async (e) => {
-                      this.changeLevel(e);
-                    }}
-                    custom
-                    size="sm"
-                    name="selectSm"
-                    id="SelectLm"
-                  >
-                    {arrLevel.map((item, i) => {
-                      return (
-                        <option selected key={i} value={item}>
-                          {item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng"}
-                        </option>
-                      );
-                    })}
-                  </CSelect>
-                ) : null}
+                {
+                  arrLevel != undefined ? (
+                    <CSelect onChange={
+                      async e => {this.changeLevel(e)}
+                      
+                    } custom size="sm" name="updateLevel" id="SelectLm">
+                      {
+                        arrLevel.map((item, i) => {
+                          if(item.item === this.state.updateLevel){
+                            return (
+                              <option selected key={i} value={item.item}>
+                                {item.item === "1" ? "Nhẹ" : item.item === "2" ? "Trung" : "Nặng"}
+                              </option>
+                            );
+                          }
+                            else {
+                            return (
+                              <option key={i} value={item.item}>
+                                {item.item == "1" ? "Nhẹ" : item.item == "2" ? "Trung" : "Nặng"}
+                              </option>
+                            );
+                          
+                          }                         
+                            
+                          })
+                      }
+                    </CSelect>
+                  ) : null
+                }
               </div>
 
-              <TextFieldGroup
-                field="price"
-                label="Giá"
-                type={"number"}
-                value={this.state.price}
-                placeholder={"Giá"}
-                onChange={(e) => this.onChange("price", e.target.value)}
-              />
-            </ModalBody>
-            <ModalFooter>
-              <CButton
-                color="primary"
-                onClick={(e) => {
-                  this.state.action === "new"
-                    ? this.addProduct()
-                    : this.updateProduct();
-                }}
-                disabled={this.state.isLoading}
-              >
-                Lưu
-              </CButton>{" "}
-              <CButton
-                color="secondary"
-                onClick={(e) => {
-                  this.closeFormAdd();
-                }}
-              >
-                Đóng
-              </CButton>
-            </ModalFooter>
-          </Modal> */}
+          <TextFieldGroup
+            field="price"
+            label="Giá"
+            type={"number"}
+            value={this.state.price}
+            placeholder={"Giá"}
+            onChange={(e) => this.onChange("price", e.target.value)}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <CButton
+            color="primary"
+            onClick={
+              ()=>{ this.state.action === 'new' ? this.saveAdd() : this.saveEdit() }}
+            disabled={this.state.isLoading}
+          >
+            Lưu
+          </CButton>{" "}
+          <CButton
+            color="secondary"
+            onClick={()=>{this.closeForm()}}
+          >
+            Đóng
+          </CButton>
+        </ModalFooter>
+      </Modal>
         </div>
       );
     }
