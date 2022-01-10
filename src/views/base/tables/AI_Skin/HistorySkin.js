@@ -189,8 +189,8 @@ class HistorySkin extends Component {
                       <th className="text-center">Tên</th>
                       <th className="text-center">Hình ảnh</th>
                       <th className="text-center">Kết quả</th>
-                      <th className="text-center">Công ty</th>
-                      <th className="text-center">Sale</th>
+                      {/* <th className="text-center">Công ty</th>
+                      <th className="text-center">Sale</th> */}
                       <th className="text-center">Ngày tạo</th>
                     </tr>
                   </thead>
@@ -214,8 +214,8 @@ class HistorySkin extends Component {
                                   })
                                 }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
                               </td>
-                              <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
-                              <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td>
+                              {/* <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
+                              <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td> */}
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>

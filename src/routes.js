@@ -42,6 +42,7 @@ const ProductPlugin = React.lazy(() => import('./views/base/tables/Prouduct/Prod
 const BrandSlider = React.lazy(() => import('./views/base/tables/Banner/BrandSlider'));
 
 const ConfigTheme = React.lazy(() => import('./views/base/tables/configSystem/ColorTheme'));
+const inferableGeneral = React.lazy(() => import('./views/config/inferableGeneral'));
 
 
 const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginSubSaleTable'));
@@ -52,7 +53,7 @@ const EndUserPlugin = React.lazy(() => import('./views/base/tables/User/EndUser'
 const configSkinDisplay = React.lazy(() => import('./views/skin/configDisplay'));
 const configContent = React.lazy(() => import('./views/skin/content'));
 const configOverView = React.lazy(() => import('./views/skin/overView'));
-
+const configWeb = React.lazy(() => import('./views/config/configWeb'));
 //ADMIN MakeUp
 const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestItem'));
 const Brand = React.lazy(() => import('./views/base/tables/MakeUp/Brand'));
@@ -110,7 +111,10 @@ const routes = [
   { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
+  { path: '/cau-hinh-trang-web', name: 'configWeb', component: configWeb },
+  { path: '/inferable-general', name: 'inferable-general', component: inferableGeneral },
 
+  
   
   //admin product
   { path: '/products-special', name: 'productSpecial', component: ProductPlugin },

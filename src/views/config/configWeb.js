@@ -8,6 +8,11 @@ import {
   Row,
   Button, Input,
 } from 'reactstrap';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import {
   CLabel,
@@ -27,16 +32,18 @@ import DotLoader from "react-spinners/DotLoader";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import logoMainnet from '../../assets/img/logo_head.png';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
+
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
 class Users extends Component {
   constructor(props) {
+
     super(props);
     this.state = {
       data: [],
-      idUpdate:"",
       updated: '',
       dataApi: [],
       delete: null,
@@ -54,104 +61,58 @@ class Users extends Component {
       isLoading: false,
       isDisable: true,
       Email: "",
+      sub2_mainColor: "",
+      button_color: "",
+      sucess_color: "",
+      error_color:"",
+      text_mainColor: "",
+
       Name: "",
       Phone: "",
       Address: "",
       UserName: "",
       Message_Code: "",
-      key : "showHideRecomendGroup",
-      configData : [
-      ]
+      sub_mainColor: ""
     };
   }
-  
-  async getDataConfig (){
-    let url = "http://192.168.1.8:3012/api/config/getAll?key=showHideRecomendGroup"
-    await axios.get(
-      url,{
-        key : "showHideRecomendGroup"
-      }
-    ).then((res)=>{
-     
-      if(res.data.data.length > 0){
-        let dataConfig = res.data.data[0];
-        
 
-        let valueConfig = JSON.parse(dataConfig.Value);
-        this.setState({
-          configData: valueConfig,
-          idUpdate: dataConfig._id
-        });
-      }else{
-        
-        let dataTemplate = [
-          {
-            lable: "Hỗ trợ giảm lão hóa da",
-            key: "k5",
-            value:  true
-          },
-          {
-            lable: "Hỗ trợ điều trị mụn",
-        
-            key: "k6",
-            value:  true 
-          },
-          {
-            lable: "Hỗ trợ giảm quang thầm mắt",
-            key: "k7",
-            value:  true 
-          },
-          {
-            lable: "Hỗ trợ lỗ chân lông",
-            key: "k8",
-            value:  true
-          },
-          {
-            lable: "Hỗ trợ giảm thâm nám da",
-            key: "k9",
-            value:  true 
-          }
-        ]
-        this.setState({
-          configData: dataTemplate
-      }, () => {
 
-          this.addDataConfig();
-      });
+  changeConfigWeb(id){
+   
+      var i,tabcontent, tablinks
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
        
-       
+        if(i === id){
+          tabcontent[i].classList.add("defaultOpen");
+          tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
+
+          
+        }else{
+          tabcontent[i].classList.remove("defaultOpen")
+          tabcontent[i].style.animation = "none";
+
+        }
+
       }
-    })
-  };
-  async onUpdate(){
-    
-    let url = "http://192.168.1.8:3012/api/config/update"
-    await axios.post(
-      url,{
-        value : JSON.stringify(this.state.configData),
-        dataType: "1",
-        type : "system",
-          id : this.state.idUpdate,
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        if(i === id){
+          tablinks[i].classList.add("active")
+
+        } else{
+          tablinks[i].classList.remove("defaultOpen")
+          tablinks[i].classList.remove("active")
+
+
+        }
+        
       }
-    ).then((res)=>{
-      console.log(res)
-    })
+
   }
-  async addDataConfig (){
-    let url = "http://192.168.1.8:3012/api/config/add";
-    await axios.post(
-      url,{
-        dataType: "1",
-        key : "showHideRecomendGroup",
-        value : JSON.stringify(this.state.configData),
-        type : "system",
-        
-
-      }
-    )
-  };
+ 
   async componentDidMount() {
-  this.getDataConfig();
+  
   
     this.getData();
 
@@ -169,23 +130,31 @@ class Users extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_GET_USER_BYID,
-      method: 'POST',
+      url: Constants.CONFIG_THEME_GET+"/"+"61ce79c4d19f5244aa161b36",
+      method: 'GET',
       headers: this.state.token
     });
     let val = res.data.data
+   ;
+
 
     this.setState({
       dataApi: val, data: val, currentPassword: val.Password,
       isLoading: false,
       current_slug: val.Company_Id == null || val.Company_Id == undefined ? null : val.Company_Id.Slug,
       companyID: val.Company_Id == null || val.Company_Id == undefined ? null : val.Company_Id._id,
-      Email: val.Email,
-      Name: val.Name,
+
+      mainColor: val.mainColor,
+      sub_mainColor: val.sub_mainColor,
       Phone: val.Phone,
       Address: val.Address,
       UserName: val.UserName,
       Message_Code: val.Message_Code,
+      sub2_mainColor: val.sub2_mainColor,
+      button_color: val.button_color,
+      sucess_color: val.sucess_color,
+      error_color:val.error_color,
+      text_mainColor: val.text_mainColor,
       isDisable: true
     });
   }
@@ -226,6 +195,7 @@ class Users extends Component {
         new_password: password
       }
     });
+
     if (res.data.is_success == true) {
       this.getData();
       this.setState({ isChange: true });
@@ -256,32 +226,34 @@ class Users extends Component {
   }
 
   async updateCompany() {
-    const { Email, Name, Phone, Address, UserName, data, Message_Code } = this.state
-
-    if (Name == null || Name == ''
-      || Phone == null || Phone == ''
-      || UserName == null || UserName == '') {
+    const {
+            mainColor, sub_mainColor, button_color,
+            sucess_color,error_color,
+            text_mainColor,Phone,
+            sub2_mainColor,  Address, UserName, data, Message_Code
+          
+          } = this.state
+  
+    if (mainColor == null || mainColor == '') {
       alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
 
     const body = {
       isHash: false,
-      Name: Name == "" ? data.Name : Name,
-      Email: Email == "" ? data.Email : Email,
-      Phone: Phone == "" ? data.Phone : Phone,
-      Address: Address == "" ? data.Address : Address,
-      UserName: UserName == "" ? data.UserName : UserName,
-      Message_Code: Message_Code == "" || Message_Code == null ? data.Message_Code : Message_Code,
-      Password: data.Password,
-      Status: data.Status,
-      id: data._id
+      sub_mainColor: sub_mainColor,
+      mainColor:  mainColor,
+      sub2_mainColor: sub2_mainColor,
+      company_id: "61ce79c4d19f5244aa161b36",
+      button_color: button_color,
+      sucess_color: sucess_color,
+      error_color: error_color,
+      text_mainColor: text_mainColor
     }
-
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_UPDATE_USER_COMPANY,
+      url: Constants.CONFIG_THEME_UPDATE,
       method: 'POST',
       data: body
     });
@@ -293,41 +265,76 @@ class Users extends Component {
       this.setState({ isLoading: false });
     }
   }
-
   render() {
-    const { data, current_slug, isChange, currentPassword, isChangeSlug, type, isDisable,
-      Email, Name, Phone, Address, UserName, Message_Code } = this.state;
+    const { data, current_slug, isChange,error_color, sucess_color,button_color , sub2_mainColor, currentPassword, isChangeSlug, type, isDisable,
+      sub_mainColor, mainColor, Phone, Address, UserName, Message_Code,text_mainColor } = this.state;
 
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          <Row>
+         
+
+<div class="tab">
+  <button class="tablinks active" onClick={()=>this.changeConfigWeb(0)}>Cấu hình trang web</button>
+  <button class="tablinks" onClick={()=>this.changeConfigWeb(1)}>Cấu hình Facebook </button>
+  <button class="tablinks" onClick={()=>this.changeConfigWeb(2)}>Cấu hình Google</button>
+</div>
+
+<div id="tabcontent1" class="tabcontent defaultOpen" >
+
+<div class="flex-a-center">
+<p class="mr-2">Logo web :</p>
+  <img  height="auto" width="110" src={logoMainnet}  alt=""/>
+  </div>
+  <textarea class="mt-3" cols='60' rows='8'>
+  {`<h1>Hello world</h1>`}
+    </textarea>
+</div>
+
+<div id="tabcontent2" class="tabcontent" >
+<div class="tabcontent_img">
+  <img src="../../images/fbicon.png"  alt=""/>
+  </div>
+</div>
+
+<div id="tabcontent3" class="tabcontent" >
+<div class="tabcontent_img">
+  <img src="../../images/ggicon.png"  alt=""/>
+  </div>
+</div>
+ <Row>
             <Col>
               <p style={styles.success}>{this.state.updated}</p>
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  LỰA CHỌN KẾT QỦA KHI RECOMEND SẢN PHẨM THEO NHÓM SẢN PHẨM 
+                  THÔNG TIN MÀU
                 </CardHeader>
                 <CardBody>
                   <CRow>
                     <CCol sm="12" lg="12">
                       <CRow>
                         <CCol sm="12" lg="10">
-                          <CLabel><strong>ẨN/HIỆN DANH SÁCH SẢN PHẨM GỢI Ý THEO NHÓM VẤN ĐỀ DA</strong></CLabel>
+                          <CLabel><strong>Thay đổi màu</strong></CLabel>
                         </CCol>
                         {
                           type == '0' || type == '1' ? "" :
                             <CCol sm="12" lg="2">
                               <CTooltip content="Xem chi tiết đơn hàng">
 
-                                
+                                {
+                                  isDisable ?
                                     <CButton outline color="info" size="xm" onClick={async (e) => {
-                                      this.updateCompany()
-                                      this.onUpdate()
+                                      this.setState({ isDisable: !isDisable })
                                     }}>
                                       <CIcon name="cil-pencil" /> Cập nhật
-                                    </CButton> 
+                                    </CButton> :
+                                    <CButton outline color="info" size="sm" onClick={async (e) => {
+                                      this.updateCompany()
+                                    }}>
+                                      <CIcon name="cil-pencil" /> Xác nhận cập nhật
+                                    </CButton>
+                                }
 
                               </CTooltip>
                             </CCol>
@@ -335,25 +342,62 @@ class Users extends Component {
                       </CRow>
                       <CRow>
                         <CCol sm="12" lg="12">
-                           
+                          <div>
+                            <CLabel>Màu chủ đạo</CLabel>
+                            <Input style={styles.searchInput} onChange={(e) => { this.setState({ mainColor: e.target.value }) }} value={mainColor} readOnly={isDisable} />
+                          </div>
+                        </CCol>
+
+                        <CCol sm="12" lg="12">
+                          <CLabel>Màu chủ đạo 1</CLabel>
+                          <Input style={styles.searchInput} value={sub_mainColor} onChange={(e) => { this.setState({ sub_mainColor: e.target.value }) }} readOnly={isDisable} />
+                        </CCol>
+                        <CCol sm="12" lg="12">
+                          <CLabel>Màu chủ đạo 2</CLabel>
+                          <Input style={styles.searchInput} value={sub2_mainColor} onChange={(e) => { this.setState({ sub2_mainColor: e.target.value }) }} readOnly={isDisable} />
+                        </CCol>
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Màu chữ</CLabel>
+                            <Input style={styles.searchInput} value={text_mainColor} onChange={(e) => { this.setState({ text_mainColor: e.target.value }) }} readOnly={isDisable} />
+                          </div>
+                        </CCol>
+                        
+                 
+
+                        <CCol sm="12" lg="12">
+                          <CLabel>Màu button </CLabel>
+                          <Input style={styles.searchInput} value={button_color} onChange={(e) => { this.setState({ button_color: e.target.value }) }} readOnly={isDisable} />
                         </CCol>
 
                       
+   
+     
 
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Màu báo thành công</CLabel>
+                            <Input style={styles.searchInput} value={sucess_color} onChange={(e) => { this.setState({ sucess_color: e.target.value }) }} readOnly={isDisable} />
+                          </div>
+                        </CCol>
+
+                        <CCol sm="12" lg="12">
+                          <div>
+                            <CLabel>Màu báo lỗi</CLabel>
+                            <Input style={styles.searchInput} value={error_color} onChange={(e) => { this.setState({ error_color: e.target.value }) }} readOnly={isDisable} />
+                          </div>
+                        </CCol>
+
+                        
+ 
+      
+                        
+                        
                       
-
-                     
 
                         
                        
-
-
-                        
-
-                        
-
-                      
-
                       </CRow>
                     </CCol>
                   </CRow>
@@ -361,35 +405,12 @@ class Users extends Component {
               </Card>
             </Col>
           </Row>
-          {
-            this.state.configData.map((product,i)=>{
-              return (
-                <div class="configData_item">
-                  <div class="">
-                  <strong>{product.lable}</strong>
-                  </div>
-                  <div class="">
-                  <FormGroup>
-                      <FormControlLabel onChange={e=>{
-                        let x = [...this.state.configData]
-                        x[i].value = !x[i].value
+      </div>
 
-                        this.setState({
-                          configData : x
-                      })
-                        
-                      }} checked={product.value} control={<Switch defaultChecked />} label="" />
-                  
-                  </FormGroup>
-                  <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
-                  </div>
-                </div>
-              )
-            })
-          }
-        </div>
-      );
+     
+      )
     }
+          
     
     return (
       <div className="sweet-loading">
