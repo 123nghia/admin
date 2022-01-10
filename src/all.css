@@ -34,9 +34,15 @@
   transition: 0.3s;
   font-size: 16px;
 }
+.flex-as-center{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .flex-a-center{
   display: flex;
   align-items: center;
+  /* justify-content: space-between; */
 }
 
 .tabcontent p{
