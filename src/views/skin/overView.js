@@ -419,6 +419,7 @@ class Users extends Component {
   async openFormEdit(item){
 
     this.setState({
+     image: item.Icon,
       updateLevel : item.Level,
       action: "edit", 
       updategroupProduct : item.GroupProduct,
@@ -852,16 +853,22 @@ class Users extends Component {
         {this.state.action === 'new' ? `Tạo mới` : `Cập nhật`}
         </ModalHeader>
         <ModalBody>
-          <TextFieldGroup
-            field="updateName"
-            label="Tên sản phẩm"
-            value={this.state.updateName}
-            placeholder={"Tên sản phẩm"}
-            onChange={e => this.setState({updateName : e.target.value})}
-          />
+      
+        <TextFieldGroup
+            field="updateTitle"
+            label="Tiêu đề"
+            value={this.state.updateTitle}
+            placeholder={"Tiêu đề"}
+            onChange={e => {
+            this.setState({ updateTitle: e.target.value });
+            
+           
+       }}
+
+            />
           <TextFieldGroup
             field="image"
-            label="Ảnh sản phẩm"
+            label="Ảnh minh họa"
             type={"file"}
             // value={this.state.image}
             onChange={(e) => {
@@ -879,19 +886,7 @@ class Users extends Component {
                     this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
           }
 
-          <TextFieldGroup
-            field="updateTitle"
-            label="Tiêu đề"
-            value={this.state.updateTitle}
-            placeholder={"Tiêu đề"}
-            onChange={e => {
-            this.setState({ updateTitle: e.target.value });
-            
-           
-       }}
-
-            />
-
+          <br></br>
           <label className="control-label">Mô tả</label>
           <CTextarea
             name="updateDesc"
@@ -900,7 +895,7 @@ class Users extends Component {
             onChange={(e) => {
               this.setState({ updateDesc: e.target.value });
             }}
-            placeholder="Mô tả"
+       
           />
 
           {/* <TextFieldGroup
@@ -944,14 +939,7 @@ class Users extends Component {
                 }
               </div>
 
-          <TextFieldGroup
-            field="price"
-            label="Giá"
-            type={"number"}
-            value={this.state.price}
-            placeholder={"Giá"}
-            onChange={(e) => this.onChange("price", e.target.value)}
-          />
+        
         </ModalBody>
         <ModalFooter>
           <CButton

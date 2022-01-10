@@ -154,7 +154,7 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Cấu hình chi tiết',
+    name: 'Kết luận chi tiết',
     to: '/skin/configContent',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
@@ -168,7 +168,7 @@ const _navSoida = [
 
   {
     _tag: 'CSidebarNavItem',
-    name: 'Cấu hình tổng quan',
+    name: 'Kết luận tổng quan',
     to: '/skin/configOverView',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
@@ -179,19 +179,7 @@ const _navSoida = [
       </CTooltip>,
     },
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Kết luận tổng quan',
-    to: '/inferable-general',
-    icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.suggest}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    },
-  }
+
 
 
 
@@ -590,13 +578,7 @@ const _navContact = [
     }],
     role: ['0', '1'],
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Quản lý banner',
-    to: '/banner',
-    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-  },
+
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách banner',
@@ -611,13 +593,7 @@ const _navContact = [
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Cấu hình template',
-    to: '/config-theme',
-    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-  }
+
 ]
 const _navLogOut = [
   {

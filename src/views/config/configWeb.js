@@ -278,6 +278,8 @@ class Users extends Component {
   <button class="tablinks active" onClick={()=>this.changeConfigWeb(0)}>Cấu hình trang web</button>
   <button class="tablinks" onClick={()=>this.changeConfigWeb(1)}>Cấu hình Facebook </button>
   <button class="tablinks" onClick={()=>this.changeConfigWeb(2)}>Cấu hình Google</button>
+  <button class="tablinks" onClick={()=>this.changeConfigWeb(3)}>Thông tin mã màu</button>
+
 </div>
 
 <div id="tabcontent1" class="tabcontent defaultOpen" >
@@ -302,7 +304,8 @@ class Users extends Component {
   <img src="../../images/ggicon.png"  alt=""/>
   </div>
 </div>
- <Row>
+<div id="tabcontent4" class="tabcontent" >
+<Row>
             <Col>
               <p style={styles.success}>{this.state.updated}</p>
               <p style={styles.danger}>{this.state.deleted}</p>
@@ -314,12 +317,12 @@ class Users extends Component {
                   <CRow>
                     <CCol sm="12" lg="12">
                       <CRow>
-                        <CCol sm="12" lg="10">
+                        <CCol sm="6" lg="8">
                           <CLabel><strong>Thay đổi màu</strong></CLabel>
                         </CCol>
                         {
                           type == '0' || type == '1' ? "" :
-                            <CCol sm="12" lg="2">
+                            <CCol sm="6" lg="4">
                               <CTooltip content="Xem chi tiết đơn hàng">
 
                                 {
@@ -404,7 +407,9 @@ class Users extends Component {
                 </CardBody>
               </Card>
             </Col>
-          </Row>
+  </Row>
+</div>
+ 
       </div>
 
      

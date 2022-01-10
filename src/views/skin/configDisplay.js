@@ -66,7 +66,8 @@ class Users extends Component {
   }
   
   async getDataConfig (){
-    let url = "http://192.168.1.8:3012/api/config/getAll?key=showHideRecomendGroup"
+    var baseUrlapi = Constants.BASE_URL;
+    let url =baseUrlapi+ "api/config/getAll?key=showHideRecomendGroup"
     await axios.get(
       url,{
         key : "showHideRecomendGroup"
@@ -125,7 +126,8 @@ class Users extends Component {
   };
   async onUpdate(){
     
-    let url = "http://192.168.1.8:3012/api/config/update"
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi+"api/config/update"
     await axios.post(
       url,{
         value : JSON.stringify(this.state.configData),
@@ -138,7 +140,8 @@ class Users extends Component {
     })
   }
   async addDataConfig (){
-    let url = "http://192.168.1.8:3012/api/config/add";
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi+"api/config/add";
     await axios.post(
       url,{
         dataType: "1",
@@ -301,20 +304,18 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          <Row>
+         <Row>
             <Col>
               <p style={styles.success}>{this.state.updated}</p>
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
-                <CardHeader>
-                  LỰA CHỌN KẾT QỦA KHI RECOMEND SẢN PHẨM THEO NHÓM SẢN PHẨM 
-                </CardHeader>
+               
                 <CardBody>
                   <CRow>
                     <CCol sm="12" lg="12">
                       <CRow>
                         <CCol sm="12" lg="10">
-                          <CLabel><strong>ẨN/HIỆN DANH SÁCH SẢN PHẨM GỢI Ý THEO NHÓM VẤN ĐỀ DA</strong></CLabel>
+                          
                         </CCol>
                         {
                           type == '0' || type == '1' ? "" :

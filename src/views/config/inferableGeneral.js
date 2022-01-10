@@ -7,11 +7,17 @@ import {
   Col,
   Row,
   Button, Input,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Modal,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import Typography from '@mui/material/Typography';
+
 import Box from '@mui/material/Box';
 import TabPanel from './TabPanel';
 import {
@@ -74,6 +80,7 @@ class Users extends Component {
       Name: "",
       Phone: "",
       Address: "",
+
       UserName: "",
       Message_Code: "",
       sub_mainColor: "",
@@ -100,11 +107,48 @@ class Users extends Component {
           content : "Mặc dù bã nhờn và tế bào da chết góp phần gây ra mụn viêm, vi khuẩn cũng có thể đóng một vai trò trong việc làm tắc nghẽn lỗ chân lông. Vi khuẩn có thể gây nhiễm trùng sâu bên dưới bề mặt da. Điều này có thể dẫn đến những nốt mụn sưng tấy và khó loại bỏ.",
           img : "https://pensilia.applamdep.com/images/klct2.png"
         },
-      ]
+      ],
+      updateDesc : "",
+      image : "",
+      image_show : "",
+updateTitle : ""
     };
   }
+ 
+ 
+  
+ 
+  async componentDidMount() {
+  
+  
+    this.getData();
 
+    let arr = JSON.parse(localStorage.getItem('url'));
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
+          window.location.href = '#/'
+        }
+      }
+    }
+  }
+  async openFormEdit(item){
 
+    this.setState({
+      updateDesc : item.content,
+      image : item.img,
+      image_show: item.img,
+      updateTitle : item.title,
+      statusModalUpdate : true,
+
+    })
+    
+    
+  }
+  closeFormEdit=()=>{
+    this.setState({ statusModalUpdate: false });
+
+  }
   changeConfigWeb(id){
    
       var i,tabcontent, tablinks
@@ -137,21 +181,6 @@ class Users extends Component {
         
       }
 
-  }
- 
-  async componentDidMount() {
-  
-  
-    this.getData();
-
-    let arr = JSON.parse(localStorage.getItem('url'));
-    for (let i = 0; i < arr.length; i++) {
-      if ("#" + arr[i].to == window.location.hash) {
-        if (arr[i].hidden == true) {
-          window.location.href = '#/'
-        }
-      }
-    }
   }
 
   getData = async () => {
@@ -333,7 +362,7 @@ class Users extends Component {
                                   outline
                                   color="primary"
                                   size="md"
-                                 
+                                //  onClick={this.openModal()}
                                 >
                                   {/* <CIcon name="cilPencil" /> */}
                                  Thêm mới
@@ -434,6 +463,79 @@ class Users extends Component {
     </div>
       </TabPanel>
     </Box>
+    <Modal
+        size="xl"
+        isOpen={this.state.statusModalUpdate}
+        className={this.props.className}
+      >
+        <ModalHeader>
+        {this.state.action === 'new' ? `Tạo mới` : `Cập nhật`}
+        </ModalHeader>
+        <ModalBody>
+        <TextFieldGroup
+            field="updateTitle"
+            label="Tiêu đề"
+            value={this.state.updateTitle}
+            placeholder={"Tiêu đề"}
+            onChange={e => {
+            this.setState({ updateTitle: e.target.value });
+            
+           
+       }}
+
+            />
+          <TextFieldGroup
+            field="image"
+            label="Ảnh minh họa"
+            type={"file"}
+            // value={this.state.image}
+            onChange={(e) => {
+              this.onChangeImage(e);
+            }}
+            onClick={(e) => {
+              e.target.value = null;
+              this.setState({ image_show: "" });
+            }}
+          />
+          {
+                   this.state.image == "" || this.state.image == null || this.state.image == undefined ?
+                  "" :
+                    <img alt="" width="200px" height="auto" src={
+                    this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
+          }
+
+        
+
+          <label className="control-label">Chi tiết</label>
+          <CTextarea
+            name="updateDesc"
+            rows="4"
+            value={this.state.updateDesc}
+            onChange={(e) => {
+              this.setState({ updateDesc: e.target.value });
+            }}
+           
+          />
+
+         
+        </ModalBody>
+        <ModalFooter>
+          <CButton
+            color="primary"
+            onClick={
+              ()=>{ this.state.action === 'new' ? this.saveAdd() : this.saveEdit() }}
+            disabled={this.state.isLoading}
+          >
+            Lưu
+          </CButton>{" "}
+          <CButton
+            color="secondary"
+            onClick={()=>{this.closeFormEdit()}}
+          >
+            Đóng
+          </CButton>
+        </ModalFooter>
+      </Modal>
 
       </div>
 
