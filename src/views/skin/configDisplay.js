@@ -67,7 +67,8 @@ class Users extends Component {
   
   async getDataConfig (){
     var baseUrlapi = Constants.BASE_URL;
-    let url =baseUrlapi+ "api/config/getAll?key=showHideRecomendGroup"
+    let url =baseUrlapi+ "api/config/getAll?key=showHideRecomendGroup";
+    console.log(url);
     await axios.get(
       url,{
         key : "showHideRecomendGroup"
@@ -394,7 +395,7 @@ class Users extends Component {
     
     return (
       <div className="sweet-loading">
-        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
+        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={.5} />
       </div>
     );
   }
