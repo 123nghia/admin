@@ -588,6 +588,13 @@ const _navContact = [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Quản lý đặt lịch',
+    to: '/book-calendar',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Cấu hình trang web',
     to: '/cau-hinh-trang-web',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,

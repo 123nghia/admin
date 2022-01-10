@@ -40,9 +40,10 @@ const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPl
 const ProductPlugin = React.lazy(() => import('./views/base/tables/Prouduct/ProductSpecialPlugin'));
 
 const BrandSlider = React.lazy(() => import('./views/base/tables/Banner/BrandSlider'));
+const BookCalendar = React.lazy(() => import('./views/config/bookCalendar'));
 
 const ConfigTheme = React.lazy(() => import('./views/base/tables/configSystem/ColorTheme'));
-const inferableGeneral = React.lazy(() => import('./views/config/inferableGeneral'));
+
 
 
 const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginSubSaleTable'));
@@ -89,7 +90,9 @@ const routes = [
   { path: '/transaction', name: 'Transaction', component: TransactionTable },
   { path: '/hardwaremanager', name: 'HardWare', component: HardWareManager },
   { path: '/profile', name: 'Profile', component: Profile },
+  { path: '/book-calendar', name: 'BookCalendar', component: BookCalendar },
 
+  
   { path: '/spending_order', name: 'SPENDING', component: SPENDING },
   { path: '/role_manager', name: 'Role Manager', component: RoleManager },
   { path: '/plugin_manager', name: 'Plugin Manager', component: PluginManager },
@@ -112,7 +115,7 @@ const routes = [
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
   { path: '/cau-hinh-trang-web', name: 'configWeb', component: configWeb },
-  { path: '/inferable-general', name: 'inferable-general', component: inferableGeneral },
+
 
   
   

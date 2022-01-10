@@ -1,14 +1,8 @@
 export default {
-  "BASE_URL" : "https://api-pensilia.applamdep.com/",
-<<<<<<< HEAD
-  //  "BASE_URL" : "http://192.168.1.2:3012",
- "BASE_URL_CURRENT" : "https://pensilia-admin.applamdep.com/",
-  // "BASE_URL_CURRENT" : "http://localhost:3013",
-=======
-  //"BASE_URL" : "http://localhost:3012/",
-  "BASE_URL_CURRENT" : "https://pensilia-admin.applamdep.com/",
-  //"BASE_URL_CURRENT" : "http://localhost:3013/",
->>>>>>> a7049ec33629a25325b48465f0a738ddee62604f
+  // "BASE_URL" : "https://api-pensilia.applamdep.com/",
+   "BASE_URL" : "http://192.168.1.12:3012/",
+//  "BASE_URL_CURRENT" : "https://pensilia-admin.applamdep.com/",
+  "BASE_URL_CURRENT" : "http://192.168.1.12:3012/",
   "BASE_URL_HISTORY_SKIN" : "https://pensilia.applamdep.com/soida/xemchitietlichsu/",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
