@@ -149,7 +149,6 @@ class Users extends Component {
         value : JSON.stringify(this.state.configData),
         type : "system",
         
-
       }
     )
   };

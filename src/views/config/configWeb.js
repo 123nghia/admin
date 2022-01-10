@@ -222,9 +222,9 @@ class Users extends Component {
     ).then((res)=>{
       console.log("res data",res.data)
       if(res.data.length > 0){
-       
+       console.log("1")
         let dataConfig = res.data[0]
-      console.log("data config" ,dataConfig)
+        console.log("data config" ,dataConfig)
         let valueConfig = JSON.parse(dataConfig.value);
         this.setState({
           dataConfigWeb: valueConfig,
@@ -232,6 +232,8 @@ class Users extends Component {
         });
        
       }else{
+       console.log("2")
+
         let templateDataConfigWeb = {
           key: "webinfo",
           value: {
@@ -280,11 +282,11 @@ class Users extends Component {
         value : JSON.stringify(this.state.dataConfigWeb),
         type : "system",
       }
-    )
+    ).then(res=>{
+      console.log("upload",res)
+    })
   };
   saveAdd=()=>{
-   
-
     const { dataConfigWeb, updateLink,
       updateTitle,
       updateLevel } = this.state;

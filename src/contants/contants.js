@@ -1,6 +1,6 @@
 export default {
   "BASE_URL" : "https://api-pensilia.applamdep.com/",
-  //  "BASE_URL" : "http://192.168.1.3:3013",
+  //  "BASE_URL" : "http://192.168.1.2:3012",
  "BASE_URL_CURRENT" : "https://pensilia-admin.applamdep.com/",
   // "BASE_URL_CURRENT" : "http://localhost:3013",
   "BASE_URL_HISTORY_SKIN" : "https://pensilia.applamdep.com/soida/xemchitietlichsu/",
