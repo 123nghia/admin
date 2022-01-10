@@ -691,7 +691,8 @@ class Users extends Component {
                       e.target.value = null;
                       this.setState({ image_show: "" });
                     }}
-                  />               
+                  />
+                  
                 </div>
               </div>
             </div>
@@ -724,7 +725,7 @@ class Users extends Component {
 
           <div id="tabcontent3" class="tabcontent">
           <div class=" sp_tabicon">
-            <div class="tabcontent_img mr-4">
+            <div class="tabcontent_img">
               <img src="../../images/ggicon.png" alt="" />
             </div>
             <Checkbox
