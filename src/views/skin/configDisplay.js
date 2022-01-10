@@ -226,7 +226,6 @@ class Users extends Component {
         new_password: password
       }
     });
-
     if (res.data.is_success == true) {
       this.getData();
       this.setState({ isChange: true });

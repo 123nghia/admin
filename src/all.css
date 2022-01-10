@@ -29,11 +29,35 @@
   border: none;
   outline: none;
   text-align: left;
+  font-weight: 500;
   cursor: pointer;
   transition: 0.3s;
-  font-size: 17px;
+  font-size: 16px;
+}
+.flex-a-center{
+  display: flex;
+  align-items: center;
 }
 
+.tabcontent p{
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: auto;
+  margin-bottom: auto;
+
+}
+.content_kqtq {
+  font-size: 16px;
+    font-weight: 400;
+    opacity: .8;
+
+}
+.tabcontent_img{
+  width: 80px; height:80px;
+}
+.tabcontent_img img{
+  width: 100%; height:100%; object-fit: cover;background-size: 100% 100%;
+}
 /* Change background color of buttons on hover */
 .tab button:hover {
   background-color: #ddd;
@@ -55,9 +79,10 @@
 }
 /* Style the tab content */
 .tabcontent {
+  padding:26px;
   transition: all 1s;
   float: left;
-  padding: 0px 12px;
+  /* padding: 0px 12px; */
   border: 1px solid #ccc;
   width: 70%;
   display: none;

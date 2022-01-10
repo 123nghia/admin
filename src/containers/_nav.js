@@ -178,6 +178,19 @@ const _navSoida = [
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     },
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Kết luận tổng quan',
+    to: '/inferable-general',
+    icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.suggest}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    },
   }
 
 
@@ -329,6 +342,19 @@ const _navOrther = [
     _tag: 'CSidebarNavItem',
     name: 'Lịch sử soi da',
     to: '/historyskin',
+    icon: <CIcon style={css} content={freeSet.cilHistory} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.history_skin}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Lịch sử trang điểm',
+    to: '/historyskin-makeup',
     icon: <CIcon style={css} content={freeSet.cilHistory} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {

@@ -42,6 +42,7 @@ const ProductPlugin = React.lazy(() => import('./views/base/tables/Prouduct/Prod
 const BrandSlider = React.lazy(() => import('./views/base/tables/Banner/BrandSlider'));
 
 const ConfigTheme = React.lazy(() => import('./views/base/tables/configSystem/ColorTheme'));
+const inferableGeneral = React.lazy(() => import('./views/config/inferableGeneral'));
 
 
 const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginSubSaleTable'));
@@ -111,6 +112,7 @@ const routes = [
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
   { path: '/cau-hinh-trang-web', name: 'configWeb', component: configWeb },
+  { path: '/inferable-general', name: 'inferable-general', component: inferableGeneral },
 
   
   

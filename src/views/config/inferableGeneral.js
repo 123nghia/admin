@@ -13,7 +13,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
+import TabPanel from './TabPanel';
 import {
   CLabel,
   CRow,
@@ -33,6 +33,10 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import logoMainnet from '../../assets/img/logo_head.png';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 
@@ -66,13 +70,37 @@ class Users extends Component {
       sucess_color: "",
       error_color:"",
       text_mainColor: "",
-
+      valueTab : 0,
       Name: "",
       Phone: "",
       Address: "",
       UserName: "",
       Message_Code: "",
-      sub_mainColor: ""
+      sub_mainColor: "",
+      tvTq : [
+        {
+          title : "Bảo vệ và chăm sóc",
+          content : "Trang bị kem chống nắng ít nhất là SPF 35 hoặc cao hơn. Hãy đội mũ trở thành một phần của quần áo và đồ thể thao hàng ngày của bạn, đồng thời đeo kính râm để chống lại tia UV. Chúng ta có thể giúp chống lại và thậm chí sửa chữa những tổn thương da hàng ngày bằng cách thoa một loại huyết thanh chống oxy hóa như vitamin C.",
+          img : "https://pensilia.applamdep.com/images/tvtq2.png"
+        },
+        {
+          title : "Thói quen tốt",
+          content : "Thực hiện các lựa chọn lối sống lành mạnh, khi có thể Ăn một chế độ ăn uống lành mạnh Giảm lượng đường Giữ đủ nước Giảm uống rượu Đừng hút thuốc Tập thể dục Nghỉ ngơi Giảm căng thẳng",
+          img : "https://pensilia.applamdep.com/images/tvtq2.png"
+        },
+      ],
+      kqTq : [
+        {
+          title : "Nguyên nhân Mụn đầu đen",
+          content : "Mụn đầu đen xảy ra khi lỗ chân lông bị tắc do sự kết hợp của bã nhờn và tế bào da chết. Phần trên cùng của lỗ chân lông vẫn mở, mặc dù phần còn lại của nó bị tắc nghẽn. Điều này dẫn đến màu đen đặc trưng nhìn thấy trên bề mặt.",
+          img : "https://pensilia.applamdep.com/images/klct1.png"
+        },
+        {
+          title : "Nguyên nhân mụn viêm",
+          content : "Mặc dù bã nhờn và tế bào da chết góp phần gây ra mụn viêm, vi khuẩn cũng có thể đóng một vai trò trong việc làm tắc nghẽn lỗ chân lông. Vi khuẩn có thể gây nhiễm trùng sâu bên dưới bề mặt da. Điều này có thể dẫn đến những nốt mụn sưng tấy và khó loại bỏ.",
+          img : "https://pensilia.applamdep.com/images/klct2.png"
+        },
+      ]
     };
   }
 
@@ -224,7 +252,119 @@ class Users extends Component {
       this.setState({ isChangeSlug: false });
     }
   }
-
+  handleChangeTab(e,value){
+    this.setState({ valueTab : value });
+  }
+ 
+  renderKQ(products){
+    if(products){
+      let x = products.map((item,i) => {
+        return (
+                  <tbody>
+                    <td
+                      colSpan="10"
+                      hidden={this.state.hidden}
+                      className="text-center"
+                    >
+                      Không tìm thấy dữ liệu
+                    </td>
+                                     
+                            <tr key={i}>
+                              <td className="text-center">
+                                {i + 1}
+                              </td>
+                              <td className="text-center">
+                                {item.title}
+                                 
+                              </td>
+                              {/* <td className="text-center">{item.name}</td> */}
+                              <td className="text-center">
+                               
+                                  <img
+                                    src={item.img}
+                                    width={"60px"}
+                                    height={"60px"}
+                                    alt=""
+                                  />
+                              
+                                
+                              </td>
+  
+                              <td className="text-center">
+                              <textarea     class="mt-3 content_kqtq" cols='60' rows='8'>
+  {item.content}
+    </textarea>
+                              </td>
+                             
+                              <td className="">
+                              <CButton
+                                  outline
+                                  color="success"
+                                  size="sm"
+                                  onClick={() => this.openFormEdit(item)}
+                                >
+                                  {/* <CIcon name="cilTrash" /> */}
+                                  Chỉnh sửa
+                                </CButton>{" "}
+                                <CButton
+                                  style={styles.mgl5}
+                                  outline
+                                  color="danger"
+                                  size="sm"
+                                  onClick={() =>
+                                     this.removeItem(item._id, item.GroupProduct)
+                                  }
+                                >
+                                  {/* <CIcon name="cilPencil" /> */}
+                                 Xóa
+                                </CButton>
+                               
+                              </td>
+                            </tr>
+                  </tbody>         
+                          
+                )
+      })         
+      let render = (
+   <div>
+          <div class="flex-center">
+              <CButton
+                                  style={styles.mgl5}
+                                  outline
+                                  color="primary"
+                                  size="md"
+                                 
+                                >
+                                  {/* <CIcon name="cilPencil" /> */}
+                                 Thêm mới
+                                </CButton>
+              </div>
+                <table
+                  ble
+                  className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+                >
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      {/* <th className="text-center">Tên</th> */}
+                      <th className="text-center">Tiêu đề</th>
+                      <th className="text-center">Ảnh</th>
+  
+                      <th className="text-center">Chi tiết</th>
+                   
+                      <th className="text-center">#</th>
+                    </tr>
+                  </thead>
+                    {x}
+                  </table>
+                  </div>
+              
+      
+      )
+      return render
+    } 
+  }
+   
   async updateCompany() {
     const {
             mainColor, sub_mainColor, button_color,
@@ -266,152 +406,40 @@ class Users extends Component {
     }
   }
   render() {
-    const { data, current_slug, isChange,error_color, sucess_color,button_color , sub2_mainColor, currentPassword, isChangeSlug, type, isDisable,
+    const { 
+      tvTq, kqTq,
+      data, current_slug, isChange,error_color, sucess_color,button_color , sub2_mainColor, currentPassword, isChangeSlug, type, isDisable,
       sub_mainColor, mainColor, Phone, Address, UserName, Message_Code,text_mainColor } = this.state;
 
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-         
-
-<div class="tab">
-  <button class="tablinks active" onClick={()=>this.changeConfigWeb(0)}>Cấu hình trang web</button>
-  <button class="tablinks" onClick={()=>this.changeConfigWeb(1)}>Cấu hình Facebook </button>
-  <button class="tablinks" onClick={()=>this.changeConfigWeb(2)}>Cấu hình Google</button>
-</div>
-
-<div id="tabcontent1" class="tabcontent defaultOpen" >
-
-<div class="flex-a-center">
-<p class="mr-2">Logo web :</p>
-  <img  height="auto" width="110" src={logoMainnet}  alt=""/>
-  </div>
-  <textarea class="mt-3" cols='60' rows='8'>
-  {`<h1>Hello world</h1>`}
-    </textarea>
-</div>
-
-<div id="tabcontent2" class="tabcontent" >
-<div class="tabcontent_img">
-  <img src="../../images/fbicon.png"  alt=""/>
-  </div>
-</div>
-
-<div id="tabcontent3" class="tabcontent" >
-<div class="tabcontent_img">
-  <img src="../../images/ggicon.png"  alt=""/>
-  </div>
-</div>
- <Row>
-            <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
-              <Card>
-                <CardHeader>
-                  THÔNG TIN MÀU
-                </CardHeader>
-                <CardBody>
-                  <CRow>
-                    <CCol sm="12" lg="12">
-                      <CRow>
-                        <CCol sm="12" lg="10">
-                          <CLabel><strong>Thay đổi màu</strong></CLabel>
-                        </CCol>
-                        {
-                          type == '0' || type == '1' ? "" :
-                            <CCol sm="12" lg="2">
-                              <CTooltip content="Xem chi tiết đơn hàng">
-
-                                {
-                                  isDisable ?
-                                    <CButton outline color="info" size="xm" onClick={async (e) => {
-                                      this.setState({ isDisable: !isDisable })
-                                    }}>
-                                      <CIcon name="cil-pencil" /> Cập nhật
-                                    </CButton> :
-                                    <CButton outline color="info" size="sm" onClick={async (e) => {
-                                      this.updateCompany()
-                                    }}>
-                                      <CIcon name="cil-pencil" /> Xác nhận cập nhật
-                                    </CButton>
-                                }
-
-                              </CTooltip>
-                            </CCol>
-                        }
-                      </CRow>
-                      <CRow>
-                        <CCol sm="12" lg="12">
-                          <div>
-                            <CLabel>Màu chủ đạo</CLabel>
-                            <Input style={styles.searchInput} onChange={(e) => { this.setState({ mainColor: e.target.value }) }} value={mainColor} readOnly={isDisable} />
-                          </div>
-                        </CCol>
-
-                        <CCol sm="12" lg="12">
-                          <CLabel>Màu chủ đạo 1</CLabel>
-                          <Input style={styles.searchInput} value={sub_mainColor} onChange={(e) => { this.setState({ sub_mainColor: e.target.value }) }} readOnly={isDisable} />
-                        </CCol>
-                        <CCol sm="12" lg="12">
-                          <CLabel>Màu chủ đạo 2</CLabel>
-                          <Input style={styles.searchInput} value={sub2_mainColor} onChange={(e) => { this.setState({ sub2_mainColor: e.target.value }) }} readOnly={isDisable} />
-                        </CCol>
-                        <CCol sm="12" lg="12">
-                          <div>
-                            <CLabel>Màu chữ</CLabel>
-                            <Input style={styles.searchInput} value={text_mainColor} onChange={(e) => { this.setState({ text_mainColor: e.target.value }) }} readOnly={isDisable} />
-                          </div>
-                        </CCol>
-                        
-                 
-
-                        <CCol sm="12" lg="12">
-                          <CLabel>Màu button </CLabel>
-                          <Input style={styles.searchInput} value={button_color} onChange={(e) => { this.setState({ button_color: e.target.value }) }} readOnly={isDisable} />
-                        </CCol>
-
-                      
-   
+         <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={this.state.valueTab} onChange={(e,value) =>{this.handleChangeTab(e,value)}} aria-label="basic tabs example">
+          <Tab label="TƯ VẤN TỔNG QUAN" id="simple-tab-1" aria-controls="simple-tabpanel-1" />
+          <Tab label="KẾT QUẢ TỔNG QUAN" id="simple-tab-2" aria-controls="simple-tabpanel-2" />
+        </Tabs>
+      </Box>
+      <TabPanel value={this.state.valueTab} index={0}>
+      <div class="mt-5">
+     {this.renderKQ(tvTq)}
      
+    </div>
+      </TabPanel>
+      <TabPanel value={this.state.valueTab} index={1}>
+      <div class="mt-5">
+     {this.renderKQ(kqTq)}
+     
+    </div>
+      </TabPanel>
+    </Box>
 
-
-                        <CCol sm="12" lg="12">
-                          <div>
-                            <CLabel>Màu báo thành công</CLabel>
-                            <Input style={styles.searchInput} value={sucess_color} onChange={(e) => { this.setState({ sucess_color: e.target.value }) }} readOnly={isDisable} />
-                          </div>
-                        </CCol>
-
-                        <CCol sm="12" lg="12">
-                          <div>
-                            <CLabel>Màu báo lỗi</CLabel>
-                            <Input style={styles.searchInput} value={error_color} onChange={(e) => { this.setState({ error_color: e.target.value }) }} readOnly={isDisable} />
-                          </div>
-                        </CCol>
-
-                        
- 
-      
-                        
-                        
-                      
-
-                        
-                       
-                      </CRow>
-                    </CCol>
-                  </CRow>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
       </div>
 
      
       )
     }
-          
-    
     return (
       <div className="sweet-loading">
         <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
