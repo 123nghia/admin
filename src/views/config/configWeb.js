@@ -137,7 +137,7 @@ class Users extends Component {
     reader.onload = (e) => {
       this.setState({ image: e.target.result, image_show: e.target.result });
     };
-    console.log(this.state.image, this.state.image_show);
+  
   }
 
   
@@ -188,7 +188,7 @@ class Users extends Component {
                   outline
                   color="danger"
                   size="sm"
-                  onClick={() => this.removeItem(item._id, item.GroupProduct)}
+                  onClick={() => this.openDelete(i)}
                 >
                   {/* <CIcon name="cilPencil" /> */}
                   Xóa
@@ -222,17 +222,18 @@ class Users extends Component {
     }
   }
   async getDataConfigWeb(){
+
+
     var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/getAll?key=webinfo"
+    let url = baseUrlapi + "api/config/getAll?key=webinfo1"
     await axios.get(
       url,{
         key : "webinfo"
       }
     ).then((res)=>{
-      console.log(res);
+      console.log(res)
       if(res.data.data.length > 0){
-      
-       
+             
         let dataConfig = res.data.data[0]
      
         let valueConfig = JSON.parse(dataConfig.Value);
@@ -336,6 +337,18 @@ class Users extends Component {
       }
     )
   }
+  openDelete = (i) => {   
+      const {dataConfigWeb} = this.state;
+    let coppyData = {
+      ...dataConfigWeb
+    }
+    coppyData.value.footerData.splice(i,1)
+    this.setState({
+      dataConfigWeb : coppyData,
+    },() => {
+      this.onUpdate();     
+    })  
+  };
   async saveEdit(){
     const { dataConfigWeb, updateLink,
       updateTitle,idUpdateCurrent,
@@ -348,21 +361,21 @@ class Users extends Component {
       title : updateTitle,
       href : updateLink,
       Level : updateLevel
-    }
-    
-    
-    coppyData.value.footerData.forEach((item,index)=>{
-      if(index === idUpdateCurrent){
-        item[idUpdateCurrent] = footerAdd
-       
+    } 
+   
+    for(let i = 0; i < coppyData.value.footerData.length; i++){
+      if(i === idUpdateCurrent){
+      coppyData.value.footerData[i] = footerAdd
+      
       }
-    })
+    }
+
      this.setState({
       dataConfigWeb : coppyData,
       statusModalUpdate: false,
     },() => {
       this.onUpdate();     
-      console.log(this.state.dataConfigWeb)
+     
       
     })  
     // this.addDataConfig();

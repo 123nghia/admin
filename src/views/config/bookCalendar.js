@@ -12,8 +12,15 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
-
-import { CButton, CRow, CCol } from "@coreui/react";
+import {
+  CLabel,
+  CRow,
+  CCol,
+  CSelect,
+  CButton,
+  CTooltip,
+  CTextarea,
+} from "@coreui/react";
 
 import API_CONNECT from "../../functions/callAPI";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -65,7 +72,7 @@ class BrandSlider extends Component {
       link: "",
       imageMobile: "",
       dataDatlich: [],
-
+      updateLevelStatus : "0",
       modalDelete: false,
       delete: null,
       arrPagination: [],
@@ -77,6 +84,12 @@ class BrandSlider extends Component {
       indexSelector : null,
     };
   }
+  changeLevel = (e) => {
+    e.preventDefault();
+    this.setState({
+      updateLevelStatus: e.target.value,
+    });
+  };
   async componentDidMount() {
       this.getDataConfigWeb();
     const { type } = this.state;
@@ -94,90 +107,87 @@ class BrandSlider extends Component {
       }
     }
   }
+  async onSearching(){
+    let url = Constants.BASE_URL + Constants.GET_BOOK_LICH;
+    console.log(this.state.key)
+    await axios.get(url,{
+      params : {
+        phoneNumber : this.state.key
+      }
+    }).then((res)=>{
+      this.setState({
+        dataDatlich: res.data.data,
+      });
+    })
+  }
+
   async getDataConfigWeb() {
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/getAll?key=bookCalendar";
+
+    let url = Constants.BASE_URL + Constants.GET_BOOK_LICH;
+
     await axios
-      .get(url, {
-        key: "bookCalendar",
-      })
+      .get(url)
       .then((res) => {
-        
-        if (res.data.data.length > 0) {
-          let dataConfig = res.data.data[0];
- 
-          let valueConfig = JSON.parse(dataConfig.Value);
+        if (res.data.data) {
           this.setState({
-            dataDatlich: valueConfig,
-            idUpdate: dataConfig._id,
-          });
-          
-        } else {
-          let templateDataDatlich = {
-            key: "bookCalendar",
-            value: [
-              {
-                name: "Phog",
-                sdtBooklich: "0123123",
-                dateStart: "16/02/2022",
-
-                dateThamChieu: "16/02/2022",
-              },
-              {
-                name: "Phog",
-                sdtBooklich: "0123123",
-                dateStart: "16/02/2022",
-
-                dateThamChieu: "16/02/2022",
-              },
-            ],
-          };
-          this.setState(
-            {
-              dataDatlich: templateDataDatlich,
-            },
+            dataDatlich: res.data.data,
             
-          );
-        }
+          });
+ 
+        } 
       });
   }
-  async addDataConfig() {
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/add";
-    await axios.post(url, {
-      dataType: "1",
-      key: "bookCalendar",
-      value: JSON.stringify(this.state.dataDatlich),
-      type: "system",
-    });
+   addDataConfig() {
+    const { name,
+      sdtBooklich,
+      dateStart,
+      updateLevelStatus
+  } = this.state;
+    let url = Constants.BASE_URL + Constants.ADD_BOOK_LICH
+     axios.post(url, {
+    
+        phoneNumber: sdtBooklich,
+        status : updateLevelStatus,
+                          infoPerson: "24",
+                          fullName: name,
+                          wanted : "a",
+                          content: "content",
+                          bookingAddress: "quan 3",
+                          booking_date:  dateStart,
+      
+    }).then(()=>{
+      this.setState({
+        modalCom : !this.state.modalCom
+      })
+      this.getDataConfigWeb();
+    })
   }
   saveUpdate=()=>{
     const { name,
-        sdtBooklich,
-        dateStart,
-        dateThamChieu,
-        dataDatlich,
-        indexSelector
-    } = this.state;
-
-    let coppyData = [
-      ...dataDatlich
-    ]
-    let dataAdd = {
-        name,
-        sdtBooklich,
-        dateStart,
-        dateThamChieu,
-    }
-    coppyData[indexSelector] = dataAdd
-
-    this.setState({
-        dataDatlich : coppyData,
-    },() => {
-
-      this.onUpdate();     
-    })  
+      sdtBooklich,
+ 
+      dateThamChieu,
   
+      indexSelector,
+      updateLevelStatus
+  } = this.state;
+    let url = Constants.BASE_URL + Constants.UPDATE_BOOK_LICH
+     axios.post(url, {
+        phoneNumber: sdtBooklich,
+        id : indexSelector,
+        status : updateLevelStatus,
+                          infoPerson: "24",
+                          fullName: name,
+                          wanted : "a",
+                          content: "content",
+                          bookingAddress: "quan 3",
+                          booking_date:  dateThamChieu,
+     }).then(()=>{
+      this.setState({
+        modalCom : !this.state.modalCom
+      })
+      this.getDataConfigWeb();
+     })
   }
   saveAdd=()=>{
     const { name,
@@ -185,18 +195,18 @@ class BrandSlider extends Component {
         dateStart,
         dateThamChieu,
         dataDatlich,
+        updateLevelStatus
     } = this.state;
 
     let coppyData = [
       ...dataDatlich
     ]
-
-
     let dataAdd = {
         name,
         sdtBooklich,
         dateStart,
         dateThamChieu,
+        updateLevelStatus
    
     }
     coppyData.push(dataAdd)
@@ -212,31 +222,26 @@ class BrandSlider extends Component {
 
   }
   
-  async onUpdate(){
-    
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi+"api/config/update"
-    await axios.post(
-      url,{
-        value : JSON.stringify(this.state.dataDatlich),
-        dataType: "1",
-        type : "system",
-        id : this.state.idUpdate,
-      }
-    )
-  }
-  openDelete = (i) => {   
-      const {dataDatlich} = this.state;
-    let coppyData = [
-      ...dataDatlich
-    ];
-    coppyData.splice(i,1)
-    this.setState({
-        dataDatlich : coppyData,
-    },() => {
-      this.onUpdate();     
-    })  
+  openDelete = (item) => {  
+    this.setState({    
+      indexSelector : item._id,
+
+    },()=>{
+      this.deleteItem();
+    })
   };
+  async deleteItem(){
+    const {indexSelector } = this.state; 
+
+    let url = Constants.BASE_URL + Constants.DELETE_BOOK_LICH
+     axios.post(url, {
+        
+        id : indexSelector,
+        
+     }).then(()=>{
+      this.getDataConfigWeb();
+     })
+  }
   async toggleModal(key) {
     if (key == "new") {
       this.setState({
@@ -246,8 +251,7 @@ class BrandSlider extends Component {
         sdtBooklich: "",
         dateStart: "",
         dateThamChieu: "",
-      },()=>{
-          this.addDataConfig();
+        updateLevelStatus : "0",
       })
       
     }
@@ -425,15 +429,16 @@ class BrandSlider extends Component {
     }
   }
 
-  async openUpdate(item,i) {
+  async openUpdate(item) {
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
-      name: item.name,
-      indexSelector : i,
-      sdtBooklich: item.sdtBooklich,
-      dateStart: item.dateStart,
-      dateThamChieu: item.dateThamChieu,
+      name: item.fullName,
+      indexSelector : item._id,
+      sdtBooklich: item.phoneNumber,
+      dateStart: item.create_date,
+      dateThamChieu: item.booking_date,
+      updateLevelStatus : item.status
     });
     
   }
@@ -559,7 +564,25 @@ class BrandSlider extends Component {
     };
   }
 
+  parseDate(str_date) {
+    return new Date(Date.parse(str_date));
+  }
+
   render() {
+    const arrLevel = [
+      {
+        item: "0",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "3",
+      },
+    ];
     const { data, dataDatlich, arrPagination, key } = this.state;
     if (!this.state.isLoading) {
       return (
@@ -573,30 +596,31 @@ class BrandSlider extends Component {
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
-                          <CCol sm="12" lg="6">
-                            <div>
+                          <CCol sm="12" lg="12">
+                            <div class="flex-a-center">
                               <Input
+                              class="mr-2"
                                 style={styles.searchInput}
                                 onChange={(e) => {
-                                  this.actionSearch(e, "key");
+                                  this.setState({ key : e.target.value});
                                 }}
                                 name="key"
                                 value={key}
                                 placeholder="Từ khóa"
                               />
+                               <CButton
+                              color="primary"
+                              style={{ width: "50%" }}
+                              size="md"
+                              onClick={(e) =>this.onSearching()}
+                            >
+                              Tìm kiếm
+                            </CButton>
+                            
                             </div>
                           </CCol>
                           <CCol sm="12" lg="6">
-                            <CButton
-                              color="primary"
-                              style={{ width: "100%", marginTop: 5 }}
-                              size="sm"
-                              onClick={(e) => {
-                                this.resetSearch();
-                              }}
-                            >
-                              Làm mới tìm kiếm
-                            </CButton>
+                           
                           </CCol>
                         </CRow>
                       </CCol>
@@ -626,24 +650,46 @@ class BrandSlider extends Component {
                         <th className="text-center">Số điện thoại</th>
 
                         <th className="text-center">Ngày đặt lịch</th>
-                        <th className="text-center"> Ngày Tham chiếu</th>
+                        <th className="text-center"> Ngày tạo</th>
+                        <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
                     <tbody>
                       
-                      {dataDatlich.length > 0  ? dataDatlich.map((item, i) => {
+                      {dataDatlich.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.name}</td>
+                                <td className="text-center">{item.fullName}</td>
                                 <td className="text-center">
-                                  {item.sdtBooklich}
+                                  {item.phoneNumber}
                                 </td>
 
-                                <td className="text-center">{item.dateStart}</td>
 
-                                <td className="text-center">{item.dateThamChieu}</td>
+                                <td className="text-center">
+
+                      
+                              {  (new Date(item.booking_date)).toLocaleString()}
+                                
+                                
+                                </td>
+                                <td className="text-center">
+                                
+                                
+                                {  (new Date(item.create_date)).toLocaleString()}
+                                
+                              </td>
+
+                                <td className="text-center">
+                                {item.status === "0"
+                              ? "Đang đặt lịch"
+                              : item.status === "1" 
+                              ? "Đã  gặp" : item.status ==="2" 
+                              ? "Hẹn gặp lại" : 
+                              "Không gặp"}
+                                </td>
+
                                 <td className="text-center">
                                   <CButton
                                     style={styles.mgl5}
@@ -651,7 +697,7 @@ class BrandSlider extends Component {
                                     color="primary"
                                     size="sm"
                                     onClick={async (e) =>
-                                      await this.openUpdate(item,i)
+                                      await this.openUpdate(item)
                                     }
                                   >
                                     <CIcon name="cilPencil" />
@@ -661,7 +707,7 @@ class BrandSlider extends Component {
                                     color="danger"
                                     size="sm"
                                     onClick={(e) => {
-                                      this.openDelete(i);
+                                      this.openDelete(item);
                                     }}
                                   >
                                     <CIcon name="cilTrash" />
@@ -670,7 +716,7 @@ class BrandSlider extends Component {
                               </tr>
                             );
                           })
-                        : null}
+                        }
                     </tbody>
                   </table>
                 </CardBody>
@@ -731,8 +777,9 @@ class BrandSlider extends Component {
                 // rows="5"
               />
               <TextFieldGroup
+              type="date"
                 field="dateStart"
-                label="Ngày đặt lịch"
+                label="Ngày đặt hẹn"
                 value={this.state.dateStart}
                 placeholder="Ngày"
                 // error={errors.title}
@@ -740,22 +787,53 @@ class BrandSlider extends Component {
                 // rows="5"
               />
 
-              <TextFieldGroup
-                field="dateThamChieu"
-                label="Ngày tham chiếu"
-                value={this.state.dateThamChieu}
-                placeholder="Ngày"
-                // error={errors.title}
-                onChange={(e) => this.onChange("dateThamChieu", e.target.value)}
-                // rows="5"
-              />
+               <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Mức độ:</CLabel>
+                {arrLevel != undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevel(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="updateLevelStatus"
+                    id="SelectLm"
+                  >
+                    {arrLevel.map((item, i) => {
+                      if (item.item === this.state.updateLevelStatus) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "0"
+                              ? "Đang đặt lịch"
+                              : item.item === "1" 
+                              ? "Đã  gặp" : item.item ==="2" 
+                              ? "Hẹn gặp lại" : 
+                              "Không gặp"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                          {item.item === "0"
+                              ? "Đang đặt lịch"
+                              : item.item === "1" 
+                              ? "Đã  gặp" : item.item ==="2" 
+                              ? "Hẹn gặp lại" : 
+                              "Không gặp"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
             </ModalBody>
             <ModalFooter>
               <CButton
                 color="primary"
                 onClick={(e) => {
                   this.state.action === "new"
-                    ? this.saveAdd()
+                    ? this.addDataConfig()
                     : this.saveUpdate();
                 }}
                 disabled={this.state.isLoading}
