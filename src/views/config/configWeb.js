@@ -225,7 +225,7 @@ class Users extends Component {
 
 
     var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/getAll?key=webinfo1"
+    let url = baseUrlapi + "api/config/getAll?key=webinfo"
     await axios.get(
       url,{
         key : "webinfo"
