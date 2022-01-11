@@ -588,7 +588,7 @@ const _navContact = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Quản lý đặt lịch',
+    name: 'Danh sách đặt hẹn',
     to: '/book-calendar',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],

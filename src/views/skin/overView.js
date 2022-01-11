@@ -780,7 +780,7 @@ class Users extends Component {
               <p style={styles.success}>{this.state.updated}</p>
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
-                <CardHeader>Cấu hình chi tiết</CardHeader>
+                <CardHeader>Quản lý soi da</CardHeader>
                 <CardBody>
                   <CRow>
                     <CCol sm="12" lg="12">
@@ -788,7 +788,7 @@ class Users extends Component {
                         <CCol sm="12" lg="10">
                           <CLabel>
                             <strong>
-                              DANH SÁCH NHÓM SẢN PHẨM THEO PHÂN LOẠI
+                              KẾT LUẬN TỔNG QUAN
                             </strong>
                           </CLabel>
                         </CCol>

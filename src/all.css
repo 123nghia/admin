@@ -61,6 +61,10 @@
   margin-bottom: auto;
 
 }
+.flex{
+  display: flex;
+
+}
 .sp_tabicon{
   display: flex;
 
