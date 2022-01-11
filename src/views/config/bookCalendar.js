@@ -655,8 +655,7 @@ class BrandSlider extends Component {
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      
+                    <tbody>                      
                       {dataDatlich.map((item, i) => {
                             return (
                               <tr key={i}>

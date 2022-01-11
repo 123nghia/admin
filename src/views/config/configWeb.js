@@ -722,32 +722,70 @@ class Users extends Component {
           </div>
 
           <div id="tabcontent2" class="tabcontent">
-          <div class=" sp_tabicon">
-            <div class="tabcontent_img mr-4">
-              <img src="../../images/fbicon.png" alt="" />
-            </div>
-            <Checkbox
+          <div class="col-md-12">
+          <div>
+          <TextFieldGroup
+                field=""
+                label="Mã App"
+                value=""
+                placeholder={"Mã"}
+                // onChange={(e) => {
+                //   this.setState({ updateTitle: e.target.value });
+                // }}
+              />
+
+              <TextFieldGroup
+                field=""
+                label="Mật khẩu"
+                value=""
+                placeholder={"Mật khẩu"}
+                // onChange={(e) => {
+                //   this.setState({ updateLink: e.target.value });
+                // }}
+              />
+          </div>
+          
+            {/* <Checkbox
       checked={this.state.checkFb}
       onChange={(e)=>{
         this.setState({checkFb: e.target.checked})
       }}
       inputProps={{ 'aria-label': 'controlled' }}
-    />
+    /> */}
             </div>
           </div>
 
           <div id="tabcontent3" class="tabcontent">
-          <div class=" sp_tabicon">
-            <div class="tabcontent_img">
-              <img src="../../images/ggicon.png" alt="" />
-            </div>
-            <Checkbox
-      checked={this.state.checkGg}
+          <div class="col-md-12">
+          <div>
+          <TextFieldGroup
+                field=""
+                label="Mã App"
+                value=""
+                placeholder={"Mã"}
+                // onChange={(e) => {
+                //   this.setState({ updateTitle: e.target.value });
+                // }}
+              />
+
+              <TextFieldGroup
+                field=""
+                label="Mật khẩu"
+                value=""
+                placeholder={"Mật khẩu"}
+                // onChange={(e) => {
+                //   this.setState({ updateLink: e.target.value });
+                // }}
+              />
+          </div>
+          
+            {/* <Checkbox
+      checked={this.state.checkFb}
       onChange={(e)=>{
-        this.setState({checkGg: e.target.checked})
+        this.setState({checkFb: e.target.checked})
       }}
       inputProps={{ 'aria-label': 'controlled' }}
-    />
+    /> */}
             </div>
           </div>
           <div id="tabcontent4" class="tabcontent">
@@ -984,7 +1022,7 @@ class Users extends Component {
           /> */}
 
               <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Mức độ:</CLabel>
+                <CLabel>Độ ưu tiên:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
                     onChange={async (e) => {
@@ -1000,20 +1038,20 @@ class Users extends Component {
                         return (
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
-                              ? "Nhẹ"
+                              ? "1"
                               : item.item === "2"
-                              ? "Trung"
-                              : "Nặng"}
+                              ? "2"
+                              : "3"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
                             {item.item == "1"
-                              ? "Nhẹ"
+                              ? "1"
                               : item.item == "2"
-                              ? "Trung"
-                              : "Nặng"}
+                              ? "2"
+                              : "3"}
                           </option>
                         );
                       }
