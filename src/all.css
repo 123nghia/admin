@@ -44,6 +44,15 @@
   align-items: center;
   /* justify-content: space-between; */
 }
+.position_loading{
+
+  position: fixed;
+  left : calc(50% - 20px);
+  right : calc(50% - 20px);
+  top : calc(50% - 20px);
+  bottom : calc(50% - 20px);
+  z-index: 10;
+}
 
 .tabcontent p{
   font-size: 16px;
@@ -51,6 +60,12 @@
   margin-top: auto;
   margin-bottom: auto;
 
+}
+.sp_tabicon{
+  display: flex;
+
+  /* justify-content: space-between; */
+  align-items: center;
 }
 .content_kqtq {
   font-size: 16px;

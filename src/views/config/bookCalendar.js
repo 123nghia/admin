@@ -1,0 +1,918 @@
+import React, { Component } from "react";
+import CIcon from "@coreui/icons-react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Row,
+  Input,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Modal,
+} from "reactstrap";
+
+import { CButton, CRow, CCol } from "@coreui/react";
+
+import API_CONNECT from "../../functions/callAPI";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Pagination from "@material-ui/lab/Pagination";
+import "moment-timezone";
+import Constants from "../../contants/contants";
+import TextFieldGroup from "../Common/TextFieldGroup";
+import axios from "axios";
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
+let headers = new Headers();
+const auth = localStorage.getItem("auth");
+headers.append("Authorization", "Bearer " + auth);
+headers.append("Content-Type", "application/json");
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
+class BrandSlider extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      key: "",
+      activePage: 1,
+      page: 1,
+      itemsCount: 0,
+      limit: 20,
+      totalActive: 0,
+      modalCom: false,
+      viewingUser: {},
+      communities: [],
+      updated: "",
+      dataApi: [],
+      hidden: false,
+      action: "new",
+      name: "",
+      image: "",
+      idUpdate : "",
+      image_show: "",
+      image_mobile: "",
+      image_show_mobile: "",
+      image_mobile_link: "",
+      image_link: "",
+      link: "",
+      imageMobile: "",
+      dataDatlich: [],
+
+      modalDelete: false,
+      delete: null,
+      arrPagination: [],
+      indexPage: 0,
+      token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      type: localStorage.getItem("type"),
+      user: localStorage.getItem("user"),
+      isLoading: false,
+      indexSelector : null,
+    };
+  }
+  async componentDidMount() {
+      this.getDataConfigWeb();
+    const { type } = this.state;
+    if (type == "0" || type == "1") {
+      this.getData();
+    } else {
+      this.getData_Company();
+    }
+    let arr = JSON.parse(localStorage.getItem("url"));
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].url == window.location.hash) {
+        if (arr[i].isHidden == true) {
+          window.location.href = "#/";
+        }
+      }
+    }
+  }
+  async getDataConfigWeb() {
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/config/getAll?key=bookCalendar";
+    await axios
+      .get(url, {
+        key: "bookCalendar",
+      })
+      .then((res) => {
+        
+        if (res.data.data.length > 0) {
+          let dataConfig = res.data.data[0];
+ 
+          let valueConfig = JSON.parse(dataConfig.Value);
+          this.setState({
+            dataDatlich: valueConfig,
+            idUpdate: dataConfig._id,
+          });
+          
+        } else {
+          let templateDataDatlich = {
+            key: "bookCalendar",
+            value: [
+              {
+                name: "Phog",
+                sdtBooklich: "0123123",
+                dateStart: "16/02/2022",
+
+                dateThamChieu: "16/02/2022",
+              },
+              {
+                name: "Phog",
+                sdtBooklich: "0123123",
+                dateStart: "16/02/2022",
+
+                dateThamChieu: "16/02/2022",
+              },
+            ],
+          };
+          this.setState(
+            {
+              dataDatlich: templateDataDatlich,
+            },
+            
+          );
+        }
+      });
+  }
+  async addDataConfig() {
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/config/add";
+    await axios.post(url, {
+      dataType: "1",
+      key: "bookCalendar",
+      value: JSON.stringify(this.state.dataDatlich),
+      type: "system",
+    });
+  }
+  saveUpdate=()=>{
+    const { name,
+        sdtBooklich,
+        dateStart,
+        dateThamChieu,
+        dataDatlich,
+        indexSelector
+    } = this.state;
+
+    let coppyData = [
+      ...dataDatlich
+    ]
+    let dataAdd = {
+        name,
+        sdtBooklich,
+        dateStart,
+        dateThamChieu,
+    }
+    coppyData[indexSelector] = dataAdd
+
+    this.setState({
+        dataDatlich : coppyData,
+    },() => {
+
+      this.onUpdate();     
+    })  
+  
+  }
+  saveAdd=()=>{
+    const { name,
+        sdtBooklich,
+        dateStart,
+        dateThamChieu,
+        dataDatlich,
+    } = this.state;
+
+    let coppyData = [
+      ...dataDatlich
+    ]
+
+
+    let dataAdd = {
+        name,
+        sdtBooklich,
+        dateStart,
+        dateThamChieu,
+   
+    }
+    coppyData.push(dataAdd)
+    this.setState({
+        dataDatlich : coppyData,
+
+
+    },() => {
+
+      this.onUpdate();     
+    })  
+  
+
+  }
+  
+  async onUpdate(){
+    
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi+"api/config/update"
+    await axios.post(
+      url,{
+        value : JSON.stringify(this.state.dataDatlich),
+        dataType: "1",
+        type : "system",
+        id : this.state.idUpdate,
+      }
+    )
+  }
+  openDelete = (i) => {   
+      const {dataDatlich} = this.state;
+    let coppyData = [
+      ...dataDatlich
+    ];
+    coppyData.splice(i,1)
+    this.setState({
+        dataDatlich : coppyData,
+    },() => {
+      this.onUpdate();     
+    })  
+  };
+  async toggleModal(key) {
+    if (key == "new") {
+      this.setState({
+        modalCom: !this.state.modalCom,
+        action: key,
+        name: "",
+        sdtBooklich: "",
+        dateStart: "",
+        dateThamChieu: "",
+      },()=>{
+          this.addDataConfig();
+      })
+      
+    }
+    
+  }
+  pagination(dataApi) {
+    var i,
+      j,
+      temparray,
+      chunk = 5;
+    var arrTotal = [];
+    for (i = 0, j = dataApi.length; i < j; i += chunk) {
+      temparray = dataApi.slice(i, i + chunk);
+      arrTotal.push(temparray);
+    }
+
+    if (arrTotal.length == 0) {
+      this.setState({
+        hidden: false,
+      });
+    } else {
+      this.setState({
+        hidden: true,
+      });
+    }
+
+    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+  }
+
+  getData = async () => {
+    this.setState({ isLoading: true });
+    const res_brand = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_Banner,
+      method: "GET",
+    });
+
+    let val = res_brand.data.data;
+    this.pagination(val);
+    this.setState({ dataApi: val });
+
+    let active = 0;
+
+    this.setState({ isLoading: false, totalActive: active });
+  };
+
+  getData_Company = async () => {
+    this.setState({ isLoading: true });
+    const res_brand = await axios({
+      baseURL: Constants.BASE_URL,
+      url:
+        Constants.LIST_Banner_COMPANY + JSON.parse(this.state.user).company_id,
+      method: "GET",
+    });
+
+    let val = res_brand.data.data;
+
+    this.pagination(val);
+    this.setState({ dataApi: val });
+
+    let active = 0;
+
+    this.setState({ isLoading: false, totalActive: active });
+  };
+
+  searchKey() {
+    const { indexPage, key } = this.state;
+    // this.setState({ key: key })
+
+    if (key != "") {
+      let d = [];
+      this.state.dataApi.map((val) => {
+        if (val.name.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
+          d.push(val);
+        }
+      });
+      let active = 0;
+
+      d.map((val) => {
+        if (val.Status == "Actived") {
+          active = active + 1;
+        }
+      });
+
+      this.setState({ data: d, totalActive: active });
+    } else {
+      let active = 0;
+
+      this.state.dataApi.map((val) => {
+        if (val.Status == "Actived") {
+          active = active + 1;
+        }
+      });
+
+      this.setState({
+        data: this.state.arrPagination[indexPage],
+        totalActive: active,
+      });
+    }
+  }
+
+  actionSearch(e, name_action) {
+    this.setState(
+      {
+        [name_action]: e.target.value,
+      },
+      () => {
+        this.searchKey();
+      }
+    );
+  }
+
+  resetSearch() {
+    this.setState(
+      {
+        key: "",
+      },
+      () => {
+        this.searchKey();
+      }
+    );
+  }
+  onChange(key, val) {
+    this.setState({ [key]: val });
+  }
+
+  async addBrand() {
+    const { name, image, link, image_link, image_mobile_link } = this.state;
+    if (name == null || name == "" || image == null || image == "") {
+      alert("Vui lòng nhập đầy đủ trường !!!");
+      return;
+    }
+
+    const form = new FormData();
+    form.append("image", image_link);
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST");
+    const form2 = new FormData();
+    form2.append("image", image_mobile_link);
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST");
+
+    const body = {
+      name: name,
+      image: image,
+      image_link: image_link.name,
+      image_mobile_link:
+        image_mobile_link == undefined || image_mobile_link == ""
+          ? ""
+          : image_mobile_link.name,
+      company_id:
+        this.state.type == "0" || this.state.type == "1"
+          ? ""
+          : JSON.parse(this.state.user).company_id,
+      link: link,
+    };
+
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.ADD_Banner,
+      method: "POST",
+      data: body,
+    });
+
+    if (res.status == 200) {
+      if (this.state.type == "0" || this.state.type == "1") {
+        this.getData();
+      } else {
+        this.getData_Company();
+      }
+      this.setState({ modalCom: !this.state.modalCom });
+    } else {
+      alert("Thêm thương hiệu thất bại");
+      this.setState({ isLoading: false });
+    }
+  }
+
+  async openUpdate(item,i) {
+    this.setState({
+      modalCom: !this.state.modalCom,
+      action: "update",
+      name: item.name,
+      indexSelector : i,
+      sdtBooklich: item.sdtBooklich,
+      dateStart: item.dateStart,
+      dateThamChieu: item.dateThamChieu,
+    });
+    
+  }
+
+  async updateBrand() {
+    const { name, image, link, image_link, image_mobile_link } = this.state;
+
+    if (name == null || name == "" || image == null || image == "") {
+      alert("Vui lòng nhập đầy đủ trường !!!");
+      return;
+    }
+
+    const form = new FormData();
+    form.append("image", image_link);
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST");
+    const form2 = new FormData();
+    form2.append("image", image_mobile_link);
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST");
+
+    const body = {
+      name: name,
+      image: image,
+      image_link:
+        image_link == undefined || image_link == null || image_link == ""
+          ? ""
+          : image_link.name,
+      image_mobile_link:
+        image_mobile_link == undefined ||
+        image_link == null ||
+        image_mobile_link == ""
+          ? ""
+          : image_mobile_link.name,
+      id: this.state.id,
+      link: link,
+    };
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.UPDATE_Banner,
+      method: "POST",
+      data: body,
+    });
+
+    if (res.status == 200) {
+      if (this.state.type == "0" || this.state.type == "1") {
+        this.getData();
+      } else {
+        this.getData_Company();
+      }
+      this.setState({ modalCom: !this.state.modalCom });
+    } else {
+      alert("Cập nhật thất bại");
+      this.setState({ isLoading: false });
+    }
+  }
+
+ 
+
+  async delete() {
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.DELETE_Banner,
+      method: "POST",
+      data: {
+        id: this.state.id,
+      },
+    });
+
+    if (res.status == 200) {
+      if (this.state.type == "0" || this.state.type == "1") {
+        this.getData();
+      } else {
+        this.getData_Company();
+      }
+      this.setState({ modalDelete: !this.state.modalDelete, delete: null });
+    } else {
+      alert("Xóa sản phẩm thất bại");
+      this.setState({ isLoading: false });
+    }
+  }
+
+  inputChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  getBadge(status) {
+    switch (status) {
+      case "Actived":
+        return "success";
+      case "Inactive":
+        return "secondary";
+      case "Locked":
+        return "warning";
+      case "Deactived":
+        return "danger";
+      default:
+        return "primary";
+    }
+  }
+
+  onChangeImage(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ image_link: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({ image: e.target.result, image_show: e.target.result });
+    };
+  }
+
+  onChangeImageMobile(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ image_mobile_link: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({
+        imageMobile: e.target.result,
+        image_show_mobile: e.target.result,
+      });
+    };
+  }
+
+  render() {
+    const { data, dataDatlich, arrPagination, key } = this.state;
+    if (!this.state.isLoading) {
+      return (
+        <div className="animated fadeIn">
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify"> Danh sách đặt lịch</i>
+                  <div style={styles.tags}>
+                    <CRow>
+                      <CCol sm="12" lg="12">
+                        <CRow>
+                          <CCol sm="12" lg="6">
+                            <div>
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
+                            </div>
+                          </CCol>
+                          <CCol sm="12" lg="6">
+                            <CButton
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </CButton>
+                          </CCol>
+                        </CRow>
+                      </CCol>
+                      <CCol sm="12" lg="12">
+                        <CButton
+                          outline
+                          color="primary"
+                          style={styles.floatRight}
+                          size="sm"
+                          onClick={(e) => this.toggleModal("new")}
+                        >
+                          Thêm mới
+                        </CButton>
+                      </CCol>
+                    </CRow>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
+                    <thead className="thead-light">
+                      <tr>
+                        <th className="text-center">STT.</th>
+                        <th className="text-center">Tên</th>
+                        <th className="text-center">Số điện thoại</th>
+
+                        <th className="text-center">Ngày đặt lịch</th>
+                        <th className="text-center"> Ngày Tham chiếu</th>
+                        <th className="text-center">#</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                      {dataDatlich.length > 0  ? dataDatlich.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.name}</td>
+                                <td className="text-center">
+                                  {item.sdtBooklich}
+                                </td>
+
+                                <td className="text-center">{item.dateStart}</td>
+
+                                <td className="text-center">{item.dateThamChieu}</td>
+                                <td className="text-center">
+                                  <CButton
+                                    style={styles.mgl5}
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={async (e) =>
+                                      await this.openUpdate(item,i)
+                                    }
+                                  >
+                                    <CIcon name="cilPencil" />
+                                  </CButton>{" "}
+                                  <CButton
+                                    outline
+                                    color="danger"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      this.openDelete(i);
+                                    }}
+                                  >
+                                    <CIcon name="cilTrash" />
+                                  </CButton>
+                                </td>
+                              </tr>
+                            );
+                          })
+                        : null}
+                    </tbody>
+                  </table>
+                </CardBody>
+              </Card>
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      data: arrPagination[v - 1],
+                      indexPage: v - 1,
+                    });
+                  }}
+                />
+              </div>
+              {/* {
+                arrPagination.length == 1 ? "" :
+                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
+                    <tr style={styles.row}>
+                      {
+                        arrPagination.map((item, i) => {
+                          return (
+                            <td>
+                              <CButton style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</CButton>
+                            </td>
+                          );
+                        })
+                      }
+                    </tr>
+                  </div>
+              } */}
+            </Col>
+          </Row>
+
+          <Modal isOpen={this.state.modalCom} className={this.props.className}>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
+            <ModalBody>
+              <TextFieldGroup
+                field="name"
+                label="Tên"
+                value={this.state.name}
+                placeholder="Tên"
+                // error={errors.title}
+                onChange={(e) => this.onChange("name", e.target.value)}
+                // rows="5"
+              />
+
+              <TextFieldGroup
+                field="sdtBooklich"
+                label="Số điện thoại"
+                value={this.state.sdtBooklich}
+                placeholder="Số điện thoại"
+                // error={errors.title}
+                onChange={(e) => this.onChange("sdtBooklich", e.target.value)}
+                // rows="5"
+              />
+              <TextFieldGroup
+                field="dateStart"
+                label="Ngày đặt lịch"
+                value={this.state.dateStart}
+                placeholder="Ngày"
+                // error={errors.title}
+                onChange={(e) => this.onChange("dateStart", e.target.value)}
+                // rows="5"
+              />
+
+              <TextFieldGroup
+                field="dateThamChieu"
+                label="Ngày tham chiếu"
+                value={this.state.dateThamChieu}
+                placeholder="Ngày"
+                // error={errors.title}
+                onChange={(e) => this.onChange("dateThamChieu", e.target.value)}
+                // rows="5"
+              />
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.saveAdd()
+                    : this.saveUpdate();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
+
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
+            <ModalBody>
+              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
+        </div>
+      );
+    }
+    return (
+      <div className="sweet-loading">
+        <DotLoader
+          css={override}
+          size={50}
+          color={"#123abc"}
+          loading={this.state.isLoading}
+          speedMultiplier={1.5}
+        />
+      </div>
+    );
+  }
+}
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
+
+const styles = {
+  pagination: {
+    marginRight: "5px",
+  },
+  flexLabel: {
+    width: 100,
+  },
+  flexOption: {
+    width: 300,
+  },
+  a: {
+    textDecoration: "none",
+  },
+  floatRight: {
+    float: "right",
+    marginTop: "3px",
+  },
+  spinner: {
+    width: "30px",
+  },
+  center: {
+    textAlign: "center",
+  },
+  tbody: {
+    height: "380px",
+    overflowY: "auto",
+  },
+  wh25: {
+    width: "25%",
+    float: "left",
+    height: "80px",
+  },
+  w5: {
+    width: "15%",
+    float: "left",
+    height: "80px",
+  },
+  wa10: {
+    width: "5%",
+    float: "left",
+    height: "80px",
+  },
+  row: {
+    float: "left",
+    width: "100%",
+  },
+  success: {
+    color: "green",
+  },
+  danger: {
+    color: "red",
+  },
+  mgl5: {
+    margin: "5px",
+  },
+  tags: {
+    float: "right",
+    marginRight: "5px",
+  },
+  searchInput: {
+    width: "190px",
+    display: "inline-block",
+  },
+  userActive: {
+    color: "green",
+  },
+  userPending: {
+    color: "red",
+  },
+  nagemonNameCol: {
+    width: "328px",
+  },
+  image: {
+    width: "100px",
+    height: "100px",
+    borderRadius: "99999px",
+  },
+};
+
+export default BrandSlider;

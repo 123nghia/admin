@@ -13,6 +13,7 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
+import update from 'react-addons-update';
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../views/Common/TextFieldGroup";
 
@@ -30,6 +31,7 @@ import {
   CTooltip,
   CTextarea,
 } from "@coreui/react";
+import Checkbox from '@mui/material/Checkbox';
 import CIcon from "@coreui/icons-react";
 import "moment-timezone";
 import "react-datepicker/dist/react-datepicker.css";
@@ -41,6 +43,7 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import logoMainnet from "../../assets/img/logo_head.png";
+import CircularProgress from '@mui/material/CircularProgress';
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 
@@ -52,6 +55,8 @@ class Users extends Component {
     this.state = {
       action : "new",
       idUpdate : "",
+      checkFb : false,
+      checkGg : true,
       data: [],
       updated: "",
       dataApi: [],
@@ -88,7 +93,9 @@ class Users extends Component {
       image_link: "",
       statusModalUpdate: false,
       updateLink: "",
-      dataConfigWeb : null
+      dataConfigWeb : null,
+      idUpdateCurrent : null,
+      loadingSaveLogo : false
       
     };
   }
@@ -120,6 +127,7 @@ class Users extends Component {
       }
     }
   }
+ 
 
   onChangeImage(e) {
     let files = e.target.files;
@@ -132,6 +140,20 @@ class Users extends Component {
     console.log(this.state.image, this.state.image_show);
   }
 
+  
+
+  async componentDidMount() {
+    this.getData();
+   await this.getDataConfigWeb();
+    let arr = JSON.parse(localStorage.getItem("url"));
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to == window.location.hash) {
+        if (arr[i].hidden == true) {
+          window.location.href = "#/";
+        }
+      }
+    }
+  }
   renderData(data) {
     if (data) {
       let x = data.map((item, i) => {
@@ -156,7 +178,7 @@ class Users extends Component {
                   outline
                   color="success"
                   size="sm"
-                  onClick={() => this.openFormEdit(item)}
+                  onClick={() => this.openFormEdit(item,i)}
                 >
                   {/* <CIcon name="cilTrash" /> */}
                   Chỉnh sửa
@@ -199,19 +221,6 @@ class Users extends Component {
       return render;
     }
   }
-
-  async componentDidMount() {
-    this.getData();
-   await this.getDataConfigWeb();
-    let arr = JSON.parse(localStorage.getItem("url"));
-    for (let i = 0; i < arr.length; i++) {
-      if ("#" + arr[i].to == window.location.hash) {
-        if (arr[i].hidden == true) {
-          window.location.href = "#/";
-        }
-      }
-    }
-  }
   async getDataConfigWeb(){
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll?key=webinfo"
@@ -220,18 +229,24 @@ class Users extends Component {
         key : "webinfo"
       }
     ).then((res)=>{
-      console.log("res data",res.data)
-      if(res.data.length > 0){
+      console.log(res);
+      if(res.data.data.length > 0){
+      
        
-        let dataConfig = res.data[0]
-      console.log("data config" ,dataConfig)
-        let valueConfig = JSON.parse(dataConfig.value);
+        let dataConfig = res.data.data[0]
+     
+        let valueConfig = JSON.parse(dataConfig.Value);
         this.setState({
+          image : valueConfig.value.logo,
+          image_show : valueConfig.value.logo,
           dataConfigWeb: valueConfig,
           idUpdate: dataConfig._id
         });
-       
+
+        
       }else{
+       
+
         let templateDataConfigWeb = {
           key: "webinfo",
           value: {
@@ -249,11 +264,14 @@ class Users extends Component {
                 title: "Khám phá ngay",
                 href: "",
                 Level: "1",
+               
               },
               {
                 title: "Chính sách bảo mật",
                 href: "",
                 Level: "2",
+            
+
               },
             ],
           },
@@ -263,7 +281,7 @@ class Users extends Component {
         },() => {
 
           this.addDataConfig();
-          console.log(this.state.dataConfigWeb)
+          
       });
       }
     })
@@ -283,8 +301,6 @@ class Users extends Component {
     )
   };
   saveAdd=()=>{
-   
-
     const { dataConfigWeb, updateLink,
       updateTitle,
       updateLevel } = this.state;
@@ -316,14 +332,40 @@ class Users extends Component {
         value : JSON.stringify(this.state.dataConfigWeb),
         dataType: "1",
         type : "system",
-          id : this.state.idUpdate,
+        id : this.state.idUpdate,
       }
-    ).then((res)=>{
-      console.log(res)
-    })
+    )
   }
   async saveEdit(){
-    this.addDataConfig();
+    const { dataConfigWeb, updateLink,
+      updateTitle,idUpdateCurrent,
+      updateLevel } = this.state;
+
+    let coppyData = {
+      ...dataConfigWeb
+    }
+    let footerAdd = {
+      title : updateTitle,
+      href : updateLink,
+      Level : updateLevel
+    }
+    
+    
+    coppyData.value.footerData.forEach((item,index)=>{
+      if(index === idUpdateCurrent){
+        item[idUpdateCurrent] = footerAdd
+       
+      }
+    })
+     this.setState({
+      dataConfigWeb : coppyData,
+      statusModalUpdate: false,
+    },() => {
+      this.onUpdate();     
+      console.log(this.state.dataConfigWeb)
+      
+    })  
+    // this.addDataConfig();
   }
   getData = async () => {
     this.setState({ isLoading: true });
@@ -397,11 +439,11 @@ class Users extends Component {
       updateTitle: "",
     });
   };
-  async openFormEdit(item) {
+  async openFormEdit(item,i) {
     this.setState({
       action : "edit",
       updateLevel: item.Level,
-
+      idUpdateCurrent : i,
       updateTitle: item.title,
 
       statusModalUpdate: true,
@@ -451,6 +493,33 @@ class Users extends Component {
       alert(res.data.message);
       this.setState({ isChangeSlug: false });
     }
+  }
+  saveLogo=()=>{
+    
+    this.setState({ loadingSaveLogo: true });
+    setTimeout(()=>{
+    this.setState({ loadingSaveLogo: false });
+
+      const {dataConfigWeb } = this.state;
+    let coppyData = {
+      ...dataConfigWeb
+    } 
+    this.setState({
+      dataConfigWeb : coppyData,
+      statusModalUpdate: false,
+    },() => {
+      this.onUpdate();     
+    })  
+    },1000)
+    
+
+  }
+  canelLogo=()=>{
+    this.setState({ 
+      image : "",
+      image_link : "" 
+    });
+
   }
 
   async updateCompany() {
@@ -565,26 +634,49 @@ class Users extends Component {
               <div class="col-sm-12 col-md-5">
                 <p class="mr-2">Logo web :</p>
               </div>
-              <div class="col-sm-12 col-md-7">
-                <img
-                  class="mr-4"
-                  height="auto"
-                  width="110"
-                  src={logoMainnet}
-                  alt=""
-                />
-                <CButton outline color="info" size="sm">
-                  {/* <CIcon name="cilTrash" /> */}
-                  Thay đổi
-                </CButton>
-                <CButton style={styles.mgl5} outline color="success" size="sm">
+              <div class="col-sm-12 col-md-7" >
+      
+              {this.state.image == "" ||
+                  this.state.image == null ||
+                  this.state.image == undefined ? (
+                    <img
+                      alt=""
+                      style={{ width:"140px" ,marginBottom: 20}}
+                      
+                      height="auto"
+                      src={
+                        logoMainnet
+                      }
+                     
+                    />
+                  ) : (
+                    <img
+                      alt=""
+                      style={{ width:"140px" ,marginBottom: 20}}
+                      
+                      height="auto"
+                      src={
+                        this.state.image_show === ""
+                          ? logoMainnet
+                          : this.state.image
+                      }
+                    
+                    />
+                  )}      
+               <br></br>
+                <CButton onClick={this.saveLogo} style={styles.mgl5} outline color="success" size="md">
                   {/* <CIcon name="cilPencil" /> */}
                   Lưu
                 </CButton>
-                <CButton style={styles.mgl5} outline color="danger" size="sm">
+                <CButton onClick={this.canelLogo} style={styles.mgl5} outline color="danger" size="md">
                   {/* <CIcon name="cilPencil" /> */}
                   Hủy
                 </CButton>
+                {
+                  this.state.loadingSaveLogo ? <div class="position_loading">
+                <CircularProgress />
+                </div> : null
+                }
                 <div class="mt-3">
                   <TextFieldGroup
                     field="image"
@@ -600,23 +692,7 @@ class Users extends Component {
                       this.setState({ image_show: "" });
                     }}
                   />
-                  {this.state.image == "" ||
-                  this.state.image == null ||
-                  this.state.image == undefined ? (
-                    ""
-                  ) : (
-                    <img
-                      alt=""
-                      width="200px"
-                      height="auto"
-                      src={
-                        this.state.image_show == ""
-                          ? `${Constants.BASE_URL}/public/image_brand/${this.state.image_link}`
-                          : this.state.image
-                      }
-                      style={{ marginBottom: 20 }}
-                    />
-                  )}
+                  
                 </div>
               </div>
             </div>
@@ -626,23 +702,39 @@ class Users extends Component {
               </div>
               <div class="col-sm-12 col-md-7">
                 <textarea class="mt-3" cols="60" rows="8">
-                  {`
-        
-  `}
+               
                 </textarea>
               </div>
             </div>
           </div>
 
           <div id="tabcontent2" class="tabcontent">
-            <div class="tabcontent_img">
+          <div class=" sp_tabicon">
+            <div class="tabcontent_img mr-4">
               <img src="../../images/fbicon.png" alt="" />
+            </div>
+            <Checkbox
+      checked={this.state.checkFb}
+      onChange={(e)=>{
+        this.setState({checkFb: e.target.checked})
+      }}
+      inputProps={{ 'aria-label': 'controlled' }}
+    />
             </div>
           </div>
 
           <div id="tabcontent3" class="tabcontent">
+          <div class=" sp_tabicon">
             <div class="tabcontent_img">
               <img src="../../images/ggicon.png" alt="" />
+            </div>
+            <Checkbox
+      checked={this.state.checkGg}
+      onChange={(e)=>{
+        this.setState({checkGg: e.target.checked})
+      }}
+      inputProps={{ 'aria-label': 'controlled' }}
+    />
             </div>
           </div>
           <div id="tabcontent4" class="tabcontent">
