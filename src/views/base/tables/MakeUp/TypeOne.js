@@ -42,6 +42,7 @@ class SuggestItem extends Component {
       page: 1,
       itemsCount: 0,
       limit: 5,
+      link: "",
       totalActive: 0,
       modalCom: false,
       viewingUser: {},
@@ -452,7 +453,7 @@ class SuggestItem extends Component {
 
   async addProduct() {
     const { name, image, title, description, linkdetail, price,
-      level, sdktype, type_sdk_id, brand_id, image_link, arrOptionSdkType, idSDK } = this.state
+      level, sdktype,link, type_sdk_id, brand_id, image_link, arrOptionSdkType, idSDK } = this.state
 
     if (name == null || name == '') {
       alert("Thiếu tên sản phẩm");
@@ -465,6 +466,8 @@ class SuggestItem extends Component {
       return
     } else if (image == null || image == '') {
       alert("Thiếu hình ảnh cho sản phẩm");
+    } else if (linkdetail == null || linkdetail == '') {
+      alert("Thiếu đường dẫn cho sản phẩm");
       return
     }
 
@@ -541,7 +544,7 @@ class SuggestItem extends Component {
 
   async updateProduct() {
     this.setState({ modalCom: !this.state.modalCom })
-    const { name, image, title, description, linkdetail, price,
+    const { name, image, title, description, linkdetail, price,link,
       level, sdktype, type_sdk_id, type_product_id, brand_id, image_link, indexPage } = this.state
 
     if (name == null || name == '') {
@@ -552,6 +555,8 @@ class SuggestItem extends Component {
       return
     } else if (title == null || title == '') {
       alert("Thiếu tên tiêu đề cho sản phẩm");
+    } else if (linkdetail == null || linkdetail == '') {
+      alert("Thiếu đường dẫn cho sản phẩm");
       return
     }
 
@@ -747,7 +752,7 @@ class SuggestItem extends Component {
                                     <td className="text-center">
                                       {
                                         item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
-                                          <img src={`https://api-soida.applamdep.com/public/image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
+                                          <img src={`${Constants.BASE_URL}${item.image_link}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
        
@@ -828,7 +833,7 @@ class SuggestItem extends Component {
               {
                 this.state.image == "" ? "" :
                   <img width="250" height="300" src={
-                    this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_plugin/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
+                    this.state.image_show == "" ? `${Constants.BASE_URL}public/image_plugin/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
               }
 
               <TextFieldGroup

@@ -294,7 +294,7 @@ class ProductHair extends Component {
 
     if (name == null || name == '' ||
       href == null || href == '' ||
-      type_id == null || type_id == '' ||
+      
       brand_id == null || brand_id == '') {
       alert("Vui lòng nhập đầy đủ trường !!!");
       return
@@ -955,7 +955,7 @@ class ProductHair extends Component {
                     // rows="5"
                     />
 
-                    <CLabel>Danh mục:</CLabel>
+                    <CLabel>Danh mục 1:</CLabel>
                     <div style={{ width: "100%" }}>
                       <CSelect onChange={async e => {
                         this.setState({ type_id: JSON.parse(e.target.value)._id, colorItemUpdate: JSON.parse(e.target.value).color_id });

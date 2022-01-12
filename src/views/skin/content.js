@@ -570,11 +570,6 @@ class Users extends Component {
                                 
                               </td>
   
-                              <td className="text-center">
-                                <a target="_blank" href={item.Icon}>
-                                  Xem chi tiết sản phẩm
-                                </a>
-                              </td>
                               {/* <td className="text-center">
                             <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
                           </td> */}
@@ -689,7 +684,7 @@ class Users extends Component {
                       <th className="text-center">Tiêu đề</th>
                       <th className="text-center">Ảnh</th>
   
-                      <th className="text-center">Chi tiết</th>
+                  
                       <th className="text-center">Thương hiệu</th>
                       {/* <th className="text-center">Ảnh thương hiệu</th> */}
                       {/* <th className="text-center">Loại</th>

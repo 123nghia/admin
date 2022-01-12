@@ -218,7 +218,7 @@ export default {
   "DELETE_PRODUCT": "/delete-product",
 
   "LIST_TYPE": "/types",
-  "LIST_TYPE_COMPANY": "/types/",
+  "LIST_TYPE_COMPANY": "types/",
   "ADD_TYPE": "/add-type",
   "UPDATE_TYPE": "/update-type",
   "DELETE_TYPE": "/delete-type",

@@ -260,12 +260,13 @@ class Product extends Component {
 
             const res_type = await API_CONNECT(
               Constants.LIST_TYPE_COMPANY + JSON.parse(this.state.user).company_id + "/null", {}, "", "GET")
-
+           
             const res_color = await API_CONNECT(
               Constants.LIST_COLOR_COMPANY + JSON.parse(this.state.user).company_id, {}, "", "GET")
 
             var brands = res_brand.data;
             var types = res_type.data;
+            
             var colors = res_color.data;
 
             let arrTempOptionBrand = [];
@@ -274,8 +275,14 @@ class Product extends Component {
                 value: brands[i]._id, label: brands[i].name
               })
             }
+            if(arrTempOptionBrand.length > 0){
+              this.setState({
+              objectValueBrand: arrTempOptionBrand[0], brand_id: arrTempOptionBrand[0].value,
+
+              })
+            }
             this.setState({
-              brands: brands, objectValueBrand: arrTempOptionBrand[0], brand_id: arrTempOptionBrand[0].value,
+              brands: brands, 
               arrOptionBrand: arrTempOptionBrand, types: types, colors: colors, colorItem: types[0].color_id
             });
           }
@@ -315,8 +322,7 @@ class Product extends Component {
 
     if (name == null || name == '' ||
       href == null || href == '' ||
-      type_id == null || type_id == '' ||
-      brand_id == null || brand_id == '') {
+      type_id == null || type_id == '') {
       alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
@@ -884,7 +890,7 @@ class Product extends Component {
                                     </td>
                                     <td className="text-center" style={{ width: '10%' }}>
                                       {
-                                        <img src={item.image_link == null ? item.image : Constants.BASE_URL + `/public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
+                                        <img src={item.image_link == null ? item.image : Constants.BASE_URL + `public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
                                     <td className="text-center">
@@ -954,7 +960,7 @@ class Product extends Component {
                     {
                       this.state.image == "" ? "" :
                         <img width="250" height="300" src={
-                          this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_makeup/${this.state.image_link}` : this.state.image
+                          this.state.image_show == "" ? `${Constants.BASE_URL}public/image_makeup/${this.state.image_link}` : this.state.image
                         } style={{ marginBottom: 20 }} />
                     }
                     {/* <div style={{ width: "100%" }}> */}
