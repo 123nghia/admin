@@ -153,9 +153,11 @@ class Users extends Component {
       }
     )
   };
+  
+  
   async componentDidMount() {
   this.getDataConfig();
-  
+
     this.getData();
 
     let arr = JSON.parse(localStorage.getItem('url'));
@@ -338,23 +340,6 @@ class Users extends Component {
                         <CCol sm="12" lg="12">
                            
                         </CCol>
-
-                      
-
-                      
-
-                     
-
-                        
-                       
-
-
-                        
-
-                        
-
-                      
-
                       </CRow>
                     </CCol>
                   </CRow>
@@ -374,11 +359,9 @@ class Users extends Component {
                       <FormControlLabel onChange={e=>{
                         let x = [...this.state.configData]
                         x[i].value = !x[i].value
-
                         this.setState({
                           configData : x
                       })
-                        
                       }} checked={product.value} control={<Switch defaultChecked />} label="" />
                   
                   </FormGroup>

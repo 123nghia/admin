@@ -104,7 +104,22 @@ class Users extends Component {
 
     };
   }
+  async getDataConfigDisplay (){
+    var baseUrlapi = Constants.BASE_URL 
+    let url =baseUrlapi+ "get-conclude";
+    await axios.get(
+      url,{
+        params : {
+          "level" : 1,
+          "typeFilter" : 1
+        }    
+      }
+    ).then((res)=>{
+      console.log("res",res)
+    })
+  }
   async componentDidMount() {
+    this.getDataConfigDisplay();
     this.getProductsSuggestRequest("0");
     this.getData();
     let arr = JSON.parse(localStorage.getItem("url"));
