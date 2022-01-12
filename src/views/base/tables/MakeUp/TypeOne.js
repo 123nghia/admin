@@ -475,14 +475,15 @@ class SuggestItem extends Component {
     form.append("image", image_link);
 
     await API_CONNECT(Constants.UPLOAD_IMAGE, form, "", "POST")
-
+    console.log(image,image_link)
+    let imgNew = `image_plugin/${image_link.name}`
     const body = {
       name: name,
-      image: image,
+      image: imgNew,
       title: title,
       description: description,
       linkdetail: linkdetail,
-      image_link: image_link.name,
+      image_link: imgNew,
       level: level,
       price: price,
       sdktype: sdktype,

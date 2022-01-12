@@ -1,6 +1,7 @@
 export default {
    "BASE_URL" : "https://api-pensilia.applamdep.com/",
   // "BASE_URL" : "http://192.168.1.12:3012/",
+  
   "BASE_URL_CURRENT" : "https://pensilia-admin.applamdep.com/",
   //"BASE_URL_CURRENT" : "http://192.168.1.12:3012/",
   "BASE_URL_HISTORY_SKIN" : "https://pensilia.applamdep.com/soida/xemchitietlichsu/",
@@ -197,7 +198,7 @@ export default {
   "LIST_SDK": "/sdk",
 
   "LIST_BRAND": "/brands",
-  "LIST_BRAND_COMPANY": "/brands/",
+  "LIST_BRAND_COMPANY": "brands/",
   "ADD_BRAND": "/add-brand",
   "UPDATE_BRAND": "/update-brand",
   "DELETE_BRAND": "/delete-brand",

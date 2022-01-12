@@ -296,7 +296,7 @@ class Product extends Component {
     let files = e.target.files;
     let reader = new FileReader();
     this.setState({ image_link: files[0].name, image_link_save: files[0] })
-    reader.readAsDataURL(files[0])
+    reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({ image: e.target.result, image_show: e.target.result })
     }
@@ -326,7 +326,7 @@ class Product extends Component {
       alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
-
+    
     if (arrProductColor.length == 0) {
       alert("Chưa thêm bất kì sản phẩm nào, thêm sản phẩm thất bại !!!");
       this.setState({ modalCom: !this.state.modalCom })
@@ -356,7 +356,9 @@ class Product extends Component {
         url: Constants.ADD_PRODUCT,
         method: 'POST',
         data: body
-      });
+      }).then((res)=>{
+        console.log(res)
+      })
 
       if (res.status == 200) {
         for (let i = 0; i < arrProductColor.length; i++) {
@@ -890,7 +892,7 @@ class Product extends Component {
                                     </td>
                                     <td className="text-center" style={{ width: '10%' }}>
                                       {
-                                        <img src={item.image_link == null ? item.image : Constants.BASE_URL + `public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
+                                        <img src={item.image_link == null ? item.image : Constants.BASE_URL + `image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
                                     <td className="text-center">

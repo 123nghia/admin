@@ -231,7 +231,7 @@ class Users extends Component {
         key : "webinfo"
       }
     ).then((res)=>{
-      console.log(res)
+    
       if(res.data.data.length > 0){
              
         let dataConfig = res.data.data[0]
@@ -286,8 +286,6 @@ class Users extends Component {
       });
       }
     })
-
-    
   }
   async addDataConfig (){
     var baseUrlapi = Constants.BASE_URL;
@@ -508,15 +506,17 @@ class Users extends Component {
     }
   }
   saveLogo=()=>{
-    
+    const {image,image_link} = this.state;
     this.setState({ loadingSaveLogo: true });
     setTimeout(()=>{
     this.setState({ loadingSaveLogo: false });
 
-      const {dataConfigWeb } = this.state;
+      const { dataConfigWeb } = this.state;
     let coppyData = {
       ...dataConfigWeb
     } 
+    let newImage = `${Constants.BASE_URL}image_plugin/${image_link.name}`
+    coppyData.value.logo = newImage 
     this.setState({
       dataConfigWeb : coppyData,
       statusModalUpdate: false,
@@ -524,8 +524,6 @@ class Users extends Component {
       this.onUpdate();     
     })  
     },1000)
-    
-
   }
   canelLogo=()=>{
     this.setState({ 
