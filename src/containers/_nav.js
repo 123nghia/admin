@@ -464,18 +464,7 @@ const _navContact = [
           <CIcon content={freeSet.cilBellExclamation} />
         </CTooltip>,
       }
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Quản lý tính năng',
-      to: '/feature',
-      role: ['0'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.feature}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>,
-      }
-    }],
+    },],
     role: ['0']
   },
   // {
@@ -525,61 +514,8 @@ const _navContact = [
     _children: ['Thông tin liên hệ'],
     role: ['0', '1'],
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách liên hệ',
-    to: '/contact',
-    role: ['0', '1'],
-    icon: <CIcon style={css} content={freeSet.cilContact} customClasses="c-sidebar-nav-icon" />,
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.contact}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách loại yêu cầu',
-    to: '/type_request',
-    role: ['0', '1'],
-    icon: <CIcon style={css} content={freeSet.cilHamburgerMenu} customClasses="c-sidebar-nav-icon" />,
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.contact}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
-  {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Quản lý đơn hàng',
-    icon: <CIcon style={css} content={freeSet.cilFile} customClasses="c-sidebar-nav-icon" />,
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách đơn hàng',
-      to: '/list_order',
-      role: ['0', '1'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.package_order}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>,
-      }
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Tạo đơn hàng',
-      to: '/plugin_create_order',
-      role: ['0', '1'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.create_order}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>,
-      }
-    }],
-    role: ['0', '1'],
-  },
+  
+  
 
   {
     _tag: 'CSidebarNavItem',

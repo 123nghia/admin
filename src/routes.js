@@ -25,16 +25,15 @@ const RoleManager = React.lazy(() => import('./views/base/tables/AI_Skin/RoleMan
 const PluginManager = React.lazy(() => import('./views/base/tables/AI_Skin/PluginManager'));
 const PluginCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/PluginCustomerManager'));
 const PluginCreateOrder = React.lazy(() => import('./views/base/tables/AI_Skin/PluginCreateOrder'));
-const FeatureTable = React.lazy(() => import('./views/base/tables/AI_Skin/FeatureTable'));
-const PluginOrderTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginOrderTable'));
+
+
 const PluginUserTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginUserTable'));
 const RewardInfomation = React.lazy(() => import('./views/base/tables/AI_Skin/RewardInfomation'));
 const ListFeatureOfCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ListFeatureOfCustomer'));
 const CusRequest = React.lazy(() => import('./views/base/tables/AI_Skin/CustomerRequestTable'));
-const TypeRequest = React.lazy(() => import('./views/base/tables/AI_Skin/TypeRequestModel'));
+
 const CustomerManager = React.lazy(() => import('./views/base/tables/AI_Skin/CustomerManager'));
 const HistorySkin = React.lazy(() => import('./views/base/tables/AI_Skin/HistorySkin'));
-const ContactCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ContactCustomer'));
 const UpdatePackage = React.lazy(() => import('./views/base/tables/UpdatePackage'));
 const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPlugin'));
 const ProductPlugin = React.lazy(() => import('./views/base/tables/Prouduct/ProductSpecialPlugin'));
@@ -98,17 +97,16 @@ const routes = [
   { path: '/plugin_manager', name: 'Plugin Manager', component: PluginManager },
   { path: '/customer_manager', name: 'Customer Manager', component: PluginCustomer },
   { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
-  { path: '/feature', name: 'Feature', component: FeatureTable },
-  { path: '/list_order', name: 'Order Plugin', component: PluginOrderTable },
+
+  
   { path: '/saleAdmin', name: 'SALE', component: PluginUserTable },
   { path: '/reward_info', name: 'REWARD_INFO', component: RewardInfomation },
   { path: '/feature_customer', name: 'REWARD_INFO', component: ListFeatureOfCustomer },
   { path: '/cus_request', name: 'REWARD_INFO', component: CusRequest },
-  { path: '/type_request', name: 'REWARD_INFO', component: TypeRequest },
+
   { path: '/customer', name: 'Customer Manager', component: CustomerManager },
   { path: '/historyskin', name: 'History Skin', component: HistorySkin },
   { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
-  { path: '/contact', name: 'Contact', component: ContactCustomer },
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
   { path: '/subsale', name: 'Sub Sale', component: PluginSubSaleTable },
   { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },

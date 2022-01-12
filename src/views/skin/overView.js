@@ -717,7 +717,7 @@ class Users extends Component {
                       <th className="text-center">Tiêu đề</th>
                       <th className="text-center">Ảnh</th>
   
-                      <th className="text-center">Chi tiết</th>
+                      {/* <th className="text-center">Chi tiết</th> */}
                       {/* <th className="text-center">Thương hiệu</th> */}
                       {/* <th className="text-center">Ảnh thương hiệu</th> */}
                       {/* <th className="text-center">Loại</th>
