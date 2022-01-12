@@ -82,6 +82,7 @@ class BrandSlider extends Component {
       user: localStorage.getItem("user"),
       isLoading: false,
       indexSelector : null,
+      timetext : "",
     };
   }
   changeLevel = (e) => {
@@ -133,15 +134,20 @@ class BrandSlider extends Component {
             dataDatlich: res.data.data,
             
           });
- 
+          console.log(this.state.dataDatlich)
+          console.log(this.state.dateThamChieu)
+
         } 
+        
       });
   }
    addDataConfig() {
     const { name,
       sdtBooklich,
       dateStart,
-      updateLevelStatus
+      dateThamChieu,
+      updateLevelStatus,
+      timetext
   } = this.state;
     let url = Constants.BASE_URL + Constants.ADD_BOOK_LICH
      axios.post(url, {
@@ -152,10 +158,12 @@ class BrandSlider extends Component {
                           fullName: name,
                           wanted : "a",
                           content: "content",
+                          timetext : timetext,
                           bookingAddress: "quan 3",
-                          booking_date:  dateStart,
+                          booking_date:  dateThamChieu,
       
     }).then(()=>{
+     
       this.setState({
         modalCom : !this.state.modalCom
       })
@@ -165,9 +173,9 @@ class BrandSlider extends Component {
   saveUpdate=()=>{
     const { name,
       sdtBooklich,
- 
+      dateStart,
       dateThamChieu,
-  
+      timetext,
       indexSelector,
       updateLevelStatus
   } = this.state;
@@ -175,13 +183,14 @@ class BrandSlider extends Component {
      axios.post(url, {
         phoneNumber: sdtBooklich,
         id : indexSelector,
+        timetext : timetext,
         status : updateLevelStatus,
                           infoPerson: "24",
                           fullName: name,
                           wanted : "a",
                           content: "content",
                           bookingAddress: "quan 3",
-                          booking_date:  dateThamChieu,
+                          booking_date:  dateStart,
      }).then(()=>{
       this.setState({
         modalCom : !this.state.modalCom
@@ -248,8 +257,10 @@ class BrandSlider extends Component {
         modalCom: !this.state.modalCom,
         action: key,
         name: "",
+        timetext : "",
         sdtBooklich: "",
         dateStart: "",
+        
         dateThamChieu: "",
         updateLevelStatus : "0",
       })
@@ -428,8 +439,21 @@ class BrandSlider extends Component {
       this.setState({ isLoading: false });
     }
   }
+ formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
 
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
   async openUpdate(item) {
+    var newDate = this.formatDate(item.booking_date);
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -437,7 +461,8 @@ class BrandSlider extends Component {
       indexSelector : item._id,
       sdtBooklich: item.phoneNumber,
       dateStart: item.create_date,
-      dateThamChieu: item.booking_date,
+      timetext : item.timetext,
+      dateThamChieu: newDate,
       updateLevelStatus : item.status
     });
     
@@ -649,7 +674,7 @@ class BrandSlider extends Component {
                         <th className="text-center">Tên</th>
                         <th className="text-center">Số điện thoại</th>
 
-                        <th className="text-center">Ngày đặt lịch</th>
+                        <th className="text-center">Ngày, giờ đặt lịch</th>
                         <th className="text-center"> Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
@@ -669,8 +694,8 @@ class BrandSlider extends Component {
                                 <td className="text-center">
 
                       
-                              {  (new Date(item.booking_date)).toLocaleString()}
-                                
+                              {   (new Date(item.booking_date)).toLocaleString().replace(/,/g, '').slice(8) }
+                            
                                 
                                 </td>
                                 <td className="text-center">
@@ -777,17 +802,26 @@ class BrandSlider extends Component {
               />
               <TextFieldGroup
               type="date"
-                field="dateStart"
+                field="dateThamChieu"
                 label="Ngày đặt hẹn"
-                value={this.state.dateStart}
+                value={this.state.dateThamChieu}
                 placeholder="Ngày"
                 // error={errors.title}
-                onChange={(e) => this.onChange("dateStart", e.target.value)}
+                onChange={(e) => this.onChange("dateThamChieu", e.target.value)}
                 // rows="5"
               />
-
+ <TextFieldGroup
+              type="time"
+                field="timetext"
+                label="Giờ đặt hẹn"
+                value={this.state.timetext}
+                placeholder="Giờ"
+                // error={errors.title}
+                onChange={(e) => this.onChange("timetext", e.target.value)}
+                // rows="5"
+              />
                <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Mức độ:</CLabel>
+                <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
                     onChange={async (e) => {

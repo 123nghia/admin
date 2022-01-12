@@ -93,11 +93,14 @@ class Login extends Component {
       <div className="c-app c-default-layout flex-row align-items-center">
         <CContainer>
           <CRow className="justify-content-center">
-            <CCol md="8">
+            <CCol md="5">
               <CCardGroup>
                 <CCard className="p-4">
                   <CCardBody>
                     <form onSubmit={async e => await this.onSubmit(e)}>
+                    <div class="text-center">
+                    <img style={{ alignSelf: 'center' }} height="40px" width="auto" src={Logo} />
+</div>
                       <h1>Đăng nhập</h1>
                       <span style={{ color: 'red' }} className="error">{errors.common}</span>
                       <CInputGroup className="mb-3">
@@ -129,8 +132,8 @@ class Login extends Component {
                     </form>
                   </CCardBody>
                 </CCard>
-                <CCard className="bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
-                  <img style={{ alignSelf: 'center' }} height="20px" width="130px" src={Logo} />
+                {/* <CCard className="bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
+                
                   <CCardBody className="text-center">
                     <div>
                       <h2>Đăng ký</h2>
@@ -140,7 +143,7 @@ class Login extends Component {
                       </a>
                     </div>
                   </CCardBody>
-                </CCard>
+                </CCard> */}
               </CCardGroup>
             </CCol>
           </CRow>

@@ -115,7 +115,7 @@ class Users extends Component {
         }    
       }
     ).then((res)=>{
-      console.log("res",res)
+      
     })
   }
   async componentDidMount() {

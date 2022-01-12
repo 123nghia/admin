@@ -477,12 +477,12 @@ class Color extends Component {
                                 
                                 {/* <td className="text-center">{item.subName}</td> */}
                                 <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                  {/* <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
                                   </CButton>
                                   <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
                                     <CIcon name="cilTrash" />
-                                  </CButton>
+                                  </CButton> */}
                                 </td>
                               </tr>
                             );

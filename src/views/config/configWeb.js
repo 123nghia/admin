@@ -726,9 +726,9 @@ class Users extends Component {
           <div>
           <TextFieldGroup
                 field=""
-                label="Mã App"
+                label="Mã ứng dụng"
                 value=""
-                placeholder={"Mã"}
+                placeholder={"Mã app"}
                 // onChange={(e) => {
                 //   this.setState({ updateTitle: e.target.value });
                 // }}
@@ -760,9 +760,9 @@ class Users extends Component {
           <div>
           <TextFieldGroup
                 field=""
-                label="Mã App"
+                label="Mã ứng dụng"
                 value=""
-                placeholder={"Mã"}
+                placeholder={"Mã app"}
                 // onChange={(e) => {
                 //   this.setState({ updateTitle: e.target.value });
                 // }}
