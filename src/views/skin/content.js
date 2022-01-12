@@ -573,11 +573,11 @@ class Users extends Component {
                               {/* <td className="text-center">
                             <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
                           </td> */}
-                              <td className="text-center">
+                              {/* <td className="text-center">
                                 {item.brand_id == null
                                   ? ""
                                   : item.brand_id.name}
-                              </td>
+                              </td> */}
                               {/* <td className="text-center">
                                 {<img src={`https://api-soida.applamdep.com/public/image_brand/${item.brand_id.image_link}`} width={"60px"} height={"60px"} />}
                               </td> */}
@@ -685,7 +685,7 @@ class Users extends Component {
                       <th className="text-center">Ảnh</th>
   
                   
-                      <th className="text-center">Thương hiệu</th>
+                      {/* <th className="text-center">Thương hiệu</th> */}
                       {/* <th className="text-center">Ảnh thương hiệu</th> */}
                       {/* <th className="text-center">Loại</th>
                       <th className="text-center">Loại SDK </th> */}
@@ -732,7 +732,7 @@ class Users extends Component {
                       <th className="text-center">Ảnh</th>
   
                       <th className="text-center">Chi tiết</th>
-                      <th className="text-center">Thương hiệu</th>
+                      {/* <th className="text-center">Thương hiệu</th> */}
                       {/* <th className="text-center">Ảnh thương hiệu</th> */}
                       {/* <th className="text-center">Loại</th>
                       <th className="text-center">Loại SDK </th> */}
