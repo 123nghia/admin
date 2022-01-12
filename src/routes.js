@@ -66,6 +66,8 @@ const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 
 const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
+const RequestSupport = React.lazy(() => import('./views/info/requestSupport'));
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -98,6 +100,7 @@ const routes = [
   { path: '/customer_manager', name: 'Customer Manager', component: PluginCustomer },
   { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
 
+  { path: '/yeu-cau-ho-tro', name: 'Request Suport', component: RequestSupport },
   
   { path: '/saleAdmin', name: 'SALE', component: PluginUserTable },
   { path: '/reward_info', name: 'REWARD_INFO', component: RewardInfomation },

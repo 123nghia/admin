@@ -626,16 +626,22 @@ class Users extends Component {
             >
               Thông tin chung
             </button>
-            <button class="tablinks" onClick={() => this.changeConfigWeb(1)}>
-              Cấu hình Facebook{" "}
+            <button
+              class="tablinks active"
+              onClick={() => this.changeConfigWeb(1)}
+            >
+              Thông tin tính năng
             </button>
             <button class="tablinks" onClick={() => this.changeConfigWeb(2)}>
-              Cấu hình Google
+              Cấu hình Facebook{" "}
             </button>
             <button class="tablinks" onClick={() => this.changeConfigWeb(3)}>
-              Thông tin mã màu
+              Cấu hình Google
             </button>
             <button class="tablinks" onClick={() => this.changeConfigWeb(4)}>
+              Thông tin mã màu
+            </button>
+            <button class="tablinks" onClick={() => this.changeConfigWeb(5)}>
               Thông tin footer
             </button>
           </div>
@@ -718,41 +724,25 @@ class Users extends Component {
               </div>
             </div>
           </div>
-
           <div id="tabcontent2" class="tabcontent">
-          <div class="col-md-12">
-          <div>
-          <TextFieldGroup
-                field=""
-                label="Mã ứng dụng"
-                value=""
-                placeholder={"Mã app"}
-                // onChange={(e) => {
-                //   this.setState({ updateTitle: e.target.value });
-                // }}
-              />
-
-              <TextFieldGroup
-                field=""
-                label="Mật khẩu"
-                value=""
-                placeholder={"Mật khẩu"}
-                // onChange={(e) => {
-                //   this.setState({ updateLink: e.target.value });
-                // }}
-              />
+          <div class="flex-a-center info_func mt-2">
+          <span class="mr-2">Tình trạng dịch vụ : </span><span style={{color:'#e55353'}}>Đang sử dụng</span>
           </div>
           
-            {/* <Checkbox
-      checked={this.state.checkFb}
-      onChange={(e)=>{
-        this.setState({checkFb: e.target.checked})
-      }}
-      inputProps={{ 'aria-label': 'controlled' }}
-    /> */}
-            </div>
+          <div class="flex-a-center info_func mt-2">
+          <span class="mr-2">Tổng số lần sử dụng : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
           </div>
-
+        
+          <div class="flex-a-center info_func mt-2">
+          <span class="mr-2">Tính năng dịch vụ : </span><span style={{color:'#e55353'}}>Soi da - Trang điểm</span>
+          </div>
+          <div class="flex-a-center info_func mt-2">
+          <span class="mr-2">Ngày bắt đầu: </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
+          </div>
+          <div class="flex-a-center info_func mt-2">
+          <span class="mr-2">Ngày hết hạn : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
+          </div>
+          </div>
           <div id="tabcontent3" class="tabcontent">
           <div class="col-md-12">
           <div>
@@ -786,7 +776,41 @@ class Users extends Component {
     /> */}
             </div>
           </div>
+
           <div id="tabcontent4" class="tabcontent">
+          <div class="col-md-12">
+          <div>
+          <TextFieldGroup
+                field=""
+                label="Mã ứng dụng"
+                value=""
+                placeholder={"Mã app"}
+                // onChange={(e) => {
+                //   this.setState({ updateTitle: e.target.value });
+                // }}
+              />
+
+              <TextFieldGroup
+                field=""
+                label="Mật khẩu"
+                value=""
+                placeholder={"Mật khẩu"}
+                // onChange={(e) => {
+                //   this.setState({ updateLink: e.target.value });
+                // }}
+              />
+          </div>
+          
+            {/* <Checkbox
+      checked={this.state.checkFb}
+      onChange={(e)=>{
+        this.setState({checkFb: e.target.checked})
+      }}
+      inputProps={{ 'aria-label': 'controlled' }}
+    /> */}
+            </div>
+          </div>
+          <div id="tabcontent5" class="tabcontent">
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>
@@ -943,7 +967,7 @@ class Users extends Component {
               </Col>
             </Row>
           </div>
-          <div id="tabcontent5" class="tabcontent">
+          <div id="tabcontent6" class="tabcontent">
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>

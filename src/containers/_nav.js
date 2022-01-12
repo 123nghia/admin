@@ -420,6 +420,19 @@ const _navOrther = [
       </CTooltip>,
     }
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý ',
+    to: '/role_manager',
+    icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
+    role: ['0'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.role}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
   // {
   //   _tag: 'CSidebarNavItem',
   //   name: 'Tính năng AI, AR',
@@ -449,24 +462,25 @@ const _navOrther = [
 ]
 
 const _navContact = [
-  {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Quản lý tính năng AI AR',
-    icon: <CIcon style={css} content={freeSet.cilApplications} customClasses="c-sidebar-nav-icon" />,
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Quản lý gói sản phẩm',
-      to: '/plugin_manager',
-      role: ['0'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.package}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>,
-      }
-    },],
-    role: ['0']
-  },
+  // {
+  //   _tag: 'CSidebarNavDropdown',
+  //   name: 'Quản lý tính năng AI AR',
+  //   icon: <CIcon style={css} content={freeSet.cilApplications} customClasses="c-sidebar-nav-icon" />,
+  //   _children: [{
+  //     _tag: 'CSidebarNavItem',
+  //     name: 'Quản lý gói sản phẩm',
+  //     to: '/plugin_manager',
+  //     role: ['0'],
+  //     badge: {
+  //       color: 'info',
+  //       text: <CTooltip placement={"right"} content={content.package}>
+  //         <CIcon content={freeSet.cilBellExclamation} />
+  //       </CTooltip>,
+  //     }
+  //   },],
+  //   role: ['0']
+  // },
+
   // {
   //   _tag: 'CSidebarNavDropdown',
   //   name: 'Quản lý tài khoản',
@@ -509,6 +523,7 @@ const _navContact = [
   //   }],
   //   role: ['0', '1', '2'],
   // },
+ 
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Thông tin liên hệ'],
@@ -538,7 +553,13 @@ const _navContact = [
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
   },
-
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Yêu cầu hỗ trợ',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    to: '/yeu-cau-ho-tro',
+    role: ['0', '1', '2'],
+  },
 ]
 const _navLogOut = [
   {

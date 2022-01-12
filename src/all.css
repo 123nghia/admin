@@ -44,6 +44,11 @@
   align-items: center;
   /* justify-content: space-between; */
 }
+.info_func
+{
+  font-size: 18px;
+  font-weight: 700;
+}
 .position_loading{
 
   position: fixed;
