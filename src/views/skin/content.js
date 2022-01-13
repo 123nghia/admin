@@ -411,7 +411,7 @@ class Users extends Component {
     reader.onload = (e) => {
       this.setState({ image: e.target.result, image_show: e.target.result });
     };
-    console.log(this.state.image,this.state.image_show)
+    
   }
   openFormAdd = (k) => {
     this.setState({ 

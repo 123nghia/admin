@@ -246,8 +246,6 @@ class Users extends Component {
 
         
       }else{
-       
-
         let templateDataConfigWeb = {
           key: "webinfo",
           value: {
@@ -697,7 +695,7 @@ class Users extends Component {
                 <div class="mt-3">
                   <TextFieldGroup
                     field="image"
-                    label="Ảnh minh họa"
+                    label="Ảnh minh họa : jpg"
                     type={"file"}
                     className="mt-5"
                     // value={this.state.image}
