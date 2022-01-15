@@ -216,20 +216,20 @@ class Brand extends Component {
       alert("Vui lòng nhập đầy đủ trường !!!");
       return
     }
+    console.log("image_link",image_link)
+    
+   
 
-    const form = new FormData();
-    form.append("image", image_link);
 
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
 
     const body = {
       name: name,
       image: image,
-      image_link: image_link.name,
+      image_link: image_link,
       company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
       link: link
     }
-
+   
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -362,6 +362,7 @@ class Brand extends Component {
     reader.onload = (e) => {
       this.setState({ image: e.target.result, image_show: e.target.result })
     }
+    
   }
 
   render() {
@@ -422,7 +423,7 @@ class Brand extends Component {
                                 <td className="text-center">
                                   {
                                     item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
-                                      <img src={ Constants.BASE_URL + `public/image_brand/${item.image_link}`} width={"60px"} height={"60px"} />
+                                      <img src={ Constants.BASE_URL + `image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
                                   }
                                 </td>
                                 <td className="text-center">
@@ -487,7 +488,7 @@ class Brand extends Component {
                 type={"file"}
                 // error={errors.title}
                 onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
+                onClick={(e) => { e.target.value = null; this.setState({ image_show: ""  }) }}
               // rows="5"
               />
               {
