@@ -290,7 +290,7 @@ class Users extends Component {
   async addDataConfig (){
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi+"api/config/add";
-    await axios.post(
+     axios.post(
       url,{
         dataType: "1",
         key : "webinfo",
