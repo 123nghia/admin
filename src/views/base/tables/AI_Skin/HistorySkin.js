@@ -81,6 +81,7 @@ class HistorySkin extends Component {
     let data = res.data.data;
 
     this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });
+    console.log(this.state.data)
   }
 
   handlePageChange = async (pageNumber) => {
@@ -199,6 +200,7 @@ class HistorySkin extends Component {
                     {
                       data != undefined ?
                         data.map((item, i) => {
+                          
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
