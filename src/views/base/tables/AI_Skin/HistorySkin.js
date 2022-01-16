@@ -206,7 +206,7 @@ class HistorySkin extends Component {
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.UserName}</td>
                               <td className="text-center">
-                                <img src={item.Result != undefined ? JSON.parse(item.Result).data.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
+                                <img src={item.Image}  style={{ width: '50%', height: 50 }} />
                               </td>
                               <td className="text-center">
                                 <CButton outline color="primary" onClick={e => {
