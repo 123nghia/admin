@@ -97,7 +97,9 @@ class EndUser extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_END_USER,
       method: 'POST'
-    });
+    }).then((res)=>{
+      console.log("end user",res.data.data)
+    
 
     let val = res.data.data;
     this.pagination(val);
@@ -106,6 +108,7 @@ class EndUser extends Component {
     let active = 0
 
     this.setState({ isLoading: false, totalActive: active });
+  });
   }
 
   searchKey() {
@@ -294,8 +297,8 @@ class EndUser extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên đăng nhập</th>
-                        <th className="text-center">Email</th>
+                        <th className="text-center">Tên khách hàng</th>
+                       
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">#</th>
                       </tr>
@@ -309,7 +312,7 @@ class EndUser extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.username}</td>
-                                <td className="text-center">{item.email}</td>
+                        
                                 <td className="text-center">{item.phone}</td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >

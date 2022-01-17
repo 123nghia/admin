@@ -170,10 +170,10 @@ class CustomerManager extends Component {
         Company_Id: JSON.parse(this.state.company_id).company_id
       }
     }).then((res)=>{
-     
-    })
+     console.log(res.data.data)
+    
    
-    let val = res.data.data.result;
+    let val = res.data.data;
     let valCount = res.data.data.Count;
 
     if (res.data.is_success) {
@@ -186,14 +186,16 @@ class CustomerManager extends Component {
 
       let active = 0
 
-      val.map(val => {
+      val.result.map(val => {
         if (val.Status == "Actived") {
           active = active + 1
         }
       })
 
       this.setState({ isLoading: false, totalActive: active });
+      
     }
+  })
   }
 
   getDataForCompanyByMonth = async (month) => {

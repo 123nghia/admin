@@ -16,6 +16,7 @@ import {
 import update from 'react-addons-update';
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../views/Common/TextFieldGroup";
+import API_CONNECT from "../../../src/functions/callAPI";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -503,8 +504,15 @@ class Users extends Component {
       this.setState({ isChangeSlug: false });
     }
   }
-  saveLogo=()=>{
+  
+  async saveLogo(){
+
     const {image,image_link} = this.state;
+    const form = new FormData();
+    form.append("image", image_link);
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then((res)=>console.log(res))
+
     this.setState({ loadingSaveLogo: true });
     setTimeout(()=>{
     this.setState({ loadingSaveLogo: false });
@@ -513,12 +521,13 @@ class Users extends Component {
     let coppyData = {
       ...dataConfigWeb
     } 
-    let newImage = `${Constants.BASE_URL}image_plugin/${image_link.name}`
+    let newImage = `${Constants.BASE_URL}image_brand/${image_link.name}`
     coppyData.value.logo = newImage 
     this.setState({
       dataConfigWeb : coppyData,
       statusModalUpdate: false,
     },() => {
+      console.log(this.state.dataConfigWeb)
       this.onUpdate();     
     })  
     },1000)
@@ -625,7 +634,7 @@ class Users extends Component {
               Thông tin chung
             </button>
             <button
-              class="tablinks active"
+              class="tablinks"
               onClick={() => this.changeConfigWeb(1)}
             >
               Thông tin tính năng
@@ -636,10 +645,10 @@ class Users extends Component {
             <button class="tablinks" onClick={() => this.changeConfigWeb(3)}>
               Cấu hình Google
             </button>
-            <button class="tablinks" onClick={() => this.changeConfigWeb(4)}>
+            {/* <button class="tablinks" onClick={() => this.changeConfigWeb(4)}>
               Thông tin mã màu
-            </button>
-            <button class="tablinks" onClick={() => this.changeConfigWeb(5)}>
+            </button> */}
+            <button class="tablinks" onClick={() => this.changeConfigWeb(4)}>
               Thông tin footer
             </button>
           </div>
@@ -651,35 +660,20 @@ class Users extends Component {
               </div>
               <div class="col-sm-12 col-md-7" >
       
-              {this.state.image == "" ||
-                  this.state.image == null ||
-                  this.state.image == undefined ? (
+              
                     <img
                       alt=""
                       style={{ width:"140px" ,marginBottom: 20}}
                       
                       height="auto"
                       src={
-                        logoMainnet
-                      }
-                     
-                    />
-                  ) : (
-                    <img
-                      alt=""
-                      style={{ width:"140px" ,marginBottom: 20}}
-                      
-                      height="auto"
-                      src={
-                        this.state.image_show === ""
-                          ? logoMainnet
-                          : this.state.image
+                         this.state.image
                       }
                     
                     />
-                  )}      
+                     
                <br></br>
-                <CButton onClick={this.saveLogo} style={styles.mgl5} outline color="success" size="md">
+                <CButton onClick={()=>this.saveLogo()} style={styles.mgl5} outline color="success" size="md">
                   {/* <CIcon name="cilPencil" /> */}
                   Lưu
                 </CButton>
@@ -695,7 +689,7 @@ class Users extends Component {
                 <div class="mt-3">
                   <TextFieldGroup
                     field="image"
-                    label="Ảnh minh họa : jpg"
+                    label="Ảnh minh họa : "
                     type={"file"}
                     className="mt-5"
                     // value={this.state.image}
@@ -808,7 +802,7 @@ class Users extends Component {
     /> */}
             </div>
           </div>
-          <div id="tabcontent5" class="tabcontent">
+          {/* <div id="tabcontent5" class="tabcontent">
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>
@@ -964,8 +958,8 @@ class Users extends Component {
                 </Card>
               </Col>
             </Row>
-          </div>
-          <div id="tabcontent6" class="tabcontent">
+          </div> */}
+          <div id="tabcontent5" class="tabcontent">
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>

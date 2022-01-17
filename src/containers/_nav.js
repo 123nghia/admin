@@ -315,10 +315,9 @@ const _navOrther = [
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách end user',
-    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     to: '/end_user',
-    icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1'],
+    icon: <CIcon style={css} content={freeSet.cilUserPlus} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.role}>
