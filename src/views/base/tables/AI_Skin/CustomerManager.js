@@ -529,7 +529,7 @@ class CustomerManager extends Component {
                             }
                             <th className="text-center">Lần đến gần nhất trong tháng</th>
                             <th className="text-center">Số lần đến</th>
-                            <th className="text-center">#</th>
+                            {/* <th className="text-center">#</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -552,11 +552,11 @@ class CustomerManager extends Component {
                                     </td>
                                     <td className="text-center">{item.Count}</td>
 
-                                    <td className="text-center">
+                                    {/* <td className="text-center">
                                       <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => { }} >
                                         Lịch sử soi da
                                       </CButton>
-                                    </td>
+                                    </td> */}
                                   </tr>
                                 );
                               }) : ""
