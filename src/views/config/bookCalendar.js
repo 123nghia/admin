@@ -674,7 +674,7 @@ class BrandSlider extends Component {
                         <th className="text-center">Tên</th>
                         <th className="text-center">Số điện thoại</th>
 
-                        <th className="text-center">Ngày, giờ đặt lịch</th>
+                        <th className="text-center">Ngày đặt lịch</th>
                         <th className="text-center"> Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>

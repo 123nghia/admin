@@ -450,7 +450,7 @@ class Color extends Component {
                         <th className="text-center">Hex</th>
                         <th className="text-center">MakeUp ID</th>
                         <th className="text-center">Alpha</th>
-                        <th className="text-center">Hình đại diện(nếu có)</th>
+                        
                         {/* <th className="text-center">Danh mục cấp 2</th> */}
                         <th className="text-center">#</th>
                       </tr>
@@ -547,22 +547,7 @@ class Color extends Component {
                 onChange={e => this.onChange("makeup_id", e.target.value)}
               // rows="5"
               />
-               <TextFieldGroup
-                      field="image"
-                      label="Ảnh màu"
-                      type={"file"}
-                      // error={errors.title}
-                      onChange={e => { this.onChangeImage(e) }}
-                      onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
-                    // rows="5"
-                    />
-                    {
-                      this.state.image == "" ? "" :
-                        <img width="250" height="300" src={
-                          this.state.image_show == "" ? Constants.BASE_URL +  `/public/image_makeup/${this.state.image_link}` : this.state.image
-                        } style={{ marginBottom: 20 }} />
-                    }
-
+   
               <TextFieldGroup
                 field="alpha"
                 label="Alpha"
