@@ -266,7 +266,7 @@ class EndUser extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách end user</i>
+                  <i className="fa fa-align-justify">Danh sách tài khoản người dùng</i>
                   <div style={styles.tags}>
 
                     <CRow>

@@ -6,7 +6,8 @@ CardBody,
 CardHeader,
 Col,
 Row,
-Input
+Input,
+ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
 
 import {
@@ -17,6 +18,9 @@ CSelect,
 import {
 CChartBar
 } from '@coreui/react-chartjs'
+import TextFieldGroup from "../../../Common/TextFieldGroup";
+import CIcon from '@coreui/icons-react'
+import IframeModal from '../../../components/Iframe';
 
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
@@ -33,6 +37,9 @@ constructor(props) {
   super(props);
   this.state = {
     data: [],
+    modalHistory : false,
+    toggleHistory: false,
+      idHistory: "",
     dataByMonth: [],
     key: '',
     activePage: 1,
@@ -65,10 +72,12 @@ constructor(props) {
     isLoading: false,
     arrTypeRequest: [],
     type: localStorage.getItem('type'),
-    dataChart: []
+    dataChart: [],
+    dataModalHistory : [],
   };
 }
 async componentDidMount() {
+
   if (this.state.type == '0' || this.state.type == '1') {
     this.getData();
   } else {
@@ -128,6 +137,7 @@ month: arrMonth[i]
   }
 
   this.setState({ dataChart: arrTemp })
+
 }
 
 getData = async () => {
@@ -147,7 +157,7 @@ getData = async () => {
 
     this.pagination(val);
     this.setState({ dataApi: val });
-
+    console.log('dataApi',this.state.dataApi)
     let active = 0
 
     val.map(val => {
@@ -155,7 +165,6 @@ getData = async () => {
         active = active + 1
       }
     })
-
     this.setState({ isLoading: false, totalActive: active });
   }
 }
@@ -181,7 +190,7 @@ getDataForCompany = async () => {
 
     this.pagination(val);
     this.setState({ dataApi: val });
-
+   
     let active = 0
 
     val.map(val => {
@@ -248,6 +257,7 @@ searchKey(key) {
     })
 
     this.setState({ data: d, totalActive: active })
+    
   } else {
     let active = 0
 this.state.dataApi.map(val => {
@@ -372,6 +382,28 @@ openDelete = (item) => {
     delete: item
   })
 }
+async openModalHistory(item){
+  debugger
+  console.log('item',item)
+  var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/get-history-by-identify"
+    await axios.post(
+      url,{
+        company_Id: '',
+        phone : item.Phone,
+      }
+    ).then((res)=>{
+      console.log(res);
+      this.setState({
+        dataModalHistory : res.data.data.data,
+        modalHistory : true
+      });
+    });
+}
+closeModal() {
+  const { toggleHistory } = this.state;
+  this.setState({ toggleHistory: !toggleHistory });
+}
 
 async delete() {
   this.setState({ isLoading: true });
@@ -419,10 +451,90 @@ getBadge_String(status) {
 }
 
 render() {
-  const { data, arrPagination, key, type, dataByMonth, dataChart } = this.state;
+  const {dataModalHistory, data, arrPagination,toggleHistory,
+    idHistory, key, type, dataByMonth, dataChart } = this.state;
   if (!this.state.isLoading) {
     return (
       <div className="animated fadeIn">
+
+
+      <div className={toggleHistory ? 'block fullScreenIframe' : 'none fullScreenIframe'} style={{ zIndex: '1200' }}>
+          <IframeModal  toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={e => this.setState({ toggleHistory: !this.state.toggleHistory })} />
+      </div>
+       
+   
+        <Modal style={{ minWidth : '900px' }} isOpen={this.state.modalHistory} className={this.props.className}>
+            <ModalHeader>Lịch sử soi da</ModalHeader>
+            <ModalBody>
+            <table ble className="table table-hover table-outline mb-0 d-none d-sm-table" >
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      <th className="text-center">Tên</th>
+                      <th className="text-center">Số điện thoại</th>
+                      <th className="text-center">Hình ảnh</th>
+                     
+
+                      <th className="text-center">Kết quả</th>
+                      {/* <th className="text-center">Công ty</th>
+                      <th className="text-center">Sale</th> */}
+                      <th className="text-center">Ngày soi da</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <td colSpan="10" hidden={data.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
+                    {
+                      dataModalHistory != undefined ?
+                      dataModalHistory.map((item, i) => {
+                          
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{item.Name}</td>
+                              <td className="text-center">{item.Phone}</td>
+                              <td className="text-center">
+                                <img src={item.Image}  style={{ width: '50%', height: 50 }} />
+                              </td>
+                             
+                              <td className="text-center">
+                                <CButton outline color="primary" onClick={e => {
+                                  this.setState({
+                                    idHistory: item._id,
+                                    toggleHistory: !toggleHistory
+                                  })
+                                }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                              </td>
+                              {/* <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
+                              <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td> */}
+                              <td className="text-center">
+                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                              </td>
+                            </tr>
+                          );
+                        }) : ""
+                    }
+                  </tbody>
+                </table>
+         
+
+
+
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalHistory: !this.state.modalHistory })}>Đóng</CButton>
+            </ModalFooter>
+          </Modal>
+          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
+            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+            <ModalBody>
+              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+            </ModalBody>
+            <ModalFooter>
+              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
+              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+            </ModalFooter>
+          </Modal>
         <Row>
           <Col>
             <Card>
@@ -438,8 +550,8 @@ render() {
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
-                      <th className="text-center">Số điện thoại</th>
-                      <th className="text-center">Tên đầy đủ</th>
+                      <th className="text-center">Tên</th>
+                   
                       <th className="text-center">Số điện thoại</th>
                       {
                         type == '0' || type == '1' ?
@@ -453,12 +565,12 @@ render() {
                     <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                     {
                       data != undefined ?
-                        data.map((item, i) => {
+                      data.map((item, i) => {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.UserName}</td>
-<td className="text-center">{item.FullName}</td>
+
                               <td className="text-center">{item.Phone}</td>
                               {
                                 type == '0' || type == '1' ?
@@ -517,7 +629,7 @@ render() {
                         <tr>
                           <th className="text-center">STT.</th>
                           <th className="text-center">Tên</th>
-<th className="text-center">Tên đầy đủ</th>
+
                           <th className="text-center">Số điện thoại</th>
                           {
                             type == '0' || type == '1' ?
@@ -537,7 +649,7 @@ render() {
                                 <tr key={i}>
                                   <td className="text-center">{i + 1}</td>
                                   <td className="text-center">{item.UserName}</td>
-                                  <td className="text-center">{item.FullName}</td>
+                                 
                                   <td className="text-center">{item.Phone}</td>
                                   {
                                     type == '0' || type == '1' ?
@@ -549,7 +661,9 @@ render() {
                                   <td className="text-center">{item.Count}</td>
 
                                   <td className="text-center">
-                                    <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => { }} >
+                                    <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={(e)=>{
+                                      this.openModalHistory(item)
+                                    }} >
                                       Lịch sử soi da
                                     </CButton>
                                   </td>

@@ -332,17 +332,16 @@ class Users extends Component {
                                     await this.updatePassword(data._id, currentPassword);
                                   }}>Cập nhật</Button>
                               }
-
                             </CCol>
                           </CRow>
                         </CCol>
 
-                        <CCol sm="12" lg="12">
+                        {/* <CCol sm="12" lg="12">
                           <div>
                             <CLabel>Mã code message (nhắn tin với khách hàng)</CLabel>
                             <CTextarea style={styles.searchInput} rows={9} value={Message_Code} onChange={(e) => { this.setState({ Message_Code: e.target.value }) }} readOnly={isDisable} />
                           </div>
-                        </CCol>
+                        </CCol> */}
 
 
                         {/* <CCol sm="12" lg="12">

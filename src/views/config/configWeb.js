@@ -99,7 +99,7 @@ class Users extends Component {
       loadingSaveLogo : false,
       htmlFuncWeb : null,
       codeChat : "",
-      
+      codeMess : "",      
     };
   }
   changeLevel = (e) => {
@@ -264,7 +264,7 @@ class Users extends Component {
       if(res.data.data.length > 0){
              
         let dataConfig = res.data.data[0]
-     console.log(dataConfig)
+     
         let valueConfig = JSON.parse(dataConfig.Value);
         this.setState({
           image : valueConfig.value.logo,
@@ -272,9 +272,8 @@ class Users extends Component {
           dataConfigWeb: valueConfig,
           idUpdate: dataConfig._id,
           codeChat : valueConfig.value.tawk,
-        });
-
-        
+          codeMess: valueConfig.value.chatMess,
+        });  
       }else{
         let templateDataConfigWeb = {
           key: "webinfo",
@@ -349,6 +348,31 @@ class Users extends Component {
 
       this.onUpdate();     
     })  
+  }
+  
+  async onFocusOutCodeMess(){
+    const { dataConfigWeb, updateLink, codeMess
+      ,
+      updateLevel } = this.state;
+    let coppyData = {
+      ...dataConfigWeb
+    }
+    coppyData.value.chatMess = codeMess
+    this.setState({
+      dataConfigWeb : coppyData
+    })
+    
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi+"api/config/update"
+    await axios.post(
+      url,{
+        value : JSON.stringify(this.state.dataConfigWeb),
+        dataType: "1",
+        type : "system",
+        id : this.state.idUpdate,
+      }
+    )
+   
   }
   async onFocusOutText(){
     const { dataConfigWeb, updateLink, codeChat
@@ -763,6 +787,16 @@ class Users extends Component {
               </div>
               <div class="col-sm-12 col-md-7">
                 <textarea onBlur={()=>this.onFocusOutText()} name="codeChat" value={this.state.codeChat} onChange={(e)=>this.setState({ codeChat : e.target.value })} class="mt-3" cols="60" rows="8">
+               
+                </textarea>
+              </div>
+            </div>
+            <div class="flex-as-center">
+              <div class="col-sm-12 col-md-5">
+                <p class="mr-2">Mã chat message(nhắn tin với khách hàng) :</p>
+              </div>
+              <div class="col-sm-12 col-md-7">
+                <textarea onBlur={()=>this.onFocusOutCodeMess()} name="codeMess" value={this.state.codeMess} onChange={(e)=>this.setState({ codeMess : e.target.value })} class="mt-3" cols="60" rows="8">
                
                 </textarea>
               </div>
