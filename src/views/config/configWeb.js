@@ -96,7 +96,9 @@ class Users extends Component {
       updateLink: "",
       dataConfigWeb : null,
       idUpdateCurrent : null,
-      loadingSaveLogo : false
+      loadingSaveLogo : false,
+      htmlFuncWeb : null,
+      codeChat : "",
       
     };
   }
@@ -144,7 +146,11 @@ class Users extends Component {
   
 
   async componentDidMount() {
-    this.getData();
+    this.getData().then(()=>{
+      this.getInfoFunc();
+
+    })
+
    await this.getDataConfigWeb();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
@@ -222,9 +228,31 @@ class Users extends Component {
       return render;
     }
   }
+
+  renderInfoFuncWeb(){
+    document.getElementById("renderInfoFuncWebId").innerHTML = this.state.htmlFuncWeb
+  }
+  async getInfoFunc(){
+    let baseUrlapi = Constants.INFO_FUNC_WEB;
+    let url = baseUrlapi 
+    await axios.get(
+      url
+    ).then((res)=>{
+      if(res){
+        if(res.data.is_success){        
+          this.setState({
+            htmlFuncWeb : res.data.data
+          },()=>{
+            this.renderInfoFuncWeb();
+          });
+        
+          
+        }else{
+          console.log("Lấy thông tin chung trang web thất bại !!!")
+        }
+      }
+    })}
   async getDataConfigWeb(){
-
-
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll?key=webinfo"
     await axios.get(
@@ -236,13 +264,14 @@ class Users extends Component {
       if(res.data.data.length > 0){
              
         let dataConfig = res.data.data[0]
-     
+     console.log(dataConfig)
         let valueConfig = JSON.parse(dataConfig.Value);
         this.setState({
           image : valueConfig.value.logo,
           image_show : valueConfig.value.logo,
           dataConfigWeb: valueConfig,
-          idUpdate: dataConfig._id
+          idUpdate: dataConfig._id,
+          codeChat : valueConfig.value.tawk,
         });
 
         
@@ -320,6 +349,29 @@ class Users extends Component {
 
       this.onUpdate();     
     })  
+  }
+  async onFocusOutText(){
+    const { dataConfigWeb, updateLink, codeChat
+      ,
+      updateLevel } = this.state;
+    let coppyData = {
+      ...dataConfigWeb
+    }
+    coppyData.value.tawk = codeChat
+    this.setState({
+      dataConfigWeb : coppyData
+    })
+    console.log(dataConfigWeb);
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi+"api/config/update"
+    await axios.post(
+      url,{
+        value : JSON.stringify(this.state.dataConfigWeb),
+        dataType: "1",
+        type : "system",
+        id : this.state.idUpdate,
+      }
+    )
   }
   async onUpdate(){
     
@@ -539,7 +591,7 @@ class Users extends Component {
     });
 
   }
-
+  
   async updateCompany() {
     const {
       mainColor,
@@ -710,14 +762,15 @@ class Users extends Component {
                 <p class="mr-2">Mã chat tawk(nếu có) :</p>
               </div>
               <div class="col-sm-12 col-md-7">
-                <textarea class="mt-3" cols="60" rows="8">
+                <textarea onBlur={()=>this.onFocusOutText()} name="codeChat" value={this.state.codeChat} onChange={(e)=>this.setState({ codeChat : e.target.value })} class="mt-3" cols="60" rows="8">
                
                 </textarea>
               </div>
             </div>
           </div>
           <div id="tabcontent2" class="tabcontent">
-          <div class="flex-a-center info_func mt-2">
+         <div id="renderInfoFuncWebId"></div> 
+          {/* <div class="flex-a-center info_func mt-2">
           <span class="mr-2">Tình trạng dịch vụ : </span><span style={{color:'#e55353'}}>Đang sử dụng</span>
           </div>
           
@@ -733,7 +786,8 @@ class Users extends Component {
           </div>
           <div class="flex-a-center info_func mt-2">
           <span class="mr-2">Ngày hết hạn : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
-          </div>
+          </div> */}
+
           </div>
           <div id="tabcontent3" class="tabcontent">
           <div class="col-md-12">

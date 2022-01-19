@@ -241,7 +241,7 @@ const _navMakeUp = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Mã màu',
+    name: 'Màu trang điểm',
     to: '/color',
     icon: <CIcon style={css} content={freeSet.cilColorPalette} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
@@ -314,7 +314,7 @@ const _navOrther = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Danh sách end user',
+    name: 'Danh sách tài khoản người dùng',
     to: '/end_user',
     icon: <CIcon style={css} content={freeSet.cilUserPlus} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],

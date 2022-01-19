@@ -36,6 +36,8 @@ export default {
   "UPDATE_TYPEKEY" : "/api/update-typekey",
   "DELETE_TYPEKEY" : "/api/delete-typekey",
 
+  "INFO_FUNC_WEB" :"/api/get-info-feature",
+
   "LIST_HARDWARE" : "/api/list-hardware",
   "LIST_HARDWARE_WITH_ID" : "/api/list-hardware?id=",
   "ADD_HARDWARE" : "/api/add-hardware",
