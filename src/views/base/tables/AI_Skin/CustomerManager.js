@@ -445,7 +445,6 @@ render() {
                         type == '0' || type == '1' ?
                           <th className="text-center">Công ty</th> : ""
                       }
-<<<<<<< HEAD
                       <th className="text-center">Lần đến gần nhất</th>
                       <th className="text-center">Số lần đến</th>
                     </tr>
@@ -523,123 +522,6 @@ render() {
                           {
                             type == '0' || type == '1' ?
                               <th className="text-center">Công ty</th> : ""
-=======
-                    </tbody>
-                  </table>
-                </CardBody>
-              </Card>
-              <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
-              </div>
-
-            </Col>
-          </Row>
-
-          {
-            type == "2" || type == "5" ?
-              <Row>
-                <Col>
-                  <Card>
-                    <CardHeader>
-                      <i className="fa fa-align-justify"> Thống kê lượt khách hàng theo từng tháng</i>
-                      <div style={styles.tags}>
-                        Tháng
-                        <CSelect onChange={async e => { this.getDataForCompanyByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
-                          <option value="01">01</option>
-                          <option value="02">02</option>
-                          <option value="03">03</option>
-                          <option value="04">04</option>
-                          <option value="05">05</option>
-                          <option value="06">06</option>
-                          <option value="07">07</option>
-                          <option value="08">08</option>
-                          <option value="09">09</option>
-                          <option value="10">10</option>
-                          <option value="11">11</option>
-                          <option value="12">12</option>
-                        </CSelect>
-                      </div>
-                    </CardHeader>
-                    <CardBody>
-
-                      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                        <thead className="thead-light">
-                          <tr>
-                            <th className="text-center">STT.</th>
-                            <th className="text-center">Tên</th>
-                            <th className="text-center">Tên đầy đủ</th>
-                            <th className="text-center">Số điện thoại</th>
-                            {
-                              type == '0' || type == '1' ?
-                                <th className="text-center">Công ty</th> : ""
-                            }
-                            <th className="text-center">Lần đến gần nhất trong tháng</th>
-                            <th className="text-center">Số lần đến</th>
-                            {/* <th className="text-center">#</th> */}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <td colSpan="10" hidden={this.state.hidden_m} className="text-center">Không tìm thấy dữ liệu</td>
-                          {
-                            dataByMonth != undefined ?
-                              dataByMonth.map((item, i) => {
-                                return (
-                                  <tr key={i}>
-                                    <td className="text-center">{i + 1}</td>
-                                    <td className="text-center">{item.UserName}</td>
-                                    <td className="text-center">{item.FullName}</td>
-                                    <td className="text-center">{item.Phone}</td>
-                                    {
-                                      type == '0' || type == '1' ?
-                                        <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td> : ""
-                                    }
-                                    <td className="text-center">
-                                      {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                    </td>
-                                    <td className="text-center">{item.Count}</td>
-
-                                    {/* <td className="text-center">
-                                      <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => { }} >
-                                        Lịch sử soi da
-                                      </CButton>
-                                    </td> */}
-                                  </tr>
-                                );
-                              }) : ""
-                          }
-                        </tbody>
-                      </table>
-                    </CardBody>
-                  </Card>
-                </Col>
-              </Row> : ""
-          }
-
-          {
-            type == "2" || type == "5" ?
-              <Row>
-                <Col>
-                  <Card>
-                    <CardHeader>
-                      <i className="fa fa-align-justify"> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)</i>
-                    </CardHeader>
-                    <CardBody>
-
-                      <CChartBar
-                        datasets={[
-                          {
-                            label: 'Lượt khách hàng mới của tháng',
-                            backgroundColor: '#f87979',
-                            data: dataChart
-                          }
-                        ]}
-                        labels="months"
-                        options={{
-                          tooltips: {
-                            enabled: true
->>>>>>> 1ecb798899e33bd6e147ded35e3a16bef8275352
                           }
                           <th className="text-center">Lần đến gần nhất trong tháng</th>
                           <th className="text-center">Số lần đến</th>
