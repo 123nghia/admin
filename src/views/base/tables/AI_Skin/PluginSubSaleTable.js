@@ -329,7 +329,7 @@ class User extends Component {
     switch (type) {
       case '0': return 'Quản lý soi da'
       case '1': return 'Quản lý trang điểm và tóc'
-      case '2': return 'Quản lý khách hàng'
+      case '2': return 'Quản lý người dùng'
     }
   }
 

@@ -480,48 +480,48 @@ const _navContact = [
   //   role: ['0']
   // },
 
-  // {
-  //   _tag: 'CSidebarNavDropdown',
-  //   name: 'Quản lý tài khoản',
-  //   icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-  //   _children: [{
-  //     _tag: 'CSidebarNavItem',
-  //     name: 'Danh sách Sale',
-  //     to: '/subsale',
-  //     role: ['2'],
-  //     badge: {
-  //       color: 'info',
-  //       text: <CTooltip placement={"right"} content={content.accountSale}>
-  //         <CIcon content={freeSet.cilBellExclamation} />
-  //       </CTooltip>,
-  //     }
-  //   },
-  //    {
-  //     _tag: 'CSidebarNavItem',
-  //     name: 'Danh sách tài khoản Sale',
-  //     to: '/saleAdmin',
-  //     role: ['0'],
-  //     badge: {
-  //       color: 'info',
-  //       text: <CTooltip placement={"right"} content={content.accountSale}>
-  //         <CIcon content={freeSet.cilBellExclamation} />
-  //       </CTooltip>,
-  //     }
-  //   }, 
-  //   {
-  //     _tag: 'CSidebarNavItem',
-  //     name: 'Danh sách khách hàng',
-  //     to: '/customer_manager',
-  //     role: ['0', '1'],
-  //     badge: {
-  //       color: 'info',
-  //       text: <CTooltip placement={"right"} content={content.accountCompany}>
-  //         <CIcon content={freeSet.cilBellExclamation} />
-  //       </CTooltip>,
-  //     }
-  //   }],
-  //   role: ['0', '1', '2'],
-  // },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Quản lý tài khoản',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    _children: [{
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách tài khoản hệ thống',
+      to: '/subsale',
+      role: ['2'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.accountSale}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      }
+    },
+    //  {
+    //   _tag: 'CSidebarNavItem',
+    //   name: 'Danh sách tài khoản hệ thống',
+    //   to: '/saleAdmin',
+    //   role: ['0'],
+    //   badge: {
+    //     color: 'info',
+    //     text: <CTooltip placement={"right"} content={content.accountSale}>
+    //       <CIcon content={freeSet.cilBellExclamation} />
+    //     </CTooltip>,
+    //   }
+    // }, 
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách khách hàng',
+      to: '/customer_manager',
+      role: ['0', '1'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.accountCompany}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      }
+    }],
+    role: ['0', '1', '2'],
+  },
  
   {
     _tag: 'CSidebarNavTitle',
@@ -552,13 +552,13 @@ const _navContact = [
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Yêu cầu hỗ trợ',
-    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    to: '/yeu-cau-ho-tro',
-    role: ['0', '1', '2'],
-  },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Yêu cầu hỗ trợ',
+  //   icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+  //   to: '/yeu-cau-ho-tro',
+  //   role: ['0', '1', '2'],
+  // },
 ]
 const _navLogOut = [
   {
