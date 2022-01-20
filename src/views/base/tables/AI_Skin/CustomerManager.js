@@ -482,7 +482,7 @@ render() {
                     </tr>
                   </thead>
                   <tbody>
-                    <td colSpan="10" hidden={data.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
+                    <td colSpan="10" hidden={( data != null ) ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
                     {
                       dataModalHistory != undefined ?
                       dataModalHistory.map((item, i) => {
