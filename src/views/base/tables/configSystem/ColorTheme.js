@@ -81,7 +81,7 @@ class ColorTheme extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.CONFIG_THEME_GET+"/"+"61ce79c4d19f5244aa161b36",
+      url: Constants.CONFIG_THEME_GET+"/"+"61e8c3498f019a121b6fc5ae",
       method: 'GET',
       headers: this.state.token
     });
@@ -195,7 +195,7 @@ class ColorTheme extends Component {
       sub_mainColor: sub_mainColor,
       mainColor:  mainColor,
       sub2_mainColor: sub2_mainColor,
-      company_id: "61ce79c4d19f5244aa161b36",
+      company_id: "61e8c3498f019a121b6fc5ae",
       button_color: button_color,
       sucess_color: sucess_color,
       error_color: error_color,
