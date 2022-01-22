@@ -76,6 +76,19 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Nhóm tuổi từ 18 - 26',
+    to: '/nhom-tuoi-1',
+    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.brand}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Hỗ trợ giảm lão hóa da',
     to: '/items/1',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,

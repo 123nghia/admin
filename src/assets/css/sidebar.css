@@ -66,3 +66,29 @@
   right: 0;
   
 }
+.bg_panel{
+  background : #636f83;;
+  padding:24px;
+  border: 3px solid #00c7e0;
+}
+.css-19kzrtu{
+  padding:0px !important;
+
+}
+.Mui-selected{
+  background : #636f83 !important;
+  color: white !important;
+  border: 3px solid #00c7e0!important;
+  
+}
+.css-1aquho2-MuiTabs-indicator{
+  background-color:none !important;
+  background:none !important;
+
+}
+
+.bg_panel tbody{
+  font-size: 16px !important;
+    font-weight: 700 !important;
+  color: white !important;
+}

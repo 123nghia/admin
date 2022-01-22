@@ -1,6 +1,6 @@
 export default {
-   "BASE_URL" : "http://localhost:3016/",
-  // "BASE_URL" : "http://192.168.1.12:3012/",
+  //  "BASE_URL" : "https://api-pensilia.applamdep.com/",
+  "BASE_URL" : "http://192.168.1.2:3016/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   
   "BASE_URL_CURRENT" : "http://localhost:3017/",

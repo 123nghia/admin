@@ -68,9 +68,16 @@ const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
 const RequestSupport = React.lazy(() => import('./views/info/requestSupport'));
 
+const GroupAge1 = React.lazy(() => import('./views/menard/groupAge1/groupAge1'));
+
+
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
+  
+  { path: '/nhom-tuoi-1', name: 'NhomTuoi1', component: GroupAge1 },
+
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', name: 'Users', component: TableUser },
   { path: '/company', name: 'Company', component: TableCompany },
