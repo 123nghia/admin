@@ -247,7 +247,7 @@ class Users extends Component {
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({
-        imageSlide_link: e.target.result,
+        imageSlide: e.target.result,
         imageSlide_show: e.target.result,
       });
     };
@@ -1168,7 +1168,7 @@ class Users extends Component {
               </ListItemButton>
             </List>
           </div>
-          <div id="tabcontent1" class="tabcontent">
+          <div id="tabcontent1" class="tabcontent defaultOpen">
             <div class="text-center">
               <Button
                 variant="contained"
@@ -1417,7 +1417,7 @@ class Users extends Component {
             />
            
           </div>
-          <div id="tabcontent4" class="tabcontent defaultOpen">
+          <div id="tabcontent4" class="tabcontent ">
             <div class="flex-a-center">
               <div class="col-sm-12 col-md-5">
                 <p class="mr-2">Logo web :</p>
