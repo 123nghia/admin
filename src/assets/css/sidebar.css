@@ -66,3 +66,10 @@
   right: 0;
   
 }
+.tab .active{
+  color: white !important;
+  background-color:#768192 !important
+}
+.tab .tablinks{
+  padding:16px 8px !important
+}

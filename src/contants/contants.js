@@ -4,7 +4,7 @@ export default {
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   
   "BASE_URL_CURRENT" : "https://soida-admin.pensilia.com/",
-  //"BASE_URL_CURRENT" : "http://192.168.1.12:3012/",
+  // "BASE_URL_CURRENT" : "http://192.168.1.12:3012/",
   "BASE_URL_HISTORY_SKIN" : "https://soida.pensilia.com/lich-su-soi-da-with-iframe/",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
