@@ -173,7 +173,7 @@ class Users extends Component {
 
         titleProduct : "",
         levelProduct : "1",
-        group : "group1",
+        group : "group2",
         typeColegen : "0",
         typeSkin : "1",
 
@@ -554,7 +554,6 @@ async openFormEditProduct(item){
   
         })
     }
-      
     this.setState({
       action: "new",
 
@@ -564,7 +563,7 @@ async openFormEditProduct(item){
 
       modalNormal: true,
 
-      
+     
         
     },()=>{
         console.log(this.state.typeCurrentUpdate)
@@ -790,7 +789,7 @@ async saveAddProduct () {
         })
     })
   }
-  renderData(data,value) {
+  renderData(data,number) {
     if (data && data.length > 0) {
       let x = data.map((item, i) => {
         return (
@@ -834,7 +833,7 @@ async saveAddProduct () {
               outline
               color="info"
               size="md"
-              onClick={() => this.openFormAdd(value)}
+              onClick={() => this.openFormAdd(number)}
             >
               {/* <CIcon name="cilTrash" /> */}
               Thêm mới
@@ -871,7 +870,7 @@ async saveAddProduct () {
               outline
               color="info"
               size="md"
-              onClick={() => this.openFormAdd(value)}
+              onClick={() => this.openFormAdd(number)}
             >
               {/* <CIcon name="cilTrash" /> */}
               Thêm mới

@@ -173,7 +173,7 @@ class Users extends Component {
 
         titleProduct : "",
         levelProduct : "1",
-        group : "group1",
+        group : "group3",
         typeColegen : "0",
         typeSkin : "1",
 
@@ -554,7 +554,6 @@ async openFormEditProduct(item){
   
         })
     }
-      
     this.setState({
       action: "new",
 
@@ -564,7 +563,7 @@ async openFormEditProduct(item){
 
       modalNormal: true,
 
-      
+     
         
     },()=>{
         console.log(this.state.typeCurrentUpdate)
@@ -704,6 +703,7 @@ async openFormEditProduct(item){
     }).then((res)=>{
       this.getDataNamda();
       this.getDataColegen();
+        
     })    
 };
 async saveAddProduct () {
@@ -790,7 +790,7 @@ async saveAddProduct () {
         })
     })
   }
-  renderData(data,value) {
+  renderData(data,number) {
     if (data && data.length > 0) {
       let x = data.map((item, i) => {
         return (
@@ -834,7 +834,7 @@ async saveAddProduct () {
               outline
               color="info"
               size="md"
-              onClick={() => this.openFormAdd(value)}
+              onClick={() => this.openFormAdd(number)}
             >
               {/* <CIcon name="cilTrash" /> */}
               Thêm mới
@@ -871,7 +871,7 @@ async saveAddProduct () {
               outline
               color="info"
               size="md"
-              onClick={() => this.openFormAdd(value)}
+              onClick={() => this.openFormAdd(number)}
             >
               {/* <CIcon name="cilTrash" /> */}
               Thêm mới
@@ -1346,10 +1346,12 @@ async saveAddProduct () {
               </Tabs>
             </Box>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={0}>
-              {this.renderData(dataColegen,"0")}
+            {this.renderData(dataColegen,"0")}
+
             </TabPanel>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={1}>
-              {this.renderData(dataNamda,"1")}
+            {this.renderData(dataNamda,"1")}
+
             </TabPanel>
             <TabPanel  value={valueTabs} index={2}>
               <Box sx={{ width: "100%" }}>

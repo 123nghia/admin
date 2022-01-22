@@ -76,8 +76,47 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Nhóm tuổi từ 18 - 26',
+    name: 'Nhóm tuổi từ 18 - 22',
     to: '/nhom-tuoi-1',
+    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.brand}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nhóm tuổi từ 28 - 35',
+    to: '/nhom-tuoi-2',
+    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.brand}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nhóm tuổi từ 35 - 45',
+    to: '/nhom-tuoi-3',
+    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.brand}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nhóm trên 50 (55+)',
+    to: '/nhom-tuoi-4',
     icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {

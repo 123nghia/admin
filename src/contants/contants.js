@@ -1,11 +1,6 @@
 export default {
-<<<<<<< HEAD
-  //  "BASE_URL" : "https://api-pensilia.applamdep.com/",
-  "BASE_URL" : "http://192.168.1.2:3016/",
-=======
    "BASE_URL" : "https://menard-api.applamdep.com/",
-  // "BASE_URL" : "http://192.168.1.12:3012/",
->>>>>>> 1966c20efc8c98a623407671bdf99712d94037f9
+  // "BASE_URL" : "http://192.168.1.2:3016/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   
   "BASE_URL_CURRENT" : "https://menard-admin.applamdep.com/",

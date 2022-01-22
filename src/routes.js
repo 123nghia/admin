@@ -69,7 +69,10 @@ const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
 const RequestSupport = React.lazy(() => import('./views/info/requestSupport'));
 
 const GroupAge1 = React.lazy(() => import('./views/menard/groupAge1/groupAge1'));
+const GroupAge2 = React.lazy(() => import('./views/menard/groupAge1/groupAge2'));
+const GroupAge3 = React.lazy(() => import('./views/menard/groupAge1/groupAge3'));
 
+const GroupAge4 = React.lazy(() => import('./views/menard/groupAge1/groupAge4'));
 
 
 
@@ -77,6 +80,9 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   
   { path: '/nhom-tuoi-1', name: 'NhomTuoi1', component: GroupAge1 },
+  { path: '/nhom-tuoi-2', name: 'NhomTuoi2', component: GroupAge2 },
+  { path: '/nhom-tuoi-3', name: 'NhomTuoi3', component: GroupAge3 },
+  { path: '/nhom-tuoi-4', name: 'NhomTuoi4', component: GroupAge4 },
 
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', name: 'Users', component: TableUser },
