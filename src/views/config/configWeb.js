@@ -197,7 +197,7 @@ class Users extends Component {
     let files = e.target.files;
     let reader = new FileReader();
     if(value==="1"){
-      this.setState({ image1: files[0] });
+      this.setState({ image1_link: files[0] });
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({
@@ -207,7 +207,7 @@ class Users extends Component {
     };
     }
     if(value==="2"){
-      this.setState({ image2: files[0] });
+      this.setState({ image2_link: files[0] });
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({
@@ -217,7 +217,7 @@ class Users extends Component {
     };
     }
     if(value==="3"){
-      this.setState({ image3: files[0] });
+      this.setState({ image3_link: files[0] });
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({
@@ -243,12 +243,12 @@ class Users extends Component {
   onChangeImageSlide(e) {
     let files = e.target.files;
     let reader = new FileReader();
-    this.setState({ imgLayout_link: files[0] });
+    this.setState({ imageSlide_link: files[0] });
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({
-        imgLayout: e.target.result,
-        imgLayout_show: e.target.result,
+        imageSlide: e.target.result,
+        imageSlide_show: e.target.result,
       });
     };
   }
@@ -371,6 +371,7 @@ class Users extends Component {
 
           let valueConfig = JSON.parse(dataConfig.Value);
           console.log(valueConfig);
+          
           this.setState(
             {
               image: valueConfig.value.logo,
@@ -384,29 +385,40 @@ class Users extends Component {
               slideShow: valueConfig.value.slideShow,
             },
             () => {
-              const {homepage} = this.state;
-              this.setState({
-                sologan: this.state.homepage.sologan,
-                introduce: this.state.homepage.introduction,
-                image1: this.state.homepage.image1,
-                image1_show: this.state.homepage.image1,
-                image3: this.state.homepage.image2,
-                image3_show: this.state.homepage.image2,
-                image2: this.state.homepage.image3,
-                image2_show: this.state.homepage.image3,
-               
+              const {homepage, seoInfo} = this.state;
+              if(homepage){
+                this.setState({
+                  sologan: this.state.homepage.sologan,
+                  introduce: this.state.homepage.introduction,
+                  image1: this.state.homepage.image1,
+                  image1_show: this.state.homepage.image1,
+                  image1_link: this.state.homepage.image1,
+                  image2_link: this.state.homepage.image2,
+                  image3_link: this.state.homepage.image3,
 
-                
+                  image3: this.state.homepage.image3,
+                  image3_show: this.state.homepage.image3,
+                  image2: this.state.homepage.image2,
+                  image2_show: this.state.homepage.image2,
+              }
+                )}
+            if(seoInfo){
+              this.setState({
                 titleSeo: this.state.seoInfo.title,
                 titleSeo2: this.state.seoInfo.titleSEO,
                 descSeo: this.state.seoInfo.description,
                 imgLayout: this.state.seoInfo.imageShare,
                 imgLayout_show : this.state.seoInfo.imageShare,
+                imgLayout_link : this.state.seoInfo.imageShare,
+
                 keywordSeo: this.state.seoInfo.key,
                 authorSeo: this.state.seoInfo.author,
-              });
+              })
+            }    
+              
             }
           );
+          // this.onUpdate();
         } else {
           let templateDataConfigWeb = {
             key: "webinfo",
@@ -443,6 +455,8 @@ class Users extends Component {
             }
           );
         }
+    
+
       });
   }
   async addDataConfig() {
@@ -538,7 +552,10 @@ class Users extends Component {
      
       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
       }
-      let newImage = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
+     if(image1_link){
+      var newImage = `${Constants.BASE_URL}image_brand/${image1_link.name}`;
+
+     }
 
       const form2 = new FormData();
 
@@ -546,14 +563,20 @@ class Users extends Component {
      
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST").then((res)=>{console.log(res)})
     
-    let newImage2 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
+   if(image2_link){
+    var newImage2 = `${Constants.BASE_URL}image_brand/${image2_link.name}`;
+
+     }
 
     const form3 = new FormData();
     form3.append("image", image3_link);
      
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
     
-    let newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`
+    if(image3_link){
+      var newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
+
+     }
     
       coppyData.value.homepage.sologan = sologan;
       coppyData.value.homepage.introduction = introduce;
@@ -620,6 +643,13 @@ class Users extends Component {
   }
   async onUpdate() {
     const { dataConfigWeb } = this.state;
+//     let copy = {...dataConfigWeb}
+//     copy.value.homepage = {}
+//     copy.value.seoInfo = {}
+//     copy.value.slideShow = []
+// this.setState({
+//   dataConfigWeb : copy
+// })
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     await axios.post(url, {
@@ -816,6 +846,8 @@ class Users extends Component {
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
       (res) => console.log(res)
     );
+    
+
 
     this.setState({ loadingSaveLogo: true });
     setTimeout(() => {
@@ -898,17 +930,26 @@ class Users extends Component {
       actionSlide: "new",
       modalSlide : true,
       imageSlide : "",
+      imageSlide_link : "",
       imageSlide_show : "",
       contentSlide : "",
    
     })
   }
-  saveAddSlide(){
+  async saveAddSlide(){
     const {
-      imageSlide,contentSlide,dataConfigWeb,indexSlideUpdate
+      imageSlide,contentSlide,dataConfigWeb,indexSlideUpdate,imageSlide_link
     } = this.state
+    const form = new FormData();
+    form.append("image", imageSlide_link);
+   
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+      (res) => console.log(res)
+    );
+    let newImage = `${Constants.BASE_URL}image_brand/${imageSlide_link.name}`;
+    
     let ob = {
-      image : imageSlide,
+      image : newImage,
       content : contentSlide
     }
     let coppy = {...dataConfigWeb};
@@ -1126,7 +1167,7 @@ class Users extends Component {
               </ListItemButton>
             </List>
           </div>
-          <div id="tabcontent1" class="tabcontent">
+          <div id="tabcontent1" class="tabcontent defaultOpen">
             <div class="text-center">
               <Button
                 variant="contained"
@@ -1375,7 +1416,7 @@ class Users extends Component {
             />
            
           </div>
-          <div id="tabcontent4" class="tabcontent defaultOpen">
+          <div id="tabcontent4" class="tabcontent ">
             <div class="flex-a-center">
               <div class="col-sm-12 col-md-5">
                 <p class="mr-2">Logo web :</p>
@@ -1416,17 +1457,17 @@ class Users extends Component {
                 ) : null}
                 <div class="mt-3">
                   <TextFieldGroup
-                    field="image"
+                    field="imageSlide"
                     label="Ảnh minh họa : "
                     type={"file"}
                     className="mt-5"
                     // value={this.state.image}
                     onChange={(e) => {
-                      this.onChangeImage(e);
+                      this.onChangeImageSlide(e);
                     }}
                     onClick={(e) => {
                       e.target.value = null;
-                      this.setState({ image_show: "" });
+                      this.setState({ imageSlide_show: "" });
                     }}
                   />
                 </div>
