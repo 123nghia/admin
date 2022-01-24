@@ -23,7 +23,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-
+import { Editor } from '@tinymce/tinymce-react';
 import {
   CLabel,
   CRow,
@@ -179,6 +179,16 @@ class Users extends Component {
 
         typeCurrentUpdate : "0",
         idCurrentUpdate : "",
+        idUpdateProduct : null,
+        imageProduct : "",
+        imageProduct_link : "",
+        imageProduct_show : "",
+      dataTuVan1 : [],
+      dataTuVan2: [],
+      idAddTuvan : null,
+      imageTuvan : "",
+      imageTuvan_show:"",
+      imageTuvan_link :""
 
     };
   }
@@ -219,9 +229,57 @@ class Users extends Component {
       this.setState({ image: e.target.result, image_show: e.target.result });
     };
   }
+  onChangeImageTuVan(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ imageTuvan_link: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({ imageTuvan: e.target.result, imageTuvan_show: e.target.result });
+    };
+  }
+  async getDataTuVan(value){
+    const 
+    {group} = this.state
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/AdvisorItem/getAll";
+    var type = null
+    if(value==="0"){
+        type = 0
+    }else{
+      type = 1
+
+    }
+    await axios.get(url,{
+      params : {
+     
+        type : type,
+        group : group
+      }
+    }).then((res) => {
+      if(value==="0"){
+        this.setState({
+          dataTuVan1 :res.data.data
+    
+          })
+    }else{
+      this.setState({
+        dataTuVan2 :res.data.data
+  
+        })
+
+    }
+      
+      console.log("res",res)
+    })
+  }
   async componentDidMount() {
     this.getDataColegen();
     this.getDataNamda();
+    this.getProduct();
+    this.getDataTuVan("0");
+    this.getDataTuVan("1");
+
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -231,10 +289,10 @@ class Users extends Component {
       }
     }
   }
-  renderInfoFuncWeb() {
-    document.getElementById("renderInfoFuncWebId").innerHTML =
-      this.state.htmlFuncWeb;
-  }
+  // renderInfoFuncWeb() {
+  //   document.getElementById("renderInfoFuncWebId").innerHTML =
+  //     this.state.htmlFuncWeb;
+  // }
   async getInfoFunc() {
     let baseUrlapi = Constants.INFO_FUNC_WEB;
     let url = baseUrlapi;
@@ -254,6 +312,22 @@ class Users extends Component {
         }
       }
     });
+  }
+  async getProduct(){
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/Recomend/getAll";
+    await axios
+      .get(url,{
+        params: {
+          group : this.state.group
+        }
+      })
+      .then((res) => {
+        console.log('product',res)
+        this.setState({
+          dataProductTemp : res.data.data
+        })
+      })
   }
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
@@ -352,7 +426,7 @@ class Users extends Component {
     this.setState({
       dataConfigWeb: coppyData,
     });
-    console.log(dataConfigWeb);
+  
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     await axios.post(url, {
@@ -411,6 +485,23 @@ class Users extends Component {
   };
   onChange(key, val) {
     this.setState({ [key]: val });
+  }
+  onChangeImageProduct(e){
+    
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ imageProduct_link: files[0] });
+    
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({
+        imageProduct: e.target.result,
+        imageProduct_show: e.target.result,
+      });
+    };
+
+   
+
   }
   openForm = () => {
     this.setState({
@@ -507,7 +598,7 @@ class Users extends Component {
           statusModalUpdate: false,
         },
         () => {
-          console.log(this.state.dataConfigWeb);
+         
           this.onUpdate();
         }
       );
@@ -526,8 +617,11 @@ class Users extends Component {
         actionProduct : "new",
         modalProduct : true,
         titleProduct : "",
-          image: "",
-          image_show: "",
+        descProduct : "",
+        hrefProduct : "",
+          imageProduct: "",
+          imageProduct_show: "",
+          imageProduct_link : "",
           levelProduct : "",
      
     })
@@ -536,9 +630,14 @@ async openFormEditProduct(item){
   this.setState({
       actionProduct : "edit",
       titleProduct : item.title,
-      image: item.img,
-      image_show: item.img,
-      levelProduct : item.level,
+        descProduct : item.description,
+        hrefProduct :item.href,
+          imageProduct: item.avatar,
+          imageProduct_show: item.avatar,
+        
+          levelProduct : item.level,
+      idUpdateProduct : item._id,
+      brandProduct : item.brandName,
       modalProduct : true
   })
 }
@@ -554,6 +653,7 @@ async openFormEditProduct(item){
   
         })
     }
+      
     this.setState({
       action: "new",
 
@@ -563,16 +663,136 @@ async openFormEditProduct(item){
 
       modalNormal: true,
 
-     
+      
         
     },()=>{
-        console.log(this.state.typeCurrentUpdate)
+      
     });
+  };
+  openAddTuVan=(value)=>{
+    this.setState({
+      actionTuvan: "new",
+      modalTuvan: true,
+      imageTuvan : "",
+      title :"",
+      lifeStyle :"",
+      skincare :"",
+        idAddTuvan : value
+    },()=>{
+      
+    });
+  };
+  openEditTuVan=(item,value)=>{
+    this.setState({
+      actionTuvan: "new",
+      modalTuvan: true,
+      imageTuvan : item.avatar,
+      imageTuvan_link : item.avatar,
+      imageTuvan_show : item.avatar,
+      levelNormal : item.level,
+      title :item.title,
+      lifeStyle :item.lifeStyle,
+      skincare :item.skincare,
+        idAddTuvan : value
+    },()=>{
+      
+    });
+  };
+  async deleteTuvan (item) {
+    const {dataTuVan1, dataTuVan2} = this.state
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/AdvisorItem/delete";
+    await axios.post(url, {
+        id : item._id
+    }).then((res)=>{
+      this.getDataTuVan("0");
+      this.getDataTuVan("1");
+
+    })
+  };
+  async saveAddTuvan () {
+    const {
+      imageTuvan,
+        levelNormal,
+        titleTuvan,
+        titleNormal,
+        lifeStyle,
+        imageTuvan_link,
+        skincare,
+    } = this.state;
+    const form = new FormData();
+    form.append("image", imageTuvan_link);
+   
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+      (res) => console.log(res)
+    );
+    let newImage =""
+    if(imageTuvan_link){
+      newImage = `${Constants.BASE_URL}image_brand/${imageTuvan_link.name}`;
+
+    }
+    console.log(newImage)
+
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/AdvisorItem/add";
+    await axios.post(url, {
+        level: levelNormal,
+        title : titleTuvan,
+      avatar : newImage,
+        lifeStyle : lifeStyle,
+        skincare : skincare,
+        type: this.state.idAddTuvan,
+        group: this.state.group,
+        icon :newImage
+    }).then((res)=>{
+      this.getDataTuVan("0");
+      this.getDataTuVan("1");
+
+    })    
+  };
+  async saveEditTuvan () {
+    const {
+      imageTuvan,
+        levelNormal,
+        titleTuvan,
+        titleNormal,
+        lifeStyle,
+        skincare,
+        imageTuvan_link,
+        imageTuvan_show,
+    } = this.state;
+    const form = new FormData();
+    form.append("image", imageTuvan_link);
+   
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+      (res) => console.log(res)
+    );
+    let newImage =""
+    if(imageTuvan_link){
+      newImage = `${Constants.BASE_URL}image_brand/${imageTuvan_link.name}`;
+
+    }
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/AdvisorItem/add";
+    await axios.post(url, {
+        level: levelNormal,
+        title : titleTuvan,
+      avatar : newImage,
+        lifeStyle : lifeStyle,
+        skincare : skincare,
+        type: this.state.idAddTuvan,
+        group: this.state.group,
+        icon :newImage
+    }).then((res)=>{
+      this.getDataTuVan("0");
+      this.getDataTuVan("1");
+
+    })    
   };
   async openFormEdit(item) {
     this.setState({
       action: "edit",
-
+      idUpdateProduct : item._id,
       levelNormal : item.level,
       
       titleNormal : item.content,
@@ -587,13 +807,13 @@ async openFormEditProduct(item){
   }
   async notificationAlert(item){
     Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Chắc chắn xóa?',
+        text: "Bạn sẽ không thể hoàn tác!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Xóa ngay'
       }).then((result) => {
         if (result.isConfirmed) {
             this.openDelete(item);
@@ -613,21 +833,27 @@ async openFormEditProduct(item){
         }
     })
   };
-  openDeleteProduct = () => {
-    const { dataConfigWeb } = this.state;
-    let coppyData = {
-      ...dataConfigWeb,
-    };
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
+ async openDeleteProduct (item)  {
+    
+  Swal.fire({
+    title: 'Chắc chắn xóa?',
+    text: "Bạn sẽ không thể hoàn tác!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Xóa ngay'
+  }).then((result) => {
         if (result.isConfirmed) {
+          var baseUrlapi = Constants.BASE_URL;
+            let url = baseUrlapi + "api/Recomend/delete";
+           axios.post(url, {
+            
+              id:item._id,
+            }).then(()=>{
+              this.getProduct();
+
+            })
           Swal.fire(
             'Deleted!',
             'Your file has been deleted.',
@@ -636,14 +862,7 @@ async openFormEditProduct(item){
         }
       })
     
-    this.setState(
-      {
-        dataConfigWeb: coppyData,
-      },
-      () => {
-        this.onUpdate();
-      }
-    );
+   
   };
   async saveEdit() {
     const {
@@ -670,24 +889,53 @@ async openFormEditProduct(item){
   }
   async saveEditProduct() {
     const {
-        levelNormal,
-        valueNormal,
-        titleNormal
+      titleProduct  ,
+      descProduct  ,
+      hrefProduct ,
+        image,
+        image_show ,
+        levelProduct ,
+    imageProduct_show,
+    imageProduct,
+    imageProduct_link,
+    linkProduct,
+    brandProduct,
+    
+    levelNormal
     } = this.state;
+    const form = new FormData();
+    form.append("image", imageProduct_link);
+   
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+      (res) => console.log(res)
+    );
+    let newImage = imageProduct
+    if(imageProduct_link){
+      newImage  = `${Constants.BASE_URL}image_brand/${imageProduct_link.name}`;
 
+    }
     var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/update";
+    let url = baseUrlapi + "api/Recomend/update";
     await axios.post(url, {
-      value: JSON.stringify(this.state.dataConfigWeb),
-      dataType: "1",
-      type: "system",
-      id: this.state.idUpdate,
-    });
+      level :levelNormal,
+      group : "group1",
+      productType : "0", 
+      brandName: brandProduct,
+      description : descProduct,
+      title : titleProduct, 
+      avatar:newImage,
+      href : hrefProduct,
+      type:"0",
+      id: this.state.idUpdateProduct,
+    }).then(()=>{
+      this.getProduct();
+
+    })
 
     
   }
   async saveAdd () {
-    console.log(this.state.typeCurrentUpdate)
+
     const {
         levelNormal,
         titleNormal
@@ -705,22 +953,45 @@ async openFormEditProduct(item){
       this.getDataColegen();
     })    
 };
-async saveAddProduct () {
-    let baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/update";
-    await axios.post(url, {
-      value: JSON.stringify(this.state.dataConfigWeb),
-      dataType: "1",
-      type: "system",
-      id: this.state.idUpdate,
-    }).then(res=>{
-        console.log(res)
 
-        this.setState({
-            dataColegen : res,
-            dataNamda : res,
-            dataProduct : res,
-        })
+async saveAddProduct () {
+  const {titleProduct, 
+    descProduct,
+    imageProduct_show,
+    imageProduct,
+    imageProduct_link,
+    linkProduct,group,hrefProduct
+    ,
+    brandProduct,
+    levelNormal
+  } = this.state
+  const form = new FormData();
+  form.append("image", imageProduct_link);
+ 
+  await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+    (res) => console.log(res)
+  );
+  let newImage = imageProduct
+  if(imageProduct_link){
+    newImage = `${Constants.BASE_URL}image_brand/${imageProduct_link.name}`;
+
+  }
+
+    let baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/Recomend/add";
+    await axios.post(url, {
+      level :levelNormal,
+      group : group,
+      productType : "0", 
+      brandName: brandProduct,
+      description : descProduct,
+      title : titleProduct, 
+      avatar:newImage,
+      href : hrefProduct,
+      type:"0"
+    }).then(res=>{
+        this.getProduct();
+      
     })
 };
   async getDataColegen(){
@@ -728,12 +999,14 @@ async saveAddProduct () {
     let url = baseUrlapi + "api/ConcludeItem/getAll";
     await axios.get(url, {
       params : {
-        level : "1",
+      
         group : this.state.group,
         type : this.state.typeColegen
       }
     }).then(res=>{
-        console.log(res)
+     
+
+       
         let coppyData = [
             ...res.data.data
         ]
@@ -751,7 +1024,7 @@ async saveAddProduct () {
     let url = baseUrlapi + "api/ConcludeItem/getAll";
     await axios.get(url, {
       params : {
-        level : "1",
+       
         group : this.state.group,
         type : this.state.typeSkin
       }
@@ -789,14 +1062,15 @@ async saveAddProduct () {
         })
     })
   }
-  renderData(data,number) {
+
+  renderData(data,value) {
     if (data && data.length > 0) {
       let x = data.map((item, i) => {
         return (
           <tr key={i}>
             <td className="text-center">{i + 1}</td>
             <td className="text-center">
-              {item.level === "1" ? "1-3" : item.level === "2" ? "4-5" : "6-7"}
+              {item.level === "1" ? "1-3" : "4-5"}
             </td>
             {/* <td className="text-center">{item.name}</td> */}
 
@@ -833,7 +1107,7 @@ async saveAddProduct () {
               outline
               color="info"
               size="md"
-              onClick={() => this.openFormAdd(number)}
+              onClick={() => this.openFormAdd(value)}
             >
               {/* <CIcon name="cilTrash" /> */}
               Thêm mới
@@ -870,7 +1144,7 @@ async saveAddProduct () {
               outline
               color="info"
               size="md"
-              onClick={() => this.openFormAdd(number)}
+              onClick={() => this.openFormAdd(value)}
             >
               {/* <CIcon name="cilTrash" /> */}
               Thêm mới
@@ -914,13 +1188,18 @@ async saveAddProduct () {
               Không tìm thấy dữ liệu
             </td>
             <td className="text-center">{i + 1}</td>
+            <td className="text-center">{item.brandName}</td>
+
             <td className="text-center">{item.title}</td>
+
             {/* <td className="text-center">{item.name}</td> */}
 
             <td className="text-center">
-              <img src={`${item.img}`} width={"60px"} height={"60px"} alt="" />
+              <img src={`${item.avatar}`} width={"60px"} height={"60px"} alt="" />
             </td>
-            <td className="text-center">{item.level}</td>
+            <td className="text-center">{item.description}</td>
+
+            <td className="text-center">{item.href}</td>
             <td className="text-center">
               <CButton
                 outline
@@ -936,7 +1215,7 @@ async saveAddProduct () {
                 outline
                 color="danger"
                 size="sm"
-                onClick={() => this.openDelete(i)}
+                onClick={() => this.openDeleteProduct(item)}
               >
                 {/* <CIcon name="cilPencil" /> */}
                 Xóa
@@ -966,11 +1245,13 @@ async saveAddProduct () {
           <thead className="thead-light">
             <tr>
               <th className="text-center radius_th_left">STT.</th>
-              {/* <th className="text-center">Tên</th> */}
+              <th className="text-center">Tên</th>
               <th className="text-center">Tiêu đề</th>
-              <th className="text-center">Ảnh</th>
 
-              <th className="text-center">Độ ưu tiên</th>
+              <th className="text-center">Ảnh</th>
+              <th className="text-center">Mô tả</th>
+
+              <th className="text-center">Đường dẫn</th>
 
               <th className="text-center radius_th_right">Hành động</th>
             </tr>
@@ -1019,6 +1300,129 @@ async saveAddProduct () {
             </td>
           </tbody>
         </table>
+        </div>
+      );
+      return render;
+    }
+  }
+  renderDataTuVan(data,value){
+    if (data && data.length > 0) {
+      let x = data.map((item, i) => {
+        return (
+          <tr key={i}>
+            <td className="text-center">{i + 1}</td>
+            <td className="text-center">
+              <img src={`${item.Icon}`} width={"60px"} height={"60px"} alt="" />
+            </td>
+
+            <td className="text-center">{item.title}</td>
+            <td className="text-center">{item.lifeStyle}</td>
+
+            
+            {/* <td className="text-center">{item.name}</td> */}
+            <td className="text-center">{item.skincare}</td>
+            <td className="text-center">
+              {item.level === "1" ? "1-3" : "4-5"}
+            </td>
+            <td className="text-center">
+              <CButton
+                outline
+                color="success"
+                size="sm"
+                onClick={() => this.openEditTuVan(item)}
+              >
+                {/* <CIcon name="cilTrash" /> */}
+                Chỉnh sửa
+              </CButton>{" "}
+              <CButton
+                style={styles.mgl5}
+                outline
+                color="danger"
+                size="sm"
+                onClick={() => this.deleteTuvan(item)}
+              >
+                {/* <CIcon name="cilPencil" /> */}
+                Xóa
+              </CButton>
+            </td>
+          
+          </tr>
+        );
+      });
+      let render = (
+          <div className="bg_panel">
+              <div class="text-center">
+            <CButton
+              outline
+              color="info"
+              size="md"
+              onClick={() => this.openAddTuVan(value)}
+            >
+              {/* <CIcon name="cilTrash" /> */}
+              Thêm mới
+            </CButton>{" "}
+          </div>
+          
+
+        <table
+          ble
+          className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+        >
+          <thead className="thead-light">
+            <tr>
+              <th className="text-center">STT.</th>
+              {/* <th className="text-center">Tên</th> */}
+              <th className="text-center">Hình ảnh</th>
+              <th className="text-center">Tiêu đề</th>
+              <th className="text-center">Lối sống</th>
+              <th className="text-center">Chăm sóc</th>
+              <th className="text-center">Cấp độ</th>
+              <th className="text-center">Hành động</th>       
+            </tr>
+          </thead>
+          <tbody>{x}</tbody>
+        </table>
+        </div>
+      );
+      return render;
+    } else {
+      let render = (
+        <div>
+          <div class="text-center">
+          <CButton
+              outline
+              color="info"
+              size="md"
+              onClick={() => this.openAddTuVan(value)}
+            >
+              {/* <CIcon name="cilTrash" /> */}
+              Thêm mới
+            </CButton>{" "}
+          </div>
+          <table
+            ble
+            className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+          >
+            <thead className="thead-light">
+              <tr>
+                <th className="text-center radius_th_left">STT.</th>
+                {/* <th className="text-center">Tên</th> */}
+                <th className="text-center">Cấp độ</th>
+                <th className="text-center">Mô tả</th>
+
+                <th className="text-center">Hành động</th>
+
+                <th className="text-center radius_th_right">Value min-max</th>
+              </tr>
+            </thead>
+            <tbody>
+              <td>
+                <div class="text-center" rows="4" cols="3">
+                  Không tìm thấy dữ liệu
+                </div>
+              </td>
+            </tbody>
+          </table>
         </div>
       );
       return render;
@@ -1114,7 +1518,9 @@ async saveAddProduct () {
       dataColegenTemp,
       dataNamTemp,
       valueOverview,
+      dataTuVan1,
       dataProductTemp,
+      dataTuVan2
     } = this.state;
 
     if (!this.state.isLoading) {
@@ -1130,6 +1536,15 @@ async saveAddProduct () {
               {this.state.actionProduct === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
+            <TextFieldGroup
+                field="brandProduct"
+                label="Tên sản phẩm"
+                value={this.state.brandProduct}
+                placeholder={"Tên..."}
+                onChange={(e) => {
+                  this.setState({ brandProduct: e.target.value });
+                }}
+              />
               <TextFieldGroup
                 field="titleProduct"
                 label="Tiêu đề"
@@ -1139,27 +1554,46 @@ async saveAddProduct () {
                   this.setState({ titleProduct: e.target.value });
                 }}
               />
+              <CTextarea
+                field="descProduct"
+                label="Mô tả"
+                value={this.state.descProduct}
+                placeholder={"Mô tả..."}
+                onChange={(e) => {
+                  this.setState({ descProduct: e.target.value });
+                }}
+              />
               <TextFieldGroup
-            field="image"
+            field="imageProduct"
             label="Ảnh minh họa"
             type={"file"}
             // value={this.state.image}
             onChange={(e) => {
-              this.onChangeImage(e);
+              this.onChangeImageProduct(e);
             }}
             onClick={(e) => {
               e.target.value = null;
-              this.setState({ image_show: "" });
+              this.setState({ imageProduct_show: "" });
             }}
           />
-          {
-                   this.state.image == "" || this.state.image == null || this.state.image == undefined ?
-                  "" :
-                    <img alt="" width="200px" height="auto" src={
-                    this.state.image_show == "" ? `${Constants.BASE_URL}/public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
-          }
+<img
+              alt=""
+              style={{ width: "140px", marginBottom: 20 }}
+              height="auto"
+              src={this.state.imageProduct}
+            />
+
+             <TextFieldGroup
+                field="hrefProduct"
+                label="Đường dẫn"
+                value={this.state.hrefProduct}
+                placeholder={"Link..."}
+                onChange={(e) => {
+                  this.setState({ hrefProduct: e.target.value });
+                }}
+              />
               <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Cấp độ ưu tiên:</CLabel>
+                <CLabel>Cấp độ:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
                     onChange={async (e) => {
@@ -1167,18 +1601,17 @@ async saveAddProduct () {
                     }}
                     custom
                     size="sm"
-                    name="levelProduct"
+                    name="levelNormal"
                     id="SelectLm"
                   >
                     {arrLevel.map((item, i) => {
-                      if (item.item === this.state.levelProduct) {
+                      if (item.item === this.state.levelNormal) {
                         return (
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
                               ? "1-3"
-                              : item.item === "2"
-                              ? "4-5"
-                              : "6-7"}
+                              :  "4-5"
+                              }
                           </option>
                         );
                       } else {
@@ -1186,25 +1619,26 @@ async saveAddProduct () {
                           <option key={i} value={item.item}>
                             {item.item === "1"
                               ? "1-3"
-                              : item.item === "2"
-                              ? "4-5"
-                              : "6-7"}
+                              :  "4-5"
+                              }
                           </option>
                         );
                       }
                     })}
                   </CSelect>
                 ) : null}
-              </div>
+              </div>   
+         
+              
              
             </ModalBody>
             <ModalFooter>
               <CButton
                 color="primary"
                 onClick={() => {
-                  this.state.action === "new"
-                    ? this.saveAdd()
-                    : this.saveEdit();
+                  this.state.actionProduct === "new"
+                    ? this.saveAddProduct()
+                    : this.saveEditProduct();
                 }}
                 disabled={this.state.isLoading}
               >
@@ -1224,6 +1658,144 @@ async saveAddProduct () {
           </Modal>
 </div>
 <div class="modal_normal">
+<Modal
+            size="xl"
+            isOpen={this.state.modalTuvan}
+            className={this.props.className}
+          >
+            <ModalHeader>
+              {this.state.actionTuvan === "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
+            <ModalBody>
+              <CTextarea
+                field="titleTuvan"
+                label="Tiêu đề"
+                className="mt-3"
+                value={this.state.titleTuvan}
+                placeholder={"Tiêu đề"}
+                onChange={(e) => {
+                  this.setState({ titleTuvan: e.target.value });
+                }}
+              />
+              <CTextarea
+                field="lifeStyle"
+                label="Lối sống"
+                className="mt-3"
+                value={this.state.lifeStyle}
+                placeholder={"Lối sống"}
+                onChange={(e) => {
+                  this.setState({ lifeStyle: e.target.value });
+                }}
+              />
+              <CTextarea
+                field="skincare"
+                label="Chăm sóc"
+                className="mt-3"
+                value={this.state.skincare}
+                placeholder={"Chăm sóc"}
+                onChange={(e) => {
+                  this.setState({ skincare: e.target.value });
+                }}
+              />
+              <TextFieldGroup
+            field="icon"
+            label="Ảnh minh họa"
+            type={"file"}
+            // value={this.state.image}
+            onChange={(e) => {
+              this.onChangeImageTuVan(e);
+            }}
+            onClick={(e) => {
+              e.target.value = null;
+              this.setState({ imageTuvan_show: "" });
+            }}
+          />
+<img
+              alt=""
+              style={{ width: "140px", marginBottom: 20 }}
+              height="auto"
+              src={this.state.imageTuvan}
+            />
+              {/* <Editor
+         onInit={{  }}
+         className="mt-3"
+         initialValue="<p></p>"
+         init={{
+           height: 250,
+           menubar: false,
+           plugins: [
+             'advlist autolink lists link image charmap print preview anchor',
+             'searchreplace visualblocks code fullscreen',
+             'insertdatetime media table paste code help wordcount'
+           ],
+           toolbar: 'undo redo | formatselect | ' +
+           'bold italic backcolor | alignleft aligncenter ' +
+           'alignright alignjustify | bullist numlist outdent indent | ' +
+           'removeformat | help',
+           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+         }}
+       /> */}
+              <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Cấp độ:</CLabel>
+                {arrLevel != undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevel(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="levelNormal"
+                    id="SelectLm"
+                  >
+                    {arrLevel.map((item, i) => {
+                      if (item.item === this.state.levelNormal) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "1"
+                              ? "1-3"
+                              : "4-5"
+                              }
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                            {item.item === "1"
+                              ? "1-3"
+                              :  "4-5"
+                              }
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>           
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={() => {
+                  this.state.actionTuvan === "new"
+                    ? this.saveAddTuvan()
+                    : this.saveEditTuvan();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => {
+                  this.setState({
+                    modalTuvan: false,
+                  });
+                }}
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
           <Modal
             size="xl"
             isOpen={this.state.modalNormal}
@@ -1260,9 +1832,8 @@ async saveAddProduct () {
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
                               ? "1-3"
-                              : item.item === "2"
-                              ? "4-5"
-                              : "6-7"}
+                              :  "4-5"
+                               }
                           </option>
                         );
                       } else {
@@ -1270,9 +1841,8 @@ async saveAddProduct () {
                           <option key={i} value={item.item}>
                             {item.item === "1"
                               ? "1-3"
-                              : item.item === "2"
-                              ? "4-5"
-                              : "6-7"}
+                              : "4-5"
+                              }
                           </option>
                         );
                       }
@@ -1375,11 +1945,11 @@ async saveAddProduct () {
                   />
                 </Tabs>
                 <TabPanel value={valueOverview} index={0}>
-                {this.renderData(dataColegen,"0")}
+                {this.renderDataTuVan(dataTuVan1,"0")}
 
                 </TabPanel>
                 <TabPanel value={valueOverview} index={1}>
-                {this.renderData(dataNamda,"1")}
+                {this.renderDataTuVan(dataTuVan2,"1")}
 
                 </TabPanel>
               </Box>

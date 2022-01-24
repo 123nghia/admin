@@ -99,7 +99,7 @@ class Login extends Component {
                   <CCardBody>
                     <form onSubmit={async e => await this.onSubmit(e)}>
                     <div class="text-center">
-                    <img style={{ alignSelf: 'center' }} height="40px" width="auto" src={Logo} />
+                    <img style={{ alignSelf: 'center' }} height="40px" width="auto" src="https://menard-api.applamdep.com/image_brand/logo.png" />
 </div>
                       <h1>Đăng nhập</h1>
                       <span style={{ color: 'red' }} className="error">{errors.common}</span>

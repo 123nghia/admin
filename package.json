@@ -36,6 +36,7 @@
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.7",
+    "@tinymce/tinymce-react": "^3.13.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
     "axios": "^0.21.1",
     "classnames": "^2.3.1",

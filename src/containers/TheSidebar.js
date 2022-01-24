@@ -99,7 +99,7 @@ const TheSidebar = () => {
       <CSidebarBrand className="d-md-down-none" to="/">
       <div class="flex-center">
         <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{ textDecoration: 'underline' }}>
-          <img src={logoMainnet} width="110" height="auto" alt="HB Analytics Logo" className="navbar-brand-full" /></NavLink>
+          <img src="https://menard-api.applamdep.com/image_brand/logo.png" width="110" height="auto" alt="HB Analytics Logo" className="navbar-brand-full" /></NavLink>
           </div>
         <CIcon
           className="c-sidebar-brand-minimized"
