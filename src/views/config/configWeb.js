@@ -133,6 +133,7 @@ class Users extends Component {
       imgLayout_show :"",
       imgLayout_link :"",
       imgLayout :"",
+      imageSeo_link : "",
 
     };
   }
@@ -155,9 +156,10 @@ class Users extends Component {
       }
     }
     tablinks = document.getElementsByClassName("tablinks");
+   
     // for (i = 0; i < tablinks.length; i++) {
     //   if (i === id) {
-    //     tablinks[i].classList.add("active");
+    //     tablinks[id].classList.add("active");
     //   } else {
     //     tablinks[i].classList.remove("defaultOpen");
     //     tablinks[i].classList.remove("active");
@@ -173,11 +175,14 @@ class Users extends Component {
     reader.onload = (e) => {
       this.setState({ image: e.target.result, image_show: e.target.result });
     };
+    
   }
   onChangeImage2(e) {
+
     let files = e.target.files;
     let reader = new FileReader();
     this.setState({ imageSeo_link: files[0] });
+    console.log(this.state.imageSeo_link)
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({
@@ -185,6 +190,8 @@ class Users extends Component {
         imageSeo_show: e.target.result,
       });
     };
+
+    
   }
   onChangeImageHomepage(e,value) {
     let files = e.target.files;
@@ -329,8 +336,7 @@ class Users extends Component {
   }
 
   renderInfoFuncWeb() {
-    document.getElementById("renderInfoFuncWebId").innerHTML =
-      this.state.htmlFuncWeb;
+    // document.getElementById("renderInfoFuncWebId").innerHTML = this.state.htmlFuncWeb;
   }
   async getInfoFunc() {
     let baseUrlapi = Constants.INFO_FUNC_WEB;
@@ -510,9 +516,15 @@ class Users extends Component {
       image3,
       image3_show,
       image2,
+      imageSeo_show,
       image2_show,
       imgLayout,
+      imageSeo_link,
       updateLevel,
+      imgLayout_link,
+      image1_link,
+      image2_link,
+      image3_link
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
@@ -520,21 +532,51 @@ class Users extends Component {
       ...dataConfigWeb,
     };
     if (change === "homepage") {
+      const form1 = new FormData();
+
+      form1.append("image", image1_link);
+     
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
+      }
+      let newImage = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
+
+      const form2 = new FormData();
+
+      form2.append("image", image2_link);
+     
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST").then((res)=>{console.log(res)})
+    
+    let newImage2 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
+
+    const form3 = new FormData();
+    form3.append("image", image3_link);
+     
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
+    
+    let newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`
+    
       coppyData.value.homepage.sologan = sologan;
       coppyData.value.homepage.introduction = introduce;
-      coppyData.value.homepage.image1 = image1;
-      coppyData.value.homepage.image2 = image2;
-      coppyData.value.homepage.image3 = image3;
-   
-    }
+      coppyData.value.homepage.image1 = newImage;
+      coppyData.value.homepage.image2 = newImage2;
+      coppyData.value.homepage.image3 = newImage3;
+      
+    
     if (change === "seoInfo") {
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
       coppyData.value.seoInfo.description = descSeo;
-      coppyData.value.seoInfo.imageShare = imgLayout;
       coppyData.value.seoInfo.author = authorSeo;
       coppyData.value.seoInfo.key = keywordSeo;
+      const form1 = new FormData();
+    form1.append("image", imgLayout_link);
+     
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
     }
+    let newImage4 = `${Constants.BASE_URL}image_brand/${imgLayout_link.name}`;
+    
+    coppyData.value.seoInfo.imageShare = newImage4;
+    
 
     this.setState({
       dataConfigWeb: coppyData,
@@ -770,7 +812,7 @@ class Users extends Component {
     const { image, image_link } = this.state;
     const form = new FormData();
     form.append("image", image_link);
-
+   
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
       (res) => console.log(res)
     );
