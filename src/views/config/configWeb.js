@@ -842,11 +842,11 @@ class Users extends Component {
     const { image, image_link } = this.state;
     const form = new FormData();
     form.append("image", image_link);
-   
+    console.log(image_link)
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
       (res) => console.log(res)
     );
-    
+   
 
 
     this.setState({ loadingSaveLogo: true });
@@ -1457,17 +1457,17 @@ class Users extends Component {
                 ) : null}
                 <div class="mt-3">
                   <TextFieldGroup
-                    field="imageSlide"
+                    field="image"
                     label="Ảnh minh họa : "
                     type={"file"}
                     className="mt-5"
                     // value={this.state.image}
                     onChange={(e) => {
-                      this.onChangeImageSlide(e);
+                      this.onChangeImage(e);
                     }}
                     onClick={(e) => {
                       e.target.value = null;
-                      this.setState({ imageSlide_show: "" });
+                      this.setState({ image_show: "" });
                     }}
                   />
                 </div>
