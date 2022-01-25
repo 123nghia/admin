@@ -1456,17 +1456,17 @@ class Users extends Component {
                 ) : null}
                 <div class="mt-3">
                   <TextFieldGroup
-                    field="imageSlide"
+                    field="image"
                     label="Ảnh minh họa : "
                     type={"file"}
                     className="mt-5"
                     // value={this.state.image}
                     onChange={(e) => {
-                      this.onChangeImageSlide(e);
+                      this.onChangeImage(e);
                     }}
                     onClick={(e) => {
                       e.target.value = null;
-                      this.setState({ imageSlide_show: "" });
+                      this.setState({ image_show: "" });
                     }}
                   />
                 </div>

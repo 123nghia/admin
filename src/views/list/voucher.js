@@ -12,6 +12,8 @@ import {
 
 import {
   CButton,
+  CLabel,
+  CSelect,
   CRow,
   CCol
 } from '@coreui/react'
@@ -55,9 +57,16 @@ class EndUser extends Component {
       type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
       isLoading: false,
-      idCurrentUpdate : null
+      idCurrentUpdate : null,
+      levelNormal : "0"
     };
   }
+  changeLevel = (e) => {
+    e.preventDefault();
+    this.setState({
+        levelNormal: e.target.value,
+    });
+  };
   async componentDidMount() {
     const { type } = this.state;
 
@@ -221,14 +230,18 @@ class EndUser extends Component {
     this.setState({
       modalDelete: !this.state.modalDelete,
       id: item._id
-    })
-  }
+    });
+  };
 openVoucher(){
   this.setState({
     actionVoucher : "new",
-    modalVoucher : true
-  })
-}
+    modalVoucher : true,
+    idCurrentUpdate : "",
+    nameVoucher : "",
+    phoneVoucher : "",
+    levelNormal : "",
+  });
+};
 openEditVoucher(item){
   const {nameVoucher , phoneVoucher,idCurrentUpdate} = this.state
   this.setState({
@@ -236,14 +249,16 @@ openEditVoucher(item){
     modalVoucher : true,
     idCurrentUpdate : item._id,
     nameVoucher : item.fullName,
-    phoneVoucher : item.phoneNumber
+    phoneVoucher : item.phoneNumber,
+    levelNormal : item.status
   })
 };
 async updateVoucher(){
   const {
     nameVoucher,
     phoneVoucher,
-    idCurrentUpdate
+    idCurrentUpdate,
+    levelNormal,
   } = this.state;
   var baseUrlapi = Constants.BASE_URL;
   let url = baseUrlapi + "api/evoucher/update";
@@ -251,6 +266,7 @@ async updateVoucher(){
       fullName :nameVoucher,
       phoneNumber : phoneVoucher,
       id : idCurrentUpdate,
+      status : levelNormal,
     }).then((res) => {
       this.getData();
     });
@@ -258,13 +274,15 @@ async updateVoucher(){
 async addVoucher(){
   const {
     nameVoucher,
-    phoneVoucher
+    phoneVoucher,
+    levelNormal
   } = this.state;
   var baseUrlapi = Constants.BASE_URL;
   let url = baseUrlapi + "api/evoucher/add";
     await axios.post(url,{
       fullName :nameVoucher,
-      phoneNumber : phoneVoucher
+      phoneNumber : phoneVoucher,
+      status : levelNormal
     }).then((res) => {
       this.getData();
     });
@@ -317,6 +335,20 @@ async removeVoucher(item){
 
   render() {
     const { data, arrPagination, key,phoneVoucher,nameVoucher ,modalVoucher} = this.state;
+    const arrLevel = [
+      {
+        item: "0",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "3",
+      },
+    ];
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -346,6 +378,36 @@ async removeVoucher(item){
                 onChange={(e) => this.onChange("phoneVoucher", e.target.value)}
                 // rows="5"
               />
+              <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Trạng thái:</CLabel>
+                {arrLevel !== undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevel(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="levelNormal"
+                    id="SelectLm"
+                  >
+                    {arrLevel.map((item, i) => {
+                      if (item.item === this.state.levelNormal) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Đã hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Đã hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>   
             </ModalBody>
             <ModalFooter>
               <CButton
@@ -353,7 +415,7 @@ async removeVoucher(item){
                 onClick={(e) => {
                   this.state.actionVoucher === "new"
                     ? this.addVoucher()
-                    : this.updateUser();
+                    : this.updateVoucher();
                 }}
                 disabled={this.state.isLoading}
               >
@@ -429,10 +491,14 @@ async removeVoucher(item){
                                 <td className="text-center">{item.fullName}</td>
                                 <td className="text-center">{item.phoneNumber}</td>
                                 <td className="text-center">
-                                {item.create_date}
+                                {(new Date(item.create_date)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}
+                               
                                 </td>
                         
-                                <td className="text-center">{item.status}</td>
+                                <td className="text-center">
+
+                                {item.status === "0" ? "Lên lịch" : (item.status === "1") ? "Chưa hẹn" : (item.status === "2") ? "Đã gặp" : "Hoàn tất"}
+                                </td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={(e) => this.openEditVoucher(item)} >
                                     <CIcon name="cilPencil" />
@@ -490,7 +556,36 @@ async removeVoucher(item){
                 onChange={e => this.onChange("phone", e.target.value)}
               // rows="5"
               />
-
+<div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Cấp độ:</CLabel>
+                {arrLevel !== undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevel(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="levelNormal"
+                    id="SelectLm"
+                  >
+                    {arrLevel.map((item, i) => {
+                      if (item.item === this.state.levelNormal) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Chưa hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Chưa hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>           
             </ModalBody>
             <ModalFooter>
               <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}

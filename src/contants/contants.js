@@ -3,8 +3,8 @@ export default {
   // "BASE_URL" : "http://192.168.1.8:3016/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   
-  "BASE_URL_CURRENT" : "https://menard-admin.applamdep.com/",
-  //"BASE_URL_CURRENT" : "http://192.168.1.12:3012/",
+  // "BASE_URL_CURRENT" : "https://menard-admin.applamdep.com/",
+  "BASE_URL_CURRENT" : "http://localhost:3017",
   "BASE_URL_HISTORY_SKIN" : "https://menard.applamdep.com/lich-su-soi-da-with-iframe/",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",

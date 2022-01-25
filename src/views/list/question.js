@@ -75,6 +75,7 @@ class EndUser extends Component {
       keyQues : ""
     };
   }
+ 
   async componentDidMount() {
       this.getDataQues();
     const { type } = this.state;
