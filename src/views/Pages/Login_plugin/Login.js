@@ -128,7 +128,6 @@ class Login extends Component {
                           <CButton color="link" className="px-0" onClick={() => { window.location.href = "#/change_password" }}>Quên mật khẩu?</CButton>
                         </CCol>
                       </Row>
-
                     </form>
                   </CCardBody>
                 </CCard>

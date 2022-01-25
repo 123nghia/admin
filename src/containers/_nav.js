@@ -61,7 +61,6 @@ const _navSoida = [
     _children: ['Quản lý soi da'],
     role: ['0', '1', '2']
   },
- 
   {
     _tag: 'CSidebarNavItem',
     name: 'Nhóm tuổi từ 22 - 28',
@@ -114,7 +113,7 @@ const _navSoida = [
       </CTooltip>,
     }
   },
- 
+
   
   
   
@@ -177,6 +176,32 @@ const _navOrther = [
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.role}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách voucher',
+    to: '/list-voucher',
+    icon: <CIcon style={css} content={freeSet.cilUserPlus} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.customer}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách câu hỏi người dùng',
+    to: '/question-customer',
+    icon: <CIcon style={css} content={freeSet.cilUserPlus} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.customer}>
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }

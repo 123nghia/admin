@@ -1200,8 +1200,6 @@ class Users extends Component {
             <div class="text-center">
               <h6>Hình ảnh Startup</h6>
             </div>
-            
-            
             <TextFieldGroup
               field="image1"
               label="Hình ảnh 1: "
