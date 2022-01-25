@@ -551,7 +551,7 @@ class Users extends Component {
       form1.append("image", image1_link);
      
       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
-      }
+      
      if(image1_link){
       var newImage = `${Constants.BASE_URL}image_brand/${image1_link.name}`;
 
@@ -584,7 +584,7 @@ class Users extends Component {
       coppyData.value.homepage.image2 = newImage2;
       coppyData.value.homepage.image3 = newImage3;
       
-    
+    }
     if (change === "seoInfo") {
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
@@ -595,10 +595,12 @@ class Users extends Component {
     form1.append("image", imgLayout_link);
      
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
-    }
+
     let newImage4 = `${Constants.BASE_URL}image_brand/${imgLayout_link.name}`;
     
     coppyData.value.seoInfo.imageShare = newImage4;
+    }
+    
     
 
     this.setState({
