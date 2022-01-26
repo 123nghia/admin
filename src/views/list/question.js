@@ -55,7 +55,7 @@ class EndUser extends Component {
       action: "new",
       email: "",
       username: "",
-      actionQues : "new",
+      actionQues: "new",
       phone: "",
       modalDelete: false,
       delete: null,
@@ -67,17 +67,22 @@ class EndUser extends Component {
       isLoading: false,
       openHomeItem: false,
       dataQues: [],
-      modalQues : false,
-      actionAddAnswer :"new",
+      modalQues: false,
+      actionAddAnswer: "new",
       idUpdateCurrent: null,
-      dataQuesChoose :[],
-      objectQues : [],
-      keyQues : ""
+      dataQuesChoose: [],
+      objectQues: [],
+      keyQues: "",
+      answer3: false,
+      answerQues2: "",
+      answerQues3: "",
+      keyQues3: "",
+      keyQues2: "",
     };
   }
- 
+
   async componentDidMount() {
-      this.getDataQues();
+    this.getDataQues();
     const { type } = this.state;
 
     this.getData();
@@ -304,135 +309,208 @@ class EndUser extends Component {
       this.setState({
         dataQues: res.data.data,
       });
-      
     });
   }
-  openAddQuestion(){
-    const {dataQues} = this.state
-    if(dataQues && dataQues.length > 1){
-      alert("Đã vượt quá mức câu hỏi cho phép")
-    }else{
+  openAddQuestion() {
+    const { dataQues } = this.state;
+    if (dataQues && dataQues.length > 1) {
+      alert("Đã vượt quá mức câu hỏi cho phép");
+    } else {
       this.setState({
-        actionQues : "new",
+        actionQues: "new",
         modalQues: true,
-        dataQuesChoose : []
-    })
+        dataQuesChoose: [],
+      });
     }
-  
-    
   }
 
-  async addQuess(){
-    const {
-      titleQues,
-      answerQues,
-      objectQues,
-      keyQues,
-    } = this.state
+  async addQuess() {
+    const { titleQues, answerQues,answerQues2,answerQues3,
+      keyQues,keyQues2,keyQues3, objectQues } = this.state;
     var baseUrlapi = Constants.BASE_URL;
-    let copy
-    if(objectQues === null){
-      copy = []
-    }else{
-      copy = objectQues
+    let copy;
+    if (objectQues === null) {
+      copy = [];
+    } else {
+      copy = objectQues;
     }
+    if(answerQues !== ""){
+      copy.push({ value: answerQues, key: keyQues });
+
+    }
+    if(answerQues2 !== ""){
+      copy.push({ value: answerQues2, key: keyQues2 });
+
+    }
+    if(answerQues3 !== ""){
+      copy.push({ value: answerQues3, key: keyQues3 });
+
+    }   
     
-    copy.push({ value : answerQues , key : keyQues});
     let url = baseUrlapi + "api/question/add";
-    await axios.post(url,{
-      questionTitle : titleQues
-      , questionAnswer :copy
-    }).then((res) => {
+    await axios
+      .post(url, {
+        questionTitle: titleQues,
+        questionAnswer: copy,
+      })
+      .then((res) => {
+        this.getDataQues();
+        this.setState({ modalQues: false });
+      });
+  }
+  OpenupdateQues(data) {
+    this.setState({
+      actionQues: "edit",
+      modalQues: true,
+      titleQues: data.QuestionTitle,
+      idUpdateCurrent: data._id,
+      dataQuesChoose: data,
+      objectQues: data.QuestionAnswer,
+
      
-          this.getDataQues();
-          this.setState({modalQues :false})
 
     });
-  }
-OpenupdateQues(data){
-    this.setState({
-        actionQues : "edit",
-        modalQues: true,
-      titleQues : data.QuestionTitle,
-    idUpdateCurrent : data._id,
-    dataQuesChoose : data,
-    objectQues : data.QuestionAnswer
-    })
-}
-  async updateQues(){
-    const {
-      titleQues ,
-        answerQues,
-        objectQues,keyQues,
-        idUpdateCurrent
-    } = this.state
-    let copy
-    if(objectQues === null){
-      copy = []
-    }else{
-      copy = objectQues
+    if(this.state.objectQues.length===1){
+      this.setState({
+        answerQues : this.state.objectQues[0].value,
+        keyQues : this.state.objectQues[0].key,
+      })
     }
-    
-    copy.push({ value : answerQues , key : keyQues});
+    else if(this.state.objectQues.length===2){
+      this.setState({
+        answerQues : this.state.objectQues[0].value,
+        answerQues2 : this.state.objectQues[1].value,
+        keyQues : this.state.objectQues[0].key,
+        keyQues2 : this.state.objectQues[1].key,
+        
+      })
+    }
+    else{
+      this.setState({
+        answerQues : this.state.objectQues[0].value,
+        answerQues2 : this.state.objectQues[1].value,
+        answerQues3 : this.state.objectQues[2].value,
+        keyQues : this.state.objectQues[0].key,
+        keyQues2 : this.state.objectQues[1].key,
+        keyQues3 : this.state.objectQues[2].key,
+
+      })
+    }
+  }
+  async updateQues() {
+    const { titleQues, answerQues,answerQues2,answerQues3,
+      keyQues,keyQues2,keyQues3, objectQues, idUpdateCurrent } =
+      this.state;
+    let copy = [];
+
+    if(answerQues !== ""){
+      copy.push({ value: answerQues, key: keyQues });
+
+    }
+    if(answerQues2 !== ""){
+      copy.push({ value: answerQues2, key: keyQues2 });
+
+    }
+    if(answerQues3 !== ""){
+      copy.push({ value: answerQues3, key: keyQues3 });
+
+    }  
+
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/question/update";
-    await axios.post(url,{
-      questionTitle: titleQues,
-      questionAnswer: copy,
-      id : idUpdateCurrent
-    }).then((res) => {
-          this.getDataQues();
-    this.setState({modalQues :false})
-
-    });
+    await axios
+      .post(url, {
+        questionTitle: titleQues,
+        questionAnswer: copy,
+        id: idUpdateCurrent,
+      })
+      .then((res) => {
+        this.getDataQues();
+        this.setState({ modalQues: false });
+      });
   }
-  async deleteQues(item){
+  async deleteQues(item) {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/question/delete";
-    await axios.post(url,{
-      id : item._id
-    }).then((res) => {
-      
-          this.getDataQues();
-    
-    });
+    await axios
+      .post(url, {
+        id: item._id,
+      })
+      .then((res) => {
+        this.getDataQues();
+      });
   }
-  async addAnswer(){
-    const {answerQues,keyQues,idUpdateCurrent,objectQues} = this.state;
-    
-   let copy
-    if(objectQues === null){
-      copy = []
-    }else{
-      copy = objectQues
+  async addAnswer() {
+    const { idUpdateCurrent, objectQues,
+      answerQues,answerQues2,answerQues3,
+      keyQues,keyQues2,keyQues3
+    } = this.state;
+
+    let copy;
+    if (objectQues === null) {
+      copy = [];
+    } else {
+      copy = objectQues;
     }
+       
+
     
-    copy.push({ value : answerQues , key : keyQues});
-  
+
+
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/question/addAnswer";
-    await axios.post(url,{
-      QuestionAnswer : copy,
-      id : idUpdateCurrent
-
-    }).then((res) => {
-      
-          this.getDataQues();
-    this.setState({modalQues :false})
+    await axios
+      .post(url, {
+        QuestionAnswer: copy,
+        id: idUpdateCurrent,
+      })
+      .then((res) => {
+        this.getDataQues();
+        this.setState({ modalQues: false });
+      });
+  }
+  OpenaddAnswer(item) {
+    this.setState({
+      actionAddAnswer: "new",
+      modalAddAnswer: true,
+      idUpdateCurrent: item._id,
+      objectQues: item.QuestionAnswer,
+      answer3 : false,
+      answerQues: "",
+      answerQues2: "",
+      answerQues3: "",
+      keyQues2 : "",
+      keyQues3 : "",
+      keyQues : "",
     });
   }
-OpenaddAnswer(item){
-  this.setState({
-    actionAddAnswer : "new",
-    modalAddAnswer: true,
-    idUpdateCurrent : item._id,
-  objectQues : item.QuestionAnswer
-
-})
-
-}
+  addAnswer3 = () => {
+    if (this.state.answer3) {
+      alert("Đáp án tối đa là 3");
+    } else {
+      this.setState({
+        answer3: true,
+      });
+    }
+  };
   render() {
-    const { data, arrPagination,answerQues,keyQues, key, openHomeItem,actionAddAnswer,dataQuesChoose, dataQues,modalQues } = this.state;
+    const {
+      answer3,
+      answerQues2,
+      keyQues3,
+      keyQues2,
+      answerQues3,
+      data,
+      arrPagination,
+      answerQues,
+      keyQues,
+      key,
+      openHomeItem,
+      actionAddAnswer,
+      dataQuesChoose,
+      dataQues,
+      modalQues,
+    } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -449,182 +527,230 @@ OpenaddAnswer(item){
               </CButton>{" "}
             </div>
             <div class="accordion" id="accordionExample">
-            {
-                dataQues && dataQues.length > 0 ? dataQues.map((item,index)=>{
-                    return (<>
-                        <div class="accordion-item">
-          <h2 class="accordion-header" id={`idSelect${index}`}>
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target={`idSelect${index}`}
-              aria-expanded="true"
-              aria-controls={`idSelect${index}`}
-            >
-              Câu hỏi {index+1}: {item.QuestionTitle}
-            </button>
-          </h2>
-          <div
-            id={`idSelect${index}`}
-            class="accordion-collapse collapse show"
-            aria-labelledby={`idSelect${index}`}
-            data-bs-parent="#accordionExample"
-          >
-            <div class="accordion-body">
-              <div class="flex-center">
-                
-                <CButton
-                  outline
-                  color="success"
-                  size="md"
-                  className="mr-3"
-                  onClick={() => this.OpenupdateQues(item)}
-                >
-                  {/* <CIcon name="cilTrash" /> */}
-                  Chỉnh sửa
-                </CButton>{" "}
-                <CButton
-                  style={styles.mgl5}
-                  outline
-                  color="danger"
-                  size="md"
-                  onClick={() => this.deleteQues(item)}
-                >
-                  {/* <CIcon name="cilPencil" /> */}
-                  Xóa
-                </CButton>
-              </div>
-              <table
-                ble
-                className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-              >
-                <thead className="thead-light">
-                  <tr>
-                    <th className="text-center">STT.</th>
-                    {/* <th className="text-center">Tên</th> */}
-                    <th className="text-center">Nội dung</th>
-
-                    <th className="text-center">#</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {item.QuestionAnswer && item.QuestionAnswer.length > 0 ? item.QuestionAnswer.map((child,i)=>{
-                    
+              {dataQues && dataQues.length > 0
+                ? dataQues.map((item, index) => {
                     return (
-                       
-            <tr key={i}>
-              <td className="text-center">{i + 1}</td>
-              <td className="text-center">{child.value}</td>
-              <td>
-                
-                
-              </td>
-            </tr>
-          
-                    )
-                    
-                }) : null}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-                    </>)
-                }) : null
-            }
-                
+                      <>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id={`idSelect${index}`}>
+                            <button
+                              class="accordion-button collapsed"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target={`idSelect${index}`}
+                              aria-expanded="true"
+                              aria-controls={`idSelect${index}`}
+                            >
+                              Câu hỏi {index + 1}: {item.QuestionTitle}
+                            </button>
+                          </h2>
+                          <div
+                            id={`idSelect${index}`}
+                            class="accordion-collapse collapse show"
+                            aria-labelledby={`idSelect${index}`}
+                            data-bs-parent="#accordionExample"
+                          >
+                            <div class="accordion-body">
+                              <div class="flex-center">
+                                <CButton
+                                  outline
+                                  color="success"
+                                  size="md"
+                                  className="mr-3"
+                                  onClick={() => this.OpenupdateQues(item)}
+                                >
+                                  {/* <CIcon name="cilTrash" /> */}
+                                  Chỉnh sửa
+                                </CButton>{" "}
+                                <CButton
+                                  style={styles.mgl5}
+                                  outline
+                                  color="danger"
+                                  size="md"
+                                  onClick={() => this.deleteQues(item)}
+                                >
+                                  {/* <CIcon name="cilPencil" /> */}
+                                  Xóa
+                                </CButton>
+                              </div>
+                              <table
+                                ble
+                                className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+                              >
+                                <thead className="thead-light">
+                                  <tr>
+                                    <th className="text-center">STT.</th>
+                                    {/* <th className="text-center">Tên</th> */}
+                                    <th className="text-center">Nội dung</th>
+
+                                    <th className="text-center">#</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {item.QuestionAnswer &&
+                                  item.QuestionAnswer.length > 0
+                                    ? item.QuestionAnswer.map((child, i) => {
+                                        return (
+                                          <tr key={i}>
+                                            <td className="text-center">
+                                              {i + 1}
+                                            </td>
+                                            <td className="text-center">
+                                              {child.value}
+                                            </td>
+                                            <td></td>
+                                          </tr>
+                                        );
+                                      })
+                                    : null}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })
+                : null}
             </div>
           </div>
 
           <Modal isOpen={this.state.modalQues} className={this.props.className}>
-              <ModalHeader>
-                {this.state.actionQues == "new" ? `Tạo mới` : `Cập nhật`}
-              </ModalHeader>
-              <ModalBody>
-                <TextFieldGroup
-                  field="titleQues"
-                  label="Tiêu đề câu hỏi"
-                  value={this.state.titleQues}
-                  placeholder={""}
-                  // error={errors.title}
-                  onChange={(e) => this.setState({titleQues: e.target.value})}
-                  // rows="5"
-                />
-                 <TextFieldGroup
-                  field="answerQues"
-                  label="Đáp án 1"
-                  value={answerQues}
-                  placeholder={""}
-                  // error={errors.title}
-                  onChange={(e) => this.setState({ answerQues: e.target.value})}
-                  
-                  // rows="5"
-                  />
+            <ModalHeader>
+              {this.state.actionQues == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
+            <ModalBody>
+              <TextFieldGroup
+                field="titleQues"
+                label="Tiêu đề câu hỏi"
+                value={this.state.titleQues}
+                placeholder={""}
+                // error={errors.title}
+                onChange={(e) => this.setState({ titleQues: e.target.value })}
+                // rows="5"
+              />
+
+              <div className="text-center">
+              <label>Đáp án 1</label>
+              </div>
+              <TextFieldGroup
+                field="answerQues"
+                label="Nội dung"
+                value={answerQues}
+                placeholder={""}
+                // error={errors.title}
+                onChange={(e) => this.setState({ answerQues: e.target.value })}
+
+                // rows="5"
+              />
+              <TextFieldGroup
+                field="keyQues"
+                label="Mã"
+                value={keyQues}
+                placeholder={""}
+                // error={errors.title}
+                onChange={(e) => this.setState({ keyQues: e.target.value })}
+              />
+              <div className="text-center">
+
+              <label>Đáp án 2</label>
+              </div>
+              <TextFieldGroup
+                field="answerQues2"
+                label="Nội dung"
+                value={answerQues2}
+                placeholder={""}
+                // error={errors.title}
+                onChange={(e) => this.setState({ answerQues2: e.target.value })}
+
+                // rows="5"
+              />
+              <TextFieldGroup
+                field="keyQues2"
+                label="Mã"
+                value={keyQues2}
+                placeholder={""}
+                // error={errors.title}
+                onChange={(e) => this.setState({ keyQues2: e.target.value })}
+              />
+              {answer3 ? (
+                <>
+              <div className="text-center">
+
+                  <label>Đáp án 3</label>
+                  </div>
                   <TextFieldGroup
-                    field="keyQues"
-                    label="Mã đáp án 1"
-                    value={keyQues}
+                    field="answerQues3"
+                    label="Nội dung"
+                    value={answerQues3}
                     placeholder={""}
                     // error={errors.title}
-                    onChange={(e) => this.setState({ keyQues: e.target.value})}
-                    />
-                
-                 {dataQuesChoose.QuestionAnswer && dataQuesChoose.QuestionAnswer.length > 0 ? dataQuesChoose.QuestionAnswer.map((child,i)=>{
-                  return (
-                 <>                 
-                    <TextFieldGroup
-                    field="answerQues"
-                    label="Đáp án"
-                    value={child.value}
-                    placeholder={""}
-                    // error={errors.title}
-                    onChange={(e) => this.setState({ answerQues: e.target.value})}
+                    onChange={(e) =>
+                      this.setState({ answerQues3: e.target.value })
+                    }
+
                     // rows="5"
                   />
-                 </>
-                )
-                 })  :  
-                 null
-                }  
-                       
-              </ModalBody>
-              <ModalFooter>
-                <CButton
-                  color="primary"
-                  onClick={(e) => {
-                    this.state.actionQues === "new"
-                      ? this.addQuess()
-                      : this.updateQues();
-                  }}
-                  disabled={this.state.isLoading}
-                >
-                  Lưu
-                </CButton>{" "}
-                <CButton
-                  color="secondary"
-                  onClick={(e) =>
-                    this.setState({ modalQues: !this.state.modalQues })
-                  }
-                >
-                  Đóng
-                </CButton>
-              </ModalFooter>
-            </Modal>
+                  <TextFieldGroup
+                    field="keyQues3"
+                    label="Mã"
+                    value={keyQues3}
+                    placeholder={""}
+                    // error={errors.title}
+                    onChange={(e) =>
+                      this.setState({ keyQues3: e.target.value })
+                    }
+                  />
+                </>
+              ) : null}
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.addAnswer3();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Thêm đáp án
+              </CButton>{" "}
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.actionQues === "new"
+                    ? this.addQuess()
+                    : this.updateQues();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({ modalQues: !this.state.modalQues })
+                }
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
 
-          <Modal isOpen={this.state.modalAddAnswer} className={this.props.className}>
+          <Modal
+            isOpen={this.state.modalAddAnswer}
+            className={this.props.className}
+          >
             <ModalHeader>
               {this.state.actionAddAnswer == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-           
               <TextFieldGroup
                 field="answerQues"
                 label="Câu trả lời"
                 value={this.state.answerQues}
                 placeholder={""}
                 // error={errors.title}
-                onChange={(e) => this.setState({answerQues: e.target.value})}
+                onChange={(e) => this.setState({ answerQues: e.target.value })}
                 // rows="5"
               />
             </ModalBody>

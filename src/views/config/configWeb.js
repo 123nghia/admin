@@ -11,6 +11,7 @@ import SendIcon from "@mui/icons-material/Send";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
+import LockResetIcon from '@mui/icons-material/LockReset';
 import {
   Card,
   CardBody,
@@ -512,6 +513,7 @@ class Users extends Component {
       id: this.state.idUpdate,
     });
   }
+  
   async BlurForm(change) {
     const {
       dataConfigWeb,
@@ -1012,6 +1014,15 @@ class Users extends Component {
     })
     
   }
+  async resetCache(){
+ 
+    let url = "https://menard.applamdep.com/api/clear_cache"
+    await axios.get(url, {
+     
+    }).then((res)=>{
+      console.log(res);
+    })
+  }
   render() {
     const arrLevel = [
       {
@@ -1165,6 +1176,15 @@ class Users extends Component {
                   <InfoIcon />
                 </ListItemIcon>
                 <ListItemText primary="Thông tin footer" />
+              </ListItemButton>
+              <ListItemButton
+                className="tablinks"
+                onClick={() => this.changeConfigWeb(7)}
+              >
+                <ListItemIcon>
+                  <LockResetIcon />
+                </ListItemIcon>
+                <ListItemText primary="Quản lý Cache" />
               </ListItemButton>
             </List>
           </div>
@@ -1610,7 +1630,19 @@ class Users extends Component {
               ? this.renderData(dataConfigWeb.value.footerData)
               : null}
           </div>
-
+          <div id="tabcontent7" class="tabcontent ">
+          <div className="text-center">
+          <Button
+                variant="contained"
+                color="success"
+                style={{ paddingRight:'20px', paddingLeft:'20px' , fontSize : "20px"}}
+                size="md"
+                onClick={() => this.resetCache()}
+              >
+                Reset Cache
+              </Button>
+          </div>
+          </div>
           <Modal
             size="xl"
             isOpen={this.state.statusModalUpdate}
