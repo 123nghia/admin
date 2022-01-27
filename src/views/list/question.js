@@ -76,7 +76,11 @@ class EndUser extends Component {
       answer3: false,
       answerQues2: "",
       answerQues3: "",
+      answerQues4: "",
+
       keyQues3: "",
+      keyQues4: "",
+
       keyQues2: "",
     };
   }
@@ -325,7 +329,7 @@ class EndUser extends Component {
   }
 
   async addQuess() {
-    const { titleQues, answerQues,answerQues2,answerQues3,
+    const { titleQues, answerQues,answerQues2,answerQues3,answerQues4,keyQues4,
       keyQues,keyQues2,keyQues3, objectQues } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let copy;
@@ -346,7 +350,10 @@ class EndUser extends Component {
       copy.push({ value: answerQues3, key: keyQues3 });
 
     }   
-    
+    if(answerQues4 !== ""){
+      copy.push({ value: answerQues4, key: keyQues4 });
+
+    }  
     let url = baseUrlapi + "api/question/add";
     await axios
       .post(url, {
@@ -358,18 +365,20 @@ class EndUser extends Component {
         this.setState({ modalQues: false });
       });
   }
-  OpenupdateQues(data) {
+  OpenupdateQues(data,i) {
+    const {dataQues} = this.state
     this.setState({
       actionQues: "edit",
       modalQues: true,
       titleQues: data.QuestionTitle,
       idUpdateCurrent: data._id,
       dataQuesChoose: data,
-      objectQues: data.QuestionAnswer,
+      objectQues: dataQues[i].QuestionAnswer,
 
      
 
-    });
+    },()=>{
+      console.log(this.state.objectQues)
     if(this.state.objectQues.length===1){
       this.setState({
         answerQues : this.state.objectQues[0].value,
@@ -385,20 +394,38 @@ class EndUser extends Component {
         
       })
     }
+    else if(this.state.objectQues.length===3){
+      this.setState({
+        answerQues : this.state.objectQues[0].value,
+        answerQues2 : this.state.objectQues[1].value,
+        keyQues : this.state.objectQues[0].key,
+        answerQues3 : this.state.objectQues[2].value,
+
+        keyQues2 : this.state.objectQues[1].key,
+        keyQues3 : this.state.objectQues[2].key,
+        
+      })
+    }
     else{
       this.setState({
         answerQues : this.state.objectQues[0].value,
         answerQues2 : this.state.objectQues[1].value,
         answerQues3 : this.state.objectQues[2].value,
+        answerQues4 : this.state.objectQues[3].value,
+
         keyQues : this.state.objectQues[0].key,
         keyQues2 : this.state.objectQues[1].key,
         keyQues3 : this.state.objectQues[2].key,
+        keyQues4 : this.state.objectQues[3].key,
+
 
       })
     }
+    });
+    
   }
   async updateQues() {
-    const { titleQues, answerQues,answerQues2,answerQues3,
+    const { titleQues, answerQues,answerQues2,answerQues3,answerQues4,keyQues4,
       keyQues,keyQues2,keyQues3, objectQues, idUpdateCurrent } =
       this.state;
     let copy = [];
@@ -415,7 +442,10 @@ class EndUser extends Component {
       copy.push({ value: answerQues3, key: keyQues3 });
 
     }  
+    if(answerQues4 !== ""){
+      copy.push({ value: answerQues4, key: keyQues4 });
 
+    }  
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/question/update";
     await axios
@@ -442,8 +472,8 @@ class EndUser extends Component {
   }
   async addAnswer() {
     const { idUpdateCurrent, objectQues,
-      answerQues,answerQues2,answerQues3,
-      keyQues,keyQues2,keyQues3
+      answerQues,answerQues2,answerQues3,answerQues4,
+      keyQues,keyQues2,keyQues3,keyQues4
     } = this.state;
 
     let copy;
@@ -479,6 +509,9 @@ class EndUser extends Component {
       answerQues: "",
       answerQues2: "",
       answerQues3: "",
+      answerQues4: "",
+      keyQues4 : "",
+
       keyQues2 : "",
       keyQues3 : "",
       keyQues : "",
@@ -506,6 +539,9 @@ class EndUser extends Component {
       keyQues,
       key,
       openHomeItem,
+      answerQues4,
+      keyQues4,
+
       actionAddAnswer,
       dataQuesChoose,
       dataQues,
@@ -557,7 +593,7 @@ class EndUser extends Component {
                                   color="success"
                                   size="md"
                                   className="mr-3"
-                                  onClick={() => this.OpenupdateQues(item)}
+                                  onClick={() => this.OpenupdateQues(item,index)}
                                 >
                                   {/* <CIcon name="cilTrash" /> */}
                                   Chỉnh sửa
@@ -673,45 +709,66 @@ class EndUser extends Component {
                 // error={errors.title}
                 onChange={(e) => this.setState({ keyQues2: e.target.value })}
               />
-              {answer3 ? (
-                <>
               <div className="text-center">
 
-                  <label>Đáp án 3</label>
+<label>Đáp án 3</label>
+</div>
+<TextFieldGroup
+  field="answerQues3"
+  label="Nội dung"
+  value={answerQues3}
+  placeholder={""}
+  // error={errors.title}
+  onChange={(e) => this.setState({ answerQues3: e.target.value })}
+
+  // rows="5"
+/>
+<TextFieldGroup
+  field="keyQues3"
+  label="Mã"
+  value={keyQues3}
+  placeholder={""}
+  // error={errors.title}
+  onChange={(e) => this.setState({ keyQues3: e.target.value })}
+/>
+             
+              <div className="text-center">
+
+                  <label>Đáp án 4</label>
                   </div>
                   <TextFieldGroup
-                    field="answerQues3"
+                    field="answerQues4"
                     label="Nội dung"
-                    value={answerQues3}
+                    value={answerQues4}
                     placeholder={""}
                     // error={errors.title}
                     onChange={(e) =>
-                      this.setState({ answerQues3: e.target.value })
+                      this.setState({ answerQues4: e.target.value })
                     }
 
                     // rows="5"
                   />
                   <TextFieldGroup
-                    field="keyQues3"
+                    field="keyQues4"
                     label="Mã"
-                    value={keyQues3}
+                    value={keyQues4}
                     placeholder={""}
                     // error={errors.title}
                     onChange={(e) =>
-                      this.setState({ keyQues3: e.target.value })
+                      this.setState({ keyQues4: e.target.value })
                     }
                   />
-                </>
-              ) : null}
-              <CButton
+               
+              
+              {/* <CButton
                 color="primary"
                 onClick={(e) => {
-                  this.addAnswer3();
+                  this.addAnswer4();
                 }}
                 disabled={this.state.isLoading}
               >
                 Thêm đáp án
-              </CButton>{" "}
+              </CButton>{" "} */}
             </ModalBody>
             <ModalFooter>
               <CButton
