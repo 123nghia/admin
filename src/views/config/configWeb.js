@@ -61,6 +61,8 @@ import logoMainnet from "../../assets/img/logo_head.png";
 import CircularProgress from "@mui/material/CircularProgress";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
+import LockResetIcon from '@mui/icons-material/LockReset';
+
 // import {HiInformationCircle
 // } from "react-icons/hi";
 let headers = new Headers();
@@ -1013,6 +1015,24 @@ class Users extends Component {
     })
     
   }
+  async resetCache(){
+ 
+    let url = "https://soida.pensilia.com/api/clear_cache"
+    await axios.get(url, {
+     
+    }).then((res)=>{
+      console.log(res);
+      if(res.data.success === "success"){
+        Swal.fire({
+       
+          icon: 'success',
+          title: 'Xóa cache thành công',
+          showConfirmButton: false,
+          timer: 1200
+        })
+      }
+    })
+  }
   render() {
     const arrLevel = [
       {
@@ -1166,6 +1186,15 @@ class Users extends Component {
                   <InfoIcon />
                 </ListItemIcon>
                 <ListItemText primary="Thông tin footer" />
+              </ListItemButton>
+              <ListItemButton
+                className="tablinks"
+                onClick={() => this.changeConfigWeb(7)}
+              >
+                <ListItemIcon>
+                  <LockResetIcon />
+                </ListItemIcon>
+                <ListItemText primary="Quản lý Cache" />
               </ListItemButton>
             </List>
           </div>
@@ -1575,6 +1604,7 @@ class Users extends Component {
             </div>
           </div>
           <div id="tabcontent7" class="tabcontent ">
+          
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>
@@ -1613,7 +1643,19 @@ class Users extends Component {
               ? this.renderData(dataConfigWeb.value.footerData)
               : null}
           </div>
-
+          <div id="tabcontent8" class="tabcontent ">
+          <div className="text-center">
+          <Button
+                variant="contained"
+                color="success"
+                style={{ paddingRight:'20px', paddingLeft:'20px' , fontSize : "20px"}}
+                size="md"
+                onClick={() => this.resetCache()}
+              >
+                Reset Cache
+              </Button>
+          </div>
+          </div>
           <Modal
             size="xl"
             isOpen={this.state.statusModalUpdate}
