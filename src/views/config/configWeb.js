@@ -1020,7 +1020,15 @@ class Users extends Component {
     await axios.get(url, {
      
     }).then((res)=>{
-      console.log(res);
+      if(res.data.success === "success"){
+        Swal.fire({
+       
+          icon: 'success',
+          title: 'Clear cache thành công',
+          showConfirmButton: false,
+          timer: 1200
+        })
+      }
     })
   }
   render() {
