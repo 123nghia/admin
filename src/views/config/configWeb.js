@@ -1030,6 +1030,14 @@ class Users extends Component {
           showConfirmButton: false,
           timer: 1200
         })
+      }else{
+        Swal.fire({
+       
+          icon: 'error',
+          title: 'Xảy ra lỗi trong quá trình xử lý',
+          showConfirmButton: false,
+          timer: 1200
+        })
       }
     })
   }
