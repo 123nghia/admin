@@ -361,14 +361,17 @@ class Users extends Component {
   }
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/getAll?key=webinfo";
-    await axios
-      .get(url, {
-        key: "webinfo",
-      })
-      .then((res) => {
-        if (res.data.data.length > 0) {
-          let dataConfig = res.data.data[0];
+ 
+    let url = baseUrlapi + "api/config/getAll";
+    
+      await axios.get(url,{
+        params : {
+          key : "webinfo"
+        }
+      }).then((res) => {
+        console.log('web',res)
+        if (res.data.data) {
+          let dataConfig = res.data.data
 
           let valueConfig = JSON.parse(dataConfig.Value);
           console.log(valueConfig);
@@ -420,8 +423,9 @@ class Users extends Component {
             }
           );
           // this.onUpdate();
-        } else {
-          let templateDataConfigWeb = {
+        } else {         
+          console.log("2")
+          let templateDataConfigWeb = {           
             key: "webinfo",
             value: {
               logo: "",
@@ -447,6 +451,7 @@ class Users extends Component {
               ],
             },
           };
+          
           this.setState(
             {
               dataConfigWeb: templateDataConfigWeb,
@@ -468,7 +473,10 @@ class Users extends Component {
       key: "webinfo",
       value: JSON.stringify(this.state.dataConfigWeb),
       type: "system",
-    });
+    }).then((res)=>{
+      console.log('add',res)
+
+    })
   }
   saveAdd = () => {
     const { dataConfigWeb, updateLink, updateTitle, updateLevel } = this.state;
