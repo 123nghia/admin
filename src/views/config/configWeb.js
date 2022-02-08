@@ -368,6 +368,7 @@ class Users extends Component {
         key: "webinfo",
       })
       .then((res) => {
+        console.log('data',res)
         if (res.data.data.length > 0) {
           let dataConfig = res.data.data[0];
 
@@ -392,18 +393,21 @@ class Users extends Component {
                 this.setState({
                   sologan: this.state.homepage.sologan,
                   introduce: this.state.homepage.introduction,
+
                   image1: this.state.homepage.image1,
                   image1_show: this.state.homepage.image1,
                   image1_link: this.state.homepage.image1,
-                  image2_link: this.state.homepage.image2,
-                  image3_link: this.state.homepage.image3,
 
+                  image3_link: this.state.homepage.image3,
                   image3: this.state.homepage.image3,
                   image3_show: this.state.homepage.image3,
+
+                  image2_link: this.state.homepage.image2,
                   image2: this.state.homepage.image2,
                   image2_show: this.state.homepage.image2,
               }
                 )}
+                console.log(this.state.homepage.image2,this.state.homepage.image3)
             if(seoInfo){
               this.setState({
                 titleSeo: this.state.seoInfo.title,
@@ -469,7 +473,9 @@ class Users extends Component {
       key: "webinfo",
       value: JSON.stringify(this.state.dataConfigWeb),
       type: "system",
-    });
+    }).then((res)=>{
+      console.log('add',res)
+    })
   }
   saveAdd = () => {
     const { dataConfigWeb, updateLink, updateTitle, updateLevel } = this.state;
@@ -553,9 +559,12 @@ class Users extends Component {
       form1.append("image", image1_link);
      
       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
-      
+      }
      if(image1_link){
-      var newImage = `${Constants.BASE_URL}image_brand/${image1_link.name}`;
+       if(image1_link.name){
+        var newImage = `${Constants.BASE_URL}image_brand/${image1_link.name}`;
+
+       }
 
      }
 
@@ -566,8 +575,9 @@ class Users extends Component {
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST").then((res)=>{console.log(res)})
     
    if(image2_link){
+    if(image2_link.name){
     var newImage2 = `${Constants.BASE_URL}image_brand/${image2_link.name}`;
-
+    }
      }
 
     const form3 = new FormData();
@@ -576,17 +586,28 @@ class Users extends Component {
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
     
     if(image3_link){
+      if(image3_link.name){
       var newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
-
+    }
      }
     
       coppyData.value.homepage.sologan = sologan;
       coppyData.value.homepage.introduction = introduce;
-      coppyData.value.homepage.image1 = newImage;
-      coppyData.value.homepage.image2 = newImage2;
-      coppyData.value.homepage.image3 = newImage3;
+      if(newImage!==undefined){
+        coppyData.value.homepage.image1 = newImage;
+
+      }
       
-    }
+      if(newImage2){
+      coppyData.value.homepage.image2 = newImage2;
+        
+      }
+      if(newImage3){
+      coppyData.value.homepage.image3 = newImage3;
+        
+      }
+      
+    
     if (change === "seoInfo") {
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
@@ -597,12 +618,10 @@ class Users extends Component {
     form1.append("image", imgLayout_link);
      
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
-
+    }
     let newImage4 = `${Constants.BASE_URL}image_brand/${imgLayout_link.name}`;
     
     coppyData.value.seoInfo.imageShare = newImage4;
-    }
-    
     
 
     this.setState({
@@ -623,7 +642,7 @@ class Users extends Component {
           showConfirmButton: false,
           timer: 1000,
         });
-        this.addDataConfig();
+       
       });
   }
   async onFocusOutText() {
@@ -906,6 +925,7 @@ class Users extends Component {
     const body = {
       isHash: false,
       sub_mainColor: sub_mainColor,
+
       mainColor: mainColor,
       sub2_mainColor: sub2_mainColor,
       company_id: "61ce79c4d19f5244aa161b36",
@@ -1203,6 +1223,15 @@ class Users extends Component {
                   <LockResetIcon />
                 </ListItemIcon>
                 <ListItemText primary="Quản lý Cache" />
+              </ListItemButton>
+              <ListItemButton
+                className="tablinks"
+                onClick={() => this.changeConfigWeb(8)}
+              >
+                <ListItemIcon>
+                  <LockResetIcon />
+                </ListItemIcon>
+                <ListItemText primary="Quản lý màu sắc" />
               </ListItemButton>
             </List>
           </div>
@@ -1664,6 +1693,183 @@ class Users extends Component {
               </Button>
           </div>
           </div>
+        <div id="tabcontent9" class="tabcontent">
+    <Row>
+      <Col>
+        <p style={styles.success}>{this.state.updated}</p>
+        <p style={styles.danger}>{this.state.deleted}</p>
+        <Card>
+          <CardHeader>THÔNG TIN MÀU</CardHeader>
+          <CardBody>
+            <CRow>
+              <CCol sm="12" lg="12">
+                <CRow>
+                  <CCol sm="6" lg="8">
+                    <CLabel>
+                      <strong>Thay đổi màu</strong>
+                    </CLabel>
+                  </CCol>
+                  {type == "0" || type == "1" ? (
+                    ""
+                  ) : (
+                    <CCol sm="6" lg="4">
+                      <CTooltip content="Xem chi tiết đơn hàng">
+                        {isDisable ? (
+                          <CButton
+                            outline
+                            color="info"
+                            size="xm"
+                            onClick={async (e) => {
+                              this.setState({ isDisable: !isDisable });
+                            }}
+                          >
+                            <CIcon name="cil-pencil" /> Cập nhật
+                          </CButton>
+                        ) : (
+                          <CButton
+                            outline
+                            color="info"
+                            size="sm"
+                            onClick={async (e) => {
+                              this.updateCompany();
+                            }}
+                          >
+                            <CIcon name="cil-pencil" /> Xác nhận cập
+                            nhật
+                          </CButton>
+                        )}
+                      </CTooltip>
+                    </CCol>
+                  )}
+                </CRow>
+                <CRow>
+                  <CCol sm="12" lg="12">
+                    <div>
+                      <CLabel>Màu chủ đạo</CLabel>
+                      <Input
+                        style={styles.searchInput}
+                        onChange={(e) => {
+                          this.setState({ mainColor: e.target.value });
+                        }}
+                        value={mainColor}
+                        readOnly={isDisable}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm="12" lg="12">
+                    <CLabel>Màu button</CLabel>
+                    <Input
+                      style={styles.searchInput}
+                      value={button_color}
+                      onChange={(e) => {
+                        this.setState({
+                          button_color: e.target.value,
+                        });
+                      }}
+                      readOnly={isDisable}
+                    />
+                  </CCol>
+                  {/* <CCol sm="12" lg="12">
+                    <CLabel>Màu chủ đạo 2</CLabel>
+                    <Input
+                      style={styles.searchInput}
+                      value={sub2_mainColor}
+                      onChange={(e) => {
+                        this.setState({
+                          sub2_mainColor: e.target.value,
+                        });
+                      }}
+                      readOnly={isDisable}
+                    />
+                  </CCol>
+                  <CCol sm="12" lg="12">
+                    <div>
+                      <CLabel>Màu chữ</CLabel>
+                      <Input
+                        style={styles.searchInput}
+                        value={text_mainColor}
+                        onChange={(e) => {
+                          this.setState({
+                            text_mainColor: e.target.value,
+                          });
+                        }}
+                        readOnly={isDisable}
+                      />
+                    </div>
+                  </CCol>
+
+                  
+
+                  <CCol sm="12" lg="12">
+                    <div>
+                      <CLabel>Màu báo thành công</CLabel>
+                      <Input
+                        style={styles.searchInput}
+                        value={sucess_color}
+                        onChange={(e) => {
+                          this.setState({
+                            sucess_color: e.target.value,
+                          });
+                        }}
+                        readOnly={isDisable}
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol sm="12" lg="12">
+                    <div>
+                      <CLabel>Màu báo lỗi</CLabel>
+                      <Input
+                        style={styles.searchInput}
+                        value={error_color}
+                        onChange={(e) => {
+                          this.setState({
+                            error_color: e.target.value,
+                          });
+                        }}
+                        readOnly={isDisable}
+                      />
+                    </div>
+                  </CCol> */}
+                </CRow>
+              </CCol>
+            </CRow>
+          </CardBody>
+        </Card>
+      </Col>
+      
+    </Row>
+        </div>  
+
+
+  <div id="tabcontent2" class="tabcontent">
+    <div id="renderInfoFuncWebId"></div> 
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Tình trạng dịch vụ : </span><span style={{color:'#e55353'}}>Đang sử dụng</span>
+     </div>
+     
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Tổng số lần sử dụng : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
+     </div>
+   
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Tính năng dịch vụ : </span><span style={{color:'#e55353'}}>Soi da - Trang điểm</span>
+     </div>
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Ngày bắt đầu: </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
+     </div>
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Ngày hết hạn : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
+     </div>
+
+     </div> 
+
+
+
+
+  
+     
           <Modal
             size="xl"
             isOpen={this.state.statusModalUpdate}
