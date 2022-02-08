@@ -1,10 +1,11 @@
 export default {
    "BASE_URL" : "https://soida-api.pensilia.com/",
-  // "BASE_URL" : "http://192.168.1.12:3012/",
+  // "BASE_URL" : "http://192.168.1.5:3012/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
+  // "PORTAL_SERVER":  "http://192.168.1.5:3014/",
   
   "BASE_URL_CURRENT" : "https://soida-admin.pensilia.com/",
-  // "BASE_URL_CURRENT" : "http://192.168.1.12:3012/",
+  // "BASE_URL_CURRENT" : "http://localhost:3013/",
   "BASE_URL_HISTORY_SKIN" : "https://soida.pensilia.com/lich-su-soi-da-with-iframe/",
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",

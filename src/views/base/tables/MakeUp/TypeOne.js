@@ -245,6 +245,7 @@ class SuggestItem extends Component {
       data: val,
       isSearch: false
     });
+    
   }
 
   pagination(dataApi, dataResult) {
@@ -282,15 +283,17 @@ class SuggestItem extends Component {
       url: Constants.LIST_SUGGEST_ITEM_ADMIN + idSDK,
       method: 'GET'
     });
-
+    console.log(res_suggest)
     const res_sdk = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_SDK,
       method: 'GET'
     });
+    console.log(res_sdk)
 
 
     let val = res_suggest.data.dataRes;
+    console.log(res_suggest.data)
     let totalItem = res_suggest.data.arrTotal;
     let arrB = res_suggest.data.brand;
 
@@ -321,7 +324,7 @@ class SuggestItem extends Component {
       method: 'GET'
     });
 
-
+    console.log(res_suggest.data)
     let val = res_suggest.data.dataRes;
     let totalItem = res_suggest.data.arrTotal;
 
@@ -473,13 +476,14 @@ class SuggestItem extends Component {
 
     const form = new FormData();
     form.append("image", image_link);
-
     await API_CONNECT(Constants.UPLOAD_IMAGE, form, "", "POST")
-    console.log(image,image_link)
-    let imgNew = `image_plugin/${image_link.name}`
+    console.log(image_link.name)
+    let imgNew = `${Constants.BASE_URL}image_plugin/${image_link.name}`
+
     const body = {
       name: name,
       image: imgNew,
+      image_show :imgNew,
       title: title,
       description: description,
       linkdetail: linkdetail,
@@ -523,8 +527,8 @@ class SuggestItem extends Component {
       modalCom: !this.state.modalCom,
       action: "update",
       name: item.name,
-      image: item.image,
-      image_show: "",
+      image: item.image_link,
+      image_show: item.image_link,
       image_link: item.image_link,
       title: item.title,
       description: item.description,
@@ -563,13 +567,14 @@ class SuggestItem extends Component {
 
     const form = new FormData();
     form.append("image", image_link);
-
     await API_CONNECT(Constants.UPLOAD_IMAGE, form, "", "POST")
+    console.log(image_link.name)
+    let imgNew = `${Constants.BASE_URL}image_plugin/${image_link.name}`
 
     const body = {
       name: name,
-      image: image,
-      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
+      image: imgNew,
+      image_link: imgNew,
       title: title,
       description: description,
       linkdetail: linkdetail,
@@ -751,10 +756,12 @@ class SuggestItem extends Component {
                                     </td>
                                     {/* <td className="text-center">{item.name}</td> */}
                                     <td className="text-center">
-                                      {
-                                        item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
-                                          <img src={`${Constants.BASE_URL}${item.image_link}`} width={"60px"} height={"60px"} />
-                                      }
+                                    <img
+                                      alt=""
+                                      style={{ width: "100px", marginBottom: 20 }}
+                                      height="auto"
+                                      src={item.image_link}
+                                    />
                                     </td>
        
                                     <td className="text-center">
@@ -831,11 +838,12 @@ class SuggestItem extends Component {
                 onChange={e => { this.onChangeImage(e) }}
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               />
-              {
-                this.state.image == "" ? "" :
-                  <img width="250" height="300" src={
-                    this.state.image_show == "" ? `${Constants.BASE_URL}public/image_plugin/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
-              }
+              <img
+                                      alt=""
+                                      style={{ width: "100px", marginBottom: 20 }}
+                                      height="auto"
+                                      src={this.state.image_show}
+                                    />
 
               <TextFieldGroup
                 field="title"
