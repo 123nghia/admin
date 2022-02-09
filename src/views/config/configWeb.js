@@ -135,7 +135,12 @@ class Users extends Component {
       imgLayout_link :"",
       imgLayout :"",
       imageSeo_link : "",
-
+      imageDemo : "",
+      imageDemo_show :"",
+      imageDemo_link :"",
+      imageVoucher: "",
+      imageVoucher_link :"",
+      imageVoucher_show:""
     };
   }
   changeLevel = (e) => {
@@ -241,6 +246,18 @@ class Users extends Component {
       });
     };
   }
+  onChangeImageVoucher(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ imageVoucher_link: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({
+        imageVoucher: e.target.result,
+        imageVoucher_show: e.target.result,
+      });
+    };
+  }
   onChangeImageSlide(e) {
     let files = e.target.files;
     let reader = new FileReader();
@@ -250,6 +267,18 @@ class Users extends Component {
       this.setState({
         imageSlide: e.target.result,
         imageSlide_show: e.target.result,
+      });
+    };
+  }
+  onChangeImageDemo(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ imageDemo_link: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({
+        imageDemo: e.target.result,
+        imageDemo_show: e.target.result,
       });
     };
   }
@@ -387,9 +416,10 @@ class Users extends Component {
               seoInfo: valueConfig.value.seoInfo,
               homepage: valueConfig.value.homepage,
               slideShow: valueConfig.value.slideShow,
+              voucher : valueConfig.value.voucher,
             },
             () => {
-              const {homepage, seoInfo} = this.state;
+              const {homepage, seoInfo,voucher} = this.state;
               if(homepage){
                 this.setState({
                   sologan: this.state.homepage.sologan,
@@ -404,8 +434,19 @@ class Users extends Component {
                   image3_show: this.state.homepage.image3,
                   image2: this.state.homepage.image2,
                   image2_show: this.state.homepage.image2,
+
+                  imageDemo :this.state.homepage.imageDemo,
+                  imageDemo_show : this.state.homepage.imageDemo,
+                  imageDemo_link : this.state.homepage.imageDemo,
               }
                 )}
+                if(voucher){
+                  this.setState({
+                  imageVoucher : this.state.voucher.image,
+                  imageVoucher_link : this.state.voucher.image,
+                  imageVoucher_show : this.state.voucher.image,
+                  })
+                }
             if(seoInfo){
               this.setState({
                 titleSeo: this.state.seoInfo.title,
@@ -424,7 +465,7 @@ class Users extends Component {
           );
           // this.onUpdate();
         } else {         
-          console.log("2")
+          
           let templateDataConfigWeb = {           
             key: "webinfo",
             value: {
@@ -548,7 +589,13 @@ class Users extends Component {
       imgLayout_link,
       image1_link,
       image2_link,
-      image3_link
+      image3_link,
+      imageDemo_link,
+      imageDemo,
+      imageDemo_show,
+      imageVoucher_link,
+      imageVoucher_show,
+      imageVoucher
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
@@ -562,7 +609,8 @@ class Users extends Component {
      
       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
       }
-     if(image1_link){
+     if(image1_link && image1_link.name){
+
       var newImage = `${Constants.BASE_URL}image_brand/${image1_link.name}`;
 
      }
@@ -573,7 +621,7 @@ class Users extends Component {
      
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST").then((res)=>{console.log(res)})
     
-   if(image2_link){
+   if(image2_link && image2_link.name){
     var newImage2 = `${Constants.BASE_URL}image_brand/${image2_link.name}`;
 
      }
@@ -583,18 +631,58 @@ class Users extends Component {
      
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
     
-    if(image3_link){
+    if(image3_link && image3_link.name){
       var newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
+
+     }
+     const formDemo = new FormData();
+     formDemo.append("image", imageDemo_link);
+     
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, formDemo, "", "POST").then((res)=>{console.log(res)})
+    
+    if(imageDemo_link && imageDemo_link.name){
+      var newImageDemo = `${Constants.BASE_URL}image_brand/${imageDemo_link.name}`;
+
+     }
+     if(newImage){
+      coppyData.value.homepage.image1 = newImage;
+
+     }
+     if(newImage2){
+      coppyData.value.homepage.image2 = newImage2;
+
+     }
+     if(newImage3){
+      coppyData.value.homepage.image3 = newImage3;
+
+     }
+     if(newImageDemo){
+      coppyData.value.homepage.imageDemo = newImageDemo;
 
      }
     
       coppyData.value.homepage.sologan = sologan;
       coppyData.value.homepage.introduction = introduce;
-      coppyData.value.homepage.image1 = newImage;
-      coppyData.value.homepage.image2 = newImage2;
-      coppyData.value.homepage.image3 = newImage3;
+     
       
-    
+      if (change === "voucher") {
+        const formVoucher = new FormData();
+        formDemo.append("image", imageVoucher_link);
+        
+       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, formVoucher, "", "POST").then((res)=>{console.log(res)})
+       
+       if(imageVoucher_link && imageVoucher_link.name){
+         var newImageVoucher = `${Constants.BASE_URL}image_brand/${imageVoucher_link.name}`;
+   
+        }
+        if(newImageVoucher){
+        //  coppyData.value.voucher={}
+
+         coppyData.value.voucher.image = newImageVoucher;
+   
+        }
+      }
+
     if (change === "seoInfo") {
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
@@ -629,7 +717,8 @@ class Users extends Component {
           showConfirmButton: false,
           timer: 1000,
         });
-        this.addDataConfig();
+        // this.addDataConfig();
+        this.getDataConfigWeb();
       });
   }
   async onFocusOutText() {
@@ -652,8 +741,10 @@ class Users extends Component {
     });
   }
   async onUpdate() {
-    const { dataConfigWeb } = this.state;
-//     let copy = {...dataConfigWeb}
+    const { dataConfigWeb ,imageDemo} = this.state;
+    let copy = {...dataConfigWeb}
+
+    // copy.imgPhoto = 
 //     copy.value.homepage = {}
 //     copy.value.seoInfo = {}
 //     copy.value.slideShow = []
@@ -1099,7 +1190,13 @@ class Users extends Component {
       UserName,
       Message_Code,
       text_mainColor,
-      modalSlide
+      modalSlide,
+      imageDemo,
+      imageDemo_link,
+      imageDemo_show,
+      imageVoucher,
+      imageVoucher_link,
+      imageVoucher_show,
     } = this.state;
 
     if (!this.state.isLoading) {
@@ -1210,6 +1307,15 @@ class Users extends Component {
                 </ListItemIcon>
                 <ListItemText primary="Quản lý Cache" />
               </ListItemButton>
+              <ListItemButton
+                className="tablinks"
+                onClick={() => this.changeConfigWeb(8)}
+              >
+                <ListItemIcon>
+                  <InfoIcon />
+                </ListItemIcon>
+                <ListItemText primary="Thông tin voucher" />
+              </ListItemButton>
             </List>
           </div>
           <div id="tabcontent1" class="tabcontent defaultOpen">
@@ -1307,6 +1413,30 @@ class Users extends Component {
               style={{ width: "140px", marginBottom: 20 }}
               height="auto"
               src={image3}
+            />
+            </div>
+            <div class="text-center">
+              <h6>Hình ảnh hướng dẫn chụp ảnh Demo</h6>
+            </div>
+            <TextFieldGroup
+              field="imageDemo"
+              label="Hình ảnh Demo: "
+              type={"file"}
+              className="mt-5"
+              onChange={(e) => {
+                this.onChangeImageDemo(e);
+              }}
+              onClick={(e) => {
+                e.target.value = null;
+                this.setState({ imageDemo_show: "" });
+              }}
+            />
+            <div class="text-center mb-5">
+            <img
+              alt=""
+              style={{ width: "140px", marginBottom: 20 }}
+              height="auto"
+              src={imageDemo}
             />
             </div>
           </div>
@@ -1666,6 +1796,41 @@ class Users extends Component {
                 Reset Cache
               </Button>
           </div>
+          </div>
+          <div  id="tabcontent8" class="tabcontent ">
+          <div class="text-center">
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => this.BlurForm("voucher")}
+              >
+                Lưu thay đổi
+              </Button>
+            </div>
+          <div class="text-center mt-3">
+              <h6>Hình ảnh Voucher</h6>
+            </div>
+            <TextFieldGroup
+              field="imageVoucher"
+              label="Hình ảnh voucher: "
+              type={"file"}
+              className="mt-5"
+              onChange={(e) => {
+                this.onChangeImageVoucher(e);
+              }}
+              onClick={(e) => {
+                e.target.value = null;
+                this.setState({ imageVoucher_show: "" });
+              }}
+            />
+         <div class="text-center mb-5">
+            <img
+              alt=""
+              style={{ width: "140px", marginBottom: 20 }}
+              height="auto"
+              src={imageVoucher}
+            />
+            </div>
           </div>
           <Modal
             size="xl"
