@@ -208,6 +208,19 @@ const _navOrther = [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Danh sách câu trả lời người dùng',
+    to: '/answers-customer',
+    icon: <CIcon style={css} content={freeSet.cilUserPlus} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.customer}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Lịch sử soi da',
     to: '/historyskin',
     icon: <CIcon style={css} content={freeSet.cilHistory} customClasses="c-sidebar-nav-icon" />,

@@ -77,6 +77,7 @@ const GroupAge4 = React.lazy(() => import('./views/menard/groupAge1/groupAge4'))
 const ListVoucher = React.lazy(() => import('./views/list/voucher'));
 const ListQuestion = React.lazy(() => import('./views/list/question'));
 
+const ListAnswers = React.lazy(() => import('./views/list/answers'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -87,7 +88,9 @@ const routes = [
   { path: '/nhom-tuoi-4', name: 'NhomTuoi4', component: GroupAge4 },
   { path: '/list-voucher', name: 'ListVoucher', component: ListVoucher },
   { path: '/question-customer', name: 'ListQuestion', component: ListQuestion },
+  { path: '/answers-customer', name: 'ListAnswers', component: ListAnswers },
 
+  
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', name: 'Users', component: TableUser },
   { path: '/company', name: 'Company', component: TableCompany },

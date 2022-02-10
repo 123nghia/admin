@@ -1554,6 +1554,7 @@ async saveAddProduct () {
                   this.setState({ titleProduct: e.target.value });
                 }}
               />
+              <label>Mô tả</label>
               <CTextarea
                 field="descProduct"
                 label="Mô tả"

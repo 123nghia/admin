@@ -1,6 +1,6 @@
 export default {
-   "BASE_URL" : "https://menard-api.applamdep.com/",
-  // "BASE_URL" : "http://192.168.1.8:3016/",
+  //  "BASE_URL" : "https://menard-api.applamdep.com/",
+  "BASE_URL" : "http://192.168.1.4:3016/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   
   "BASE_URL_CURRENT" : "https://menard-admin.applamdep.com/",
@@ -14,7 +14,11 @@ export default {
   "ADD_BOOK_LICH" : "api/booking/add",
   "UPDATE_BOOK_LICH" : "api/booking/update",
   "DELETE_BOOK_LICH" : "api/booking/delete",
+  "GET_ANSWERS_CUSTOMER" : "api/question/customer/getAll",
+  "DELETE_ANSWERS_CUSTOMER" : "api/question/customer/delete",
 
+  
+  
   "DELETE_USER" : "/api/delete-user",
   "LOGIN_ADMIN" : "/api/login_admin",
   "GET_SHOP" : "/api/get-shop",
