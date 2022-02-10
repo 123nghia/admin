@@ -963,7 +963,10 @@ async saveAddProduct () {
     linkProduct,group,hrefProduct
     ,
     brandProduct,
-    levelNormal
+    levelNormal,
+    brandName,
+    productType,
+    title
   } = this.state
   const form = new FormData();
   form.append("image", imageProduct_link);
@@ -982,8 +985,8 @@ async saveAddProduct () {
     await axios.post(url, {
       level :levelNormal,
       group : group,
-      productType : "0", 
-      brandName: brandProduct,
+      productType :productType, 
+      brandName: brandName,
       description : descProduct,
       title : titleProduct, 
       avatar:newImage,
@@ -1245,8 +1248,8 @@ async saveAddProduct () {
           <thead className="thead-light">
             <tr>
               <th className="text-center radius_th_left">STT.</th>
+              <th className="text-center">Thương hiệu</th>
               <th className="text-center">Tên</th>
-              <th className="text-center">Tiêu đề</th>
 
               <th className="text-center">Ảnh</th>
               <th className="text-center">Mô tả</th>
@@ -1537,23 +1540,33 @@ async saveAddProduct () {
             </ModalHeader>
             <ModalBody>
             <TextFieldGroup
-                field="brandProduct"
-                label="Tên sản phẩm"
-                value={this.state.brandProduct}
-                placeholder={"Tên..."}
-                onChange={(e) => {
-                  this.setState({ brandProduct: e.target.value });
-                }}
-              />
-              <TextFieldGroup
                 field="titleProduct"
-                label="Tiêu đề"
+                label="Tên sản phẩm"
                 value={this.state.titleProduct}
-                placeholder={"Tiêu đề..."}
+         
                 onChange={(e) => {
                   this.setState({ titleProduct: e.target.value });
                 }}
               />
+               <TextFieldGroup
+                field="productType"
+                label="Nhóm sản phẩm"
+                value={this.state.productType}
+              
+                onChange={(e) => {
+                  this.setState({ productType: e.target.value });
+                }}
+              />
+               <TextFieldGroup
+                field="brandName"
+                label="Thương hiệu"
+                value={this.state.brandName}
+              
+                onChange={(e) => {
+                  this.setState({ brandName: e.target.value });
+                }}
+              />
+            
               <label>Mô tả</label>
               <CTextarea
                 field="descProduct"

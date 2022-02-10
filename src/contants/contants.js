@@ -16,8 +16,6 @@ export default {
   "DELETE_BOOK_LICH" : "api/booking/delete",
   "GET_ANSWERS_CUSTOMER" : "api/question/customer/getAll",
   "DELETE_ANSWERS_CUSTOMER" : "api/question/customer/delete",
-
-  
   
   "DELETE_USER" : "/api/delete-user",
   "LOGIN_ADMIN" : "/api/login_admin",

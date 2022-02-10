@@ -1356,7 +1356,7 @@ class Users extends Component {
             </div>
             <TextFieldGroup
               field="image1"
-              label="Hình ảnh 1: "
+              label="Hình ảnh 1: (170px x 170px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1378,7 +1378,7 @@ class Users extends Component {
             
             <TextFieldGroup
               field="image2"
-              label="Hình ảnh 2: "
+              label="Hình ảnh 2: (280px x 280px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1400,7 +1400,7 @@ class Users extends Component {
             
             <TextFieldGroup
               field="image3"
-              label="Hình ảnh 3: "
+              label="Hình ảnh 3: (170px x 170px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1424,7 +1424,7 @@ class Users extends Component {
             </div>
             <TextFieldGroup
               field="imageDemo"
-              label="Hình ảnh Demo: "
+              label="Hình ảnh Demo: (472px x 472px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1573,7 +1573,7 @@ class Users extends Component {
             />
             <TextFieldGroup
               field="imgLayout"
-              label="Hình ảnh: "
+              label="Hình ảnh (favicon): (20px x 20px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1596,7 +1596,7 @@ class Users extends Component {
           <div id="tabcontent4" class="tabcontent ">
             <div class="flex-a-center">
               <div class="col-sm-12 col-md-5">
-                <p class="mr-2">Logo web :</p>
+                <p class="mr-2">Logo web : (200px x 50px)</p>
               </div>
               <div class="col-sm-12 col-md-7">
                 <img
@@ -1816,7 +1816,7 @@ class Users extends Component {
             </div>
             <TextFieldGroup
               field="imageVoucher"
-              label="Hình ảnh voucher: "
+              label="Hình ảnh voucher: (130px x 160px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1954,7 +1954,7 @@ class Users extends Component {
               />
 <TextFieldGroup
               field="imageSlide"
-              label="Hình ảnh: "
+              label="Hình ảnh: (180px x 190px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
