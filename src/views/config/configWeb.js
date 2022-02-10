@@ -474,6 +474,10 @@ class Users extends Component {
               facebook: {
                 appid: "",
               },
+              homepage: { },
+              seoInfo: {},
+              voucher: {},
+              slideShow: [],
               google: {
                 appid: "",
                 password: "",
