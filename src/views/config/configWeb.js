@@ -1306,7 +1306,7 @@ class Users extends Component {
             />
              <TextFieldGroup
               field="titlePen2"
-              label="Heading 2:"
+              label="Heading 2: (Không thay đổi cú pháp (<span>) - chỉ thay đổi nội dung)"
               value={this.state.titlePen2}
               
               onChange={(e) => {
@@ -1340,7 +1340,7 @@ class Users extends Component {
             
             <TextFieldGroup
               field="image1"
-              label="Hình ảnh 1: "
+              label="Hình ảnh 1: (170px x 170px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1362,7 +1362,7 @@ class Users extends Component {
             
             <TextFieldGroup
               field="image2"
-              label="Hình ảnh 2: "
+              label="Hình ảnh 2: (280px x 280px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1384,7 +1384,7 @@ class Users extends Component {
             
             <TextFieldGroup
               field="image3"
-              label="Hình ảnh 3: "
+              label="Hình ảnh 3: (170px x 170px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1403,7 +1403,7 @@ class Users extends Component {
               src={image3}
             />
             </div>
-            <label className="control-label">Text AI:</label>
+            <label className="control-label">Text AI:(Không thay đổi cú pháp - chỉ thay đổi nội dung)</label>
             <CTextarea
               name="textAi"
               rows="4"
@@ -1542,7 +1542,7 @@ class Users extends Component {
             />
             <TextFieldGroup
               field="imgLayout"
-              label="Hình ảnh favicon: "
+              label="Hình ảnh favicon: (20px x 20px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1565,7 +1565,7 @@ class Users extends Component {
           <div id="tabcontent4" class="tabcontent ">
             <div class="flex-a-center">
               <div class="col-sm-12 col-md-5">
-                <p class="mr-2">Logo web :</p>
+                <p class="mr-2">Logo web :(2:1)</p>
               </div>
               <div class="col-sm-12 col-md-7">
                 <img
@@ -1731,7 +1731,7 @@ class Users extends Component {
           
           <TextFieldGroup
               field="logoFooter"
-              label="Logo footer: "
+              label="Logo footer: (2:1)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -2097,7 +2097,7 @@ class Users extends Component {
               />
 <TextFieldGroup
               field="imageSlide"
-              label="Hình ảnh: "
+              label="Hình ảnh: (180px x 190px)"
               type={"file"}
               className="mt-5"
               onChange={(e) => {
