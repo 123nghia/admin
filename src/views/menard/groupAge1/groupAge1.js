@@ -188,7 +188,20 @@ class Users extends Component {
       idAddTuvan : null,
       imageTuvan : "",
       imageTuvan_show:"",
-      imageTuvan_link :""
+      imageTuvan_link :"",
+      configData : [
+        {
+          label : "Trạng thái Facebook",
+          value : true,
+          key : "fb"
+        },
+        {
+          label : "Trạng thái Google",
+          value : true,
+          key : "gg"
+
+        },
+      ]
 
     };
   }

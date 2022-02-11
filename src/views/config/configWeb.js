@@ -140,7 +140,20 @@ class Users extends Component {
       imageDemo_link :"",
       imageVoucher: "",
       imageVoucher_link :"",
-      imageVoucher_show:""
+      imageVoucher_show:"",
+      configData : [
+        {
+          label : "Trạng thái Facebook",
+          value : true,
+          key : "fb"
+        },
+        {
+          label : "Trạng thái Google",
+          value : true,
+          key : "gg"
+
+        },
+      ]
     };
   }
   changeLevel = (e) => {
@@ -417,6 +430,12 @@ class Users extends Component {
               homepage: valueConfig.value.homepage,
               slideShow: valueConfig.value.slideShow,
               voucher : valueConfig.value.voucher,
+              configData : valueConfig.value.statusConfig,
+
+              keyAppFb: valueConfig.value.facebook.appid,
+      PassFb: valueConfig.value.facebook.password,
+      PassGg: valueConfig.value.google.password,
+      keyAppGg: valueConfig.value.google.appid,
             },
             () => {
               const {homepage, seoInfo,voucher} = this.state;
@@ -599,13 +618,29 @@ class Users extends Component {
       imageDemo_show,
       imageVoucher_link,
       imageVoucher_show,
-      imageVoucher
+      imageVoucher,
+      configData,
+      keyAppFb,
+      PassFb,
+      PassGg,
+      keyAppGg
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     let coppyData = {
       ...dataConfigWeb,
     };
+    if (change === "config") {
+   
+      coppyData.value.statusConfig = configData;
+      coppyData.value.facebook.appid = keyAppFb;
+      coppyData.value.facebook.password = PassFb;
+      coppyData.value.google.appid = keyAppGg;
+      coppyData.value.google.password = PassGg;
+
+      
+
+    }
     if (change === "homepage") {
       const form1 = new FormData();
 
@@ -1275,27 +1310,18 @@ class Users extends Component {
         </ListItemIcon>
         <ListItemText primary="Thông tin tính năng" />
       </ListItemButton> */}
-              <ListItemButton
+      <ListItemButton
                 className="tablinks"
                 onClick={() => this.changeConfigWeb(4)}
               >
                 <ListItemIcon>
                  <FacebookIcon />
                 </ListItemIcon>
-                <ListItemText primary="Cấu hình Facebook" />
+                <ListItemText primary="Cấu hình mạng xã hội" />
               </ListItemButton>
               <ListItemButton
                 className="tablinks"
                 onClick={() => this.changeConfigWeb(5)}
-              >
-                <ListItemIcon>
-                <GoogleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình Google" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(6)}
               >
                 <ListItemIcon>
                   <InfoIcon />
@@ -1304,7 +1330,7 @@ class Users extends Component {
               </ListItemButton>
               <ListItemButton
                 className="tablinks"
-                onClick={() => this.changeConfigWeb(7)}
+                onClick={() => this.changeConfigWeb(6)}
               >
                 <ListItemIcon>
                   <LockResetIcon />
@@ -1313,7 +1339,7 @@ class Users extends Component {
               </ListItemButton>
               <ListItemButton
                 className="tablinks"
-                onClick={() => this.changeConfigWeb(8)}
+                onClick={() => this.changeConfigWeb(7)}
               >
                 <ListItemIcon>
                   <InfoIcon />
@@ -1684,72 +1710,91 @@ class Users extends Component {
             </div>
           </div>
           <div id="tabcontent5" class="tabcontent">
-            <div class="col-md-12">
+          <div class="text-center">
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => this.BlurForm("config")}
+              >
+                Lưu thay đổi
+              </Button>
+            </div>
+            <div class="mt-3"></div>
+          {
+            this.state.configData.map((product,i)=>{
+              return (
+                <div class="configData_item">
+                  <div class="">
+                  <strong>{product.label}</strong>
+                  </div>
+                  <div class="">
+                  <FormGroup>
+                      <FormControlLabel onChange={e=>{
+                        let x = [...this.state.configData]
+                        x[i].value = !x[i].value
+                        this.setState({
+                          configData : x
+                      })
+                      }} checked={product.value} control={<Switch defaultChecked />} label="" />
+                  
+                  </FormGroup>
+                  <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
+                  </div>
+                </div>
+              )
+            })
+          }
+          <div class="text-center"><p>Facebook</p></div>
+            <div class="col-md-12 mt-3">
               <div>
                 <TextFieldGroup
                   field=""
                   label="Mã ứng dụng"
-                  value=""
+                  value={this.state.keyAppFb}
                   placeholder={"Mã app"}
-                  // onChange={(e) => {
-                  //   this.setState({ updateTitle: e.target.value });
-                  // }}
+                  onChange={(e) => {
+                    this.setState({ keyAppFb: e.target.value });
+                  }}
                 />
 
                 <TextFieldGroup
                   field=""
                   label="Mật khẩu"
-                  value=""
+                  value={this.state.PassFb}
                   placeholder={"Mật khẩu"}
-                  // onChange={(e) => {
-                  //   this.setState({ updateLink: e.target.value });
-                  // }}
+                  onChange={(e) => {
+                    this.setState({ PassFb: e.target.value });
+                  }}
                 />
               </div>
-
-              {/* <Checkbox
-      checked={this.state.checkFb}
-      onChange={(e)=>{
-        this.setState({checkFb: e.target.checked})
-      }}
-      inputProps={{ 'aria-label': 'controlled' }}
-    /> */}
             </div>
-          </div>
-          <div id="tabcontent6" class="tabcontent">
-            <div class="col-md-12">
+            <div class="text-center"><p>Google</p></div>
+            <div class="col-md-12 mt-3">
               <div>
-                <TextFieldGroup
+              <TextFieldGroup
                   field=""
                   label="Mã ứng dụng"
-                  value=""
+                  value={this.state.keyAppGg}
                   placeholder={"Mã app"}
-                  // onChange={(e) => {
-                  //   this.setState({ updateTitle: e.target.value });
-                  // }}
+                  onChange={(e) => {
+                    this.setState({ keyAppGg: e.target.value });
+                  }}
                 />
 
                 <TextFieldGroup
                   field=""
                   label="Mật khẩu"
-                  value=""
+                  value={this.state.PassGg}
                   placeholder={"Mật khẩu"}
-                  // onChange={(e) => {
-                  //   this.setState({ updateLink: e.target.value });
-                  // }}
+                  onChange={(e) => {
+                    this.setState({ PassGg: e.target.value });
+                  }}
                 />
               </div>
-
-              {/* <Checkbox
-      checked={this.state.checkFb}
-      onChange={(e)=>{
-        this.setState({checkFb: e.target.checked})
-      }}
-      inputProps={{ 'aria-label': 'controlled' }}
-    /> */}
             </div>
           </div>
-          <div id="tabcontent7" class="tabcontent ">
+          
+          <div id="tabcontent6" class="tabcontent ">
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>

@@ -114,11 +114,8 @@ class EndUser extends Component {
     }
   }
 
-  pagination(dataApi) {
-    var i,
-      j,
-      temparray,
-      chunk = 5;
+   pagination(dataApi) {
+    var i, j, temparray, chunk = 5;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -127,12 +124,12 @@ class EndUser extends Component {
 
     if (arrTotal.length == 0) {
       this.setState({
-        hidden: false,
-      });
+        hidden: false
+      })
     } else {
       this.setState({
-        hidden: true,
-      });
+        hidden: true
+      })
     }
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
@@ -644,7 +641,7 @@ class EndUser extends Component {
                               </table>
                               <div style={{ float: 'right' }}>
                 <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                  this.setState({ dataQues: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
           </div>
