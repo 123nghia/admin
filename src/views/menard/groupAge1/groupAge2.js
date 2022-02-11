@@ -631,6 +631,9 @@ async openFormEditProduct(item){
       actionProduct : "edit",
       titleProduct : item.title,
         descProduct : item.description,
+        brandName : item.brandName,
+        productType : item.productType,
+
         hrefProduct :item.href,
           imageProduct: item.avatar,
           imageProduct_show: item.avatar,
@@ -900,7 +903,9 @@ async openFormEditProduct(item){
     imageProduct_link,
     linkProduct,
     brandProduct,
-    
+    productType,
+    brandName,
+    group,
     levelNormal
     } = this.state;
     const form = new FormData();
@@ -918,9 +923,9 @@ async openFormEditProduct(item){
     let url = baseUrlapi + "api/Recomend/update";
     await axios.post(url, {
       level :levelNormal,
-      group : "group1",
-      productType : "0", 
-      brandName: brandProduct,
+      group : group,
+      productType :productType, 
+      brandName: brandName,
       description : descProduct,
       title : titleProduct, 
       avatar:newImage,
