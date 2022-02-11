@@ -74,6 +74,9 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      imgLogoFooter : "",
+      imgLogoFooter_link : "",
+      imgLogoFooter_show : "",
       action: "new",
       idUpdate: "",
       checkFb: false,
@@ -254,6 +257,18 @@ class Users extends Component {
       });
     };
   }
+  onChangeLogoFooter(e) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ imgLogoFooter_link: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({
+        imgLogoFooter: e.target.result,
+        imgLogoFooter_show: e.target.result,
+      });
+    };
+  }
   async componentDidMount() {
     this.getData().then(() => {
       this.getInfoFunc();
@@ -386,11 +401,19 @@ class Users extends Component {
               seoInfo: valueConfig.value.seoInfo,
               homepage: valueConfig.value.homepage,
               slideShow: valueConfig.value.slideShow,
+              imgLogoFooter : valueConfig.value.logoFooter,
+              imgLogoFooter_show: valueConfig.value.logoFooter,
+              imgLogoFooter_link : valueConfig.value.logoFooter,
+
             },
             () => {
               const {homepage, seoInfo} = this.state;
               if(homepage){
                 this.setState({
+                  textAi: this.state.homepage.textAi,
+
+                  titlePen1 : this.state.homepage.title1,
+                  titlePen2 : this.state.homepage.title2,
                   sologan: this.state.homepage.sologan,
                   introduce: this.state.homepage.introduction,
 
@@ -431,6 +454,7 @@ class Users extends Component {
             value: {
               logo: "",
               tawk: "",
+              logoFooter : "",
               facebook: {
                 appid: "",
               },
@@ -546,13 +570,35 @@ class Users extends Component {
       imgLayout_link,
       image1_link,
       image2_link,
-      image3_link
+      image3_link,
+      imgLogoFooter,
+      imgLogoFooter_link
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     let coppyData = {
       ...dataConfigWeb,
     };
+    if (change === "logoFooter") {
+      const formLogoFooter = new FormData();
+
+      formLogoFooter.append("image", imgLogoFooter_link);
+     
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, formLogoFooter, "", "POST").then((res)=>{console.log(res)})
+      if(imgLogoFooter_link){
+        if(imgLogoFooter_link.name){
+         var newLogoFooter = `${Constants.BASE_URL}image_brand/${imgLogoFooter_link.name}`;
+         
+     
+        }
+      }
+      if(newLogoFooter){
+        coppyData.value.logoFooter = newLogoFooter;
+       
+      }
+     }
+      
+     
     if (change === "homepage") {
       const form1 = new FormData();
 
@@ -590,6 +636,9 @@ class Users extends Component {
       var newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
     }
      }
+     coppyData.value.homepage.title1 = this.state.titlePen1;
+     coppyData.value.homepage.title2 = this.state.titlePen2;
+     coppyData.value.homepage.textAi = this.state.textAi;
     
       coppyData.value.homepage.sologan = sologan;
       coppyData.value.homepage.introduction = introduce;
@@ -609,6 +658,7 @@ class Users extends Component {
       
     
     if (change === "seoInfo") {
+
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
       coppyData.value.seoInfo.description = descSeo;
@@ -1246,6 +1296,25 @@ class Users extends Component {
               </Button>
             </div>
             <TextFieldGroup
+              field="titlePen1"
+              label="Heading 1:"
+              value={this.state.titlePen1}
+              
+              onChange={(e) => {
+                this.setState({ titlePen1: e.target.value });
+              }}
+            />
+             <TextFieldGroup
+              field="titlePen2"
+              label="Heading 2:"
+              value={this.state.titlePen2}
+              
+              onChange={(e) => {
+                this.setState({ titlePen2: e.target.value });
+              }}
+            />
+            
+            <TextFieldGroup
               field="sologan"
               label="Sologan (text):"
               value={sologan}
@@ -1334,6 +1403,15 @@ class Users extends Component {
               src={image3}
             />
             </div>
+            <label className="control-label">Text AI:</label>
+            <CTextarea
+              name="textAi"
+              rows="4"
+              value={this.state.textAi}
+              onChange={(e) => {
+                this.setState({ textAi: e.target.value });
+              }}
+            />
           </div>
           <div id="tabcontent2" class="tabcontent">
           <div class="text-center">
@@ -1464,7 +1542,7 @@ class Users extends Component {
             />
             <TextFieldGroup
               field="imgLayout"
-              label="Hình ảnh: "
+              label="Hình ảnh favicon: "
               type={"file"}
               className="mt-5"
               onChange={(e) => {
@@ -1641,7 +1719,37 @@ class Users extends Component {
             </div>
           </div>
           <div id="tabcontent7" class="tabcontent ">
+          <div class="text-center">
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => this.BlurForm("logoFooter")}
+              >
+                Lưu thay đổi
+              </Button>
+            </div>
           
+          <TextFieldGroup
+              field="logoFooter"
+              label="Logo footer: "
+              type={"file"}
+              className="mt-5"
+              onChange={(e) => {
+                this.onChangeLogoFooter(e);
+              }}
+              onClick={(e) => {
+                e.target.value = null;
+                this.setState({ imgLogoFooter_show: "" });
+              }}
+            />
+         
+            <img
+              alt=""
+              style={{ width: "auto", marginBottom: 20 }}
+              height="140px"
+              src={this.state.imgLogoFooter}
+            />
+           
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>
@@ -1672,13 +1780,14 @@ class Users extends Component {
                         </CRow>
                       </CCol>
                     </CRow>
+                    {dataConfigWeb
+              ? this.renderData(dataConfigWeb.value.footerData)
+              : null}
                   </CardBody>
                 </Card>
               </Col>
             </Row>
-            {dataConfigWeb
-              ? this.renderData(dataConfigWeb.value.footerData)
-              : null}
+           
           </div>
           <div id="tabcontent8" class="tabcontent ">
           <div className="text-center">
