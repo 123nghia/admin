@@ -188,7 +188,20 @@ class Users extends Component {
       idAddTuvan : null,
       imageTuvan : "",
       imageTuvan_show:"",
-      imageTuvan_link :""
+      imageTuvan_link :"",
+      configData : [
+        {
+          label : "Trạng thái Facebook",
+          value : true,
+          key : "fb"
+        },
+        {
+          label : "Trạng thái Google",
+          value : true,
+          key : "gg"
+
+        },
+      ]
 
     };
   }
@@ -196,6 +209,12 @@ class Users extends Component {
     e.preventDefault();
     this.setState({
         levelNormal: e.target.value,
+    });
+  };
+  changeLevelNam = (e) => {
+    e.preventDefault();
+    this.setState({
+        levelNam: e.target.value,
     });
   };
   changeConfigWeb(id) {
@@ -906,6 +925,7 @@ async openFormEditProduct(item){
     productType,
     brandName,
     group,
+    levelNam,
     levelNormal
     } = this.state;
     const form = new FormData();
@@ -931,6 +951,7 @@ async openFormEditProduct(item){
       avatar:newImage,
       href : hrefProduct,
       type:"0",
+      levelPlasma : levelNam,
       id: this.state.idUpdateProduct,
     }).then(()=>{
       this.getProduct();
@@ -969,9 +990,11 @@ async saveAddProduct () {
     ,
     brandProduct,
     levelNormal,
+    levelNam,
     brandName,
     productType,
-    title
+    title,
+
   } = this.state
   const form = new FormData();
   form.append("image", imageProduct_link);
@@ -996,7 +1019,8 @@ async saveAddProduct () {
       title : titleProduct, 
       avatar:newImage,
       href : hrefProduct,
-      type:"0"
+      type:"0",
+      levelPlasma : levelNam
     }).then(res=>{
         this.getProduct();
       
@@ -1503,8 +1527,17 @@ async saveAddProduct () {
       {
         item: "2",
       },
+  
+    ];
+    const arrLevelPro = [
       {
-        item: "3",
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "0",
       },
     ];
     const arrValue = [
@@ -1612,8 +1645,8 @@ async saveAddProduct () {
                 }}
               />
               <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Cấp độ:</CLabel>
-                {arrLevel != undefined ? (
+                <CLabel>Cấp độ Collagen:</CLabel>
+                {arrLevelPro != undefined ? (
                   <CSelect
                     onChange={async (e) => {
                       this.changeLevel(e);
@@ -1623,22 +1656,24 @@ async saveAddProduct () {
                     name="levelNormal"
                     id="SelectLm"
                   >
-                    {arrLevel.map((item, i) => {
+                    {arrLevelPro.map((item, i) => {
                       if (item.item === this.state.levelNormal) {
                         return (
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
                               ? "1-3"
-                              :  "4-5"
+                              :  item.item === "0" ? "Không có" : "4-5"
                               }
+                            
                           </option>
+                          
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                            {item.item === "1"
+                          {item.item === "1"
                               ? "1-3"
-                              :  "4-5"
+                              :  item.item === "0" ? "Không có" : "4-5"
                               }
                           </option>
                         );
@@ -1647,7 +1682,44 @@ async saveAddProduct () {
                   </CSelect>
                 ) : null}
               </div>   
-         
+              <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Cấp độ Nám:</CLabel>
+                {arrLevelPro != undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevelNam(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="levelNam"
+                    id="SelectLm"
+                  >
+                    {arrLevelPro.map((item, i) => {
+                      if (item.item === this.state.levelNam) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "1"
+                              ? "1-3"
+                              :  item.item === "0" ? "Không có" : "4-5"
+                              }
+                            
+                          </option>
+                          
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                          {item.item === "1"
+                              ? "1-3"
+                              :  item.item === "0" ? "Không có" : "4-5"
+                              }
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div> 
               
              
             </ModalBody>
