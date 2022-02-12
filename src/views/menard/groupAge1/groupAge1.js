@@ -706,7 +706,7 @@ async openFormEditProduct(item){
   };
   openEditTuVan=(item,value)=>{
     this.setState({
-      actionTuvan: "new",
+      actionTuvan: "edit",
       modalTuvan: true,
       imageTuvan : item.avatar,
       imageTuvan_link : item.avatar,
@@ -795,7 +795,7 @@ async openFormEditProduct(item){
 
     }
     var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/AdvisorItem/add";
+    let url = baseUrlapi + "api/AdvisorItem/update";
     await axios.post(url, {
         level: levelNormal,
         title : titleTuvan,
@@ -947,7 +947,7 @@ async openFormEditProduct(item){
       productType :productType, 
       brandName: brandName,
       description : descProduct,
-      title : titleProduct, 
+      title : titleProduct,
       avatar:newImage,
       href : hrefProduct,
       type:"0",
