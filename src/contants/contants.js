@@ -1,5 +1,5 @@
 export default {
-   "BASE_URL" : "http/s://menard-api.applamdep.com/",
+   "BASE_URL" : "https://menard-api.applamdep.com/",
   // "BASE_URL" : "http://192.168.1.13:3016/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   
