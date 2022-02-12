@@ -182,6 +182,7 @@ class Product extends Component {
     const res_product = await API_CONNECT(
       Constants.LIST_PRODUCT, {}, "", "GET")
 
+
     let val = res_product.data;
     let totalItem = res_product.arrTotal;
 
@@ -200,7 +201,9 @@ class Product extends Component {
     const res_product = await API_CONNECT(
       Constants.LIST_PRODUCT_COMPANY + JSON.parse(this.state.user).company_id, {}, this.state.token, "GET")
 
-    if (res_product.status == 200) {
+console.log("res_product",res_product)
+
+    if (res_product.status === 200) {
       let val = res_product.data;
       let totalItem = res_product.arrTotal;
 
@@ -212,7 +215,7 @@ class Product extends Component {
   }
 
   async toggleModal(key) {
-
+    console.log("new")
     if (key == 'new') {
       this.setState({
         modalCom: !this.state.modalCom,
@@ -227,10 +230,14 @@ class Product extends Component {
         arrProductColor: [],
         collapse: false
       }, async () => {
+
         if (this.state.brands.length == 0 && this.state.types.length == 0 && this.state.colors.length == 0) {
+
           if (this.state.type == '0' || this.state.type == '1') {
+        
+
             const res_brand = await API_CONNECT(
-              Constants.LIST_BRAND, {}, "", "GET")
+              Constants.LIST_BRAND, {}, "", "GET").then((res)=>console.log("brand",res))
 
             const res_type = await API_CONNECT(
               Constants.LIST_TYPE + "/null", {}, "", "GET")
@@ -318,7 +325,7 @@ class Product extends Component {
   }
 
   async addProduct() {
-    const { name, href, type_id, brand_id, arrProductColor, price } = this.state
+    const { name, href, type_id, brand_id, arrProductColor, price,image ,image_link_save} = this.state
 
     
     if (arrProductColor.length == 0) {
@@ -331,10 +338,32 @@ class Product extends Component {
           return;
         }
       }
+      const formLogoFooter = new FormData();
+
+      formLogoFooter.append("image", image_link_save);
+      var newLogoFooter;
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, formLogoFooter, "", "POST").then((res)=>{console.log(res)})
+      if(image_link_save){
+        if(image_link_save.name){
+          newLogoFooter = `${Constants.BASE_URL}image_brand/${image_link_save.name}`;
+        }
+      }
+      if(newLogoFooter){
+        this.setState({
+          image : newLogoFooter
+        })
+       
+      }else{
+        this.setState({
+          image : image
+        })
+      }
 
       //run api here
 
       const body = {
+      image: image,
+
         type_id: type_id,
         brand_id: brand_id,
         name: name,
@@ -345,33 +374,33 @@ class Product extends Component {
       }
 
       this.setState({ isLoading: true });
-      const res = await axios({
+       await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.ADD_PRODUCT,
         method: 'POST',
         data: body
       }).then((res)=>{
-        console.log(res)
+        if (res.status == 200) {
+          for (let i = 0; i < arrProductColor.length; i++) {
+            const form = new FormData();
+            form.append("image", arrProductColor[i].data_image);
+  
+             API_CONNECT(Constants.UPLOAD_IMAGE_MAKEUP, form, "", "POST")
+          }
+  
+          if (this.state.type == '0' || this.state.type == '1') {
+            this.getData()
+          } else {
+            this.getData_Company()
+          }
+          this.setState({ modalCom: !this.state.modalCom })
+        } else {
+          alert("Thêm sản phẩm thất bại");
+          this.setState({ isLoading: false });
+        }
       })
 
-      if (res.status == 200) {
-        for (let i = 0; i < arrProductColor.length; i++) {
-          const form = new FormData();
-          form.append("image", arrProductColor[i].data_image);
-
-          await API_CONNECT(Constants.UPLOAD_IMAGE_MAKEUP, form, "", "POST")
-        }
-
-        if (this.state.type == '0' || this.state.type == '1') {
-          this.getData()
-        } else {
-          this.getData_Company()
-        }
-        this.setState({ modalCom: !this.state.modalCom })
-      } else {
-        alert("Thêm sản phẩm thất bại");
-        this.setState({ isLoading: false });
-      }
+      
     }
   }
 
@@ -379,6 +408,13 @@ class Product extends Component {
     console.log(item)
     const { brands, types, colors } = this.state;
     let objValue = { value: item.brand_id == null ? "" : item.brand_id._id, label: item.brand_id == null ? "" : item.brand_id.name }
+    if(item.brand_id){
+      this.setState({
+      brand_id: item.brand_id._id,
+      brand_name: item.brand_id.name,
+
+      })
+    }
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -387,12 +423,11 @@ class Product extends Component {
       image_link: item.image_link,
       href: item.href,
       type_id: item.type_id.type_id,
-      brand_id: item.brand_id._id,
+    
       price: item.price,
       objectValueBrand: objValue,
       color_id: item.color_id == null ? null : item.color_id,
       colorChooseUpdate: item.color_id == null ? null : item.color_id.hex,
-      brand_name: item.brand_id.name,
       id: item['_id'],
       arrProductColor: [],
       colorItemUpdate: item.type_id.color_id,
@@ -448,13 +483,13 @@ class Product extends Component {
     form.append("image", image_link_save);
 
     await API_CONNECT(Constants.UPLOAD_IMAGE_MAKEUP, form, "", "POST")
-
-    if (name == null || name == '' ||
-      href == null || href == '' ||
-      type_id == null || type_id == '' ||
-      brand_id == null || brand_id == '') {
-      alert("Vui lòng nhập đầy đủ trường !!!");
-      return
+    var newImg
+    if(image_link_save){
+      if(image_link_save.name){
+        newImg  = `${Constants.BASE_URL}image_brand/${image_link_save.name}`;
+      }else{
+        newImg = image
+      }
     }
 
     this.setState({ modalCom: !this.state.modalCom })
@@ -464,7 +499,7 @@ class Product extends Component {
       brand_id: brand_id,
       name: name,
       href: href,
-      image: image,
+      image: newImg,
       price: price,
       image_link: image_link,
       color_id: color_id,
@@ -887,7 +922,7 @@ class Product extends Component {
                                     </td>
                                     <td className="text-center" style={{ width: '10%' }}>
                                       {
-                                        <img src={item.image_link == null ? item.image : Constants.BASE_URL + `image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
+                                        <img src={item.image_link == null ? item.image : Constants.BASE_URL + `public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
                                     <td className="text-center">
