@@ -320,12 +320,6 @@ class Product extends Component {
   async addProduct() {
     const { name, href, type_id, brand_id, arrProductColor, price } = this.state
 
-    if (name == null || name == '' ||
-      href == null || href == '' ||
-      type_id == null || type_id == '') {
-      alert("Vui lòng nhập đầy đủ trường !!!");
-      return
-    }
     
     if (arrProductColor.length == 0) {
       alert("Chưa thêm bất kì sản phẩm nào, thêm sản phẩm thất bại !!!");
@@ -382,6 +376,7 @@ class Product extends Component {
   }
 
   async openUpdate(item) {
+    console.log(item)
     const { brands, types, colors } = this.state;
     let objValue = { value: item.brand_id == null ? "" : item.brand_id._id, label: item.brand_id == null ? "" : item.brand_id.name }
     this.setState({

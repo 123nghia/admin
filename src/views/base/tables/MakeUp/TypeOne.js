@@ -521,7 +521,7 @@ class SuggestItem extends Component {
   }
 
   async openUpdate(item) {
-    console.log(item.brand_id)
+    console.log(item)
     let objValue = { value: item.brand_id == null ? "" : item.brand_id._id, label: item.brand_id == null ? "" : item.brand_id.name }
     this.setState({
       modalCom: !this.state.modalCom,
@@ -529,7 +529,7 @@ class SuggestItem extends Component {
       name: item.name,
       image: item.image_link,
       image_show: item.image_link,
-      image_link: item.image_link,
+   
       title: item.title,
       description: item.description,
       linkdetail: item.linkdetail,
@@ -568,9 +568,15 @@ class SuggestItem extends Component {
     const form = new FormData();
     form.append("image", image_link);
     await API_CONNECT(Constants.UPLOAD_IMAGE, form, "", "POST")
-    console.log(image_link.name)
-    let imgNew = `${Constants.BASE_URL}image_plugin/${image_link.name}`
+    let imgNew ;
+    if(image_link){
+      imgNew = `${Constants.BASE_URL}image_plugin/${image_link.name}`
 
+    }else{
+      imgNew  = image
+    }
+    
+    console.log(imgNew)
     const body = {
       name: name,
       image: imgNew,
@@ -691,7 +697,7 @@ class SuggestItem extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách sản phẩm da mặt</i>
+                  <i className="fa fa-align-justify">Danh sách sản phẩm da mặt </i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">

@@ -139,7 +139,19 @@ class Users extends Component {
       imgLayout_link :"",
       imgLayout :"",
       imageSeo_link : "",
+      configData : [
+        {
+          label : "Trạng thái Facebook",
+          value : true,
+          key : "fb"
+        },
+        {
+          label : "Trạng thái Google",
+          value : true,
+          key : "gg"
 
+        },
+      ]
     };
   }
   changeLevel = (e) => {
@@ -404,7 +416,8 @@ class Users extends Component {
               imgLogoFooter : valueConfig.value.logoFooter,
               imgLogoFooter_show: valueConfig.value.logoFooter,
               imgLogoFooter_link : valueConfig.value.logoFooter,
-
+              configData : valueConfig.value.statusConfig,
+              
             },
             () => {
               const {homepage, seoInfo} = this.state;
@@ -454,6 +467,8 @@ class Users extends Component {
             value: {
               logo: "",
               tawk: "",
+              configFacebook: true,
+              configGoogle : true,
               logoFooter : "",
               facebook: {
                 appid: "",
@@ -572,13 +587,20 @@ class Users extends Component {
       image2_link,
       image3_link,
       imgLogoFooter,
-      imgLogoFooter_link
+      imgLogoFooter_link,
+      configData
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     let coppyData = {
       ...dataConfigWeb,
     };
+    if (change === "config") {
+   
+      coppyData.value.statusConfig = configData;
+      
+
+    }
     if (change === "logoFooter") {
       const formLogoFooter = new FormData();
 
@@ -1245,20 +1267,12 @@ class Users extends Component {
                 <ListItemIcon>
                  <FacebookIcon />
                 </ListItemIcon>
-                <ListItemText primary="Cấu hình Facebook" />
+                <ListItemText primary="Cấu hình mạng xã hội" />
               </ListItemButton>
+        
               <ListItemButton
                 className="tablinks"
                 onClick={() => this.changeConfigWeb(5)}
-              >
-                <ListItemIcon>
-                <GoogleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình Google" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(6)}
               >
                 <ListItemIcon>
                   <InfoIcon />
@@ -1267,7 +1281,7 @@ class Users extends Component {
               </ListItemButton>
               <ListItemButton
                 className="tablinks"
-                onClick={() => this.changeConfigWeb(7)}
+                onClick={() => this.changeConfigWeb(6)}
               >
                 <ListItemIcon>
                   <LockResetIcon />
@@ -1276,7 +1290,7 @@ class Users extends Component {
               </ListItemButton>
               <ListItemButton
                 className="tablinks"
-                onClick={() => this.changeConfigWeb(8)}
+                onClick={() => this.changeConfigWeb(7)}
               >
                 <ListItemIcon>
                   <LockResetIcon />
@@ -1653,7 +1667,41 @@ class Users extends Component {
             </div>
           </div>
           <div id="tabcontent5" class="tabcontent">
-            <div class="col-md-12">
+          <div class="text-center">
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => this.BlurForm("config")}
+              >
+                Lưu thay đổi
+              </Button>
+            </div>
+            <div class="mt-3"></div>
+          {
+            this.state.configData.map((product,i)=>{
+              return (
+                <div class="configData_item">
+                  <div class="">
+                  <strong>{product.label}</strong>
+                  </div>
+                  <div class="">
+                  <FormGroup>
+                      <FormControlLabel onChange={e=>{
+                        let x = [...this.state.configData]
+                        x[i].value = !x[i].value
+                        this.setState({
+                          configData : x
+                      })
+                      }} checked={product.value} control={<Switch defaultChecked />} label="" />
+                  
+                  </FormGroup>
+                  <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
+                  </div>
+                </div>
+              )
+            })
+          }
+            <div class="col-md-12 mt-3">
               <div>
                 <TextFieldGroup
                   field=""
@@ -1685,40 +1733,8 @@ class Users extends Component {
     /> */}
             </div>
           </div>
-          <div id="tabcontent6" class="tabcontent">
-            <div class="col-md-12">
-              <div>
-                <TextFieldGroup
-                  field=""
-                  label="Mã ứng dụng"
-                  value=""
-                  placeholder={"Mã app"}
-                  // onChange={(e) => {
-                  //   this.setState({ updateTitle: e.target.value });
-                  // }}
-                />
-
-                <TextFieldGroup
-                  field=""
-                  label="Mật khẩu"
-                  value=""
-                  placeholder={"Mật khẩu"}
-                  // onChange={(e) => {
-                  //   this.setState({ updateLink: e.target.value });
-                  // }}
-                />
-              </div>
-
-              {/* <Checkbox
-      checked={this.state.checkFb}
-      onChange={(e)=>{
-        this.setState({checkFb: e.target.checked})
-      }}
-      inputProps={{ 'aria-label': 'controlled' }}
-    /> */}
-            </div>
-          </div>
-          <div id="tabcontent7" class="tabcontent ">
+          
+          <div id="tabcontent6" class="tabcontent ">
           <div class="text-center">
               <Button
                 variant="contained"
@@ -1789,7 +1805,7 @@ class Users extends Component {
             </Row>
            
           </div>
-          <div id="tabcontent8" class="tabcontent ">
+          <div id="tabcontent7" class="tabcontent ">
           <div className="text-center">
           <Button
                 variant="contained"
@@ -1802,7 +1818,7 @@ class Users extends Component {
               </Button>
           </div>
           </div>
-        <div id="tabcontent9" class="tabcontent">
+        <div id="tabcontent8" class="tabcontent">
     <Row>
       <Col>
         <p style={styles.success}>{this.state.updated}</p>
