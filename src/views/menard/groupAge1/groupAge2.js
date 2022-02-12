@@ -642,7 +642,8 @@ class Users extends Component {
           imageProduct_show: "",
           imageProduct_link : "",
           levelProduct : "",
-     
+          levelNam: "",
+          levelNormal :"",
     })
 }
 async openFormEditProduct(item){
@@ -652,12 +653,12 @@ async openFormEditProduct(item){
         descProduct : item.description,
         brandName : item.brandName,
         productType : item.productType,
-
+      levelNormal :  item.level,
         hrefProduct :item.href,
           imageProduct: item.avatar,
           imageProduct_show: item.avatar,
-        
-          levelProduct : item.level,
+        levelNam  :item.levelPlasma,
+          levelProduct : item.levelPlasma,
       idUpdateProduct : item._id,
       brandProduct : item.brandName,
       modalProduct : true
@@ -705,6 +706,8 @@ async openFormEditProduct(item){
     });
   };
   openEditTuVan=(item,value)=>{
+    
+
     this.setState({
       actionTuvan: "edit",
       modalTuvan: true,
@@ -715,7 +718,8 @@ async openFormEditProduct(item){
       title :item.title,
       lifeStyle :item.lifeStyle,
       skincare :item.skincare,
-        idAddTuvan : value
+        idAddTuvan : value,
+        idUpdateSkin : item._id,
     },()=>{
       
     });
@@ -729,7 +733,7 @@ async openFormEditProduct(item){
     }).then((res)=>{
       this.getDataTuVan("0");
       this.getDataTuVan("1");
-
+     
     })
   };
   async saveAddTuvan () {
@@ -769,7 +773,11 @@ async openFormEditProduct(item){
     }).then((res)=>{
       this.getDataTuVan("0");
       this.getDataTuVan("1");
-
+      Swal.fire(
+        'Success!',
+        'Thêm thành công',
+        'success'
+      )
     })    
   };
   async saveEditTuvan () {
@@ -782,6 +790,8 @@ async openFormEditProduct(item){
         skincare,
         imageTuvan_link,
         imageTuvan_show,
+        idAddTuvan,
+        idUpdateSkin
     } = this.state;
     const form = new FormData();
     form.append("image", imageTuvan_link);
@@ -797,6 +807,7 @@ async openFormEditProduct(item){
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/AdvisorItem/update";
     await axios.post(url, {
+      
         level: levelNormal,
         title : titleTuvan,
       avatar : newImage,
@@ -804,11 +815,16 @@ async openFormEditProduct(item){
         skincare : skincare,
         type: this.state.idAddTuvan,
         group: this.state.group,
-        icon :newImage
+        icon :newImage,
+        id : idUpdateSkin
     }).then((res)=>{
       this.getDataTuVan("0");
       this.getDataTuVan("1");
-
+      Swal.fire(
+        'Success!',
+        'Cập nhật thành công',
+        'success'
+      )
     })    
   };
   async openFormEdit(item) {
@@ -878,7 +894,7 @@ async openFormEditProduct(item){
             })
           Swal.fire(
             'Deleted!',
-            'Your file has been deleted.',
+            'Xóa thành công',
             'success'
           )
         }
@@ -955,7 +971,11 @@ async openFormEditProduct(item){
       id: this.state.idUpdateProduct,
     }).then(()=>{
       this.getProduct();
-
+      Swal.fire(
+        'Hoàn thành!',
+        'Cập nhật thành công',
+        'success'
+      )
     })
 
     
@@ -1023,7 +1043,11 @@ async saveAddProduct () {
       levelPlasma : levelNam
     }).then(res=>{
         this.getProduct();
-      
+        Swal.fire(
+          'Hoàn thành!',
+          'Thêm mới sản phẩm thành công',
+          'success'
+        )
     })
 };
   async getDataColegen(){
@@ -1344,7 +1368,7 @@ async saveAddProduct () {
           <tr key={i}>
             <td className="text-center">{i + 1}</td>
             <td className="text-center">
-              <img src={`${item.Icon}`} width={"60px"} height={"60px"} alt="" />
+              <img src={`${item.icon}`} width={"120px"}  alt="" />
             </td>
 
             <td className="text-center">{item.title}</td>
