@@ -581,7 +581,7 @@ class Users extends Component {
                                 {item.type_sdk_id.Name}
                               </td> */}
                               <td className="text-center">
-                                {item.Level}
+                                {item.Level === "1" ? "Nhẹ" : item.Level === "2" ? "Trung bình" : item.Level === "3" ? "Cao" : "Không có"}
                               </td>
                               {/* <td className="text-center">
                                 {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
@@ -778,64 +778,7 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          <Row>
-            <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
-              <Card>
-                <CardHeader>Quản lý soi da</CardHeader>
-                <CardBody>
-                  <CRow>
-                    <CCol sm="12" lg="12">
-                      <CRow>
-                        <CCol sm="12" lg="10">
-                          <CLabel>
-                            <strong>
-                              KẾT LUẬN TỔNG QUAN
-                            </strong>
-                          </CLabel>
-                        </CCol>
-                        {type == "0" || type == "1" ? (
-                          ""
-                        ) : (
-                          <CCol sm="12" lg="2">
-                            <CTooltip content="Xem chi tiết đơn hàng">
-                              {isDisable ? (
-                                <CButton
-                                  outline
-                                  color="info"
-                                  size="xm"
-                                  onClick={async (e) => {
-                                    this.setState({ isDisable: !isDisable });
-                                  }}
-                                >
-                                  <CIcon name="cil-pencil" /> Cập nhật
-                                </CButton>
-                              ) : (
-                                <CButton
-                                  outline
-                                  color="info"
-                                  size="sm"
-                                  onClick={async (e) => {
-                                    this.updateCompany();
-                                  }}
-                                >
-                                  <CIcon name="cil-pencil" /> Xác nhận cập nhật
-                                </CButton>
-                              )}
-                            </CTooltip>
-                          </CCol>
-                        )}
-                      </CRow>
-                      <CRow>
-                        <CCol sm="12" lg="12"></CCol>
-                      </CRow>
-                    </CCol>
-                  </CRow>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+          
 
           <div class="accordion" id="accordionExample">
             {this.renderProductsSuggest(this.state.listK5,"headingOne","collapser1","Hỗ trợ giảm lão hóa da",true,"K5")}
