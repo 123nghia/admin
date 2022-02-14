@@ -122,8 +122,10 @@ class Users extends Component {
     let list7 = null;
     let list8 = null;
     let list9 = null;
+    var  url = Constants.BASE_URL
+    
     list5 = await axios.get(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      `${url}/api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -132,7 +134,7 @@ class Users extends Component {
       }
     );
     list6 = await axios.get(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      `${url}/api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -141,7 +143,7 @@ class Users extends Component {
       }
     );
     list7 = await axios.get(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      `${url}/api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -150,7 +152,7 @@ class Users extends Component {
       }
     );
     list8 = await axios.get(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      `${url}/api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -159,7 +161,7 @@ class Users extends Component {
       }
     );
     list9 = await axios.get(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/getAll",
+      `${url}/api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -451,8 +453,10 @@ class Users extends Component {
       image_show  ,
       image_link  ,
     } = this.state;
+    let url = Constants.BASE_URL
+
     await axios.post(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/add",{
+      `${url}/api/paramenterRecomed/add`,{
         "title": updateTitle,
         "content": updateDesc,
         "level": updateLevel,
@@ -484,9 +488,10 @@ class Users extends Component {
     } = this.state;
    
 
+    let url = Constants.BASE_URL
   
     await axios.post(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/update",{
+     `${url}/api/paramenterRecomed/update`,{
       "id":updateId,
           "title" : updateTitle,
           "content": updateDesc,
@@ -503,8 +508,10 @@ class Users extends Component {
     })
   }
   async removeItem(id,k){
+    let url = Constants.BASE_URL
+
     await axios.post(
-      "https://api-pensilia.applamdep.com/api/paramenterRecomed/delete",{
+     `${url}/api/paramenterRecomed/delete`,{
         id: id,
       }
     ).then(()=>{
