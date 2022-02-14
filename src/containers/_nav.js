@@ -154,7 +154,7 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Kết luận chi tiết',
+    name: 'Tư vấn chi tiết',
     to: '/skin/configContent',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
@@ -168,7 +168,7 @@ const _navSoida = [
 
   {
     _tag: 'CSidebarNavItem',
-    name: 'Kết luận tổng quan',
+    name: 'Tư vấn tổng quan',
     to: '/skin/configOverView',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
