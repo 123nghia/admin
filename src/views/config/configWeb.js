@@ -417,7 +417,10 @@ class Users extends Component {
               imgLogoFooter_show: valueConfig.value.logoFooter,
               imgLogoFooter_link : valueConfig.value.logoFooter,
               configData : valueConfig.value.statusConfig,
-              
+              keyAppFb: valueConfig.value.facebook.appid,
+              PassFb: valueConfig.value.facebook.password,
+              PassGg: valueConfig.value.google.password,
+              keyAppGg: valueConfig.value.google.appid,
             },
             () => {
               const {homepage, seoInfo} = this.state;
@@ -588,7 +591,11 @@ class Users extends Component {
       image3_link,
       imgLogoFooter,
       imgLogoFooter_link,
-      configData
+      configData,
+      keyAppFb,
+      PassFb,
+      PassGg,
+      keyAppGg
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
@@ -598,6 +605,11 @@ class Users extends Component {
     if (change === "config") {
    
       coppyData.value.statusConfig = configData;
+      coppyData.value.facebook.appid = keyAppFb;
+      coppyData.value.facebook.password = PassFb;
+      coppyData.value.google.appid = keyAppGg;
+      coppyData.value.google.password = PassGg;
+
       
 
     }
@@ -1701,36 +1713,53 @@ class Users extends Component {
               )
             })
           }
+          <div class="text-center"><p>Facebook</p></div>
             <div class="col-md-12 mt-3">
               <div>
                 <TextFieldGroup
                   field=""
                   label="Mã ứng dụng"
-                  value=""
+                  value={this.state.keyAppFb}
                   placeholder={"Mã app"}
-                  // onChange={(e) => {
-                  //   this.setState({ updateTitle: e.target.value });
-                  // }}
+                  onChange={(e) => {
+                    this.setState({ keyAppFb: e.target.value });
+                  }}
                 />
 
                 <TextFieldGroup
                   field=""
                   label="Mật khẩu"
-                  value=""
+                  value={this.state.PassFb}
                   placeholder={"Mật khẩu"}
-                  // onChange={(e) => {
-                  //   this.setState({ updateLink: e.target.value });
-                  // }}
+                  onChange={(e) => {
+                    this.setState({ PassFb: e.target.value });
+                  }}
                 />
               </div>
+            </div>
+            <div class="text-center"><p>Google</p></div>
+            <div class="col-md-12 mt-3">
+              <div>
+              <TextFieldGroup
+                  field=""
+                  label="Mã ứng dụng"
+                  value={this.state.keyAppGg}
+                  placeholder={"Mã app"}
+                  onChange={(e) => {
+                    this.setState({ keyAppGg: e.target.value });
+                  }}
+                />
 
-              {/* <Checkbox
-      checked={this.state.checkFb}
-      onChange={(e)=>{
-        this.setState({checkFb: e.target.checked})
-      }}
-      inputProps={{ 'aria-label': 'controlled' }}
-    /> */}
+                <TextFieldGroup
+                  field=""
+                  label="Mật khẩu"
+                  value={this.state.PassGg}
+                  placeholder={"Mật khẩu"}
+                  onChange={(e) => {
+                    this.setState({ PassGg: e.target.value });
+                  }}
+                />
+              </div>
             </div>
           </div>
           
