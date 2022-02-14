@@ -125,7 +125,7 @@ class Users extends Component {
     var  url = Constants.BASE_URL
     
     list5 = await axios.get(
-      `${url}/api/paramenterRecomed/getAll`,
+      `${url}api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -134,7 +134,7 @@ class Users extends Component {
       }
     );
     list6 = await axios.get(
-      `${url}/api/paramenterRecomed/getAll`,
+      `${url}api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -143,7 +143,7 @@ class Users extends Component {
       }
     );
     list7 = await axios.get(
-      `${url}/api/paramenterRecomed/getAll`,
+      `${url}api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -152,7 +152,7 @@ class Users extends Component {
       }
     );
     list8 = await axios.get(
-      `${url}/api/paramenterRecomed/getAll`,
+      `${url}api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -161,7 +161,7 @@ class Users extends Component {
       }
     );
     list9 = await axios.get(
-      `${url}/api/paramenterRecomed/getAll`,
+      `${url}api/paramenterRecomed/getAll`,
       {
         params: {
           typeFilter: number,
@@ -456,7 +456,7 @@ class Users extends Component {
     let url = Constants.BASE_URL
 
     await axios.post(
-      `${url}/api/paramenterRecomed/add`,{
+      `${url}api/paramenterRecomed/add`,{
         "title": updateTitle,
         "content": updateDesc,
         "level": updateLevel,
@@ -491,7 +491,7 @@ class Users extends Component {
     let url = Constants.BASE_URL
   
     await axios.post(
-     `${url}/api/paramenterRecomed/update`,{
+     `${url}api/paramenterRecomed/update`,{
       "id":updateId,
           "title" : updateTitle,
           "content": updateDesc,
@@ -511,7 +511,7 @@ class Users extends Component {
     let url = Constants.BASE_URL
 
     await axios.post(
-     `${url}/api/paramenterRecomed/delete`,{
+     `${url}api/paramenterRecomed/delete`,{
         id: id,
       }
     ).then(()=>{
