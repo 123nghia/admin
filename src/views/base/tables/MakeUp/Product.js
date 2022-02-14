@@ -62,9 +62,9 @@ class Product extends Component {
       dataApi: [],
       hidden: false,
       action: 'new',
-      type_id: '',
-      brand_id: '',
-      color_id: '',
+      type_id: null,
+      brand_id: null,
+      color_id: null,
       brand_name: '',
       name: '',
       href: '',
@@ -325,9 +325,14 @@ console.log("res_product",res_product)
   }
 
   async addProduct() {
-    const { name, href, type_id, brand_id, arrProductColor, price,image ,image_link_save} = this.state
 
-    
+    const { name, href, type_id, brand_id, arrProductColor, price,image ,image_link_save} = this.state
+    if(brand_id === "" && type_id === ""){
+      alert("Hãy nhập đầy đủ thông tin !!!");
+      return
+    }
+
+ 
     if (arrProductColor.length == 0) {
       alert("Chưa thêm bất kì sản phẩm nào, thêm sản phẩm thất bại !!!");
       this.setState({ modalCom: !this.state.modalCom })
@@ -342,10 +347,10 @@ console.log("res_product",res_product)
 
       formLogoFooter.append("image", image_link_save);
       var newLogoFooter;
-      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, formLogoFooter, "", "POST").then((res)=>{console.log(res)})
+      await API_CONNECT(Constants.UPLOAD_IMAGE_MAKEUP, formLogoFooter, "", "POST").then((res)=>{console.log(res)})
       if(image_link_save){
         if(image_link_save.name){
-          newLogoFooter = `${Constants.BASE_URL}image_brand/${image_link_save.name}`;
+          newLogoFooter = `${Constants.BASE_URL}image_makeup/${image_link_save.name}`;
         }
       }
       if(newLogoFooter){
@@ -358,12 +363,13 @@ console.log("res_product",res_product)
           image : image
         })
       }
+      console.log("arrProductColor",arrProductColor[0])
 
       //run api here
-
       const body = {
+        color_id : arrProductColor[0],
       image: image,
-
+   
         type_id: type_id,
         brand_id: brand_id,
         name: name,
@@ -410,7 +416,7 @@ console.log("res_product",res_product)
     let objValue = { value: item.brand_id == null ? "" : item.brand_id._id, label: item.brand_id == null ? "" : item.brand_id.name }
     if(item.brand_id){
       this.setState({
-      brand_id: item.brand_id._id,
+      brand_id: item.brand_id,
       brand_name: item.brand_id.name,
 
       })
@@ -422,7 +428,7 @@ console.log("res_product",res_product)
       image: item.image,
       image_link: item.image_link,
       href: item.href,
-      type_id: item.type_id.type_id,
+      type_id: item.type_id,
     
       price: item.price,
       objectValueBrand: objValue,
@@ -435,6 +441,8 @@ console.log("res_product",res_product)
       collapse: false,
       image_show: ""
     }, async () => {
+    console.log(this.state.type_id)
+
       if (brands.length == 0 && types.length == 0 && colors.length == 0) {
         if (this.state.type == '0' || this.state.type == '1') {
           const res_brand = await API_CONNECT(
@@ -486,7 +494,7 @@ console.log("res_product",res_product)
     var newImg
     if(image_link_save){
       if(image_link_save.name){
-        newImg  = `${Constants.BASE_URL}image_brand/${image_link_save.name}`;
+        newImg  = `${Constants.BASE_URL}image_makeup/${image_link_save.name}`;
       }else{
         newImg = image
       }
@@ -1027,7 +1035,8 @@ console.log("res_product",res_product)
                       }} custom size="sm" name="selectSm" id="SelectLm">
                         {
                           types.map((item, i) => {
-                            if (item.type_id == this.state.type_id) {
+                            
+                            if (item.name == this.state.type_id.name) {
                               return (
                                 <option selected key={i} value={JSON.stringify(item)}>{item.name}</option>
                               );

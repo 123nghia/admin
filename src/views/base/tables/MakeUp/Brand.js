@@ -252,11 +252,13 @@ class Brand extends Component {
   }
 
   async openUpdate(item) {
+    
+   
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
       name: item.name,
-      image: item.image,
+      image: item.image_link,
       image_show: "",
       image_link: item.image_link,
       id: item['_id'],
@@ -267,21 +269,16 @@ class Brand extends Component {
   async updateUser() {
     const { name, image, link, image_link } = this.state
 
-    if (name == null || name == '' ||
-      image == null || image == '') {
-      alert("Vui lòng nhập đầy đủ trường !!!");
-      return
-    }
 
     const form = new FormData();
     form.append("image", image_link);
 
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST")
-
+    
     const body = {
       name: name,
-      image: image,
-      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
+      image: image_link,
+      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link,
       id: this.state.id,
       link: link
     }

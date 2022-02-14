@@ -254,6 +254,7 @@ class BrandPlugin extends Component {
   }
 
   async openUpdate(item) {
+
     this.setState({
       modalCom: !this.state.modalCom,
       action: "update",
@@ -265,6 +266,7 @@ class BrandPlugin extends Component {
       link: item.link
     })
   }
+  
 
   async updateBrand() {
     const { name, image, link, image_link } = this.state
