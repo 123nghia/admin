@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {
   Card,
   CardBody,
@@ -1782,36 +1783,47 @@ async saveAddProduct () {
               {this.state.actionTuvan === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
+            <label>Tiêu đề</label>
               <CTextarea
                 field="titleTuvan"
-                label="Tiêu đề"
+               
                 className="mt-3"
                 value={this.state.titleTuvan}
-                placeholder={"Tiêu đề"}
+                
                 onChange={(e) => {
                   this.setState({ titleTuvan: e.target.value });
                 }}
               />
-              <CTextarea
-                field="lifeStyle"
-                label="Lối sống"
-                className="mt-3"
-                value={this.state.lifeStyle}
-                placeholder={"Lối sống"}
-                onChange={(e) => {
-                  this.setState({ lifeStyle: e.target.value });
-                }}
-              />
-              <CTextarea
-                field="skincare"
-                label="Chăm sóc"
-                className="mt-3"
-                value={this.state.skincare}
-                placeholder={"Chăm sóc"}
-                onChange={(e) => {
-                  this.setState({ skincare: e.target.value });
-                }}
-              />
+              <label>Lối sống</label>
+              <CKEditor
+                    editor={ ClassicEditor }
+                    data={this.state.lifeStyle}
+                    onReady={ editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log( 'Editor is ready to use!', editor );
+                    } }
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        this.setState({ lifeStyle: data });
+                    } }
+                   
+                />
+            
+              <label>Chăm sóc</label>
+              <CKEditor
+                    editor={ ClassicEditor }
+                    data={this.state.skincare}
+                    onReady={ editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log( 'Editor is ready to use!', editor );
+                    } }
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        this.setState({ skincare: data });
+                    } }
+                   
+                />
+             
               <TextFieldGroup
             field="icon"
             label="Ảnh minh họa"

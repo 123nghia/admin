@@ -34,6 +34,8 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      phoneSearch : "",
+      emailSearch : "",
       data: [],
       key: '',
       totalActive: 0,
@@ -96,7 +98,11 @@ class EndUser extends Component {
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_END_USER,
-      method: 'POST'
+      method: 'POST',
+      data : {
+        phone : "",
+        tokensearch : "",
+      }
     }).then((res)=>{
       console.log("end user",res.data.data)
     
@@ -110,19 +116,48 @@ class EndUser extends Component {
     this.setState({ isLoading: false, totalActive: active });
   });
   }
+  async newSearch(){
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_END_USER,
+      method: 'POST',
+      data : {
+        phone : this.state.phoneSearch,
+        tokensearch : this.state.emailSearch,
+      }
+    }).then((res)=>{
+      console.log("end user",res.data.data)
+    
 
+    let val = res.data.data;
+    this.pagination(val);
+    this.setState({ dataApi: val });
+
+    let active = 0
+
+    this.setState({ isLoading: false, totalActive: active });
+  });
+  }
   searchKey() {
     const { indexPage, key } = this.state;
     // this.setState({ key: key })
 
     if (key != '') {
       let d = []
+      console.log(this.state.dataApi)
       this.state.dataApi.map(val => {
-        if (val.email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
+     
+       if(val.phone){
+
+       
+      
+        if (
           val.phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) {
 
           d.push(val)
         }
+      }
       })
       let active = 0
 
@@ -273,14 +308,27 @@ class EndUser extends Component {
                       <CCol sm="12" lg="12">
                         <CRow>
                           <CCol sm="12" lg="6">
-                            <div>
+                            {/* <div>
                               <Input style={styles.searchInput} onChange={(e) => {
                                 this.actionSearch(e, "key");
                               }} name="key" value={key} placeholder="Từ khóa" />
+                            </div> */}
+                            <div>
+                              <Input style={styles.searchInput} onChange={(e) => {
+                                this.setState({
+                                  emailSearch : e.target.value
+                                })
+                              }} name="emailSearch" value={this.state.emailSearch} placeholder="Email" />
+                                <Input style={styles.searchInput} onChange={(e) => {
+                               this.setState({
+                                  phoneSearch : e.target.value
+                                })
+                              }} name="phoneSearch" value={this.state.phoneSearch} placeholder="Số điện thoại" />
                             </div>
+                            
                           </CCol>
                           <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.newSearch() }}>Tìm kiếm</CButton>
                           </CCol>
                         </CRow>
                       </CCol>
@@ -297,9 +345,17 @@ class EndUser extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
+                        <th className="text-center">Loại tài khoản</th>
+
                         <th className="text-center">Tên khách hàng</th>
                        
                         <th className="text-center">Số điện thoại</th>
+                        <th className="text-center">Email</th>
+
+                        <th className="text-center">Địa chỉ</th>
+
+                        <th className="text-center">Ngày đăng ký</th>
+
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -311,9 +367,22 @@ class EndUser extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.username}</td>
+                                <td className="text-center">{item.type === "0" ? "" : item.type === "1" ? "FaceBook" : "Google"}</td>
+
+                                <td className="text-center">{item.name}</td>
                         
                                 <td className="text-center">{item.phone}</td>
+                                <td className="text-center">{item.email}</td>
+
+                                <td className="text-center">
+                                {item.addressHome}
+                                </td>
+
+                                <td className="text-center">
+                                {(new Date(item.create_date)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}
+                                  
+                                </td>
+
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
