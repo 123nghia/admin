@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {
   Card,
   CardBody,
@@ -834,21 +835,36 @@ class Users extends Component {
 
           <br></br>
           <label className="control-label">Mô tả</label>
-          <CTextarea
+         
+          <CKEditor
+                    editor={ ClassicEditor }
+                    data={
+                      this.state.updateDesc
+                    }
+                    onReady={ editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log( 'Editor is ready to use!', editor );
+                    } }
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        console.log( { event, editor, data } );
+                        this.setState({ updateDesc: data });
+                    } }
+                    onBlur={ ( event, editor ) => {
+                        console.log( 'Blur.', editor );
+                    } }
+                    onFocus={ ( event, editor ) => {
+                        console.log( 'Focus.', editor );
+                    } }
+                />
+          {/* <CTextarea
             name="updateDesc"
             rows="4"
             value={this.state.updateDesc}
             onChange={(e) => {
               this.setState({ updateDesc: e.target.value });
             }}
-          />
-
-          {/* <TextFieldGroup
-            field="linkProductsSuggest"
-            label="Đường dẫn chi tiết sản phẩm"
-            value={this.state.linkProductsSuggest}
-            placeholder={"Đường dẫn chi tiết sản phẩm"}
-            onChange={(e) => this.onChange("linkProductsSuggest", e.target.value)}
+            
           /> */}
          
           <div style={{ width: "100%" }} className="mt-3">
