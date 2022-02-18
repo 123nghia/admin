@@ -6,6 +6,8 @@ import {
   CardHeader,
   Col,
   Row,
+  
+
   Input,
   ModalHeader,
   ModalBody,
@@ -13,7 +15,7 @@ import {
   Modal,
 } from "reactstrap";
 
-import { CButton, CRow, CCol } from "@coreui/react";
+import { CButton,CTextarea ,CRow, CCol } from "@coreui/react";
 
 import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
@@ -664,16 +666,17 @@ class EndUser extends Component {
               <div className="text-center">
               <label>Đáp án 1</label>
               </div>
-              <TextFieldGroup
-                field="answerQues"
+              <CTextarea
+               field="answerQues"
                 label="Nội dung"
                 value={answerQues}
                 placeholder={""}
                 // error={errors.title}
                 onChange={(e) => this.setState({ answerQues: e.target.value })}
+                rows="3"
 
-                // rows="5"
               />
+            
               <TextFieldGroup
                 field="keyQues"
                 label="Mã"
@@ -686,16 +689,18 @@ class EndUser extends Component {
 
               <label>Đáp án 2</label>
               </div>
-              <TextFieldGroup
-                field="answerQues2"
+              <CTextarea
+               field="answerQues2"
                 label="Nội dung"
                 value={answerQues2}
                 placeholder={""}
                 // error={errors.title}
                 onChange={(e) => this.setState({ answerQues2: e.target.value })}
 
-                // rows="5"
+                rows="3"
+
               />
+             
               <TextFieldGroup
                 field="keyQues2"
                 label="Mã"
@@ -708,16 +713,18 @@ class EndUser extends Component {
 
 <label>Đáp án 3</label>
 </div>
-<TextFieldGroup
-  field="answerQues3"
+<CTextarea
+          field="answerQues3"
   label="Nội dung"
   value={answerQues3}
   placeholder={""}
   // error={errors.title}
   onChange={(e) => this.setState({ answerQues3: e.target.value })}
 
-  // rows="5"
-/>
+                rows="3"
+
+              />
+
 <TextFieldGroup
   field="keyQues3"
   label="Mã"
@@ -731,8 +738,8 @@ class EndUser extends Component {
 
                   <label>Đáp án 4</label>
                   </div>
-                  <TextFieldGroup
-                    field="answerQues4"
+                  <CTextarea
+   field="answerQues4"
                     label="Nội dung"
                     value={answerQues4}
                     placeholder={""}
@@ -741,8 +748,10 @@ class EndUser extends Component {
                       this.setState({ answerQues4: e.target.value })
                     }
 
-                    // rows="5"
-                  />
+                rows="3"
+
+              />
+                 
                   <TextFieldGroup
                     field="keyQues4"
                     label="Mã"

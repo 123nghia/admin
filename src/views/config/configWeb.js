@@ -706,9 +706,9 @@ class Users extends Component {
       
       if (change === "voucher") {
         const formVoucher = new FormData();
-        formDemo.append("image", imageVoucher_link);
+        formVoucher.append("image", imageVoucher_link);
         
-       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, formVoucher, "", "POST").then((res)=>{console.log(res)})
+        await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, formVoucher, "", "POST").then((res)=>{console.log(res)})
        
        if(imageVoucher_link && imageVoucher_link.name){
          var newImageVoucher = `${Constants.BASE_URL}image_brand/${imageVoucher_link.name}`;
