@@ -596,7 +596,7 @@ class Users extends Component {
                                 {item.type_sdk_id.Name}
                               </td> */}
                               <td className="text-center">
-                              {item.Level === "1" ? "Nhẹ" : item.Level === "2" ? "Trung bình" : item.Level === "3" ? "Cao" : "Không có"}
+                              {item.Level === "1" ? "Nhẹ" : item.Level === "2" ? "Trung bình" : item.Level === "3" ? "Nặng" : "Không có"}
 
                               </td>
                               {/* <td className="text-center">
@@ -857,18 +857,18 @@ class Users extends Component {
                     }
                     onReady={ editor => {
                         // You can store the "editor" and use when it is needed.
-                        console.log( 'Editor is ready to use!', editor );
+                       
                     } }
                     onChange={ ( event, editor ) => {
                         const data = editor.getData();
-                        console.log( { event, editor, data } );
+                       
                         this.setState({ updateDesc: data });
                     } }
                     onBlur={ ( event, editor ) => {
-                        console.log( 'Blur.', editor );
+                        
                     } }
                     onFocus={ ( event, editor ) => {
-                        console.log( 'Focus.', editor );
+                        
                     } }
                 />
           {/* <CTextarea

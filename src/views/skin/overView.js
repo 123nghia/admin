@@ -582,7 +582,7 @@ class Users extends Component {
                                 {item.type_sdk_id.Name}
                               </td> */}
                               <td className="text-center">
-                                {item.Level === "1" ? "Nhẹ" : item.Level === "2" ? "Trung bình" : item.Level === "3" ? "Cao" : "Không có"}
+                                {item.Level === "1" ? "Nhẹ" : item.Level === "2" ? "Trung bình" : item.Level === "3" ? "Nặng" : "Không có"}
                               </td>
                               {/* <td className="text-center">
                                 {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
@@ -847,14 +847,14 @@ class Users extends Component {
                     } }
                     onChange={ ( event, editor ) => {
                         const data = editor.getData();
-                        console.log( { event, editor, data } );
+                    
                         this.setState({ updateDesc: data });
                     } }
                     onBlur={ ( event, editor ) => {
-                        console.log( 'Blur.', editor );
+                       
                     } }
                     onFocus={ ( event, editor ) => {
-                        console.log( 'Focus.', editor );
+                     
                     } }
                 />
           {/* <CTextarea
