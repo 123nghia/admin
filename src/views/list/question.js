@@ -598,16 +598,15 @@ class EndUser extends Component {
                                   {/* <CIcon name="cilTrash" /> */}
                                   Chỉnh sửa
                                 </CButton>{" "}
-                                <CButton
+                                {/* <CButton
                                   style={styles.mgl5}
                                   outline
                                   color="danger"
                                   size="md"
                                   onClick={() => this.deleteQues(item)}
                                 >
-                                  {/* <CIcon name="cilPencil" /> */}
                                   Xóa
-                                </CButton>
+                                </CButton> */}
                               </div>
                               <table
                                 ble
@@ -629,7 +628,7 @@ class EndUser extends Component {
                                         return (
                                           <tr key={i}>
                                             <td className="text-center">
-                                              {i + 1}
+                                             Đáp án {i + 1}
                                             </td>
                                             <td className="text-center">
                                               {child.value}

@@ -75,6 +75,9 @@
   padding:0px !important;
 
 }
+.MuiListItemButton-root{
+  padding:14px !important;
+}
 .Mui-selected{  
 }
 .title_ques{
@@ -83,4 +86,7 @@
 .table_ques{
   border: 1px solid gray
 
+}
+.c-sidebar-nav-icon{
+  /* margin-right:6px */
 }

@@ -185,6 +185,8 @@ class Users extends Component {
         imageProduct_link : "",
         imageProduct_show : "",
       dataTuVan1 : [],
+      levelNam : "1",
+      
       dataTuVan2: [],
       idAddTuvan : null,
       imageTuvan : "",
@@ -217,6 +219,7 @@ class Users extends Component {
     this.setState({
         levelNam: e.target.value,
     });
+    console.log(this.state.levelNam)
   };
   changeConfigWeb(id) {
     var i, tabcontent, tablinks;
@@ -643,8 +646,8 @@ class Users extends Component {
           imageProduct_show: "",
           imageProduct_link : "",
           levelProduct : "",
-          levelNam: "",
-          levelNormal :"",
+          levelNam: "1",
+          levelNormal :"1",
     })
 }
 async openFormEditProduct(item){
@@ -976,7 +979,10 @@ async openFormEditProduct(item){
         'Hoàn thành!',
         'Cập nhật thành công',
         'success'
-      )
+      );
+      this.setState({
+        modalProduct : false
+      })
     })
 
     
@@ -1239,6 +1245,7 @@ async saveAddProduct () {
   renderDataProduct(data) {
     if (data && data.length > 0) {
       let x = data.map((item, i) => {
+        console.log(item)
         return (
           <tr key={i}>
             <td colSpan="10" hidden={this.state.hidden} className="text-center">
@@ -1254,9 +1261,10 @@ async saveAddProduct () {
             <td className="text-center">
               <img src={`${item.avatar}`} width={"60px"} height={"60px"} alt="" />
             </td>
-            <td className="text-center">{item.description}</td>
-
-            <td className="text-center">{item.href}</td>
+            <td className="text-center"><p className=" text_line_3">{item.description}</p></td>
+            <td className="text-center">{item.level}</td>
+            <td className="text-center">{item.levelPlasma}</td>
+            <td className="text-center"><p className=" text_line_3">{item.href}</p></td>
             <td className="text-center">
               <CButton
                 outline
@@ -1307,6 +1315,8 @@ async saveAddProduct () {
 
               <th className="text-center">Ảnh</th>
               <th className="text-center">Mô tả</th>
+              <th className="text-center">Cấp độ Collagen</th>
+              <th className="text-center">Cấp độ Nám</th>
 
               <th className="text-center">Đường dẫn</th>
 
@@ -1373,11 +1383,11 @@ async saveAddProduct () {
             </td>
 
             <td className="text-center">{item.title}</td>
-            <td className="text-center">{item.lifeStyle}</td>
+            <td className="text-center"><p className=" text_line_3">{item.lifeStyle}</p></td>
 
             
             {/* <td className="text-center">{item.name}</td> */}
-            <td className="text-center">{item.skincare}</td>
+            <td className="text-center"><p className=" text_line_3">{item.skincare}</p></td>
             <td className="text-center">
               {item.level === "1" ? "1-3" : "4-5"}
             </td>
@@ -1634,6 +1644,7 @@ async saveAddProduct () {
               <CTextarea
                 field="descProduct"
                 label="Mô tả"
+                rows="4"
                 value={this.state.descProduct}
                 placeholder={"Mô tả..."}
                 onChange={(e) => {
@@ -2016,7 +2027,7 @@ async saveAddProduct () {
                 aria-label="basic tabs example"
               >
                 <Tab
-                  label="Colegen"
+                  label="Collagen"
                   style={styles.Tab}
                   id="simple-tab-0"
                   aria-controls="simple-tabpanel-0"
@@ -2059,13 +2070,13 @@ async saveAddProduct () {
                   centered
                 >
                   <Tab
-                    label="Colegen"
+                    label="Collagen"
                     id="simple-tab-4"
                     style={styles.Tab}
                     aria-controls="simple-tabpanel-4"
                   />
                   <Tab
-                    label="Nấm"
+                    label="Nám"
                     id="simple-tab-5"
                     style={styles.Tab}
                     aria-controls="simple-tabpanel-5"

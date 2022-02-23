@@ -5,6 +5,7 @@ import {
   CButton
 } from '@coreui/react'
 import { cifAU, freeSet } from '@coreui/icons';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const css = {}
 const content = {
@@ -31,7 +32,6 @@ const content = {
   update_package: "Nâng cấp gói",
   contact: "Danh sach liên hệ",
 }
-
 const _navDashboard = [
   {
     _tag: 'CSidebarNavTitle',
@@ -65,7 +65,7 @@ const _navSoida = [
     _tag: 'CSidebarNavItem',
     name: 'Nhóm tuổi từ 22 - 28',
     to: '/nhom-tuoi-1',
-    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    icon: <GroupsIcon class="c-sidebar-nav-icon" style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
@@ -76,14 +76,14 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Nhóm tuổi từ 28 - 35',
+    name: ' Nhóm tuổi từ 28 - 35',
     to: '/nhom-tuoi-2',
-    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    icon: <GroupsIcon  class="c-sidebar-nav-icon" style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
-      text: <CTooltip placement={"right"} content={content.brand}>
-        <CIcon content={freeSet.cilBellExclamation} />
+      text: <CTooltip class="c-sidebar-nav-icon" placement={"right"} content={content.brand}>
+        <CIcon  content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
   },
@@ -91,7 +91,7 @@ const _navSoida = [
     _tag: 'CSidebarNavItem',
     name: 'Nhóm tuổi từ 35 - 45',
     to: '/nhom-tuoi-3',
-    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    icon: <GroupsIcon class="c-sidebar-nav-icon" style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
@@ -104,11 +104,11 @@ const _navSoida = [
     _tag: 'CSidebarNavItem',
     name: 'Nhóm trên 50 (55+)',
     to: '/nhom-tuoi-4',
-    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    icon: <GroupsIcon class="c-sidebar-nav-icon" style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
-      text: <CTooltip placement={"right"} content={content.brand}>
+      text: <CTooltip  placement={"right"} content={content.brand}>
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
