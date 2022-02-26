@@ -6,7 +6,7 @@ import {
 } from '@coreui/react'
 import { cifAU, freeSet } from '@coreui/icons';
 import GroupsIcon from '@mui/icons-material/Groups';
-
+import SettingsIcon from '@mui/icons-material/Settings';
 const css = {}
 const content = {
   profile: "Quản lý các thông tin cá nhân của bạn như số điện thoại, email, v.v",
@@ -105,6 +105,19 @@ const _navSoida = [
     name: 'Nhóm trên 50 (55+)',
     to: '/nhom-tuoi-4',
     icon: <GroupsIcon class="c-sidebar-nav-icon" style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip  placement={"right"} content={content.brand}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+    {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý sản phẩm gợi ý',
+    to: '/manage-product',
+    icon: <SettingsIcon class="c-sidebar-nav-icon" style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
       color: 'info',

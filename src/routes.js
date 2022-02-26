@@ -79,6 +79,8 @@ const ListQuestion = React.lazy(() => import('./views/list/question'));
 
 const ListAnswers = React.lazy(() => import('./views/list/answers'));
 
+const ManageProduct = React.lazy(() => import('./views/menard/groupAge1/manageProduct'));
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   
@@ -89,6 +91,7 @@ const routes = [
   { path: '/list-voucher', name: 'ListVoucher', component: ListVoucher },
   { path: '/question-customer', name: 'ListQuestion', component: ListQuestion },
   { path: '/answers-customer', name: 'ListAnswers', component: ListAnswers },
+  { path: '/manage-product', name: 'ManageProduct', component: ManageProduct },
 
   
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },

@@ -299,7 +299,7 @@ class Users extends Component {
   async componentDidMount() {
     this.getDataColegen();
     this.getDataNamda();
-    this.getProduct();
+ 
     this.getDataTuVan("0");
     this.getDataTuVan("1");
 
@@ -2044,12 +2044,7 @@ async saveAddProduct () {
                   style={styles.Tab}
                   aria-controls="simple-tabpanel-2"
                 />
-                <Tab
-                  label="Sản phẩm gợi ý"
-                  id="simple-tab-3"
-                  style={styles.Tab}
-                  aria-controls="simple-tabpanel-3"
-                />
+              
               </Tabs>
             </Box>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={0}>
@@ -2092,9 +2087,7 @@ async saveAddProduct () {
                 </TabPanel>
               </Box>
             </TabPanel>
-            <TabPanel style={styles.TabPanel} value={valueTabs} index={3}>
-              {this.renderDataProduct(dataProductTemp)}
-            </TabPanel>
+           
           </Box>
         </div>
       );

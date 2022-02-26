@@ -174,7 +174,7 @@ class Users extends Component {
 
         titleProduct : "",
         levelProduct : "1",
-        group : "group4",
+        group : "group1",
         typeColegen : "0",
         typeSkin : "1",
 
@@ -299,7 +299,12 @@ class Users extends Component {
   async componentDidMount() {
     this.getDataColegen();
     this.getDataNamda();
- 
+    this.getProduct("group1");
+    this.getProduct("group2");
+    this.getProduct("group3");
+    this.getProduct("group4");
+    this.getProduct("group5");
+
     this.getDataTuVan("0");
     this.getDataTuVan("1");
 
@@ -336,20 +341,42 @@ class Users extends Component {
       }
     });
   }
-  async getProduct(){
+  async getProduct(group){
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/Recomend/getAll";
     await axios
       .get(url,{
         params: {
-          group : this.state.group
+          group : group
         }
       })
       .then((res) => {
-        console.log('product',res)
-        this.setState({
-          dataProductTemp : res.data.data
-        })
+        if(group === "group1"){
+            this.setState({
+                dataProductTemp1 : res.data.data
+              })
+        }
+        else if(group === "group2"){
+            this.setState({
+                dataProductTemp2 : res.data.data
+              })
+        }
+        else if(group === "group3"){
+            this.setState({
+                dataProductTemp3 : res.data.data
+              })
+        }
+        else if(group === "group4"){
+            this.setState({
+                dataProductTemp4 : res.data.data
+              })
+        }
+        else{
+            this.setState({
+                dataProductTemp5 : res.data.data
+              })
+        }
+       
       })
   }
   async getDataConfigWeb() {
@@ -635,8 +662,9 @@ class Users extends Component {
   };
 
 
-  openFormAddProduct=()=>{
+  openFormAddProduct=(group)=>{
     this.setState({
+        group,
         actionProduct : "new",
         modalProduct : true,
         titleProduct : "",
@@ -650,7 +678,7 @@ class Users extends Component {
           levelNormal :"1",
     })
 }
-async openFormEditProduct(item){
+async openFormEditProduct(item,group){
   this.setState({
       actionProduct : "edit",
       titleProduct : item.title,
@@ -665,7 +693,8 @@ async openFormEditProduct(item){
           levelProduct : item.levelPlasma,
       idUpdateProduct : item._id,
       brandProduct : item.brandName,
-      modalProduct : true
+      modalProduct : true,
+      group : group
   })
 }
   openFormAdd = (value) => {
@@ -875,7 +904,7 @@ async openFormEditProduct(item){
         }
     })
   };
- async openDeleteProduct (item)  {
+ async openDeleteProduct (item,group)  {
     
   Swal.fire({
     title: 'Chắc chắn xóa?',
@@ -893,7 +922,7 @@ async openFormEditProduct(item){
             
               id:item._id,
             }).then(()=>{
-              this.getProduct();
+              this.getProduct(group);
 
             })
           Swal.fire(
@@ -974,7 +1003,7 @@ async openFormEditProduct(item){
       levelPlasma : levelNam,
       id: this.state.idUpdateProduct,
     }).then(()=>{
-      this.getProduct();
+      this.getProduct(group);
       Swal.fire(
         'Hoàn thành!',
         'Cập nhật thành công',
@@ -1049,7 +1078,7 @@ async saveAddProduct () {
       type:"0",
       levelPlasma : levelNam
     }).then(res=>{
-        this.getProduct();
+        this.getProduct(group);
         Swal.fire(
           'Hoàn thành!',
           'Thêm mới sản phẩm thành công',
@@ -1242,10 +1271,10 @@ async saveAddProduct () {
       return render;
     }
   }
-  renderDataProduct(data) {
+  renderDataProduct(data,group) {
     if (data && data.length > 0) {
       let x = data.map((item, i) => {
-        console.log(item)
+   
         return (
           <tr key={i}>
             <td colSpan="10" hidden={this.state.hidden} className="text-center">
@@ -1262,15 +1291,15 @@ async saveAddProduct () {
               <img src={`${item.avatar}`} width={"60px"} height={"60px"} alt="" />
             </td>
             <td className="text-center"><p className=" text_line_3">{item.description}</p></td>
-            <td className="text-center">{item.level}</td>
-            <td className="text-center">{item.levelPlasma}</td>
+            <td className="text-center">{item.level === "0" ? "Tất cả" : item.level}</td>
+            <td className="text-center">{item.levelPlasma === "0" ? "Tất cả" : item.levelPlasma}</td>
             <td className="text-center"><p className=" text_line_3">{item.href}</p></td>
             <td className="text-center">
               <CButton
                 outline
                 color="success"
                 size="sm"
-                onClick={() => this.openFormEditProduct(item)}
+                onClick={() => this.openFormEditProduct(item,group)}
               >
                 {/* <CIcon name="cilTrash" /> */}
                 Chỉnh sửa
@@ -1280,7 +1309,7 @@ async saveAddProduct () {
                 outline
                 color="danger"
                 size="sm"
-                onClick={() => this.openDeleteProduct(item)}
+                onClick={() => this.openDeleteProduct(item,group)}
               >
                 {/* <CIcon name="cilPencil" /> */}
                 Xóa
@@ -1296,7 +1325,7 @@ async saveAddProduct () {
               outline
               color="info"
               size="md"
-              onClick={() => this.openFormAddProduct()}
+              onClick={() => this.openFormAddProduct(group)}
             >
               {/* <CIcon name="cilTrash" /> */}
               Thêm mới
@@ -1336,7 +1365,7 @@ async saveAddProduct () {
               outline
               color="info"
               size="md"
-              onClick={() => this.openFormAddProduct()}
+              onClick={() => this.openFormAddProduct(group)}
             >
               {/* <CIcon name="cilTrash" /> */}
               Thêm mới
@@ -1698,7 +1727,7 @@ async saveAddProduct () {
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
                               ? "1-3"
-                              :  item.item === "0" ? "Không có" : "4-5"
+                              :  item.item === "0" ? "Tất cả" : "4-5"
                               }
                             
                           </option>
@@ -1709,7 +1738,7 @@ async saveAddProduct () {
                           <option key={i} value={item.item}>
                           {item.item === "1"
                               ? "1-3"
-                              :  item.item === "0" ? "Không có" : "4-5"
+                              :  item.item === "0" ? "Tất cả" : "4-5"
                               }
                           </option>
                         );
@@ -1736,7 +1765,7 @@ async saveAddProduct () {
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
                               ? "1-3"
-                              :  item.item === "0" ? "Không có" : "4-5"
+                              :  item.item === "0" ? "Tất cả" : "4-5"
                               }
                             
                           </option>
@@ -1747,7 +1776,7 @@ async saveAddProduct () {
                           <option key={i} value={item.item}>
                           {item.item === "1"
                               ? "1-3"
-                              :  item.item === "0" ? "Không có" : "4-5"
+                              :  item.item === "0" ? "Tất cả" : "4-5"
                               }
                           </option>
                         );
@@ -2027,67 +2056,53 @@ async saveAddProduct () {
                 aria-label="basic tabs example"
               >
                 <Tab
-                  label="Collagen"
+                  label="Nhóm tuổi 22 - 28"
                   style={styles.Tab}
                   id="simple-tab-0"
                   aria-controls="simple-tabpanel-0"
                 />
                 <Tab
-                  label="Nám"
+                  label="Nhóm tuổi 28 - 35"
                   style={styles.Tab}
                   id="simple-tab-1"
                   aria-controls="simple-tabpanel-1"
                 />
                 <Tab
-                  label="Tư vấn tổng quan"
+                  label="Nhóm tuổi 35 - 45"
                   id="simple-tab-2"
                   style={styles.Tab}
                   aria-controls="simple-tabpanel-2"
                 />
-              
+                <Tab
+                  label="Nhóm tuổi 50 +"
+                  id="simple-tab-3"
+                  style={styles.Tab}
+                  aria-controls="simple-tabpanel-3"
+                />
+                <Tab
+                  label="Tất cả các nhóm"
+                  id="simple-tab-3"
+                  style={styles.Tab}
+                  aria-controls="simple-tabpanel-3"
+                />
               </Tabs>
             </Box>
+        
             <TabPanel style={styles.TabPanel} value={valueTabs} index={0}>
-              {this.renderData(dataColegen,"0")}
+              {this.renderDataProduct(this.state.dataProductTemp1,"group1")}
             </TabPanel>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={1}>
-              {this.renderData(dataNamda,"1")}
+              {this.renderDataProduct(this.state.dataProductTemp2,"group2")}
             </TabPanel>
-            <TabPanel  value={valueTabs} index={2}>
-              <Box sx={{ width: "100%" }}>
-                <Tabs
-                  value={valueOverview}
-                  onChange={(e, newValue) =>
-                    this.setState({
-                      valueOverview: newValue,
-                    })
-                  }
-                  centered
-                >
-                  <Tab
-                    label="Collagen"
-                    id="simple-tab-4"
-                    style={styles.Tab}
-                    aria-controls="simple-tabpanel-4"
-                  />
-                  <Tab
-                    label="Nám"
-                    id="simple-tab-5"
-                    style={styles.Tab}
-                    aria-controls="simple-tabpanel-5"
-                  />
-                </Tabs>
-                <TabPanel value={valueOverview} index={0}>
-                {this.renderDataTuVan(dataTuVan1,"0")}
-
-                </TabPanel>
-                <TabPanel value={valueOverview} index={1}>
-                {this.renderDataTuVan(dataTuVan2,"1")}
-
-                </TabPanel>
-              </Box>
+            <TabPanel style={styles.TabPanel} value={valueTabs} index={2}>
+              {this.renderDataProduct(this.state.dataProductTemp3,"group3")}
             </TabPanel>
-           
+            <TabPanel style={styles.TabPanel} value={valueTabs} index={3}>
+              {this.renderDataProduct(this.state.dataProductTemp4,"group4")}
+            </TabPanel>
+            <TabPanel style={styles.TabPanel} value={valueTabs} index={4}>
+              {this.renderDataProduct(this.state.dataProductTemp5,"group5")}
+            </TabPanel>
           </Box>
         </div>
       );
