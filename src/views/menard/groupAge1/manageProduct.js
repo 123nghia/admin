@@ -297,16 +297,14 @@ class Users extends Component {
     })
   }
   async componentDidMount() {
-    this.getDataColegen();
-    this.getDataNamda();
+   
     this.getProduct("group1");
     this.getProduct("group2");
     this.getProduct("group3");
     this.getProduct("group4");
     this.getProduct("group5");
 
-    this.getDataTuVan("0");
-    this.getDataTuVan("1");
+   
 
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
@@ -925,11 +923,7 @@ async openFormEditProduct(item,group){
               this.getProduct(group);
 
             })
-          Swal.fire(
-            'Deleted!',
-            'Xóa thành công',
-            'success'
-          )
+        
         }
       })
     
@@ -2101,7 +2095,8 @@ async saveAddProduct () {
               {this.renderDataProduct(this.state.dataProductTemp4,"group4")}
             </TabPanel>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={4}>
-              {this.renderDataProduct(this.state.dataProductTemp5,"group5")}
+              <h1>Đang nâng cấp</h1>
+              {/* {this.renderDataProduct(this.state.dataProductTemp5,"group5")} */}
             </TabPanel>
           </Box>
         </div>
