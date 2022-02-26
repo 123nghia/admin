@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import SelectWithHiddenSelectedOptions from './tags';
+
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {
   Card,
@@ -35,6 +37,10 @@ import {
   CTextarea,
 } from "@coreui/react";
 import Checkbox from "@mui/material/Checkbox";
+
+import 'antd/dist/antd.css';
+
+import { Select } from 'antd';
 import CIcon from "@coreui/icons-react";
 import "moment-timezone";
 import "react-datepicker/dist/react-datepicker.css";
@@ -105,7 +111,7 @@ class Users extends Component {
       codeChat: "",
       codeMess: "",
       valueTabs: 0,
-      actionProduct : "new",
+      actionProduct: "new",
       valueOverview: 0,
       dataColegenTemp: [
         {
@@ -163,64 +169,75 @@ class Users extends Component {
           description: "nám",
         },
       ],
-      dataColegen : [],
-      dataNamda : [],
-      dataProduct : [],
+      dataColegen: [],
+      dataNamda: [],
+      dataProduct: [],
       modalNormal: false,
       modalProduct: false,
-      titleNormal : "",
-      valueNormal : "1",
-      levelNormal :"1",
+      titleNormal: "",
+      valueNormal: "1",
+      levelNormal: "1",
 
-        titleProduct : "",
-        levelProduct : "1",
-        group : "group1",
-        typeColegen : "0",
-        typeSkin : "1",
+      titleProduct: "",
+      levelProduct: "1",
+      group: "group1",
+      typeColegen: "0",
+      typeSkin: "1",
 
-        typeCurrentUpdate : "0",
-        idCurrentUpdate : "",
-        idUpdateProduct : null,
-        imageProduct : "",
-        imageProduct_link : "",
-        imageProduct_show : "",
-      dataTuVan1 : [],
-      levelNam : "1",
-      
+      typeCurrentUpdate: "0",
+      idCurrentUpdate: "",
+      idUpdateProduct: null,
+      imageProduct: "",
+      imageProduct_link: "",
+      imageProduct_show: "",
+      dataTuVan1: [],
+      levelNam: "1",
+
       dataTuVan2: [],
-      idAddTuvan : null,
-      imageTuvan : "",
-      imageTuvan_show:"",
-      imageTuvan_link :"",
-      configData : [
+      idAddTuvan: null,
+      imageTuvan: "",
+      imageTuvan_show: "",
+      imageTuvan_link: "",
+      configData: [
         {
-          label : "Trạng thái Facebook",
-          value : true,
-          key : "fb"
+          label: "Trạng thái Facebook",
+          value: true,
+          key: "fb"
         },
         {
-          label : "Trạng thái Google",
-          value : true,
-          key : "gg"
+          label: "Trạng thái Google",
+          value: true,
+          key: "gg"
 
         },
-      ]
-
+      ],
+      selectedItems : [],
+      selectedItemsCollagen : []
     };
   }
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
-        levelNormal: e.target.value,
+      levelNormal: e.target.value,
     });
   };
   changeLevelNam = (e) => {
     e.preventDefault();
     this.setState({
-        levelNam: e.target.value,
+      levelNam: e.target.value,
     });
-    console.log(this.state.levelNam)
   };
+  setSelect=(ob)=>{
+    this.setState({
+      selectedItems : ob
+    });
+  }
+  setSelectCollagen=(ob)=>{
+    this.setState({
+      selectedItemsCollagen : ob
+    });
+  }
+  
   changeConfigWeb(id) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -261,50 +278,46 @@ class Users extends Component {
       this.setState({ imageTuvan: e.target.result, imageTuvan_show: e.target.result });
     };
   }
-  async getDataTuVan(value){
-    const 
-    {group} = this.state
+  async getDataTuVan(value) {
+    const
+      { group } = this.state
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/AdvisorItem/getAll";
     var type = null
-    if(value==="0"){
-        type = 0
-    }else{
+    if (value === "0") {
+      type = 0
+    } else {
       type = 1
 
     }
-    await axios.get(url,{
-      params : {
-     
-        type : type,
-        group : group
+    await axios.get(url, {
+      params: {
+        type: type,
+        group: group
       }
     }).then((res) => {
-      if(value==="0"){
+      if (value === "0") {
         this.setState({
-          dataTuVan1 :res.data.data
-    
-          })
-    }else{
-      this.setState({
-        dataTuVan2 :res.data.data
-  
+          dataTuVan1: res.data.data
+
+        })
+      } else {
+        this.setState({
+          dataTuVan2: res.data.data
+
         })
 
-    }
-      
-      console.log("res",res)
+      }
+
+      console.log("res", res)
     })
   }
   async componentDidMount() {
-   
     this.getProduct("group1");
     this.getProduct("group2");
     this.getProduct("group3");
     this.getProduct("group4");
     this.getProduct("group5");
-
-   
 
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
@@ -339,42 +352,42 @@ class Users extends Component {
       }
     });
   }
-  async getProduct(group){
+  async getProduct(group) {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/Recomend/getAll";
     await axios
-      .get(url,{
+      .get(url, {
         params: {
-          group : group
+          group: group
         }
       })
       .then((res) => {
-        if(group === "group1"){
-            this.setState({
-                dataProductTemp1 : res.data.data
-              })
+        if (group === "group1") {
+          this.setState({
+            dataProductTemp1: res.data.data
+          })
         }
-        else if(group === "group2"){
-            this.setState({
-                dataProductTemp2 : res.data.data
-              })
+        else if (group === "group2") {
+          this.setState({
+            dataProductTemp2: res.data.data
+          })
         }
-        else if(group === "group3"){
-            this.setState({
-                dataProductTemp3 : res.data.data
-              })
+        else if (group === "group3") {
+          this.setState({
+            dataProductTemp3: res.data.data
+          })
         }
-        else if(group === "group4"){
-            this.setState({
-                dataProductTemp4 : res.data.data
-              })
+        else if (group === "group4") {
+          this.setState({
+            dataProductTemp4: res.data.data
+          })
         }
-        else{
-            this.setState({
-                dataProductTemp5 : res.data.data
-              })
+        else {
+          this.setState({
+            dataProductTemp5: res.data.data
+          })
         }
-       
+
       })
   }
   async getDataConfigWeb() {
@@ -445,7 +458,7 @@ class Users extends Component {
       type: "system",
     });
   }
- 
+
   async onFocusOutCodeMess() {
     const { dataConfigWeb, updateLink, codeMess, updateLevel } = this.state;
     let coppyData = {
@@ -474,7 +487,7 @@ class Users extends Component {
     this.setState({
       dataConfigWeb: coppyData,
     });
-  
+
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     await axios.post(url, {
@@ -534,12 +547,12 @@ class Users extends Component {
   onChange(key, val) {
     this.setState({ [key]: val });
   }
-  onChangeImageProduct(e){
-    
+  onChangeImageProduct(e) {
+
     let files = e.target.files;
     let reader = new FileReader();
     this.setState({ imageProduct_link: files[0] });
-    
+
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({
@@ -548,7 +561,7 @@ class Users extends Component {
       });
     };
 
-   
+
 
   }
   openForm = () => {
@@ -646,7 +659,7 @@ class Users extends Component {
           statusModalUpdate: false,
         },
         () => {
-         
+
           this.onUpdate();
         }
       );
@@ -660,131 +673,142 @@ class Users extends Component {
   };
 
 
-  openFormAddProduct=(group)=>{
+  openFormAddProduct = (group) => {
     this.setState({
-        group,
-        actionProduct : "new",
-        modalProduct : true,
-        titleProduct : "",
-        descProduct : "",
-        hrefProduct : "",
-          imageProduct: "",
-          imageProduct_show: "",
-          imageProduct_link : "",
-          levelProduct : "",
-          levelNam: "1",
-          levelNormal :"1",
+      group,
+      actionProduct: "new",
+      modalProduct: true,
+      titleProduct: "",
+      descProduct: "",
+      hrefProduct: "",
+      imageProduct: "",
+      imageProduct_show: "",
+      imageProduct_link: "",
+      levelProduct: "",
+      levelNam: "1",
+      levelNormal: "1",
+      selectedItems : [],
+      selectedItemsCollagen : [],
+
     })
-}
-async openFormEditProduct(item,group){
-  this.setState({
-      actionProduct : "edit",
-      titleProduct : item.title,
-        descProduct : item.description,
-        brandName : item.brandName,
-        productType : item.productType,
-      levelNormal :  item.level,
-        hrefProduct :item.href,
-          imageProduct: item.avatar,
-          imageProduct_show: item.avatar,
-        levelNam  :item.levelPlasma,
-          levelProduct : item.levelPlasma,
-      idUpdateProduct : item._id,
-      brandProduct : item.brandName,
-      modalProduct : true,
-      group : group
-  })
-}
-  openFormAdd = (value) => {
-    if(value === "0"){
+  }
+  async openFormEditProduct(item, group) {
+    this.setState({
+      actionProduct: "edit",
+      titleProduct: item.title,
+      descProduct: item.description,
+      brandName: item.brandName,
+      productType: item.productType,
+      levelNormal: item.level,
+      hrefProduct: item.href,
+      imageProduct: item.avatar,
+      imageProduct_show: item.avatar,
+      levelNam: item.levelPlasma,
+      levelProduct: item.levelPlasma,
+      idUpdateProduct: item._id,
+      brandProduct: item.brandName,
+      modalProduct: true,
+      group: group,
+    })
+    if(item.selectedItems){
       this.setState({
-      typeCurrentUpdate : 0
+        selectedItems : item.selectedItems,
+        selectedItemsCollagen : item.selectedItemsCollagen
 
       })
-    }else{
-      this.setState({
-        typeCurrentUpdate :1
-  
-        })
-    }
       
+    }
+  }
+  openFormAdd = (value) => {
+    if (value === "0") {
+      this.setState({
+        typeCurrentUpdate: 0
+
+      })
+    } else {
+      this.setState({
+        typeCurrentUpdate: 1
+
+      })
+    }
+
     this.setState({
       action: "new",
 
-      levelNormal : "1",
-      
-      titleNormal : "",
+      levelNormal: "1",
+
+      titleNormal: "",
 
       modalNormal: true,
 
-      
-        
-    },()=>{
-      
+
+
+    }, () => {
+
     });
   };
-  openAddTuVan=(value)=>{
+  openAddTuVan = (value) => {
     this.setState({
       actionTuvan: "new",
       modalTuvan: true,
-      imageTuvan : "",
-      title :"",
-      lifeStyle :"",
-      skincare :"",
-        idAddTuvan : value
-    },()=>{
-      
+      imageTuvan: "",
+      title: "",
+      lifeStyle: "",
+      skincare: "",
+      idAddTuvan: value
+    }, () => {
+
     });
   };
-  openEditTuVan=(item,value)=>{
-    
+  openEditTuVan = (item, value) => {
+
 
     this.setState({
       actionTuvan: "edit",
       modalTuvan: true,
-      imageTuvan : item.avatar,
-      imageTuvan_link : item.avatar,
-      imageTuvan_show : item.avatar,
-      levelNormal : item.level,
-      title :item.title,
-      lifeStyle :item.lifeStyle,
-      skincare :item.skincare,
-        idAddTuvan : value,
-        idUpdateSkin : item._id,
-    },()=>{
-      
+      imageTuvan: item.avatar,
+      imageTuvan_link: item.avatar,
+      imageTuvan_show: item.avatar,
+      levelNormal: item.level,
+      title: item.title,
+      lifeStyle: item.lifeStyle,
+      skincare: item.skincare,
+      idAddTuvan: value,
+      idUpdateSkin: item._id,
+    }, () => {
+
     });
   };
-  async deleteTuvan (item) {
-    const {dataTuVan1, dataTuVan2} = this.state
+  async deleteTuvan(item) {
+    const { dataTuVan1, dataTuVan2 } = this.state
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/AdvisorItem/delete";
     await axios.post(url, {
-        id : item._id
-    }).then((res)=>{
+      id: item._id
+    }).then((res) => {
       this.getDataTuVan("0");
       this.getDataTuVan("1");
-     
+
     })
   };
-  async saveAddTuvan () {
+  async saveAddTuvan() {
     const {
       imageTuvan,
-        levelNormal,
-        titleTuvan,
-        titleNormal,
-        lifeStyle,
-        imageTuvan_link,
-        skincare,
+      levelNormal,
+      titleTuvan,
+      titleNormal,
+      lifeStyle,
+      imageTuvan_link,
+      skincare,
     } = this.state;
     const form = new FormData();
     form.append("image", imageTuvan_link);
-   
+
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
       (res) => console.log(res)
     );
-    let newImage =""
-    if(imageTuvan_link){
+    let newImage = ""
+    if (imageTuvan_link) {
       newImage = `${Constants.BASE_URL}image_brand/${imageTuvan_link.name}`;
 
     }
@@ -793,15 +817,15 @@ async openFormEditProduct(item,group){
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/AdvisorItem/add";
     await axios.post(url, {
-        level: levelNormal,
-        title : titleTuvan,
-      avatar : newImage,
-        lifeStyle : lifeStyle,
-        skincare : skincare,
-        type: this.state.idAddTuvan,
-        group: this.state.group,
-        icon :newImage
-    }).then((res)=>{
+      level: levelNormal,
+      title: titleTuvan,
+      avatar: newImage,
+      lifeStyle: lifeStyle,
+      skincare: skincare,
+      type: this.state.idAddTuvan,
+      group: this.state.group,
+      icon: newImage
+    }).then((res) => {
       this.getDataTuVan("0");
       this.getDataTuVan("1");
       Swal.fire(
@@ -809,46 +833,46 @@ async openFormEditProduct(item,group){
         'Thêm thành công',
         'success'
       )
-    })    
+    })
   };
-  async saveEditTuvan () {
+  async saveEditTuvan() {
     const {
       imageTuvan,
-        levelNormal,
-        titleTuvan,
-        titleNormal,
-        lifeStyle,
-        skincare,
-        imageTuvan_link,
-        imageTuvan_show,
-        idAddTuvan,
-        idUpdateSkin
+      levelNormal,
+      titleTuvan,
+      titleNormal,
+      lifeStyle,
+      skincare,
+      imageTuvan_link,
+      imageTuvan_show,
+      idAddTuvan,
+      idUpdateSkin
     } = this.state;
     const form = new FormData();
     form.append("image", imageTuvan_link);
-   
+
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
       (res) => console.log(res)
     );
-    let newImage =""
-    if(imageTuvan_link){
+    let newImage = ""
+    if (imageTuvan_link) {
       newImage = `${Constants.BASE_URL}image_brand/${imageTuvan_link.name}`;
 
     }
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/AdvisorItem/update";
     await axios.post(url, {
-      
-        level: levelNormal,
-        title : titleTuvan,
-      avatar : newImage,
-        lifeStyle : lifeStyle,
-        skincare : skincare,
-        type: this.state.idAddTuvan,
-        group: this.state.group,
-        icon :newImage,
-        id : idUpdateSkin
-    }).then((res)=>{
+
+      level: levelNormal,
+      title: titleTuvan,
+      avatar: newImage,
+      lifeStyle: lifeStyle,
+      skincare: skincare,
+      type: this.state.idAddTuvan,
+      group: this.state.group,
+      icon: newImage,
+      id: idUpdateSkin
+    }).then((res) => {
       this.getDataTuVan("0");
       this.getDataTuVan("1");
       Swal.fire(
@@ -856,147 +880,147 @@ async openFormEditProduct(item,group){
         'Cập nhật thành công',
         'success'
       )
-    })    
+    })
   };
   async openFormEdit(item) {
     this.setState({
       action: "edit",
-      idUpdateProduct : item._id,
-      levelNormal : item.level,
-      
-      titleNormal : item.content,
+      idUpdateProduct: item._id,
+      levelNormal: item.level,
+
+      titleNormal: item.content,
 
       modalNormal: true,
 
-      idCurrentUpdate : item._id,
- 
-      typeCurrentUpdate : item._type
-    
+      idCurrentUpdate: item._id,
+
+      typeCurrentUpdate: item._type
+
     });
   }
-  async notificationAlert(item){
+  async notificationAlert(item) {
     Swal.fire({
-        title: 'Chắc chắn xóa?',
-        text: "Bạn sẽ không thể hoàn tác!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xóa ngay'
-      }).then((result) => {
-        if (result.isConfirmed) {
-            this.openDelete(item);
-        }
-      })
+      title: 'Chắc chắn xóa?',
+      text: "Bạn sẽ không thể hoàn tác!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xóa ngay'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.openDelete(item);
+      }
+    })
   }
-  async openDelete (item) {
+  async openDelete(item) {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/ConcludeItem/delete";
     await axios.post(url, {
-        id : item._id
-    }).then((res)=>{
-        if(item._type === "0"){
-            this.getDataColegen();
-        }else{
-            this.getDataNamda();
-        }
+      id: item._id
+    }).then((res) => {
+      if (item._type === "0") {
+        this.getDataColegen();
+      } else {
+        this.getDataNamda();
+      }
     })
   };
- async openDeleteProduct (item,group)  {
-    
-  Swal.fire({
-    title: 'Chắc chắn xóa?',
-    text: "Bạn sẽ không thể hoàn tác!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Xóa ngay'
-  }).then((result) => {
-        if (result.isConfirmed) {
-          var baseUrlapi = Constants.BASE_URL;
-            let url = baseUrlapi + "api/Recomend/delete";
-           axios.post(url, {
-            
-              id:item._id,
-            }).then(()=>{
-              this.getProduct(group);
+  async openDeleteProduct(item, group) {
 
-            })
-        
-        }
-      })
-    
-   
+    Swal.fire({
+      title: 'Chắc chắn xóa?',
+      text: "Bạn sẽ không thể hoàn tác!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xóa ngay'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        var baseUrlapi = Constants.BASE_URL;
+        let url = baseUrlapi + "api/Recomend/delete";
+        axios.post(url, {
+
+          id: item._id,
+        }).then(() => {
+          this.getProduct(group);
+
+        })
+
+      }
+    })
+
+
   };
   async saveEdit() {
     const {
-        levelNormal,
-        titleNormal,
-        idCurrentUpdate,
-        typeCurrentUpdate,
-        group
+      levelNormal,
+      titleNormal,
+      idCurrentUpdate,
+      typeCurrentUpdate,
+      group
     } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/ConcludeItem/update";
     await axios.post(url, {
-        "level": levelNormal,
-        "content": titleNormal,
-        "type": typeCurrentUpdate,
-        "group":group,
-        "icon" : [],
-        "id" : idCurrentUpdate
-    }).then((res)=>{
+      "level": levelNormal,
+      "content": titleNormal,
+      "type": typeCurrentUpdate,
+      "group": group,
+      "icon": [],
+      "id": idCurrentUpdate
+    }).then((res) => {
       this.getDataNamda();
       this.getDataColegen();
-    })    
+    })
   }
   async saveEditProduct() {
     const {
-      titleProduct  ,
-      descProduct  ,
-      hrefProduct ,
-        image,
-        image_show ,
-        levelProduct ,
-    imageProduct_show,
-    imageProduct,
-    imageProduct_link,
-    linkProduct,
-    brandProduct,
-    productType,
-    brandName,
-    group,
-    levelNam,
-    levelNormal
+      titleProduct,
+      descProduct,
+      hrefProduct,
+      image,
+      image_show,
+      levelProduct,
+      imageProduct_show,
+      imageProduct,
+      imageProduct_link,
+      linkProduct,
+      brandProduct,
+      productType,
+      brandName,
+      group,
+      levelNam,
+      levelNormal
     } = this.state;
     const form = new FormData();
     form.append("image", imageProduct_link);
-   
+
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
       (res) => console.log(res)
     );
     let newImage = imageProduct
-    if(imageProduct_link){
-      newImage  = `${Constants.BASE_URL}image_brand/${imageProduct_link.name}`;
+    if (imageProduct_link) {
+      newImage = `${Constants.BASE_URL}image_brand/${imageProduct_link.name}`;
 
     }
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/Recomend/update";
     await axios.post(url, {
-      level :levelNormal,
-      group : group,
-      productType :productType, 
+      level: levelNormal,
+      group: group,
+      productType: productType,
       brandName: brandName,
-      description : descProduct,
-      title : titleProduct,
-      avatar:newImage,
-      href : hrefProduct,
-      type:"0",
-      levelPlasma : levelNam,
+      description: descProduct,
+      title: titleProduct,
+      avatar: newImage,
+      href: hrefProduct,
+      type: "0",
+      levelPlasma: levelNam,
       id: this.state.idUpdateProduct,
-    }).then(()=>{
+    }).then(() => {
       this.getProduct(group);
       Swal.fire(
         'Hoàn thành!',
@@ -1004,152 +1028,152 @@ async openFormEditProduct(item,group){
         'success'
       );
       this.setState({
-        modalProduct : false
+        modalProduct: false
       })
     })
 
-    
+
   }
-  async saveAdd () {
+  async saveAdd() {
 
     const {
-        levelNormal,
-        titleNormal
+      levelNormal,
+      titleNormal
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/ConcludeItem/add";
     await axios.post(url, {
-        level: levelNormal,
-    content: titleNormal,
-        type: this.state.typeCurrentUpdate,
-        group: this.state.group,
-        icon : []
-    }).then((res)=>{
+      level: levelNormal,
+      content: titleNormal,
+      type: this.state.typeCurrentUpdate,
+      group: this.state.group,
+      icon: []
+    }).then((res) => {
       this.getDataNamda();
       this.getDataColegen();
-    })    
-};
+    })
+  };
 
-async saveAddProduct () {
-  const {titleProduct, 
-    descProduct,
-    imageProduct_show,
-    imageProduct,
-    imageProduct_link,
-    linkProduct,group,hrefProduct
-    ,
-    brandProduct,
-    levelNormal,
-    levelNam,
-    brandName,
-    productType,
-    title,
+  async saveAddProduct() {
+    const { titleProduct,
+      descProduct,
+      imageProduct_show,
+      imageProduct,
+      imageProduct_link,
+      linkProduct, group, hrefProduct
+      ,
+      brandProduct,
+      levelNormal,
+      levelNam,
+      brandName,
+      productType,
+      title,
 
-  } = this.state
-  const form = new FormData();
-  form.append("image", imageProduct_link);
- 
-  await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
-    (res) => console.log(res)
-  );
-  let newImage = imageProduct
-  if(imageProduct_link){
-    newImage = `${Constants.BASE_URL}image_brand/${imageProduct_link.name}`;
+    } = this.state
+    const form = new FormData();
+    form.append("image", imageProduct_link);
 
-  }
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+      (res) => console.log(res)
+    );
+    let newImage = imageProduct
+    if (imageProduct_link) {
+      newImage = `${Constants.BASE_URL}image_brand/${imageProduct_link.name}`;
+
+    }
 
     let baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/Recomend/add";
     await axios.post(url, {
-      level :levelNormal,
-      group : group,
-      productType :productType, 
+      level: levelNormal,
+      group: group,
+      productType: productType,
       brandName: brandName,
-      description : descProduct,
-      title : titleProduct, 
-      avatar:newImage,
-      href : hrefProduct,
-      type:"0",
-      levelPlasma : levelNam
-    }).then(res=>{
-        this.getProduct(group);
-        Swal.fire(
-          'Hoàn thành!',
-          'Thêm mới sản phẩm thành công',
-          'success'
-        )
+      description: descProduct,
+      title: titleProduct,
+      avatar: newImage,
+      href: hrefProduct,
+      type: "0",
+      levelPlasma: levelNam
+    }).then(res => {
+      this.getProduct(group);
+      Swal.fire(
+        'Hoàn thành!',
+        'Thêm mới sản phẩm thành công',
+        'success'
+      )
     })
-};
-  async getDataColegen(){
+  };
+  async getDataColegen() {
     let baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/ConcludeItem/getAll";
     await axios.get(url, {
-      params : {
-      
-        group : this.state.group,
-        type : this.state.typeColegen
-      }
-    }).then(res=>{
-     
+      params: {
 
-       
-        let coppyData = [
-            ...res.data.data
-        ]
-        coppyData.forEach((item)=>{
-            item._type = this.state.typeColegen
-        })
-        this.setState({
-            dataColegen : coppyData,   
-        })
+        group: this.state.group,
+        type: this.state.typeColegen
+      }
+    }).then(res => {
+
+
+
+      let coppyData = [
+        ...res.data.data
+      ]
+      coppyData.forEach((item) => {
+        item._type = this.state.typeColegen
+      })
+      this.setState({
+        dataColegen: coppyData,
+      })
     })
   }
-  async getDataNamda(){
+  async getDataNamda() {
     let baseUrlapi = Constants.BASE_URL;
-    
+
     let url = baseUrlapi + "api/ConcludeItem/getAll";
     await axios.get(url, {
-      params : {
-       
-        group : this.state.group,
-        type : this.state.typeSkin
+      params: {
+
+        group: this.state.group,
+        type: this.state.typeSkin
       }
-    }).then(res=>{
-        let coppyData = [
-            ...res.data.data
-        ]
-        coppyData.forEach((item)=>{
-            item._type = this.state.typeSkin
-        })
-        this.setState({
-            dataNamda : coppyData,   
-        })
+    }).then(res => {
+      let coppyData = [
+        ...res.data.data
+      ]
+      coppyData.forEach((item) => {
+        item._type = this.state.typeSkin
+      })
+      this.setState({
+        dataNamda: coppyData,
+      })
     })
   }
-  async getDataTvtq(){
+  async getDataTvtq() {
     let baseUrlapi = Constants.BASE_URL;
-    
+
     let url = baseUrlapi + "api/ConcludeItem/getAll";
     await axios.get(url, {
-      params : {
-        level : "1",
-        group : this.state.group,
-        type : this.state.typeSkin
+      params: {
+        level: "1",
+        group: this.state.group,
+        type: this.state.typeSkin
       }
-    }).then(res=>{
-        let coppyData = [
-            ...res.data.data
-        ]
-        coppyData.forEach((item)=>{
-            item._type = this.state.typeSkin
-        })
-        this.setState({
-            dataNamda : coppyData,   
-        })
+    }).then(res => {
+      let coppyData = [
+        ...res.data.data
+      ]
+      coppyData.forEach((item) => {
+        item._type = this.state.typeSkin
+      })
+      this.setState({
+        dataNamda: coppyData,
+      })
     })
   }
 
-  renderData(data,value) {
+  renderData(data, value) {
     if (data && data.length > 0) {
       let x = data.map((item, i) => {
         return (
@@ -1182,13 +1206,13 @@ async saveAddProduct () {
                 Xóa
               </CButton>
             </td>
-          
+
           </tr>
         );
       });
       let render = (
-          <div className="bg_panel">
-              <div class="text-center">
+        <div className="bg_panel">
+          <div class="text-center">
             <CButton
               outline
               color="info"
@@ -1199,26 +1223,26 @@ async saveAddProduct () {
               Thêm mới
             </CButton>{" "}
           </div>
-          
 
-        <table
-          ble
-          className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-        >
-          <thead className="thead-light">
-            <tr>
-              <th className="text-center">STT.</th>
-              {/* <th className="text-center">Tên</th> */}
-              <th className="text-center">Cấp độ</th>
-              <th className="text-center">Mô tả</th>
 
-              <th className="text-center">Hành động</th>
+          <table
+            ble
+            className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+          >
+            <thead className="thead-light">
+              <tr>
+                <th className="text-center">STT.</th>
+                {/* <th className="text-center">Tên</th> */}
+                <th className="text-center">Cấp độ</th>
+                <th className="text-center">Mô tả</th>
 
-            
-            </tr>
-          </thead>
-          <tbody>{x}</tbody>
-        </table>
+                <th className="text-center">Hành động</th>
+
+
+              </tr>
+            </thead>
+            <tbody>{x}</tbody>
+          </table>
         </div>
       );
       return render;
@@ -1265,10 +1289,10 @@ async saveAddProduct () {
       return render;
     }
   }
-  renderDataProduct(data,group) {
+  renderDataProduct(data, group) {
     if (data && data.length > 0) {
       let x = data.map((item, i) => {
-   
+
         return (
           <tr key={i}>
             <td colSpan="10" hidden={this.state.hidden} className="text-center">
@@ -1293,7 +1317,7 @@ async saveAddProduct () {
                 outline
                 color="success"
                 size="sm"
-                onClick={() => this.openFormEditProduct(item,group)}
+                onClick={() => this.openFormEditProduct(item, group)}
               >
                 {/* <CIcon name="cilTrash" /> */}
                 Chỉnh sửa
@@ -1303,7 +1327,7 @@ async saveAddProduct () {
                 outline
                 color="danger"
                 size="sm"
-                onClick={() => this.openDeleteProduct(item,group)}
+                onClick={() => this.openDeleteProduct(item, group)}
               >
                 {/* <CIcon name="cilPencil" /> */}
                 Xóa
@@ -1313,8 +1337,8 @@ async saveAddProduct () {
         );
       });
       let render = (
-          <div className="bg_panel">
-              <div class="text-center">
+        <div className="bg_panel">
+          <div class="text-center">
             <CButton
               outline
               color="info"
@@ -1325,36 +1349,36 @@ async saveAddProduct () {
               Thêm mới
             </CButton>{" "}
           </div>
-         
-        <table
-          ble
-          className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-        >
-          <thead className="thead-light">
-            <tr>
-              <th className="text-center radius_th_left">STT.</th>
-              <th className="text-center">Thương hiệu</th>
-              <th className="text-center">Tên</th>
 
-              <th className="text-center">Ảnh</th>
-              <th className="text-center">Mô tả</th>
-              <th className="text-center">Cấp độ Collagen</th>
-              <th className="text-center">Cấp độ Nám</th>
+          <table
+            ble
+            className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+          >
+            <thead className="thead-light">
+              <tr>
+                <th className="text-center radius_th_left">STT.</th>
+                <th className="text-center">Thương hiệu</th>
+                <th className="text-center">Tên</th>
 
-              <th className="text-center">Đường dẫn</th>
+                <th className="text-center">Ảnh</th>
+                <th className="text-center">Mô tả</th>
+                <th className="text-center">Cấp độ Collagen</th>
+                <th className="text-center">Cấp độ Nám</th>
 
-              <th className="text-center radius_th_right">Hành động</th>
-            </tr>
-          </thead>
-          <tbody>{x}</tbody>
-        </table>
+                <th className="text-center">Đường dẫn</th>
+
+                <th className="text-center radius_th_right">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>{x}</tbody>
+          </table>
         </div>
       );
       return render;
     } else {
       let render = (
-          <div>
-                 <div class="text-center">
+        <div>
+          <div class="text-center">
             <CButton
               outline
               color="info"
@@ -1365,50 +1389,50 @@ async saveAddProduct () {
               Thêm mới
             </CButton>{" "}
           </div>
-          
-        <table
-          ble
-          className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-        >
-          <thead className="thead-light">
-          <tr>
-              <th className="text-center">STT.</th>
-              {/* <th className="text-center">Tên</th> */}
-              <th className="text-center">Tiêu đề</th>
-              <th className="text-center">Ảnh</th>
 
-              <th className="text-center">Độ ưu tiên</th>
+          <table
+            ble
+            className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+          >
+            <thead className="thead-light">
+              <tr>
+                <th className="text-center">STT.</th>
+                {/* <th className="text-center">Tên</th> */}
+                <th className="text-center">Tiêu đề</th>
+                <th className="text-center">Ảnh</th>
 
-              <th className="text-center">Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <td>
-              <div class="text-center" rows="4" cols="3">
-                Không tìm thấy dữ liệu
-              </div>
-            </td>
-          </tbody>
-        </table>
+                <th className="text-center">Độ ưu tiên</th>
+
+                <th className="text-center">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <td>
+                <div class="text-center" rows="4" cols="3">
+                  Không tìm thấy dữ liệu
+                </div>
+              </td>
+            </tbody>
+          </table>
         </div>
       );
       return render;
     }
   }
-  renderDataTuVan(data,value){
+  renderDataTuVan(data, value) {
     if (data && data.length > 0) {
       let x = data.map((item, i) => {
         return (
           <tr key={i}>
             <td className="text-center">{i + 1}</td>
             <td className="text-center">
-              <img src={`${item.icon}`} width={"120px"}  alt="" />
+              <img src={`${item.icon}`} width={"120px"} alt="" />
             </td>
 
             <td className="text-center">{item.title}</td>
             <td className="text-center"><p className=" text_line_3">{item.lifeStyle}</p></td>
 
-            
+
             {/* <td className="text-center">{item.name}</td> */}
             <td className="text-center"><p className=" text_line_3">{item.skincare}</p></td>
             <td className="text-center">
@@ -1435,13 +1459,13 @@ async saveAddProduct () {
                 Xóa
               </CButton>
             </td>
-          
+
           </tr>
         );
       });
       let render = (
-          <div className="bg_panel">
-              <div class="text-center">
+        <div className="bg_panel">
+          <div class="text-center">
             <CButton
               outline
               color="info"
@@ -1452,26 +1476,26 @@ async saveAddProduct () {
               Thêm mới
             </CButton>{" "}
           </div>
-          
 
-        <table
-          ble
-          className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-        >
-          <thead className="thead-light">
-            <tr>
-              <th className="text-center">STT.</th>
-              {/* <th className="text-center">Tên</th> */}
-              <th className="text-center">Hình ảnh</th>
-              <th className="text-center">Tiêu đề</th>
-              <th className="text-center">Lối sống</th>
-              <th className="text-center">Chăm sóc</th>
-              <th className="text-center">Cấp độ</th>
-              <th className="text-center">Hành động</th>       
-            </tr>
-          </thead>
-          <tbody>{x}</tbody>
-        </table>
+
+          <table
+            ble
+            className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+          >
+            <thead className="thead-light">
+              <tr>
+                <th className="text-center">STT.</th>
+                {/* <th className="text-center">Tên</th> */}
+                <th className="text-center">Hình ảnh</th>
+                <th className="text-center">Tiêu đề</th>
+                <th className="text-center">Lối sống</th>
+                <th className="text-center">Chăm sóc</th>
+                <th className="text-center">Cấp độ</th>
+                <th className="text-center">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>{x}</tbody>
+          </table>
         </div>
       );
       return render;
@@ -1479,7 +1503,7 @@ async saveAddProduct () {
       let render = (
         <div>
           <div class="text-center">
-          <CButton
+            <CButton
               outline
               color="info"
               size="md"
@@ -1570,12 +1594,12 @@ async saveAddProduct () {
       Tab: {
         fontSize: "16px",
         fontWeight: "bold",
-        background : "#636f83; !important",
-        backgroundColor : "#636f83; !important"
+        background: "#636f83; !important",
+        backgroundColor: "#636f83; !important"
 
       },
-      TabPanel : {
-          background : "#636f83;"
+      TabPanel: {
+        background: "#636f83;"
       }
     };
     const arrLevel = [
@@ -1585,7 +1609,7 @@ async saveAddProduct () {
       {
         item: "2",
       },
-  
+
     ];
     const arrLevelPro = [
       {
@@ -1611,8 +1635,8 @@ async saveAddProduct () {
     ];
 
     const {
-        dataColegen,
-        dataNamda,
+      dataColegen,
+      dataNamda,
       valueTabs,
       dataColegenTemp,
       dataNamTemp,
@@ -1625,259 +1649,192 @@ async saveAddProduct () {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-        <div class="modal_product">
-        <Modal
-            size="xl"
-            isOpen={this.state.modalProduct}
-            className={this.props.className}
-          >
-            <ModalHeader>
-              {this.state.actionProduct === "new" ? `Tạo mới` : `Cập nhật`}
-            </ModalHeader>
-            <ModalBody>
-            <TextFieldGroup
-                field="titleProduct"
-                label="Tên sản phẩm"
-                value={this.state.titleProduct}
-         
-                onChange={(e) => {
-                  this.setState({ titleProduct: e.target.value });
-                }}
-              />
-               <TextFieldGroup
-                field="productType"
-                label="Nhóm sản phẩm"
-                value={this.state.productType}
-              
-                onChange={(e) => {
-                  this.setState({ productType: e.target.value });
-                }}
-              />
-               <TextFieldGroup
-                field="brandName"
-                label="Thương hiệu"
-                value={this.state.brandName}
-              
-                onChange={(e) => {
-                  this.setState({ brandName: e.target.value });
-                }}
-              />
-            
-              <label>Mô tả</label>
-              <CTextarea
-                field="descProduct"
-                label="Mô tả"
-                rows="4"
-                value={this.state.descProduct}
-                placeholder={"Mô tả..."}
-                onChange={(e) => {
-                  this.setState({ descProduct: e.target.value });
-                }}
-              />
-              <TextFieldGroup
-            field="imageProduct"
-            label="Ảnh minh họa"
-            type={"file"}
-            // value={this.state.image}
-            onChange={(e) => {
-              this.onChangeImageProduct(e);
-            }}
-            onClick={(e) => {
-              e.target.value = null;
-              this.setState({ imageProduct_show: "" });
-            }}
-          />
-<img
-              alt=""
-              style={{ width: "140px", marginBottom: 20 }}
-              height="auto"
-              src={this.state.imageProduct}
-            />
+          <div class="modal_product">
+            <Modal
+              size="xl"
+              isOpen={this.state.modalProduct}
+              className={this.props.className}
+            >
+              <ModalHeader>
+                {this.state.actionProduct === "new" ? `Tạo mới` : `Cập nhật`}
+              </ModalHeader>
+              <ModalBody>
+                <TextFieldGroup
+                  field="titleProduct"
+                  label="Tên sản phẩm"
+                  value={this.state.titleProduct}
 
-             <TextFieldGroup
-                field="hrefProduct"
-                label="Đường dẫn"
-                value={this.state.hrefProduct}
-                placeholder={"Link..."}
-                onChange={(e) => {
-                  this.setState({ hrefProduct: e.target.value });
-                }}
-              />
-              <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Cấp độ Collagen:</CLabel>
-                {arrLevelPro != undefined ? (
-                  <CSelect
-                    onChange={async (e) => {
-                      this.changeLevel(e);
-                    }}
-                    custom
-                    size="sm"
-                    name="levelNormal"
-                    id="SelectLm"
-                  >
-                    {arrLevelPro.map((item, i) => {
-                      if (item.item === this.state.levelNormal) {
-                        return (
-                          <option selected key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "1-3"
-                              :  item.item === "0" ? "Tất cả" : "4-5"
-                              }
-                            
-                          </option>
-                          
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item.item}>
-                          {item.item === "1"
-                              ? "1-3"
-                              :  item.item === "0" ? "Tất cả" : "4-5"
-                              }
-                          </option>
-                        );
-                      }
-                    })}
-                  </CSelect>
-                ) : null}
-              </div>   
-              <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Cấp độ Nám:</CLabel>
-                {arrLevelPro != undefined ? (
-                  <CSelect
-                    onChange={async (e) => {
-                      this.changeLevelNam(e);
-                    }}
-                    custom
-                    size="sm"
-                    name="levelNam"
-                    id="SelectLm"
-                  >
-                    {arrLevelPro.map((item, i) => {
-                      if (item.item === this.state.levelNam) {
-                        return (
-                          <option selected key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "1-3"
-                              :  item.item === "0" ? "Tất cả" : "4-5"
-                              }
-                            
-                          </option>
-                          
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item.item}>
-                          {item.item === "1"
-                              ? "1-3"
-                              :  item.item === "0" ? "Tất cả" : "4-5"
-                              }
-                          </option>
-                        );
-                      }
-                    })}
-                  </CSelect>
-                ) : null}
-              </div> 
-              
-             
-            </ModalBody>
-            <ModalFooter>
-              <CButton
-                color="primary"
-                onClick={() => {
-                  this.state.actionProduct === "new"
-                    ? this.saveAddProduct()
-                    : this.saveEditProduct();
-                }}
-                disabled={this.state.isLoading}
-              >
-                Lưu
-              </CButton>{" "}
-              <CButton
-                color="secondary"
-                onClick={(e) => {
-                  this.setState({
-                    modalProduct: false,
-                  });
-                }}
-              >
-                Đóng
-              </CButton>
-            </ModalFooter>
-          </Modal>
-</div>
-<div class="modal_normal">
-<Modal
-            size="xl"
-            isOpen={this.state.modalTuvan}
-            className={this.props.className}
-          >
-            <ModalHeader>
-              {this.state.actionTuvan === "new" ? `Tạo mới` : `Cập nhật`}
-            </ModalHeader>
-            <ModalBody>
-            <label>Tiêu đề</label>
-              <CTextarea
-                field="titleTuvan"
-               
-                className="mt-3"
-                value={this.state.titleTuvan}
+                  onChange={(e) => {
+                    this.setState({ titleProduct: e.target.value });
+                  }}
+                />
+                <TextFieldGroup
+                  field="productType"
+                  label="Nhóm sản phẩm"
+                  value={this.state.productType}
+
+                  onChange={(e) => {
+                    this.setState({ productType: e.target.value });
+                  }}
+                />
+                <TextFieldGroup
+                  field="brandName"
+                  label="Thương hiệu"
+                  value={this.state.brandName}
+
+                  onChange={(e) => {
+                    this.setState({ brandName: e.target.value });
+                  }}
+                />
+
+                <label>Mô tả</label>
+                <CTextarea
+                  field="descProduct"
+                  label="Mô tả"
+                  rows="4"
+                  value={this.state.descProduct}
+                  placeholder={"Mô tả..."}
+                  onChange={(e) => {
+                    this.setState({ descProduct: e.target.value });
+                  }}
+                />
+                <TextFieldGroup
+                  field="imageProduct"
+                  label="Ảnh minh họa"
+                  type={"file"}
+                  // value={this.state.image}
+                  onChange={(e) => {
+                    this.onChangeImageProduct(e);
+                  }}
+                  onClick={(e) => {
+                    e.target.value = null;
+                    this.setState({ imageProduct_show: "" });
+                  }}
+                />
+                <img
+                  alt=""
+                  style={{ width: "140px", marginBottom: 20 }}
+                  height="auto"
+                  src={this.state.imageProduct}
+                />
+
+                <TextFieldGroup
+                  field="hrefProduct"
+                  label="Đường dẫn"
+                  value={this.state.hrefProduct}
+                  placeholder={"Link..."}
+                  onChange={(e) => {
+                    this.setState({ hrefProduct: e.target.value });
+                  }}
+                />
+                <div style={{ width: "100%" }} className="mt-3">
+                  <CLabel>Cấp độ Collagen:</CLabel>
+                  <SelectWithHiddenSelectedOptions selectedItems={this.state.selectedItemsCollagen} setSelect={this.setSelectCollagen} />
+                </div>
+                <div style={{ width: "100%" }} className="mt-3">
+                  <CLabel>Cấp độ Nám:</CLabel>
+                  <SelectWithHiddenSelectedOptions selectedItems={this.state.selectedItems} setSelect={this.setSelect} />
                 
-                onChange={(e) => {
-                  this.setState({ titleTuvan: e.target.value });
-                }}
-              />
-              <label>Lối sống</label>
-              <CKEditor
-                    editor={ ClassicEditor }
-                    data={this.state.lifeStyle}
-                    onReady={ editor => {
-                        // You can store the "editor" and use when it is needed.
-                        console.log( 'Editor is ready to use!', editor );
-                    } }
-                    onChange={ ( event, editor ) => {
-                        const data = editor.getData();
-                        this.setState({ lifeStyle: data });
-                    } }
-                   
+                </div>
+
+
+              </ModalBody>
+              <ModalFooter>
+                <CButton
+                  color="primary"
+                  onClick={() => {
+                    this.state.actionProduct === "new"
+                      ? this.saveAddProduct()
+                      : this.saveEditProduct();
+                  }}
+                  disabled={this.state.isLoading}
+                >
+                  Lưu
+                </CButton>{" "}
+                <CButton
+                  color="secondary"
+                  onClick={(e) => {
+                    this.setState({
+                      modalProduct: false,
+                    });
+                  }}
+                >
+                  Đóng
+                </CButton>
+              </ModalFooter>
+            </Modal>
+          </div>
+          <div class="modal_normal">
+            <Modal
+              size="xl"
+              isOpen={this.state.modalTuvan}
+              className={this.props.className}
+            >
+              <ModalHeader>
+                {this.state.actionTuvan === "new" ? `Tạo mới` : `Cập nhật`}
+              </ModalHeader>
+              <ModalBody>
+                <label>Tiêu đề</label>
+                <CTextarea
+                  field="titleTuvan"
+
+                  className="mt-3"
+                  value={this.state.titleTuvan}
+
+                  onChange={(e) => {
+                    this.setState({ titleTuvan: e.target.value });
+                  }}
                 />
-            
-              <label>Chăm sóc</label>
-              <CKEditor
-                    editor={ ClassicEditor }
-                    data={this.state.skincare}
-                    onReady={ editor => {
-                        // You can store the "editor" and use when it is needed.
-                        console.log( 'Editor is ready to use!', editor );
-                    } }
-                    onChange={ ( event, editor ) => {
-                        const data = editor.getData();
-                        this.setState({ skincare: data });
-                    } }
-                   
+                <label>Lối sống</label>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={this.state.lifeStyle}
+                  onReady={editor => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log('Editor is ready to use!', editor);
+                  }}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    this.setState({ lifeStyle: data });
+                  }}
+
                 />
-             
-              <TextFieldGroup
-            field="icon"
-            label="Ảnh minh họa"
-            type={"file"}
-            // value={this.state.image}
-            onChange={(e) => {
-              this.onChangeImageTuVan(e);
-            }}
-            onClick={(e) => {
-              e.target.value = null;
-              this.setState({ imageTuvan_show: "" });
-            }}
-          />
-<img
-              alt=""
-              style={{ width: "140px", marginBottom: 20 }}
-              height="auto"
-              src={this.state.imageTuvan}
-            />
-              {/* <Editor
+
+                <label>Chăm sóc</label>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={this.state.skincare}
+                  onReady={editor => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log('Editor is ready to use!', editor);
+                  }}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    this.setState({ skincare: data });
+                  }}
+
+                />
+
+                <TextFieldGroup
+                  field="icon"
+                  label="Ảnh minh họa"
+                  type={"file"}
+                  // value={this.state.image}
+                  onChange={(e) => {
+                    this.onChangeImageTuVan(e);
+                  }}
+                  onClick={(e) => {
+                    e.target.value = null;
+                    this.setState({ imageTuvan_show: "" });
+                  }}
+                />
+                <img
+                  alt=""
+                  style={{ width: "140px", marginBottom: 20 }}
+                  height="auto"
+                  src={this.state.imageTuvan}
+                />
+                {/* <Editor
          onInit={{  }}
          className="mt-3"
          initialValue="<p></p>"
@@ -1896,146 +1853,146 @@ async saveAddProduct () {
            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
          }}
        /> */}
-              <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Cấp độ:</CLabel>
-                {arrLevel != undefined ? (
-                  <CSelect
-                    onChange={async (e) => {
-                      this.changeLevel(e);
-                    }}
-                    custom
-                    size="sm"
-                    name="levelNormal"
-                    id="SelectLm"
-                  >
-                    {arrLevel.map((item, i) => {
-                      if (item.item === this.state.levelNormal) {
-                        return (
-                          <option selected key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "1-3"
-                              : "4-5"
+                <div style={{ width: "100%" }} className="mt-3">
+                  <CLabel>Cấp độ:</CLabel>
+                  {arrLevel != undefined ? (
+                    <CSelect
+                      onChange={async (e) => {
+                        this.changeLevel(e);
+                      }}
+                      custom
+                      size="sm"
+                      name="levelNormal"
+                      id="SelectLm"
+                    >
+                      {arrLevel.map((item, i) => {
+                        if (item.item === this.state.levelNormal) {
+                          return (
+                            <option selected key={i} value={item.item}>
+                              {item.item === "1"
+                                ? "1-3"
+                                : "4-5"
                               }
-                          </option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "1-3"
-                              :  "4-5"
+                            </option>
+                          );
+                        } else {
+                          return (
+                            <option key={i} value={item.item}>
+                              {item.item === "1"
+                                ? "1-3"
+                                : "4-5"
                               }
-                          </option>
-                        );
-                      }
-                    })}
-                  </CSelect>
-                ) : null}
-              </div>           
-            </ModalBody>
-            <ModalFooter>
-              <CButton
-                color="primary"
-                onClick={() => {
-                  this.state.actionTuvan === "new"
-                    ? this.saveAddTuvan()
-                    : this.saveEditTuvan();
-                }}
-                disabled={this.state.isLoading}
-              >
-                Lưu
-              </CButton>{" "}
-              <CButton
-                color="secondary"
-                onClick={(e) => {
-                  this.setState({
-                    modalTuvan: false,
-                  });
-                }}
-              >
-                Đóng
-              </CButton>
-            </ModalFooter>
-          </Modal>
-          <Modal
-            size="xl"
-            isOpen={this.state.modalNormal}
-            className={this.props.className}
-          >
-            <ModalHeader>
-              {this.state.action === "new" ? `Tạo mới` : `Cập nhật`}
-            </ModalHeader>
-            <ModalBody>
-              <CTextarea
-                field="titleNormal"
-                label="Mô tả"
-                value={this.state.titleNormal}
-                placeholder={"Mô tả..."}
-                onChange={(e) => {
-                  this.setState({ titleNormal: e.target.value });
-                }}
-              />
-              <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Cấp độ:</CLabel>
-                {arrLevel != undefined ? (
-                  <CSelect
-                    onChange={async (e) => {
-                      this.changeLevel(e);
-                    }}
-                    custom
-                    size="sm"
-                    name="levelNormal"
-                    id="SelectLm"
-                  >
-                    {arrLevel.map((item, i) => {
-                      if (item.item === this.state.levelNormal) {
-                        return (
-                          <option selected key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "1-3"
-                              :  "4-5"
-                               }
-                          </option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "1-3"
-                              : "4-5"
+                            </option>
+                          );
+                        }
+                      })}
+                    </CSelect>
+                  ) : null}
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <CButton
+                  color="primary"
+                  onClick={() => {
+                    this.state.actionTuvan === "new"
+                      ? this.saveAddTuvan()
+                      : this.saveEditTuvan();
+                  }}
+                  disabled={this.state.isLoading}
+                >
+                  Lưu
+                </CButton>{" "}
+                <CButton
+                  color="secondary"
+                  onClick={(e) => {
+                    this.setState({
+                      modalTuvan: false,
+                    });
+                  }}
+                >
+                  Đóng
+                </CButton>
+              </ModalFooter>
+            </Modal>
+            <Modal
+              size="xl"
+              isOpen={this.state.modalNormal}
+              className={this.props.className}
+            >
+              <ModalHeader>
+                {this.state.action === "new" ? `Tạo mới` : `Cập nhật`}
+              </ModalHeader>
+              <ModalBody>
+                <CTextarea
+                  field="titleNormal"
+                  label="Mô tả"
+                  value={this.state.titleNormal}
+                  placeholder={"Mô tả..."}
+                  onChange={(e) => {
+                    this.setState({ titleNormal: e.target.value });
+                  }}
+                />
+                <div style={{ width: "100%" }} className="mt-3">
+                  <CLabel>Cấp độ:</CLabel>
+                  {arrLevel != undefined ? (
+                    <CSelect
+                      onChange={async (e) => {
+                        this.changeLevel(e);
+                      }}
+                      custom
+                      size="sm"
+                      name="levelNormal"
+                      id="SelectLm"
+                    >
+                      {arrLevel.map((item, i) => {
+                        if (item.item === this.state.levelNormal) {
+                          return (
+                            <option selected key={i} value={item.item}>
+                              {item.item === "1"
+                                ? "1-3"
+                                : "4-5"
                               }
-                          </option>
-                        );
-                      }
-                    })}
-                  </CSelect>
-                ) : null}
-              </div>           
-            </ModalBody>
-            <ModalFooter>
-              <CButton
-                color="primary"
-                onClick={() => {
-                  this.state.action === "new"
-                    ? this.saveAdd()
-                    : this.saveEdit();
-                }}
-                disabled={this.state.isLoading}
-              >
-                Lưu
-              </CButton>{" "}
-              <CButton
-                color="secondary"
-                onClick={(e) => {
-                  this.setState({
-                    modalNormal: false,
-                  });
-                }}
-              >
-                Đóng
-              </CButton>
-            </ModalFooter>
-          </Modal>
+                            </option>
+                          );
+                        } else {
+                          return (
+                            <option key={i} value={item.item}>
+                              {item.item === "1"
+                                ? "1-3"
+                                : "4-5"
+                              }
+                            </option>
+                          );
+                        }
+                      })}
+                    </CSelect>
+                  ) : null}
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <CButton
+                  color="primary"
+                  onClick={() => {
+                    this.state.action === "new"
+                      ? this.saveAdd()
+                      : this.saveEdit();
+                  }}
+                  disabled={this.state.isLoading}
+                >
+                  Lưu
+                </CButton>{" "}
+                <CButton
+                  color="secondary"
+                  onClick={(e) => {
+                    this.setState({
+                      modalNormal: false,
+                    });
+                  }}
+                >
+                  Đóng
+                </CButton>
+              </ModalFooter>
+            </Modal>
 
           </div>
           <Box sx={{ width: "100%" }}>
@@ -2081,18 +2038,18 @@ async saveAddProduct () {
                 />
               </Tabs>
             </Box>
-        
+
             <TabPanel style={styles.TabPanel} value={valueTabs} index={0}>
-              {this.renderDataProduct(this.state.dataProductTemp1,"group1")}
+              {this.renderDataProduct(this.state.dataProductTemp1, "group1")}
             </TabPanel>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={1}>
-              {this.renderDataProduct(this.state.dataProductTemp2,"group2")}
+              {this.renderDataProduct(this.state.dataProductTemp2, "group2")}
             </TabPanel>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={2}>
-              {this.renderDataProduct(this.state.dataProductTemp3,"group3")}
+              {this.renderDataProduct(this.state.dataProductTemp3, "group3")}
             </TabPanel>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={3}>
-              {this.renderDataProduct(this.state.dataProductTemp4,"group4")}
+              {this.renderDataProduct(this.state.dataProductTemp4, "group4")}
             </TabPanel>
             <TabPanel style={styles.TabPanel} value={valueTabs} index={4}>
               <h1>Đang nâng cấp</h1>

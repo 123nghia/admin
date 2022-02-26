@@ -1720,6 +1720,7 @@ async saveAddProduct () {
               </div>   
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Cấp độ Nám:</CLabel>
+                
                 {arrLevelPro != undefined ? (
                   <CSelect
                     onChange={async (e) => {
