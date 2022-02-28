@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import { Select } from 'antd';
 
 const OPTIONS = ['1-3', '4-5', 'Tất cả'];
+const GROUPS = ['Nhóm 1 (22-28)', 'Nhóm 2 (28-35)', 'Nhóm 3 (35-45)', 'Nhóm 4 (50+)', 'Tất cả'];
 
 export default class SelectWithHiddenSelectedOptions extends React.Component {
   state = {
@@ -18,7 +19,14 @@ export default class SelectWithHiddenSelectedOptions extends React.Component {
 
   render() {
     const { selectedItems } = this.state;
-    const filteredOptions = OPTIONS.filter(o => !selectedItems.includes(o));
+    var filteredOptions;
+    if (this.props.groups) {
+      filteredOptions = GROUPS.filter(o => !selectedItems.includes(o));
+
+    } else {
+      filteredOptions = OPTIONS.filter(o => !selectedItems.includes(o));
+
+    }
     return (
       <Select
         mode="multiple"
