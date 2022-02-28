@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 
 import { Select } from 'antd';
 
-const OPTIONS = ['1', '2', '0'];
+const OPTIONS = ['1-3', '4-5', 'Tất cả'];
 
 export default class SelectWithHiddenSelectedOptions extends React.Component {
   state = {
@@ -29,7 +29,7 @@ export default class SelectWithHiddenSelectedOptions extends React.Component {
       >
         {filteredOptions.map(item => (
           <Select.Option key={item} value={item}>
-            {item === "0" ? "Tất cả" : item ==="1" ? "1-3" : "4-5" }
+            {item}
           </Select.Option>
         ))}
       </Select>

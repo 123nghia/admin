@@ -211,8 +211,8 @@ class Users extends Component {
 
         },
       ],
-      selectedItems : [],
-      selectedItemsCollagen : []
+      selectedItems : ['1-3', '4-5', 'Tất cả'],
+      selectedItemsCollagen : ['1-3', '4-5', 'Tất cả']
     };
   }
   changeLevel = (e) => {
@@ -710,13 +710,35 @@ class Users extends Component {
       modalProduct: true,
       group: group,
     })
-    if(item.selectedItems){
+    if(item.level){
+      
       this.setState({
-        selectedItems : item.selectedItems,
-        selectedItemsCollagen : item.selectedItemsCollagen
+        
+        selectedItemsCollagen : item.level
 
       })
       
+    }else{
+      this.setState({
+        
+        selectedItemsCollagen : []
+
+      })
+    }
+    if(item.levelPlasma){
+
+      this.setState({
+        selectedItems : item.levelPlasma,
+
+
+      })
+      
+    }else{
+      this.setState({
+        
+        selectedItems : []
+
+      })
     }
   }
   openFormAdd = (value) => {
@@ -978,6 +1000,8 @@ class Users extends Component {
   }
   async saveEditProduct() {
     const {
+      selectedItemsCollagen,
+      selectedItems,
       titleProduct,
       descProduct,
       hrefProduct,
@@ -1008,8 +1032,41 @@ class Users extends Component {
     }
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/Recomend/update";
+    let levelCollagen = [];
+    let levelSkin = [];
+    selectedItemsCollagen.forEach((item,i)=>{
+      let value;
+      if(item==="1-3"){
+        value = selectedItemsCollagen[i].replace('1-3','1')
+        levelCollagen.push(value)
+      }
+      else if(item==="4-5"){
+        value = selectedItemsCollagen[i].replace('4-5','2')
+        levelCollagen.push(value)
+      }
+      else if(item==="Tất cả"){
+        value = selectedItemsCollagen[i].replace('Tất cả','0')
+        levelCollagen.push(value)
+      }
+    })
+    
+    selectedItems.forEach((item,i)=>{
+      let value;
+      if(item==="1-3"){
+        value = selectedItems[i].replace('1-3','1')
+        levelSkin.push(value)
+      }
+      else if(item==="4-5"){
+        value = selectedItems[i].replace('4-5','2')
+        levelSkin.push(value)
+      }
+      else if(item==="Tất cả"){
+        value = selectedItems[i].replace('Tất cả','0')
+        levelSkin.push(value)
+      }
+    })
     await axios.post(url, {
-      level: levelNormal,
+      level: levelCollagen,
       group: group,
       productType: productType,
       brandName: brandName,
@@ -1018,7 +1075,7 @@ class Users extends Component {
       avatar: newImage,
       href: hrefProduct,
       type: "0",
-      levelPlasma: levelNam,
+      levelPlasma: levelSkin,
       id: this.state.idUpdateProduct,
     }).then(() => {
       this.getProduct(group);
@@ -1068,6 +1125,8 @@ class Users extends Component {
       brandName,
       productType,
       title,
+      selectedItems,
+      selectedItemsCollagen
 
     } = this.state
     const form = new FormData();
@@ -1084,8 +1143,41 @@ class Users extends Component {
 
     let baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/Recomend/add";
+    let levelCollagen = [];
+    let levelSkin = [];
+    selectedItemsCollagen.forEach((item,i)=>{
+      let value;
+      if(item==="1-3"){
+        value = selectedItemsCollagen[i].replace('1-3','1')
+        levelCollagen.push(value)
+      }
+      else if(item==="4-5"){
+        value = selectedItemsCollagen[i].replace('4-5','2')
+        levelCollagen.push(value)
+      }
+      else{
+        value = selectedItemsCollagen[i].replace('Tất cả','0')
+        levelCollagen.push(value)
+      }
+    })
+    
+    selectedItems.forEach((item,i)=>{
+      let value;
+      if(item==="1-3"){
+        value = selectedItems[i].replace('1-3','1')
+        levelSkin.push(value)
+      }
+      else if(item==="4-5"){
+        value = selectedItems[i].replace('4-5','2')
+        levelSkin.push(value)
+      }
+      else{
+        value = selectedItems[i].replace('Tất cả','0')
+        levelSkin.push(value)
+      }
+    })
     await axios.post(url, {
-      level: levelNormal,
+      level: levelCollagen,
       group: group,
       productType: productType,
       brandName: brandName,
@@ -1094,7 +1186,7 @@ class Users extends Component {
       avatar: newImage,
       href: hrefProduct,
       type: "0",
-      levelPlasma: levelNam
+      levelPlasma: levelSkin
     }).then(res => {
       this.getProduct(group);
       Swal.fire(
