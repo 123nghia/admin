@@ -213,7 +213,10 @@ class Users extends Component {
       ],
       selectedItems: ['1-3', '4-5', 'Tất cả'],
       selectedItemsCollagen: ['1-3', '4-5', 'Tất cả'],
-      selectedGroup: []
+      selectedGroup: [],
+      selectedItemsSearch: [],
+      selectedItemsCollagenSearch: [],
+      selectedGroupSearch: []
     };
   }
   changeLevel = (e) => {
@@ -241,6 +244,21 @@ class Users extends Component {
   setSelectGroup = (ob) => {
     this.setState({
       selectedGroup: ob
+    });
+  }
+  setSelectSearch = (ob) => {
+    this.setState({
+      selectedItemsSearch: ob
+    });
+  }
+  setSelectCollagenSearch = (ob) => {
+    this.setState({
+      selectedItemsCollagenSearch: ob
+    });
+  }
+  setSelectGroupSearch = (ob) => {
+    this.setState({
+      selectedGroupSearch: ob
     });
   }
   changeConfigWeb(id) {
@@ -318,15 +336,49 @@ class Users extends Component {
     })
   }
   async getProductAll() {
-    await this.getProduct("group1");
-
-    const { dataProductTemp1, dataProductTemp2, dataProductTemp3, dataProductTemp4, dataProductTemp5 } = this.state;
-    let dataAll = dataProductTemp1
-    this.setState({
-      allDataProduct: dataAll,
-    })
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/Recomend/getAll";
+    await axios
+        .get(url)
+      .then((res) => {
+        
+        this.setState({
+          allDataProduct: res.data.data,
+        })
+      }) 
   }
+  async newSearch(){
+   
+    const {
+      selectedItemsSearch,
+      selectedItemsCollagenSearch,
+      selectedGroupSearch
+    } = this.state;
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/Recomend/getAll";
+    let dataCollagen = [];
+    let dataSkin = [];
+    let dataGroup = [];
+    dataCollagen = this.checkDataLevel(selectedItemsCollagenSearch);
+    dataSkin = this.checkDataLevel(selectedItemsSearch);
+    dataGroup = this.checkDataGroup(selectedGroupSearch);
+    console.log(dataCollagen,dataSkin,dataGroup)
 
+    await axios
+    .get(url, {
+      params: {
+        collagenLevel :dataCollagen,
+        PlasmaLevel  :dataSkin,
+        GroupProduct: dataGroup
+      }
+    })
+      .then((res) => {
+        
+        this.setState({
+          allDataProduct: res.data.data,
+        })
+      }) 
+  }
   async componentDidMount() {
     await this.getProductAll();
     let arr = JSON.parse(localStorage.getItem("url"));
@@ -362,44 +414,7 @@ class Users extends Component {
       }
     });
   }
-  async getProduct(group) {
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/Recomend/getAll";
-    await axios
-      .get(url, {
-        params: {
-          group: group
-        }
-      })
-      .then((res) => {
-        if (group === "group1") {
-          this.setState({
-            dataProductTemp1: res.data.data
-          })
-        }
-        else if (group === "group2") {
-          this.setState({
-            dataProductTemp2: res.data.data
-          })
-        }
-        else if (group === "group3") {
-          this.setState({
-            dataProductTemp3: res.data.data
-          })
-        }
-        else if (group === "group4") {
-          this.setState({
-            dataProductTemp4: res.data.data
-          })
-        }
-        else {
-          this.setState({
-            dataProductTemp5: res.data.data
-          })
-        }
 
-      })
-  }
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll?key=webinfo";
@@ -507,53 +522,7 @@ class Users extends Component {
       id: this.state.idUpdate,
     });
   }
-  async onUpdate() {
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/update";
-    await axios.post(url, {
-      value: JSON.stringify(this.state.dataConfigWeb),
-      dataType: "1",
-      type: "system",
-      id: this.state.idUpdate,
-    });
-  }
-  getData = async () => {
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.CONFIG_THEME_GET + "/" + "61e8c3498f019a121b6fc5ae",
-      method: "GET",
-      headers: this.state.token,
-    });
-    let val = res.data.data;
-    this.setState({
-      dataApi: val,
-      data: val,
-      currentPassword: val.Password,
-      isLoading: false,
-      current_slug:
-        val.Company_Id == null || val.Company_Id == undefined
-          ? null
-          : val.Company_Id.Slug,
-      companyID:
-        val.Company_Id == null || val.Company_Id == undefined
-          ? null
-          : val.Company_Id._id,
-
-      mainColor: val.mainColor,
-      sub_mainColor: val.sub_mainColor,
-      Phone: val.Phone,
-      Address: val.Address,
-      UserName: val.UserName,
-      Message_Code: val.Message_Code,
-      sub2_mainColor: val.sub2_mainColor,
-      button_color: val.button_color,
-      sucess_color: val.sucess_color,
-      error_color: val.error_color,
-      text_mainColor: val.text_mainColor,
-      isDisable: true,
-    });
-  };
+ 
   onChange(key, val) {
     this.setState({ [key]: val });
   }
@@ -644,44 +613,7 @@ class Users extends Component {
       this.setState({ isChangeSlug: false });
     }
   }
-  async saveLogo() {
-    const { image, image_link } = this.state;
-    const form = new FormData();
-    form.append("image", image_link);
-
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
-      (res) => console.log(res)
-    );
-
-    this.setState({ loadingSaveLogo: true });
-    setTimeout(() => {
-      this.setState({ loadingSaveLogo: false });
-
-      const { dataConfigWeb } = this.state;
-      let coppyData = {
-        ...dataConfigWeb,
-      };
-      let newImage = `${Constants.BASE_URL}image_brand/${image_link.name}`;
-      coppyData.value.logo = newImage;
-      this.setState(
-        {
-          dataConfigWeb: coppyData,
-          statusModalUpdate: false,
-        },
-        () => {
-
-          this.onUpdate();
-        }
-      );
-    }, 1000);
-  }
-  canelLogo = () => {
-    this.setState({
-      image: "",
-      image_link: "",
-    });
-  };
-
+ 
 
   openFormAddProduct = () => {
     this.setState({
@@ -1097,14 +1029,14 @@ class Users extends Component {
         if (item === "1") {
   
   
-          text += "1-3"
+          text += "1"
   
   
         }
         if (item === "2") {
   
   
-          text += "4-5"
+          text += "2"
   
   
         }
@@ -1163,17 +1095,7 @@ class Users extends Component {
       });
       let render = (
         <div className="bg_panel">
-          <div class="text-center">
-            <CButton
-              outline
-              color="info"
-              size="md"
-              onClick={() => this.openFormAddProduct()}
-            >
-              {/* <CIcon name="cilTrash" /> */}
-              Thêm mới
-            </CButton>{" "}
-          </div>
+         
 
           <table
             ble
@@ -1203,17 +1125,7 @@ class Users extends Component {
     } else {
       let render = (
         <div>
-          <div class="text-center">
-            <CButton
-              outline
-              color="info"
-              size="md"
-              onClick={() => this.openFormAddProduct()}
-            >
-              {/* <CIcon name="cilTrash" /> */}
-              Thêm mới
-            </CButton>{" "}
-          </div>
+        
 
           <table
             ble
@@ -1378,6 +1290,7 @@ class Users extends Component {
       return (
         <div className="animated fadeIn">
           <div class="modal_product">
+          
             <Modal
               size="xl"
               isOpen={this.state.modalProduct}
@@ -1728,11 +1641,57 @@ class Users extends Component {
             </Modal>
 
           </div>
-          <Box sx={{ width: "100%" }}>
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                <i className="fa fa-align-justify">Danh sách sản phẩm</i>
+                <CRow>
+                          <CCol sm="6" lg="6">
+                          <div style={{ width: "100%" }} className="mt-3">
+                  <CLabel>Nhóm:</CLabel>
+                  <SelectWithHiddenSelectedOptions groups={true} selectedItems={this.state.selectedGroupSearch} setSelect={this.setSelectGroupSearch} />
+                </div>
+                          </CCol>
+                          <CCol sm="6" lg="6">
+                          <div style={{ width: "100%" }} className="mt-3">
+                  <CLabel>Cấp độ Collagen:</CLabel>
+                  <SelectWithHiddenSelectedOptions selectedItems={this.state.selectedItemsCollagenSearch} setSelect={this.setSelectCollagenSearch} />
+                </div>
+                <div style={{ width: "100%" }} className="mt-3">
+                  <CLabel>Cấp độ Nám:</CLabel>
+                  <SelectWithHiddenSelectedOptions selectedItems={this.state.selectedItemsSearch} setSelect={this.setSelectSearch} />
 
-            {this.renderDataProduct(this.state.allDataProduct)}
+                </div>
+                          </CCol>
+                </CRow>
+                 
+                  
+               <div class="flex-center mt-3">
+               <CButton
+              outline
+              color="info"
+              size="md"
+              className="mr-1"
+              onClick={() => this.openFormAddProduct()}
+            >
+              {/* <CIcon name="cilTrash" /> */}
+              Thêm mới
+            </CButton>{" "}
+                  <CButton color="primary" size="md" onClick={()=>this.newSearch() }>Tìm kiếm</CButton>
+                </div>
+                </CardHeader>
+                <CardBody>
+                {this.renderDataProduct(this.state.allDataProduct)}
 
-          </Box>
+                </CardBody>
+                </Card>
+              </Col>
+          </Row>
+
+
+       
+             
         </div>
       );
     }
@@ -1822,8 +1781,9 @@ const styles = {
     marginLeft: "5px",
   },
   tags: {
-    float: "right",
-    marginRight: "5px",
+    display: "flex",
+    justifyContent : "center",
+    textAlign : "center"
   },
   searchInput: {
     width: "100%",
