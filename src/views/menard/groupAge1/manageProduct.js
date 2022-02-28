@@ -317,15 +317,11 @@ class Users extends Component {
       console.log("res", res)
     })
   }
-  async getProductAll(){
+  async getProductAll() {
     await this.getProduct("group1");
-    await this.getProduct("group2");
-    await this.getProduct("group3");
-    await this.getProduct("group4");
-    await this.getProduct("group5");
-    const { dataProductTemp1, dataProductTemp2, dataProductTemp3, dataProductTemp4, dataProductTemp5 } = this.state;
-    let dataAll = dataProductTemp1.concat(dataProductTemp2).concat(dataProductTemp3).concat(dataProductTemp4).concat(dataProductTemp5)
 
+    const { dataProductTemp1, dataProductTemp2, dataProductTemp3, dataProductTemp4, dataProductTemp5 } = this.state;
+    let dataAll = dataProductTemp1
     this.setState({
       allDataProduct: dataAll,
     })
@@ -725,7 +721,7 @@ class Users extends Component {
       idUpdateProduct: item._id,
       brandProduct: item.brandName,
       modalProduct: true,
-     
+
 
     })
     if (item.collagenLevel) {
@@ -775,7 +771,7 @@ class Users extends Component {
       })
     }
   }
-  checkDataGroup(data){
+  checkDataGroup(data) {
     let currentGroup = [];
     data.forEach((item, i) => {
       let value;
@@ -788,21 +784,21 @@ class Users extends Component {
         currentGroup.push(value)
       }
       else if (item === "Nhóm 3 (35-45)") {
-        value = data[i].replace('Nhóm 2 (28-35)', 'group3')
+        value = data[i].replace('Nhóm 3 (35-45)', 'group3')
         currentGroup.push(value)
       }
       else if (item === "Nhóm 4 (50+)") {
-        value = data[i].replace('Nhóm 2 (28-35)', 'group4')
+        value = data[i].replace('Nhóm 4 (50+)', 'group4')
         currentGroup.push(value)
       }
       else if (item === "Tất cả") {
-        value = data[i].replace('Tất cả', 'group-1')
+        value = data[i].replace('Tất cả', '-1')
         currentGroup.push(value)
       }
     })
     return currentGroup
   }
-  checkDataLevel(data){
+  checkDataLevel(data) {
     let levelCollagen = [];
     data.forEach((item, i) => {
       let value;
@@ -821,7 +817,7 @@ class Users extends Component {
     });
     return levelCollagen
   }
-  checkValueLevel(data){
+  checkValueLevel(data) {
     let levelCollagen = [];
     data.forEach((item, i) => {
       let value;
@@ -840,7 +836,7 @@ class Users extends Component {
     });
     return levelCollagen
   }
-  checkValueGroup(data){
+  checkValueGroup(data) {
     let currentGroup = [];
     data.forEach((item, i) => {
       let value;
@@ -853,15 +849,15 @@ class Users extends Component {
         currentGroup.push(value)
       }
       else if (item === "group3") {
-        value = data[i].replace('group3)', 'Nhóm 3 (35-45)')
+        value = data[i].replace('group3', 'Nhóm 3 (35-45)')
         currentGroup.push(value)
       }
       else if (item === "group4") {
         value = data[i].replace('group4', 'Nhóm 4 (50+)')
         currentGroup.push(value)
       }
-      else if (item === "group-1") {
-        value = data[i].replace('group-1', 'Tất cả')
+      else if (item === "-1") {
+        value = data[i].replace('-1', 'Tất cả')
         currentGroup.push(value)
       }
     })
@@ -903,12 +899,12 @@ class Users extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/Recomend/update";
     let levelCollagen = this.checkDataLevel(selectedItemsCollagen);
-   
+
     let levelSkin = this.checkDataLevel(selectedItems);
     let currentGroup = this.checkDataGroup(selectedGroup)
-    
 
-    
+
+
     if (selectedGroup.length === 0) {
       alert("Vui lòng chọn nhóm")
       return
@@ -974,11 +970,11 @@ class Users extends Component {
     let baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/Recomend/add";
     let levelCollagen = this.checkDataLevel(selectedItemsCollagen);
-   
+
     let levelSkin = this.checkDataLevel(selectedItems);
     let currentGroup = this.checkDataGroup(selectedGroup)
-  
-   
+
+
     if (selectedGroup.length === 0) {
       alert("Vui lòng chọn nhóm")
       return
@@ -1007,8 +1003,8 @@ class Users extends Component {
       )
     })
   };
-  async openDeleteProduct (item)  {
-    
+  async openDeleteProduct(item) {
+
     Swal.fire({
       title: 'Chắc chắn xóa?',
       text: "Bạn sẽ không thể hoàn tác!",
@@ -1018,27 +1014,105 @@ class Users extends Component {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Xóa ngay'
     }).then((result) => {
-          if (result.isConfirmed) {
-            var baseUrlapi = Constants.BASE_URL;
-              let url = baseUrlapi + "api/Recomend/delete";
-             axios.post(url, {
-              
-                id:item._id,
-              }).then(()=>{
-                this.getProductAll();
-  
-              })
-            Swal.fire(
-              'Deleted!',
-              'Xóa thành công',
-              'success'
-            )
-          }
-        })
-      
-     
-    };
+      if (result.isConfirmed) {
+        var baseUrlapi = Constants.BASE_URL;
+        let url = baseUrlapi + "api/Recomend/delete";
+        axios.post(url, {
 
+          id: item._id,
+        }).then(() => {
+          this.getProductAll();
+
+        })
+        Swal.fire(
+          'Deleted!',
+          'Xóa thành công',
+          'success'
+        )
+      }
+    })
+
+
+  };
+  renderTextGroup(GroupProduct) {
+    let text = `Nhóm `
+    GroupProduct.forEach((item, i) => {
+      if (item === "-1") {
+        text = "Tất cả";
+        return text
+      };
+      if (item === "group1") {
+
+        if (i > 0) {
+          text += " & 1"
+        } else {
+          text += "1"
+        }
+
+      }
+      if (item === "group2") {
+
+        if (i > 0) {
+          text += " & 2"
+        } else {
+          text += "2"
+        }
+
+      }
+      if (item === "group3") {
+
+        if (i > 0) {
+          text += " & 3"
+        } else {
+          text += "3"
+        }
+
+      }
+      if (item === "group4") {
+
+        if (i > 0) {
+          text += " & 4"
+        } else {
+          text += "4"
+        }
+      };
+
+    });
+    return text
+  }
+  renderTextLevel(level) {
+    let text = "";
+    if(level.includes('1') && level.includes('2')){
+      text = "Tất cả";
+      return text
+
+    }else{
+      level.forEach((item, i) => {
+        if (item === "-1") {
+          text = "Tất cả";
+          return text
+        };
+        
+  
+        if (item === "1") {
+  
+  
+          text += "1-3"
+  
+  
+        }
+        if (item === "2") {
+  
+  
+          text += "4-5"
+  
+  
+        }
+      });
+    }
+    
+    return text
+  }
   renderDataProduct(data) {
 
     if (data && data.length > 0) {
@@ -1050,7 +1124,7 @@ class Users extends Component {
               Không tìm thấy dữ liệu
             </td>
             <td className="text-center">{i + 1}</td>
-            <td className="text-center">{item.brandName}</td>
+            <td className="text-center">{this.renderTextGroup(item.GroupProduct)}</td>
 
             <td className="text-center">{item.title}</td>
 
@@ -1060,8 +1134,8 @@ class Users extends Component {
               <img src={`${item.avatar}`} width={"60px"} height={"60px"} alt="" />
             </td>
             <td className="text-center"><p className=" text_line_3">{item.description}</p></td>
-            <td className="text-center">{item.level === "0" ? "Tất cả" : item.level}</td>
-            <td className="text-center">{item.levelPlasma === "0" ? "Tất cả" : item.levelPlasma}</td>
+            <td className="text-center">{this.renderTextLevel(item.collagenLevel)}</td>
+            <td className="text-center">{this.renderTextLevel(item.PlasmaLevel)}</td>
             <td className="text-center"><p className=" text_line_3">{item.href}</p></td>
             <td className="text-center">
               <CButton
@@ -1284,7 +1358,7 @@ class Users extends Component {
       },
       {
         item: "Tất cả",
-        group: "group-1"
+        group: "-1"
 
       },
     ];
