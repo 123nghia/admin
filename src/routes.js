@@ -67,10 +67,22 @@ const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 
 const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
 const RequestSupport = React.lazy(() => import('./views/info/requestSupport'));
+const ListEvoucher = React.lazy(() => import('./views/evoucher/ListVoucher'));
+const ListUserEvoucher = React.lazy(() => import('./views/evoucher/ListUserEvoucher'));
+const ManageCampaign = React.lazy(() => import('./views/evoucher/Campaign'));
+const ListCampaign = React.lazy(() => import('./views/evoucher/ListCampaign'));
+const BannerSales = React.lazy(() => import('./views/evoucher/Banner'));
+
 
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
+  { path: '/list-evoucher', name: 'ListEvoucher', component: ListEvoucher },
+  { path: '/list-user-evoucher', name: 'ListUserEvoucher', component: ListUserEvoucher },
+  { path: '/manage-campaign', name: 'ManageCampaign', component: ManageCampaign },
+  { path: '/list-campaign', name: 'ListCampaign', component: ListCampaign },
+  { path: '/banner-sales', name: 'BannerSales', component: BannerSales },
+
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', name: 'Users', component: TableUser },
   { path: '/company', name: 'Company', component: TableCompany },

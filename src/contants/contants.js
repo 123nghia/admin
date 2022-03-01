@@ -1,12 +1,29 @@
 export default {
-  //  "BASE_URL" : "https://soida-api.pensilia.com/",
-  "BASE_URL" : "http://192.168.1.8:3018/",
+   "BASE_URL" : "https://evoucher-api.applamdep.com/",
+  // "BASE_URL" : "http://192.168.1.8:3018/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   // "PORTAL_SERVER":  "http://192.168.1.5:3014/",
 
   // "BASE_URL_CURRENT" : "https://soida-admin.pensilia.com/",
-  "BASE_URL_CURRENT" : "http://localhost:3017/",
-  "BASE_URL_HISTORY_SKIN" : "https://soida.pensilia.com/lich-su-soi-da-with-iframe/",
+  "BASE_URL_CURRENT" : "http://localhost:3019/",
+  "BASE_URL_HISTORY_SKIN" : "https://shope.thulamua.com/lich-su-soi-da-with-iframe/",
+
+  "ADD_CAMPAIGN" : "",
+  "UPDATE_CAMPAIGN" : "",
+  "DELETE_CAMPAIGN" : "",
+
+  "ADD_BANNER_SALES" : "",
+  "UPDATE_BANNER_SALES" : "",
+  "DELETE_BANNER_SALES" : "",
+
+  "ADD_VOUCHER" : "",
+  "UPDATE_VOUCHER" : "",
+  "DELETE_VOUCHER" : "",
+
+  "ADD_USER_EVOUCHER" : "",
+  "UPDATE_USER_EVOUCHER" : "",
+  "DELETE_USER_EVOUCHER" : "",
+
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",
@@ -15,7 +32,6 @@ export default {
   "ADD_BOOK_LICH" : "api/booking/add",
   "UPDATE_BOOK_LICH" : "api/booking/update",
   "DELETE_BOOK_LICH" : "api/booking/delete",
-
   "DELETE_USER" : "/api/delete-user",
   "LOGIN_ADMIN" : "/api/login_admin",
   "GET_SHOP" : "/api/get-shop",

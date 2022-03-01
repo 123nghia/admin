@@ -283,6 +283,7 @@ class Users extends Component {
   }
   async componentDidMount() {
     this.getData().then(() => {
+      
       this.getInfoFunc();
     });
 
@@ -300,12 +301,11 @@ class Users extends Component {
     if (data) {
       let x = data.map((item, i) => {
         return (
-          <tbody>
-            <td colSpan="10" hidden={this.state.hidden} className="text-center">
-              Không tìm thấy dữ liệu
-            </td>
+          
+            
 
             <tr key={i}>
+            
               <td className="text-center">{i + 1}</td>
               <td className="text-center">{item.title}</td>
               {/* <td className="text-center">{item.name}</td> */}
@@ -337,7 +337,7 @@ class Users extends Component {
                 </CButton>
               </td>
             </tr>
-          </tbody>
+         
         );
       });
       let render = (
@@ -357,7 +357,12 @@ class Users extends Component {
               <th className="text-center">#</th>
             </tr>
           </thead>
-          {x}
+          <tbody>
+          <td colSpan="10" hidden={this.state.hidden} className="text-center">
+              Không tìm thấy dữ liệu
+            </td>
+            {x}
+          </tbody>
         </table>
       );
       return render;
@@ -395,6 +400,7 @@ class Users extends Component {
         key: "webinfo",
       })
       .then((res) => {
+     
         console.log('data',res)
         if (res.data.data.length > 0) {
           let dataConfig = res.data.data[0];
@@ -469,12 +475,20 @@ class Users extends Component {
             key: "webinfo",
             value: {
               logo: "",
+              chatMess :"",
+        
+              slideShow : [],
+              statusConfig :[],
+             
+              homepage : {},
+              seoInfo : {},
               tawk: "",
-              configFacebook: true,
-              configGoogle : true,
+         
               logoFooter : "",
               facebook: {
                 appid: "",
+                password: "",
+
               },
               google: {
                 appid: "",
@@ -703,7 +717,11 @@ class Users extends Component {
      
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
     }
-    let newImage4 = `${Constants.BASE_URL}image_brand/${imgLayout_link.name}`;
+    let newImage4 ="";
+    if(imgLayout_link){
+       newImage4 = `${Constants.BASE_URL}image_brand/${imgLayout_link.name}`;
+
+    }
     
     coppyData.value.seoInfo.imageShare = newImage4;
     
@@ -771,7 +789,8 @@ class Users extends Component {
     let coppyData = {
       ...dataConfigWeb,
     };
-    coppyData.value.footerData.splice(i, 1);
+    
+    coppyData.value.splice(i, 1);
     this.setState(
       {
         dataConfigWeb: coppyData,
@@ -1066,7 +1085,7 @@ class Users extends Component {
       dataConfigWeb : coppy
     },()=>{
       this.onUpdate();
-      this.getInfoFunc();
+      this.getDataConfigWeb();
     })
   }
   openFormEditSlide (item,i){
@@ -1096,7 +1115,7 @@ class Users extends Component {
       },
       () => {
         this.onUpdate();
-      this.getInfoFunc();
+      this.getDataConfigWeb();
 
       }
     );
@@ -1115,7 +1134,7 @@ class Users extends Component {
       dataConfigWeb : coppy
     },()=>{
       this.onUpdate();
-      this.getInfoFunc();
+      this.getDataConfigWeb();
     })
     
   }
