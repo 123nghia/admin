@@ -8,8 +8,9 @@ export default {
   "BASE_URL_CURRENT" : "http://localhost:3019/",
   "BASE_URL_HISTORY_SKIN" : "https://shope.thulamua.com/lich-su-soi-da-with-iframe/",
 
-  "ADD_CAMPAIGN" : "",
-  "UPDATE_CAMPAIGN" : "",
+  "GET_CAMPAIGN" : "api/campaign/getAll",
+  "ADD_CAMPAIGN" : "api/campaign/add",
+  "UPDATE_CAMPAIGN" : "api/campaign/update",
   "DELETE_CAMPAIGN" : "",
 
   "ADD_BANNER_SALES" : "",
