@@ -11,6 +11,8 @@ import {
 } from 'reactstrap';
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
+import Swal from "sweetalert2";
+
 import {
   CButton,
   CLabel,
@@ -29,6 +31,9 @@ import axios from 'axios'
 import md5 from 'md5'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import { Tag, Divider } from "antd";
+import { DatePicker, Space } from "antd";
+import "antd/dist/antd.css";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -38,6 +43,8 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      company_id: "621c2ec17abc0b6b4349d4e5",
+
       data: [],
       key: '',
       totalActive: 0,
@@ -66,7 +73,7 @@ class EndUser extends Component {
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
-        levelNormal: e.target.value,
+        status: e.target.value,
     });
   };
   async componentDidMount() {
@@ -104,49 +111,30 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
+  async getData () {
+    const { company_id } = this.state;
 
-  getData = async () => {
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_VOUCHER;
 
-    let val = [
-        {
-            name : "Voucher 20k",
-            user : "Phong",
-            
-            create_date:"2021-03-18T21:11:57.239Z",
-            content : "Khong co gi",
-            create_end:"2021-04-18T21:11:57.239Z"
-
-        }
-    ]
-    this.pagination(val);
-    this.setState({ dataApi: val });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
-
-
-    return 
-
-    this.setState({ isLoading: true });
-    let getUrl = "api/evoucher/getAll"
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: getUrl,
-      method: 'GET'
-    }).then((res)=>{
-      console.log("voucher",res.data.data)
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+    .get(url, {
+      params: {
+        company_id,
+      },
+    }).then((res) => {
     
 
-    let val = res.data.data;
-    this.pagination(val);
-    this.setState({ dataApi: val });
+      let val = res.data.data;
+      this.pagination(val);
+      this.setState({ dataApi: val });
 
-    let active = 0
+      let active = 0;
 
-    this.setState({ isLoading: false, totalActive: active });
-  });
-  }
+      this.setState({ isLoading: false, totalActive: active });
+    });
+  };
 
  
 
@@ -214,55 +202,74 @@ openVoucher(){
     actionVoucher : "new",
     modalVoucher : true,
     idCurrentUpdate : "",
-    nameVoucher : "",
-    phoneVoucher : "",
-    levelNormal : "",
+    codeVoucher : "",
+    relCode : "",
+    description : "",
+    status :"",
   });
 };
 openEditVoucher(item){
-  const {nameVoucher , phoneVoucher,idCurrentUpdate} = this.state
+ 
   this.setState({
     actionVoucher : "edit",
     modalVoucher : true,
     idCurrentUpdate : item._id,
-    nameVoucher : item.fullName,
-    phoneVoucher : item.phoneNumber,
-    levelNormal : item.status
+    codeVoucher : item.code,
+    relCode : item.relCode,
+    description : item.content,
+    status :item.status,
   })
 };
 async update(){
-  const {
-    nameVoucher,
-    phoneVoucher,
-    idCurrentUpdate,
-    levelNormal,
-  } = this.state;
+  const { codeVoucher, from, to, description, status, company_id, relCode, idCurrentUpdate } =
+  this.state;
   let baseUrlCallApi = Constants.UPDATE_VOUCHER;
   var baseUrlapi = Constants.BASE_URL;
   let url = baseUrlapi + baseUrlCallApi;
     await axios.post(url,{
-      fullName :nameVoucher,
-      phoneNumber : phoneVoucher,
+      code :codeVoucher,
+      relCode : relCode,
+   
+      content: description,
+                
+                status: status,
+                company_id: company_id,
       id : idCurrentUpdate,
-      status : levelNormal,
+    
     }).then((res) => {
+      Swal.fire({
+        icon: "success",
+        title: "Cập nhật hoàn tất",
+        showConfirmButton: false,
+        timer: 700,
+      });
+      this.setState({
+        modalVoucher: false,
+      });
       this.getData();
     });
 }
 async add(){
-  const {
-    nameVoucher,
-    phoneVoucher,
-    levelNormal
-  } = this.state;
+  const { codeVoucher, from, to, description, status, company_id, relCode } =
+  this.state;
   let baseUrlCallApi = Constants.ADD_VOUCHER;
   var baseUrlapi = Constants.BASE_URL;
   let url = baseUrlapi + baseUrlCallApi;
     await axios.post(url,{
-      fullName :nameVoucher,
-      phoneNumber : phoneVoucher,
-      status : levelNormal
+      code :codeVoucher,
+      relCode : relCode,
+   
+      content: description,
+                
+                status: status,
+                company_id: company_id
     }).then((res) => {
+      Swal.fire({
+        icon: "success",
+        title: "Thêm thành công",
+        showConfirmButton: false,
+        timer: 700,
+      });
       this.getData();
     });
 }
@@ -273,6 +280,12 @@ async remove(item){
     await axios.post(url,{
       id : item._id
     }).then((res) => {
+      Swal.fire({
+        icon: "success",
+        title: "Xóa thành công",
+        showConfirmButton: false,
+        timer: 700,
+      });
       this.getData();
     });
 }
@@ -316,9 +329,7 @@ async remove(item){
   render() {
     const { data, arrPagination, key,phoneVoucher,nameVoucher ,modalVoucher} = this.state;
     const arrLevel = [
-      {
-        item: "0",
-      },
+      
       {
         item: "1",
       },
@@ -338,15 +349,23 @@ async remove(item){
             </ModalHeader>
             <ModalBody>
             <TextFieldGroup
-                field="name"
-                label="Tên voucher"
-                value={this.state.name}
+                field="codeVoucher"
+                label="Mã voucher"
+                value={this.state.codeVoucher}
                 
                 // error={errors.title}
-                onChange={e => this.setState({name : e.target.value})}
+                onChange={e => this.setState({codeVoucher : e.target.value})}
               // rows="5"
               />
-
+ <TextFieldGroup
+                field="relCode"
+                label="Mã chiến dịch"
+                value={this.state.relCode}
+                
+                // error={errors.title}
+                onChange={e => this.setState({relCode : e.target.value})}
+              // rows="5"
+              />
             <label className="control-label">Mô tả:</label>
             <CTextarea
               name="description"
@@ -356,6 +375,44 @@ async remove(item){
                 this.setState({ description: e.target.value });
               }}
             />
+            <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Trạng thái:</CLabel>
+                {arrLevel != undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevel(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="status"
+                    id="SelectLm"
+                  >
+                    {arrLevel.map((item, i) => {
+                      if (item.item === this.state.status) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "1"
+                              ? "Bắt đầu"
+                              : item.item === "2"
+                              ? "Trong quá trình"
+                              : "Hoàn thành"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                            {item.item == "1"
+                              ? "Bắt đầu"
+                              : item.item == "2"
+                              ? "Trong quá trình"
+                              : "Hoàn thành"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
             </ModalBody>
             <ModalFooter>
               <CButton
@@ -407,9 +464,10 @@ async remove(item){
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên voucher</th>
                      
-                        <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Hạn sử dụng</th>
+                        <th className="text-center">Mã voucher</th>
+                        <th className="text-center">Mã chiến dịch</th>
                         <th className="text-center">Nội dung</th>
+                        <th className="text-center">trạng thái</th>
                    
 
                         <th className="text-center"></th>
@@ -424,15 +482,27 @@ async remove(item){
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                
-                                <td className="text-center">
-                                {(new Date(item.create_date)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}                          
-                                </td>
-                                <td className="text-center">
-                                {(new Date(item.create_end)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}                          
-                                </td>
+                                <td className="text-center">{item.code}</td>
+                                <td className="text-center">{item.relCode}</td>     
                                 <td className="text-center">{item.content}</td>
-
+                                <td className="text-center">
+                                  <Tag
+                                    className="ant-tag"
+                                    color={
+                                      item.status === "1"
+                                        ? "#2db7f5"
+                                        : item.status === "2"
+                                        ? "#f50"
+                                        : "#87d068"
+                                    }
+                                  >
+                                    {item.status == "1"
+                                      ? "Bắt đầu"
+                                      : item.status == "2"
+                                      ? "Trong quá trình"
+                                      : "Hoàn thành"}
+                                  </Tag>
+                                </td>
                                 <td className="text-center">
                                   <CButton shape="rounded-pill" variant="ghost" color="info" style={styles.mgl5}  size="md" onClick={(e) => this.openEditVoucher(item)} >
                                     <FiEdit3 style={styles.icon} name="cilPencil" />

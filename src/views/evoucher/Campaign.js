@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import CIcon from "@coreui/icons-react";
+import moment from 'moment';
 import {
   Card,
   CardBody,
@@ -12,7 +13,7 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
-
+import Swal from "sweetalert2";
 import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
 
 import API_CONNECT from "../../functions/callAPI";
@@ -26,15 +27,20 @@ import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
+import { Tag, Divider } from "antd";
+import { DatePicker, Space } from "antd";
+import "antd/dist/antd.css";
+const dateFormat = 'YYYY-MM-DD';
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
-
+const { RangePicker } = DatePicker;
 class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      company_id: "621c2ec17abc0b6b4349d4e5",
       data: [],
       key: "",
       totalActive: 0,
@@ -63,7 +69,7 @@ class EndUser extends Component {
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
-      levelNormal: e.target.value,
+      status: e.target.value,
     });
   };
   async componentDidMount() {
@@ -105,30 +111,28 @@ class EndUser extends Component {
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
 
-  async getData () {
-   
-
-    // this.setState({ isLoading: true });
-   
-
- 
+  async getData() {
+    const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_CAMPAIGN;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .post(url).then((res) => {
-    
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        let val = res.data.data;
+        this.pagination(val);
+        this.setState({ dataApi: val });
 
-      let val = res.data.data;
-      this.pagination(val);
-      this.setState({ dataApi: val });
+        let active = 0;
 
-      let active = 0;
-
-      this.setState({ isLoading: false, totalActive: active });
-    });
-  };
+        this.setState({ isLoading: false, totalActive: active });
+      });
+  }
 
   onChange(key, val) {
     this.setState({ [key]: val });
@@ -195,11 +199,12 @@ class EndUser extends Component {
     this.setState({
       actionVoucher: "new",
       modalVoucher: true,
-      name :"",
-      from :"",
-      to :"",
-      description :"",
-      status :"1",
+      name: "",
+      from: "",
+      quantity: "",
+      to: "",
+      description: "",
+      status: "1",
     });
   }
   openEditVoucher(item) {
@@ -209,15 +214,17 @@ class EndUser extends Component {
       actionVoucher: "edit",
       modalVoucher: true,
       idCurrentUpdate: item._id,
-      name :"",
-      from :"",
-      to :"",
-      description :"",
-      status :"1",
+      quantity: item.quatinity,
+      name: item.name,
+      from: item.from.split("T")[0],
+      to: item.to.split("T")[0],
+      description: item.description,
+      status: item.status,
     });
   }
   async update() {
-    const { name, from, to, description, status, idCurrentUpdate } = this.state;
+    const { name, from, to, description, status, idCurrentUpdate, quantity } =
+      this.state;
 
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_CAMPAIGN;
@@ -225,7 +232,7 @@ class EndUser extends Component {
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .post(url, {
-      
+        quatinity: quantity,
         id: idCurrentUpdate,
         name,
         from,
@@ -234,23 +241,43 @@ class EndUser extends Component {
         status,
       })
       .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Cập nhật hoàn tất",
+          showConfirmButton: false,
+          timer: 700,
+        });
+        this.setState({
+          modalVoucher: false,
+        });
         this.getData();
       });
   }
   async add() {
-    const { name, from, to, description, status } = this.state;
+    const { name, from, to, description, status, company_id, quantity } =
+      this.state;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_CAMPAIGN;
     let url = baseUrlapi + baseUrlCallApi;
+
     await axios
       .post(url, {
+        quatinity: quantity,
+        company_id,
         name,
         from,
         to,
         description,
         status,
+        create_by: "1",
       })
       .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Thêm thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
         this.getData();
       });
   }
@@ -264,6 +291,12 @@ class EndUser extends Component {
         id: item._id,
       })
       .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Xóa thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
         this.getData();
       });
   }
@@ -271,7 +304,13 @@ class EndUser extends Component {
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-
+  handleDatePickerChange = (date, dateString, id) => {
+    this.setState({
+      from : dateString[0],
+      to : dateString[1],
+    })
+    
+ }
   getBadge(status) {
     switch (status) {
       case "Actived":
@@ -296,10 +335,8 @@ class EndUser extends Component {
       nameVoucher,
       modalVoucher,
     } = this.state;
+    const dateArray = [this.state.from, this.state.to]
     const arrLevel = [
-      {
-        item: "0",
-      },
       {
         item: "1",
       },
@@ -330,11 +367,35 @@ class EndUser extends Component {
                 // rows="5"
               />
 
+              {/* <TextFieldGroup
+                field="company"
+                label="Tên công ty"
+                value={this.state.company}
+                // error={errors.title}
+                onChange={(e) => this.setState({ company: e.target.value })}
+                // rows="5"
+              /> */}
+              
+              <TextFieldGroup
+                field="quantity"
+                label="Số lượng Voucher"
+                value={this.state.quantity}
+                // error={errors.title}
+                onChange={(e) => this.setState({ quantity: e.target.value })}
+                // rows="5"
+              />
+{/* <label>Ngày bắt đầu - kết thúc</label>
+              <Space direction="vertical" size={12}>
+                <RangePicker 
+                value={dateArray}   
+              onChange={this.handleDatePickerChange}
+                />
+              </Space> */}
               <TextFieldGroup
                 field="from"
                 label="Bắt đầu"
                 value={this.state.from}
-                type={"email"}
+                type={"date"}
                 // error={errors.title}
                 onChange={(e) => this.setState({ from: e.target.value })}
                 // rows="5"
@@ -343,7 +404,7 @@ class EndUser extends Component {
                 field="to"
                 label="Kết thúc"
                 value={this.state.to}
-                type={"email"}
+                type={"date"}
                 // error={errors.title}
                 onChange={(e) => this.setState({ to: e.target.value })}
                 // rows="5"
@@ -357,44 +418,7 @@ class EndUser extends Component {
                   this.setState({ description: e.target.value });
                 }}
               />
-               <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Độ ưu tiên:</CLabel>
-                {arrLevel != undefined ? (
-                  <CSelect
-                    onChange={async (e) => {
-                      this.changeLevel(e);
-                    }}
-                    custom
-                    size="sm"
-                    name="updateLevel"
-                    id="SelectLm"
-                  >
-                    {arrLevel.map((item, i) => {
-                      if (item.item === this.state.updateLevel) {
-                        return (
-                          <option selected key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "1"
-                              : item.item === "2"
-                              ? "2"
-                              : "3"}
-                          </option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item.item}>
-                            {item.item == "1"
-                              ? "1"
-                              : item.item == "2"
-                              ? "2"
-                              : "3"}
-                          </option>
-                        );
-                      }
-                    })}
-                  </CSelect>
-                ) : null}
-              </div> <div style={{ width: "100%" }} className="mt-3">
+              <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
@@ -411,20 +435,20 @@ class EndUser extends Component {
                         return (
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
-                              ? "1"
+                              ? "Bắt đầu"
                               : item.item === "2"
-                              ? "2"
-                              : "3"}
+                              ? "Trong quá trình"
+                              : "Hoàn thành"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
                             {item.item == "1"
-                              ? "1"
+                              ? "Bắt đầu"
                               : item.item == "2"
-                              ? "2"
-                              : "3"}
+                              ? "Trong quá trình"
+                              : "Hoàn thành"}
                           </option>
                         );
                       }
@@ -511,7 +535,6 @@ class EndUser extends Component {
 
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center"></th>
-
                       </tr>
                     </thead>
                     <tbody>
@@ -529,30 +552,36 @@ class EndUser extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  {new Date(
-                                    item.to
-                                  ).toLocaleDateString() +
+                                  {new Date(item.from).toLocaleDateString() +
                                     " " +
-                                    new Date(
-                                      item.to
-                                    ).toLocaleTimeString()}
+                                    new Date(item.from).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
-                                  {new Date(
-                                    item.to
-                                  ).toLocaleDateString() +
+                                  {new Date(item.to).toLocaleDateString() +
                                     " " +
-                                    new Date(
-                                      item.to
-                                    ).toLocaleTimeString()}
+                                    new Date(item.to).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
                                   {item.description}
                                 </td>
                                 <td className="text-center">
-                                  {item.status}
+                                  <Tag
+                                    className="ant-tag"
+                                    color={
+                                      item.status === "1"
+                                        ? "#2db7f5"
+                                        : item.status === "2"
+                                        ? "#f50"
+                                        : "#87d068"
+                                    }
+                                  >
+                                    {item.status == "1"
+                                      ? "Bắt đầu"
+                                      : item.status == "2"
+                                      ? "Trong quá trình"
+                                      : "Hoàn thành"}
+                                  </Tag>
                                 </td>
-                              
 
                                 <td className="text-center">
                                   <CButton
@@ -625,7 +654,7 @@ class EndUser extends Component {
                 field="voucher"
                 label="Số lượng Voucher"
                 value={this.state.voucher}
-                type={"email"}
+              
                 // error={errors.title}
                 onChange={(e) => this.setState({ voucher: e.target.value })}
                 // rows="5"

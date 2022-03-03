@@ -104,46 +104,25 @@ class EndUser extends Component {
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
 
-  getData = async () => {
+  async getData () {
 
-    let val = [
-        {
-            name : "Phong",
-            email : "phong@gmail.com",
-            number : "123456789",
-            usingVoucher:"Voucher 20k"
-        }
-    ]
-    this.pagination(val);
-    this.setState({ dataApi: val });
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_CAMPAIGN;
 
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
-
-
-    return 
-
-    this.setState({ isLoading: true });
-    let getUrl = "api/evoucher/getAll"
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: getUrl,
-      method: 'GET'
-    }).then((res)=>{
-      console.log("voucher",res.data.data)
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .post(url).then((res) => {
     
 
-    let val = res.data.data;
-    this.pagination(val);
-    this.setState({ dataApi: val });
+      let val = res.data.data;
+      this.pagination(val);
+      this.setState({ dataApi: val });
 
-    let active = 0
+      let active = 0;
 
-    this.setState({ isLoading: false, totalActive: active });
-  });
-  }
-
+      this.setState({ isLoading: false, totalActive: active });
+    });
+  };
  
 
   

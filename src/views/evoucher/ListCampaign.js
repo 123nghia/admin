@@ -28,6 +28,9 @@ import axios from 'axios'
 import md5 from 'md5'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import { Tag, Divider } from "antd";
+import { DatePicker, Space } from "antd";
+import "antd/dist/antd.css";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -37,6 +40,8 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      company_id: "621c2ec17abc0b6b4349d4e5",
+
       data: [],
       key: '',
       totalActive: 0,
@@ -103,47 +108,28 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
+  async getData() {
+    const { company_id } = this.state;
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_CAMPAIGN;
 
-  getData = async () => {
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        let val = res.data.data;
+        this.pagination(val);
+        this.setState({ dataApi: val });
 
-    let val = [
-        {
-            name : "Phong",
-            amountVoucher : "120",
-            amountJoin : "20",
-            create_date:"2021-03-18T21:11:57.239Z"
-        }
-    ]
-    this.pagination(val);
-    this.setState({ dataApi: val });
+        let active = 0;
 
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
-
-
-    return 
-
-    this.setState({ isLoading: true });
-    let getUrl = "api/evoucher/getAll"
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: getUrl,
-      method: 'GET'
-    }).then((res)=>{
-      console.log("voucher",res.data.data)
-    
-
-    let val = res.data.data;
-    this.pagination(val);
-    this.setState({ dataApi: val });
-
-    let active = 0
-
-    this.setState({ isLoading: false, totalActive: active });
-  });
+        this.setState({ isLoading: false, totalActive: active });
+      });
   }
-
  
 
   
@@ -431,10 +417,12 @@ async remove(item){
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên</th>
+                        <th className="text-center">Ngày tạo</th>
                        
                         <th className="text-center">Số lượng voucher</th>
-                        <th className="text-center">Số lượng người tham gia</th>
-                        <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">Mô tả</th>
+                        <th className="text-center">Trạng thái</th>
+
                    
 
                         
@@ -449,10 +437,29 @@ async remove(item){
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                <td className="text-center">{item.amountVoucher}</td>
-                                <td className="text-center">{item.amountJoin}</td>
                                 <td className="text-center">
-                                {(new Date(item.create_date)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}                          
+                                {(new Date(item.create_at)).toLocaleDateString() + ' ' + (new Date(item.create_at)).toLocaleTimeString()}                          
+                                </td>
+                                <td className="text-center">{item.amountJoin}</td>
+
+                                <td className="text-center">{item.description}</td>
+                                <td className="text-center">
+                                  <Tag
+                                    className="ant-tag"
+                                    color={
+                                      item.status === "1"
+                                        ? "#2db7f5"
+                                        : item.status === "2"
+                                        ? "#f50"
+                                        : "#87d068"
+                                    }
+                                  >
+                                    {item.status == "1"
+                                      ? "Bắt đầu"
+                                      : item.status == "2"
+                                      ? "Trong quá trình"
+                                      : "Hoàn thành"}
+                                  </Tag>
                                 </td>
                                 
                               </tr>
