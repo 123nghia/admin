@@ -102,7 +102,7 @@ class EndUser extends Component {
     var i,
       j,
       temparray,
-      chunk = 5;
+      chunk = 8;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -680,6 +680,7 @@ class EndUser extends Component {
                                         : "#87d068"
                                     }
                                   >
+                                  
                                     {item.status == "1"
                                       ? "Bắt đầu"
                                       : item.status == "2"

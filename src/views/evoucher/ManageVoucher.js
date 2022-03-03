@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import CIcon from "@coreui/icons-react";
-import moment from 'moment';
 import {
   Card,
   CardBody,
@@ -13,8 +12,13 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+
 import Swal from "sweetalert2";
-import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
+
+import { CButton, CLabel, CTextarea, CSelect, CRow, CCol } from "@coreui/react";
 
 import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
@@ -25,22 +29,20 @@ import axios from "axios";
 import md5 from "md5";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
-import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { Tag, Divider } from "antd";
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
-const dateFormat = 'YYYY-MM-DD';
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
-const { RangePicker } = DatePicker;
+
 class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
       company_id: "621c2ec17abc0b6b4349d4e5",
+      modalInfo : null,
       data: [],
       key: "",
       totalActive: 0,
@@ -91,7 +93,7 @@ class EndUser extends Component {
     var i,
       j,
       temparray,
-      chunk = 5;
+      chunk = 8;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -110,11 +112,11 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
-
   async getData() {
     const { company_id } = this.state;
+
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_CAMPAIGN;
+    let baseUrlCallApi = Constants.GET_VOUCHER;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
@@ -199,46 +201,48 @@ class EndUser extends Component {
     this.setState({
       actionVoucher: "new",
       modalVoucher: true,
-      name: "",
-      from: "",
-      quantity: "",
-      to: "",
+      idCurrentUpdate: "",
+      codeVoucher: "",
+      relCode: "",
       description: "",
-      status: "1",
+      status: "",
     });
   }
   openEditVoucher(item) {
-    const { name, from, to, description, status } = this.state;
-
     this.setState({
       actionVoucher: "edit",
       modalVoucher: true,
       idCurrentUpdate: item._id,
-      quantity: item.quatinity,
-      name: item.name,
-      from: item.from.split("T")[0],
-      to: item.to.split("T")[0],
-      description: item.description,
+      codeVoucher: item.code,
+      relCode: item.relCode,
+      description: item.content,
       status: item.status,
     });
   }
   async update() {
-    const { name, from, to, description, status, idCurrentUpdate, quantity } =
-      this.state;
-
+    const {
+      codeVoucher,
+      from,
+      to,
+      description,
+      status,
+      company_id,
+      relCode,
+      idCurrentUpdate,
+    } = this.state;
+    let baseUrlCallApi = Constants.UPDATE_VOUCHER;
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.UPDATE_CAMPAIGN;
-
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .post(url, {
-        quatinity: quantity,
+        code: codeVoucher,
+        relCode: relCode,
+
+        content: description,
+
+        status: status,
+        company_id: company_id,
         id: idCurrentUpdate,
-        name,
-        from,
-        to,
-        description,
-        status,
       })
       .then((res) => {
         Swal.fire({
@@ -254,22 +258,20 @@ class EndUser extends Component {
       });
   }
   async add() {
-    const { name, from, to, description, status, company_id, quantity } =
+    const { codeVoucher, from, to, description, status, company_id, relCode } =
       this.state;
+    let baseUrlCallApi = Constants.ADD_VOUCHER;
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.ADD_CAMPAIGN;
     let url = baseUrlapi + baseUrlCallApi;
-
     await axios
       .post(url, {
-        quatinity: quantity,
-        company_id,
-        name,
-        from,
-        to,
-        description,
-        status,
-        create_by: "1",
+        code: codeVoucher,
+        relCode: relCode,
+
+        content: description,
+
+        status: status,
+        company_id: company_id,
       })
       .then((res) => {
         Swal.fire({
@@ -282,8 +284,7 @@ class EndUser extends Component {
       });
   }
   async remove(item) {
-    let baseUrlCallApi = Constants.DELETE_CAMPAIGN;
-
+    let baseUrlCallApi = Constants.DELETE_VOUCHER;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
@@ -300,17 +301,31 @@ class EndUser extends Component {
         this.getData();
       });
   }
+  async delete() {
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.DELETE_END_USER,
+      method: "POST",
+      data: {
+        id: this.state.id,
+      },
+    });
+
+    if (res.status == 200) {
+      this.getData();
+
+      this.setState({ modalDelete: !this.state.modalDelete, delete: null });
+    } else {
+      alert("Xóa sản phẩm thất bại");
+      this.setState({ isLoading: false });
+    }
+  }
 
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  handleDatePickerChange = (date, dateString, id) => {
-    this.setState({
-      from : dateString[0],
-      to : dateString[1],
-    })
-    
- }
+
   getBadge(status) {
     switch (status) {
       case "Actived":
@@ -325,7 +340,90 @@ class EndUser extends Component {
         return "primary";
     }
   }
+  renderModalInfo(item) {
+    
+    let itemRender = (
+      <div>
+      <Modal isOpen={true} size="md">
+        <ModalHeader>Chi tiết Voucher</ModalHeader>
+        <ModalBody className="info_voucher">
+          <p>Mã voucher : <span>{item.code}</span></p>
+          <p>Mã công ty : <span>{item.code}</span></p>
+          <p>
+            Khởi tạo :
+            <span>
+              Lúc {" "}
+            {new Date(item.create_at).toLocaleTimeString() +
+              " Giờ " + " ngày " +
+              new Date(item.create_at).toLocaleDateString()}
+              </span>
+          </p>
+          <p>
+            Bắt đầu :
+            <span>
+            Lúc {" "}
+            {new Date(item.from).toLocaleTimeString() +
+              " Giờ " + " ngày " +
+              new Date(item.from).toLocaleDateString()}
+              </span>
+          </p>
+          <p>
+            Kết thúc :
+           
+              <span>
+              Lúc {" "}
+          {new Date(item.to).toLocaleTimeString() +
+            " Giờ " + " ngày " +
+            new Date(item.to).toLocaleDateString()}
+            </span>
+          </p>
+          <p>Nội dung voucher : <span>{item.content}</span></p>
+          <p>
+            Trạng thái :
+            <span>
+            <Tag
+              className="ant-tag"
+              color={
+                item.status === "1"
+                  ? "#2db7f5"
+                  : item.status === "2"
+                  ? "#f50"
+                  : "#87d068"
+              }
+            >
+              {item.status == "1"
+                ? "Bắt đầu"
+                : item.status == "2"
+                ? "Trong quá trình"
+                : "Hoàn thành"}
+            </Tag>
+            </span>
+          </p>
 
+          <p>Id voucher : <span>{item._id}</span></p>
+        </ModalBody>
+        <ModalFooter>
+          <CButton
+            color="secondary"
+            onClick={(e) =>
+              this.setState({
+                modalInfo: null,
+              })
+            }
+          >
+            Đóng
+          </CButton>
+        </ModalFooter>
+      </Modal>
+      </div>
+    );
+    this.setState({
+      modalInfo : itemRender
+    });
+    console.log(itemRender)
+
+    console.log(this.state.modalInfo)
+  }
   render() {
     const {
       data,
@@ -335,7 +433,6 @@ class EndUser extends Component {
       nameVoucher,
       modalVoucher,
     } = this.state;
-    const dateArray = [this.state.from, this.state.to]
     const arrLevel = [
       {
         item: "1",
@@ -359,54 +456,19 @@ class EndUser extends Component {
             </ModalHeader>
             <ModalBody>
               <TextFieldGroup
-                field="name"
-                label="Tên chiến dịch"
-                value={this.state.name}
+                field="codeVoucher"
+                label="Mã voucher"
+                value={this.state.codeVoucher}
                 // error={errors.title}
-                onChange={(e) => this.setState({ name: e.target.value })}
-                // rows="5"
-              />
-
-              {/* <TextFieldGroup
-                field="company"
-                label="Tên công ty"
-                value={this.state.company}
-                // error={errors.title}
-                onChange={(e) => this.setState({ company: e.target.value })}
-                // rows="5"
-              /> */}
-              
-              <TextFieldGroup
-                field="quantity"
-                label="Số lượng Voucher"
-                value={this.state.quantity}
-                // error={errors.title}
-                onChange={(e) => this.setState({ quantity: e.target.value })}
-                // rows="5"
-              />
-{/* <label>Ngày bắt đầu - kết thúc</label>
-              <Space direction="vertical" size={12}>
-                <RangePicker 
-                value={dateArray}   
-              onChange={this.handleDatePickerChange}
-                />
-              </Space> */}
-              <TextFieldGroup
-                field="from"
-                label="Bắt đầu"
-                value={this.state.from}
-                type={"date"}
-                // error={errors.title}
-                onChange={(e) => this.setState({ from: e.target.value })}
+                onChange={(e) => this.setState({ codeVoucher: e.target.value })}
                 // rows="5"
               />
               <TextFieldGroup
-                field="to"
-                label="Kết thúc"
-                value={this.state.to}
-                type={"date"}
+                field="relCode"
+                label="Mã chiến dịch"
+                value={this.state.relCode}
                 // error={errors.title}
-                onChange={(e) => this.setState({ to: e.target.value })}
+                onChange={(e) => this.setState({ relCode: e.target.value })}
                 // rows="5"
               />
               <label className="control-label">Mô tả:</label>
@@ -479,12 +541,13 @@ class EndUser extends Component {
               </CButton>
             </ModalFooter>
           </Modal>
+                {this.state.modalInfo}
           <Row>
             <Col>
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Quản lý chiến dịch
+                    Quản lý Voucher
                   </i>
 
                   <div class="flex mt-3">
@@ -527,13 +590,13 @@ class EndUser extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên</th>
+                        <th className="text-center">Tên voucher</th>
 
-                        <th className="text-center">Bắt đầu</th>
-                        <th className="text-center">Kết thúc</th>
-                        <th className="text-center">Mô tả</th>
+                        <th className="text-center">Mã voucher</th>
+                        <th className="text-center">Mã chiến dịch</th>
+                        <th className="text-center">Nội dung</th>
+                        <th className="text-center">trạng thái</th>
 
-                        <th className="text-center">Trạng thái</th>
                         <th className="text-center"></th>
                       </tr>
                     </thead>
@@ -551,19 +614,9 @@ class EndUser extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                <td className="text-center">
-                                  {new Date(item.from).toLocaleDateString() +
-                                    " " +
-                                    new Date(item.from).toLocaleTimeString()}
-                                </td>
-                                <td className="text-center">
-                                  {new Date(item.to).toLocaleDateString() +
-                                    " " +
-                                    new Date(item.to).toLocaleTimeString()}
-                                </td>
-                                <td className="text-center">
-                                  {item.description}
-                                </td>
+                                <td className="text-center">{item.code}</td>
+                                <td className="text-center">{item.relCode}</td>
+                                <td className="text-center">{item.content}</td>
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
@@ -582,36 +635,53 @@ class EndUser extends Component {
                                       : "Hoàn thành"}
                                   </Tag>
                                 </td>
-
                                 <td className="text-center">
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openEditVoucher(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => {
-                                      this.remove(item);
-                                    }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
+                                  <div class="flex">
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="outline"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      className="flex-a-center "
+                                      onClick={() =>
+                                        this.renderModalInfo(item)
+                                      }
+                                    >
+                                      <BsSearch className="mr-1" />
+                                      Xem chi tiết
+                                    </CButton>
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      onClick={(e) =>
+                                        this.openEditVoucher(item)
+                                      }
+                                    >
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        name="cilPencil"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.remove(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
+                                    </CButton>
+                                  </div>
                                 </td>
                               </tr>
                             );
@@ -642,23 +712,77 @@ class EndUser extends Component {
             </ModalHeader>
             <ModalBody>
               <TextFieldGroup
-                field="name"
-                label="Tên chiến dịch"
-                value={this.state.name}
+                field="username"
+                label="Tên đăng nhập"
+                value={this.state.username}
+                placeholder={"Tên đăng nhập"}
                 // error={errors.title}
-                onChange={(e) => this.setState({ name: e.target.value })}
+                onChange={(e) => this.onChange("username", e.target.value)}
                 // rows="5"
               />
 
               <TextFieldGroup
-                field="voucher"
-                label="Số lượng Voucher"
-                value={this.state.voucher}
-              
+                field="name"
+                label="Email"
+                value={this.state.email}
+                placeholder={"Email"}
+                type={"email"}
                 // error={errors.title}
-                onChange={(e) => this.setState({ voucher: e.target.value })}
+                onChange={(e) => this.onChange("email", e.target.value)}
                 // rows="5"
               />
+
+              <TextFieldGroup
+                field="phone"
+                label="Số điện thoại"
+                value={this.state.phone}
+                placeholder={"Số điện thoại"}
+                // error={errors.title}
+                onChange={(e) => this.onChange("phone", e.target.value)}
+                // rows="5"
+              />
+              <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Cấp độ:</CLabel>
+                {arrLevel !== undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevel(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="levelNormal"
+                    id="SelectLm"
+                  >
+                    {arrLevel.map((item, i) => {
+                      if (item.item === this.state.levelNormal) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "0"
+                              ? "Lên lịch"
+                              : item.item === "1"
+                              ? "Chưa hẹn"
+                              : item.item === "2"
+                              ? "Đã gặp"
+                              : "Hoàn tất"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                            {item.item === "0"
+                              ? "Lên lịch"
+                              : item.item === "1"
+                              ? "Chưa hẹn"
+                              : item.item === "2"
+                              ? "Đã gặp"
+                              : "Hoàn tất"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
             </ModalBody>
             <ModalFooter>
               <CButton

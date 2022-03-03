@@ -12,6 +12,7 @@ import {
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import Swal from "sweetalert2";
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 
 import {
   CButton,
@@ -92,7 +93,7 @@ class EndUser extends Component {
   }
 
   pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
+    var i, j, temparray, chunk = 8;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -325,7 +326,90 @@ async remove(item){
       default: return 'primary'
     }
   }
+  renderModalInfo(item) {
+    
+    let itemRender = (
+      <div>
+      <Modal isOpen={true} size="md">
+        <ModalHeader>Chi tiết Voucher</ModalHeader>
+        <ModalBody className="info_voucher">
+          <p>Mã voucher : <span>{item.code}</span></p>
+          <p>Mã công ty : <span>{item.code}</span></p>
+          <p>
+            Khởi tạo :
+            <span>
+              Lúc {" "}
+            {new Date(item.create_at).toLocaleTimeString() +
+              " Giờ " + " ngày " +
+              new Date(item.create_at).toLocaleDateString()}
+              </span>
+          </p>
+          <p>
+            Bắt đầu :
+            <span>
+            Lúc {" "}
+            {new Date(item.from).toLocaleTimeString() +
+              " Giờ " + " ngày " +
+              new Date(item.from).toLocaleDateString()}
+              </span>
+          </p>
+          <p>
+            Kết thúc :
+           
+              <span>
+              Lúc {" "}
+          {new Date(item.to).toLocaleTimeString() +
+            " Giờ " + " ngày " +
+            new Date(item.to).toLocaleDateString()}
+            </span>
+          </p>
+          <p>Nội dung voucher : <span>{item.content}</span></p>
+          <p>
+            Trạng thái :
+            <span>
+            <Tag
+              className="ant-tag"
+              color={
+                item.status === "1"
+                  ? "#2db7f5"
+                  : item.status === "2"
+                  ? "#f50"
+                  : "#87d068"
+              }
+            >
+              {item.status == "1"
+                ? "Bắt đầu"
+                : item.status == "2"
+                ? "Trong quá trình"
+                : "Hoàn thành"}
+            </Tag>
+            </span>
+          </p>
 
+          <p>Id voucher : <span>{item._id}</span></p>
+        </ModalBody>
+        <ModalFooter>
+          <CButton
+            color="secondary"
+            onClick={(e) =>
+              this.setState({
+                modalInfo: null,
+              })
+            }
+          >
+            Đóng
+          </CButton>
+        </ModalFooter>
+      </Modal>
+      </div>
+    );
+    this.setState({
+      modalInfo : itemRender
+    });
+    console.log(itemRender)
+
+    console.log(this.state.modalInfo)
+  }
   render() {
     const { data, arrPagination, key,phoneVoucher,nameVoucher ,modalVoucher} = this.state;
     const arrLevel = [
@@ -436,12 +520,13 @@ async remove(item){
               </CButton>
             </ModalFooter>
           </Modal>
+          {this.state.modalInfo}
           <Row>
             <Col>
               <Card>
                 <CardHeader>
                 
-                  <i className="fa fa-align-justify title_header">Danh sách Evoucher</i>
+                  <i className="fa fa-align-justify title_header">Danh sách Voucher</i>
                  
                   
                   <div class="flex mt-3"> 
@@ -455,9 +540,9 @@ async remove(item){
                           </div>
                 </CardHeader>
                 <CardBody>
-                <div class="text-center">
+                {/* <div class="text-center">
                   <CButton color="primary" style={{ marginBottom: "10px" }} size="md" onClick={()=>this.openVoucher()}>Thêm mới</CButton>
-                  </div>
+                  </div> */}
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
                     <thead className="thead-light">
                       <tr>
@@ -469,8 +554,9 @@ async remove(item){
                         <th className="text-center">Nội dung</th>
                         <th className="text-center">trạng thái</th>
                    
-
                         <th className="text-center"></th>
+
+                 
                       </tr>
                     </thead>
                     <tbody>
@@ -504,12 +590,20 @@ async remove(item){
                                   </Tag>
                                 </td>
                                 <td className="text-center">
-                                  <CButton shape="rounded-pill" variant="ghost" color="info" style={styles.mgl5}  size="md" onClick={(e) => this.openEditVoucher(item)} >
-                                    <FiEdit3 style={styles.icon} name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton shape="rounded-pill" variant="ghost" color="danger" style={styles.mgl5} onClick={(e) => { this.remove(item) }}>
-                                    <BsTrash style={styles.icon} className="icon" name="cilTrash" />
-                                  </CButton>
+                                <CButton
+                                      shape="rounded-pill"
+                                      variant="outline"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      className="flex-a-center "
+                                      onClick={() =>
+                                        this.renderModalInfo(item)
+                                      }
+                                    >
+                                      <BsSearch className="mr-1" />
+                                      Xem chi tiết
+                                    </CButton>
                                 </td>
                               </tr>
                             );

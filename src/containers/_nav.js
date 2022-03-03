@@ -9,6 +9,11 @@ import { BsCardList } from "@react-icons/all-files/bs/BsCardList";
 import { CgUserList } from "@react-icons/all-files/cg/CgUserList";
 import { BsCardChecklist } from "@react-icons/all-files/bs/BsCardChecklist";
 import { BsImageFill } from "@react-icons/all-files/bs/BsImageFill";
+import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill";
+import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
+import { AiFillSetting } from "@react-icons/all-files/ai/AiFillSetting";
+
+
 
 
 
@@ -38,6 +43,7 @@ const content = {
   reward_type: "Danh sách các loại khuyến mãi",
   update_package: "Nâng cấp gói",
   contact: "Danh sach liên hệ",
+  none : "..."
 }
 
 const _navDashboard = [
@@ -358,37 +364,25 @@ const _navOrther = [
     _tag: 'CSidebarNavItem',
     name: 'Quản lý chiến dịch',
     to: '/manage-campaign',
-    icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
-      text: <CTooltip placement={"right"} content={content.customer}>
+      text: <CTooltip placement={"right"} content={content.none}>
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách Chiến dịch tham gia',
-    to: '/list-campaign',
-    icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.customer}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
+  
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách Voucher',
     to: '/list-evoucher',
-    icon: <BsCardList style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
-      text: <CTooltip placement={"right"} content={content.customer}>
+      text: <CTooltip placement={"right"} content={content.none}>
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
@@ -397,11 +391,11 @@ const _navOrther = [
     _tag: 'CSidebarNavItem',
     name: 'Danh sách người sử dụng',
     to: '/list-user-evoucher',
-    icon: <CgUserList style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    icon: <HiUserGroup style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
-      text: <CTooltip placement={"right"} content={content.customer}>
+      text: <CTooltip placement={"right"} content={content.none}>
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
@@ -414,7 +408,49 @@ const _navOrther = [
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
-      text: <CTooltip placement={"right"} content={content.customer}>
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách Chiến dịch tham gia',
+    to: '/list-campaign',
+    icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý Voucher',
+    to: '/manage-voucher',
+    icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Thống kê',
+    to: '/evoucher-statistics',
+    icon: <BsFillBarChartFill style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }

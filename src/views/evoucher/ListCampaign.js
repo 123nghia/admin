@@ -9,9 +9,12 @@ import {
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
+import ModalAnt from './ModalAnt';
+import Swal from "sweetalert2";
 
 import {
   CButton,
+  CTextarea,
   CLabel,
   CSelect,
   CRow,
@@ -30,6 +33,9 @@ import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import { Tag, Divider } from "antd";
 import { DatePicker, Space } from "antd";
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+
+
 import "antd/dist/antd.css";
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -41,14 +47,23 @@ class EndUser extends Component {
     super(props);
     this.state = {
       company_id: "621c2ec17abc0b6b4349d4e5",
-
+      company_id_search :"",
       data: [],
+      dataVoucher: [],
+      arrPaginationVoucher: [],
+      indexPageVoucher: 0,
+
+
+      hiddenVoucher: false,
+
+      actionVoucherEditing : "update",
       key: '',
       totalActive: 0,
       modalCom: false,
       updated: '',
       dataApi: [],
       hidden: false,
+
       action: 'new',
       email: "",
       modalVoucher: false,
@@ -64,20 +79,18 @@ class EndUser extends Component {
       user: localStorage.getItem('user'),
       isLoading: false,
       idCurrentUpdate : null,
-      levelNormal : "0"
+      levelNormal : "0",
+      modalVoucherEditing : false
     };
   }
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
-        levelNormal: e.target.value,
+        status: e.target.value,
     });
   };
   async componentDidMount() {
-    const { type } = this.state;
-
-    this.getData()
-
+    this.getData();
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -89,7 +102,7 @@ class EndUser extends Component {
   }
 
   pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
+    var i, j, temparray, chunk = 8;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -108,6 +121,8 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
+  
+  
   async getData() {
     const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
@@ -130,7 +145,49 @@ class EndUser extends Component {
         this.setState({ isLoading: false, totalActive: active });
       });
   }
- 
+  paginationVoucher(dataApi) {
+    var i, j, temparray, chunk = 8;
+    var arrTotal = [];
+    for (i = 0, j = dataApi.length; i < j; i += chunk) {
+      temparray = dataApi.slice(i, i + chunk);
+      arrTotal.push(temparray);
+    }
+
+    if (arrTotal.length == 0) {
+      this.setState({
+        hiddenVoucher: false
+      })
+    } else {
+      this.setState({
+        hiddenVoucher: true
+      })
+    }
+
+    this.setState({ arrPaginationVoucher: arrTotal, dataVoucher: arrTotal[0] });
+  }
+  async getDataVoucher(company_id_search) {
+    
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_VOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id : company_id_search,
+        },
+      })
+      .then((res) => {
+        let val = res.data.data;
+        
+        this.paginationVoucher(val);
+        this.setState({ dataApiVoucher: val });
+
+        let active = 0;
+
+        this.setState({ isLoading: false, totalActiveVoucher: active });
+      });
+  }
 
   
 
@@ -138,145 +195,122 @@ class EndUser extends Component {
     this.setState({ [key]: val })
   }
 
-  async openUpdate(item) {
-    this.setState({
-      modalCom: !this.state.modalCom,
-      action: "update",
-      email: item.email,
-      phone: item.phone,
-      username: item.username,
-      id: item['_id']
-    })
-  }
+ 
 
-  async updateUser() {
-    const { email, phone, password, username } = this.state
-
-    if (email == null || email == '' ||
-      phone == null || phone == '' ||
-      username == null || username == '') {
-      alert("Hãy nhập đầy đủ trường !!!");
-      return
-    }
-
-    const body = {
-      email: email,
-      phone: phone,
-      username: username,
-      id: this.state.id,
-    }
-
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_END_USER,
-      method: 'POST',
-      data: body
-    });
-
-    if (res.status == 200) {
-
-      this.getData()
-
-      this.setState({ modalCom: !this.state.modalCom })
-    } else {
-      alert("Cập nhật thất bại");
-      this.setState({ isLoading: false });
-    }
-  }
-
-  openDelete = (item) => {
-    this.setState({
-      modalDelete: !this.state.modalDelete,
-      id: item._id
-    });
-  };
+  
 openVoucher(){
   this.setState({
-    actionVoucher : "new",
-    modalVoucher : true,
+    actionVoucherEditing : "new",
+    modalVoucherEditing : true,
     idCurrentUpdate : "",
-    nameVoucher : "",
-    phoneVoucher : "",
-    levelNormal : "",
+    codeVoucher : "",
+    relCode : "",
+    description : "",
+    status :"",
   });
 };
-openEditVoucher(item){
-  const {nameVoucher , phoneVoucher,idCurrentUpdate} = this.state
+openEdit(item){
+  if(item.company_id){
+    this.setState({
+      company_id_search : item.company_id
+    },()=>{
+      this.getDataVoucher(this.state.company_id_search)
+    })
+  }else{
+    this.getDataVoucher(this.state.company_id_search)
+  }
   this.setState({
     actionVoucher : "edit",
     modalVoucher : true,
     idCurrentUpdate : item._id,
-    nameVoucher : item.fullName,
-    phoneVoucher : item.phoneNumber,
-    levelNormal : item.status
+    codeVoucher : item.code,
+    relCode : item.relCode,
+    description : item.content,
+    status :item.status,
+  })
+};
+openEditVoucher(item){
+ 
+  this.setState({
+    actionVoucherEditing : "edit",
+    modalVoucherEditing : true,
+    idCurrentUpdate : item._id,
+    codeVoucher : item.code,
+    relCode : item.relCode,
+    description : item.content,
+    status :item.status,
   })
 };
 async update(){
-  const {
-    nameVoucher,
-    phoneVoucher,
-    idCurrentUpdate,
-    levelNormal,
-  } = this.state;
+  const { codeVoucher,company_id_search, from, to, description, status, company_id, relCode, idCurrentUpdate } =
+  this.state;
+  let baseUrlCallApi = Constants.UPDATE_VOUCHER;
   var baseUrlapi = Constants.BASE_URL;
-  let url = baseUrlapi + "api/evoucher/update";
+  let url = baseUrlapi + baseUrlCallApi;
     await axios.post(url,{
-      fullName :nameVoucher,
-      phoneNumber : phoneVoucher,
+      code :codeVoucher,
+      relCode : relCode,
+   
+      content: description,
+                
+                status: status,
+                company_id: company_id_search,
       id : idCurrentUpdate,
-      status : levelNormal,
+    
     }).then((res) => {
-      this.getData();
+      Swal.fire({
+        icon: "success",
+        title: "Cập nhật hoàn tất",
+        showConfirmButton: false,
+        timer: 700,
+      });
+      this.setState({
+        modalVoucherEditing: false,
+      });
+     this.getDataVoucher(this.state.company_id_search)
     });
 }
 async add(){
-  const {
-    nameVoucher,
-    phoneVoucher,
-    levelNormal
-  } = this.state;
+  const { codeVoucher, from, to, description, status, company_id_search, relCode } =
+  this.state;
+  let baseUrlCallApi = Constants.ADD_VOUCHER;
   var baseUrlapi = Constants.BASE_URL;
-  let url = baseUrlapi + "api/evoucher/add";
+  let url = baseUrlapi + baseUrlCallApi;
     await axios.post(url,{
-      fullName :nameVoucher,
-      phoneNumber : phoneVoucher,
-      status : levelNormal
+      code :codeVoucher,
+      relCode : relCode,
+   
+      content: description,
+                
+                status: status,
+                company_id: company_id_search
     }).then((res) => {
-      this.getData();
+      Swal.fire({
+        icon: "success",
+        title: "Thêm thành công",
+        showConfirmButton: false,
+        timer: 700,
+      });
+      this.getDataVoucher(this.state.company_id_search)
     });
 }
 async remove(item){
+  let baseUrlCallApi = Constants.DELETE_VOUCHER;
   var baseUrlapi = Constants.BASE_URL;
-  let url = baseUrlapi + "api/evoucher/delete";
+  let url = baseUrlapi + baseUrlCallApi;
     await axios.post(url,{
       id : item._id
     }).then((res) => {
-      this.getData();
+      Swal.fire({
+        icon: "success",
+        title: "Xóa thành công",
+        showConfirmButton: false,
+        timer: 700,
+      });
+     this.getDataVoucher(this.state.company_id_search)
     });
 }
-  async delete() {
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.DELETE_END_USER,
-      method: 'POST',
-      data: {
-        "id": this.state.id
-      }
-    });
-
-    if (res.status == 200) {
-
-      this.getData()
-
-      this.setState({ modalDelete: !this.state.modalDelete, delete: null })
-    } else {
-      alert("Xóa sản phẩm thất bại");
-      this.setState({ isLoading: false });
-    }
-
-  }
+  
 
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -293,11 +327,9 @@ async remove(item){
   }
 
   render() {
-    const { data, arrPagination, key,phoneVoucher,nameVoucher ,modalVoucher} = this.state;
+    const { data,indexPageVoucher, arrPagination,dataVoucher,arrPaginationVoucher, key,phoneVoucher,nameVoucher ,modalVoucher} = this.state;
     const arrLevel = [
-      {
-        item: "0",
-      },
+    
       {
         item: "1",
       },
@@ -311,68 +343,163 @@ async remove(item){
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-         <Modal isOpen={this.state.modalVoucher} className={this.props.className}>
-            <ModalHeader>
-              {this.state.actionVoucher == "new" ? `Tạo mới` : `Cập nhật`}
+         <Modal isOpen={this.state.modalVoucher} size="lg">
+            <ModalHeader >
+              {this.state.actionVoucher == "new" ? `Danh sách Voucher` : `Danh sách Voucher`}
             </ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="nameVoucher"
-                label="Tên đăng nhập"
-                value={this.state.nameVoucher}
-                placeholder={"Tên đăng nhập"}
-                // error={errors.title}
-                onChange={(e) => this.onChange("nameVoucher", e.target.value)}
-                // rows="5"
-              />
-
+           
+            <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash" >
+                    <thead className="thead-light">
+                      <tr>
+                        <th className="text-center">STT.</th>
+                        
+                     
+                        <th className="text-center">Mã voucher</th>
+ 
+                        <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">người sử dụng</th>
         
+                        <th className="text-center">trạng thái</th>
+                   
 
-              <TextFieldGroup
-                field="phoneVoucher"
-                label="Số điện thoại"
-                value={this.state.phoneVoucher}
-                placeholder={"Số điện thoại"}
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                      {
+                        dataVoucher != undefined ?
+                        dataVoucher.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                     
+                                <td className="text-center">{item.code}</td>
+                                <td className="text-center">
+                                {(new Date(item.create_at)).toLocaleDateString() + ' ' + (new Date(item.create_at)).toLocaleTimeString()}                          
+                                </td>
+                                <td className="text-center">{item.user ? item.user : "Chưa có"}</td>
+
+                                <td className="text-center">
+                                  <Tag
+                                    className="ant-tag"
+                                    color={
+                                      item.status === "1"
+                                        ? "#2db7f5"
+                                        : item.status === "2"
+                                        ? "#f50"
+                                        : "#87d068"
+                                    }
+                                  >
+                                    {item.status == "1"
+                                      ? "Bắt đầu"
+                                      : item.status == "2"
+                                      ? "Trong quá trình"
+                                      : "Hoàn thành"}
+                                  </Tag>
+                                </td>
+                                
+                              </tr>
+                            );
+                          }) : ""
+                      }
+                    </tbody>
+                  </table>
+                  <div style={{ float: 'right' }}>
+                <Pagination count={arrPaginationVoucher.length} color="primary" onChange={(e, v) => {
+                  this.setState({ dataVoucher: arrPaginationVoucher[v - 1], indexPageVoucher: v - 1 })
+                }} />
+              </div>
+            </ModalBody>
+            <ModalFooter>
+             
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({ modalVoucher: !this.state.modalVoucher })
+                }
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
+          <Modal isOpen={this.state.modalVoucherEditing} className={this.props.className}>
+            <ModalHeader>
+              {this.state.actionVoucherEditing == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
+            <ModalBody>
+            <TextFieldGroup
+                field="codeVoucher"
+                label="Mã voucher"
+                value={this.state.codeVoucher}
+                
                 // error={errors.title}
-                onChange={(e) => this.onChange("phoneVoucher", e.target.value)}
-                // rows="5"
+                onChange={e => this.setState({codeVoucher : e.target.value})}
+              // rows="5"
               />
-              <div style={{ width: "100%" }} className="mt-3">
+ <TextFieldGroup
+                field="relCode"
+                label="Mã chiến dịch"
+                value={this.state.relCode}
+                
+                // error={errors.title}
+                onChange={e => this.setState({relCode : e.target.value})}
+              // rows="5"
+              />
+            <label className="control-label">Mô tả:</label>
+            <CTextarea
+              name="description"
+              rows="4"
+              value={this.state.description}
+              onChange={(e) => {
+                this.setState({ description: e.target.value });
+              }}
+            />
+            <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
-                {arrLevel !== undefined ? (
+                {arrLevel != undefined ? (
                   <CSelect
                     onChange={async (e) => {
                       this.changeLevel(e);
                     }}
                     custom
                     size="sm"
-                    name="levelNormal"
+                    name="status"
                     id="SelectLm"
                   >
                     {arrLevel.map((item, i) => {
-                      if (item.item === this.state.levelNormal) {
+                      if (item.item === this.state.status) {
                         return (
                           <option selected key={i} value={item.item}>
-                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Đã hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
+                            {item.item === "1"
+                              ? "Bắt đầu"
+                              : item.item === "2"
+                              ? "Trong quá trình"
+                              : "Hoàn thành"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Đã hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
+                            {item.item == "1"
+                              ? "Bắt đầu"
+                              : item.item == "2"
+                              ? "Trong quá trình"
+                              : "Hoàn thành"}
                           </option>
                         );
                       }
                     })}
                   </CSelect>
                 ) : null}
-              </div>   
+              </div>
             </ModalBody>
             <ModalFooter>
               <CButton
                 color="primary"
                 onClick={(e) => {
-                  this.state.actionVoucher === "new"
+                  this.state.actionVoucherEditing === "new"
                     ? this.add()
                     : this.update();
                 }}
@@ -383,7 +510,7 @@ async remove(item){
               <CButton
                 color="secondary"
                 onClick={(e) =>
-                  this.setState({ modalVoucher: !this.state.modalVoucher })
+                  this.setState({ modalVoucherEditing: !this.state.modalVoucherEditing })
                 }
               >
                 Đóng
@@ -440,7 +567,25 @@ async remove(item){
                                 <td className="text-center">
                                 {(new Date(item.create_at)).toLocaleDateString() + ' ' + (new Date(item.create_at)).toLocaleTimeString()}                          
                                 </td>
-                                <td className="text-center">{item.amountJoin}</td>
+                                <td className="text-center">
+                              <div className="flex-center">
+                               <p className="mr-2" style={{ margin : "auto"}}>
+                                  {item.quatinity ? item.quatinity : "0"}
+                                  </p>
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="outline"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    size="md"
+                                    className="flex-a-center "
+                                    onClick={(e) => this.openEdit(item)}
+                                  >
+                                  <BsSearch className="mr-1" />
+                                  Xem
+                                  </CButton>
+                                  </div>
+                                  </td>
 
                                 <td className="text-center">{item.description}</td>
                                 <td className="text-center">
@@ -478,86 +623,8 @@ async remove(item){
             </Col>
           </Row>
 
-          <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
-            <ModalBody>
-              <TextFieldGroup
-                field="username"
-                label="Tên đăng nhập"
-                value={this.state.username}
-                placeholder={"Tên đăng nhập"}
-                // error={errors.title}
-                onChange={e => this.onChange("username", e.target.value)}
-              // rows="5"
-              />
+       
 
-              <TextFieldGroup
-                field="name"
-                label="Email"
-                value={this.state.email}
-                placeholder={"Email"}
-                type={"email"}
-                // error={errors.title}
-                onChange={e => this.onChange("email", e.target.value)}
-              // rows="5"
-              />
-
-              <TextFieldGroup
-                field="phone"
-                label="Số điện thoại"
-                value={this.state.phone}
-                placeholder={"Số điện thoại"}
-                // error={errors.title}
-                onChange={e => this.onChange("phone", e.target.value)}
-              // rows="5"
-              />
-<div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Cấp độ:</CLabel>
-                {arrLevel !== undefined ? (
-                  <CSelect
-                    onChange={async (e) => {
-                      this.changeLevel(e);
-                    }}
-                    custom
-                    size="sm"
-                    name="levelNormal"
-                    id="SelectLm"
-                  >
-                    {arrLevel.map((item, i) => {
-                      if (item.item === this.state.levelNormal) {
-                        return (
-                          <option selected key={i} value={item.item}>
-                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Chưa hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
-                          </option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item.item}>
-                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Chưa hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
-                          </option>
-                        );
-                      }
-                    })}
-                  </CSelect>
-                ) : null}
-              </div>           
-            </ModalBody>
-            <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</CButton>
-            </ModalFooter>
-          </Modal>
-
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
-            <ModalBody>
-              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
-            </ModalBody>
-            <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
-            </ModalFooter>
-          </Modal>
         </div>
       );
     }
