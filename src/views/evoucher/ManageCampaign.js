@@ -511,7 +511,84 @@ class EndUser extends Component {
         return "primary";
     }
   }
+  renderModalInfo(item) {
+    
+    let itemRender = (
+      <div>
+      <Modal isOpen={true} size="md">
+        <ModalHeader>Chi tiết Voucher</ModalHeader>
+        <ModalBody className="info_voucher">
+          <p>Mã voucher : <span>{item.code}</span></p>
+          <p>Mã công ty : <span>{item.code}</span></p>
+          <p>
+            Khởi tạo :
+            <span>
+              Lúc {" "}
+            {new Date(item.create_at).toLocaleTimeString() +
+              " giờ " + " ngày " +
+              new Date(item.create_at).toLocaleDateString()}
+              </span>
+          </p>
+          <p>
+            Bắt đầu :
+            <span>
+            Ngày {" "}
+              {new Date(item.from).toLocaleDateString()}
+              </span>
+          </p>
+          <p>
+            Kết thúc :
+           
+              <span>
+              Ngày {" "}
+            {new Date(item.to).toLocaleDateString()}
+            </span>
+          </p>
+          <p>Nội dung voucher : <span>{item.content}</span></p>
+          <p>
+            Trạng thái :
+            <span>
+            <Tag
+              className="ant-tag"
+              color={
+                item.status === "1"
+                  ? "#2db7f5"
+                  : item.status === "2"
+                  ? "#f50"
+                  : "#87d068"
+              }
+            >
+              {item.status == "1"
+                ? "Bắt đầu"
+                : item.status == "2"
+                ? "Trong quá trình"
+                : "Hoàn thành"}
+            </Tag>
+            </span>
+          </p>
 
+          <p>Id voucher : <span>{item._id}</span></p>
+        </ModalBody>
+        <ModalFooter>
+          <CButton
+            color="secondary"
+            onClick={(e) =>
+              this.setState({
+                modalInfo: null,
+              })
+            }
+          >
+            Đóng
+          </CButton>
+        </ModalFooter>
+      </Modal>
+      </div>
+    );
+    this.setState({
+      modalInfo : itemRender
+    });
+    
+  }
   render() {
     const {
       data,
@@ -667,8 +744,9 @@ class EndUser extends Component {
               </CButton>
             </ModalFooter>
           </Modal>
-          <Modal isOpen={this.state.modalVoucherEditing} size="lg">
-            <ModalHeader>
+          {this.state.modalInfo}
+          <Modal isOpen={this.state.modalVoucherEditing} size="xl">
+            <ModalHeader >
               {this.state.actionVoucherEditing == "new"
                 ? `Danh sách Voucher`
                 : `Danh sách Voucher`}
@@ -745,31 +823,48 @@ class EndUser extends Component {
                               </Tag>
                             </td>
                             <td className="text-center">
-                              <CButton
-                                shape="rounded-pill"
-                                variant="ghost"
-                                color="info"
-                                style={styles.mgl5}
-                                size="md"
-                                onClick={(e) => this.openUpdateVoucher(item)}
-                              >
-                                <FiEdit3 style={styles.icon} name="cilPencil" />
-                              </CButton>{" "}
-                              <CButton
-                                shape="rounded-pill"
-                                variant="ghost"
-                                color="danger"
-                                style={styles.mgl5}
-                                onClick={(e) => {
-                                  this.removeVoucher(item);
-                                }}
-                              >
-                                <BsTrash
-                                  style={styles.icon}
-                                  className="icon"
-                                  name="cilTrash"
-                                />
-                              </CButton>
+                              <div class="flex">
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="outline"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  size="md"
+                                  className="flex-a-center "
+                                  onClick={() => this.renderModalInfo(item)}
+                                >
+                                  <BsSearch className="mr-1" />
+                                  Xem chi tiết
+                                </CButton>
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  size="md"
+                                  onClick={(e) => this.openUpdateVoucher(item)}
+                                >
+                                  <FiEdit3
+                                    style={styles.icon}
+                                    name="cilPencil"
+                                  />
+                                </CButton>{" "}
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="danger"
+                                  style={styles.mgl5}
+                                  onClick={(e) => {
+                                    this.removeVoucher(item);
+                                  }}
+                                >
+                                  <BsTrash
+                                    style={styles.icon}
+                                    className="icon"
+                                    name="cilTrash"
+                                  />
+                                </CButton>
+                              </div>
                             </td>
                           </tr>
                         );
@@ -791,7 +886,6 @@ class EndUser extends Component {
               </div>
             </ModalBody>
             <ModalFooter>
-             
               <CButton
                 color="secondary"
                 onClick={(e) =>
@@ -879,7 +973,7 @@ class EndUser extends Component {
               </div>
             </ModalBody>
             <ModalFooter>
-            <CButton
+              <CButton
                 color="primary"
                 onClick={(e) => {
                   this.state.actionVoucherEditing2 === "new"
@@ -954,6 +1048,8 @@ class EndUser extends Component {
 
                         <th className="text-center">Bắt đầu</th>
                         <th className="text-center">Kết thúc</th>
+                        <th className="text-center">Ngày tạo</th>
+
                         <th className="text-center">Mô tả</th>
                         <th className="text-center">Số lượng voucher</th>
 
@@ -976,14 +1072,14 @@ class EndUser extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  {new Date(item.from).toLocaleDateString() +
-                                    " " +
-                                    new Date(item.from).toLocaleTimeString()}
+                                  {new Date(item.from).toLocaleDateString() 
+                                    }
                                 </td>
                                 <td className="text-center">
-                                  {new Date(item.to).toLocaleDateString() +
-                                    " " +
-                                    new Date(item.to).toLocaleTimeString()}
+                                  {new Date(item.to).toLocaleDateString() }
+                                </td>
+                                <td className="text-center">
+                                {(new Date(item.create_at)).toLocaleDateString() }                          
                                 </td>
                                 <td className="text-center">
                                   {item.description}

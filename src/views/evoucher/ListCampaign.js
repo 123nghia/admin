@@ -325,7 +325,84 @@ async remove(item){
       default: return 'primary'
     }
   }
+  renderModalInfo(item) {
+    
+    let itemRender = (
+      <div>
+      <Modal isOpen={true} size="md">
+        <ModalHeader>Chi tiết Voucher</ModalHeader>
+        <ModalBody className="info_voucher">
+          <p>Mã voucher : <span>{item.code}</span></p>
+          <p>Mã công ty : <span>{item.code}</span></p>
+          <p>
+            Khởi tạo :
+            <span>
+              Lúc {" "}
+            {new Date(item.create_at).toLocaleTimeString() +
+              " giờ " + " ngày " +
+              new Date(item.create_at).toLocaleDateString()}
+              </span>
+          </p>
+          <p>
+            Bắt đầu :
+            <span>
+            Ngày {" "}
+              {new Date(item.from).toLocaleDateString()}
+              </span>
+          </p>
+          <p>
+            Kết thúc :
+           
+              <span>
+              Ngày {" "}
+            {new Date(item.to).toLocaleDateString()}
+            </span>
+          </p>
+          <p>Nội dung voucher : <span>{item.content}</span></p>
+          <p>
+            Trạng thái :
+            <span>
+            <Tag
+              className="ant-tag"
+              color={
+                item.status === "1"
+                  ? "#2db7f5"
+                  : item.status === "2"
+                  ? "#f50"
+                  : "#87d068"
+              }
+            >
+              {item.status == "1"
+                ? "Bắt đầu"
+                : item.status == "2"
+                ? "Trong quá trình"
+                : "Hoàn thành"}
+            </Tag>
+            </span>
+          </p>
 
+          <p>Id voucher : <span>{item._id}</span></p>
+        </ModalBody>
+        <ModalFooter>
+          <CButton
+            color="secondary"
+            onClick={(e) =>
+              this.setState({
+                modalInfo: null,
+              })
+            }
+          >
+            Đóng
+          </CButton>
+        </ModalFooter>
+      </Modal>
+      </div>
+    );
+    this.setState({
+      modalInfo : itemRender
+    });
+    
+  }
   render() {
     const { data,indexPageVoucher, arrPagination,dataVoucher,arrPaginationVoucher, key,phoneVoucher,nameVoucher ,modalVoucher} = this.state;
     const arrLevel = [
@@ -361,7 +438,7 @@ async remove(item){
                         <th className="text-center">người sử dụng</th>
         
                         <th className="text-center">trạng thái</th>
-                   
+                   <th className="text-center"></th>
 
                         
                       </tr>
@@ -399,7 +476,20 @@ async remove(item){
                                       : "Hoàn thành"}
                                   </Tag>
                                 </td>
-                                
+                                <td className="text-center">
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="outline"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  size="md"
+                                  className="flex-a-center "
+                                  onClick={() => this.renderModalInfo(item)}
+                                >
+                                  <BsSearch className="mr-1" />
+                                  Xem chi tiết
+                                </CButton>
+                                </td>
                               </tr>
                             );
                           }) : ""
@@ -424,6 +514,7 @@ async remove(item){
               </CButton>
             </ModalFooter>
           </Modal>
+          {this.state.modalInfo}
           <Modal isOpen={this.state.modalVoucherEditing} className={this.props.className}>
             <ModalHeader>
               {this.state.actionVoucherEditing == "new" ? `Tạo mới` : `Cập nhật`}
@@ -544,10 +635,14 @@ async remove(item){
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên</th>
+                        <th className="text-center">Bắt đầu</th>
+                        <th className="text-center">Kết thúc</th>
                         <th className="text-center">Ngày tạo</th>
+
+                        <th className="text-center">Mô tả</th>
+
                        
                         <th className="text-center">Số lượng voucher</th>
-                        <th className="text-center">Mô tả</th>
                         <th className="text-center">Trạng thái</th>
 
                    
@@ -565,10 +660,20 @@ async remove(item){
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                {(new Date(item.create_at)).toLocaleDateString() + ' ' + (new Date(item.create_at)).toLocaleTimeString()}                          
+                                  {new Date(item.from).toLocaleDateString() 
+                                    }
                                 </td>
                                 <td className="text-center">
+                                  {new Date(item.to).toLocaleDateString() }
+                                </td>
+                                <td className="text-center">
+                                {(new Date(item.create_at)).toLocaleDateString() }                          
+                                </td>
+                                <td className="text-center">{item.description}</td>
+                                
+                                <td className="text-center">
                               <div className="flex-center">
+                                    
                                <p className="mr-2" style={{ margin : "auto"}}>
                                   {item.quatinity ? item.quatinity : "0"}
                                   </p>
@@ -585,9 +690,9 @@ async remove(item){
                                   Xem
                                   </CButton>
                                   </div>
+                              
                                   </td>
 
-                                <td className="text-center">{item.description}</td>
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"

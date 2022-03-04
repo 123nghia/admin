@@ -354,27 +354,23 @@ class EndUser extends Component {
             <span>
               Lúc {" "}
             {new Date(item.create_at).toLocaleTimeString() +
-              " Giờ " + " ngày " +
+              " giờ " + " ngày " +
               new Date(item.create_at).toLocaleDateString()}
               </span>
           </p>
           <p>
             Bắt đầu :
             <span>
-            Lúc {" "}
-            {new Date(item.from).toLocaleTimeString() +
-              " Giờ " + " ngày " +
-              new Date(item.from).toLocaleDateString()}
+            Ngày {" "}
+              {new Date(item.from).toLocaleDateString()}
               </span>
           </p>
           <p>
             Kết thúc :
            
               <span>
-              Lúc {" "}
-          {new Date(item.to).toLocaleTimeString() +
-            " Giờ " + " ngày " +
-            new Date(item.to).toLocaleDateString()}
+              Ngày {" "}
+            {new Date(item.to).toLocaleDateString()}
             </span>
           </p>
           <p>Nội dung voucher : <span>{item.content}</span></p>
