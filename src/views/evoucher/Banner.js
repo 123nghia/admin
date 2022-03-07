@@ -131,7 +131,7 @@ class EndUser extends Component {
     await axios
       .get(url, {
         params: {
-          company_id,
+          company_id,status : null
         },
       })
       .then((res) => {

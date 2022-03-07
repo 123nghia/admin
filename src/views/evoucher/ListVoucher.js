@@ -112,7 +112,10 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
-  async getData () {
+  onSearch(){
+    this.getData(this.state.key);
+  }
+  async getData (key) {
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
@@ -123,6 +126,7 @@ class EndUser extends Component {
     .get(url, {
       params: {
         company_id,
+        status : null
       },
     }).then((res) => {
     
@@ -532,11 +536,11 @@ async remove(item){
                   <div class="flex mt-3"> 
                             
                             <Input style={styles.searchInput} onChange={(e) => {
-                              this.actionSearch(e, "key");
+                              this.setState({ key : e.target.value });
                             }} name="key" value={key} placeholder="Từ khóa" />
                          
                     
-                          <CButton color="primary" size="sm" onClick={e => { this.resetSearch() }}>Tìm kiếm</CButton>
+                          <CButton color="primary" size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm</CButton>
                           </div>
                 </CardHeader>
                 <CardBody>

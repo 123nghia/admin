@@ -163,7 +163,10 @@ class EndUser extends Component {
         this.setState({ isLoading: false, totalActiveVoucher: active });
       });
   }
-  async getData() {
+  onSearch(){
+    this.getData(this.state.key);
+  }
+  async getData(key) {
     const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_CAMPAIGN;
@@ -172,7 +175,7 @@ class EndUser extends Component {
     await axios
       .get(url, {
         params: {
-          company_id,
+          company_id,status : null
         },
       })
       .then((res) => {
@@ -1004,27 +1007,15 @@ class EndUser extends Component {
                     Quản lý chiến dịch
                   </i>
 
-                  <div class="flex mt-3">
-                    <Input
-                      style={styles.searchInput}
-                      onChange={(e) => {
-                        this.actionSearch(e, "key");
-                      }}
-                      name="key"
-                      value={key}
-                      placeholder="Từ khóa"
-                    />
-
-                    <CButton
-                      color="primary"
-                      size="sm"
-                      onClick={(e) => {
-                        this.resetSearch();
-                      }}
-                    >
-                      Tìm kiếm
-                    </CButton>
-                  </div>
+                  <div class="flex mt-3"> 
+                            
+                            <Input style={styles.searchInput} onChange={(e) => {
+                              this.setState({ key : e.target.value });
+                            }} name="key" value={key} placeholder="Từ khóa" />
+                         
+                    
+                          <CButton color="primary" size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm</CButton>
+                          </div>
                 </CardHeader>
                 <CardBody>
                   <div class="text-center">

@@ -76,7 +76,8 @@
     "redux-thunk": "^2.4.1",
     "sass": "^1.32.8",
     "sweetalert2": "^11.3.6",
-    "validator": "^13.6.0"
+    "validator": "^13.6.0",
+    "xlsx": "^0.18.3"
   },
   "devDependencies": {
     "@babel/core": "^7.13.14",
