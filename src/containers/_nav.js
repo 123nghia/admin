@@ -12,6 +12,7 @@ import { BsImageFill } from "@react-icons/all-files/bs/BsImageFill";
 import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill";
 import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
 import { AiFillSetting } from "@react-icons/all-files/ai/AiFillSetting";
+import { RiFileTransferLine } from "@react-icons/all-files/ri/RiFileTransferLine";
 
 
 
@@ -45,6 +46,7 @@ const content = {
   contact: "Danh sach liên hệ",
   none : "..."
 }
+
 
 const _navDashboard = [
   {
@@ -365,7 +367,7 @@ const _navOrther = [
     name: 'Quản lý chiến dịch',
     to: '/manage-campaign',
     icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
+    role: ['0'],
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.none}>
@@ -427,13 +429,39 @@ const _navOrther = [
       </CTooltip>,
     }
   },
-
+ 
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Màn hình Translation',
+    to: '/translation',
+    icon: <RiFileTransferLine style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Cấu hình email',
+    to: '/configuration-email',
+    icon: <RiFileTransferLine style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
   {
     _tag: 'CSidebarNavItem',
     name: 'Quản lý Voucher',
     to: '/manage-voucher',
     icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
+    role: ['0'],
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.none}>
@@ -604,6 +632,7 @@ const _navContact = [
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách tài khoản hệ thống',
+      
       to: '/subsale',
       role: ['2'],
       badge: {
@@ -625,11 +654,12 @@ const _navContact = [
     //     </CTooltip>,
     //   }
     // }, 
+    
     {
       _tag: 'CSidebarNavItem',
       name: 'Danh sách khách hàng',
       to: '/customer_manager',
-      role: ['0', '1'],
+      role: ['0', '1','2'],
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.accountCompany}>
@@ -653,21 +683,21 @@ const _navContact = [
     name: 'Danh sách banner',
     to: '/quan-ly-banner',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
+    role: ['2'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách đặt hẹn',
     to: '/book-calendar',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
+    role: ['2'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Cấu hình trang web',
     to: '/cau-hinh-trang-web',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
+    role: ['2'],
   },
   // {
   //   _tag: 'CSidebarNavItem',

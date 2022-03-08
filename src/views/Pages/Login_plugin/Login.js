@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import { Button, Col, Row } from 'reactstrap';
-import validateInput from '../../../shared/validations/login';
-import axios from 'axios'
-import jwt from 'jsonwebtoken'
+import React, { Component } from "react";
+import { Button, Col, Row } from "reactstrap";
+import validateInput from "../../../shared/validations/login";
+import axios from "axios";
+import jwt from "jsonwebtoken";
 import Constants from "./../../../contants/contants";
 import Logo from "./../../../../src/assets/img/logo_head.png";
 import md5 from "md5";
+import * as actions from "../../../redux/reducersForder/account";
 import {
   CButton,
   CCard,
@@ -17,22 +18,24 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CRow
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+  CRow,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
       errors: {},
-      isLoading: false
-    }
-    localStorage.removeItem('auth');
-    if (this.props.location.pathname === '/logout') {
-      window.location.href = '#/login';
+      isLoading: false,
+    };
+    localStorage.removeItem("auth");
+    if (this.props.location.pathname === "/logout") {
+      window.location.href = "#/login";
     }
   }
   isValid() {
@@ -50,37 +53,53 @@ class Login extends Component {
       const res = await axios({
         baseURL: Constants.BASE_URL,
         url: Constants.PLUGIN_LOGIN_ADMIN,
-        method: 'POST',
+        method: "POST",
         data: {
           username: this.state.username,
-          password: md5(this.state.password)
-        }
+          password: md5(this.state.password),
+        },
       });
 
-      console.log(res.data)
+      console.log(res.data);
 
       if (res.data.is_success) {
         var token = jwt.decode(res.data.data.token);
-        localStorage.setItem('user', JSON.stringify({
-          username: this.state.username,
-          password: this.state.password, company_id: res.data.data.data.Company_Id, sale_id: res.data.data.data._id
-        }));
-        localStorage.setItem('auth', 'abv');
-        localStorage.setItem('role', token.role);
-        localStorage.setItem('type', token.type);
-        localStorage.setItem('token', res.data.data.token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            username: this.state.username,
+            password: this.state.password,
+            company_id: res.data.data.data.Company_Id,
+            sale_id: res.data.data.data._id,
+          })
+        );
+        localStorage.setItem("auth", "abv");
+        localStorage.setItem("role", token.role);
+        localStorage.setItem("type", token.type);
+        sessionStorage.setItem("type", token.type);
 
-        if (token.type == '0' || token.type == '1') {
-          localStorage.setItem('isAD', "0");
-          this.props.history.push('/list_order')
+        localStorage.setItem("token", res.data.data.token);
+        
+        const { action } = this.props;
+        const { changeTypeUser } = action;
+
+        changeTypeUser(token.type);
+
+        if (token.type == "0" || token.type == "1") {
+          localStorage.setItem("isAD", "0");
+          this.props.history.push("/list_order");
         } else {
-          localStorage.setItem('isAD', "1");
-          this.props.history.push('/profile')
+          localStorage.setItem("isAD", "1");
+          this.props.history.push("/profile");
         }
+        window.location.reload();
       } else {
-        console.log(this.state.username)
-        console.log(this.state.password)
-        this.setState({ isLoading: false, errors: { common: 'Tên đăng nhập hoặc mật khẩu không chính xác' } });
+        console.log(this.state.username);
+        console.log(this.state.password);
+        this.setState({
+          isLoading: false,
+          errors: { common: "Tên đăng nhập hoặc mật khẩu không chính xác" },
+        });
       }
     }
   }
@@ -97,19 +116,32 @@ class Login extends Component {
               <CCardGroup>
                 <CCard className="p-4">
                   <CCardBody>
-                    <form onSubmit={async e => await this.onSubmit(e)}>
-                    <div class="text-center">
-                    <img style={{ alignSelf: 'center' }} height="40px" width="auto" src={Logo} />
-</div>
+                    <form onSubmit={async (e) => await this.onSubmit(e)}>
+                      <div class="text-center">
+                        <img
+                          style={{ alignSelf: "center" }}
+                          height="40px"
+                          width="auto"
+                          src={Logo}
+                        />
+                      </div>
                       <h1>Đăng nhập</h1>
-                      <span style={{ color: 'red' }} className="error">{errors.common}</span>
+                      <span style={{ color: "red" }} className="error">
+                        {errors.common}
+                      </span>
                       <CInputGroup className="mb-3">
                         <CInputGroupPrepend>
                           <CInputGroupText>
                             <CIcon name="cil-user" />
                           </CInputGroupText>
                         </CInputGroupPrepend>
-                        <CInput type="text" placeholder="Tên đăng nhập" name="username" onChange={e => this.onChange(e, 'username')} autoComplete="name"/>
+                        <CInput
+                          type="text"
+                          placeholder="Tên đăng nhập"
+                          name="username"
+                          onChange={(e) => this.onChange(e, "username")}
+                          autoComplete="name"
+                        />
                       </CInputGroup>
                       <CInputGroup className="mb-4">
                         <CInputGroupPrepend>
@@ -117,18 +149,35 @@ class Login extends Component {
                             <CIcon name="cil-lock-locked" />
                           </CInputGroupText>
                         </CInputGroupPrepend>
-                        <CInput type="password" placeholder="Mật khẩu" onChange={e => this.onChange(e, 'password')} />
+                        <CInput
+                          type="password"
+                          placeholder="Mật khẩu"
+                          onChange={(e) => this.onChange(e, "password")}
+                        />
                       </CInputGroup>
 
                       <Row>
                         <Col xs="6" lg="6" sm="6">
-                          <Button color="primary" className="px-4" disabled={isLoading}>Đăng nhập</Button>
+                          <Button
+                            color="primary"
+                            className="px-4"
+                            disabled={isLoading}
+                          >
+                            Đăng nhập
+                          </Button>
                         </Col>
-                        <CCol xs="6" lg="6" sm="6"className="text-right">
-                          <CButton color="link" className="px-0" onClick={() => { window.location.href = "#/change_password" }}>Quên mật khẩu?</CButton>
+                        <CCol xs="6" lg="6" sm="6" className="text-right">
+                          <CButton
+                            color="link"
+                            className="px-0"
+                            onClick={() => {
+                              window.location.href = "#/change_password";
+                            }}
+                          >
+                            Quên mật khẩu?
+                          </CButton>
                         </CCol>
                       </Row>
-
                     </form>
                   </CCardBody>
                 </CCard>
@@ -152,4 +201,12 @@ class Login extends Component {
     );
   }
 }
-export default Login;
+const mapStateToProps = (state) => {
+  return {};
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    action: bindActionCreators(actions, dispatch),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

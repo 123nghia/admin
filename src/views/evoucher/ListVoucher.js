@@ -44,7 +44,7 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      company_id: "621c2ec17abc0b6b4349d4e5",
+      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
 
       data: [],
       key: '',
@@ -126,7 +126,7 @@ class EndUser extends Component {
     .get(url, {
       params: {
         company_id,
-        status : null
+        keyword : key
       },
     }).then((res) => {
     

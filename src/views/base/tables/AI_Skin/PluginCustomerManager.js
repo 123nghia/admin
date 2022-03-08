@@ -73,9 +73,13 @@ class PluginCustomerManager extends Component {
   }
   async componentDidMount() {
     if (this.state.type == "0") {
+      
       this.getData();
     } else {
-      this.getData_ByID();
+      
+      this.getData();
+
+      // this.getData_ByID();
     }
 
     this.getProvince();
@@ -120,7 +124,7 @@ class PluginCustomerManager extends Component {
       method: 'POST',
     });
     let val = res.data.data;
-    console.log(val)
+    console.log("val",val)
     this.pagination(val);
     this.setState({ dataApi: val, isLoading: false });
   }

@@ -27,15 +27,20 @@ import md5 from "md5";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import * as XLSX from "xlsx";
+import { DatePicker, Space } from "antd";
+import "antd/dist/antd.css";
+import moment from "moment";
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
-
+const dateFormat = "DD/MM/YYYY";
+const customFormat = (value) => `custom format: ${value.format(dateFormat)}`;
 class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
       data: [],
       key: "",
       totalActive: 0,
@@ -59,6 +64,10 @@ class EndUser extends Component {
       isLoading: false,
       idCurrentUpdate: null,
       levelNormal: "0",
+      // from : new Date().toLocaleDateString(),
+      // to : new Date().toLocaleDateString()
+      from: "",
+      to: "",
     };
   }
   changeLevel = (e) => {
@@ -106,6 +115,12 @@ class EndUser extends Component {
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
   onSearch() {
+    console.log(this.state.from);
+    console.log(this.state.to);
+    console.log(this.state.codeVoucher);
+    console.log(this.state.userVoucher);
+    console.log(this.state.statusVoucher);
+
     this.getData(this.state.key);
   }
   async getData(key) {
@@ -300,12 +315,12 @@ class EndUser extends Component {
 
         resolve(data);
       };
-      fileReader.onerror = (error)=>{
+      fileReader.onerror = (error) => {
         reject(error);
       };
     });
 
-    promise.then(data=>{
+    promise.then((data) => {
       console.log(data);
     });
   };
@@ -335,11 +350,14 @@ class EndUser extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          <input type="file" onChange={(e)=>{
-            const file = e.target.files[0];
-            this.readExcel(file);
-          }}/>
-          
+          <input
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              this.readExcel(file);
+            }}
+          />
+
           <Modal
             isOpen={this.state.modalVoucher}
             className={this.props.className}
@@ -440,20 +458,99 @@ class EndUser extends Component {
                     Danh sách người nhận Voucher
                   </i>
 
-                  <div class="flex mt-3">
-                    <Input
-                      style={styles.searchInput}
-                      onChange={(e) => {
-                        this.setState({ key: e.target.value });
-                      }}
-                      name="key"
-                      value={key}
-                      placeholder="Từ khóa"
-                    />
+                  <CRow>
+                    <CCol md={6} className="mt-3">
+                      <div className="text-center">
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ codeVoucher: e.target.value });
+                          }}
+                          name="codeVoucher"
+                          value={this.state.codeVoucher}
+                          placeholder="Mã voucher"
+                        />
+                      </div>
+                    </CCol>
+                    <CCol md={6} className="mt-3">
+                      <div className="text-center">
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ userVoucher: e.target.value });
+                          }}
+                          type="number"
+                          name="userVoucher"
+                          value={this.state.userVoucher}
+                          placeholder="Số điện thoại"
+                        />
+                      </div>
+                    </CCol>
+                    <CCol md={6} className="mt-3">
+                      <div className="text-center">
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ statusVoucher: e.target.value });
+                          }}
+                          name="statusVoucher"
+                          value={this.state.statusVoucher}
+                          placeholder="Trạng thái voucher"
+                        />
+                      </div>
+                    </CCol>
+                    <CCol md={6} className="mt-3">
+                      <div className="flex-center">
+                        <div className="flex">
+                          <div className="text-center">
+                            Từ ngày
+                            <div style={{ padding: "0 24px" }}>
+                              <DatePicker
+                                onChange={(e, dateString) => {
+                                  let copy = dateString.split("-");
+                                  let newData = ``;
+                                  copy.forEach((item, index) => {
+                                    if (index === 0) {
+                                      newData += item;
+                                    } else {
+                                      newData += `/${item}`;
+                                    }
+                                  });
+                                  this.setState({ from: newData });
+                                }}
+                                format={dateFormat}
+                              />
+                            </div>
+                          </div>
+                          <div className="text-center">
+                            Đến ngày
+                            <div style={{ padding: "0 24x" }}>
+                              <DatePicker
+                                onChange={(e, dateString) => {
+                                  let copy = dateString.split("-");
+                                  let newData = ``;
+                                  copy.forEach((item, index) => {
+                                    if (index === 0) {
+                                      newData += item;
+                                    } else {
+                                      newData += `/${item}`;
+                                    }
+                                  });
+                                  this.setState({ to: newData });
+                                }}
+                                format={dateFormat}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CCol>
+                  </CRow>
 
+                  <div className="text-center mt-3">
                     <CButton
                       color="primary"
-                      size="sm"
+                      size="lg"
                       onClick={(e) => {
                         this.onSearch();
                       }}
@@ -485,6 +582,8 @@ class EndUser extends Component {
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">Email</th>
                         <th className="text-center">Mã Voucher</th>
+                        <th className="text-center">Ngày tạo</th>
+
                         <th className="text-center">Trạng thái</th>
                       </tr>
                     </thead>
@@ -506,6 +605,9 @@ class EndUser extends Component {
                                 <td className="text-center">{item.email}</td>
                                 <td className="text-center">
                                   {item.usingVoucher}
+                                </td>
+                                <td className="text-center">
+                                  {new Date(item.create_at).toLocaleDateString()}
                                 </td>
 
                                 <td className="text-center">

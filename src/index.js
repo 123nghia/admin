@@ -10,7 +10,7 @@ import * as serviceWorker from './serviceWorker';
 import { icons } from './assets/icons'
 
 import { Provider } from 'react-redux'
-import store from './store'
+// import store from './store'
 import { createStore, applyMiddleware ,compose } from 'redux';
 import rootReducers from "./../src/redux/reducers";
 import createSagaMiddleware from 'redux-saga';
@@ -18,21 +18,22 @@ import thunk from 'redux-thunk';
 import root from "./../src/redux/sagas"
 import './assets/css/sidebar.css';
 import './all.css';
+import myReducer from './redux/reducers';
 
 
 
-const sagaMiddleware = createSagaMiddleware();
 
-const middleWares = [sagaMiddleware, thunk]
 
-const storeS = createStore(rootReducers,
-  applyMiddleware(...middleWares)
+
+const store = createStore(
+  myReducer,
+  applyMiddleware(thunk)
   
   )
 
 React.icons = icons
 
-sagaMiddleware.run(root)
+
 
 ReactDOM.render(
   <Provider store={store}>

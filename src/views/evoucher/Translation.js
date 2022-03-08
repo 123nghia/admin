@@ -436,13 +436,14 @@ async remove(item){
                         <th className="text-center">STT.</th>
                         
                      
+                        <th className="text-center">Loại</th>
+                        <th className="text-center">Ngày tạo</th>
+
                         <th className="text-center">Mã voucher</th>
  
-                        <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">người sử dụng</th>
         
                         <th className="text-center">trạng thái</th>
-                   <th className="text-center"></th>
+                 
 
                         
                       </tr>
@@ -455,13 +456,11 @@ async remove(item){
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                     
-                                <td className="text-center">{item.code}</td>
+                                <td className="text-center">{item.type}</td>
                                 <td className="text-center">
                                 {(new Date(item.create_at)).toLocaleDateString() + ' ' + (new Date(item.create_at)).toLocaleTimeString()}                          
                                 </td>
-                                <td className="text-center">{item.user ? item.user : "Chưa có"}</td>
-
+                                <td className="text-center">{item.code}</td>
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
@@ -480,20 +479,7 @@ async remove(item){
                                       : "Hoàn thành"}
                                   </Tag>
                                 </td>
-                                <td className="text-center">
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="outline"
-                                  color="info"
-                                  style={styles.mgl5}
-                                  size="md"
-                                  className="flex-a-center "
-                                  onClick={() => this.renderModalInfo(item)}
-                                >
-                                  <BsSearch className="mr-1" />
-                                  Xem chi tiết
-                                </CButton>
-                                </td>
+                                
                               </tr>
                             );
                           }) : ""
@@ -617,7 +603,7 @@ async remove(item){
               <Card>
                 <CardHeader>
                 
-                  <i className="fa fa-align-justify title_header">Danh sách Chiến dịch</i>
+                  <i className="fa fa-align-justify title_header">Màn hình Translation</i>
                
                  
                
@@ -635,21 +621,19 @@ async remove(item){
                 <CardBody>
 
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
-                    <thead className="thead-light">
+                  <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên</th>
-                        <th className="text-center">Bắt đầu</th>
-                        <th className="text-center">Kết thúc</th>
+                        
+                     
+                        <th className="text-center">Loại</th>
                         <th className="text-center">Ngày tạo</th>
 
-                        <th className="text-center">Mô tả</th>
-
-                       
-                        <th className="text-center">Số lượng voucher</th>
-                        <th className="text-center">Trạng thái</th>
-
-                   
+                        <th className="text-center">Mã voucher</th>
+ 
+        
+                        <th className="text-center">trạng thái</th>
+                 
 
                         
                       </tr>
@@ -662,40 +646,13 @@ async remove(item){
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.name}</td>
+                                <td className="text-center">{item.type}</td>
                                 <td className="text-center">
-                                  {new Date(item.from).toLocaleDateString() 
+                                  {new Date(item.create_at).toLocaleDateString() 
                                     }
                                 </td>
-                                <td className="text-center">
-                                  {new Date(item.to).toLocaleDateString() }
-                                </td>
-                                <td className="text-center">
-                                {(new Date(item.create_at)).toLocaleDateString() }                          
-                                </td>
-                                <td className="text-center">{item.description}</td>
+                                <td className="text-center">{item.code}</td>
                                 
-                                <td className="text-center">
-                              <div className="flex-center">
-                                    
-                               <p className="mr-2" style={{ margin : "auto"}}>
-                                  {item.quatinity ? item.quatinity : "0"}
-                                  </p>
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="outline"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    className="flex-a-center "
-                                    onClick={(e) => this.openEdit(item)}
-                                  >
-                                  <BsSearch className="mr-1" />
-                                  Xem
-                                  </CButton>
-                                  </div>
-                              
-                                  </td>
 
                                 <td className="text-center">
                                   <Tag
