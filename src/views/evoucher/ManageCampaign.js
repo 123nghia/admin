@@ -31,7 +31,7 @@ import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { Tag, Divider } from "antd";
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
-import { Select } from 'antd';
+import { Select } from "antd";
 
 const { Option } = Select;
 const dateFormat = "DD-MM-YYYY";
@@ -44,7 +44,9 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-           company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
+      company_id: JSON.parse(localStorage.getItem("user")).company_id
+        ? JSON.parse(localStorage.getItem("user")).company_id
+        : null,
       data: [],
       actionVoucherEditing: "new",
       modalPopupVoucher: false,
@@ -75,7 +77,7 @@ class EndUser extends Component {
       isLoading: false,
       idCurrentUpdate: null,
       levelNormal: "0",
-      dataCompany : []
+      dataCompany: [],
     };
   }
   changeLevel = (e) => {
@@ -99,17 +101,17 @@ class EndUser extends Component {
       }
     }
   }
-  async getDataCompany(){
+  async getDataCompany() {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.PLUGIN_LIST_COMPANY,
-      method: 'POST',
+      method: "POST",
     });
     let val = res.data.data;
     this.setState({
-        dataCompany : val
-    })
+      dataCompany: val,
+    });
   }
   pagination(dataApi) {
     var i,
@@ -295,8 +297,16 @@ class EndUser extends Component {
     });
   }
   async update() {
-    const { name, from, to, description, status, idCurrentUpdate, quantity } =
-      this.state;
+    const {
+      name,
+      from,
+      to,
+      description,
+      idCompany,
+      status,
+      idCurrentUpdate,
+      quantity,
+    } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_CAMPAIGN;
@@ -307,6 +317,8 @@ class EndUser extends Component {
         quatinity: quantity,
         id: idCurrentUpdate,
         name,
+        company_id: idCompany,
+
         from,
         to,
         description,
@@ -326,8 +338,16 @@ class EndUser extends Component {
       });
   }
   async add() {
-    const { name, from, to, description, status, company_id, quantity } =
-      this.state;
+    const {
+      name,
+      from,
+      to,
+      description,
+      status,
+      idCompany,
+      company_id,
+      quantity,
+    } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_CAMPAIGN;
     let url = baseUrlapi + baseUrlCallApi;
@@ -335,7 +355,7 @@ class EndUser extends Component {
     await axios
       .post(url, {
         quatinity: quantity,
-        company_id,
+        company_id: idCompany,
         name,
         from,
         to,
@@ -609,7 +629,7 @@ class EndUser extends Component {
       modalInfo: itemRender,
     });
   }
-  
+
   render() {
     const {
       data,
@@ -620,7 +640,7 @@ class EndUser extends Component {
       dataVoucher,
       arrPaginationVoucher,
       modalVoucher,
-      dataCompany
+      dataCompany,
     } = this.state;
     const dateArray = [this.state.from, this.state.to];
     const arrLevel = [
@@ -782,27 +802,27 @@ class EndUser extends Component {
               <label className="control-label">Công ty:</label>
 
               <Select
-              className="select_company"
-    showSearch
-    placeholder="Chọn tên công ty"
-    optionFilterProp="children"
-    onChange={(value)=>this.setState({
-      nameCompany : value
-    })}
-    onSearch={this.onSearchSelect}
-    filterOption={(input, option) =>
-      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-    }
-  >
-
-    {
-      dataCompany ? dataCompany.map((item,i)=>{
-        return (
-          <Option value={item.Name}>{item.Name}</Option>
-        )
-      }) : null
-    }
-    </Select>
+                className="select_company"
+                showSearch
+                placeholder="Chọn tên công ty"
+                optionFilterProp="children"
+                onChange={(value) =>
+                  this.setState({
+                    idCompany: value,
+                  })
+                }
+                onSearch={this.onSearchSelect}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {dataCompany
+                  ? dataCompany.map((item, i) => {
+                      return <Option value={item._id}>{item.Name}</Option>;
+                    })
+                  : null}
+              </Select>
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (

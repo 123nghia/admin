@@ -124,11 +124,20 @@ class EndUser extends Component {
     this.getData(this.state.key);
   }
   async getData(key) {
+    const { company_id } = this.state;
+
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_CAMPAIGN;
+    let baseUrlCallApi = Constants.GET_USER_EVOUCHER;
 
     let url = baseUrlapi + baseUrlCallApi;
-    await axios.get(url).then((res) => {
+    await axios.get(url,{
+      params : {
+       
+          company_id
+         
+      
+      }
+    }).then((res) => {
       let val = res.data.data;
       this.pagination(val);
       this.setState({ dataApi: val });
@@ -550,7 +559,7 @@ class EndUser extends Component {
                   <div className="text-center mt-3">
                     <CButton
                       color="primary"
-                      size="lg"
+                      size="md"
                       onClick={(e) => {
                         this.onSearch();
                       }}
@@ -560,7 +569,7 @@ class EndUser extends Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <div class="text-center">
+                  {/* <div class="text-center">
                     <CButton
                       color="primary"
                       style={{ marginBottom: "10px" }}
@@ -569,7 +578,7 @@ class EndUser extends Component {
                     >
                       Thêm mới
                     </CButton>
-                  </div>
+                  </div> */}
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -582,7 +591,7 @@ class EndUser extends Component {
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">Email</th>
                         <th className="text-center">Mã Voucher</th>
-                        <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">Ngày nhận</th>
 
                         <th className="text-center">Trạng thái</th>
                       </tr>
@@ -600,11 +609,11 @@ class EndUser extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.name}</td>
-                                <td className="text-center">{item.number}</td>
+                                <td className="text-center">{item.fullName}</td>
+                                <td className="text-center">{item.phoneNumber}</td>
                                 <td className="text-center">{item.email}</td>
                                 <td className="text-center">
-                                  {item.usingVoucher}
+                                  {item.voucherCode}
                                 </td>
                                 <td className="text-center">
                                   {new Date(item.create_at).toLocaleDateString()}
@@ -627,7 +636,11 @@ class EndUser extends Component {
                                       ? "Trong quá trình"
                                       : "Hoàn thành"}
                                   </Tag>
-                                  <CButton
+
+                                  {
+                                    this.state.type == "0" ? 
+                                    <div>
+                                    <CButton
                                     shape="rounded-pill"
                                     variant="ghost"
                                     color="info"
@@ -637,7 +650,18 @@ class EndUser extends Component {
                                   >
                                     {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
                                     Thay đổi
-                                  </CButton>
+                                  </CButton><CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    size="md"
+                                    onClick={(e) => this.openEditVoucher(item)}
+                                  >
+                                    {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
+                                    Thay đổi
+                                  </CButton></div> : null
+                                  }
                                 </td>
                               </tr>
                             );
