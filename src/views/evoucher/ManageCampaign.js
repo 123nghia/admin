@@ -770,7 +770,7 @@ class EndUser extends Component {
                   format={dateFormat}
                 />
               )}
-              <label className="control-label">Mô tả:</label>
+              <label className="control-label mt-3">Mô tả:</label>
               <CTextarea
                 name="description"
                 rows="4"

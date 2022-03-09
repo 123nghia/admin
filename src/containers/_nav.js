@@ -13,6 +13,7 @@ import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill
 import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
 import { AiFillSetting } from "@react-icons/all-files/ai/AiFillSetting";
 import { RiFileTransferLine } from "@react-icons/all-files/ri/RiFileTransferLine";
+import { CgWebsite } from "@react-icons/all-files/cg/CgWebsite";
 
 
 
@@ -157,7 +158,7 @@ const _navSoida = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Bộ lọc sản phẩm gợi ý',
+    name: 'Bộ lọc sản phẩm',
     to: '/skin/config',
     icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
@@ -443,19 +444,19 @@ const _navOrther = [
       </CTooltip>,
     }
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Cấu hình email',
-    to: '/configuration-email',
-    icon: <RiFileTransferLine style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.none}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Cấu hình email',
+  //   to: '/configuration-email',
+  //   icon: <RiFileTransferLine style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+  //   role: ['0', '1', '2'],
+  //   badge: {
+  //     color: 'info',
+  //     text: <CTooltip placement={"right"} content={content.none}>
+  //       <CIcon content={freeSet.cilBellExclamation} />
+  //     </CTooltip>,
+  //   }
+  // },
   {
     _tag: 'CSidebarNavItem',
     name: 'Quản lý Voucher',
@@ -537,6 +538,19 @@ const _navOrther = [
     _tag: 'CSidebarNavTitle',
     _children: ['Thông tin chung'],
     role: ['0', '1', '2'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Cấu hình Web',
+    to: '/general-config-web',
+    icon: <CgWebsite style={css} name="cil-user" className="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.none} />
+      </CTooltip>,
+    }
   },
   {
     _tag: 'CSidebarNavItem',

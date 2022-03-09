@@ -350,13 +350,13 @@ class EndUser extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          <input
+          {/* <input
             type="file"
             onChange={(e) => {
               const file = e.target.files[0];
               this.readExcel(file);
             }}
-          />
+          /> */}
 
           <Modal
             isOpen={this.state.modalVoucher}

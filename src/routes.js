@@ -79,6 +79,7 @@ const BannerSales = React.lazy(() => import('./views/evoucher/Banner'));
 const Statistics = React.lazy(() => import('./views/evoucher/Chart'));
 const Translation = React.lazy(() => import('./views/evoucher/Translation'));
 const NotEnough = React.lazy(() => import('./views/Pages/NotEnough/NotEnough'));
+const GeneralConfigWebsite = React.lazy(() => import('./views/config/GeneralConfigWeb'));
 
 const roleUser = sessionStorage.getItem('type');
 
@@ -95,6 +96,7 @@ const routes = [
   { path: '/translation', name: 'Translation', component: Translation },
   { path: '/not-enough', name: 'NotEnough', component: NotEnough },
 
+  { path: '/general-config-web', name: 'GeneralConfigWebsite', component: GeneralConfigWebsite },
 
 
   
