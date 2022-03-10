@@ -377,22 +377,22 @@ const _navOrther = [
     }
   },
   
+  // {
+  //   _tag: 'CSidebarNavItem',
+  //   name: 'Danh sách Voucher',
+  //   to: '/list-evoucher',
+  //   icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+  //   role: ['0', '1', '2'],
+  //   badge: {
+  //     color: 'info',
+  //     text: <CTooltip placement={"right"} content={content.none}>
+  //       <CIcon content={freeSet.cilBellExclamation} />
+  //     </CTooltip>,
+  //   }
+  // },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Danh sách Voucher',
-    to: '/list-evoucher',
-    icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.none}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh sách người nhận Voucher',
+    name: 'Danh sách người dùng Voucher',
     to: '/list-user-evoucher',
     icon: <HiUserGroup style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
@@ -408,7 +408,7 @@ const _navOrther = [
     name: 'Banner Quảng cáo',
     to: '/banner-sales',
     icon: <BsImageFill style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
+    role: ['0'],
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.none}>
@@ -462,7 +462,7 @@ const _navOrther = [
     name: 'Quản lý Voucher',
     to: '/manage-voucher',
     icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0'],
+    role: ['0','1','2'],
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.none}>

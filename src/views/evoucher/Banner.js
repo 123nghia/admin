@@ -13,6 +13,8 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
+import { Select } from "antd";
+
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { CButton, CTextarea, CLabel, CSelect, CRow, CCol } from "@coreui/react";
@@ -30,6 +32,7 @@ import { Tag, Divider } from "antd";
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
 import Swal from "sweetalert2";
+const { Option } = Select;
 
 const dateFormat = "YYYY-MM-DD";
 let headers = new Headers();
@@ -41,7 +44,9 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
+      company_id: JSON.parse(localStorage.getItem("user")).company_id
+        ? JSON.parse(localStorage.getItem("user")).company_id
+        : null,
       data: [],
       key: "",
       totalActive: 0,
@@ -83,11 +88,13 @@ class EndUser extends Component {
     };
   }
   async componentDidMount() {
-   
+    if(this.state.type !== '0'){
+      window.location.href = "/"
+    }
     const { type } = this.state;
 
     this.getData();
-
+    this.getDataCampaign();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -121,7 +128,24 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
+  async getDataCampaign() {
+    const { company_id } = this.state;
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_CAMPAIGN;
 
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        let val = res.data.data;
+
+        this.setState({ dataCampaign: val });
+      });
+  }
   async getData() {
     const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
@@ -131,7 +155,8 @@ class EndUser extends Component {
     await axios
       .get(url, {
         params: {
-          company_id,status : null
+          company_id,
+          status: null,
         },
       })
       .then((res) => {
@@ -218,7 +243,7 @@ class EndUser extends Component {
       embedded: "",
       image: "",
       relCode: "",
-      link : ""
+      link: "",
     });
   }
   openEditVoucher(item) {
@@ -251,18 +276,22 @@ class EndUser extends Component {
       link,
       relCode,
       company_id,
-      image_link
+      image_link,
     } = this.state;
 
     const form3 = new FormData();
     form3.append("image", image_link);
-     
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
-    var img ="";
-    if(image_link){
-      if(image_link.name){
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then(
+      (res) => {
+        console.log(res);
+      }
+    );
+    var img = "";
+    if (image_link) {
+      if (image_link.name) {
         img = `${Constants.BASE_URL}image_brand/${image_link.name}`;
-     }
+      }
     }
 
     var baseUrlapi = Constants.BASE_URL;
@@ -279,8 +308,8 @@ class EndUser extends Component {
         status: status,
         embedded: embedded,
         company_id,
-        image : img,
-        relcode : relCode,
+        image: img,
+        relcode: relCode,
       })
       .then((res) => {
         Swal.fire({
@@ -311,13 +340,17 @@ class EndUser extends Component {
     } = this.state;
     const form3 = new FormData();
     form3.append("image", image_link);
-     
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
-    var img ="";
-    if(image_link){
-      if(image_link.name){
+
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then(
+      (res) => {
+        console.log(res);
+      }
+    );
+    var img = "";
+    if (image_link) {
+      if (image_link.name) {
         img = `${Constants.BASE_URL}image_brand/${image_link.name}`;
-     }
+      }
     }
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_BANNER_SALES;
@@ -332,8 +365,8 @@ class EndUser extends Component {
         status: status,
         embedded: embedded,
         company_id,
-        image : img,
-        relcode : relCode,
+        image: img,
+        relcode: relCode,
       })
       .then((res) => {
         Swal.fire({
@@ -409,12 +442,12 @@ class EndUser extends Component {
       data,
       arrPagination,
       key,
+      dataCampaign,
       phoneVoucher,
       nameVoucher,
       modalVoucher,
     } = this.state;
     const arrLevel = [
-   
       {
         item: "1",
       },
@@ -436,7 +469,7 @@ class EndUser extends Component {
               {this.state.actionVoucher == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-            <TextFieldGroup
+              <TextFieldGroup
                 field="name"
                 label="Tên Banner"
                 value={this.state.name}
@@ -452,14 +485,36 @@ class EndUser extends Component {
                 onChange={(e) => this.setState({ title: e.target.value })}
                 // rows="5"
               />
-               <TextFieldGroup
-                field="relCode"
-                label="Mã công ty"
-                value={this.state.relCode}
-                // error={errors.title}
-                onChange={(e) => this.setState({ relCode: e.target.value })}
-                // rows="5"
-              />
+              <div className="mt-3"></div>
+              <label>Tên công ty</label>
+              <Select
+              defaultValue={dataCampaign ? dataCampaign[0].name : ""}
+
+                className="select_company"
+                showSearch
+                placeholder="Chọn tên công ty"
+                optionFilterProp="children"
+                onChange={(value) =>
+                  this.setState({
+                    relCode: value,
+                  })
+                }
+                onSearch={this.onSearchSelect}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {dataCampaign
+                  ? dataCampaign.map((item, i) => {
+                    if(i===0){
+                      return <Option value={item.name}>{item.name}</Option>;
+
+                    }
+                    })
+                  : null}
+              </Select>
+              <div className="mt-3"></div>
               <TextFieldGroup
                 field="image"
                 label="Hình ảnh"
@@ -498,7 +553,7 @@ class EndUser extends Component {
                   this.setState({ description: e.target.value });
                 }}
               />
-               <TextFieldGroup
+              <TextFieldGroup
                 field="embedded"
                 label="Mã nhúng"
                 value={this.state.embedded}
@@ -506,8 +561,7 @@ class EndUser extends Component {
                 onChange={(e) => this.setState({ embedded: e.target.value })}
                 // rows="5"
               />
-              
-              
+
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
@@ -657,7 +711,7 @@ class EndUser extends Component {
                                     src={item.image}
                                   />
                                 </td>
-                               
+
                                 <td className="text-center">
                                   {item.description}
                                 </td>
@@ -666,9 +720,7 @@ class EndUser extends Component {
                                     {item.link}
                                   </a>
                                 </td>
-                                <td className="text-center">
-                                  {item.embedded}
-                                </td>
+                                <td className="text-center">{item.embedded}</td>
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
@@ -680,7 +732,6 @@ class EndUser extends Component {
                                         : "#87d068"
                                     }
                                   >
-                                  
                                     {item.status == "1"
                                       ? "Bắt đầu"
                                       : item.status == "2"

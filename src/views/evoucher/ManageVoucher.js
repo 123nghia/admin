@@ -32,6 +32,9 @@ import DotLoader from "react-spinners/DotLoader";
 import { Tag, Divider } from "antd";
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
+import { Select } from "antd";
+
+const { Option } = Select;
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
@@ -74,16 +77,32 @@ class EndUser extends Component {
       status: e.target.value,
     });
   };
+  async getDataCampaign() {
+    const { company_id } = this.state;
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_CAMPAIGN;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        let val = res.data.data;
+
+        this.setState({ dataCampaign: val });
+      });
+  }
   async componentDidMount() {
     
-    if(this.state.type === "2"){
-      window.location.href = "/not-enough"
-    }
+  
     
     const { type } = this.state;
 
     this.getData();
-
+    this.getDataCampaign();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -214,7 +233,7 @@ class EndUser extends Component {
       codeVoucher: "",
       relCode: "",
       description: "",
-      status: "",
+      status: "0",
     });
   }
   openEditVoucher(item) {
@@ -436,17 +455,24 @@ class EndUser extends Component {
       key,
       phoneVoucher,
       nameVoucher,
+      dataCampaign,
       modalVoucher,
     } = this.state;
     const arrLevel = [
       {
-        item: "1",
+        item: "0",
       },
       {
         item: "2",
       },
       {
         item: "3",
+      },
+      {
+        item: "4",
+      },
+      {
+        item: "5",
       },
     ];
     if (!this.state.isLoading) {
@@ -468,14 +494,43 @@ class EndUser extends Component {
                 onChange={(e) => this.setState({ codeVoucher: e.target.value })}
                 // rows="5"
               />
-              <TextFieldGroup
+              <div class="mt-3"></div>
+              <label>Tên chiến dịch</label>
+              <Select
+              defaultValue={dataCampaign ? dataCampaign[0].name : ""}
+                className="select_company"
+                showSearch
+                placeholder="Chọn tên công ty"
+                optionFilterProp="children"
+                onChange={(value) =>
+                  this.setState({
+                    relCode: value,
+                  })
+                }
+                onSearch={this.onSearchSelect}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {dataCampaign
+                  ? dataCampaign.map((item, i) => {
+                    if(i===0){
+                      return <Option  value={item.name}>{item.name}</Option>;
+
+                    }
+                    })
+                  : null}
+              </Select>
+              {/* <TextFieldGroup
                 field="relCode"
                 label="Mã chiến dịch"
                 value={this.state.relCode}
                 // error={errors.title}
                 onChange={(e) => this.setState({ relCode: e.target.value })}
                 // rows="5"
-              />
+              /> */}
+              <div className="mt-3"></div>
               <label className="control-label">Mô tả:</label>
               <CTextarea
                 name="description"
@@ -501,21 +556,33 @@ class EndUser extends Component {
                       if (item.item === this.state.status) {
                         return (
                           <option selected key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "Bắt đầu"
+                            {item.item === "0"
+                              ? "Sẵn sàng"
+                              : item.item === "1"
+                              ? "Đã nhận"
                               : item.item === "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                              ? "Đã sử dụng"
+                              : item.item === "3"
+                              ? "Hủy bỏ"
+                              : item.item === "4"
+                              ? "Xóa bỏ"
+                              : "Khóa"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                            {item.item == "1"
-                              ? "Bắt đầu"
-                              : item.item == "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                           {item.item === "0"
+                              ? "Sẵn sàng"
+                              : item.item === "1"
+                              ? "Đã nhận"
+                              : item.item === "2"
+                              ? "Đã sử dụng"
+                              : item.item === "3"
+                              ? "Hủy bỏ"
+                              : item.item === "4"
+                              ? "Xóa bỏ"
+                              : "Khóa"}
                           </option>
                         );
                       }
@@ -613,19 +680,29 @@ class EndUser extends Component {
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
-                                    color={
-                                      item.status === "1"
-                                        ? "#2db7f5"
-                                        : item.status === "2"
-                                        ? "#f50"
-                                        : "#87d068"
-                                    }
+                                    color= {item.status === "0"
+                                    ? "#2db7f5"
+                                    : item.status === "1"
+                                    ? "#108ee9"
+                                    : item.status === "2"
+                                    ? "#f50"
+                                    : item.status === "3"
+                                    ? "#FF9800"
+                                    : item.status === "4"
+                                    ? "#FF0004"
+                                    : "#00D084"}
                                   >
-                                    {item.status == "1"
-                                      ? "Bắt đầu"
-                                      : item.status == "2"
-                                      ? "Trong quá trình"
-                                      : "Hoàn thành"}
+                                    {item.status === "0"
+                              ? "Sẵn sàng"
+                              : item.status === "1"
+                              ? "Đã nhận"
+                              : item.status === "2"
+                              ? "Đã sử dụng"
+                              : item.status === "3"
+                              ? "Hủy bỏ"
+                              : item.status === "4"
+                              ? "Xóa bỏ"
+                              : "Khóa"}
                                   </Tag>
                                 </td>
                                 <td className="text-center">
