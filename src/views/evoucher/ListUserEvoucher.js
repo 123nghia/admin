@@ -344,17 +344,12 @@ class EndUser extends Component {
     } = this.state;
     const arrLevel = [
       {
-        item: "0",
+        item: "A",
       },
       {
         item: "1",
       },
-      {
-        item: "2",
-      },
-      {
-        item: "3",
-      },
+     
     ];
     if (!this.state.isLoading) {
       return (
@@ -623,18 +618,16 @@ class EndUser extends Component {
                                   <Tag
                                     className="ant-tag"
                                     color={
-                                      item.status === "1"
+                                      item.status === "A"
                                         ? "#2db7f5"
                                         : item.status === "2"
-                                        ? "#f50"
-                                        : "#87d068"
+                                        
                                     }
                                   >
-                                    {item.status == "1"
-                                      ? "Bắt đầu"
+                                    {item.status == "A"
+                                      ? "Đã nhận"
                                       : item.status == "2"
-                                      ? "Trong quá trình"
-                                      : "Hoàn thành"}
+                                      }
                                   </Tag>
 
                                   {

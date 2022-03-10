@@ -308,6 +308,9 @@ class EndUser extends Component {
           showConfirmButton: false,
           timer: 700,
         });
+        this.setState({
+          modalVoucher: false,
+        });
         this.getData();
       });
   }
@@ -559,7 +562,7 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Sẵn sàng"
                               : item.item === "1"
-                              ? "Đã nhận"
+                              ? "Chờ xác nhận"
                               : item.item === "2"
                               ? "Đã sử dụng"
                               : item.item === "3"
@@ -575,7 +578,7 @@ class EndUser extends Component {
                            {item.item === "0"
                               ? "Sẵn sàng"
                               : item.item === "1"
-                              ? "Đã nhận"
+                              ? "Chờ xác nhận"
                               : item.item === "2"
                               ? "Đã sử dụng"
                               : item.item === "3"
@@ -695,7 +698,7 @@ class EndUser extends Component {
                                     {item.status === "0"
                               ? "Sẵn sàng"
                               : item.status === "1"
-                              ? "Đã nhận"
+                              ? "Chờ xác nhận"
                               : item.status === "2"
                               ? "Đã sử dụng"
                               : item.status === "3"

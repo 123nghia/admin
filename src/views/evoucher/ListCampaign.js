@@ -369,17 +369,15 @@ async remove(item){
               className="ant-tag"
               color={
                 item.status === "1"
-                  ? "#2db7f5"
-                  : item.status === "2"
-                  ? "#f50"
-                  : "#87d068"
+                  ? "#87d068"
+                  
+                  : "#f50"
               }
             >
               {item.status == "1"
-                ? "Bắt đầu"
-                : item.status == "2"
-                ? "Trong quá trình"
-                : "Hoàn thành"}
+                ? "Hoạt động"
+                
+                : "Không hoạt động"}
             </Tag>
             </span>
           </p>
@@ -467,17 +465,15 @@ async remove(item){
                                     className="ant-tag"
                                     color={
                                       item.status === "1"
-                                        ? "#2db7f5"
-                                        : item.status === "2"
-                                        ? "#f50"
-                                        : "#87d068"
+                                        ? "#87d068"
+                                        
+                                        : "#f50"
                                     }
                                   >
                                     {item.status == "1"
-                                      ? "Bắt đầu"
-                                      : item.status == "2"
-                                      ? "Trong quá trình"
-                                      : "Hoàn thành"}
+                                      ? "Hoạt động"
+                                     
+                                      : "Không hoạt động"}
                                   </Tag>
                                 </td>
                                 <td className="text-center">
@@ -702,17 +698,15 @@ async remove(item){
                                     className="ant-tag"
                                     color={
                                       item.status === "1"
-                                        ? "#2db7f5"
-                                        : item.status === "2"
-                                        ? "#f50"
-                                        : "#87d068"
+                                        ? "#87d068"
+                                        
+                                        : "#f50"
                                     }
                                   >
                                     {item.status == "1"
-                                      ? "Bắt đầu"
-                                      : item.status == "2"
-                                      ? "Trong quá trình"
-                                      : "Hoàn thành"}
+                                      ? "Hoạt động"
+                                      
+                                      : "Không hoạt động"}
                                   </Tag>
                                 </td>
                                 

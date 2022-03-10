@@ -375,6 +375,9 @@ class EndUser extends Component {
           showConfirmButton: false,
           timer: 700,
         });
+        this.setState({
+          modalVoucher: false,
+        });
         this.getData();
       });
   }
@@ -454,9 +457,7 @@ class EndUser extends Component {
       {
         item: "2",
       },
-      {
-        item: "3",
-      },
+     
     ];
     if (!this.state.isLoading) {
       return (
@@ -517,7 +518,7 @@ class EndUser extends Component {
               <div className="mt-3"></div>
               <TextFieldGroup
                 field="image"
-                label="Hình ảnh"
+                label="Hình ảnh (280 x 86)px"
                 type={"file"}
                 className="mt-5"
                 onChange={(e) => {
@@ -579,20 +580,18 @@ class EndUser extends Component {
                         return (
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
-                              ? "Bắt đầu"
-                              : item.item === "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                              ? "Hoạt động"
+                              
+                              : "Không hoạt động"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
                             {item.item == "1"
-                              ? "Bắt đầu"
-                              : item.item == "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                              ? "Hoạt động"
+                             
+                              : "Không hoạt động"}
                           </option>
                         );
                       }
@@ -628,7 +627,7 @@ class EndUser extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Quản lý Banner Quảng cáo
+                    Quản lý Banner
                   </i>
 
                   {/* <div style={styles.tags}>
@@ -682,7 +681,7 @@ class EndUser extends Component {
                         <th className="text-center">Mô tả</th>
 
                         <th className="text-center">Link tham chiếu</th>
-                        <th className="text-center">Mã nhúng</th>
+                        
                         <th className="text-center">trạng thái</th>
 
                         <th className="text-center"></th>
@@ -704,9 +703,9 @@ class EndUser extends Component {
                                 <td className="text-center">{item.name}</td>
 
                                 <td className="text-center">{item.title}</td>
-                                <td className="text-center">
+                                <td className="text-center" style={{ maxWidth: "230px"}}>
                                   <img
-                                    style={{ maxWidth: "300px" }}
+                                    style={{ maxWidth: "230px" }}
                                     alt=""
                                     src={item.image}
                                   />
@@ -715,28 +714,26 @@ class EndUser extends Component {
                                 <td className="text-center">
                                   {item.description}
                                 </td>
-                                <td className="text-center">
+                                <td className="text-center" style={{ maxWidth: "140px" }}>
                                   <a target="_blank" href={item.link}>
                                     {item.link}
                                   </a>
                                 </td>
-                                <td className="text-center">{item.embedded}</td>
+                               
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
                                     color={
                                       item.status === "1"
-                                        ? "#2db7f5"
-                                        : item.status === "2"
-                                        ? "#f50"
-                                        : "#87d068"
+                                        ? "#87d068"
+                                        
+                                        : "#f50"
                                     }
                                   >
                                     {item.status == "1"
-                                      ? "Bắt đầu"
-                                      : item.status == "2"
-                                      ? "Trong quá trình"
-                                      : "Hoàn thành"}
+                                      ? "Hoạt động"
+                                     
+                                      : "Không hoạt động"}
                                   </Tag>
                                 </td>
                                 <td className="text-center">

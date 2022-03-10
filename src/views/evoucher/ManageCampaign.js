@@ -370,6 +370,9 @@ class EndUser extends Component {
           showConfirmButton: false,
           timer: 700,
         });
+        this.setState({
+          modalVoucher: false,
+        });
         this.getData();
       });
   }
@@ -511,6 +514,9 @@ class EndUser extends Component {
           showConfirmButton: false,
           timer: 700,
         });
+        this.setState({
+          modalVoucherEditing2: false,
+        });
         this.getDataVoucher(this.state.company_id_search);
       });
   }
@@ -591,17 +597,15 @@ class EndUser extends Component {
                   className="ant-tag"
                   color={
                     item.status === "1"
-                      ? "#2db7f5"
-                      : item.status === "2"
-                      ? "#f50"
-                      : "#87d068"
+                      ? "#87d068"
+                      
+                      : "#f50"
                   }
                 >
-                  {item.status == "1"
-                    ? "Bắt đầu"
-                    : item.status == "2"
-                    ? "Trong quá trình"
-                    : "Hoàn thành"}
+                   {item.status === "1"
+                                      ? "Hoạt động"
+                                      
+                                      : "Không hoạt động"}
                 </Tag>
               </span>
             </p>
@@ -650,9 +654,7 @@ class EndUser extends Component {
       {
         item: "2",
       },
-      {
-        item: "3",
-      },
+     
     ];
     if (!this.state.isLoading) {
       return (
@@ -839,21 +841,19 @@ class EndUser extends Component {
                       if (item.item === this.state.status) {
                         return (
                           <option selected key={i} value={item.item}>
-                            {item.item === "1"
-                              ? "Bắt đầu"
-                              : item.item === "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                             {item.item === "1"
+                                      ? "Hoạt động"
+                                      
+                                      : "Không hoạt động"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                            {item.item == "1"
-                              ? "Bắt đầu"
-                              : item.item == "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                            {item.item === "1"
+                                      ? "Hoạt động"
+                                      
+                                      : "Không hoạt động"}
                           </option>
                         );
                       }
@@ -949,17 +949,15 @@ class EndUser extends Component {
                                 className="ant-tag"
                                 color={
                                   item.status === "1"
-                                    ? "#2db7f5"
-                                    : item.status === "2"
-                                    ? "#f50"
-                                    : "#87d068"
+                                    ? "#87d068"
+                                    
+                                    : "#f50"
                                 }
                               >
-                                {item.status == "1"
-                                  ? "Bắt đầu"
-                                  : item.status == "2"
-                                  ? "Trong quá trình"
-                                  : "Hoàn thành"}
+                                 {item.status === "1"
+                                      ? "Hoạt động"
+                                      
+                                      : "Không hoạt động"}
                               </Tag>
                             </td>
                             <td className="text-center">
@@ -1090,20 +1088,18 @@ class EndUser extends Component {
                         return (
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
-                              ? "Bắt đầu"
-                              : item.item === "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                                      ? "Hoạt động"
+                                      
+                                      : "Không hoạt động"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                            {item.item == "1"
-                              ? "Bắt đầu"
-                              : item.item == "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                             {item.item === "1"
+                                      ? "Hoạt động"
+                                      
+                                      : "Không hoạt động"}
                           </option>
                         );
                       }
@@ -1254,17 +1250,15 @@ class EndUser extends Component {
                                     className="ant-tag"
                                     color={
                                       item.status === "1"
-                                        ? "#2db7f5"
-                                        : item.status === "2"
-                                        ? "#f50"
-                                        : "#87d068"
+                                        ? "#87d068"
+                                        
+                                        : "#f50"
                                     }
                                   >
-                                    {item.status == "1"
-                                      ? "Bắt đầu"
-                                      : item.status == "2"
-                                      ? "Trong quá trình"
-                                      : "Hoàn thành"}
+                                    {item.status === "1"
+                                      ? "Hoạt động"
+                                      
+                                      : "Không hoạt động"}
                                   </Tag>
                                 </td>
 
