@@ -74,6 +74,8 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
+
       imgLogoFooter : "",
       imgLogoFooter_link : "",
       imgLogoFooter_show : "",
@@ -394,10 +396,16 @@ class Users extends Component {
   }
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/getAll?key=webinfo";
+    let url = baseUrlapi + "api/config/getAll";
+    const newComany_id = JSON.parse(this.state.company_id).company_id
+
     await axios
       .get(url, {
-        key: "webinfo",
+        params : {
+          "key": "webinfo",
+          "company_id": newComany_id
+        }
+        
       })
       .then((res) => {
      
@@ -775,12 +783,14 @@ class Users extends Component {
 // this.setState({
 //   dataConfigWeb : copy
 // })
+const newComany_id = JSON.parse(this.state.company_id).company_id
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     await axios.post(url, {
       value: JSON.stringify(dataConfigWeb),
       dataType: "1",
       type: "system",
+      company_id : newComany_id,
       id: this.state.idUpdate,
     });
   }
@@ -836,15 +846,18 @@ class Users extends Component {
     // this.addDataConfig();
   }
   getData = async () => {
+    const newComany_id = JSON.parse(this.state.company_id).company_id
+
+   
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.CONFIG_THEME_GET + "/" + "61ce79c4d19f5244aa161b36",
+      url: Constants.CONFIG_THEME_GET + "/" + newComany_id,
       method: "GET",
       headers: this.state.token,
     });
     let val = res.data.data;
-
+    
     this.setState({
       dataApi: val,
       data: val,
@@ -1025,13 +1038,15 @@ class Users extends Component {
       return;
     }
 
+    const newComany_id = JSON.parse(this.state.company_id).company_id
+  
     const body = {
       isHash: false,
       sub_mainColor: sub_mainColor,
 
       mainColor: mainColor,
       sub2_mainColor: sub2_mainColor,
-      company_id: "61ce79c4d19f5244aa161b36",
+      company_id: newComany_id,
       button_color: button_color,
       sucess_color: sucess_color,
       error_color: error_color,
@@ -1046,7 +1061,9 @@ class Users extends Component {
     });
 
     if (res.data.is_success == true) {
+
       this.getData();
+     
     } else {
       alert(res.data.message);
       this.setState({ isLoading: false });
