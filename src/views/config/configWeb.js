@@ -173,15 +173,7 @@ class Users extends Component {
       }
     }
     tablinks = document.getElementsByClassName("tablinks");
-   
-    // for (i = 0; i < tablinks.length; i++) {
-    //   if (i === id) {
-    //     tablinks[id].classList.add("active");
-    //   } else {
-    //     tablinks[i].classList.remove("defaultOpen");
-    //     tablinks[i].classList.remove("active");
-    //   }
-    // }
+  
   }
 
   onChangeImage(e) {

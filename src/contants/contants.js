@@ -1,12 +1,33 @@
 export default {
    "BASE_URL" : "https://soida-api.pensilia.com/",
-  // "BASE_URL" : "http://192.168.1.15:3012/",
+  // "BASE_URL" : "http://192.168.1.8:3012/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   // "PORTAL_SERVER":  "http://192.168.1.5:3014/",
 
   // "BASE_URL_CURRENT" : "https://soida-admin.pensilia.com/",
   "BASE_URL_CURRENT" : "http://localhost:3013/",
   "BASE_URL_HISTORY_SKIN" : "https://soida.pensilia.com/lich-su-soi-da-with-iframe/",
+
+  "GET_CAMPAIGN" : "api/campaign/getAll",
+  "ADD_CAMPAIGN" : "api/campaign/add",
+  "UPDATE_CAMPAIGN" : "api/campaign/update",
+  "DELETE_CAMPAIGN" : "api/campaign/delete",
+
+  "GET_BANNER_SALES" : "api/banner_embedd/getAll",
+  "ADD_BANNER_SALES" : "api/banner_embedd/add",
+  "UPDATE_BANNER_SALES" : "api/banner_embedd/update",
+  "DELETE_BANNER_SALES" : "api/banner_embedd/delete",
+
+  "GET_VOUCHER" : "api/evoucher/getAll",
+  "ADD_VOUCHER" : "api/evoucher/add",
+  "UPDATE_VOUCHER" : "api/evoucher/update",
+  "DELETE_VOUCHER" : "api/evoucher/delete",
+
+  "GET_USER_EVOUCHER" : "api/evoucher/list-customer-request",
+  "ADD_USER_EVOUCHER" : "api/evoucher/list-customer-request",
+  "UPDATE_USER_EVOUCHER" : "api/evoucher/list-customer-request",
+  "DELETE_USER_EVOUCHER" : "api/evoucher/list-customer-request",
+
   "LIST_USER" : "/api/list-user",
   "LIST_USER_WITH_ID" : "/api/list-user?id=",
   "ADD_USER" : "/api/add-user",

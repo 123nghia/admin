@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const Dashboard = React.lazy(() => import('./views/DashBoard/Dashboard'));
 const TableUser = React.lazy(() => import('./views/base/tables/TableUser'));
@@ -65,12 +67,39 @@ const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTyp
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 
+// evoucher
 const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
 const RequestSupport = React.lazy(() => import('./views/info/requestSupport'));
+const ListEvoucher = React.lazy(() => import('./views/evoucher/ListVoucher'));
+const ListUserEvoucher = React.lazy(() => import('./views/evoucher/ListUserEvoucher'));
+const ListCampaign = React.lazy(() => import('./views/evoucher/ListCampaign'));
+const ManageCampaign = React.lazy(() => import('./views/evoucher/ManageCampaign'));
+const ManageVoucher = React.lazy(() => import('./views/evoucher/ManageVoucher'));
+const BannerSales = React.lazy(() => import('./views/evoucher/Banner'));
+const Statistics = React.lazy(() => import('./views/evoucher/Chart'));
+const Translation = React.lazy(() => import('./views/evoucher/Translation'));
+const NotEnough = React.lazy(() => import('./views/Pages/NotEnough/NotEnough'));
 
+
+const roleUser = sessionStorage.getItem('type');
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
+  // evoucher
+  { path: '/list-evoucher', name: 'ListEvoucher', component: ListEvoucher },
+  { path: '/list-user-evoucher', name: 'ListUserEvoucher', component: ListUserEvoucher },
+  { path: '/list-campaign', name: 'ListCampaign', component: ListCampaign },
+  { path: '/banner-sales', name: 'BannerSales', component: roleUser === "0" ? BannerSales : NotEnough },
+  { path: '/evoucher-statistics', name: 'Statistics', component: Statistics },
+  { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher  },
+  { path: '/manage-campaign', name: 'ManageCampaign', component:roleUser === "0" ? ManageCampaign : NotEnough },
+  { path: '/translation', name: 'Translation', component: Translation },
+  { path: '/not-enough', name: 'NotEnough', component: NotEnough },
+
+
+
+
+  
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', name: 'Users', component: TableUser },
   { path: '/company', name: 'Company', component: TableCompany },
@@ -91,7 +120,7 @@ const routes = [
   { path: '/transaction', name: 'Transaction', component: TransactionTable },
   { path: '/hardwaremanager', name: 'HardWare', component: HardWareManager },
   { path: '/profile', name: 'Profile', component: Profile },
-  { path: '/book-calendar', name: 'BookCalendar', component: BookCalendar },
+  { path: '/book-calendar', name: 'BookCalendar', component: roleUser === "2" ? BookCalendar : NotEnough  },
 
   
   { path: '/spending_order', name: 'SPENDING', component: SPENDING },
@@ -111,11 +140,12 @@ const routes = [
   { path: '/historyskin', name: 'History Skin', component: HistorySkin },
   { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
-  { path: '/subsale', name: 'Sub Sale', component: PluginSubSaleTable },
+
+  { path: '/subsale', name: 'Sub Sale', component: roleUser === "2" ? PluginSubSaleTable : NotEnough },
   { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
-  { path: '/cau-hinh-trang-web', name: 'configWeb', component: configWeb },
+  { path: '/cau-hinh-trang-web', name: 'configWeb', component:roleUser === "2" ? configWeb : NotEnough  },
 
 
   
@@ -130,7 +160,7 @@ const routes = [
 
   { path: '/banner', name: 'Banner User', component: Banner },
 
-  { path: '/quan-ly-banner', name: 'BannerSlider', component: BrandSlider },
+  { path: '/quan-ly-banner', name: 'BannerSlider', component:roleUser === "2" ? BrandSlider : NotEnough  },
 
   { path: '/config-theme', name: 'Config themes', component: ConfigTheme },
 
@@ -150,5 +180,5 @@ const routes = [
   { path: '/items/4', name: 'K5', component: TypeOne },
   { path: '/items/5', name: 'K6', component: TypeOne },
 ];
+export default routes
 
-export default routes;
