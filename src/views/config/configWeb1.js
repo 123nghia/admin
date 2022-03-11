@@ -27,16 +27,16 @@ import {
 import Swal from "sweetalert2";
 import update from "react-addons-update";
 import PropTypes from "prop-types";
-import TextFieldGroup from "../../views/Common/TextFieldGroup";
-import API_CONNECT from "../../../src/functions/callAPI";
+import TextFieldGroup from "../Common/TextFieldGroup";
+import API_CONNECT from "../../functions/callAPI";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import InfoIcon from "@mui/icons-material/Info";
-import PermDataSettingIcon from "@mui/icons-material/PermDataSetting";
-import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
+import InfoIcon from '@mui/icons-material/Info';
+import PermDataSettingIcon from '@mui/icons-material/PermDataSetting';
+import DoorSlidingIcon from '@mui/icons-material/DoorSliding';
 import {
   CLabel,
   CRow,
@@ -50,7 +50,7 @@ import Checkbox from "@mui/material/Checkbox";
 import CIcon from "@coreui/icons-react";
 import "moment-timezone";
 import "react-datepicker/dist/react-datepicker.css";
-import Constants from "./../../contants/contants";
+import Constants from "../../contants/contants";
 import axios from "axios";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
@@ -59,9 +59,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import logoMainnet from "../../assets/img/logo_head.png";
 import CircularProgress from "@mui/material/CircularProgress";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
-import LockResetIcon from "@mui/icons-material/LockReset";
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GoogleIcon from '@mui/icons-material/Google';
+import LockResetIcon from '@mui/icons-material/LockReset';
 
 // import {HiInformationCircle
 // } from "react-icons/hi";
@@ -74,13 +74,11 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      company_id: JSON.parse(localStorage.getItem("user")).company_id
-        ? JSON.parse(localStorage.getItem("user")).company_id
-        : "-1",
+      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
 
-      imgLogoFooter: "",
-      imgLogoFooter_link: "",
-      imgLogoFooter_show: "",
+      imgLogoFooter : "",
+      imgLogoFooter_link : "",
+      imgLogoFooter_show : "",
       action: "new",
       idUpdate: "",
       checkFb: false,
@@ -133,33 +131,29 @@ class Users extends Component {
       sliderWelcome: [],
       sologan: "",
       introduce: "",
-      imageSlide: "",
-      imageSlide_show: "",
-      imageSlide_link: "",
-      contentSlide: "",
-      modalSlide: false,
+      imageSlide : "",
+      imageSlide_show : "",
+      imageSlide_link :"",
+      contentSlide : "",
+      modalSlide : false,
       actionSlide: "new",
-      imgLayout_show: "",
-      imgLayout_link: "",
-      imgLayout: "",
-      imageSeo_link: "",
-      configData: [
+      imgLayout_show :"",
+      imgLayout_link :"",
+      imgLayout :"",
+      imageSeo_link : "",
+      configData : [
         {
-          label: "Trạng thái Facebook",
-          value: true,
-          key: "fb",
+          label : "Trạng thái Facebook",
+          value : true,
+          key : "fb"
         },
         {
-          label: "Trạng thái Google",
-          value: true,
-          key: "gg",
+          label : "Trạng thái Google",
+          value : true,
+          key : "gg"
+
         },
-        {
-          label: "Trạng thái Zalo",
-          value: true,
-          key: "gg",
-        },
-      ],
+      ]
     };
   }
   changeLevel = (e) => {
@@ -181,7 +175,7 @@ class Users extends Component {
       }
     }
     tablinks = document.getElementsByClassName("tablinks");
-
+   
     // for (i = 0; i < tablinks.length; i++) {
     //   if (i === id) {
     //     tablinks[id].classList.add("active");
@@ -200,12 +194,14 @@ class Users extends Component {
     reader.onload = (e) => {
       this.setState({ image: e.target.result, image_show: e.target.result });
     };
+    
   }
   onChangeImage2(e) {
+
     let files = e.target.files;
     let reader = new FileReader();
     this.setState({ imageSeo_link: files[0] });
-    console.log(this.state.imageSeo_link);
+    console.log(this.state.imageSeo_link)
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
       this.setState({
@@ -213,40 +209,43 @@ class Users extends Component {
         imageSeo_show: e.target.result,
       });
     };
+
+    
   }
-  onChangeImageHomepage(e, value) {
+  onChangeImageHomepage(e,value) {
     let files = e.target.files;
     let reader = new FileReader();
-    if (value === "1") {
+    if(value==="1"){
       this.setState({ image1_link: files[0] });
-      reader.readAsDataURL(files[0]);
-      reader.onload = (e) => {
-        this.setState({
-          image1: e.target.result,
-          image1_show: e.target.result,
-        });
-      };
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({
+        image1: e.target.result,
+        image1_show: e.target.result,
+      });
+    };
     }
-    if (value === "2") {
+    if(value==="2"){
       this.setState({ image2_link: files[0] });
-      reader.readAsDataURL(files[0]);
-      reader.onload = (e) => {
-        this.setState({
-          image2: e.target.result,
-          image2_show: e.target.result,
-        });
-      };
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({
+        image2: e.target.result,
+        image2_show: e.target.result,
+      });
+    };
     }
-    if (value === "3") {
+    if(value==="3"){
       this.setState({ image3_link: files[0] });
-      reader.readAsDataURL(files[0]);
-      reader.onload = (e) => {
-        this.setState({
-          image3: e.target.result,
-          image3_show: e.target.result,
-        });
-      };
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({
+        image3: e.target.result,
+        image3_show: e.target.result,
+      });
+    };
     }
+    
   }
   onChangeImageSeo(e) {
     let files = e.target.files;
@@ -286,6 +285,7 @@ class Users extends Component {
   }
   async componentDidMount() {
     this.getData().then(() => {
+      
       this.getInfoFunc();
     });
 
@@ -303,38 +303,43 @@ class Users extends Component {
     if (data) {
       let x = data.map((item, i) => {
         return (
-          <tr key={i}>
-            <td className="text-center">{i + 1}</td>
-            <td className="text-center">{item.title}</td>
-            {/* <td className="text-center">{item.name}</td> */}
+          
+            
 
-            <td className="text-center">{item.href}</td>
-            <td className="text-center">{item.Level}</td>
-            {/* <td className="text-center">
+            <tr key={i}>
+            
+              <td className="text-center">{i + 1}</td>
+              <td className="text-center">{item.title}</td>
+              {/* <td className="text-center">{item.name}</td> */}
+
+              <td className="text-center">{item.href}</td>
+              <td className="text-center">{item.Level}</td>
+              {/* <td className="text-center">
                                 {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
                               </td> */}
-            <td className="">
-              <CButton
-                outline
-                color="success"
-                size="sm"
-                onClick={() => this.openFormEdit(item, i)}
-              >
-                {/* <CIcon name="cilTrash" /> */}
-                Chỉnh sửa
-              </CButton>{" "}
-              <CButton
-                style={styles.mgl5}
-                outline
-                color="danger"
-                size="sm"
-                onClick={() => this.openDelete(i)}
-              >
-                {/* <CIcon name="cilPencil" /> */}
-                Xóa
-              </CButton>
-            </td>
-          </tr>
+              <td className="">
+                <CButton
+                  outline
+                  color="success"
+                  size="sm"
+                  onClick={() => this.openFormEdit(item, i)}
+                >
+                  {/* <CIcon name="cilTrash" /> */}
+                  Chỉnh sửa
+                </CButton>{" "}
+                <CButton
+                  style={styles.mgl5}
+                  outline
+                  color="danger"
+                  size="sm"
+                  onClick={() => this.openDelete(i)}
+                >
+                  {/* <CIcon name="cilPencil" /> */}
+                  Xóa
+                </CButton>
+              </td>
+            </tr>
+         
         );
       });
       let render = (
@@ -355,7 +360,7 @@ class Users extends Component {
             </tr>
           </thead>
           <tbody>
-            <td colSpan="10" hidden={this.state.hidden} className="text-center">
+          <td colSpan="10" hidden={this.state.hidden} className="text-center">
               Không tìm thấy dữ liệu
             </td>
             {x}
@@ -392,35 +397,29 @@ class Users extends Component {
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll";
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if(newComany_id){
-        Output_newComany_id = newComany_id
-    }else{
-        Output_newComany_id = "-1"
-    }
+    const newComany_id = JSON.parse(this.state.company_id).company_id
+
     await axios
       .get(url, {
-        params: {
-          key: "webinfo_admin",
-          company_id: Output_newComany_id,
-        },
+        params : {
+          "key": "webinfo",
+          "company_id": newComany_id
+        }
+        
       })
       .then((res) => {
-        console.log("data", res);
+     
+        console.log('data',res)
         if (res.data.data.length > 0) {
           let dataConfig = res.data.data[0];
 
           let valueConfig = JSON.parse(dataConfig.Value);
           console.log(valueConfig);
-
+          
           this.setState(
             {
-              image: valueConfig.value.infoHeader.logo,
-              image_show: valueConfig.value.infoHeader.logo,
-              image_link: valueConfig.value.infoHeader.logo,
-              hrefLogoHeader: valueConfig.value.infoHeader.href,
-
+              image: valueConfig.value.logo,
+              image_show: valueConfig.value.logo,
               dataConfigWeb: valueConfig,
               idUpdate: dataConfig._id,
               codeChat: valueConfig.value.tawk,
@@ -428,30 +427,23 @@ class Users extends Component {
               seoInfo: valueConfig.value.seoInfo,
               homepage: valueConfig.value.homepage,
               slideShow: valueConfig.value.slideShow,
-              imgLogoFooter: valueConfig.value.infoFooter.logo,
-              imgLogoFooter_show: valueConfig.value.infoFooter.logo,
-              imgLogoFooter_link: valueConfig.value.infoFooter.logo,
-              hrefLogoFooter: valueConfig.value.infoFooter.href,
-              configData: valueConfig.value.statusConfig,
-              keyAppFb: valueConfig.value.mxh.facebook.appid,
-              PassFb: valueConfig.value.mxh.facebook.password,
-              PassGg: valueConfig.value.mxh.google.password,
-              keyAppGg: valueConfig.value.mxh.google.appid,
-              PassZalo: valueConfig.value.mxh.zalo.password,
-              keyAppZalo: valueConfig.value.mxh.zalo.appid,
-              hrefFb: valueConfig.value.mxh.facebook.href,
-              hrefGg: valueConfig.value.mxh.google.href,
-              hrefZalo: valueConfig.value.mxh.zalo.href,
-
+              imgLogoFooter : valueConfig.value.logoFooter,
+              imgLogoFooter_show: valueConfig.value.logoFooter,
+              imgLogoFooter_link : valueConfig.value.logoFooter,
+              configData : valueConfig.value.statusConfig,
+              keyAppFb: valueConfig.value.facebook.appid,
+              PassFb: valueConfig.value.facebook.password,
+              PassGg: valueConfig.value.google.password,
+              keyAppGg: valueConfig.value.google.appid,
             },
             () => {
-              const { homepage, seoInfo } = this.state;
-              if (homepage) {
+              const {homepage, seoInfo} = this.state;
+              if(homepage){
                 this.setState({
                   textAi: this.state.homepage.textAi,
 
-                  titlePen1: this.state.homepage.title1,
-                  titlePen2: this.state.homepage.title2,
+                  titlePen1 : this.state.homepage.title1,
+                  titlePen2 : this.state.homepage.title2,
                   sologan: this.state.homepage.sologan,
                   introduce: this.state.homepage.introduction,
 
@@ -466,60 +458,49 @@ class Users extends Component {
                   image2_link: this.state.homepage.image2,
                   image2: this.state.homepage.image2,
                   image2_show: this.state.homepage.image2,
-                });
               }
+                )}
+                console.log(this.state.homepage.image2,this.state.homepage.image3)
+            if(seoInfo){
+              this.setState({
+                titleSeo: this.state.seoInfo.title,
+                titleSeo2: this.state.seoInfo.titleSEO,
+                descSeo: this.state.seoInfo.description,
+                imgLayout: this.state.seoInfo.imageShare,
+                imgLayout_show : this.state.seoInfo.imageShare,
+                imgLayout_link : this.state.seoInfo.imageShare,
 
-              if (seoInfo) {
-                this.setState({
-                  titleSeo: this.state.seoInfo.title,
-                  titleSeo2: this.state.seoInfo.titleSEO,
-                  descSeo: this.state.seoInfo.description,
-                  imgLayout: this.state.seoInfo.imageShare,
-                  imgLayout_show: this.state.seoInfo.imageShare,
-                  imgLayout_link: this.state.seoInfo.imageShare,
-
-                  keywordSeo: this.state.seoInfo.key,
-                  authorSeo: this.state.seoInfo.author,
-                });
-              }
+                keywordSeo: this.state.seoInfo.key,
+                authorSeo: this.state.seoInfo.author,
+              })
+            }    
+              
             }
           );
           // this.onUpdate();
         } else {
           let templateDataConfigWeb = {
-            key: "webinfo_admin",
+            key: "webinfo",
             value: {
               logo: "",
-              chatMess: "",
-
-              slideShow: [],
-              statusConfig: [],
-
-              homepage: {},
-              seoInfo: {},
+              chatMess :"",
+        
+              slideShow : [],
+              statusConfig :[],
+             
+              homepage : {},
+              seoInfo : {},
               tawk: "",
-              infoFooter: {
-                logo: "",
-                href: "",
+         
+              logoFooter : "",
+              facebook: {
+                appid: "",
+                password: "",
+
               },
-              infoHeader: {
-                logo: "",
-                href: "",
-              },
-              logoFooter: "",
-              mxh: {
-                facebook: {
-                  appid: "",
-                  password: "",
-                },
-                google: {
-                  appid: "",
-                  password: "",
-                },
-                zalo: {
-                  appid: "",
-                  password: "",
-                },
+              google: {
+                appid: "",
+                password: "",
               },
               footerData: [
                 {
@@ -544,29 +525,21 @@ class Users extends Component {
             }
           );
         }
+    
+
       });
   }
   async addDataConfig() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/add";
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if(newComany_id){
-        Output_newComany_id = newComany_id
-    }else{
-        Output_newComany_id = "-1"
-    }
-    axios
-      .post(url, {
-        dataType: "1",
-        key: "webinfo_admin",
-        company_id : Output_newComany_id,
-        value: JSON.stringify(this.state.dataConfigWeb),
-        type: "system",
-      })
-      .then((res) => {
-        console.log("add", res);
-      });
+    axios.post(url, {
+      dataType: "1",
+      key: "webinfo",
+      value: JSON.stringify(this.state.dataConfigWeb),
+      type: "system",
+    }).then((res)=>{
+      console.log('add',res)
+    })
   }
   saveAdd = () => {
     const { dataConfigWeb, updateLink, updateTitle, updateLevel } = this.state;
@@ -590,6 +563,7 @@ class Users extends Component {
       }
     );
   };
+
 
   async onFocusOutCodeMess() {
     const { dataConfigWeb, updateLink, codeMess, updateLevel } = this.state;
@@ -643,143 +617,122 @@ class Users extends Component {
       keyAppFb,
       PassFb,
       PassGg,
-      keyAppGg,
-      keyAppZalo,
-      PassZalo,
-      hrefFb,
-      hrefZalo,
-      hrefGg
+      keyAppGg
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     let coppyData = {
       ...dataConfigWeb,
     };
-
     if (change === "config") {
+   
       coppyData.value.statusConfig = configData;
-      coppyData.value.mxh.facebook.appid = keyAppFb;
-      coppyData.value.mxh.facebook.password = PassFb;
-      coppyData.value.mxh.facebook.href = hrefFb;
-      coppyData.value.mxh.google.appid = keyAppGg;
-      coppyData.value.mxh.google.password = PassGg;
-      coppyData.value.mxh.google.href = hrefGg;
-      coppyData.value.mxh.zalo.appid = keyAppZalo;
-      coppyData.value.mxh.zalo.password = PassZalo;
-      coppyData.value.mxh.zalo.href = hrefZalo;
+      coppyData.value.facebook.appid = keyAppFb;
+      coppyData.value.facebook.password = PassFb;
+      coppyData.value.google.appid = keyAppGg;
+      coppyData.value.google.password = PassGg;
+
+      
 
     }
     if (change === "logoFooter") {
       const formLogoFooter = new FormData();
 
       formLogoFooter.append("image", imgLogoFooter_link);
-
-      await API_CONNECT(
-        Constants.UPLOAD_IMAGE_BRAND,
-        formLogoFooter,
-        "",
-        "POST"
-      ).then((res) => {
-        console.log(res);
-      });
-      if (imgLogoFooter_link) {
-        if (imgLogoFooter_link.name) {
-          var newLogoFooter = `${Constants.BASE_URL}image_brand/${imgLogoFooter_link.name}`;
+     
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, formLogoFooter, "", "POST").then((res)=>{console.log(res)})
+      if(imgLogoFooter_link){
+        if(imgLogoFooter_link.name){
+         var newLogoFooter = `${Constants.BASE_URL}image_brand/${imgLogoFooter_link.name}`;
+         
+     
         }
       }
-      if (newLogoFooter) {
-      
-        coppyData.value.infoFooter.href = this.state.hrefLogoFooter;
-        coppyData.value.infoFooter.logo = newLogoFooter;
+      if(newLogoFooter){
         coppyData.value.logoFooter = newLogoFooter;
+       
       }
-    }
-
+     }
+      
+     
     if (change === "homepage") {
       const form1 = new FormData();
 
       form1.append("image", image1_link);
-
-      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then(
-        (res) => {
-          console.log(res);
-        }
-      );
-    }
-    if (image1_link) {
-      if (image1_link.name) {
+     
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
+      }
+     if(image1_link){
+       if(image1_link.name){
         var newImage = `${Constants.BASE_URL}image_brand/${image1_link.name}`;
-      }
+
+       }
+
+     }
+
+      const form2 = new FormData();
+
+      form2.append("image", image2_link);
+     
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST").then((res)=>{console.log(res)})
+    
+   if(image2_link){
+    if(image2_link.name){
+    var newImage2 = `${Constants.BASE_URL}image_brand/${image2_link.name}`;
     }
-
-    const form2 = new FormData();
-
-    form2.append("image", image2_link);
-
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST").then(
-      (res) => {
-        console.log(res);
-      }
-    );
-
-    if (image2_link) {
-      if (image2_link.name) {
-        var newImage2 = `${Constants.BASE_URL}image_brand/${image2_link.name}`;
-      }
-    }
+     }
 
     const form3 = new FormData();
     form3.append("image", image3_link);
-
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then(
-      (res) => {
-        console.log(res);
-      }
-    );
-
-    if (image3_link) {
-      if (image3_link.name) {
-        var newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
-      }
+     
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
+    
+    if(image3_link){
+      if(image3_link.name){
+      var newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
     }
-    coppyData.value.homepage.title1 = this.state.titlePen1;
-    coppyData.value.homepage.title2 = this.state.titlePen2;
-    coppyData.value.homepage.textAi = this.state.textAi;
+     }
+     coppyData.value.homepage.title1 = this.state.titlePen1;
+     coppyData.value.homepage.title2 = this.state.titlePen2;
+     coppyData.value.homepage.textAi = this.state.textAi;
+    
+      coppyData.value.homepage.sologan = sologan;
+      coppyData.value.homepage.introduction = introduce;
+      if(newImage!==undefined){
+        coppyData.value.homepage.image1 = newImage;
 
-    coppyData.value.homepage.sologan = sologan;
-    coppyData.value.homepage.introduction = introduce;
-    if (newImage !== undefined) {
-      coppyData.value.homepage.image1 = newImage;
-    }
-
-    if (newImage2) {
+      }
+      
+      if(newImage2){
       coppyData.value.homepage.image2 = newImage2;
-    }
-    if (newImage3) {
+        
+      }
+      if(newImage3){
       coppyData.value.homepage.image3 = newImage3;
-    }
-   
+        
+      }
+      
+    
     if (change === "seoInfo") {
+
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
       coppyData.value.seoInfo.description = descSeo;
       coppyData.value.seoInfo.author = authorSeo;
       coppyData.value.seoInfo.key = keywordSeo;
       const form1 = new FormData();
-      form1.append("image", imgLayout_link);
-
-      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then(
-        (res) => {
-          console.log(res);
-        }
-      );
+    form1.append("image", imgLayout_link);
+     
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
     }
-    let newImage4 = "";
-    if (imgLayout_link) {
-      newImage4 = `${Constants.BASE_URL}image_brand/${imgLayout_link.name}`;
-    }
+    let newImage4 ="";
+    if(imgLayout_link){
+       newImage4 = `${Constants.BASE_URL}image_brand/${imgLayout_link.name}`;
 
+    }
+    
     coppyData.value.seoInfo.imageShare = newImage4;
+    
 
     this.setState({
       dataConfigWeb: coppyData,
@@ -799,6 +752,7 @@ class Users extends Component {
           showConfirmButton: false,
           timer: 1000,
         });
+       
       });
   }
   async onFocusOutText() {
@@ -822,21 +776,21 @@ class Users extends Component {
   }
   async onUpdate() {
     const { dataConfigWeb } = this.state;
-    //     let copy = {...dataConfigWeb}
-    //     copy.value.homepage = {}
-    //     copy.value.seoInfo = {}
-    //     copy.value.slideShow = []
-    // this.setState({
-    //   dataConfigWeb : copy
-    // })
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+//     let copy = {...dataConfigWeb}
+//     copy.value.homepage = {}
+//     copy.value.seoInfo = {}
+//     copy.value.slideShow = []
+// this.setState({
+//   dataConfigWeb : copy
+// })
+const newComany_id = JSON.parse(this.state.company_id).company_id
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     await axios.post(url, {
       value: JSON.stringify(dataConfigWeb),
       dataType: "1",
       type: "system",
-      company_id: newComany_id,
+      company_id : newComany_id,
       id: this.state.idUpdate,
     });
   }
@@ -845,7 +799,7 @@ class Users extends Component {
     let coppyData = {
       ...dataConfigWeb,
     };
-
+    
     coppyData.value.splice(i, 1);
     this.setState(
       {
@@ -892,8 +846,9 @@ class Users extends Component {
     // this.addDataConfig();
   }
   getData = async () => {
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = JSON.parse(this.state.company_id).company_id
 
+   
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -902,7 +857,7 @@ class Users extends Component {
       headers: this.state.token,
     });
     let val = res.data.data;
-
+    
     this.setState({
       dataApi: val,
       data: val,
@@ -1026,36 +981,34 @@ class Users extends Component {
     const { image, image_link } = this.state;
     const form = new FormData();
     form.append("image", image_link);
-    console.log(image_link);
+    console.log(image_link)
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
       (res) => console.log(res)
     );
+   
 
-    const { dataConfigWeb } = this.state;
-    let coppyData = {
-      ...dataConfigWeb,
-    };
-    let newImage = `${Constants.BASE_URL}image_brand/${image_link.name}`;
 
-    coppyData.value.infoHeader.href = this.state.hrefLogoFooter;
-    coppyData.value.infoHeader.logo = newImage;
-    coppyData.value.logo = newImage;
-    this.setState(
-      {
-        dataConfigWeb: coppyData,
-        statusModalUpdate: false,
-      },
-      () => {
-        console.log(this.state.dataConfigWeb);
-        this.onUpdate();
-        Swal.fire({
-          icon: "success",
-          title: "Hoàn tất !",
-          showConfirmButton: false,
-          timer: 700,
-        });
-      }
-    );
+    this.setState({ loadingSaveLogo: true });
+    setTimeout(() => {
+      this.setState({ loadingSaveLogo: false });
+
+      const { dataConfigWeb } = this.state;
+      let coppyData = {
+        ...dataConfigWeb,
+      };
+      let newImage = `${Constants.BASE_URL}image_brand/${image_link.name}`;
+      coppyData.value.logo = newImage;
+      this.setState(
+        {
+          dataConfigWeb: coppyData,
+          statusModalUpdate: false,
+        },
+        () => {
+          console.log(this.state.dataConfigWeb);
+          this.onUpdate();
+        }
+      );
+    }, 1000);
   }
   canelLogo = () => {
     this.setState({
@@ -1085,8 +1038,8 @@ class Users extends Component {
       return;
     }
 
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-
+    const newComany_id = JSON.parse(this.state.company_id).company_id
+  
     const body = {
       isHash: false,
       sub_mainColor: sub_mainColor,
@@ -1108,68 +1061,66 @@ class Users extends Component {
     });
 
     if (res.data.is_success == true) {
+
       this.getData();
+     
     } else {
       alert(res.data.message);
       this.setState({ isLoading: false });
     }
   }
-  openFormAddSlide() {
+  openFormAddSlide(){
     this.setState({
       actionSlide: "new",
-      modalSlide: true,
-      imageSlide: "",
-      imageSlide_link: "",
-      imageSlide_show: "",
-      contentSlide: "",
-    });
+      modalSlide : true,
+      imageSlide : "",
+      imageSlide_link : "",
+      imageSlide_show : "",
+      contentSlide : "",
+   
+    })
   }
-  async saveAddSlide() {
+  async saveAddSlide(){
     const {
-      imageSlide,
-      contentSlide,
-      dataConfigWeb,
-      indexSlideUpdate,
-      imageSlide_link,
-    } = this.state;
+      imageSlide,contentSlide,dataConfigWeb,indexSlideUpdate,imageSlide_link
+    } = this.state
     const form = new FormData();
     form.append("image", imageSlide_link);
-
+   
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
       (res) => console.log(res)
     );
     let newImage = `${Constants.BASE_URL}image_brand/${imageSlide_link.name}`;
-
+    
     let ob = {
-      image: newImage,
-      content: contentSlide,
-    };
-    let coppy = { ...dataConfigWeb };
-    coppy.value.slideShow.push(ob);
-    this.setState(
-      {
-        dataConfigWeb: coppy,
-      },
-      () => {
-        this.onUpdate();
-        this.getDataConfigWeb();
-      }
-    );
+      image : newImage,
+      content : contentSlide
+    }
+    let coppy = {...dataConfigWeb};
+    coppy.value.slideShow.push(ob)
+    this.setState({
+      dataConfigWeb : coppy
+    },()=>{
+      this.onUpdate();
+      this.getDataConfigWeb();
+    })
   }
-  openFormEditSlide(item, i) {
-    console.log(item);
+  openFormEditSlide (item,i){
+    console.log(item)
     this.setState({
       actionSlide: "edit",
 
-      modalSlide: true,
+      modalSlide : true,
 
-      imageSlide: item.image,
-      imageSlide_show: item.image,
-      contentSlide: item.content,
-      indexSlideUpdate: i,
+      imageSlide : item.image,
+      imageSlide_show : item.image,
+      contentSlide : item.content,
+      indexSlideUpdate : i
     });
+
+    
   }
-  async deleteSlide(i) {
+  async deleteSlide  (i) {
     const { dataConfigWeb } = this.state;
     let coppyData = {
       ...dataConfigWeb,
@@ -1181,48 +1132,54 @@ class Users extends Component {
       },
       () => {
         this.onUpdate();
-        this.getDataConfigWeb();
+      this.getDataConfigWeb();
+
       }
     );
-  }
-  saveEditSlide() {
-    const { imageSlide, contentSlide, dataConfigWeb, indexSlideUpdate } =
-      this.state;
+  };
+  saveEditSlide (){
+    const {
+      imageSlide,contentSlide,dataConfigWeb,indexSlideUpdate
+    } = this.state
     let ob = {
-      image: imageSlide,
-      content: contentSlide,
-    };
-    let coppy = { ...dataConfigWeb };
-    coppy.value.slideShow[indexSlideUpdate] = ob;
-    this.setState(
-      {
-        dataConfigWeb: coppy,
-      },
-      () => {
-        this.onUpdate();
-        this.getDataConfigWeb();
-      }
-    );
+      image : imageSlide,
+      content : contentSlide
+    }
+    let coppy = {...dataConfigWeb};
+    coppy.value.slideShow[indexSlideUpdate] = ob
+    this.setState({
+      dataConfigWeb : coppy
+    },()=>{
+      this.onUpdate();
+      this.getDataConfigWeb();
+    })
+    
   }
-  async resetCache() {
-    let url = "https://soida.pensilia.com/api/clear_cache";
-    await axios.get(url, {}).then((res) => {
-      if (res.data.success === "success") {
+  async resetCache(){
+ 
+    let url = "https://soida.pensilia.com/api/clear_cache"
+    await axios.get(url, {
+     
+    }).then((res)=>{
+     
+      if(res.data.success === "success"){
         Swal.fire({
-          icon: "success",
-          title: "Clear cache thành công",
+       
+          icon: 'success',
+          title: 'Clear cache thành công',
           showConfirmButton: false,
-          timer: 1200,
-        });
-      } else {
+          timer: 1200
+        })
+      }else{
         Swal.fire({
-          icon: "error",
-          title: "Xảy ra lỗi trong quá trình xử lý",
+       
+          icon: 'error',
+          title: 'Xảy ra lỗi trong quá trình xử lý',
           showConfirmButton: false,
-          timer: 1200,
-        });
+          timer: 1200
+        })
       }
-    });
+    })
   }
   render() {
     const arrLevel = [
@@ -1238,7 +1195,7 @@ class Users extends Component {
     ];
 
     const {
-      actionSlide,
+      actionSlide ,
       contentSlide,
       seoInfo,
       homepage,
@@ -1276,7 +1233,7 @@ class Users extends Component {
       UserName,
       Message_Code,
       text_mainColor,
-      modalSlide,
+      modalSlide
     } = this.state;
 
     if (!this.state.isLoading) {
@@ -1294,62 +1251,81 @@ class Users extends Component {
               }
             >
               <ListItemButton
-                className=" tablinks"
-                onClick={() => this.changeConfigWeb(0)}
-                sx={{ pl: 4 }}
+                className=""
+                onClick={(e) => this.setState({ openHomeItem: !openHomeItem })}
               >
                 <ListItemIcon>
-                  <InfoIcon />
+                  <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary="Thông tin" />
+                <ListItemText primary="Quản lý trang chủ" />
+                {openHomeItem ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
+              <Collapse in={openHomeItem} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItemButton
+                    className=" tablinks"
+                    onClick={() => this.changeConfigWeb(0)}
+                    sx={{ pl: 4 }}
+                  >
+                    <ListItemIcon>
+                      <InfoIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Thông tin" />
+                  </ListItemButton>
+                  <ListItemButton
+                    className="tablinks"
+                    onClick={() => this.changeConfigWeb(1)}
+                    sx={{ pl: 4 }}
+                  >
+                    <ListItemIcon>
+                      <DoorSlidingIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Slider hiển thị" />
+                  </ListItemButton>
+                </List>
+              </Collapse>
               <ListItemButton
                 className="tablinks"
-                onClick={() => this.changeConfigWeb(1)}
+                onClick={() => this.changeConfigWeb(2)}
               >
                 <ListItemIcon>
-                  <PermDataSettingIcon />
+                 <PermDataSettingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Cấu hình SEO" />
               </ListItemButton>
               <ListItemButton
                 className="tablinks "
-                onClick={() => this.changeConfigWeb(2)}
+                onClick={() => this.changeConfigWeb(3)}
               >
                 <ListItemIcon>
                   <InfoIcon />
                 </ListItemIcon>
                 <ListItemText primary="Thông tin chung" />
               </ListItemButton>
-
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(3)}
-              >
-                <ListItemIcon>
-                  <FacebookIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình mạng xã hội" />
-              </ListItemButton>
-
+              {/* <ListItemButton onClick={() => this.changeConfigWeb(1)}>
+        <ListItemIcon>
+          <DraftsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Thông tin tính năng" />
+      </ListItemButton> */}
               <ListItemButton
                 className="tablinks"
                 onClick={() => this.changeConfigWeb(4)}
               >
                 <ListItemIcon>
-                  <InfoIcon />
+                 <FacebookIcon />
                 </ListItemIcon>
-                <ListItemText primary="Thông tin footer" />
+                <ListItemText primary="Cấu hình mạng xã hội" />
               </ListItemButton>
-
+        
               <ListItemButton
                 className="tablinks"
                 onClick={() => this.changeConfigWeb(5)}
               >
                 <ListItemIcon>
-                  <LockResetIcon />
+                  <InfoIcon />
                 </ListItemIcon>
-                <ListItemText primary="Quản lý màu sắc" />
+                <ListItemText primary="Thông tin footer" />
               </ListItemButton>
               <ListItemButton
                 className="tablinks"
@@ -1360,10 +1336,19 @@ class Users extends Component {
                 </ListItemIcon>
                 <ListItemText primary="Quản lý Cache" />
               </ListItemButton>
+              <ListItemButton
+                className="tablinks"
+                onClick={() => this.changeConfigWeb(7)}
+              >
+                <ListItemIcon>
+                  <LockResetIcon />
+                </ListItemIcon>
+                <ListItemText primary="Quản lý màu sắc" />
+              </ListItemButton>
             </List>
           </div>
           <div id="tabcontent1" class="tabcontent defaultOpen">
-          <div class="text-center">
+            <div class="text-center">
               <Button
                 variant="contained"
                 color="success"
@@ -1490,9 +1475,78 @@ class Users extends Component {
               }}
             />
           </div>
-    
-
           <div id="tabcontent2" class="tabcontent">
+          <div class="text-center">
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => this.openFormAddSlide()}
+              >
+                Thêm mới
+              </Button>
+              </div>
+            <table
+              ble
+              className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+            >
+              <thead className="thead-light">
+                <tr>
+                  <th className="text-center">STT.</th>
+                  {/* <th className="text-center">Tên</th> */}
+                  <th className="text-center">Hình ảnh</th>
+                  <th className="text-center">Mô tả</th>
+
+                  <th className="text-center">#</th>
+                </tr>
+              </thead>
+              <tbody>
+                {slideShow
+                  ? slideShow.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <td className="text-center">{i + 1}</td>
+                          <td className="text-center">
+                            <img
+                              width="150"
+                              height="150"
+                              src={item.image}
+                              alt=""
+                            />
+                          </td>
+
+                          <td className="text-center">{item.content}</td>
+                          {/* <td className="text-center">
+                                {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
+                              </td> */}
+                          <td className="">
+                            <CButton
+                              outline
+                              color="success"
+                              size="sm"
+                              onClick={() => this.openFormEditSlide(item, i)}
+                            >
+                              {/* <CIcon name="cilTrash" /> */}
+                              Chỉnh sửa
+                            </CButton>{" "}
+                            <CButton
+                              style={styles.mgl5}
+                              outline
+                              color="danger"
+                              size="sm"
+                              onClick={() => this.deleteSlide(i)}
+                            >
+                              {/* <CIcon name="cilPencil" /> */}
+                              Xóa
+                            </CButton>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  : null}
+              </tbody>
+            </table>
+          </div>
+          <div id="tabcontent3" class="tabcontent">
             <div className="text-center">
               {" "}
               <Button
@@ -1561,16 +1615,17 @@ class Users extends Component {
                 this.setState({ imgLayout_show: "" });
               }}
             />
-
+         
             <img
               alt=""
               style={{ width: "auto", marginBottom: 20 }}
               height="140px"
               src={this.state.imgLayout}
             />
+           
           </div>
-          <div id="tabcontent3" class="tabcontent ">
-            <div class="text-center">
+          <div id="tabcontent4" class="tabcontent ">
+          <div class="text-center">
               <CButton
                 onClick={() => this.saveLogo()}
                 style={styles.mgl5}
@@ -1620,9 +1675,10 @@ class Users extends Component {
                   // value={this.state.image}
                   onChange={(e) => {
                     this.setState({
-                      hrefLogoHeader: e.target.value,
+                        hrefLogoHeader : e.target.value
                     });
                   }}
+                 
                 />
               </div>
             </div>
@@ -1657,8 +1713,8 @@ class Users extends Component {
               ></textarea>
             </div>
           </div>
-          <div id="tabcontent4" class="tabcontent">
-            <div class="text-center">
+          <div id="tabcontent5" class="tabcontent">
+          <div class="text-center">
               <Button
                 variant="contained"
                 color="success"
@@ -1668,42 +1724,38 @@ class Users extends Component {
               </Button>
             </div>
             <div class="mt-3"></div>
-            {this.state.configData.map((product, i) => {
+          {
+            this.state.configData.map((product,i)=>{
               return (
                 <div class="configData_item">
                   <div class="">
-                    <strong>{product.label}</strong>
+                  <strong>{product.label}</strong>
                   </div>
                   <div class="">
-                    <FormGroup>
-                      <FormControlLabel
-                        onChange={(e) => {
-                          let x = [...this.state.configData];
-                          x[i].value = !x[i].value;
-                          this.setState({
-                            configData: x,
-                          });
-                        }}
-                        checked={product.value}
-                        control={<Switch defaultChecked />}
-                        label=""
-                      />
-                    </FormGroup>
-                    <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
+                  <FormGroup>
+                      <FormControlLabel onChange={e=>{
+                        let x = [...this.state.configData]
+                        x[i].value = !x[i].value
+                        this.setState({
+                          configData : x
+                      })
+                      }} checked={product.value} control={<Switch defaultChecked />} label="" />
+                  
+                  </FormGroup>
+                  <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
                   </div>
                 </div>
-              );
-            })}
-            <div class="text-center">
-              <p>Facebook</p>
-            </div>
+              )
+            })
+          }
+          <div class="text-center"><p>Facebook</p></div>
             <div class="col-md-12 mt-3">
               <div>
                 <TextFieldGroup
                   field=""
                   label="Mã ứng dụng"
                   value={this.state.keyAppFb}
-               
+                  placeholder={"Mã app"}
                   onChange={(e) => {
                     this.setState({ keyAppFb: e.target.value });
                   }}
@@ -1713,28 +1765,17 @@ class Users extends Component {
                   field=""
                   label="Mật khẩu"
                   value={this.state.PassFb}
-                
+                  placeholder={"Mật khẩu"}
                   onChange={(e) => {
                     this.setState({ PassFb: e.target.value });
                   }}
                 />
-                 <TextFieldGroup
-                  field=""
-                  label="Đường dẫn"
-                  value={this.state.hrefFb}
-                 
-                  onChange={(e) => {
-                    this.setState({ hrefFb: e.target.value });
-                  }}
-                />
               </div>
             </div>
-            <div class="text-center">
-              <p>Google</p>
-            </div>
+            <div class="text-center"><p>Google</p></div>
             <div class="col-md-12 mt-3">
               <div>
-                <TextFieldGroup
+              <TextFieldGroup
                   field=""
                   label="Mã ứng dụng"
                   value={this.state.keyAppGg}
@@ -1753,55 +1794,12 @@ class Users extends Component {
                     this.setState({ PassGg: e.target.value });
                   }}
                 />
-                 <TextFieldGroup
-                  field=""
-                  label="Đường dẫn"
-                  value={this.state.hrefGg}
-                 
-                  onChange={(e) => {
-                    this.setState({ hrefGg: e.target.value });
-                  }}
-                />
-              </div>
-            </div>
-            <div class="text-center">
-              <p>Zalo</p>
-            </div>
-            <div class="col-md-12 mt-3">
-              <div>
-                <TextFieldGroup
-                  field=""
-                  label="Mã ứng dụng"
-                  value={this.state.keyAppZalo}
-                  placeholder={"Mã app"}
-                  onChange={(e) => {
-                    this.setState({ keyAppZalo: e.target.value });
-                  }}
-                />
-
-                <TextFieldGroup
-                  field=""
-                  label="Mật khẩu"
-                  value={this.state.PassZalo}
-                  placeholder={"Mật khẩu"}
-                  onChange={(e) => {
-                    this.setState({ PassZalo: e.target.value });
-                  }}
-                />
-                 <TextFieldGroup
-                  field=""
-                  label="Đường dẫn"
-                  value={this.state.hrefZalo}
-                 
-                  onChange={(e) => {
-                    this.setState({ hrefZalo: e.target.value });
-                  }}
-                />
               </div>
             </div>
           </div>
-          <div id="tabcontent5" class="tabcontent ">
-            <div class="text-center">
+          
+          <div id="tabcontent6" class="tabcontent ">
+          <div class="text-center">
               <Button
                 variant="contained"
                 color="success"
@@ -1849,13 +1847,14 @@ class Users extends Component {
                   // value={this.state.image}
                   onChange={(e) => {
                     this.setState({
-                      hrefLogoFooter: e.target.value,
+                        hrefLogoFooter : e.target.value
                     });
                   }}
+                 
                 />
               </div>
             </div>
-
+           
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>
@@ -1870,7 +1869,7 @@ class Users extends Component {
                             ""
                           ) : (
                             <CCol sm="12" lg="4">
-                              <CTooltip content="Thêm mới">
+                              <CTooltip content="Xem chi tiết đơn hàng">
                                 <CButton
                                   onClick={this.openForm}
                                   style={{ float: "right" }}
@@ -1887,91 +1886,105 @@ class Users extends Component {
                       </CCol>
                     </CRow>
                     {dataConfigWeb
-                      ? this.renderData(dataConfigWeb.value.footerData)
-                      : null}
+              ? this.renderData(dataConfigWeb.value.footerData)
+              : null}
                   </CardBody>
                 </Card>
               </Col>
             </Row>
+           
           </div>
-          <div id="tabcontent6" class="tabcontent">
-            <Row>
-              <Col>
-                <p style={styles.success}>{this.state.updated}</p>
-                <p style={styles.danger}>{this.state.deleted}</p>
-                <Card>
-                  <CardHeader>THÔNG TIN MÀU</CardHeader>
-                  <CardBody>
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <CRow>
-                          <CCol sm="6" lg="8">
-                            <CLabel>
-                              <strong>Thay đổi màu</strong>
-                            </CLabel>
-                          </CCol>
-                          
-                            <CCol sm="6" lg="4">
-                                
-                            
-                              <CTooltip content="Màu sắc">
-                                {isDisable ? (
-                                  <CButton
-                                    outline
-                                    color="info"
-                                    size="xm"
-                                    onClick={async (e) => {
-                                      this.setState({ isDisable: !isDisable });
-                                    }}
-                                  >
-                                    <CIcon name="cil-pencil" /> Cập nhật
-                                  </CButton>
-                                ) : (
-                                  <CButton
-                                    outline
-                                    color="info"
-                                    size="sm"
-                                    onClick={async (e) => {
-                                      this.updateCompany();
-                                    }}
-                                  >
-                                    <CIcon name="cil-pencil" /> Xác nhận cập
-                                    nhật
-                                  </CButton>
-                                )}
-                              </CTooltip>
-                            </CCol>
-                          
-                        </CRow>
-                        <CRow>
-                          <CCol sm="12" lg="12">
-                            <div>
-                              <CLabel>Màu chủ đạo</CLabel>
-                              <Input
-                                style={styles.searchInput}
-                                onChange={(e) => {
-                                  this.setState({ mainColor: e.target.value });
-                                }}
-                                value={mainColor}
-                                readOnly={isDisable}
-                              />
-                            </div>
-                          </CCol>
+          <div id="tabcontent7" class="tabcontent ">
+          <div className="text-center">
+          <Button
+                variant="contained"
+                color="success"
+                style={{ paddingRight:'20px', paddingLeft:'20px' , fontSize : "20px"}}
+                size="md"
+                onClick={() => this.resetCache()}
+              >
+                Reset Cache
+              </Button>
+          </div>
+          </div>
+        <div id="tabcontent8" class="tabcontent">
+    <Row>
+      <Col>
+        <p style={styles.success}>{this.state.updated}</p>
+        <p style={styles.danger}>{this.state.deleted}</p>
+        <Card>
+          <CardHeader>THÔNG TIN MÀU</CardHeader>
+          <CardBody>
+            <CRow>
+              <CCol sm="12" lg="12">
+                <CRow>
+                  <CCol sm="6" lg="8">
+                    <CLabel>
+                      <strong>Thay đổi màu</strong>
+                    </CLabel>
+                  </CCol>
+                  {type == "0" || type == "1" ? (
+                    ""
+                  ) : (
+                    <CCol sm="6" lg="4">
+                      <CTooltip content="Xem chi tiết đơn hàng">
+                        {isDisable ? (
+                          <CButton
+                            outline
+                            color="info"
+                            size="xm"
+                            onClick={async (e) => {
+                              this.setState({ isDisable: !isDisable });
+                            }}
+                          >
+                            <CIcon name="cil-pencil" /> Cập nhật
+                          </CButton>
+                        ) : (
+                          <CButton
+                            outline
+                            color="info"
+                            size="sm"
+                            onClick={async (e) => {
+                              this.updateCompany();
+                            }}
+                          >
+                            <CIcon name="cil-pencil" /> Xác nhận cập
+                            nhật
+                          </CButton>
+                        )}
+                      </CTooltip>
+                    </CCol>
+                  )}
+                </CRow>
+                <CRow>
+                  <CCol sm="12" lg="12">
+                    <div>
+                      <CLabel>Màu chủ đạo</CLabel>
+                      <Input
+                        style={styles.searchInput}
+                        onChange={(e) => {
+                          this.setState({ mainColor: e.target.value });
+                        }}
+                        value={mainColor}
+                        readOnly={isDisable}
+                      />
+                    </div>
+                  </CCol>
 
-                          <CCol sm="12" lg="12">
-                            <CLabel>Màu button</CLabel>
-                            <Input
-                              style={styles.searchInput}
-                              value={button_color}
-                              onChange={(e) => {
-                                this.setState({
-                                  button_color: e.target.value,
-                                });
-                              }}
-                              readOnly={isDisable}
-                            />
-                          </CCol>
-                          {/* <CCol sm="12" lg="12">
+                  <CCol sm="12" lg="12">
+                    <CLabel>Màu button</CLabel>
+                    <Input
+                      style={styles.searchInput}
+                      value={button_color}
+                      onChange={(e) => {
+                        this.setState({
+                          button_color: e.target.value,
+                        });
+                      }}
+                      readOnly={isDisable}
+                    />
+                  </CCol>
+                  {/* <CCol sm="12" lg="12">
                     <CLabel>Màu chủ đạo 2</CLabel>
                     <Input
                       style={styles.searchInput}
@@ -2033,32 +2046,44 @@ class Users extends Component {
                       />
                     </div>
                   </CCol> */}
-                        </CRow>
-                      </CCol>
-                    </CRow>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-          <div id="tabcontent7" class="tabcontent ">
-            <div className="text-center">
-              <Button
-                variant="contained"
-                color="success"
-                style={{
-                  paddingRight: "20px",
-                  paddingLeft: "20px",
-                  fontSize: "20px",
-                }}
-                size="md"
-                onClick={() => this.resetCache()}
-              >
-                Reset Cache
-              </Button>
-            </div>
-          </div>
+                </CRow>
+              </CCol>
+            </CRow>
+          </CardBody>
+        </Card>
+      </Col>
+      
+    </Row>
+        </div>  
 
+
+  <div id="tabcontent2" class="tabcontent">
+    <div id="renderInfoFuncWebId"></div> 
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Tình trạng dịch vụ : </span><span style={{color:'#e55353'}}>Đang sử dụng</span>
+     </div>
+     
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Tổng số lần sử dụng : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
+     </div>
+   
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Tính năng dịch vụ : </span><span style={{color:'#e55353'}}>Soi da - Trang điểm</span>
+     </div>
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Ngày bắt đầu: </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
+     </div>
+     <div class="flex-a-center info_func mt-2">
+     <span class="mr-2">Ngày hết hạn : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
+     </div>
+
+     </div> 
+
+
+
+
+  
+     
           <Modal
             size="xl"
             isOpen={this.state.statusModalUpdate}
@@ -2175,26 +2200,29 @@ class Users extends Component {
                   this.setState({ contentSlide: e.target.value });
                 }}
               />
-              <TextFieldGroup
-                field="imageSlide"
-                label="Hình ảnh: (180px x 190px)"
-                type={"file"}
-                className="mt-5"
-                onChange={(e) => {
-                  this.onChangeImageSlide(e);
-                }}
-                onClick={(e) => {
-                  e.target.value = null;
-                  this.setState({ imageSlide_show: "" });
-                }}
-              />
+<TextFieldGroup
+              field="imageSlide"
+              label="Hình ảnh: (180px x 190px)"
+              type={"file"}
+              className="mt-5"
+              onChange={(e) => {
+                this.onChangeImageSlide(e);
+              }}
+              onClick={(e) => {
+                e.target.value = null;
+                this.setState({ imageSlide_show: "" });
+              }}
+            />
+         
+            <img
+              alt=""
+              style={{ width: "140px", marginBottom: 20 }}
+              height="auto"
+              src={this.state.imageSlide}
+            />
+        
 
-              <img
-                alt=""
-                style={{ width: "140px", marginBottom: 20 }}
-                height="auto"
-                src={this.state.imageSlide}
-              />
+              
             </ModalBody>
             <ModalFooter>
               <CButton
@@ -2212,9 +2240,11 @@ class Users extends Component {
                 color="secondary"
                 onClick={() => {
                   this.setState({
-                    modalSlide: false,
-                  });
+                    modalSlide: false
+                    
+                  })
                 }}
+     
               >
                 Đóng
               </CButton>

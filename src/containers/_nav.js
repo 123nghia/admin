@@ -541,14 +541,14 @@ const _navOrther = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Cấu hình Web',
+    name: 'Cấu hình Web-Admin',
     to: '/general-config-web',
     icon: <CgWebsite style={css} name="cil-user" className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
+    role: ['0'],
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.none}>
-        <CIcon content={freeSet.none} />
+        <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
   },
@@ -642,13 +642,14 @@ const _navContact = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý tài khoản',
+    role: ['0'],
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     _children: [{
       _tag: 'CSidebarNavItem',
       name: 'Danh sách tài khoản hệ thống',
       
       to: '/subsale',
-      role: ['2'],
+      role: ['0'],
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.accountSale}>
@@ -673,7 +674,7 @@ const _navContact = [
       _tag: 'CSidebarNavItem',
       name: 'Danh sách khách hàng',
       to: '/customer_manager',
-      role: ['0', '1','2'],
+      role: ['0'],
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.accountCompany}>
@@ -708,10 +709,10 @@ const _navContact = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Cấu hình trang web',
+    name: 'Cấu hình Web',
     to: '/cau-hinh-trang-web',
-    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2'],
+    icon: <CgWebsite style={css} content={freeSet.none} className="c-sidebar-nav-icon" />,
+    role: ['1','2'],
   },
   // {
   //   _tag: 'CSidebarNavItem',
