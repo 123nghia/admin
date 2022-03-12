@@ -366,9 +366,6 @@ class Users extends Component {
     }
   }
 
-  renderInfoFuncWeb() {
-    // document.getElementById("renderInfoFuncWebId").innerHTML = this.state.htmlFuncWeb;
-  }
   async getInfoFunc() {
     let baseUrlapi = Constants.INFO_FUNC_WEB;
     let url = baseUrlapi;
@@ -566,6 +563,94 @@ class Users extends Component {
       })
       .then((res) => {
         console.log("add", res);
+      });
+  }
+  async getFooter(){
+    var baseUrlapi = Constants.BASE_URL;
+    let urlCall  = Constants.GET_FOOTER;
+    let url = baseUrlapi + urlCall;
+    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    let Output_newComany_id;
+    if(newComany_id){
+        Output_newComany_id = newComany_id
+    }else{
+        Output_newComany_id = "-1"
+    }
+    axios
+      .get(url, {
+          params : {
+            company_id : Output_newComany_id
+          }
+      })
+      .then((res) => {
+        console.log("add footer", res);
+      });
+  }
+  async deleteFooter(item){
+    var baseUrlapi = Constants.BASE_URL;
+    let urlCall  = Constants.DELETE_FOOTER;
+    let url = baseUrlapi + urlCall;
+    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    let Output_newComany_id;
+    if(newComany_id){
+        Output_newComany_id = newComany_id
+    }else{
+        Output_newComany_id = "-1"
+    }
+    axios
+      .post(url, {
+        id : item._id,
+        "company_id": Output_newComany_id
+      })
+      .then((res) => {
+        console.log("add footer", res);
+      });
+  }
+  async updateFooter(updateTitle,contentFooter,updateLink){
+    var baseUrlapi = Constants.BASE_URL;
+    let urlCall  = Constants.UPDATE_FOOTER;
+    let url = baseUrlapi + urlCall;
+    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    let Output_newComany_id;
+    if(newComany_id){
+        Output_newComany_id = newComany_id
+    }else{
+        Output_newComany_id = "-1"
+    }
+    axios
+      .post(url, {
+        id : this.state.idFooterEditor,
+        "title": updateTitle,
+        "content":contentFooter,
+        "slug":  updateLink,
+        "link": updateLink,
+        "company_id": Output_newComany_id
+      })
+      .then((res) => {
+        console.log("add footer", res);
+      });
+  }
+  async addFooter(updateTitle,contentFooter,updateLink){
+    var baseUrlapi = Constants.BASE_URL;
+    let urlCall  = Constants.ADD_FOOTER;
+    let url = baseUrlapi + urlCall;
+    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    let Output_newComany_id;
+    if(newComany_id){
+        Output_newComany_id = newComany_id
+    }else{
+        Output_newComany_id = "-1"
+    }
+    axios
+      .post(url, {
+        "title": updateTitle,
+        "content":contentFooter,
+        "slug":  updateLink,
+        "link": updateLink,
+        "company_id": Output_newComany_id
+      })
+      .then((res) => {
+        console.log("add footer", res);
       });
   }
   saveAdd = () => {
@@ -822,13 +907,7 @@ class Users extends Component {
   }
   async onUpdate() {
     const { dataConfigWeb } = this.state;
-    //     let copy = {...dataConfigWeb}
-    //     copy.value.homepage = {}
-    //     copy.value.seoInfo = {}
-    //     copy.value.slideShow = []
-    // this.setState({
-    //   dataConfigWeb : copy
-    // })
+  
     const newComany_id = JSON.parse(this.state.company_id).company_id;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
@@ -1971,68 +2050,7 @@ class Users extends Component {
                               readOnly={isDisable}
                             />
                           </CCol>
-                          {/* <CCol sm="12" lg="12">
-                    <CLabel>Màu chủ đạo 2</CLabel>
-                    <Input
-                      style={styles.searchInput}
-                      value={sub2_mainColor}
-                      onChange={(e) => {
-                        this.setState({
-                          sub2_mainColor: e.target.value,
-                        });
-                      }}
-                      readOnly={isDisable}
-                    />
-                  </CCol>
-                  <CCol sm="12" lg="12">
-                    <div>
-                      <CLabel>Màu chữ</CLabel>
-                      <Input
-                        style={styles.searchInput}
-                        value={text_mainColor}
-                        onChange={(e) => {
-                          this.setState({
-                            text_mainColor: e.target.value,
-                          });
-                        }}
-                        readOnly={isDisable}
-                      />
-                    </div>
-                  </CCol>
-
-                  
-
-                  <CCol sm="12" lg="12">
-                    <div>
-                      <CLabel>Màu báo thành công</CLabel>
-                      <Input
-                        style={styles.searchInput}
-                        value={sucess_color}
-                        onChange={(e) => {
-                          this.setState({
-                            sucess_color: e.target.value,
-                          });
-                        }}
-                        readOnly={isDisable}
-                      />
-                    </div>
-                  </CCol>
-
-                  <CCol sm="12" lg="12">
-                    <div>
-                      <CLabel>Màu báo lỗi</CLabel>
-                      <Input
-                        style={styles.searchInput}
-                        value={error_color}
-                        onChange={(e) => {
-                          this.setState({
-                            error_color: e.target.value,
-                          });
-                        }}
-                        readOnly={isDisable}
-                      />
-                    </div>
-                  </CCol> */}
+                     
                         </CRow>
                       </CCol>
                     </CRow>
