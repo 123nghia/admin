@@ -544,7 +544,7 @@ const _navOrther = [
     name: 'Cấu hình Web',
     to: '/general-config-web',
     icon: <CgWebsite style={css} name="cil-user" className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
+    role: ['0'],
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.none}>
@@ -711,7 +711,7 @@ const _navContact = [
     name: 'Cấu hình trang web',
     to: '/cau-hinh-trang-web',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2'],
+    role: ['2','1'],
   },
   // {
   //   _tag: 'CSidebarNavItem',

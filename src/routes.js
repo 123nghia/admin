@@ -96,7 +96,7 @@ const routes = [
   { path: '/translation', name: 'Translation', component: Translation },
   { path: '/not-enough', name: 'NotEnough', component: NotEnough },
 
-  { path: '/general-config-web', name: 'GeneralConfigWebsite', component: GeneralConfigWebsite },
+  { path: '/general-config-web', name: 'GeneralConfigWebsite', component: roleUser === "0" ? GeneralConfigWebsite : NotEnough  },
 
 
   
@@ -120,13 +120,13 @@ const routes = [
   { path: '/transaction', name: 'Transaction', component: TransactionTable },
   { path: '/hardwaremanager', name: 'HardWare', component: HardWareManager },
   { path: '/profile', name: 'Profile', component: Profile },
-  { path: '/book-calendar', name: 'BookCalendar', component: roleUser === "2" ? BookCalendar : NotEnough  },
+  { path: '/book-calendar', name: 'BookCalendar', component: roleUser !== "0" ? BookCalendar : NotEnough  },
 
   
   { path: '/spending_order', name: 'SPENDING', component: SPENDING },
   { path: '/role_manager', name: 'Role Manager', component: RoleManager },
   { path: '/plugin_manager', name: 'Plugin Manager', component: PluginManager },
-  { path: '/customer_manager', name: 'Customer Manager', component: PluginCustomer },
+  { path: '/customer_manager', name: 'Customer Manager', component:roleUser === "0" ? PluginCustomer : NotEnough  },
   { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
 
   { path: '/yeu-cau-ho-tro', name: 'Request Suport', component: RequestSupport },
@@ -141,11 +141,11 @@ const routes = [
   { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
 
-  { path: '/subsale', name: 'Sub Sale', component: roleUser === "2" ? PluginSubSaleTable : NotEnough },
+  { path: '/subsale', name: 'Sub Sale', component: roleUser === "0" ? PluginSubSaleTable : NotEnough },
   { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
-  { path: '/cau-hinh-trang-web', name: 'configWeb', component:roleUser === "2" ? configWeb : NotEnough  },
+  { path: '/cau-hinh-trang-web', name: 'configWeb', component: roleUser !== "0" ? configWeb : NotEnough   },
 
 
   
@@ -160,7 +160,7 @@ const routes = [
 
   { path: '/banner', name: 'Banner User', component: Banner },
 
-  { path: '/quan-ly-banner', name: 'BannerSlider', component:roleUser === "2" ? BrandSlider : NotEnough  },
+  { path: '/quan-ly-banner', name: 'BannerSlider', component:roleUser !== "0" ? BrandSlider : NotEnough  },
 
   { path: '/config-theme', name: 'Config themes', component: ConfigTheme },
 
