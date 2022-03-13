@@ -41,7 +41,7 @@ const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPl
 const ProductPlugin = React.lazy(() => import('./views/base/tables/Prouduct/ProductSpecialPlugin'));
 
 const BrandSlider = React.lazy(() => import('./views/base/tables/Banner/BrandSlider'));
-const BookCalendar = React.lazy(() => import('./views/config/bookCalendar'));
+const BookCalendar = React.lazy(() => import('./views/components/bookCalendar'));
 
 const ConfigTheme = React.lazy(() => import('./views/base/tables/configSystem/ColorTheme'));
 
