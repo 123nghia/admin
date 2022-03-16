@@ -185,7 +185,7 @@ class Users extends Component {
   async componentDidMount() {
     await this.getFooter();
     this.getDataConfigWeb();
-    // this.getData();
+    this.getData();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -209,7 +209,7 @@ class Users extends Component {
     await axios
       .get(url, {
         params: {
-          key: "webinfo_admin",
+          key: "webinfo",
           company_id: Output_newComany_id,
         },
       })
@@ -219,8 +219,7 @@ class Users extends Component {
           let dataConfig = res.data.data[0];
 
           let valueConfig = JSON.parse(dataConfig.Value);
-          console.log(valueConfig);
-
+          
           this.setState(
             {
               dataConfigWeb: valueConfig,
@@ -231,6 +230,7 @@ class Users extends Component {
               homepage: valueConfig.value.homepage,
               slideShow: valueConfig.value.slideShow,
               mxh: valueConfig.value.mxh,
+              statusConfig : valueConfig.value.statusConfig,
               configData: valueConfig.value.statusConfig,
             },
             () => {
@@ -256,7 +256,6 @@ class Users extends Component {
                   image2_show: this.state.homepage.image2,
                 });
               }
-
               if (seoInfo) {
                 this.setState({
                   titleSeo: this.state.seoInfo.title,
@@ -304,7 +303,7 @@ class Users extends Component {
           );
         } else {
           let templateDataConfigWeb = {
-            key: "webinfo_admin",
+            key: "webinfo",
             value: {
               logos: {
                 footer: {
@@ -343,20 +342,7 @@ class Users extends Component {
                   href: "",
                 },
               },
-              footerData: [
-                {
-                  title: "Khám phá ngay",
-                  href: "",
-                  content: "",
-                  slug: "",
-                },
-                {
-                  title: "Chính sách bảo mật",
-                  href: "",
-                  content: "",
-                  slug: "",
-                },
-              ],
+              
             },
           };
 
@@ -372,11 +358,19 @@ class Users extends Component {
       });
   }
   async addDataConfig() {
+    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    let Output_newComany_id;
+    if (newComany_id) {
+      Output_newComany_id = newComany_id;
+    } else {
+      Output_newComany_id = "-1";
+    }
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/add";
     axios
       .post(url, {
         dataType: "1",
+        company_id: Output_newComany_id,
         key: "webinfo",
         value: JSON.stringify(this.state.dataConfigWeb),
         type: "system",
@@ -567,6 +561,7 @@ class Users extends Component {
      
     }
     if (change === "chats") {
+
       coppyData.value.chats.tawk = this.state.codeChat;
       coppyData.value.chats.mess = this.state.codeMess;
     }
@@ -604,6 +599,8 @@ class Users extends Component {
       });
     }
     if (change === "logos") {
+
+    
       let newImage = await this.postImage(this.state.image_link);
       if (newImage) {
         coppyData.value.logos.header.logo = `${Constants.BASE_URL}image_brand/${newImage}`;
@@ -874,7 +871,6 @@ class Users extends Component {
     const body = {
       isHash: false,
       sub_mainColor: sub_mainColor,
-
       mainColor: mainColor,
       sub2_mainColor: sub2_mainColor,
       company_id: newComany_id,
@@ -1689,6 +1685,15 @@ class Users extends Component {
                 this.setState({ mainColor: e.target.value });
               }}
               value={mainColor}
+              readOnly={isDisable}
+            />
+            <CLabel>Màu chủ đạo 2</CLabel>
+            <Input
+              style={styles.searchInput}
+              onChange={(e) => {
+                this.setState({ button_color: e.target.value });
+              }}
+              value={this.state.button_color}
               readOnly={isDisable}
             />
           </div>

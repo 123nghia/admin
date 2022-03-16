@@ -542,7 +542,7 @@ const _navOrther = [
   {
     _tag: 'CSidebarNavItem',
     name: 'Cấu hình Web-Admin',
-    to: '/general-config-web',
+    to: '/admin-config-web',
     icon: <CgWebsite style={css} name="cil-user" className="c-sidebar-nav-icon" />,
     role: ['0'],
     badge: {
@@ -649,7 +649,7 @@ const _navContact = [
       name: 'Danh sách tài khoản hệ thống',
       
       to: '/subsale',
-      role: ['0'],
+      role: ['1','2'],
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.accountSale}>
