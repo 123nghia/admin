@@ -195,7 +195,67 @@ class PluginCustomerManager extends Component {
         item.Address.split(',')[item.Address.split(',').length - 1]
     })
   }
-
+  openFormAdd(){
+    this.setState({
+      modalCom: !this.state.modalCom,
+      action: "new",
+      Name: "",
+      Email: "",
+      Phone: "",
+      Fax: "",
+      Address: null,
+      Slug: "",
+      Website: "",
+      UserName: "",
+      Code: "",
+      id: "",
+      Status:"",
+      current_province:  null
+    })
+  }
+  async addCompany(){
+    const { Email, Name, Phone, Fax, Address, Website, Slug, Status, current_province, UserName } = this.state
+    if (
+      // Email == null || Email == ''
+      // || Name == null || Name == ''
+      // || Phone == null || Phone == ''
+      // ||
+       Slug == null || Slug == '') {
+      alert("Vui lòng nhập đầy đủ trường !!!");
+      return
+    }
+  
+    // let add = Address.split(',');
+    // add.splice(Address.split(',').length - 1, 1)
+    const body = {
+      Name: Name,
+      Email: Email,
+      Phone: Phone,
+      Fax: Fax,
+      Address,
+      Website: Website,
+      Slug: Slug,
+     
+      Status: Status,
+      UserName: UserName,
+ 
+    }
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_ADD_COMPANY,
+      method: 'POST',
+      data: body
+    });
+    console.log(res);
+    if (res.data.is_success == true) {
+      this.getData();
+      this.setState({ modalCom: !this.state.modalCom })
+    } else {
+      alert(res.data.message);
+      this.setState({ isLoading: false });
+    }
+  }
   async updateCompany() {
     const { Email, Name, Phone, Fax, Address, Website, Slug, Status, current_province, UserName } = this.state
 
@@ -375,6 +435,7 @@ class PluginCustomerManager extends Component {
 
   renderDetailPackage() {
     return (
+
       <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>
@@ -457,6 +518,16 @@ class PluginCustomerManager extends Component {
                   </div>
                 </CardHeader>
                 <CardBody>
+                <div class="text-center">
+                    <CButton
+                      color="primary"
+                      style={{ marginBottom: "10px" }}
+                      size="md"
+                      onClick={() => this.openFormAdd()}
+                    >
+                      Thêm mới
+                    </CButton>
+                  </div>
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                     <thead className="thead-light">
                       <tr>

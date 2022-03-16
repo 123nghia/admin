@@ -84,7 +84,7 @@ class Login extends Component {
         const { changeTypeUser } = action;
 
         changeTypeUser(token.type);
-
+       
         if (token.type == "0" || token.type == "1") {
           localStorage.setItem("isAD", "0");
           this.props.history.push("/list_order");

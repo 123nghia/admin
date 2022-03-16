@@ -16,6 +16,7 @@ import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { CButton, CLabel, CSelect, CRow, CCol } from "@coreui/react";
 import { Tag, Divider } from "antd";
+import { Select } from "antd";
 
 import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
@@ -30,6 +31,8 @@ import * as XLSX from "xlsx";
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
+const { Option } = Select;
+
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
@@ -68,6 +71,11 @@ class EndUser extends Component {
       // to : new Date().toLocaleDateString()
       from: "",
       to: "",
+      dataSalesDefault : [{
+        _id : "",
+        Name : "Không có"
+      }]
+      
     };
   }
   changeLevel = (e) => {
@@ -78,7 +86,7 @@ class EndUser extends Component {
   };
   async componentDidMount() {
     const { type } = this.state;
-
+    this.getDataSeo();
     this.getData();
 
     let arr = JSON.parse(localStorage.getItem("url"));
@@ -114,28 +122,50 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
-  onSearch() {
+  async onSearch() {
     console.log(this.state.from);
     console.log(this.state.to);
     console.log(this.state.codeVoucher);
     console.log(this.state.userVoucher);
     console.log(this.state.statusVoucher);
-
-    this.getData(this.state.key);
+    console.log(this.state.idDataSales);
+  
+    await this.getData(this.state.idDataSales);
   }
-  async getData(key) {
+  async getDataSeo(){
+    
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.PLUGIN_SUBSALE_USER2;
+
+    let url = baseUrlapi + baseUrlCallApi;
+  
+    await axios.get(url, {
+      params: {
+        company_id
+      }
+    }).then((res) => {
+      var val = res.data.data;
+      this.setState({
+        dataSales : this.state.dataSalesDefault.concat(val)
+      })
+    })
+  }
+  async getData(saleId) {
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_USER_EVOUCHER;
 
     let url = baseUrlapi + baseUrlCallApi;
-    await axios.get(url,{
-      params : {
-       
-          company_id
-         
-      
+  
+    await axios.get(url, {
+      params: {
+        saleId : saleId,
+        roleType: this.state.type,
+        userId: JSON.parse(this.state.user).sale_id,
+        company_id
       }
     }).then((res) => {
       let val = res.data.data;
@@ -349,7 +379,7 @@ class EndUser extends Component {
       {
         item: "1",
       },
-     
+
     ];
     if (!this.state.isLoading) {
       return (
@@ -377,7 +407,7 @@ class EndUser extends Component {
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("nameVoucher", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
 
               <TextFieldGroup
@@ -387,7 +417,7 @@ class EndUser extends Component {
                 placeholder={"Số điện thoại"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("phoneVoucher", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
@@ -408,10 +438,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                              ? "Đã hẹn"
-                              : item.item === "2"
-                              ? "Đã gặp"
-                              : "Hoàn tất"}
+                                ? "Đã hẹn"
+                                : item.item === "2"
+                                  ? "Đã gặp"
+                                  : "Hoàn tất"}
                           </option>
                         );
                       } else {
@@ -420,10 +450,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                              ? "Đã hẹn"
-                              : item.item === "2"
-                              ? "Đã gặp"
-                              : "Hoàn tất"}
+                                ? "Đã hẹn"
+                                : item.item === "2"
+                                  ? "Đã gặp"
+                                  : "Hoàn tất"}
                           </option>
                         );
                       }
@@ -463,8 +493,11 @@ class EndUser extends Component {
                   </i>
 
                   <CRow>
-                    <CCol md={6} className="mt-3">
-                      <div className="text-center">
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Mã Voucher</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
@@ -476,8 +509,12 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={6} className="mt-3">
-                      <div className="text-center">
+                   
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Số điện thoại</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
@@ -490,8 +527,11 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={6} className="mt-3">
-                      <div className="text-center">
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Trạng thái</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
@@ -503,13 +543,14 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={6} className="mt-3">
-                      <div className="flex-center">
-                        <div className="flex">
-                          <div className="text-center">
-                            Từ ngày
-                            <div style={{ padding: "0 24px" }}>
+                    <CCol md={4} className="mt-5">
+                      <div className="">
+                      
+                          <div className="flex-center-space">
+                           <p className="title_filter">Từ ngày</p>
+                            <div>
                               <DatePicker
+                                style={styles.dateForm}
                                 onChange={(e, dateString) => {
                                   let copy = dateString.split("-");
                                   let newData = ``;
@@ -526,10 +567,11 @@ class EndUser extends Component {
                               />
                             </div>
                           </div>
-                          <div className="text-center">
-                            Đến ngày
-                            <div style={{ padding: "0 24x" }}>
+                          <div className="flex-center-space mt-3">
+                          <p className="title_filter">Đến ngày</p>
+                            <div>
                               <DatePicker
+                              style={styles.dateForm}
                                 onChange={(e, dateString) => {
                                   let copy = dateString.split("-");
                                   let newData = ``;
@@ -546,7 +588,38 @@ class EndUser extends Component {
                               />
                             </div>
                           </div>
-                        </div>
+                      
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-5">
+                      <div className="flex-center-space">
+
+                   
+                        <p className="title_filter">Danh sách Sales</p>
+                        <Select
+                          className="select_seo"
+                          showSearch
+                          placeholder="Lọc theo Sales"
+                          optionFilterProp="children"
+                          onChange={(value) =>
+                            this.setState({
+                              idDataSales: value,
+                            })
+                          }
+                          onSearch={this.onSearchSelect}
+                          filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                            0
+                          }
+                        >
+                          {this.state.dataSales
+                            ? this.state.dataSales.map((item, i) => {
+                              return <Option value={item._id}>{item.Name}</Option>;
+                            })
+                            : null}
+                        </Select>
+                     
+                     
                       </div>
                     </CCol>
                   </CRow>
@@ -601,64 +674,54 @@ class EndUser extends Component {
                       </td>
                       {data != undefined
                         ? data.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.fullName}</td>
-                                <td className="text-center">{item.phoneNumber}</td>
-                                <td className="text-center">{item.email}</td>
-                                <td className="text-center">
-                                  {item.voucherCode}
-                                </td>
-                                <td className="text-center">
-                                  {new Date(item.create_at).toLocaleDateString()}
-                                </td>
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{item.fullName}</td>
+                              <td className="text-center">{item.phoneNumber}</td>
+                              <td className="text-center">{item.email}</td>
+                              <td className="text-center">
+                                {item.voucherCode}
+                              </td>
+                              <td className="text-center">
+                                {new Date(item.create_at).toLocaleDateString()}
+                              </td>
 
-                                <td className="text-center">
-                                  <Tag
-                                    className="ant-tag"
-                                    color={
-                                      item.status === "A"
-                                        ? "#2db7f5"
-                                        : item.status === "2"
-                                        
-                                    }
-                                  >
-                                    {item.status == "A"
-                                      ? "Đã nhận"
-                                      : item.status == "2"
-                                      }
-                                  </Tag>
+                              <td className="text-center">
+                                <Tag
+                                  className="ant-tag"
+                                  color={
+                                    item.status === "A"
+                                      ? "#2db7f5"
+                                      : item.status === "2"
 
-                                  {
-                                    this.state.type == "0" ? 
-                                    <div>
-                                    <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openEditVoucher(item)}
-                                  >
-                                    {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
-                                    Thay đổi
-                                  </CButton><CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openEditVoucher(item)}
-                                  >
-                                    {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
-                                    Thay đổi
-                                  </CButton></div> : null
                                   }
-                                </td>
-                              </tr>
-                            );
-                          })
+                                >
+                                  {item.status == "A"
+                                    ? "Đã nhận"
+                                    : item.status == "2"
+                                  }
+                                </Tag>
+
+                                {
+                                  this.state.type == "0" ?
+                                    <div>
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="ghost"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        onClick={(e) => this.openEditVoucher(item)}
+                                      >
+                                        {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
+                                        Thay đổi
+                                      </CButton></div> : null
+                                }
+                              </td>
+                            </tr>
+                          );
+                        })
                         : ""}
                     </tbody>
                   </table>
@@ -691,7 +754,7 @@ class EndUser extends Component {
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("username", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
 
               <TextFieldGroup
@@ -702,7 +765,7 @@ class EndUser extends Component {
                 type={"email"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("email", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
 
               <TextFieldGroup
@@ -712,7 +775,7 @@ class EndUser extends Component {
                 placeholder={"Số điện thoại"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("phone", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Cấp độ:</CLabel>
@@ -733,10 +796,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                              ? "Chưa hẹn"
-                              : item.item === "2"
-                              ? "Đã gặp"
-                              : "Hoàn tất"}
+                                ? "Chưa hẹn"
+                                : item.item === "2"
+                                  ? "Đã gặp"
+                                  : "Hoàn tất"}
                           </option>
                         );
                       } else {
@@ -745,10 +808,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                              ? "Chưa hẹn"
-                              : item.item === "2"
-                              ? "Đã gặp"
-                              : "Hoàn tất"}
+                                ? "Chưa hẹn"
+                                : item.item === "2"
+                                  ? "Đã gặp"
+                                  : "Hoàn tất"}
                           </option>
                         );
                       }
@@ -846,6 +909,9 @@ const override = css`
 `;
 
 const styles = {
+  dateForm : {
+    width: "200px"
+  },
   pagination: {
     marginRight: "5px",
   },
@@ -910,7 +976,7 @@ const styles = {
     marginRight: "5px",
   },
   searchInput: {
-    width: "250px",
+    width: "200px",
     display: "inline-block",
     marginRight: "5px",
   },
