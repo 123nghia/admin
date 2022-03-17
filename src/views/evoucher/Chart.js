@@ -74,12 +74,13 @@ constructor(props) {
     type: localStorage.getItem('type'),
     dataChart: [],
     dataModalHistory : [],
+    dataChartUser : [0,1,2,3,4,5,6]
   };
 }
 async componentDidMount() {
 
   if (this.state.type == '0' || this.state.type == '1') {
-    // this.getData();
+    this.getData();
   } else {
     this.getDataForCompany();
   }
@@ -154,7 +155,7 @@ async getDataForCharts() {
 }
 
 getData = async () => {
-  this.setState({ isLoading: true });
+  // this.setState({ isLoading: true });
   const res = await axios({
     baseURL: Constants.BASE_URL,
     url: Constants.LIST_CUSTOMER,
@@ -294,7 +295,7 @@ getDataForCompanyByMonth = async (month) => {
           hidden_m: true
         })
       }
-  const monthCurrent = 6
+  const monthCurrent = new Date().getMonth() + 1;
   const arrayMonth = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12',]
   var dataMonth = [];
   if(monthCurrent > 6){
@@ -561,14 +562,43 @@ render() {
   if (!this.state.isLoading) {
     return (
       <div className="animated fadeIn">
-        {
-          type == "2" || type == "5" ?
+      <Row>
+              <Col>
+                <Card>
+                  <CardHeader>
+                  <i className="fa fa-align-justify title_header">
+                  Biểu đồ thể hiện số lượng khách hàng trong 6 tháng gần nhất
+                  </i>
+
+                  </CardHeader>
+                  <CardBody>
+
+                    <CChartBar
+                      datasets={[
+                        {
+                          label: 'Lượt khách hàng mới của tháng',
+                          backgroundColor: '#f87979',
+                          data: this.state.dataChartUser
+                        }
+                      ]}
+                      labels =  {this.state.labelsMonth}
+                      options={{
+                        tooltips: {
+                          enabled: true
+                        }
+                      }}
+                    />
+
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>     
             <Row>
               <Col>
                 <Card>
                   <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                  Biểu đồ thể hiện lượt khách hàng trong 6 tháng gần nhất
+                  Biểu đồ thể hiện số lượng Voucher trong 6 tháng gần nhất
                   </i>
 
                   </CardHeader>
@@ -593,8 +623,8 @@ render() {
                   </CardBody>
                 </Card>
               </Col>
-            </Row> : ""
-        }
+            </Row> 
+            
       </div>
     );
   }

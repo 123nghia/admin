@@ -845,7 +845,8 @@ class Users extends Component {
       }
     });
   }
-  async updateCompany() {
+  async updateCompany(e) {
+    e.preventDefault();
     const {
       mainColor,
       sub_mainColor,
@@ -879,19 +880,25 @@ class Users extends Component {
       error_color: error_color,
       text_mainColor: text_mainColor,
     };
-    this.setState({ isLoading: true });
+   
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.CONFIG_THEME_UPDATE,
       method: "POST",
       data: body,
-    });
-
+    }); 
+   
     if (res.data.is_success == true) {
-      this.getData();
+      Swal.fire({
+        icon: "success",
+        title: "Cập nhật thành công",
+        showConfirmButton: false,
+        timer: 700,
+      });
+      await this.getData();
     } else {
       alert(res.data.message);
-      this.setState({ isLoading: false });
+     
     }
   }
   render() {
@@ -1668,9 +1675,9 @@ class Users extends Component {
                 <CButton
                   outline
                   color="info"
-                  size="sm"
+                  size="xm"
                   onClick={async (e) => {
-                    this.updateCompany();
+                    this.updateCompany(e);
                   }}
                 >
                   <CIcon name="cil-pencil" /> Xác nhận cập nhật
