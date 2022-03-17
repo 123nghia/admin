@@ -17,6 +17,7 @@ import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { CButton, CLabel, CSelect, CRow, CCol } from "@coreui/react";
 import { Tag, Divider } from "antd";
 import { Select } from "antd";
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 
 import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
@@ -74,7 +75,8 @@ class EndUser extends Component {
       dataSalesDefault : [{
         _id : "",
         Name : "Không có"
-      }]
+      }],
+      levelFilter : "A"
       
     };
   }
@@ -82,6 +84,12 @@ class EndUser extends Component {
     e.preventDefault();
     this.setState({
       status: e.target.value,
+    });
+  };
+  changeLevelValue= (e,value) => {
+    e.preventDefault();
+    this.setState({
+      [value]: e.target.value,
     });
   };
   async componentDidMount() {
@@ -123,14 +131,8 @@ class EndUser extends Component {
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
   async onSearch() {
-    console.log(this.state.from);
-    console.log(this.state.to);
-    console.log(this.state.codeVoucher);
-    console.log(this.state.userVoucher);
-    console.log(this.state.statusVoucher);
-    console.log(this.state.idDataSales);
-  
-    await this.getData(this.state.idDataSales);
+    const { from, to ,idDataSales, phoneFilter, levelFilter, codeVoucher } = this.state;
+    await this.getData(idDataSales,phoneFilter,levelFilter,codeVoucher,from,to);
   }
   async getDataSeo(){
     
@@ -152,7 +154,7 @@ class EndUser extends Component {
       })
     })
   }
-  async getData(saleId) {
+  async getData(saleId,phoneNumber,status,voucherCode,from,to) {
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
@@ -163,6 +165,11 @@ class EndUser extends Component {
     await axios.get(url, {
       params: {
         saleId : saleId,
+        phoneNumber,
+        from,
+        to,
+        status,
+        voucherCode,
         roleType: this.state.type,
         userId: JSON.parse(this.state.user).sale_id,
         company_id
@@ -381,6 +388,23 @@ class EndUser extends Component {
       },
 
     ];
+    const arrLevelFilter = [
+      {
+        item: "A",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "3",
+      },
+      {
+        item: "4",
+      },
+    ];
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -491,7 +515,7 @@ class EndUser extends Component {
                   <i className="fa fa-align-justify title_header">
                     Danh sách người nhận Voucher
                   </i>
-
+               
                   <CRow>
                     <CCol md={4} className="mt-5">
                     <div className="flex-center-space">
@@ -518,11 +542,11 @@ class EndUser extends Component {
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
-                            this.setState({ userVoucher: e.target.value });
+                            this.setState({ phoneFilter: e.target.value });
                           }}
                           type="number"
-                          name="userVoucher"
-                          value={this.state.userVoucher}
+                          name="phoneFilter"
+                          value={this.state.phoneFilter}
                           placeholder="Số điện thoại"
                         />
                       </div>
@@ -532,7 +556,53 @@ class EndUser extends Component {
 
                    
 <p className="title_filter">Trạng thái</p>
-                        <Input
+<div style={{ width: "200px" }} className="">
+             
+                {arrLevel !== undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevelValue(e,"levelFilter");
+                    }}
+                    custom
+                    size="md"
+                    name="levelFilter"
+                    id="SelectLm"
+                  >
+                    {arrLevelFilter.map((item, i) => {
+                      if (item.item === this.state.levelFilter) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "A"
+                              ? "Đã giao KH"
+                              : item.item === "1"
+                                ? "Đã xác nhận KH"
+                                : item.item === "2"
+                                  ? "Hoàn thành"
+                                  : item.item === "3"
+                                  ? "Hủy bỏ"
+                                  : "Chưa xác nhận"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                           {item.item === "A"
+                              ? "Đã giao KH"
+                              : item.item === "1"
+                                ? "Đã xác nhận KH"
+                                : item.item === "2"
+                                  ? "Hoàn thành"
+                                  : item.item === "3"
+                                  ? "Hủy bỏ"
+                                  : "Chưa xác nhận"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
+                        {/* <Input
                           style={styles.searchInput}
                           onChange={(e) => {
                             this.setState({ statusVoucher: e.target.value });
@@ -540,7 +610,7 @@ class EndUser extends Component {
                           name="statusVoucher"
                           value={this.state.statusVoucher}
                           placeholder="Trạng thái voucher"
-                        />
+                        /> */}
                       </div>
                     </CCol>
                     <CCol md={4} className="mt-5">
@@ -624,16 +694,20 @@ class EndUser extends Component {
                     </CCol>
                   </CRow>
 
-                  <div className="text-center mt-3">
-                    <CButton
-                      color="primary"
+                  <div className="flex-center mt-3">
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
+                      className="flex-center"
                       onClick={(e) => {
                         this.onSearch();
                       }}
                     >
-                      Tìm kiếm
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                     </CButton>
+                 
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -978,7 +1052,7 @@ const styles = {
   searchInput: {
     width: "200px",
     display: "inline-block",
-    marginRight: "5px",
+  
   },
   userActive: {
     color: "green",

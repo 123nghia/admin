@@ -129,14 +129,27 @@ async getDataForCharts() {
       method: 'POST',
       data: {
         Company_Id: JSON.parse(this.state.company_id).company_id,
-month: arrMonth[i]
+        month: arrMonth[i]
       }
     });
 
     arrTemp.push(res.data.data.result.length)
   }
-
-  this.setState({ dataChart: [] })
+  arrTemp = [
+    1,
+    2,
+    4,
+    1,
+    2,
+    3,
+    1,
+    2,
+    3,
+    1,
+    2,
+    3
+]
+  this.setState({ dataChart: arrTemp })
 
 }
 
@@ -170,6 +183,7 @@ getData = async () => {
 }
 
 getDataForCompany = async () => {
+
   this.setState({ isLoading: true });
   const res = await axios({
     baseURL: Constants.BASE_URL,
@@ -204,36 +218,127 @@ getDataForCompany = async () => {
 }
 
 getDataForCompanyByMonth = async (month) => {
-  const res = await axios({
-    baseURL: Constants.BASE_URL,
-    url: Constants.LIST_CUSTOMER_FOR_COMPANY_BY_MONTH,
-    method: 'POST',
-    data: {
-      Company_Id: JSON.parse(this.state.company_id).company_id,
-      month: month
+  const dataTemplate = [
+    {
+      "Create_Date": "2022-02-28T06:24:46.341Z",
+      "Status": "1",
+      "isDelete": false,
+      "_id": "621c6ab6087b93a3cbd7c47a",
+      "FullName": "Trường Nghĩa",
+      "UserName": "nghiait10@gmail.com",
+      "Phone": "0383338840",
+      "Company_Id": {
+        "_id": "621c2ec17abc0b6b4349d4e5",
+        "Name": "evoucher"
+      },
+      "__v": 0
+    },
+    {
+      "Create_Date": "2022-03-01T01:17:57.591Z",
+      "Status": "1",
+      "isDelete": false,
+      "_id": "621d94042085ed1af6357743",
+      "FullName": "Phong",
+      "UserName": "0356618354",
+      "Phone": "0356618354",
+      "Company_Id": {
+        "_id": "621c2ec17abc0b6b4349d4e5",
+        "Name": "evoucher"
+      },
+      "__v": 0
     }
-  });
+  ]
+  // const res = await axios({
+  //   baseURL: Constants.BASE_URL,
+  //   url: Constants.LIST_CUSTOMER_FOR_COMPANY_BY_MONTH,
+  //   method: 'POST',
+  //   data: {
+  //     Company_Id: JSON.parse(this.state.company_id).company_id,
+  //     month: month
+  //   }
+  // });
 
-  let val = res.data.data.result;
-  let valCount = res.data.data.Count;
+  // let val = res.data.data.result;
+  // let valCount = res.data.data.Count;
+  let val = dataTemplate;
+  let valCount = dataTemplate.length;
+ 
+  // if (res.data.is_success) {
+  //   for (let i = 0; i < val.length; i++) {
+  //     val[i].Count = valCount[i]
+  //   }
 
-  if (res.data.is_success) {
-    for (let i = 0; i < val.length; i++) {
-      val[i].Count = valCount[i]
+  //   if (val.length == 0) {
+  //     this.setState({
+  //       hidden_m: false
+  //     })
+  //   } else {
+  //     this.setState({
+  //       hidden_m: true
+  //     })
+  //   }
+
+  //   this.setState({ dataByMonth: val });
+  // }
+
+  for (let i = 0; i < val.length; i++) {
+        val[i].Count = valCount[i]
+      }
+  
+      if (val.length == 0) {
+        this.setState({
+          hidden_m: false
+        })
+      } else {
+        this.setState({
+          hidden_m: true
+        })
+      }
+  const monthCurrent = 7
+  const arrayMonth = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12',]
+  var dataMonth = [];
+  if(monthCurrent > 6){
+    let start = monthCurrent - 6-1;
+
+    for(let i = 0; i < arrayMonth.length; i++){
+      if(i > start-1 && dataMonth.length<6){
+        dataMonth.push(arrayMonth[i])
+      }
     }
-
-    if (val.length == 0) {
-      this.setState({
-        hidden_m: false
-      })
-    } else {
-      this.setState({
-        hidden_m: true
-      })
-    }
-
-    this.setState({ dataByMonth: val });
+  }else{
+    for(let i = 0; i < arrayMonth.length; i++){
+      if(i< monthCurrent-1){
+      
+        if(dataMonth.length>5){
+          
+        }else{
+   
+          dataMonth.push(arrayMonth[i]);
+        };
+      };
+    };
+    if(dataMonth.length<=6){
+      var valueNeeds = 6 - dataMonth.length;
+      let valueStart = 12 - valueNeeds;
+      arrayMonth.forEach((item,i)=>{
+        if(i>valueStart-1){
+          if(dataMonth.length>6){
+          
+          }else{
+          dataMonth.push(item);
+  
+          }
+        };
+      });
+    };
   }
+  
+
+  console.log(dataMonth)
+  this.setState({
+    labelsMonth : dataMonth
+  })
+      this.setState({ dataByMonth: val });
 }
 
 searchKey(key) {
@@ -462,7 +567,10 @@ render() {
               <Col>
                 <Card>
                   <CardHeader>
-<i className="fa fa-align-justify"> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)</i>
+                  <i className="fa fa-align-justify title_header">
+                  Biểu đồ thể hiện lượt khách hàng trong 6 tháng gần nhất
+                  </i>
+
                   </CardHeader>
                   <CardBody>
 
@@ -474,7 +582,7 @@ render() {
                           data: dataChart
                         }
                       ]}
-                      labels="months"
+                      labels =  {this.state.labelsMonth}
                       options={{
                         tooltips: {
                           enabled: true

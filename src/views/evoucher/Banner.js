@@ -31,6 +31,8 @@ import DotLoader from "react-spinners/DotLoader";
 import { Tag, Divider } from "antd";
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+
 import Swal from "sweetalert2";
 const { Option } = Select;
 
@@ -656,15 +658,20 @@ class EndUser extends Component {
                   </div> */}
                 </CardHeader>
                 <CardBody>
-                  <div class="text-center">
-                    <CButton
-                      color="primary"
-                      style={{ marginBottom: "10px" }}
+               
+                  <div className="flex-center">
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
+                      className="flex-center"
                       onClick={() => this.openVoucher()}
                     >
-                      Thêm mới
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
+                   
+                   
                   </div>
                   <table
                     ble
@@ -1020,9 +1027,9 @@ const styles = {
     marginRight: "5px",
   },
   searchInput: {
-    width: "250px",
+    width: "200px",
     display: "inline-block",
-    marginRight: "5px",
+
   },
   userActive: {
     color: "green",

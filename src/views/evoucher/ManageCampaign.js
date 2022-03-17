@@ -16,6 +16,7 @@ import {
 import Swal from "sweetalert2";
 import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 
 import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
@@ -656,6 +657,15 @@ class EndUser extends Component {
       },
      
     ];
+    const arrLevelFilter = [
+      {
+        item: "0",
+      },
+      {
+        item: "1",
+      },
+      
+    ];
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -893,6 +903,7 @@ class EndUser extends Component {
             </ModalHeader>
             <ModalBody>
               <div class="text-center">
+                
                 <CButton
                   color="primary"
                   style={{ marginBottom: "10px" }}
@@ -1140,38 +1151,204 @@ class EndUser extends Component {
                     Quản lý chiến dịch
                   </i>
 
-                  <div class="flex mt-3">
-                    <Input
-                      style={styles.searchInput}
-                      onChange={(e) => {
-                        this.setState({ key: e.target.value });
-                      }}
-                      name="key"
-                      value={key}
-                      placeholder="Từ khóa"
-                    />
+                  <CRow>
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
 
-                    <CButton
-                      color="primary"
-                      size="sm"
+                   
+<p className="title_filter">Mã Voucher</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ codeVoucher: e.target.value });
+                          }}
+                          name="codeVoucher"
+                          value={this.state.codeVoucher}
+                          placeholder="Mã voucher"
+                        />
+                      </div>
+                    </CCol>
+                   
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Số điện thoại</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ phoneFilter: e.target.value });
+                          }}
+                          type="number"
+                          name="phoneFilter"
+                          value={this.state.phoneFilter}
+                          placeholder="Số điện thoại"
+                        />
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Trạng thái</p>
+<div style={{ width: "200px" }} className="">
+             
+                {arrLevel !== undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevelValue(e,"levelFilter");
+                    }}
+                    custom
+                    size="md"
+                    name="levelFilter"
+                    id="SelectLm"
+                  >
+                    {arrLevelFilter.map((item, i) => {
+                      if (item.item === this.state.levelFilter) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "0"
+                              ? "Hoạt động"
+                             
+                                  : "Không hoạt động"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                          {item.item === "0"
+                              ? "Hoạt động"
+                             
+                                  : "Không hoạt động"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
+                        {/* <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ statusVoucher: e.target.value });
+                          }}
+                          name="statusVoucher"
+                          value={this.state.statusVoucher}
+                          placeholder="Trạng thái voucher"
+                        /> */}
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-5">
+                      <div className="">
+                      
+                          <div className="flex-center-space">
+                           <p className="title_filter">Từ ngày</p>
+                            <div>
+                              <DatePicker
+                                style={styles.dateForm}
+                                onChange={(e, dateString) => {
+                                  let copy = dateString.split("-");
+                                  let newData = ``;
+                                  copy.forEach((item, index) => {
+                                    if (index === 0) {
+                                      newData += item;
+                                    } else {
+                                      newData += `/${item}`;
+                                    }
+                                  });
+                                  this.setState({ from: newData });
+                                }}
+                                format={dateFormat}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex-center-space mt-3">
+                          <p className="title_filter">Đến ngày</p>
+                            <div>
+                              <DatePicker
+                              style={styles.dateForm}
+                                onChange={(e, dateString) => {
+                                  let copy = dateString.split("-");
+                                  let newData = ``;
+                                  copy.forEach((item, index) => {
+                                    if (index === 0) {
+                                      newData += item;
+                                    } else {
+                                      newData += `/${item}`;
+                                    }
+                                  });
+                                  this.setState({ to: newData });
+                                }}
+                                format={dateFormat}
+                              />
+                            </div>
+                          </div>
+                      
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-5">
+                      <div className="flex-center-space">
+
+                   
+                        <p className="title_filter">Danh sách Sales</p>
+                        <Select
+                          className="select_seo"
+                          showSearch
+                          placeholder="Lọc theo Sales"
+                          optionFilterProp="children"
+                          onChange={(value) =>
+                            this.setState({
+                              idDataSales: value,
+                            })
+                          }
+                          onSearch={this.onSearchSelect}
+                          filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                            0
+                          }
+                        >
+                          {this.state.dataSales
+                            ? this.state.dataSales.map((item, i) => {
+                              return <Option value={item._id}>{item.Name}</Option>;
+                            })
+                            : null}
+                        </Select>
+                     
+                     
+                      </div>
+                    </CCol>
+                  </CRow>
+
+                  <div className="flex-center mt-3">
+                    
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
                       onClick={(e) => {
                         this.onSearch();
                       }}
                     >
-                      Tìm kiếm
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                     </CButton>
+                 
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <div class="text-center">
-                    <CButton
-                      color="primary"
-                      style={{ marginBottom: "10px" }}
+                  <div className="flex-center">
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
+                      className="flex-center"
                       onClick={() => this.openVoucher()}
                     >
-                      Thêm mới
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
+                  
                   </div>
                   <table
                     ble
@@ -1493,7 +1670,7 @@ const styles = {
   searchInput: {
     width: "250px",
     display: "inline-block",
-    marginRight: "5px",
+   
   },
   userActive: {
     color: "green",

@@ -421,6 +421,23 @@ async remove(item){
         item: "3",
       },
     ];
+    const arrLevelFilter = [
+      {
+        item: "0",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "3",
+      },
+      {
+        item: "4",
+      },
+    ];
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -607,16 +624,101 @@ async remove(item){
                
                  
                
+                  <CRow>
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
+
                    
-                  <div class="flex mt-3"> 
-                            
-                            <Input style={styles.searchInput} onChange={(e) => {
-                              this.setState({ key : e.target.value });
-                            }} name="key" value={key} placeholder="Từ khóa" />
-                         
-                    
-                          <CButton color="primary" size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm</CButton>
-                          </div>
+<p className="title_filter">Mã Voucher</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ codeVoucher: e.target.value });
+                          }}
+                          name="codeVoucher"
+                          value={this.state.codeVoucher}
+                          placeholder="Mã voucher"
+                        />
+                      </div>
+                    </CCol>
+                   
+                   
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Trạng thái</p>
+<div style={{ width: "200px" }} className="">
+             
+                {arrLevelFilter !== undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevelValue(e,"levelFilter");
+                    }}
+                    custom
+                    size="md"
+                    name="levelFilter"
+                    id="SelectLm"
+                  >
+                    {arrLevelFilter.map((item, i) => {
+                      if (item.item === this.state.levelFilter) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "0"
+                                    ? "Chờ xác nhận"
+                                    : item.item === "1"
+                                      ? "Đã sử dụng"
+                                      : item.item === "2"
+                                        ? "Hủy bỏ"
+                                        : item.item === "3"
+                                          ? "Xóa bỏ"
+                                       
+                                            : "Khóa"
+                                            }
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                           {item.item === "0"
+                                    ? "Chờ xác nhận"
+                                    : item.item === "1"
+                                      ? "Đã sử dụng"
+                                      : item.item === "2"
+                                        ? "Hủy bỏ"
+                                        : item.item === "3"
+                                          ? "Xóa bỏ"
+                                       
+                                            : "Khóa"
+                                            }
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
+                       
+                      </div>
+                    </CCol>
+                
+                  
+                  </CRow>
+                  <div className="flex-center mt-3">
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                      onClick={(e) => {
+                        this.onSearch();
+                      }}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                    </CButton>
+                   
+                  </div>
                 </CardHeader>
                 <CardBody>
 
@@ -773,9 +875,9 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "250px",
+    width: "200px",
     display: 'inline-block',
-    marginRight: '5px'
+   
   },
   userActive: {
     color: 'green'

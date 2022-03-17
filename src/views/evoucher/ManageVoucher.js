@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CIcon from "@coreui/icons-react";
+
 import {
   Card,
   CardBody,
@@ -12,22 +12,26 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
-import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { BsTrash  } from "@react-icons/all-files/bs/BsTrash";
+import { BsDownload} from "@react-icons/all-files/bs/BsDownload";
+
+
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+
 import * as XLSX from "xlsx";
 
 import Swal from "sweetalert2";
 
 import { CButton, CLabel, CTextarea, CSelect, CRow, CCol } from "@coreui/react";
 
-import API_CONNECT from "../../functions/callAPI";
+
 import Pagination from "@material-ui/lab/Pagination";
 import "moment-timezone";
 import Constants from "../../contants/contants";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import axios from "axios";
-import md5 from "md5";
+
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import { Tag, Divider } from "antd";
@@ -35,9 +39,9 @@ import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 
-import { Upload, message, Button } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+
 
 const { Option } = Select;
 let headers = new Headers();
@@ -82,6 +86,12 @@ class EndUser extends Component {
       statusExcel : !this.state.statusExcel
     })
   }
+  changeLevelValue= (e,value) => {
+    e.preventDefault();
+    this.setState({
+      [value]: e.target.value,
+    });
+  };
   readExcel = (file) => {
 
 		var btnOuter = document.getElementById("button_outer"),
@@ -190,8 +200,9 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
-  onSearch() {
-    this.getData(this.state.key);
+  async onSearch() {
+    const { from, to ,idDataSales, phoneFilter, levelFilter, codeVoucher } = this.state;
+    await this.getData(idDataSales,phoneFilter,levelFilter,codeVoucher,from,to);
   }
   async getData(key) {
     const { company_id } = this.state;
@@ -464,19 +475,29 @@ class EndUser extends Component {
               <span>
                 <Tag
                   className="ant-tag"
-                  color={
-                    item.status === "1"
-                      ? "#2db7f5"
-                      : item.status === "2"
-                        ? "#f50"
-                        : "#87d068"
-                  }
+                  color={item.status === "0"
+                  ? "#2db7f5"
+                  : item.status === "1"
+                    ? "#87d068"
+                    : item.status === "2"
+                      ? "#f50"
+                      : item.status === "3"
+                        ? "#dc0e04"
+                        : item.status === "4"
+                          ? "#00D084"
+                          : "#FF0004"}
                 >
-                  {item.status == "1"
-                    ? "Bắt đầu"
-                    : item.status == "2"
-                      ? "Trong quá trình"
-                      : "Hoàn thành"}
+                   {item.status === "0"
+                                    ? "Chờ xác nhận"
+                                    : item.status === "1"
+                                      ? "Đã sử dụng"
+                                      : item.status === "2"
+                                        ? "Hủy bỏ"
+                                        : item.status === "3"
+                                          ? "Xóa bỏ"
+                                       
+                                            : "Khóa"
+                                            }
                 </Tag>
               </span>
             </p>
@@ -520,6 +541,9 @@ class EndUser extends Component {
         item: "0",
       },
       {
+        item: "1",
+      },
+      {
         item: "2",
       },
       {
@@ -528,8 +552,23 @@ class EndUser extends Component {
       {
         item: "4",
       },
+      
+    ];
+    const arrLevelFilter = [
       {
-        item: "5",
+        item: "0",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "3",
+      },
+      {
+        item: "4",
       },
     ];
     if (!this.state.isLoading) {
@@ -552,7 +591,7 @@ class EndUser extends Component {
               // rows="5"
               />
               <div class="mt-3"></div>
-              <label>Tên chiến dịch</label>
+              <label className="mr-3">Tên chiến dịch</label>
               <Select
                 defaultValue={dataCampaign ? dataCampaign[0].name : ""}
                 className="select_company"
@@ -573,7 +612,7 @@ class EndUser extends Component {
                 {dataCampaign
                   ? dataCampaign.map((item, i) => {
                     if (i === 0) {
-                      return <Option value={item.name}>{item.name}</Option>;
+                      return <Option key={i} value={item.name}>{item.name}</Option>;
 
                     }
                   })
@@ -613,33 +652,33 @@ class EndUser extends Component {
                       if (item.item === this.state.status) {
                         return (
                           <option selected key={i} value={item.item}>
-                            {item.item === "0"
-                              ? "Sẵn sàng"
-                              : item.item === "1"
-                                ? "Chờ xác nhận"
-                                : item.item === "2"
-                                  ? "Đã sử dụng"
-                                  : item.item === "3"
-                                    ? "Hủy bỏ"
-                                    : item.item === "4"
-                                      ? "Xóa bỏ"
-                                      : "Khóa"}
+                           {item.item === "0"
+                                    ? "Chờ xác nhận"
+                                    : item.item === "1"
+                                      ? "Đã sử dụng"
+                                      : item.item === "2"
+                                        ? "Hủy bỏ"
+                                        : item.item === "3"
+                                          ? "Xóa bỏ"
+                                       
+                                            : "Khóa"
+                                            }
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                            {item.item === "0"
-                              ? "Sẵn sàng"
-                              : item.item === "1"
-                                ? "Chờ xác nhận"
-                                : item.item === "2"
-                                  ? "Đã sử dụng"
-                                  : item.item === "3"
-                                    ? "Hủy bỏ"
-                                    : item.item === "4"
-                                      ? "Xóa bỏ"
-                                      : "Khóa"}
+                        {item.item === "0"
+                                    ? "Chờ xác nhận"
+                                    : item.item === "1"
+                                      ? "Đã sử dụng"
+                                      : item.item === "2"
+                                        ? "Hủy bỏ"
+                                        : item.item === "3"
+                                          ? "Xóa bỏ"
+                                       
+                                            : "Khóa"
+                                            }
                           </option>
                         );
                       }
@@ -679,32 +718,122 @@ class EndUser extends Component {
                     Quản lý Voucher
                   </i>
 
-                  <div class="flex mt-3">
+                  <CRow>
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
 
-                    <Input style={styles.searchInput} onChange={(e) => {
-                      this.setState({ key: e.target.value });
-                    }} name="key" value={key} placeholder="Từ khóa" />
+                   
+<p className="title_filter">Mã Voucher</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ codeVoucher: e.target.value });
+                          }}
+                          name="codeVoucher"
+                          value={this.state.codeVoucher}
+                          placeholder="Mã voucher"
+                        />
+                      </div>
+                    </CCol>
+                   
+                   
+                    <CCol md={4} className="mt-5">
+                    <div className="flex-center-space">
 
-
-                    <CButton color="primary" size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm</CButton>
+                   
+<p className="title_filter">Trạng thái</p>
+<div style={{ width: "200px" }} className="">
+             
+                {arrLevelFilter !== undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevelValue(e,"levelFilter");
+                    }}
+                    custom
+                    size="md"
+                    name="levelFilter"
+                    id="SelectLm"
+                  >
+                    {arrLevelFilter.map((item, i) => {
+                      if (item.item === this.state.levelFilter) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "0"
+                                    ? "Chờ xác nhận"
+                                    : item.item === "1"
+                                      ? "Đã sử dụng"
+                                      : item.item === "2"
+                                        ? "Hủy bỏ"
+                                        : item.item === "3"
+                                          ? "Xóa bỏ"
+                                       
+                                            : "Khóa"
+                                            }
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                           {item.item === "0"
+                                    ? "Chờ xác nhận"
+                                    : item.item === "1"
+                                      ? "Đã sử dụng"
+                                      : item.item === "2"
+                                        ? "Hủy bỏ"
+                                        : item.item === "3"
+                                          ? "Xóa bỏ"
+                                       
+                                            : "Khóa"
+                                            }
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
+                       
+                      </div>
+                    </CCol>
+                
+                  
+                  </CRow>
+                  <div className="flex-center mt-3">
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                      onClick={(e) => {
+                        this.onSearch();
+                      }}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                    </CButton>
+                   
                   </div>
                 </CardHeader>
                 <CardBody>
+                
                   <div class="flex-center">
-                    <CButton
-                      color="primary"
-                      style={{ marginBottom: "10px" }}
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
+                      className="flex-center"
                       onClick={() => this.openVoucher()}
                     >
-                      Thêm mới
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
+                   
 
                   </div>
-                  <div class=" pb-3">
+                  <div class=" pb-3 flex">
                     <CButton
                       color="success"
-                      style={{ marginBottom: "10px", marginRight: '20px' }}
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
                       className="flex-center"
                       onClick={this.OpenFileExcel}
@@ -712,11 +841,23 @@ class EndUser extends Component {
                       <FaFileImport style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Import</p>
                     </CButton>
+                    <a href="/excel/template-import-voucher.xlsx" download>
+                    <CButton
+                      color="success"
+                      style={{ marginBottom: "10px", marginRight: '20px' }}
+                      size="md"
+                      className="flex-center"
+                   
+                    >
+                      <BsDownload style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
+                    </CButton>
+                    </a>
                     <div>
 
                     </div>
-
-               <div style={{display : this.state.statusExcel ? "block" : "none" }}>
+                    </div>
+               <div className="pb-3" style={{display : this.state.statusExcel ? "block" : "none" }}>
                       <div className="button_outer" id="button_outer">
                         <div className="btn_upload">
                           <input
@@ -729,7 +870,7 @@ class EndUser extends Component {
                           />
                           <div className="flex-center">
                           <svg viewBox="64 64 896 896" focusable="false" data-icon="upload" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"></path></svg>
-                         <p>Upload File Excel</p> 
+                         <p>Tải lên File Excel</p> 
                          </div>
                         </div>
                         <div className="processing_bar"></div>
@@ -741,7 +882,7 @@ class EndUser extends Component {
 
 
 
-                  </div>
+               
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -782,26 +923,26 @@ class EndUser extends Component {
                                   color={item.status === "0"
                                     ? "#2db7f5"
                                     : item.status === "1"
-                                      ? "#108ee9"
+                                      ? "#87d068"
                                       : item.status === "2"
                                         ? "#f50"
                                         : item.status === "3"
-                                          ? "#FF9800"
+                                          ? "#dc0e04"
                                           : item.status === "4"
-                                            ? "#FF0004"
-                                            : "#00D084"}
+                                            ? "#00D084"
+                                            : "#FF0004"}
                                 >
                                   {item.status === "0"
-                                    ? "Sẵn sàng"
+                                    ? "Chờ xác nhận"
                                     : item.status === "1"
-                                      ? "Chờ xác nhận"
+                                      ? "Đã sử dụng"
                                       : item.status === "2"
-                                        ? "Đã sử dụng"
+                                        ? "Hủy bỏ"
                                         : item.status === "3"
-                                          ? "Hủy bỏ"
-                                          : item.status === "4"
-                                            ? "Xóa bỏ"
-                                            : "Khóa"}
+                                          ? "Xóa bỏ"
+                                       
+                                            : "Khóa"
+                                            }
                                 </Tag>
                               </td>
                               <td className="text-center">
@@ -1108,7 +1249,7 @@ const styles = {
   searchInput: {
     width: "250px",
     display: "inline-block",
-    marginRight: "5px",
+   
   },
   userActive: {
     color: "green",
