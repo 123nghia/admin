@@ -596,17 +596,32 @@ class EndUser extends Component {
               <span>
                 <Tag
                   className="ant-tag"
-                  color={
-                    item.status === "1"
-                      ? "#87d068"
-                      
-                      : "#f50"
-                  }
+                  color={item.status === "0"
+                                  ? "#2eb85c"
+                                  : item.status === "1"
+                                    ? "#2db7f5"
+                                    : item.status === "2"
+                                      ? "#87d068"
+                                      : item.status === "3"
+                                        ? "#f50"
+                                        : item.status === "4"
+                                          ? "#dc0e04"
+                                          : item.status === "4"
+                                          ? "#00D084"
+                                          : "#FF0004"}
                 >
-                   {item.status === "1"
-                                      ? "Hoạt động"
-                                      
-                                      : "Không hoạt động"}
+                   {item.status === "0"
+                                    ? "Sẵn sàng"
+                                    : item.status === "1"
+                                      ? "Chờ xác nhận"
+                                      : item.status === "2"
+                                        ? "Đã sử dụng"
+                                        : item.status === "3"
+                                          ? "Hủy bỏ"
+                                          : item.status === "4"
+                                          ? "Xóa bỏ"
+                                            : "Khóa"
+                                            }
                 </Tag>
               </span>
             </p>
@@ -666,6 +681,26 @@ class EndUser extends Component {
       },
       
     ];
+    const levelVoucher = [
+      {
+        item: "0",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "3",
+      },
+      {
+        item: "4",
+      },
+      {
+        item: "5",
+      },
+    ]
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -958,17 +993,32 @@ class EndUser extends Component {
                             <td className="text-center">
                               <Tag
                                 className="ant-tag"
-                                color={
-                                  item.status === "1"
-                                    ? "#87d068"
-                                    
-                                    : "#f50"
-                                }
+                                color={item.status === "0"
+                                  ? "#2eb85c"
+                                  : item.status === "1"
+                                    ? "#2db7f5"
+                                    : item.status === "2"
+                                      ? "#87d068"
+                                      : item.status === "3"
+                                        ? "#f50"
+                                        : item.status === "4"
+                                          ? "#dc0e04"
+                                          : item.status === "4"
+                                          ? "#00D084"
+                                          : "#FF0004"}
                               >
-                                 {item.status === "1"
-                                      ? "Hoạt động"
-                                      
-                                      : "Không hoạt động"}
+                                {item.status === "0"
+                                    ? "Sẵn sàng"
+                                    : item.status === "1"
+                                      ? "Chờ xác nhận"
+                                      : item.status === "2"
+                                        ? "Đã sử dụng"
+                                        : item.status === "3"
+                                          ? "Hủy bỏ"
+                                          : item.status === "4"
+                                          ? "Xóa bỏ"
+                                            : "Khóa"
+                                            }
                               </Tag>
                             </td>
                             <td className="text-center">
@@ -1094,23 +1144,39 @@ class EndUser extends Component {
                     name="status"
                     id="SelectLm"
                   >
-                    {arrLevel.map((item, i) => {
+                    {levelVoucher.map((item, i) => {
                       if (item.item === this.state.status) {
                         return (
                           <option selected key={i} value={item.item}>
-                            {item.item === "1"
-                                      ? "Hoạt động"
-                                      
-                                      : "Không hoạt động"}
+                           {item.item === "0"
+                                    ? "Sẵn sàng"
+                                    : item.item === "1"
+                                      ? "Chờ xác nhận"
+                                      : item.item === "2"
+                                        ? "Đã sử dụng"
+                                        : item.item === "3"
+                                          ? "Hủy bỏ"
+                                          : item.item === "4"
+                                          ? "Xóa bỏ"
+                                            : "Khóa"
+                                            }
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                             {item.item === "1"
-                                      ? "Hoạt động"
-                                      
-                                      : "Không hoạt động"}
+                            {item.item === "0"
+                                    ? "Sẵn sàng"
+                                    : item.item === "1"
+                                      ? "Chờ xác nhận"
+                                      : item.item === "2"
+                                        ? "Đã sử dụng"
+                                        : item.item === "3"
+                                          ? "Hủy bỏ"
+                                          : item.item === "4"
+                                          ? "Xóa bỏ"
+                                            : "Khóa"
+                                            }
                           </option>
                         );
                       }

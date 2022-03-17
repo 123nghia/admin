@@ -476,26 +476,29 @@ class EndUser extends Component {
                 <Tag
                   className="ant-tag"
                   color={item.status === "0"
-                  ? "#2db7f5"
+                  ? "#2eb85c"
                   : item.status === "1"
-                    ? "#87d068"
+                    ? "#2db7f5"
                     : item.status === "2"
-                      ? "#f50"
+                      ? "#87d068"
                       : item.status === "3"
-                        ? "#dc0e04"
+                        ? "#f50"
                         : item.status === "4"
+                          ? "#dc0e04"
+                          : item.status === "4"
                           ? "#00D084"
                           : "#FF0004"}
                 >
                    {item.status === "0"
-                                    ? "Chờ xác nhận"
+                                    ? "Sẵn sàng"
                                     : item.status === "1"
-                                      ? "Đã sử dụng"
+                                      ? "Chờ xác nhận"
                                       : item.status === "2"
-                                        ? "Hủy bỏ"
+                                        ? "Đã sử dụng"
                                         : item.status === "3"
+                                          ? "Hủy bỏ"
+                                          : item.status === "4"
                                           ? "Xóa bỏ"
-                                       
                                             : "Khóa"
                                             }
                 </Tag>
@@ -552,6 +555,9 @@ class EndUser extends Component {
       {
         item: "4",
       },
+      {
+        item: "5",
+      },
       
     ];
     const arrLevelFilter = [
@@ -570,6 +576,9 @@ class EndUser extends Component {
       {
         item: "4",
       },
+      {
+        item : "5"
+      }
     ];
     if (!this.state.isLoading) {
       return (
@@ -652,15 +661,16 @@ class EndUser extends Component {
                       if (item.item === this.state.status) {
                         return (
                           <option selected key={i} value={item.item}>
-                           {item.item === "0"
-                                    ? "Chờ xác nhận"
+                          {item.item === "0"
+                                    ? "Sẵn sàng"
                                     : item.item === "1"
-                                      ? "Đã sử dụng"
+                                      ? "Chờ xác nhận"
                                       : item.item === "2"
-                                        ? "Hủy bỏ"
+                                        ? "Đã sử dụng"
                                         : item.item === "3"
+                                          ? "Hủy bỏ"
+                                          : item.item === "4"
                                           ? "Xóa bỏ"
-                                       
                                             : "Khóa"
                                             }
                           </option>
@@ -668,15 +678,16 @@ class EndUser extends Component {
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                        {item.item === "0"
-                                    ? "Chờ xác nhận"
+                      {item.item === "0"
+                                    ? "Sẵn sàng"
                                     : item.item === "1"
-                                      ? "Đã sử dụng"
+                                      ? "Chờ xác nhận"
                                       : item.item === "2"
-                                        ? "Hủy bỏ"
+                                        ? "Đã sử dụng"
                                         : item.item === "3"
+                                          ? "Hủy bỏ"
+                                          : item.item === "4"
                                           ? "Xóa bỏ"
-                                       
                                             : "Khóa"
                                             }
                           </option>
@@ -758,15 +769,16 @@ class EndUser extends Component {
                       if (item.item === this.state.levelFilter) {
                         return (
                           <option selected key={i} value={item.item}>
-                            {item.item === "0"
-                                    ? "Chờ xác nhận"
+                          {item.item === "0"
+                                    ? "Sẵn sàng"
                                     : item.item === "1"
-                                      ? "Đã sử dụng"
+                                      ? "Chờ xác nhận"
                                       : item.item === "2"
-                                        ? "Hủy bỏ"
+                                        ? "Đã sử dụng"
                                         : item.item === "3"
+                                          ? "Hủy bỏ"
+                                          : item.item === "4"
                                           ? "Xóa bỏ"
-                                       
                                             : "Khóa"
                                             }
                           </option>
@@ -774,15 +786,16 @@ class EndUser extends Component {
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                           {item.item === "0"
-                                    ? "Chờ xác nhận"
+                          {item.item === "0"
+                                    ? "Sẵn sàng"
                                     : item.item === "1"
-                                      ? "Đã sử dụng"
+                                      ? "Chờ xác nhận"
                                       : item.item === "2"
-                                        ? "Hủy bỏ"
+                                        ? "Đã sử dụng"
                                         : item.item === "3"
+                                          ? "Hủy bỏ"
+                                          : item.item === "4"
                                           ? "Xóa bỏ"
-                                       
                                             : "Khóa"
                                             }
                           </option>
@@ -921,26 +934,29 @@ class EndUser extends Component {
                                 <Tag
                                   className="ant-tag"
                                   color={item.status === "0"
+                                  ? "#2eb85c"
+                                  : item.status === "1"
                                     ? "#2db7f5"
-                                    : item.status === "1"
+                                    : item.status === "2"
                                       ? "#87d068"
-                                      : item.status === "2"
+                                      : item.status === "3"
                                         ? "#f50"
-                                        : item.status === "3"
+                                        : item.status === "4"
                                           ? "#dc0e04"
                                           : item.status === "4"
-                                            ? "#00D084"
-                                            : "#FF0004"}
+                                          ? "#00D084"
+                                          : "#FF0004"}
                                 >
-                                  {item.status === "0"
-                                    ? "Chờ xác nhận"
+                                 {item.status === "0"
+                                    ? "Sẵn sàng"
                                     : item.status === "1"
-                                      ? "Đã sử dụng"
+                                      ? "Chờ xác nhận"
                                       : item.status === "2"
-                                        ? "Hủy bỏ"
+                                        ? "Đã sử dụng"
                                         : item.status === "3"
+                                          ? "Hủy bỏ"
+                                          : item.status === "4"
                                           ? "Xóa bỏ"
-                                       
                                             : "Khóa"
                                             }
                                 </Tag>
