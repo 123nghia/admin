@@ -233,7 +233,7 @@ class HistorySkin extends Component {
                   </i>
 
                   <CRow>
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                     <div className="flex-center-space">
 
                    
@@ -250,7 +250,7 @@ class HistorySkin extends Component {
                       </div>
                     </CCol>
                    
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                     <div className="flex-center-space">
 
                    
@@ -268,7 +268,7 @@ class HistorySkin extends Component {
                       </div>
                     </CCol>
                    
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                       <div className="">
                       
                           <div className="flex-center-space">
@@ -316,7 +316,7 @@ class HistorySkin extends Component {
                       
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                       <div className="flex-center-space">
 
                    
@@ -362,7 +362,7 @@ class HistorySkin extends Component {
                   </div>
                 </CardHeader>
               <CardBody>
-                <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <table ble className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
