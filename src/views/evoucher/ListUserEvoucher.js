@@ -764,17 +764,28 @@ class EndUser extends Component {
                               <td className="text-center">
                                 <Tag
                                   className="ant-tag"
-                                  color={
-                                    item.status === "A"
-                                      ? "#2db7f5"
-                                      : item.status === "2"
-
-                                  }
+                                  color={item.status === "A"
+                                  ? "#2eb85c"
+                                  : item.status === "1"
+                                    ? "#2db7f5"
+                                    : item.status === "2"
+                                      ? "#87d068"
+                                      
+                                        : item.status === "3"
+                                          ? "#dc0e04"
+                                       
+                                          : "#FF0004"}
                                 >
-                                  {item.status == "A"
-                                    ? "Đã nhận"
-                                    : item.status == "2"
-                                  }
+                               
+                                   {item.status === "A"
+                              ? "Đã giao KH"
+                              : item.status === "1"
+                                ? "Đã xác nhận KH"
+                                : item.status === "2"
+                                  ? "Hoàn thành"
+                                  : item.status === "3"
+                                  ? "Hủy bỏ"
+                                  : "Chưa xác nhận"}
                                 </Tag>
 
                                 {
