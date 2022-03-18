@@ -47,7 +47,7 @@ class EndUser extends Component {
     super(props);
     this.state = {
       company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
-      company_id_search :"",
+      company_id_search: "",
       data: [],
       dataVoucher: [],
       arrPaginationVoucher: [],
@@ -56,7 +56,7 @@ class EndUser extends Component {
 
       hiddenVoucher: false,
 
-      actionVoucherEditing : "update",
+      actionVoucherEditing: "update",
       key: '',
       totalActive: 0,
       modalCom: false,
@@ -73,20 +73,20 @@ class EndUser extends Component {
       delete: null,
       arrPagination: [],
       indexPage: 0,
-      actionVoucher : "new",
+      actionVoucher: "new",
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
       user: localStorage.getItem('user'),
       isLoading: false,
-      idCurrentUpdate : null,
-      levelNormal : "0",
-      modalVoucherEditing : false
+      idCurrentUpdate: null,
+      levelNormal: "0",
+      modalVoucherEditing: false
     };
   }
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
-        status: e.target.value,
+      status: e.target.value,
     });
   };
   async componentDidMount() {
@@ -121,9 +121,10 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
-  
-  onSearch(){
-    this.getData(this.state.key);
+
+  async onSearch() {
+    const { from, to ,idDataSales, phoneFilter, levelFilter, codeVoucher } = this.state;
+    await this.getData(idDataSales,phoneFilter,levelFilter,codeVoucher,from,to);
   }
   async getData(key) {
     const { company_id } = this.state;
@@ -135,7 +136,7 @@ class EndUser extends Component {
       .get(url, {
         params: {
           company_id,
-          keyword : key
+          keyword: key
         },
       })
       .then((res) => {
@@ -169,7 +170,7 @@ class EndUser extends Component {
     this.setState({ arrPaginationVoucher: arrTotal, dataVoucher: arrTotal[0] });
   }
   async getDataVoucher(company_id_search) {
-    
+
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_VOUCHER;
 
@@ -177,12 +178,12 @@ class EndUser extends Component {
     await axios
       .get(url, {
         params: {
-          company_id : company_id_search,
+          company_id: company_id_search,
         },
       })
       .then((res) => {
         let val = res.data.data;
-        
+
         this.paginationVoucher(val);
         this.setState({ dataApiVoucher: val });
 
@@ -192,74 +193,74 @@ class EndUser extends Component {
       });
   }
 
-  
+
 
   onChange(key, val) {
     this.setState({ [key]: val })
   }
 
- 
 
-  
-openVoucher(){
-  this.setState({
-    actionVoucherEditing : "new",
-    modalVoucherEditing : true,
-    idCurrentUpdate : "",
-    codeVoucher : "",
-    relCode : "",
-    description : "",
-    status :"",
-  });
-};
-openEdit(item){
-  if(item.company_id){
+
+
+  openVoucher() {
     this.setState({
-      company_id_search : item.company_id
-    },()=>{
+      actionVoucherEditing: "new",
+      modalVoucherEditing: true,
+      idCurrentUpdate: "",
+      codeVoucher: "",
+      relCode: "",
+      description: "",
+      status: "",
+    });
+  };
+  openEdit(item) {
+    if (item.company_id) {
+      this.setState({
+        company_id_search: item.company_id
+      }, () => {
+        this.getDataVoucher(this.state.company_id_search)
+      })
+    } else {
       this.getDataVoucher(this.state.company_id_search)
+    }
+    this.setState({
+      actionVoucher: "edit",
+      modalVoucher: true,
+      idCurrentUpdate: item._id,
+      codeVoucher: item.code,
+      relCode: item.relCode,
+      description: item.content,
+      status: item.status,
     })
-  }else{
-    this.getDataVoucher(this.state.company_id_search)
-  }
-  this.setState({
-    actionVoucher : "edit",
-    modalVoucher : true,
-    idCurrentUpdate : item._id,
-    codeVoucher : item.code,
-    relCode : item.relCode,
-    description : item.content,
-    status :item.status,
-  })
-};
-openEditVoucher(item){
- 
-  this.setState({
-    actionVoucherEditing : "edit",
-    modalVoucherEditing : true,
-    idCurrentUpdate : item._id,
-    codeVoucher : item.code,
-    relCode : item.relCode,
-    description : item.content,
-    status :item.status,
-  })
-};
-async update(){
-  const { codeVoucher,company_id_search, from, to, description, status, company_id, relCode, idCurrentUpdate } =
-  this.state;
-  let baseUrlCallApi = Constants.UPDATE_VOUCHER;
-  var baseUrlapi = Constants.BASE_URL;
-  let url = baseUrlapi + baseUrlCallApi;
-    await axios.post(url,{
-      code :codeVoucher,
-      relCode : relCode,
-   
+  };
+  openEditVoucher(item) {
+
+    this.setState({
+      actionVoucherEditing: "edit",
+      modalVoucherEditing: true,
+      idCurrentUpdate: item._id,
+      codeVoucher: item.code,
+      relCode: item.relCode,
+      description: item.content,
+      status: item.status,
+    })
+  };
+  async update() {
+    const { codeVoucher, company_id_search, from, to, description, status, company_id, relCode, idCurrentUpdate } =
+      this.state;
+    let baseUrlCallApi = Constants.UPDATE_VOUCHER;
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios.post(url, {
+      code: codeVoucher,
+      relCode: relCode,
+
       content: description,
-                
-                status: status,
-                company_id: company_id_search,
-      id : idCurrentUpdate,
-    
+
+      status: status,
+      company_id: company_id_search,
+      id: idCurrentUpdate,
+
     }).then((res) => {
       Swal.fire({
         icon: "success",
@@ -270,23 +271,23 @@ async update(){
       this.setState({
         modalVoucherEditing: false,
       });
-     this.getDataVoucher(this.state.company_id_search)
+      this.getDataVoucher(this.state.company_id_search)
     });
-}
-async add(){
-  const { codeVoucher, from, to, description, status, company_id_search, relCode } =
-  this.state;
-  let baseUrlCallApi = Constants.ADD_VOUCHER;
-  var baseUrlapi = Constants.BASE_URL;
-  let url = baseUrlapi + baseUrlCallApi;
-    await axios.post(url,{
-      code :codeVoucher,
-      relCode : relCode,
-   
+  }
+  async add() {
+    const { codeVoucher, from, to, description, status, company_id_search, relCode } =
+      this.state;
+    let baseUrlCallApi = Constants.ADD_VOUCHER;
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios.post(url, {
+      code: codeVoucher,
+      relCode: relCode,
+
       content: description,
-                
-                status: status,
-                company_id: company_id_search
+
+      status: status,
+      company_id: company_id_search
     }).then((res) => {
       Swal.fire({
         icon: "success",
@@ -296,13 +297,13 @@ async add(){
       });
       this.getDataVoucher(this.state.company_id_search)
     });
-}
-async remove(item){
-  let baseUrlCallApi = Constants.DELETE_VOUCHER;
-  var baseUrlapi = Constants.BASE_URL;
-  let url = baseUrlapi + baseUrlCallApi;
-    await axios.post(url,{
-      id : item._id
+  }
+  async remove(item) {
+    let baseUrlCallApi = Constants.DELETE_VOUCHER;
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios.post(url, {
+      id: item._id
     }).then((res) => {
       Swal.fire({
         icon: "success",
@@ -310,10 +311,10 @@ async remove(item){
         showConfirmButton: false,
         timer: 700,
       });
-     this.getDataVoucher(this.state.company_id_search)
+      this.getDataVoucher(this.state.company_id_search)
     });
-}
-  
+  }
+
 
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -329,86 +330,86 @@ async remove(item){
     }
   }
   renderModalInfo(item) {
-    
+
     let itemRender = (
       <div>
-      <Modal isOpen={true} size="md">
-        <ModalHeader>Chi tiết Voucher</ModalHeader>
-        <ModalBody className="info_voucher">
-          <p>Mã voucher : <span>{item.code}</span></p>
-          <p>Mã công ty : <span>{item.code}</span></p>
-          <p>
-            Khởi tạo :
-            <span>
-              Lúc {" "}
-            {new Date(item.create_at).toLocaleTimeString() +
-              " giờ " + " ngày " +
-              new Date(item.create_at).toLocaleDateString()}
-              </span>
-          </p>
-          <p>
-            Bắt đầu :
-            <span>
-            Ngày {" "}
-              {new Date(item.from).toLocaleDateString()}
-              </span>
-          </p>
-          <p>
-            Kết thúc :
-           
+        <Modal isOpen={true} size="md">
+          <ModalHeader>Chi tiết Voucher</ModalHeader>
+          <ModalBody className="info_voucher">
+            <p>Mã voucher : <span>{item.code}</span></p>
+            <p>Mã công ty : <span>{item.code}</span></p>
+            <p>
+              Khởi tạo :
               <span>
-              Ngày {" "}
-            {new Date(item.to).toLocaleDateString()}
-            </span>
-          </p>
-          <p>Nội dung voucher : <span>{item.content}</span></p>
-          <p>
-            Trạng thái :
-            <span>
-            <Tag
-              className="ant-tag"
-              color={
-                item.status === "1"
-                  ? "#87d068"
-                  
-                  : "#f50"
+                Lúc {" "}
+                {new Date(item.create_at).toLocaleTimeString() +
+                  " giờ " + " ngày " +
+                  new Date(item.create_at).toLocaleDateString()}
+              </span>
+            </p>
+            <p>
+              Bắt đầu :
+              <span>
+                Ngày {" "}
+                {new Date(item.from).toLocaleDateString()}
+              </span>
+            </p>
+            <p>
+              Kết thúc :
+
+              <span>
+                Ngày {" "}
+                {new Date(item.to).toLocaleDateString()}
+              </span>
+            </p>
+            <p>Nội dung voucher : <span>{item.content}</span></p>
+            <p>
+              Trạng thái :
+              <span>
+                <Tag
+                  className="ant-tag"
+                  color={
+                    item.status === "1"
+                      ? "#87d068"
+
+                      : "#f50"
+                  }
+                >
+                  {item.status == "1"
+                    ? "Hoạt động"
+
+                    : "Không hoạt động"}
+                </Tag>
+              </span>
+            </p>
+
+            <p>Id voucher : <span>{item._id}</span></p>
+          </ModalBody>
+          <ModalFooter>
+            <CButton
+              color="secondary"
+              onClick={(e) =>
+                this.setState({
+                  modalInfo: null,
+                })
               }
             >
-              {item.status == "1"
-                ? "Hoạt động"
-                
-                : "Không hoạt động"}
-            </Tag>
-            </span>
-          </p>
-
-          <p>Id voucher : <span>{item._id}</span></p>
-        </ModalBody>
-        <ModalFooter>
-          <CButton
-            color="secondary"
-            onClick={(e) =>
-              this.setState({
-                modalInfo: null,
-              })
-            }
-          >
-            Đóng
-          </CButton>
-        </ModalFooter>
-      </Modal>
+              Đóng
+            </CButton>
+          </ModalFooter>
+        </Modal>
       </div>
     );
     this.setState({
-      modalInfo : itemRender
+      modalInfo: itemRender
     });
-    
+
   }
-  
+
   render() {
-    const { data,indexPageVoucher, arrPagination,dataVoucher,arrPaginationVoucher, key,phoneVoucher,nameVoucher ,modalVoucher} = this.state;
+    const { data, indexPageVoucher, arrPagination, dataVoucher, arrPaginationVoucher, key, phoneVoucher, nameVoucher, modalVoucher } = this.state;
     const arrLevel = [
-    
+
       {
         item: "1",
       },
@@ -419,91 +420,109 @@ async remove(item){
         item: "3",
       },
     ];
+    const arrLevelFilter = [
+      {
+        item: "0",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "3",
+      },
+      {
+        item: "4",
+      },
+    ];
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-         <Modal isOpen={this.state.modalVoucher} size="lg">
+          <Modal isOpen={this.state.modalVoucher} size="lg">
             <ModalHeader >
               {this.state.actionVoucher == "new" ? `Danh sách Voucher` : `Danh sách Voucher`}
+
             </ModalHeader>
             <ModalBody>
-           
-            <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash" >
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        
-                     
-                        <th className="text-center">Mã voucher</th>
- 
-                        <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">người sử dụng</th>
-        
-                        <th className="text-center">trạng thái</th>
-                   <th className="text-center"></th>
 
-                        
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        dataVoucher != undefined ?
-                        dataVoucher.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                     
-                                <td className="text-center">{item.code}</td>
-                                <td className="text-center">
-                                {(new Date(item.create_at)).toLocaleDateString() + ' ' + (new Date(item.create_at)).toLocaleTimeString()}                          
-                                </td>
-                                <td className="text-center">{item.user ? item.user : "Chưa có"}</td>
+              <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash" >
+                <thead className="thead-light">
+                  <tr>
+                    <th className="text-center">STT.</th>
 
-                                <td className="text-center">
-                                  <Tag
-                                    className="ant-tag"
-                                    color={
-                                      item.status === "1"
-                                        ? "#87d068"
-                                        
-                                        : "#f50"
-                                    }
-                                  >
-                                    {item.status == "1"
-                                      ? "Hoạt động"
-                                     
-                                      : "Không hoạt động"}
-                                  </Tag>
-                                </td>
-                                <td className="text-center">
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="outline"
-                                  color="info"
-                                  style={styles.mgl5}
-                                  size="md"
-                                  className="flex-a-center "
-                                  onClick={() => this.renderModalInfo(item)}
-                                >
-                                  <BsSearch className="mr-1" />
-                                  Xem chi tiết
-                                </CButton>
-                                </td>
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </table>
-                  <div style={{ float: 'right' }}>
+
+                    <th className="text-center">Mã voucher</th>
+
+                    <th className="text-center">Ngày tạo</th>
+                    <th className="text-center">người sử dụng</th>
+
+                    <th className="text-center">trạng thái</th>
+                    <th className="text-center"></th>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                  {
+                    dataVoucher != undefined ?
+                      dataVoucher.map((item, i) => {
+                        return (
+                          <tr key={i}>
+                            <td className="text-center">{i + 1}</td>
+
+                            <td className="text-center">{item.code}</td>
+                            <td className="text-center">
+                              {(new Date(item.create_at)).toLocaleDateString() + ' ' + (new Date(item.create_at)).toLocaleTimeString()}
+                            </td>
+                            <td className="text-center">{item.user ? item.user : "Chưa có"}</td>
+
+                            <td className="text-center">
+                              <Tag
+                                className="ant-tag"
+                                color={
+                                  item.status === "1"
+                                    ? "#87d068"
+
+                                    : "#f50"
+                                }
+                              >
+                                {item.status == "1"
+                                  ? "Hoạt động"
+
+                                  : "Không hoạt động"}
+                              </Tag>
+                            </td>
+                            <td className="text-center">
+                              <CButton
+                                shape="rounded-pill"
+                                variant="outline"
+                                color="info"
+                                style={styles.mgl5}
+                                size="md"
+                                className="flex-a-center "
+                                onClick={() => this.renderModalInfo(item)}
+                              >
+                                <BsSearch className="mr-1" />
+                                Xem chi tiết
+                              </CButton>
+                            </td>
+                          </tr>
+                        );
+                      }) : ""
+                  }
+                </tbody>
+              </table>
+              <div style={{ float: 'right' }}>
                 <Pagination count={arrPaginationVoucher.length} color="primary" onChange={(e, v) => {
                   this.setState({ dataVoucher: arrPaginationVoucher[v - 1], indexPageVoucher: v - 1 })
                 }} />
               </div>
             </ModalBody>
             <ModalFooter>
-             
+
               <CButton
                 color="secondary"
                 onClick={(e) =>
@@ -520,34 +539,34 @@ async remove(item){
               {this.state.actionVoucherEditing == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-            <TextFieldGroup
+              <TextFieldGroup
                 field="codeVoucher"
                 label="Mã voucher"
                 value={this.state.codeVoucher}
-                
+
                 // error={errors.title}
-                onChange={e => this.setState({codeVoucher : e.target.value})}
+                onChange={e => this.setState({ codeVoucher: e.target.value })}
               // rows="5"
               />
- <TextFieldGroup
+              <TextFieldGroup
                 field="relCode"
                 label="Mã chiến dịch"
                 value={this.state.relCode}
-                
+
                 // error={errors.title}
-                onChange={e => this.setState({relCode : e.target.value})}
+                onChange={e => this.setState({ relCode: e.target.value })}
               // rows="5"
               />
-            <label className="control-label">Mô tả:</label>
-            <CTextarea
-              name="description"
-              rows="4"
-              value={this.state.description}
-              onChange={(e) => {
-                this.setState({ description: e.target.value });
-              }}
-            />
-            <div style={{ width: "100%" }} className="mt-3">
+              <label className="control-label">Mô tả:</label>
+              <CTextarea
+                name="description"
+                rows="4"
+                value={this.state.description}
+                onChange={(e) => {
+                  this.setState({ description: e.target.value });
+                }}
+              />
+              <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
@@ -566,8 +585,8 @@ async remove(item){
                             {item.item === "1"
                               ? "Bắt đầu"
                               : item.item === "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                                ? "Trong quá trình"
+                                : "Hoàn thành"}
                           </option>
                         );
                       } else {
@@ -576,8 +595,8 @@ async remove(item){
                             {item.item == "1"
                               ? "Bắt đầu"
                               : item.item == "2"
-                              ? "Trong quá trình"
-                              : "Hoàn thành"}
+                                ? "Trong quá trình"
+                                : "Hoàn thành"}
                           </option>
                         );
                       }
@@ -612,25 +631,111 @@ async remove(item){
             <Col>
               <Card>
                 <CardHeader>
-                
+
                   <i className="fa fa-align-justify title_header">Danh sách Chiến dịch</i>
-               
-                 
-               
+
+
+
+
+                  <CRow>
+                    <CCol md={4} className="mt-3">
+                      <div className="flex-center-space">
+
+
+                        <p className="title_filter">Mã Voucher</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ codeVoucher: e.target.value });
+                          }}
+                          name="codeVoucher"
+                          value={this.state.codeVoucher}
+                          placeholder="Mã voucher"
+                        />
+                      </div>
+                    </CCol>
+
+
+                    <CCol md={4} className="mt-3">
+                      <div className="flex-center-space">
+
+
+                        <p className="title_filter">Trạng thái</p>
+                        <div style={{ width: "200px" }} className="">
+
+                          {arrLevelFilter !== undefined ? (
+                            <CSelect
+                              onChange={async (e) => {
+                                this.changeLevelValue(e, "levelFilter");
+                              }}
+                              custom
+                              size="md"
+                              name="levelFilter"
+                              id="SelectLm"
+                            >
+                              {arrLevelFilter.map((item, i) => {
+                                if (item.item === this.state.levelFilter) {
+                                  return (
+                                    <option selected key={i} value={item.item}>
+                                      {item.item === "0"
+                                        ? "Chờ xác nhận"
+                                        : item.item === "1"
+                                          ? "Đã sử dụng"
+                                          : item.item === "2"
+                                            ? "Hủy bỏ"
+                                            : item.item === "3"
+                                              ? "Xóa bỏ"
+
+                                              : "Khóa"
+                                      }
+                                    </option>
+                                  );
+                                } else {
+                                  return (
+                                    <option key={i} value={item.item}>
+                                      {item.item === "0"
+                                        ? "Chờ xác nhận"
+                                        : item.item === "1"
+                                          ? "Đã sử dụng"
+                                          : item.item === "2"
+                                            ? "Hủy bỏ"
+                                            : item.item === "3"
+                                              ? "Xóa bỏ"
+
+                                              : "Khóa"
+                                      }
+                                    </option>
+                                  );
+                                }
+                              })}
+                            </CSelect>
+                          ) : null}
+                        </div>
+
+                      </div>
+                    </CCol>
+
+
+                  </CRow>
+                  <div className="flex-center mt-3">
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                      onClick={(e) => {
+                        this.onSearch();
+                      }}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                    </CButton>
                    
-                  <div class="flex mt-3"> 
-                            
-                            <Input style={styles.searchInput} onChange={(e) => {
-                              this.setState({ key : e.target.value });
-                            }} name="key" value={key} placeholder="Từ khóa" />
-                         
-                    
-                          <CButton color="primary" size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm</CButton>
-                          </div>
+                  </div>
                 </CardHeader>
                 <CardBody>
 
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
+                  <table ble className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash">
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -641,13 +746,13 @@ async remove(item){
 
                         <th className="text-center">Mô tả</th>
 
-                       
+
                         <th className="text-center">Số lượng voucher</th>
                         <th className="text-center">Trạng thái</th>
 
-                   
 
-                        
+
+
                       </tr>
                     </thead>
                     <tbody>
@@ -660,38 +765,38 @@ async remove(item){
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  {new Date(item.from).toLocaleDateString() 
-                                    }
+                                  {new Date(item.from).toLocaleDateString()
+                                  }
                                 </td>
                                 <td className="text-center">
-                                  {new Date(item.to).toLocaleDateString() }
+                                  {new Date(item.to).toLocaleDateString()}
                                 </td>
                                 <td className="text-center">
-                                {(new Date(item.create_at)).toLocaleDateString() }                          
+                                  {(new Date(item.create_at)).toLocaleDateString()}
                                 </td>
                                 <td className="text-center">{item.description}</td>
-                                
+
                                 <td className="text-center">
-                              <div className="flex-center">
-                                    
-                               <p className="mr-2" style={{ margin : "auto"}}>
-                                  {item.quatinity ? item.quatinity : "0"}
-                                  </p>
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="outline"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    className="flex-a-center "
-                                    onClick={(e) => this.openEdit(item)}
-                                  >
-                                  <BsSearch className="mr-1" />
-                                  Xem
-                                  </CButton>
+                                  <div className="flex-center">
+
+                                    <p className="mr-2" style={{ margin: "auto" }}>
+                                      {item.quatinity ? item.quatinity : "0"}
+                                    </p>
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="outline"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      className="flex-a-center "
+                                      onClick={(e) => this.openEdit(item)}
+                                    >
+                                      <BsSearch className="mr-1" />
+                                      Xem
+                                    </CButton>
                                   </div>
-                              
-                                  </td>
+
+                                </td>
 
                                 <td className="text-center">
                                   <Tag
@@ -699,17 +804,17 @@ async remove(item){
                                     color={
                                       item.status === "1"
                                         ? "#87d068"
-                                        
+
                                         : "#f50"
                                     }
                                   >
                                     {item.status == "1"
                                       ? "Hoạt động"
-                                      
+
                                       : "Không hoạt động"}
                                   </Tag>
                                 </td>
-                                
+
                               </tr>
                             );
                           }) : ""
@@ -726,7 +831,7 @@ async remove(item){
             </Col>
           </Row>
 
-       
+
 
         </div>
       );
@@ -746,7 +851,7 @@ const override = css`
 `;
 
 const styles = {
-  icon :{
+  icon: {
     fontSize: "16px",
     height: "20px",
     width: "20px"
@@ -810,9 +915,9 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "250px",
+    width: "200px",
     display: 'inline-block',
-    marginRight: '5px'
+   
   },
   userActive: {
     color: 'green'

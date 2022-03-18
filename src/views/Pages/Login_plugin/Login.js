@@ -38,6 +38,9 @@ class Login extends Component {
       window.location.href = "#/login";
     }
   }
+  async componentDidMount() {
+    await this.getDataConfigWeb();
+  }
   isValid() {
     const { errors, isValid } = validateInput(this.state);
 
@@ -46,6 +49,29 @@ class Login extends Component {
     }
     return isValid;
   }
+  async getDataConfigWeb() {
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/config/getAll";
+   
+    await axios
+      .get(url, {
+        params: {
+          key: "webinfo_admin",
+          company_id: "-1",
+        },
+      })
+      .then((res) => {
+  
+        if (res.data.data.length > 0) {
+          let dataConfig = res.data.data[0];
+  
+          let valueConfig = JSON.parse(dataConfig.Value);
+          console.log(valueConfig);
+          this.setState({
+            logoAdmin : valueConfig.value.logos.webAdmin.logo
+          })
+          
+        }})}
   async onSubmit(e) {
     e.preventDefault();
     if (this.isValid()) {
@@ -84,7 +110,7 @@ class Login extends Component {
         const { changeTypeUser } = action;
 
         changeTypeUser(token.type);
-
+       
         if (token.type == "0" || token.type == "1") {
           localStorage.setItem("isAD", "0");
           this.props.history.push("/list_order");
@@ -122,7 +148,7 @@ class Login extends Component {
                           style={{ alignSelf: "center" }}
                           height="40px"
                           width="auto"
-                          src={Logo}
+                          src={this.state.logoAdmin}
                         />
                       </div>
                       <h1>Đăng nhập</h1>

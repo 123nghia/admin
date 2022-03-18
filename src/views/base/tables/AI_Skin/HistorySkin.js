@@ -5,21 +5,27 @@ import {
   CardBody,
   CardHeader,
   Col,
+  Input,
   Row,
 } from 'reactstrap';
+import { DatePicker, Space } from "antd";
+import "antd/dist/antd.css";
 
 import {
-  CButton
-} from '@coreui/react'
-
+  CButton,
+  CLabel, CSelect, CRow, CCol
+} from "@coreui/react";
 import IframeModal from '../../../components/Iframe';
-import styles from '../../../../../src/assets/styles/styles';
+
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
 import Constants from "../../../../contants/contants";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import { Select } from "antd";
+const { Option } = Select;
+const dateFormat = "DD/MM/YYYY";
 
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -29,6 +35,8 @@ class HistorySkin extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
+
       data: [],
       key: '',
       page: 1,
@@ -37,18 +45,25 @@ class HistorySkin extends Component {
       activePage: 1,
       numPage: 1,
       itemsCount: 0,
-      itemPerPage: 5,
+      itemPerPage: 7,
       hidden: false,
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
       type: localStorage.getItem('type'),
+      user: localStorage.getItem("user"),
+
       toggleHistory: false,
-      idHistory: ""
+      idHistory: "",
+      dataSalesDefault : [{
+        _id : "",
+        Name : "Không có"
+      }]
     };
     this.closeModal = this.closeModal.bind(this)
   }
   async componentDidMount() {
+    this.getDataSeo();
     if (this.state.type == '0') {
       this.getData()
     } else {
@@ -64,8 +79,18 @@ class HistorySkin extends Component {
       }
     }
   }
-
-  getData = async () => {
+  async onSearch() {
+    console.log(this.state.from);
+    console.log(this.state.to);
+    console.log(this.state.codeVoucher);
+    console.log(this.state.userVoucher);
+    console.log(this.state.statusVoucher);
+    console.log(this.state.idDataSales);
+  
+    await this.getData_ByCondition(this.state.idDataSales);
+  }
+  getData = async (key) => {
+    
     const { activePage, itemPerPage } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
@@ -79,11 +104,30 @@ class HistorySkin extends Component {
     });
 
     let data = res.data.data;
-
+    console.log("Data",data);
     this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });
     console.log(this.state.data)
   }
+  async getDataSeo(){
+    
+    const { company_id } = this.state;
 
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.PLUGIN_SUBSALE_USER2;
+
+    let url = baseUrlapi + baseUrlCallApi;
+  
+    await axios.get(url, {
+      params: {
+        company_id
+      }
+    }).then((res) => {
+      var val = res.data.data;
+      this.setState({
+        dataSales : this.state.dataSalesDefault.concat(val)
+      })
+    })
+  }
   handlePageChange = async (pageNumber) => {
     const { type } = this.state;
     console.log(type)
@@ -96,7 +140,8 @@ class HistorySkin extends Component {
     });
   };
 
-  getData_ByCondition = async () => {
+  getData_ByCondition = async (key) => {
+    console.log(key)
     const { activePage, itemPerPage } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
@@ -104,6 +149,9 @@ class HistorySkin extends Component {
       url: Constants.LIST_HISTORY_SKIN_BY_CONDITION,
       method: 'POST',
       data: {
+        saleId : key,
+        roleType: this.state.type,
+        userId: JSON.parse(this.state.user).sale_id,
         page: activePage,
         limit: itemPerPage
       },
@@ -111,7 +159,7 @@ class HistorySkin extends Component {
     });
 
     let data = res.data.data
-
+    console.log("Data 2",data);
     this.setState({ isLoading: false, itemsCount: data.total, dataApi: data.data, data: data.data });
   }
 
@@ -179,15 +227,148 @@ class HistorySkin extends Component {
         <Row>
           <Col>
             <Card>
-              <CardHeader>
-                <i className="fa fa-align-justify">Lịch sử soi da</i>
-              </CardHeader>
+            <CardHeader>
+                  <i className="fa fa-align-justify title_header">
+                    Lịch sử soi da
+                  </i>
+
+                  <CRow>
+                    <CCol md={4} className="mt-3">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Tên khách hàng</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ nameUser: e.target.value });
+                          }}
+                          name="nameUser"
+                          value={this.state.nameUser}
+                          placeholder="Tên"
+                        />
+                      </div>
+                    </CCol>
+                   
+                    <CCol md={4} className="mt-3">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Số điện thoại</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ numberUser: e.target.value });
+                          }}
+                          type="number"
+                          name="numberUser"
+                          value={this.state.numberUser}
+                          placeholder="Số điện thoại"
+                        />
+                      </div>
+                    </CCol>
+                   
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+                      
+                          <div className="flex-center-space">
+                           <p className="title_filter">Từ ngày</p>
+                            <div>
+                              <DatePicker
+                                style={styles.dateForm}
+                                onChange={(e, dateString) => {
+                                  let copy = dateString.split("-");
+                                  let newData = ``;
+                                  copy.forEach((item, index) => {
+                                    if (index === 0) {
+                                      newData += item;
+                                    } else {
+                                      newData += `/${item}`;
+                                    }
+                                  });
+                                  this.setState({ from: newData });
+                                }}
+                                format={dateFormat}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex-center-space mt-3">
+                          <p className="title_filter">Đến ngày</p>
+                            <div>
+                              <DatePicker
+                              style={styles.dateForm}
+                                onChange={(e, dateString) => {
+                                  let copy = dateString.split("-");
+                                  let newData = ``;
+                                  copy.forEach((item, index) => {
+                                    if (index === 0) {
+                                      newData += item;
+                                    } else {
+                                      newData += `/${item}`;
+                                    }
+                                  });
+                                  this.setState({ to: newData });
+                                }}
+                                format={dateFormat}
+                              />
+                            </div>
+                          </div>
+                      
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-3">
+                      <div className="flex-center-space">
+
+                   
+                        <p className="title_filter">Danh sách Sales</p>
+                        <Select
+                          className="select_seo"
+                          showSearch
+                          placeholder="Lọc theo Sales"
+                          optionFilterProp="children"
+                          onChange={(value) =>
+                            this.setState({
+                              idDataSales: value,
+                            })
+                          }
+                          onSearch={this.onSearchSelect}
+                          filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                            0
+                          }
+                        >
+                          {this.state.dataSales
+                            ? this.state.dataSales.map((item, i) => {
+                              return <Option value={item._id}>{item.Name}</Option>;
+                            })
+                            : null}
+                        </Select>
+                     
+                     
+                      </div>
+                    </CCol>
+                  </CRow>
+
+                  <div className="text-center mt-3">
+                    <CButton
+                      color="primary"
+                      size="md"
+                      onClick={(e) => {
+                        this.onSearch();
+                      }}
+                    >
+                      Tìm kiếm
+                    </CButton>
+                  </div>
+                </CardHeader>
               <CardBody>
-                <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <table ble className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
                       <th className="text-center">Tên</th>
+                      <th className="text-center">Số điện thoại</th>
+
                       <th className="text-center">Hình ảnh</th>
                       <th className="text-center">Kết quả</th>
                       {/* <th className="text-center">Công ty</th>
@@ -204,7 +385,9 @@ class HistorySkin extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.Name}</td>
+                              <td className="text-center">{item.Phone}</td>
+
                               <td className="text-center">
                                 <img src={item.Image}  style={{ width: '50%', height: 50 }} />
                               </td>
@@ -219,7 +402,7 @@ class HistorySkin extends Component {
                               {/* <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
                               <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td> */}
                               <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                {(new Date(item.Create_Date)).toLocaleDateString()}
                               </td>
                             </tr>
                           );
@@ -258,3 +441,90 @@ const override = css`
 `;
 
 export default HistorySkin;
+const styles = {
+  dateForm : {
+    width: "200px"
+  },
+  pagination: {
+    marginRight: "5px",
+  },
+  flexLabel: {
+    width: 100,
+  },
+  flexOption: {
+    width: 300,
+  },
+  a: {
+    textDecoration: "none",
+  },
+  floatRight: {
+    float: "right",
+    marginTop: "3px",
+  },
+  spinner: {
+    width: "30px",
+  },
+  center: {
+    textAlign: "center",
+  },
+  tbody: {
+    height: "380px",
+    overflowY: "auto",
+  },
+  wh25: {
+    width: "25%",
+    float: "left",
+    height: "80px",
+  },
+  w5: {
+    width: "15%",
+    float: "left",
+    height: "80px",
+  },
+  icon: {
+    fontSize: "16px",
+    height: "20px",
+    width: "20px",
+  },
+  wa10: {
+    width: "5%",
+    float: "left",
+    height: "80px",
+  },
+  row: {
+    float: "left",
+    width: "100%",
+  },
+  success: {
+    color: "green",
+  },
+  danger: {
+    color: "red",
+  },
+  mgl5: {
+    marginLeft: "5px",
+  },
+  tags: {
+    float: "right",
+    marginRight: "5px",
+  },
+  searchInput: {
+    width: "250px",
+    display: "inline-block",
+    marginRight: "5px",
+  },
+  userActive: {
+    color: "green",
+  },
+  userPending: {
+    color: "red",
+  },
+  nagemonNameCol: {
+    width: "328px",
+  },
+  image: {
+    width: "100px",
+    height: "100px",
+    borderRadius: "99999px",
+  },
+};

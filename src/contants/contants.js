@@ -1,12 +1,19 @@
 export default {
    "BASE_URL" : "https://evoucher-api.applamdep.com/",
+<<<<<<< HEAD
   // "BASE_URL" : "http://192.168.1.6:3018/",
+=======
+  // "BASE_URL" : "http://192.168.1.9:3018/",
+>>>>>>> 50175a9a4fda0369d5a0e17e6d74b59a1832597c
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
-  // "PORTAL_SERVER":  "http://192.168.1.12:3014/",  
+  // "PORTAL_SERVER":  "http://192.168.1.12:3014/",   
 
   "BASE_URL_CURRENT" : "https://admin-evoucher.applamdep.com/",
   // "BASE_URL_CURRENT" : "http://localhost:3019/",
   "BASE_URL_HISTORY_SKIN" : "https://shope.thulamua.com/lich-su-soi-da-with-iframe/",
+
+  "PLUGIN_SUBSALE_USER2" : "api/plugin-subsale-user_New",
+
 
   "GET_FOOTER" : "api/footerPage/getAll",
   "ADD_FOOTER" : "api/footerPage/add",

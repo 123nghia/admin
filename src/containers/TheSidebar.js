@@ -16,6 +16,7 @@ import logoMainnet from './../assets/img/logo_head.png';
 import CIcon from '@coreui/icons-react'
 import API_CONNECT from '../functions/callAPI'
 import Constants from '../contants/contants'
+import axios from "axios";
 
 // sidebar nav config
 import navigations from './_nav'
@@ -31,14 +32,40 @@ const callApiGetRoleSubAdmin = async (user) => {
   return res.data.sidebar_id
 }
 
+
 const TheSidebar = () => {
+  const [Logo,setLogo] = useState("");
   const [sidebar, setSidebar] = useState([]);
   const type = localStorage.getItem('type');
   const user = localStorage.getItem('user');
-
+  async function getDataConfigWeb() {
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "api/config/getAll";
+   
+    await axios
+      .get(url, {
+        params: {
+          key: "webinfo_admin",
+          company_id: "-1",
+        },
+      })
+      .then((res) => {
+  
+        if (res.data.data.length > 0) {
+          let dataConfig = res.data.data[0];
+  
+          let valueConfig = JSON.parse(dataConfig.Value);
+          console.log(valueConfig);
+          setLogo(valueConfig.value.logos.webAdmin.logo)
+          
+        }})}
   useEffect(async () => {
     var data = await callApiGetRoleSubAdmin(user)
+    await getDataConfigWeb();
+
     setSidebar(data);
+ 
+
   }, []);
 
   var temp = []
@@ -99,7 +126,7 @@ const TheSidebar = () => {
       <CSidebarBrand className="d-md-down-none" to="/">
       <div class="flex-center">
         <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{ textDecoration: 'underline' }}>
-          <img src={logoMainnet} width="110" height="auto" alt="HB Analytics Logo" className="navbar-brand-full" /></NavLink>
+          <img src={Logo} width="110" height="auto" alt="HB Analytics Logo" className="navbar-brand-full" /></NavLink>
           </div>
         <CIcon
           className="c-sidebar-brand-minimized"
@@ -119,7 +146,7 @@ const TheSidebar = () => {
             }}
           />
         </div> */}
-        <div style={{ backgroundColor: '#111111' }}>
+        <div style={{ backgroundColor: '#fff9fe' }}>
           <CCreateElement
             items={navigations[0]}
             components={{
@@ -130,7 +157,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#222222' }}>
+        <div style={{ backgroundColor: '#fff9fe' }}>
           <CCreateElement
             items={navigations[1]}
             components={{
@@ -141,7 +168,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#fff9fe' }}>
           <CCreateElement
             items={navigations[2]}
             components={{
@@ -152,7 +179,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#fff9fe' }}>
           <CCreateElement
             items={navigations[3]}
             components={{
@@ -163,7 +190,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#fff9fe' }}>
           <CCreateElement
             items={navigations[4]}
             components={{
@@ -175,7 +202,7 @@ const TheSidebar = () => {
           />
         </div>
 
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#fff9fe' }}>
           <CCreateElement
             items={navigations[5]}
             components={{

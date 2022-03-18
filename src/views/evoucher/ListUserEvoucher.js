@@ -16,6 +16,8 @@ import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { CButton, CLabel, CSelect, CRow, CCol } from "@coreui/react";
 import { Tag, Divider } from "antd";
+import { Select } from "antd";
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 
 import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
@@ -30,6 +32,8 @@ import * as XLSX from "xlsx";
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
+const { Option } = Select;
+
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
@@ -68,6 +72,12 @@ class EndUser extends Component {
       // to : new Date().toLocaleDateString()
       from: "",
       to: "",
+      dataSalesDefault : [{
+        _id : "",
+        Name : "Không có"
+      }],
+      levelFilter : "A"
+      
     };
   }
   changeLevel = (e) => {
@@ -76,9 +86,15 @@ class EndUser extends Component {
       status: e.target.value,
     });
   };
+  changeLevelValue= (e,value) => {
+    e.preventDefault();
+    this.setState({
+      [value]: e.target.value,
+    });
+  };
   async componentDidMount() {
     const { type } = this.state;
-
+    this.getDataSeo();
     this.getData();
 
     let arr = JSON.parse(localStorage.getItem("url"));
@@ -114,28 +130,49 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
-  onSearch() {
-    console.log(this.state.from);
-    console.log(this.state.to);
-    console.log(this.state.codeVoucher);
-    console.log(this.state.userVoucher);
-    console.log(this.state.statusVoucher);
-
-    this.getData(this.state.key);
+  async onSearch() {
+    const { from, to ,idDataSales, phoneFilter, levelFilter, codeVoucher } = this.state;
+    await this.getData(idDataSales,phoneFilter,levelFilter,codeVoucher,from,to);
   }
-  async getData(key) {
+  async getDataSeo(){
+    
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.PLUGIN_SUBSALE_USER2;
+
+    let url = baseUrlapi + baseUrlCallApi;
+  
+    await axios.get(url, {
+      params: {
+        company_id
+      }
+    }).then((res) => {
+      var val = res.data.data;
+      this.setState({
+        dataSales : this.state.dataSalesDefault.concat(val)
+      })
+    })
+  }
+  async getData(saleId,phoneNumber,status,voucherCode,from,to) {
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_USER_EVOUCHER;
 
     let url = baseUrlapi + baseUrlCallApi;
-    await axios.get(url,{
-      params : {
-       
-          company_id
-         
-      
+  
+    await axios.get(url, {
+      params: {
+        saleId : saleId,
+        phoneNumber,
+        from,
+        to,
+        status,
+        voucherCode,
+        roleType: this.state.type,
+        userId: JSON.parse(this.state.user).sale_id,
+        company_id
       }
     }).then((res) => {
       let val = res.data.data;
@@ -349,7 +386,24 @@ class EndUser extends Component {
       {
         item: "1",
       },
-     
+
+    ];
+    const arrLevelFilter = [
+      {
+        item: "A",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+      {
+        item: "3",
+      },
+      {
+        item: "4",
+      },
     ];
     if (!this.state.isLoading) {
       return (
@@ -377,7 +431,7 @@ class EndUser extends Component {
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("nameVoucher", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
 
               <TextFieldGroup
@@ -387,7 +441,7 @@ class EndUser extends Component {
                 placeholder={"Số điện thoại"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("phoneVoucher", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
@@ -408,10 +462,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                              ? "Đã hẹn"
-                              : item.item === "2"
-                              ? "Đã gặp"
-                              : "Hoàn tất"}
+                                ? "Đã hẹn"
+                                : item.item === "2"
+                                  ? "Đã gặp"
+                                  : "Hoàn tất"}
                           </option>
                         );
                       } else {
@@ -420,10 +474,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                              ? "Đã hẹn"
-                              : item.item === "2"
-                              ? "Đã gặp"
-                              : "Hoàn tất"}
+                                ? "Đã hẹn"
+                                : item.item === "2"
+                                  ? "Đã gặp"
+                                  : "Hoàn tất"}
                           </option>
                         );
                       }
@@ -461,10 +515,13 @@ class EndUser extends Component {
                   <i className="fa fa-align-justify title_header">
                     Danh sách người nhận Voucher
                   </i>
-
+               
                   <CRow>
-                    <CCol md={6} className="mt-3">
-                      <div className="text-center">
+                    <CCol md={4} className="mt-3">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Mã Voucher</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
@@ -476,23 +533,76 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={6} className="mt-3">
-                      <div className="text-center">
+                   
+                    <CCol md={4} className="mt-3">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Số điện thoại</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
-                            this.setState({ userVoucher: e.target.value });
+                            this.setState({ phoneFilter: e.target.value });
                           }}
                           type="number"
-                          name="userVoucher"
-                          value={this.state.userVoucher}
+                          name="phoneFilter"
+                          value={this.state.phoneFilter}
                           placeholder="Số điện thoại"
                         />
                       </div>
                     </CCol>
-                    <CCol md={6} className="mt-3">
-                      <div className="text-center">
-                        <Input
+                    <CCol md={4} className="mt-3">
+                    <div className="flex-center-space">
+
+                   
+<p className="title_filter">Trạng thái</p>
+<div style={{ width: "200px" }} className="">
+             
+                {arrLevel !== undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevelValue(e,"levelFilter");
+                    }}
+                    custom
+                    size="md"
+                    name="levelFilter"
+                    id="SelectLm"
+                  >
+                    {arrLevelFilter.map((item, i) => {
+                      if (item.item === this.state.levelFilter) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "A"
+                              ? "Đã giao KH"
+                              : item.item === "1"
+                                ? "Đã xác nhận KH"
+                                : item.item === "2"
+                                  ? "Hoàn thành"
+                                  : item.item === "3"
+                                  ? "Hủy bỏ"
+                                  : "Chưa xác nhận"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                           {item.item === "A"
+                              ? "Đã giao KH"
+                              : item.item === "1"
+                                ? "Đã xác nhận KH"
+                                : item.item === "2"
+                                  ? "Hoàn thành"
+                                  : item.item === "3"
+                                  ? "Hủy bỏ"
+                                  : "Chưa xác nhận"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
+                        {/* <Input
                           style={styles.searchInput}
                           onChange={(e) => {
                             this.setState({ statusVoucher: e.target.value });
@@ -500,16 +610,17 @@ class EndUser extends Component {
                           name="statusVoucher"
                           value={this.state.statusVoucher}
                           placeholder="Trạng thái voucher"
-                        />
+                        /> */}
                       </div>
                     </CCol>
-                    <CCol md={6} className="mt-3">
-                      <div className="flex-center">
-                        <div className="flex">
-                          <div className="text-center">
-                            Từ ngày
-                            <div style={{ padding: "0 24px" }}>
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+                      
+                          <div className="flex-center-space">
+                           <p className="title_filter">Từ ngày</p>
+                            <div>
                               <DatePicker
+                                style={styles.dateForm}
                                 onChange={(e, dateString) => {
                                   let copy = dateString.split("-");
                                   let newData = ``;
@@ -526,10 +637,11 @@ class EndUser extends Component {
                               />
                             </div>
                           </div>
-                          <div className="text-center">
-                            Đến ngày
-                            <div style={{ padding: "0 24x" }}>
+                          <div className="flex-center-space mt-3">
+                          <p className="title_filter">Đến ngày</p>
+                            <div>
                               <DatePicker
+                              style={styles.dateForm}
                                 onChange={(e, dateString) => {
                                   let copy = dateString.split("-");
                                   let newData = ``;
@@ -546,21 +658,56 @@ class EndUser extends Component {
                               />
                             </div>
                           </div>
-                        </div>
+                      
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-3">
+                      <div className="flex-center-space">
+
+                   
+                        <p className="title_filter">Danh sách Sales</p>
+                        <Select
+                          className="select_seo"
+                          showSearch
+                          placeholder="Lọc theo Sales"
+                          optionFilterProp="children"
+                          onChange={(value) =>
+                            this.setState({
+                              idDataSales: value,
+                            })
+                          }
+                          onSearch={this.onSearchSelect}
+                          filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                            0
+                          }
+                        >
+                          {this.state.dataSales
+                            ? this.state.dataSales.map((item, i) => {
+                              return <Option value={item._id}>{item.Name}</Option>;
+                            })
+                            : null}
+                        </Select>
+                     
+                     
                       </div>
                     </CCol>
                   </CRow>
 
-                  <div className="text-center mt-3">
-                    <CButton
-                      color="primary"
+                  <div className="flex-center mt-3">
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
+                      className="flex-center"
                       onClick={(e) => {
                         this.onSearch();
                       }}
                     >
-                      Tìm kiếm
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                     </CButton>
+                 
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -576,7 +723,7 @@ class EndUser extends Component {
                   </div> */}
                   <table
                     ble
-                    className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
                   >
                     <thead className="thead-light">
                       <tr>
@@ -601,64 +748,65 @@ class EndUser extends Component {
                       </td>
                       {data != undefined
                         ? data.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.fullName}</td>
-                                <td className="text-center">{item.phoneNumber}</td>
-                                <td className="text-center">{item.email}</td>
-                                <td className="text-center">
-                                  {item.voucherCode}
-                                </td>
-                                <td className="text-center">
-                                  {new Date(item.create_at).toLocaleDateString()}
-                                </td>
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{item.fullName}</td>
+                              <td className="text-center">{item.phoneNumber}</td>
+                              <td className="text-center">{item.email}</td>
+                              <td className="text-center">
+                                {item.voucherCode}
+                              </td>
+                              <td className="text-center">
+                                {new Date(item.create_at).toLocaleDateString()}
+                              </td>
 
-                                <td className="text-center">
-                                  <Tag
-                                    className="ant-tag"
-                                    color={
-                                      item.status === "A"
-                                        ? "#2db7f5"
-                                        : item.status === "2"
-                                        
-                                    }
-                                  >
-                                    {item.status == "A"
-                                      ? "Đã nhận"
-                                      : item.status == "2"
-                                      }
-                                  </Tag>
+                              <td className="text-center">
+                                <Tag
+                                  className="ant-tag"
+                                  color={item.status === "A"
+                                  ? "#2eb85c"
+                                  : item.status === "1"
+                                    ? "#2db7f5"
+                                    : item.status === "2"
+                                      ? "#87d068"
+                                      
+                                        : item.status === "3"
+                                          ? "#dc0e04"
+                                       
+                                          : "#FF0004"}
+                                >
+                               
+                                   {item.status === "A"
+                              ? "Đã giao KH"
+                              : item.status === "1"
+                                ? "Đã xác nhận KH"
+                                : item.status === "2"
+                                  ? "Hoàn thành"
+                                  : item.status === "3"
+                                  ? "Hủy bỏ"
+                                  : "Chưa xác nhận"}
+                                </Tag>
 
-                                  {
-                                    this.state.type == "0" ? 
+                                {
+                                  this.state.type == "0" ?
                                     <div>
-                                    <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openEditVoucher(item)}
-                                  >
-                                    {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
-                                    Thay đổi
-                                  </CButton><CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openEditVoucher(item)}
-                                  >
-                                    {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
-                                    Thay đổi
-                                  </CButton></div> : null
-                                  }
-                                </td>
-                              </tr>
-                            );
-                          })
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="ghost"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        onClick={(e) => this.openEditVoucher(item)}
+                                      >
+                                        {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
+                                        Thay đổi
+                                      </CButton></div> : null
+                                }
+                              </td>
+                            </tr>
+                          );
+                        })
                         : ""}
                     </tbody>
                   </table>
@@ -691,7 +839,7 @@ class EndUser extends Component {
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("username", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
 
               <TextFieldGroup
@@ -702,7 +850,7 @@ class EndUser extends Component {
                 type={"email"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("email", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
 
               <TextFieldGroup
@@ -712,7 +860,7 @@ class EndUser extends Component {
                 placeholder={"Số điện thoại"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("phone", e.target.value)}
-                // rows="5"
+              // rows="5"
               />
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Cấp độ:</CLabel>
@@ -733,10 +881,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                              ? "Chưa hẹn"
-                              : item.item === "2"
-                              ? "Đã gặp"
-                              : "Hoàn tất"}
+                                ? "Chưa hẹn"
+                                : item.item === "2"
+                                  ? "Đã gặp"
+                                  : "Hoàn tất"}
                           </option>
                         );
                       } else {
@@ -745,10 +893,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                              ? "Chưa hẹn"
-                              : item.item === "2"
-                              ? "Đã gặp"
-                              : "Hoàn tất"}
+                                ? "Chưa hẹn"
+                                : item.item === "2"
+                                  ? "Đã gặp"
+                                  : "Hoàn tất"}
                           </option>
                         );
                       }
@@ -846,6 +994,9 @@ const override = css`
 `;
 
 const styles = {
+  dateForm : {
+    width: "200px"
+  },
   pagination: {
     marginRight: "5px",
   },
@@ -910,9 +1061,9 @@ const styles = {
     marginRight: "5px",
   },
   searchInput: {
-    width: "250px",
+    width: "200px",
     display: "inline-block",
-    marginRight: "5px",
+  
   },
   userActive: {
     color: "green",

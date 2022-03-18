@@ -48,7 +48,7 @@ class Login extends Component {
         localStorage.setItem('auth', 'abv');
         localStorage.setItem('role', token.role);
         localStorage.setItem('token', res.data.data.token);
-
+    
         this.props.history.push('/dashboard')
       } else {
         console.log(this.state.username)
