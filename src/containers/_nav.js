@@ -650,7 +650,7 @@ const _navContact = [
       name: 'Danh sách tài khoản hệ thống',
       
       to: '/subsale',
-      role: ['1','2'],
+      role: ['0'],
       badge: {
         color: 'info',
         text: <CTooltip placement={"right"} content={content.accountSale}>
