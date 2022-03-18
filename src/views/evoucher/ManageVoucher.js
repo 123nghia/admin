@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 import { BsTrash  } from "@react-icons/all-files/bs/BsTrash";
 import { BsDownload} from "@react-icons/all-files/bs/BsDownload";
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 
 
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
@@ -857,7 +858,7 @@ class EndUser extends Component {
                     <a href="/excel/template-import-voucher.xlsx" download>
                     <CButton
                       color="success"
-                      style={{ marginBottom: "10px", marginRight: '20px' }}
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
                       className="flex-center"
                    
@@ -866,6 +867,16 @@ class EndUser extends Component {
                       <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
                     </CButton>
                     </a>
+                    <CButton
+                      color="success"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                   
+                    >
+                      <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Exports</p>
+                    </CButton>
                     <div>
 
                     </div>

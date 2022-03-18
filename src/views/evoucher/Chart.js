@@ -569,7 +569,6 @@ render() {
                   <i className="fa fa-align-justify title_header">
                   Biểu đồ thể hiện số lượng khách hàng trong 6 tháng gần nhất
                   </i>
-
                   </CardHeader>
                   <CardBody>
 
