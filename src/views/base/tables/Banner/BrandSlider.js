@@ -205,10 +205,14 @@ class BrandSlider extends Component {
         modalCom: !this.state.modalCom,
         action: key,
         name: "",
-        image: "",
-        image_show: "",
-        image_show_mobile:"",
-        link: ""
+      
+       
+      image: "",
+      image_show: "",
+      image_link: "",
+        image_mobile: "",
+      image_show_mobile: "",
+      image_mobile_link: "",
       })
     }
   }
@@ -238,8 +242,8 @@ class BrandSlider extends Component {
     const body = {
       name: name,
       image: image,
-      image_link: image_link.name,
-      image_mobile_link: image_mobile_link == undefined  || image_mobile_link == "" ? "" : image_mobile_link.name,
+      image_link: `${Constants.BASE_URL}image_brand/${image_link.name}`,
+      image_mobile_link:  `${Constants.BASE_URL}image_brand/${image_mobile_link.name}`,
       company_id: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.user).company_id,
       link: link
     }
@@ -272,10 +276,11 @@ class BrandSlider extends Component {
       modalCom: !this.state.modalCom,
       action: "update",
       name: item.name,
-      image:"",
-      image_show: "",
-      image_show_mobile: item.image_mobile_link,
+      image: item.image_link,
+      image_show: item.image_link,
       image_link: item.image_link,
+      image_mobile : item.image_mobile_link,
+      image_show_mobile: item.image_mobile_link,
       image_mobile_link: item.image_mobile_link,
       id: item['_id'],
       link: item.hrefLink
@@ -298,16 +303,32 @@ class BrandSlider extends Component {
     form2.append("image", image_mobile_link);
 
 
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST")
-
+    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST");
     const body = {
       name: name,
       image: image,
-      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
-      image_mobile_link: image_mobile_link == undefined || image_link == null || image_mobile_link == "" ? "" : image_mobile_link.name,
+     
       id: this.state.id,
       link: link
     }
+
+  
+    if(image_link.name){
+     
+      body.image_link = `${Constants.BASE_URL}image_brand/${image_link.name}`;
+    }else{
+      body.image_link = this.state.image;
+
+    };
+   
+    if(image_mobile_link.name){
+    
+      body.image_mobile_link = `${Constants.BASE_URL}image_brand/${image_mobile_link.name}`;
+    }else{
+      body.image_mobile_link = this.state.image_mobile;
+    };
+  
+
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -391,7 +412,7 @@ class BrandSlider extends Component {
     this.setState({ image_mobile_link: files[0] })
     reader.readAsDataURL(files[0])                    
     reader.onload = (e) => {
-      this.setState({ imageMobile: e.target.result, image_show_mobile: e.target.result })
+      this.setState({ image_mobile: e.target.result, image_show_mobile: e.target.result })
     }
   }
 
@@ -452,10 +473,12 @@ class BrandSlider extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  {
-                                    item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"400px"} /> :
-                                      <img src= {`${Constants.BASE_URL}public/image_brand/${item.image_link}`} width={"400px"}  />
-                                  }
+                                <img
+              alt=""
+              style={{ width: "400px", marginBottom: 20 }}
+              height="auto"
+              src={item.image_link}
+            />
                                 </td>
 
                               
@@ -524,12 +547,12 @@ class BrandSlider extends Component {
                 onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
               // rows="5"
               />
-              {
-                   this.state.image == "" || this.state.image == null || this.state.image == undefined ?
-                  "" :
-                    <img width="80%" height="auto" src={
-                    this.state.image_show == "" ? `${Constants.BASE_URL}public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
-              }
+           <img
+              alt=""
+              style={{ width: "400px", marginBottom: 20 }}
+              height="auto"
+              src={this.state.image}
+            />
 
 
 
@@ -542,12 +565,12 @@ class BrandSlider extends Component {
                 onClick={(e) => { e.target.value = null; this.setState({ image_show_mobile: "" }) }}
               // rows="5"
               />
-              {
-                   this.state.imageMobile == "" || this.state.imageMobile == null || this.state.imageMobile == undefined ?
-                  "" :
-                    <img width="80%" height="auto" src={
-                    this.state.image_show_mobile == "" ? `${Constants.BASE_URL}public/image_brand/${this.state.image_link}` : this.state.imageMobile} style={{ marginBottom: 20 }} />
-              }
+             <img
+              alt=""
+              style={{ width: "300px", marginBottom: 20 }}
+              height="auto"
+              src={this.state.image_mobile}
+            />
 
 
 

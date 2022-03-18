@@ -101,7 +101,7 @@ class EndUser extends Component {
   }
 
   async componentDidMount() {
-    this.getDataQues();
+    await this.getDataQues();
     const { type } = this.state;
 
     // this.getData();
@@ -117,7 +117,7 @@ class EndUser extends Component {
   }
 
    pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
+    var i, j, temparray, chunk = 8;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -150,30 +150,10 @@ class EndUser extends Component {
       let active = 0;
 
       this.setState({ isLoading: false, totalActive: active });
-      this.setState({
-        dataQues: res.data.data,
-      });
+      
     });
   }
-  getData = async () => {
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_END_USER,
-      method: "POST",
-    }).then((res) => {
-      console.log("end user", res.data.data);
-
-      let val = res.data.data;
-      this.pagination(val);
-      this.setState({ dataApi: val });
-
-      let active = 0;
-
-      this.setState({ isLoading: false, totalActive: active });
-    });
-  };
-
+ 
   searchKey() {
     const { indexPage, key } = this.state;
     // this.setState({ key: key })
@@ -609,9 +589,9 @@ class EndUser extends Component {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {dataQues &&
-                                    dataQues.length > 0
-                                    ? dataQues.map((child, i) => {
+                                  {data &&
+                                    data.length > 0
+                                    ? data.map((child, i) => {
                                         return (
                                           <tr key={i}>
                                             <td className="text-center">

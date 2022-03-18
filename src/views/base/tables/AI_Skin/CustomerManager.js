@@ -569,7 +569,7 @@ render() {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.FullName}</td>
 
                               <td className="text-center">{item.Phone}</td>
                               {
@@ -648,7 +648,7 @@ render() {
                               return (
                                 <tr key={i}>
                                   <td className="text-center">{i + 1}</td>
-                                  <td className="text-center">{item.UserName}</td>
+                                  <td className="text-center">{item.FullName}</td>
                                  
                                   <td className="text-center">{item.Phone}</td>
                                   {

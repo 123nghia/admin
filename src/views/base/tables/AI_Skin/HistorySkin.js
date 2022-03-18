@@ -37,7 +37,7 @@ class HistorySkin extends Component {
       activePage: 1,
       numPage: 1,
       itemsCount: 0,
-      itemPerPage: 5,
+      itemPerPage: 7,
       hidden: false,
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -188,6 +188,8 @@ class HistorySkin extends Component {
                     <tr>
                       <th className="text-center">STT.</th>
                       <th className="text-center">Tên</th>
+                      <th className="text-center">Số điện thoại</th>
+
                       <th className="text-center">Hình ảnh</th>
                       <th className="text-center">Kết quả</th>
                       {/* <th className="text-center">Công ty</th>
@@ -205,6 +207,8 @@ class HistorySkin extends Component {
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.Phone}</td>
+
                               <td className="text-center">
                                 <img src={item.Image}  style={{ width: '50%', height: 50 }} />
                               </td>
