@@ -731,7 +731,7 @@ class EndUser extends Component {
                   </i>
 
                   <CRow>
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                     <div className="flex-center-space">
 
                    
@@ -749,7 +749,7 @@ class EndUser extends Component {
                     </CCol>
                    
                    
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                     <div className="flex-center-space">
 
                    

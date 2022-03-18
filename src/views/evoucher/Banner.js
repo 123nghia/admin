@@ -675,7 +675,7 @@ class EndUser extends Component {
                   </div>
                   <table
                     ble
-                    className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
                   >
                     <thead className="thead-light">
                       <tr>

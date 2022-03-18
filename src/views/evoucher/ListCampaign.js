@@ -638,7 +638,7 @@ class EndUser extends Component {
 
 
                   <CRow>
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                       <div className="flex-center-space">
 
 
@@ -656,7 +656,7 @@ class EndUser extends Component {
                     </CCol>
 
 
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                       <div className="flex-center-space">
 
 
@@ -735,7 +735,7 @@ class EndUser extends Component {
                 </CardHeader>
                 <CardBody>
 
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
+                  <table ble className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash">
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>

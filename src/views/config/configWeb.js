@@ -600,7 +600,7 @@ class Users extends Component {
     }
     if (change === "logos") {
 
-    
+      
       let newImage = await this.postImage(this.state.image_link);
       if (newImage) {
         coppyData.value.logos.header.logo = `${Constants.BASE_URL}image_brand/${newImage}`;
@@ -1404,6 +1404,7 @@ class Users extends Component {
                 });
               }}
             />
+            
           </div>
           <div id="tabcontent5" class="tabcontent ">
             <div class="text-center">

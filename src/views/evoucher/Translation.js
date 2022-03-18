@@ -625,7 +625,7 @@ async remove(item){
                  
                
                   <CRow>
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                     <div className="flex-center-space">
 
                    
@@ -643,7 +643,7 @@ async remove(item){
                     </CCol>
                    
                    
-                    <CCol md={4} className="mt-5">
+                    <CCol md={4} className="mt-3">
                     <div className="flex-center-space">
 
                    
@@ -722,7 +722,7 @@ async remove(item){
                 </CardHeader>
                 <CardBody>
 
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
+                  <table ble className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash">
                   <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>

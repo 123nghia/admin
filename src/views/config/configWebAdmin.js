@@ -286,6 +286,8 @@ class Users extends Component {
                   hrefLogoFooter: valueConfig.value.logos.footer.href,
                   image: valueConfig.value.logos.header.logo,
                   imgLogoFooter: valueConfig.value.logos.footer.logo,
+                  imgLogoAdmin: valueConfig.value.logos.webAdmin.logo,
+
                 });
               };
               if (chats) {
@@ -621,6 +623,10 @@ class Users extends Component {
       });
     };
     if (change === "logos") {
+      let newImage3 = await this.postImage(this.state.imgLogoAdmin_link);
+      if (newImage3) {
+        coppyData.value.logos.webAdmin.logo = `${Constants.BASE_URL}image_brand/${newImage3}`;
+      }
       let newImage = await this.postImage(this.state.image_link);
       if (newImage) {
         coppyData.value.logos.header.logo = `${Constants.BASE_URL}image_brand/${newImage}`;
@@ -1611,6 +1617,33 @@ class Users extends Component {
                 });
               }}
             />
+            <hr />
+            <h1>Web Admin</h1>
+            <TextFieldGroup
+              field="imgLogoAdmin"
+              label="Logo :(Tỷ lệ 2:1)"
+              type={"file"}
+              className="mt-5"
+              onChange={(e) => {
+                this.onChangeImage(
+                  e,
+                  "imgLogoAdmin",
+                  "imgLogoAdmin_link",
+                  "imgLogoAdmin_show"
+                );
+              }}
+              onClick={(e) => {
+                e.target.value = null;
+                this.setState({ imgLogoAdmin_show: "" });
+              }}
+            />
+            <div className="text-center">
+              <img
+                alt=""
+                style={{ width: "200px", marginBottom: 20 }}
+                src={this.state.imgLogoAdmin}
+              />
+            </div>
           </div>
           <div id="tabcontent5" class="tabcontent ">
             <div class="text-center">
