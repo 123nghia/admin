@@ -141,7 +141,7 @@ const routes = [
   { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
   { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
 
-  { path: '/subsale', name: 'Sub Sale', component: roleUser === "0" ? NotEnough : PluginSubSaleTable },
+  { path: '/subsale', name: 'Sub Sale', component: roleUser !== "0" ? NotEnough : PluginSubSaleTable },
   { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },

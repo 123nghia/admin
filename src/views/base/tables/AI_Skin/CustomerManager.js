@@ -119,6 +119,7 @@ pagination(dataApi) {
 }
 
 async getDataForCharts() {
+  
 
   let arrMonth = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
   let arrTemp = [];
@@ -135,7 +136,7 @@ month: arrMonth[i]
 
     arrTemp.push(res.data.data.result.length)
   }
-
+  console.log("arrTemp",arrTemp);
   this.setState({ dataChart: arrTemp })
 
 }
