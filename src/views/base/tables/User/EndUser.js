@@ -397,37 +397,16 @@ class EndUser extends Component {
                 </CardHeader>
                 <CardBody>
                 <div class=" pb-3 flex">
+                    
                     <CButton
                       color="success"
                       style={{ marginBottom: "10px", marginRight: '10px' }}
-                      size="md"
-                      className="flex-center"
-                      onClick={this.OpenFileExcel}
-                    >
-                      <FaFileImport style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Import</p>
-                    </CButton>
-                    <a href="/excel/template-import-voucher.xlsx" download>
-                    <CButton
-                      color="success"
-                      style={{ marginBottom: "10px", marginRight: '10px' }}
-                      size="md"
-                      className="flex-center"
-                   
-                    >
-                      <BsDownload style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
-                    </CButton>
-                    </a>
-                    <CButton
-                      color="success"
-                      style={{ marginBottom: "10px", marginRight: '10px' }}
-                      size="md"
+                      size="lg"
                       className="flex-center"
                       onClick={()=>this.ExportsFileExcel()}
                     >
                       <FaFileExport style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      <p style={{ margin: "auto 0" }}>Xuất File Excel</p>
                     </CButton>
                     <a id="download_excel" download></a>
                     <div>
