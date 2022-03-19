@@ -18,7 +18,7 @@ import {
   CCol
 } from '@coreui/react'
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
-import * as XLSX from "xlsx";
+
 import { BsDownload} from "@react-icons/all-files/bs/BsDownload";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 
@@ -40,6 +40,8 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
+
       data: [],
       key: '',
       totalActive: 0,
@@ -90,28 +92,7 @@ class EndUser extends Component {
   name_excel.innerHTML = `${file.name}`;
 
     console.log(file);
-    const promise = new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(file);
-
-      fileReader.onload = (e) => {
-        const bufferArray = e.target.result;
-
-        const wb = XLSX.read(bufferArray, { type: "buffer" });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
-
-        resolve(data);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-
-    promise.then((data) => {
-      console.log(data);
-    });
+   
   };
   async ExportsFileExcel(){
     const { company_id } = this.state;
