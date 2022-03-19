@@ -54,7 +54,7 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
+      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : "-1",
       modalInfo: null,
       data: [],
       key: "",
@@ -82,17 +82,13 @@ class EndUser extends Component {
       statusExcel : false,
     };
   }
+  
+  
   OpenFileExcel=()=>{
     this.setState({
       statusExcel : !this.state.statusExcel
     })
   }
-  changeLevelValue= (e,value) => {
-    e.preventDefault();
-    this.setState({
-      [value]: e.target.value,
-    });
-  };
   readExcel = (file) => {
 
 		var btnOuter = document.getElementById("button_outer"),
@@ -136,6 +132,34 @@ class EndUser extends Component {
       console.log(data);
     });
   };
+  async ExportsFileExcel(){
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if(a){
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  };
+  changeLevelValue= (e,value) => {
+    e.preventDefault();
+    this.setState({
+      [value]: e.target.value,
+    });
+  };
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
@@ -161,9 +185,6 @@ class EndUser extends Component {
       });
   }
   async componentDidMount() {
-
-
-
     const { type } = this.state;
 
     this.getData();
@@ -603,7 +624,7 @@ class EndUser extends Component {
               <div class="mt-3"></div>
               <label className="mr-3">Tên chiến dịch</label>
               <Select
-                defaultValue={dataCampaign ? dataCampaign[0].name : ""}
+                defaultValue={dataCampaign ? dataCampaign[0]?.name : ""}
                 className="select_company"
                 showSearch
                 placeholder="Chọn tên công ty"
@@ -872,11 +893,12 @@ class EndUser extends Component {
                       style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
                       className="flex-center"
-                   
+                      onClick={()=>this.ExportsFileExcel()}
                     >
                       <FaFileExport style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Exports</p>
+                      <p style={{ margin: "auto 0" }}>Xuất File</p>
                     </CButton>
+                    <a id="download_excel" download></a>
                     <div>
 
                     </div>
@@ -902,11 +924,7 @@ class EndUser extends Component {
                       </div>
                    
                     <div className="name_excel" id="name_excel"></div>
-                    </div>           
-
-
-
-               
+                    </div>                          
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"

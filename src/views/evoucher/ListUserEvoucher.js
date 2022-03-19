@@ -12,13 +12,16 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
+import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
+
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { CButton, CLabel, CSelect, CRow, CCol } from "@coreui/react";
 import { Tag, Divider } from "antd";
 import { Select } from "antd";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
-
+import { BsDownload} from "@react-icons/all-files/bs/BsDownload";
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
 import "moment-timezone";
@@ -80,6 +83,76 @@ class EndUser extends Component {
       
     };
   }
+  OpenFileExcel=()=>{
+    this.setState({
+      statusExcel : !this.state.statusExcel
+    })
+  }
+  readExcel = (file) => {
+
+		var btnOuter = document.getElementById("button_outer"),
+
+    name_excel = document.getElementById("name_excel");
+
+    btnOuter.classList.add("file_uploading");
+    
+    setTimeout(function(){
+      btnOuter.classList.add("file_uploaded");
+      btnOuter.style.borderRadius = "50%";
+
+     
+
+    },3000);
+
+ 
+  name_excel.innerHTML = `${file.name}`;
+
+    console.log(file);
+    const promise = new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(file);
+
+      fileReader.onload = (e) => {
+        const bufferArray = e.target.result;
+
+        const wb = XLSX.read(bufferArray, { type: "buffer" });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws);
+
+        resolve(data);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+
+    promise.then((data) => {
+      console.log(data);
+    });
+  };
+  async ExportsFileExcel(){
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if(a){
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  };
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
@@ -346,30 +419,7 @@ class EndUser extends Component {
         return "primary";
     }
   }
-  readExcel = (file) => {
-    const promise = new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(file);
-
-      fileReader.onload = (e) => {
-        const bufferArray = e.target.result;
-
-        const wb = XLSX.read(bufferArray, { type: "buffer" });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
-
-        resolve(data);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-
-    promise.then((data) => {
-      console.log(data);
-    });
-  };
+  
   render() {
     const {
       data,
@@ -711,16 +761,66 @@ class EndUser extends Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  {/* <div class="text-center">
+                <div class=" pb-3 flex">
                     <CButton
-                      color="primary"
-                      style={{ marginBottom: "10px" }}
+                      color="success"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
-                      onClick={() => this.openVoucher()}
+                      className="flex-center"
+                      onClick={this.OpenFileExcel}
                     >
-                      Thêm mới
+                      <FaFileImport style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Import</p>
                     </CButton>
-                  </div> */}
+                    <a href="/excel/template-import-voucher.xlsx" download>
+                    <CButton
+                      color="success"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                   
+                    >
+                      <BsDownload style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
+                    </CButton>
+                    </a>
+                    <CButton
+                      color="success"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                      onClick={()=>this.ExportsFileExcel()}
+                    >
+                      <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Xuất File</p>
+                    </CButton>
+                    <a id="download_excel" download></a>
+                    <div>
+
+                    </div>
+                    </div>
+                <div className="pb-3" style={{display : this.state.statusExcel ? "block" : "none" }}>
+                      <div className="button_outer" id="button_outer">
+                        <div className="btn_upload">
+                          <input
+                          id="upload_file"
+                            type="file"
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              this.readExcel(file);
+                            }}
+                          />
+                          <div className="flex-center">
+                          <svg viewBox="64 64 896 896" focusable="false" data-icon="upload" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"></path></svg>
+                         <p>Tải lên File Excel</p> 
+                         </div>
+                        </div>
+                        <div className="processing_bar"></div>
+                        <div className="success_box"></div>
+                      </div>
+                   
+                    <div className="name_excel" id="name_excel"></div>
+                    </div>              
                   <table
                     ble
                     className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"

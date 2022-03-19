@@ -9,6 +9,8 @@ export default {
   "BASE_URL_HISTORY_SKIN" : "https://shope.thulamua.com/lich-su-soi-da-with-iframe/",
 
   "PLUGIN_SUBSALE_USER2" : "api/plugin-subsale-user_New",
+  "EXPORT_CUSTOMER_EVOUCHER" : "api/get-file-export-customer-evoucher",
+  "EXPORT_CUSTOMER" : "api/get-data-user",
 
 
   "GET_FOOTER" : "api/footerPage/getAll",
