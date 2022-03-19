@@ -10,6 +10,8 @@ import {
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
 
+import { Select } from 'antd';
+
 import {
   CBadge,
   CRow,
@@ -27,11 +29,13 @@ import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
 import API_CONNECT from "../../../../functions/callAPI";
+import { Box } from '@material-ui/core';
 
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      brandList: [],
       data: [],
       key: '',
       keyRole: '',
@@ -381,12 +385,39 @@ class User extends Component {
     }
   }
 
+
+
   render() {
+    const { Option } = Select;
+    // const children = [];
+
+
     const { data, key, action, arrPagination, arrRoleSubAdmin } = this.state;
     const { classes } = this.props;
+
+
+    // for (let i = 10; i < 36; i++) {
+    //   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+    // }
+
+    axios({
+      method: 'POST',
+      url: 'https://evoucher-api.applamdep.com/api/plugin-list-company',
+    })
+      .then(res => {
+        console.log(res.data.data)
+        this.setState({ brandList: res.data.data })
+      });
+
+
+    function handleChange(value) {
+      console.log(`selected ${value}`);
+    }
+
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
+
           <Row>
             <Col>
               <p style={styles.success}>{this.state.updated}</p>
@@ -546,6 +577,20 @@ class User extends Component {
                 onChange={e => this.onChange("Address", e.target.value)}
               // rows="5"
               />
+              <CLabel>Danh sách công ty</CLabel>
+
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: '100%', marginBottom: '15px'}}
+                placeholder="Please select"
+                defaultValue={['TINTINLE', 'Beauty shop']}
+                onChange={handleChange}
+              >
+                {this.state.brandList && this.state.brandList.map(opt => (
+                  <Option key={opt._id}>{opt.Name}</Option>
+                ))}
+              </Select>
 
               {
                 action == 'new' ? "" : <div>
@@ -580,7 +625,7 @@ class User extends Component {
                         name={item}
                         value={item}
                         onChange={(e) => {
-                          if(e.target.checked == true) {
+                          if (e.target.checked == true) {
                             arrRoleSubAdmin.push(item);
                             this.setState({ arrRoleSubAdmin: arrRoleSubAdmin })
                           } else {

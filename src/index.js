@@ -6,18 +6,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
+import './all.css';
 import { icons } from './assets/icons'
 
 import { Provider } from 'react-redux'
 // import store from './store'
-import { createStore, applyMiddleware ,compose } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducers from "./../src/redux/reducers";
 import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 import root from "./../src/redux/sagas"
+import "antd/dist/antd.css";
 import './assets/css/sidebar.css';
-import './all.css';
+
 import myReducer from './redux/reducers';
 
 
@@ -28,8 +29,8 @@ import myReducer from './redux/reducers';
 const store = createStore(
   myReducer,
   applyMiddleware(thunk)
-  
-  )
+
+)
 
 React.icons = icons
 
