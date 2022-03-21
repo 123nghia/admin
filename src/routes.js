@@ -80,6 +80,7 @@ const Statistics = React.lazy(() => import('./views/evoucher/Chart'));
 const Translation = React.lazy(() => import('./views/evoucher/Translation'));
 const NotEnough = React.lazy(() => import('./views/Pages/NotEnough/NotEnough'));
 const AdminConfigWebsite = React.lazy(() => import('././views/config/configWebAdmin'));
+const ManageSales = React.lazy(() => import('./views/evoucher/ManageSales'));
 const roleUser = localStorage.getItem('type');
 
 
@@ -93,12 +94,14 @@ const routes = [
   { path: '/evoucher-statistics', name: 'Statistics', component: Statistics },
   { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher  },
   { path: '/manage-campaign', name: 'ManageCampaign', component:roleUser === "0" ? ManageCampaign : NotEnough },
+  { path: '/manage-sales', name: 'ManageSales', component:roleUser === "0" ? ManageSales : NotEnough },
+
   { path: '/translation', name: 'Translation', component: Translation },
   { path: '/not-enough', name: 'NotEnough', component: NotEnough },
 
   { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough  },
 
-
+  
   
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', name: 'Users', component: TableUser },

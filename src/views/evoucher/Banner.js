@@ -90,6 +90,7 @@ class EndUser extends Component {
     };
   }
   async componentDidMount() {
+  
     if(this.state.type !== '0'){
       window.location.href = "/"
     }

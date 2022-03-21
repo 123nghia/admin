@@ -1,7 +1,8 @@
 export default {
    "BASE_URL" : "https://evoucher-api.applamdep.com/",
+  // "BASE_URL":  "http://192.168.1.5:3018/",   
+
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
-  // "PORTAL_SERVER":  "http://192.168.1.12:3014/",   
 
   "BASE_URL_CURRENT" : "https://admin-evoucher.applamdep.com/",
   // "BASE_URL_CURRENT" : "http://localhost:3019/",
@@ -10,6 +11,7 @@ export default {
   "PLUGIN_SUBSALE_USER2" : "api/plugin-subsale-user_New",
   "EXPORT_CUSTOMER_EVOUCHER" : "api/get-file-export-customer-evoucher",
   "EXPORT_CUSTOMER" : "api/get-data-user",
+  "GET_ALL_COMPANY" : "api/plugin-list-company",
 
 
   "GET_FOOTER" : "api/footerPage/getAll",

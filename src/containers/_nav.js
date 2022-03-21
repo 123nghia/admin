@@ -485,6 +485,37 @@ const _navOrther = [
       </CTooltip>,
     }
   },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý Sales'],
+    role: ['0'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách Sales',
+    to: '/manage-sales',
+    icon: <HiUserGroup style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.customer}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách Nhóm',
+    to: '/manage-sales-group',
+    icon: <HiUserGroup style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
   // {
   //   _tag: 'CSidebarNavItem',
   //   name: 'Lịch sử trang điểm',

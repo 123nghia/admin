@@ -668,6 +668,7 @@ class EndUser extends Component {
                 }}
               />
               <div style={{ width: "100%" }} className="mt-3">
+                
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect

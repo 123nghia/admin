@@ -20,6 +20,7 @@ import "antd/dist/antd.css";
 import './assets/css/sidebar.css';
 
 import myReducer from './redux/reducers';
+import './css/root.css';
 
 
 

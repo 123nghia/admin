@@ -27,7 +27,12 @@ class App extends Component {
       isShow: true
     };
   }
-
+  componentDidMount() {
+    var colorCurrently = localStorage.getItem('colorpicker');
+    if(colorCurrently) {
+      document.body.style.setProperty("--main_web_admin",colorCurrently);
+    };
+  };
   render() {
     return (
 
