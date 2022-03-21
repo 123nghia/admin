@@ -81,6 +81,53 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tabNameConfig : [
+        {
+            _id : "t1",
+            name : "Thông tin trang chủ",
+            icon : <AiOutlineHome style={{width : "24px ", height : "24px "}} />
+        },
+        {
+            _id : "t2",
+            name : "Slider",
+            icon : <DoorSlidingIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t3",
+            name : "Cấu hình SEO",
+            icon : <PermDataSettingIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t4",
+            name : "Logos",
+            icon : <IoLogoBuffer style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t5",
+            name : "Mã Chat",
+            icon : <AiFillWechat style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t6",
+            name : "Cấu hình mạng xã hội",
+            icon : <FacebookIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t7",
+            name : "Thông tin footer",
+            icon : <InfoIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t8",
+            name : "Quản lý màu sắc",
+            icon : <LockResetIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t9",
+            name : "Quản lý Cache",
+            icon : <LockResetIcon style={{width : "24px ", height : "24px "}}/>
+        },
+    ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
         : null,
@@ -97,7 +144,7 @@ class Users extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       role: localStorage.getItem("role"),
       type: localStorage.getItem("type"),
-      company_id: localStorage.getItem("user"),
+    
       current_slug: "",
       companyID: "",
       arrTotalPackage: [],
@@ -160,15 +207,18 @@ class Users extends Component {
       updateLevel: e.target.value,
     });
   };
-  changeConfigWeb(id) {
-    var i, tabcontent;
+  ToggleViewConfigWeb(id) {
+    var i, tabcontent,tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
+    tablinks =  document.getElementsByClassName("tablinks");
     for (i = 0; i < tabcontent.length; i++) {
       if (i === id) {
+        tablinks[i].classList.add("tabcontent-left-active");
         tabcontent[i].classList.add("defaultOpen");
         tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
       } else {
         tabcontent[i].classList.remove("defaultOpen");
+        tablinks[i].classList.remove("tabcontent-left-active");
         tabcontent[i].style.animation = "none";
       }
     }
@@ -934,7 +984,7 @@ class Users extends Component {
 
     if (!this.state.isLoading) {
       return (
-        <div className="animated fadeIn">
+        <div className="animated fadeIn" >
           <div class="tab">
             <List
               sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
@@ -946,93 +996,27 @@ class Users extends Component {
                 </ListSubheader>
               }
             >
-              <ListItemButton
-                className=" tablinks"
-                onClick={() => this.changeConfigWeb(0)}
-                sx={{ pl: 4 }}
-              >
-                <ListItemIcon>
-                  <AiOutlineHome style={{width : "24px ", height : "24px "}} />
-                </ListItemIcon>
-                <ListItemText primary="Thông tin trang chủ" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(1)}
-                sx={{ pl: 4 }}
-              >
-                <ListItemIcon>
-                  <DoorSlidingIcon />
-                </ListItemIcon>
-                <ListItemText primary="Slider" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(2)}
-              >
-                <ListItemIcon>
-                  <PermDataSettingIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình SEO" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks "
-                onClick={() => this.changeConfigWeb(3)}
-              >
-                <ListItemIcon>
-                  <IoLogoBuffer style={{width : "24px ", height : "24px "}} />
-                </ListItemIcon>
-                <ListItemText primary="Logos" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks "
-                onClick={() => this.changeConfigWeb(4)}
-              >
-                <ListItemIcon>
-                  <AiFillWechat style={{width : "24px ", height : "24px "}} />
-                </ListItemIcon>
-                <ListItemText primary="Mã Chat" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(5)}
-              >
-                <ListItemIcon>
-                  <FacebookIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình mạng xã hội" />
-              </ListItemButton>
-
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(6)}
-              >
-                <ListItemIcon>
-                  <InfoIcon />
-                </ListItemIcon>
-                <ListItemText primary="Thông tin footer" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(7)}
-              >
-                <ListItemIcon>
-                  <LockResetIcon />
-                </ListItemIcon>
-                <ListItemText primary="Quản lý màu sắc" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(8)}
-              >
-                <ListItemIcon>
-                  <LockResetIcon />
-                </ListItemIcon>
-                <ListItemText primary="Quản lý Cache" />
-              </ListItemButton>
+              {
+                this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i)=>{
+                  return (
+                        <ListItemButton
+                        key={item._id}
+                    className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
+                    onClick={() => this.ToggleViewConfigWeb(i)}
+                    sx={{ pl: 4 }}
+                  >
+                    <ListItemIcon>
+                     {item.icon}
+                    </ListItemIcon>
+                    <ListItemText className="tabcontent-left" style={{fontSize:"14px !important", color: "rgb(52, 71, 103)"}} primary={item.name} />
+                  </ListItemButton>
+                      );
+                }) : null
+              }
             </List>
           </div>
-          <div id="tabcontent1" class="tabcontent defaultOpen">
+          <div className="tabcontents">
+          <div id="tabcontent1" className="tabcontent defaultOpen">
             <div class="text-center">
               <Button
                 variant="contained"
@@ -1159,7 +1143,7 @@ class Users extends Component {
               }}
             />
           </div>
-          <div id="tabcontent2" class="tabcontent">
+          <div id="tabcontent2" className="tabcontent">
             <div class="text-center">
               <Button
                 variant="contained"
@@ -1230,7 +1214,7 @@ class Users extends Component {
               </tbody>
             </table>
           </div>
-          <div id="tabcontent3" class="tabcontent">
+          <div id="tabcontent3" className="tabcontent">
             <div className="text-center">
               {" "}
               <Button
@@ -1312,7 +1296,7 @@ class Users extends Component {
               />
             </div>
           </div>
-          <div id="tabcontent4" class="tabcontent ">
+          <div id="tabcontent4" className="tabcontent ">
             <div class="text-center">
               <CButton
                 onClick={() => this.SaveAllConfigWeb("logos")}
@@ -1406,7 +1390,7 @@ class Users extends Component {
             />
             
           </div>
-          <div id="tabcontent5" class="tabcontent ">
+          <div id="tabcontent5" className="tabcontent ">
             <div class="text-center">
               <CButton
                 onClick={() => this.SaveAllConfigWeb("chats")}
@@ -1450,7 +1434,7 @@ class Users extends Component {
               ></textarea>
             </div>
           </div>
-          <div id="tabcontent6" class="tabcontent">
+          <div id="tabcontent6" className="tabcontent">
             <div class="text-center">
               <Button
                 variant="contained"
@@ -1588,7 +1572,7 @@ class Users extends Component {
               </div>
             </div>
           </div>
-          <div id="tabcontent7" class="tabcontent ">
+          <div id="tabcontent7" className="tabcontent">
             <div class="text-center">
               <CButton onClick={this.openFormAddFooter} outline color="info" size="xm">
                 <MdAdd /> Thêm mới
@@ -1659,7 +1643,7 @@ class Users extends Component {
               </tbody>
             </table>
           </div>
-          <div id="tabcontent8" class="tabcontent">
+          <div id="tabcontent8" className="tabcontent">
             <div class="text-center">
               {isDisable ? (
                 <CButton
@@ -1705,7 +1689,7 @@ class Users extends Component {
               readOnly={isDisable}
             />
           </div>
-          <div id="tabcontent9" class="tabcontent ">
+          <div id="tabcontent9" className="tabcontent ">
             <div className="text-center">
               <Button
                 variant="contained"
@@ -1721,6 +1705,7 @@ class Users extends Component {
                 Reset Cache
               </Button>
             </div>
+          </div>
           </div>
           <Modal
             size="xl"

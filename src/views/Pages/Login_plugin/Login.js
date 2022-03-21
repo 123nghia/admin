@@ -109,7 +109,7 @@ class Login extends Component {
         const { action } = this.props;
         const { changeTypeUser } = action;
 
-        changeTypeUser(token.type);
+        // changeTypeUser(token.type);
        
         if (token.type == "0" || token.type == "1") {
           localStorage.setItem("isAD", "0");

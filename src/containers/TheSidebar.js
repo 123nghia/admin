@@ -17,7 +17,6 @@ import CIcon from '@coreui/icons-react'
 import API_CONNECT from '../functions/callAPI'
 import Constants from '../contants/contants'
 import axios from "axios";
-
 // sidebar nav config
 import navigations from './_nav'
 
@@ -115,8 +114,8 @@ const TheSidebar = () => {
   localStorage.setItem('url', JSON.stringify(temp))
 
   const dispatch = useDispatch()
-  const show = useSelector(state => state.sidebarShow)
-
+  const show = useSelector(state => state.showNavbar)
+  console.log(show);
   return (
     <CSidebar
       show={show}

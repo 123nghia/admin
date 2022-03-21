@@ -15,6 +15,7 @@ import {
   CCarouselItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import {ToggleNav} from '../reducers/Navbar';
 
 import {
   ModalHeader, ModalBody, ModalFooter, Modal,
@@ -40,6 +41,7 @@ const TheHeader = () => {
 
   const toggleSidebar = () => {
     const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
+    dispatch(ToggleNav());
     dispatch({ type: 'set', sidebarShow: val })
   }
 
