@@ -70,7 +70,7 @@ const TheHeader = () => {
         <CHeaderNavItem className="px-3" >
           {
             localStorage.getItem("type") == "0" || localStorage.getItem("type") == "1" ? "" :
-              <CButton color="info" onClick={() => { setShow(true) }} style={{ color: '#ffffff' }}>Hướng dẫn người dùng</CButton>
+              <CButton color="info" onClick={() => { setShow(true) }} style={{ color: '#ffff' }}>Hướng dẫn người dùng</CButton>
           }
         </CHeaderNavItem>
       </CHeaderNav>
