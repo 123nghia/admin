@@ -1513,7 +1513,7 @@ class EndUser extends Component {
                                 
                                 
 
-                                <td className="text-center">
+                                <td className="text-center" style={{minWidth: '230px'}}>
                                <div className="flex">
                                   <Link to={"/detail-campaign/" + item._id}>
                                <CButton
