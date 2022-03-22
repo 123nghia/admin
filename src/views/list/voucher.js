@@ -527,7 +527,7 @@ async removeVoucher(item){
                     <CButton
                       color="success"
                       style={{ marginBottom: "10px", marginRight: '10px' }}
-                      size="lg"
+                      size="md"
                       className="flex-center"
                       onClick={()=>this.ExportsFileExcel()}
                     >

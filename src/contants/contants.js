@@ -6,6 +6,9 @@ export default {
   "BASE_URL_CURRENT" : "https://menard-admin.applamdep.com/",
   // "BASE_URL_CURRENT" : "http://localhost:3017",
   "BASE_URL_HISTORY_SKIN" : "https://menard.applamdep.com/lich-su-soi-da-with-iframe/",
+
+  "EXPORT_CUSTOMER_STATISTIC_MONTH" : "api/get-data-customer-by-month",
+  "EXPORT_CUSTOMER_STATISTIC" : "api/get-data-customer",
   "EXPORT_CUSTOMER_EVOUCHER" : "api/get-file-export-customer-evoucher",
   "EXPORT_CUSTOMER" : "api/get-data-user",
   "LIST_USER" : "/api/list-user",

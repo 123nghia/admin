@@ -21,6 +21,7 @@ CChartBar
 import TextFieldGroup from "../../../Common/TextFieldGroup";
 import CIcon from '@coreui/icons-react'
 import IframeModal from '../../../components/Iframe';
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
@@ -74,6 +75,7 @@ constructor(props) {
     type: localStorage.getItem('type'),
     dataChart: [],
     dataModalHistory : [],
+    monthChooseCurrent : "1"
   };
 }
 async componentDidMount() {
@@ -204,6 +206,9 @@ getDataForCompany = async () => {
 }
 
 getDataForCompanyByMonth = async (month) => {
+  this.setState({
+    monthChooseCurrent : month
+  })
   const res = await axios({
     baseURL: Constants.BASE_URL,
     url: Constants.LIST_CUSTOMER_FOR_COMPANY_BY_MONTH,
@@ -337,6 +342,52 @@ async openUpdate(item) {
   })
 }
 
+async ExportsFileExcel(){
+  const { company_id } = this.state;
+
+  var baseUrlapi = Constants.BASE_URL;
+  let baseUrlCallApi = Constants.EXPORT_CUSTOMER_STATISTIC;
+  const company_id_output = JSON.parse(company_id).company_id
+  let url = baseUrlapi + baseUrlCallApi;
+  await axios
+    .get(url, {
+      params: {
+        company_id : company_id_output,
+      },
+    })
+    .then((res) => {
+      console.log(res);
+      let a = document.getElementById("download_excel");
+      if(a){
+        a.href = `${baseUrlapi}${res.data.data.url}`;
+      }
+      a.click();
+    });
+};
+async ExportsFileExcelMonth(){
+  const { company_id } = this.state;
+
+  var baseUrlapi = Constants.BASE_URL;
+  let baseUrlCallApi = Constants.EXPORT_CUSTOMER_STATISTIC_MONTH;
+  const company_id_output = JSON.parse(company_id).company_id;
+  console.log(company_id);
+  let url = baseUrlapi + baseUrlCallApi;
+  await axios
+    .get(url, {
+      params: {
+        company_id : company_id_output,
+        month : this.state.monthChooseCurrent
+      },
+    })
+    .then((res) => {
+      console.log(res);
+      let a = document.getElementById("download_excel_month");
+      if(a){
+        a.href = `${baseUrlapi}${res.data.data.url}`;
+      }
+      a.click();
+    });
+};
 async updateUser() {
   const { UserName, Phone, Type, FullName, Status } = this.state
   if (UserName == null || UserName == '' ||
@@ -466,6 +517,24 @@ render() {
         <Modal style={{ minWidth : '900px' }} isOpen={this.state.modalHistory} className={this.props.className}>
             <ModalHeader>Lịch sử soi da</ModalHeader>
             <ModalBody>
+            <div class=" pb-3 flex">
+                    
+                    <CButton
+                      color="success"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                      onClick={()=>this.ExportsFileExcel()}
+                    >
+                      <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Xuất File Excel</p>
+                    </CButton>
+                    <a id="download_excel" download></a>
+
+                    <div>
+
+                    </div>
+                    </div>
             <table ble className="table table-hover table-outline mb-0 d-none d-sm-table" >
                   <thead className="thead-light">
                     <tr>
@@ -545,7 +614,23 @@ render() {
                 </div>
               </CardHeader>
               <CardBody>
+              <div class=" pb-3 flex">
+                    
+                    <CButton
+                      color="success"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                      onClick={()=>this.ExportsFileExcel()}
+                    >
+                      <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Xuất File Excel</p>
+                    </CButton>
+                    <a id="download_excel" download></a>
+                    <div>
 
+                    </div>
+                    </div>
                 <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-light">
                     <tr>
@@ -623,7 +708,23 @@ render() {
                     </div>
                   </CardHeader>
                   <CardBody>
+                  <div class=" pb-3 flex">
+                    
+                    <CButton
+                      color="success"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                      onClick={()=>this.ExportsFileExcelMonth()}
+                    >
+                      <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Xuất File Excel</p>
+                    </CButton>
+                    <a id="download_excel_month" download></a>
+                    <div>
 
+                    </div>
+                    </div>
                     <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                       <thead className="thead-light">
                         <tr>
