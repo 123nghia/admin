@@ -604,7 +604,7 @@ class Users extends Component {
                   <tbody>             
                     <tr>
                       <td className="pl-5">
-                      Số lượng Voucher
+                      Tổng số lượng Voucher
                       </td>
                       <td className="color-red">
                         300

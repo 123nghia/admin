@@ -1,23 +1,26 @@
 
-// constant
+// constants
 const TOGGLE_NAVBAR = "toggle-navbar";
 
-// action
-export const ToggleNav=()=>{
+// actions
+
+export const ToggleNav=(value)=>{
     return {
-        type : TOGGLE_NAVBAR
+        type : TOGGLE_NAVBAR,
+        value
     };
 };
 
 // reducers
 
-const StatusNavBar = true;
-
-export const ReducerStatusNavBar = (state = StatusNavBar, action) => {
-    switch (action.type) {
-        case TOGGLE_NAVBAR:
-            return !state;
-        default:
-            return state;
-    };
-};
+const initialState = true;
+export const changeNavbar = (state = initialState, action ) => {
+  switch (action.type) {
+    case TOGGLE_NAVBAR:
+        state = action.value
+        console.log(state);
+      return state
+    default:
+      return state
+  }
+}

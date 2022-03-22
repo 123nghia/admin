@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import Constants from "./../../../contants/contants";
 import Logo from "./../../../../src/assets/img/logo_head.png";
 import md5 from "md5";
-import * as actions from "../../../redux/reducersForder/account";
+
 import {
   CButton,
   CCard,
@@ -107,7 +107,7 @@ class Login extends Component {
         localStorage.setItem("token", res.data.data.token);
         
         const { action } = this.props;
-        const { changeTypeUser } = action;
+       
 
         // changeTypeUser(token.type);
        
@@ -232,7 +232,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    action: bindActionCreators(actions, dispatch),
+    
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

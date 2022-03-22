@@ -2,9 +2,10 @@
 
 
 import { combineReducers } from 'redux';
-import { ReducerStatusNavBar } from './Navbar';
+import { changeNavbar } from './Navbar';
 const reducers = combineReducers({
-    showNavbar : ReducerStatusNavBar
+  
+    sidebarShow : changeNavbar
 });
 
 export default reducers;

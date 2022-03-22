@@ -19,7 +19,7 @@ import Constants from '../contants/contants'
 import axios from "axios";
 // sidebar nav config
 import navigations from './_nav'
-
+import {ToggleNav } from '../reducers/Navbar';
 const callApiGetRoleSubAdmin = async (user) => {
 
   if (user == null || JSON.parse(user) == null) {
@@ -114,13 +114,12 @@ const TheSidebar = () => {
   localStorage.setItem('url', JSON.stringify(temp))
 
   const dispatch = useDispatch()
-  const show = useSelector(state => state.showNavbar)
-  console.log(show);
+  const show = useSelector(state => state.sidebarShow)
   return (
     <CSidebar
-      show={show}
-      size={"lg"}
-      onShowChange={(val) => dispatch({ type: 'set', sidebarShow: val })}
+      show={show === "responsive" ? false : true}
+      size={"lg"} 
+     
     >
       <div className="header-logo" style={{height:"80px", backgroundColor : '#ffff'}}>
       <CSidebarBrand className="d-md-down-none" to="/">

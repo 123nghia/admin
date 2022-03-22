@@ -33,6 +33,7 @@ import {
   // TheHeaderDropdownTasks
 } from './index'
 
+
 const TheHeader = () => {
   const [show, setShow] = useState(true);
   const [close, setClose] = useState(true);
@@ -40,14 +41,25 @@ const TheHeader = () => {
   const sidebarShow = useSelector(state => state.sidebarShow)
 
   const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
-    dispatch(ToggleNav());
-    dispatch({ type: 'set', sidebarShow: val })
+    if(sidebarShow === 'responsive'){
+      dispatch(ToggleNav(true))      
+    }else{
+      dispatch(ToggleNav('responsive'))
+    }
   }
 
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
-    dispatch({ type: 'set', sidebarShow: val })
+    console.log("1",sidebarShow)
+
+    if(sidebarShow !== 'responsive'){
+      dispatch(ToggleNav('responsive'))
+      
+
+    }else{
+      dispatch(ToggleNav(true))      
+
+
+    }
   }
 
   return (
