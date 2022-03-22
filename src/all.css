@@ -1,6 +1,11 @@
 @import './assets/css/evoucher.css';
 
+.color-red{
+  color: rgb(255,0,0,0.8);
+  font-weight: bold !important;
+}
 .configData_item {
+  background: #ffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,6 +18,8 @@
   line-height: 10px;
 }
 .tab {
+  background-color: #ffff;
+
   float: left;
   border: 1px solid #ccc;
   border-bottom:none !important;
@@ -113,6 +120,7 @@
   font-size: 14px !important;
 }
 .tabcontents {
+  background-color: #ffff;
   padding: 26px;
   transition: all 1s;
   float: left;

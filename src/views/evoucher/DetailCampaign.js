@@ -15,7 +15,8 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
-
+import { BsInfoCircleFill } from "@react-icons/all-files/bs/BsInfoCircleFill";
+import {Link} from 'react-router-dom';
 import {
   Card,
   CardBody,
@@ -34,7 +35,8 @@ import update from "react-addons-update";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import API_CONNECT from "../../../src/functions/callAPI";
-
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
+import { TiArrowBack } from "@react-icons/all-files/ti/TiArrowBack";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
@@ -94,17 +96,17 @@ class Users extends Component {
         {
           _id: "t2",
           name: "Thông tin về chiến dịch",
-          icon: <DoorSlidingIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
         },
         {
           _id: "t3",
           name: "Thông tin về voucher",
-          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
         },
         {
           _id: "t4",
           name: "Thông tin về nhà cung cấp",
-          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />
+          icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
         },
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
@@ -177,7 +179,28 @@ class Users extends Component {
       ],
     };
   }
+  async ExportsFileExcel(){
+    const { company_id } = this.state;
 
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if(a){
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  };
   ToggleViewConfigWeb(id) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -460,6 +483,9 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <>
+        <Link className="detail-campaign-goback" to="/manage-campaign">
+          <TiArrowBack style={{height: '36px' , width : '36px'}} />
+        </Link>
           <h4 className="detail-title-campaign">
             Chi tiết chiến dịch
           </h4>
@@ -496,16 +522,15 @@ class Users extends Component {
             </div>
             <div className="tabcontents">
               <div className="tabcontent defaultOpen">
-                <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
-                  <thead>
-                
+                <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
+                  <thead>               
                   </thead>
                   <tbody>             
                     <tr>
                       <td className="pl-5">
                       Ngày bắt đầu
                       </td>
-                      <td className="">
+                      <td className="color-red">
                         25/06/2022
                       </td>
                     </tr>
@@ -513,7 +538,7 @@ class Users extends Component {
                       <td className="pl-5">
                       Ngày kết thúc
                       </td>
-                      <td className="">
+                      <td className="color-red">
                        ...
                       </td>
                     </tr>
@@ -521,7 +546,7 @@ class Users extends Component {
                       <td className="pl-5">
                      Số lượng voucher đã áp dụng
                       </td>
-                      <td className="">
+                      <td className="color-red">
                         403
                       </td>
                     </tr>
@@ -529,7 +554,7 @@ class Users extends Component {
                       <td className="pl-5">
                      Số lượng voucher còn lại
                       </td>
-                      <td className="">
+                      <td className="color-red">
                         203
                       </td>
                     </tr>
@@ -537,7 +562,7 @@ class Users extends Component {
                       <td className="pl-5">
                      Trạng thái
                       </td>
-                      <td className="">
+                      <td className="color-red">
                       Chuẩn bị Sales
                       </td>
                     </tr>
@@ -545,7 +570,7 @@ class Users extends Component {
                 </table>
               </div>
               <div className="tabcontent">
-                <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
+                <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
                   <thead>
                 
                   </thead>
@@ -554,31 +579,16 @@ class Users extends Component {
                       <td className="pl-5">
                       Tên chiên dịch
                       </td>
-                      <td className="">
+                      <td className="color-red">
                         Test
                       </td>
                     </tr>
-                    <tr>
-                      <td className="pl-5">
-                      Ngày bắt đầu
-                      </td>
-                      <td className="">
-                       25/05/2022
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="pl-5">
-                      Ngày kết thúc
-                      </td>
-                      <td className="">
-                       ...
-                      </td>
-                    </tr>
+                    
                     <tr>
                       <td className="pl-5">
                       Ngày kết thúc Sale
                       </td> 
-                      <td className="">
+                      <td className="color-red">
                        ...
                       </td>
                     </tr>
@@ -587,9 +597,35 @@ class Users extends Component {
                 </table>
               </div>
               <div className="tabcontent">
-              <h4 className="detail-title-campaign-voucher">
+              <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
+                  <thead>
+                
+                  </thead>
+                  <tbody>             
+                    <tr>
+                      <td className="pl-5">
+                      Số lượng Voucher
+                      </td>
+                      <td className="color-red">
+                        300
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              <h4 className="detail-title-campaign-voucher mt-5">
                   DANH SÁCH VOUCHER
               </h4>
+              <CButton
+                      color="success"
+                      style={{ marginBottom: "20px", marginRight: '10px' }}
+                      size="md"
+                      className="flex-center"
+                      onClick={()=>this.ExportsFileExcel()}
+                    >
+                      <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Xuất File</p>
+                    </CButton>
+                    <a id="download_excel" download></a>
               <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -656,7 +692,7 @@ class Users extends Component {
                                 </Tag>
                               </td>
                               <td className="text-center">
-                                <div class="flex">
+                                <div class="flex" style={{minWidth : "237px"}}>
                                   <CButton
                                     shape="rounded-pill"
                                     variant="outline"
@@ -724,7 +760,7 @@ class Users extends Component {
 
               </div>
               <div className="tabcontent">
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
+              <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign" >
                   <thead>
                 
                   </thead>
@@ -733,7 +769,7 @@ class Users extends Component {
                       <td className="pl-5">
                       Tên công ty
                       </td>
-                      <td className="">
+                      <td className="color-red">
                         SKT
                       </td>
                     </tr>
@@ -741,7 +777,7 @@ class Users extends Component {
                       <td className="pl-5">
                       Brand
                       </td>
-                      <td className="">
+                      <td className="color-red">
                        Hasaki
                       </td>
                     </tr>         

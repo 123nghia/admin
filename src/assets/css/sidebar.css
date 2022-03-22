@@ -12,8 +12,8 @@
 }
 
 .c-sidebar ul li.c-sidebar-nav-item .c-active {
-  background-color: #321fdb;
-
+  /* background-color: var(--main-color); */
+  background: linear-gradient(to right, #5CB3FF 26%,#7db9e8 94%);
   /* background-color: #2B1CB3; */
   /* color: #000000; */
   font-weight: 500;
@@ -32,13 +32,13 @@
 }
 
 .c-body {
-  background: rgb(248,248,248,0.1);
+  background: rgb(255,255,255,0.5);
 }
 
 .c-header {
   height:80px;
   background-color: #ffff;
-  box-shadow: 0px 4px 8px 5px rgb(0 0 0 / 10%);
+  box-shadow: 0px 3px 8px 5px rgb(0 0 0 / 10%);
 }
 .c-sidebar-nav.ps {
   background-color:var(--white);
@@ -107,8 +107,8 @@
 .c-sidebar .c-sidebar-nav-link:hover,
 .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
   color: #fff !important;
-  background: #321fdb;
-
+  /* background: #321fdb; */
+  background: linear-gradient(to right, #5CB3FF 26%,#7db9e8 94%);
   box-shadow: 0px 4px 8px 3px rgb(0 0 0 / 10%);
 }
 .c-sidebar-nav-icon {

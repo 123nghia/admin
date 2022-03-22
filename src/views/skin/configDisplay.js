@@ -306,47 +306,7 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-         <Row>
-            <Col>
-              <p style={styles.success}>{this.state.updated}</p>
-              <p style={styles.danger}>{this.state.deleted}</p>
-              <Card>
-               
-                <CardBody>
-                  <CRow>
-                    <CCol sm="12" lg="12">
-                      <CRow>
-                        <CCol sm="12" lg="10">
-                          
-                        </CCol>
-                        {
-                          type == '0' || type == '1' ? "" :
-                            <CCol sm="12" lg="2">
-                              <CTooltip content="Xem chi tiết đơn hàng">
-
-                                
-                                    <CButton outline color="info" size="xm" onClick={async (e) => {
-                                      this.updateCompany()
-                                      this.onUpdate()
-                                    }}>
-                                      <CIcon name="cil-pencil" /> Cập nhật
-                                    </CButton> 
-
-                              </CTooltip>
-                            </CCol>
-                        }
-                      </CRow>
-                      <CRow>
-                        <CCol sm="12" lg="12">
-                           
-                        </CCol>
-                      </CRow>
-                    </CCol>
-                  </CRow>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+      
           {
             this.state.configData.map((product,i)=>{
               return (
