@@ -577,7 +577,7 @@ class Users extends Component {
                   <tbody>             
                     <tr>
                       <td className="pl-5">
-                      Tên chiên dịch
+                      Tên chiến dịch
                       </td>
                       <td className="color-red">
                         Test
