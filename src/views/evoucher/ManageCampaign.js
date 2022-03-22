@@ -1426,7 +1426,7 @@ class EndUser extends Component {
                         <th className="text-center">Tên</th>
                         <th className="text-center">Nhà cung cấp</th>
                         <th className="text-center">Số lượng voucher</th>
-                        <th className="text-center">Tỷ lệ</th>
+                        <th className="text-center">Tỷ lệ checkIn</th>
 
                         <th className="text-center">Trạng thái</th>
 
@@ -1478,7 +1478,7 @@ class EndUser extends Component {
                                     </CButton>
                                   </div>
                                 </td>
-                                <td className="text-center">Tỷ lệ</td>
+                                <td className="text-center">30%</td>
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
