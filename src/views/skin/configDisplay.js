@@ -99,12 +99,12 @@ class Users extends Component {
             value:  true 
           },
           {
-            lable: "Hỗ trợ giảm quang thầm mắt",
+            lable: "Hỗ trợ giảm quầng thâm mắt",
             key: "k7",
             value:  true 
           },
           {
-            lable: "Hỗ trợ lỗ chân lông",
+            lable: "Hỗ trợ giảm lỗ chân lông",
             key: "k8",
             value:  true
           },
