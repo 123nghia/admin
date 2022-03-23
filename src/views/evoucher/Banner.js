@@ -756,9 +756,7 @@ class EndUser extends Component {
                         : ""}
                     </tbody>
                   </table>
-                </CardBody>
-              </Card>
-              <div style={{ float: "right" }}>
+                  <div style={{ float: "right" }}>
                 <Pagination
                   count={arrPagination.length}
                   color="primary"
@@ -770,6 +768,9 @@ class EndUser extends Component {
                   }}
                 />
               </div>
+                </CardBody>
+              </Card>
+             
             </Col>
           </Row>
 

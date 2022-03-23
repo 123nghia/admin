@@ -615,13 +615,14 @@ async remove(item){
                       }
                     </tbody>
                   </table>
-                </CardBody>
-              </Card>
-              <div style={{ float: 'right' }}>
+                  <div style={{ float: 'right' }}>
                 <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
+                </CardBody>
+              </Card>
+             
             </Col>
           </Row>
 

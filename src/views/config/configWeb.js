@@ -13,6 +13,9 @@ import SendIcon from "@mui/icons-material/Send";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 
 import {
   Card,
@@ -32,6 +35,7 @@ import update from "react-addons-update";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import API_CONNECT from "../../../src/functions/callAPI";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -233,6 +237,8 @@ class Users extends Component {
     };
   }
   async componentDidMount() {
+    
+
     await this.getFooter();
     this.getDataConfigWeb();
     this.getData();
@@ -249,7 +255,7 @@ class Users extends Component {
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll";
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -433,8 +439,7 @@ class Users extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.GET_FOOTER;
     let url = baseUrlapi + urlCall;
-    console.log(JSON.parse(this.state.company_id));
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id;
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -700,7 +705,7 @@ class Users extends Component {
     });
   }
   getData = async () => {
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id;
 
     this.setState({ isLoading: true });
     const res = await axios({
@@ -918,7 +923,7 @@ class Users extends Component {
       return;
     }
 
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id =this.state.company_id;
 
     const body = {
       isHash: false,
@@ -1034,7 +1039,7 @@ class Users extends Component {
                 />
                 <TextFieldGroup
                   field="titlePen2"
-                  label="Heading 2: (Không thay đổi cú pháp (<span>) - chỉ thay đổi nội dung)"
+                  label="Heading 2: "
                   value={this.state?.titlePen2}
                   onChange={(e) => {
                     this.setState({ titlePen2: e.target.value });
@@ -1060,13 +1065,11 @@ class Users extends Component {
                     this.setState({ introduce: e.target.value });
                   }}
                 />
-                <div class="text-center">
-                  <h6>Hình ảnh Startup</h6>
-                </div>
+                
 
                 <TextFieldGroup
                   field="image1"
-                  label="Hình ảnh 1: (170px x 170px)"
+                  label="Hình ảnh startup 1: (170px * 170px)"
                   type={"file"}
                   className="mt-5"
                   onChange={(e) => {
@@ -1088,7 +1091,7 @@ class Users extends Component {
 
                 <TextFieldGroup
                   field="image2"
-                  label="Hình ảnh 2: (280px x 280px)"
+                  label="Hình ảnh startup 2: (280px * 280px)"
                   type={"file"}
                   className="mt-5"
                   onChange={(e) => {
@@ -1110,7 +1113,7 @@ class Users extends Component {
 
                 <TextFieldGroup
                   field="image3"
-                  label="Hình ảnh 3: (170px x 170px)"
+                  label="Hình ảnh startup 3: (170px * 170px)"
                   type={"file"}
                   className="mt-5"
                   onChange={(e) => {
@@ -1142,15 +1145,20 @@ class Users extends Component {
                 />
               </div>
               <div id="tabcontent2" className="tabcontent">
-                <div class="text-center">
-                  <Button
-                    variant="contained"
-                    color="success"
+              <div class="flex-end mt-3">
+                  <CButton
+                    color="info"
+                    style={{ marginBottom: "10px" }}
+                    size="md"
+                    className="btn-main"
                     onClick={() => this.openFormAddSlide()}
                   >
-                    Thêm mới
-                  </Button>
+                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                  </CButton>
+
                 </div>
+                
                 <table
                   ble
                   className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
@@ -1185,25 +1193,38 @@ class Users extends Component {
                                 {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
                               </td> */}
                             <td className="">
-                              <CButton
-                                outline
-                                color="success"
-                                size="sm"
-                                onClick={() => this.openFormEditSlide(item, i)}
-                              >
-                                {/* <CIcon name="cilTrash" /> */}
-                                Chỉnh sửa
-                              </CButton>{" "}
-                              <CButton
-                                style={styles.mgl5}
-                                outline
-                                color="danger"
-                                size="sm"
-                                onClick={() => this.deleteSlide(i)}
-                              >
-                                {/* <CIcon name="cilPencil" /> */}
-                                Xóa
-                              </CButton>
+                            <div className="flex">
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  size="md"
+                                  onClick={() => this.openFormEditSlide(item, i)}
+                                >
+                                  <FiEdit3
+                                    style={styles.icon}
+                                    className="icon"
+
+                                    name="cilPencil"
+                                  />
+                                </CButton>{" "}
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="danger"
+                                  style={styles.mgl5}
+                                  onClick={() => this.deleteSlide(i)}
+                                >
+                                  <BsTrash
+                                    style={styles.icon}
+                                    className="icon"
+
+                                    name="cilTrash"
+                                  />
+                                </CButton>
+                              </div>
+                             
                             </td>
                           </tr>
                         );
@@ -1270,7 +1291,7 @@ class Users extends Component {
                 />
                 <TextFieldGroup
                   field="imgLayout"
-                  label="Hình ảnh favicon: (20px x 20px)"
+                  label="Hình ảnh favicon: (20px * 20px)"
                   type={"file"}
                   className="mt-5"
                   onChange={(e) => {
@@ -1571,10 +1592,18 @@ class Users extends Component {
                 </div>
               </div>
               <div id="tabcontent7" className="tabcontent">
-                <div class="text-center">
-                  <CButton onClick={this.openFormAddFooter} outline color="info" size="xm">
-                    <MdAdd /> Thêm mới
+                <div class="flex-end">
+                <CButton
+                    color="info"
+                    style={{ marginBottom: "10px" }}
+                    size="md"
+                    className="btn-main"
+                    onClick={this.openFormAddFooter} 
+                  >
+                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Thêm mới</p>
                   </CButton>
+                 
                 </div>
                 <table
                   ble
@@ -1614,25 +1643,38 @@ class Users extends Component {
 
 
                             <td className="">
-                              <CButton
-                                outline
-                                color="success"
-                                size="sm"
-                                onClick={() => this.openFormEditFooter(item)}
-                              >
-                                {/* <CIcon name="cilTrash" /> */}
-                                Chỉnh sửa
-                              </CButton>{" "}
-                              <CButton
-                                style={styles.mgl5}
-                                outline
-                                color="danger"
-                                size="sm"
-                                onClick={() => this.deleteFooter(item)}
-                              >
-                                {/* <CIcon name="cilPencil" /> */}
-                                Xóa
-                              </CButton>
+                            <div className="flex">
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  size="md"
+                                  onClick={() => this.openFormEditFooter(item)}
+                                >
+                                  <FiEdit3
+                                    style={styles.icon}
+                                    className="icon"
+
+                                    name="cilPencil"
+                                  />
+                                </CButton>{" "}
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="danger"
+                                  style={styles.mgl5}
+                                  onClick={() => this.deleteFooter(item)}
+                                >
+                                  <BsTrash
+                                    style={styles.icon}
+                                    className="icon"
+
+                                    name="cilTrash"
+                                  />
+                                </CButton>
+                              </div>
+                            
                             </td>
                           </tr>
                         );
@@ -1642,28 +1684,30 @@ class Users extends Component {
                 </table>
               </div>
               <div id="tabcontent8" className="tabcontent">
-                <div class="text-center">
+                <div class="flex-end">
                   {isDisable ? (
                     <CButton
                       outline
                       color="info"
-                      size="xm"
+                      size="md"
+                      className="btn-main"
                       onClick={async (e) => {
                         this.setState({ isDisable: !isDisable });
                       }}
                     >
-                      <CIcon name="cil-pencil" /> Cập nhật
+                      <CIcon name="cil-pencil" style={{marginRight:'6px'}} /> Cập nhật
                     </CButton>
                   ) : (
                     <CButton
                       outline
                       color="info"
-                      size="xm"
+                      size="md"
+                      className="btn-main"
                       onClick={async (e) => {
                         this.updateCompany(e);
                       }}
                     >
-                      <CIcon name="cil-pencil" /> Xác nhận cập nhật
+                      <CIcon name="cil-pencil" style={{marginRight:'6px'}} /> Xác nhận cập nhật
                     </CButton>
                   )}
                 </div>

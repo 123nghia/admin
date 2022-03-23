@@ -1247,7 +1247,7 @@ class Users extends Component {
                     className="btn-main"
                     onClick={() => this.openFormAddBanner()}
                   >
-                    <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                     <p style={{ margin: "auto 0" }}>Thêm mới</p>
                   </CButton>
 

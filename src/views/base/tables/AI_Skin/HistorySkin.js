@@ -423,21 +423,18 @@ class HistorySkin extends Component {
                     }
                   </tbody>
                 </table>
-                {/* :
-                    <div className="sweet-loading">
-                      <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
-                    </div> */}
+                <div style={{ float: 'right' }}>
+              <Pagination count={Math.ceil(itemsCount / itemPerPage)} color="primary" onChange={(e, v) => {
+                this.handlePageChange(v)
+              }} />
+            </div>
 
 
               </CardBody>
             </Card>
 
 
-            <div style={{ float: 'right' }}>
-              <Pagination count={Math.ceil(itemsCount / itemPerPage)} color="primary" onChange={(e, v) => {
-                this.handlePageChange(v)
-              }} />
-            </div>
+            
           </Col>
         </Row>
 

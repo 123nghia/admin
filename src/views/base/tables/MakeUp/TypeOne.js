@@ -866,14 +866,13 @@ class SuggestItem extends Component {
                               }) : ""
                           }
                         </tbody>
-                      </table> :
+                      </table>
+                       :
                       <div className="sweet-loading" style={{ height: 370 }}>
                         <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoadingTable} speedMultiplier={1.5} />
                       </div>
                   }
-                </CardBody>
-              </Card>
-              <div style={{ float: 'right' }}>
+                  <div style={{ float: 'right' }}>
                 {isSearch ? "" :
                   <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
                     this.setState({ indexPage: v })
@@ -881,6 +880,9 @@ class SuggestItem extends Component {
                   }} />
                 }
               </div>
+                </CardBody>
+              </Card>
+              
 
             </Col>
           </Row>
