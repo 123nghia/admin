@@ -82,6 +82,7 @@ const NotEnough = React.lazy(() => import('./views/Pages/NotEnough/NotEnough'));
 const AdminConfigWebsite = React.lazy(() => import('././views/config/configWebAdmin'));
 const ManageSales = React.lazy(() => import('./views/evoucher/ManageSales'));
 const DetailCampaign = React.lazy(() => import('./views/evoucher/DetailCampaign'));
+const Provider = React.lazy(() => import('./views/evoucher/ManageProvider'));
 
 
 const roleUser = localStorage.getItem('type');
@@ -97,10 +98,11 @@ const routes = [
   { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher  },
   { path: '/manage-campaign', name: 'ManageCampaign', component:roleUser === "0" ? ManageCampaign : NotEnough },
   { path: '/manage-sales', name: 'ManageSales', component:roleUser === "0" ? ManageSales : NotEnough },
+  { path: '/manage-provider', name: 'Provider', component:roleUser === "0" ? Provider : NotEnough },
+
   { path: '/detail-campaign/:id', name: 'DetailCampaign', component:roleUser === "0" ? DetailCampaign : NotEnough },
   { path: '/translation', name: 'Translation', component: Translation },
   { path: '/not-enough', name: 'NotEnough', component: NotEnough },
-
   { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough  },
 
   

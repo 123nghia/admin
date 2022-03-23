@@ -9,8 +9,10 @@ import {
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 
 import { Select } from 'antd';
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 
 import {
   CBadge,
@@ -424,43 +426,65 @@ class User extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Quản lý tài khoản hệ thống</i>
-                  <div style={styles.tags}>
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <CRow>
-                          <CCol sm="12" lg="4">
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
-                            </div>
-                          </CCol>
-                          <CCol sm="12" lg="4">
-                            <CSelect style={styles.flexOption} onChange={e => {
+                  <i className="fa fa-align-justify title_header">Quản lý tài khoản hệ thống</i>
+                  <CRow>
+                    <CCol md={4} className="mt-3">
+                      <div className="">
 
-                              this.actionSearch(e, "keyStatus");
 
-                            }} custom>
-                              {
-                                ["Actived", 'Deactived', 'Locked'].map((item, i) => {
-                                  return (
-                                    <option value={item}>{item}</option>
-                                  );
-                                })
-                              }
-                            </CSelect>
-                          </CCol>
-                          <CCol sm="12" lg="4">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                      <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới tài khoản Sale</CButton>
-                      </CCol>
-                    </CRow>
+                        <p className="title_filter">Từ khóa</p>
+                        <Input style={styles.searchInput} onChange={(e) => {
+                          this.actionSearch(e, "key");
+                        }} name="key" value={key} placeholder="Từ khóa" />
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+
+
+                        <p className="title_filter">Trạng thái</p>
+                        <CSelect style={styles.flexOption} onChange={e => {
+
+                          this.actionSearch(e, "keyStatus");
+
+                        }} custom>
+                          {
+                            ["Actived", 'Deactived', 'Locked'].map((item, i) => {
+                              return (
+                                <option value={item}>{item}</option>
+                              );
+                            })
+                          }
+                        </CSelect>
+                      </div>
+
+                    </CCol>
+                  </CRow>
+                  <div className="flex-end mt-4">
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="btn-main"
+                      onClick={e => { this.resetSearch() }}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Làm mới tìm kiếm</p>
+                    </CButton>
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px" }}
+                      size="md"
+                      className="btn-main"
+                      onClick={e => this.toggleModal("new")}
+                    >
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm mới tài khoản Sale</p>
+                    </CButton>
+
+
                   </div>
+
                 </CardHeader>
                 <CardBody>
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
@@ -582,7 +606,7 @@ class User extends Component {
               <Select
                 mode="multiple"
                 allowClear
-                style={{ width: '100%', marginBottom: '15px'}}
+                style={{ width: '100%', marginBottom: '15px' }}
                 placeholder="Please select"
                 defaultValue={['TINTINLE', 'Beauty shop']}
                 onChange={handleChange}
@@ -684,8 +708,8 @@ const styles = {
     width: 100
   },
   flexOption: {
-    width: 160,
-    margin: '1px'
+    width: 200,
+   
   },
   a: {
     textDecoration: 'none'
@@ -742,9 +766,9 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "160px",
+    width: "200px",
     display: 'inline-block',
-    margin: '1px'
+
   },
   userActive: {
     color: 'green'

@@ -122,7 +122,7 @@ const TheSidebar = () => {
      
     >
       <div className="header-logo" style={{height:"80px", backgroundColor : '#ffff'}}>
-      <CSidebarBrand className="d-md-down-none" to="/">
+      <CSidebarBrand className="d-md-down" to="/">
       <div class="flex-center">
         <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{ textDecoration: 'underline' }}>
           <img src={Logo} width="110" height="auto" alt="HB Analytics Logo" className="navbar-brand-full" /></NavLink>

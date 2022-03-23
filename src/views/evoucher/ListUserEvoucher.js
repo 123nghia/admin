@@ -568,7 +568,7 @@ class EndUser extends Component {
                
                   <CRow>
                     <CCol md={4} className="mt-3">
-                    <div className="flex-center-space">
+                    <div className="">
 
                    
 <p className="title_filter">Mã Voucher</p>
@@ -585,10 +585,11 @@ class EndUser extends Component {
                     </CCol>
                    
                     <CCol md={4} className="mt-3">
-                    <div className="flex-center-space">
+                    <div className="">
 
                    
 <p className="title_filter">Số điện thoại</p>
+
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
@@ -602,7 +603,7 @@ class EndUser extends Component {
                       </div>
                     </CCol>
                     <CCol md={4} className="mt-3">
-                    <div className="flex-center-space">
+                    <div className="">
 
                    
 <p className="title_filter">Trạng thái</p>
@@ -666,7 +667,7 @@ class EndUser extends Component {
                     <CCol md={4} className="mt-3">
                       <div className="">
                       
-                          <div className="flex-center-space">
+                          <div className="">
                            <p className="title_filter">Từ ngày</p>
                             <div>
                               <DatePicker
@@ -687,7 +688,7 @@ class EndUser extends Component {
                               />
                             </div>
                           </div>
-                          <div className="flex-center-space mt-3">
+                          <div className=" mt-3">
                           <p className="title_filter">Đến ngày</p>
                             <div>
                               <DatePicker
@@ -712,10 +713,11 @@ class EndUser extends Component {
                       </div>
                     </CCol>
                     <CCol md={4} className="mt-3">
-                      <div className="flex-center-space">
+                      <div className="">
 
                    
                         <p className="title_filter">Danh sách Sales</p>
+                        <div style={{ width:'200px'}}>
                         <Select
                           className="select_seo"
                           showSearch
@@ -738,30 +740,14 @@ class EndUser extends Component {
                             })
                             : null}
                         </Select>
-                     
+                        </div>
                      
                       </div>
                     </CCol>
                   </CRow>
 
-                  <div className="flex-center mt-3">
-                  <CButton
-                      color="info"
-                      style={{ marginBottom: "10px", marginRight: '10px' }}
-                      size="md"
-                      className="flex-center"
-                      onClick={(e) => {
-                        this.onSearch();
-                      }}
-                    >
-                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
-                    </CButton>
-                 
-                  </div>
-                </CardHeader>
-                <CardBody>
-                <div class=" pb-3 flex">
+                  <div className="flex-center-space mt-4">
+                  <div class=" flex">
                     <CButton
                       color="success"
                       style={{ marginBottom: "10px", marginRight: '10px' }}
@@ -799,6 +785,26 @@ class EndUser extends Component {
 
                     </div>
                     </div>
+                    <div>
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px" }}
+                      size="md"
+                      className="btn-main"
+                      onClick={(e) => {
+                        this.onSearch();
+                      }}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                    </CButton>
+                    </div>
+                  
+                 
+                  </div>
+                </CardHeader>
+                <CardBody>
+               
                 <div className="pb-3" style={{display : this.state.statusExcel ? "block" : "none" }}>
                       <div className="button_outer" id="button_outer">
                         <div className="btn_upload">

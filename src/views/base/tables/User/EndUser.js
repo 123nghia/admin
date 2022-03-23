@@ -9,7 +9,11 @@ import {
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import {
   CButton,
   CRow,
@@ -301,43 +305,57 @@ class EndUser extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách tài khoản người dùng</i>
-                  <div style={styles.tags}>
+                  
+                  
+                <i className="fa fa-align-justify title_header">Danh sách tài khoản người dùng</i>
+        <CRow>
+        <CCol md={4} className="mt-3">
+                      <div className="">
 
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <CRow>
-                          <CCol sm="12" lg="6">
-                            {/* <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
-                            </div> */}
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
+
+                        <p className="title_filter">E-mail</p>
+                        <Input style={styles.searchInput} onChange={(e) => {
                                 this.setState({
                                   emailSearch : e.target.value
                                 })
                               }} name="emailSearch" value={this.state.emailSearch} placeholder="Email" />
+                               
+
+
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+
+
+                        <p className="title_filter">Số điện thoại</p>
+                       
                                 <Input style={styles.searchInput} onChange={(e) => {
                                this.setState({
                                   phoneSearch : e.target.value
                                 })
                               }} name="phoneSearch" value={this.state.phoneSearch} placeholder="Số điện thoại" />
-                            </div>
-                            
-                          </CCol>
-                          <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.newSearch() }}>Tìm kiếm</CButton>
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                      <CCol sm="12" lg="12">
 
-                      </CCol>
-                    </CRow>
 
-                  </div>
+                      </div>
+                    </CCol>
+        </CRow>
+        <div className="flex-end">
+
+<CButton
+  color="info"
+  style={{ marginBottom: "10px" }}
+  size="md"
+  className="btn-main"
+  onClick={e => { this.newSearch() }}
+>
+  <BsSearch style={{ margin: "auto 6px auto 0" }} />
+  <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+</CButton>
+
+
+</div>      
+                
                 </CardHeader>
                 <CardBody>
 
@@ -382,15 +400,45 @@ class EndUser extends Component {
                                 {(new Date(item.create_date)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}
                                   
                                 </td>
-
                                 <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                    <CIcon name="cilTrash" />
+                                <div className="flex-center">
+                                 
+                                   
+                             
+
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    className="mr-1"
+                                    size="md"
+                                    onClick={async (e) => await this.openUpdate(item)}
+                                  >
+                                    <FiEdit3
+                                      style={styles.icon}
+                                      name="cilPencil"
+                                      className="icon"
+
+                                    />
+                                  </CButton>{" "}
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="danger"
+                                    style={styles.mgl5}
+                                    onClick={(e) => { this.openDelete(item) }}
+                                  >
+                                    <BsTrash
+                                      style={styles.icon}
+                                      className="icon"
+                                      name="cilTrash"
+                                    />
                                   </CButton>
+                                </div>
+                                 
                                 </td>
+                             
                               </tr>
                             );
                           }) : ""
@@ -535,8 +583,9 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "190px",
+    width: "200px",
     display: 'inline-block',
+   
   },
   userActive: {
     color: 'green'

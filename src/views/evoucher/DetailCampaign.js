@@ -16,7 +16,7 @@ import StarBorder from "@mui/icons-material/StarBorder";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsInfoCircleFill } from "@react-icons/all-files/bs/BsInfoCircleFill";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Card,
   CardBody,
@@ -73,7 +73,10 @@ import { MdAdd } from "@react-icons/all-files/md/MdAdd";
 import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
 import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
 import { AiFillWechat } from "@react-icons/all-files/ai/AiFillWechat";
-import { BsTrash  } from "@react-icons/all-files/bs/BsTrash";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { GrClose } from "@react-icons/all-files/gr/GrClose";
+
+
 import { Tag, Divider } from "antd";
 import Pagination from "@material-ui/lab/Pagination";
 
@@ -114,7 +117,7 @@ class Users extends Component {
         : null,
 
       action: "new",
-      arrPagination : [],
+      arrPagination: [],
       data: [],
       dataApi: [],
       delete: null,
@@ -179,7 +182,7 @@ class Users extends Component {
       ],
     };
   }
-  async ExportsFileExcel(){
+  async ExportsFileExcel() {
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
@@ -195,7 +198,7 @@ class Users extends Component {
       .then((res) => {
         console.log(res);
         let a = document.getElementById("download_excel");
-        if(a){
+        if (a) {
           a.href = `${baseUrlapi}${res.data.data.url}`;
         }
         a.click();
@@ -483,150 +486,156 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <>
-        <Link className="detail-campaign-goback" to="/manage-campaign">
-          <TiArrowBack style={{height: '36px' , width : '36px'}} />
-        </Link>
+         
+         
+          <div className="animated fadeIn " >
+            <div className="header-flex-tabs">
+             <div className="detail-campaign-goback-position">
+            <Link className="" to="/manage-campaign">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="detail-campaign-goback bi bi-x-lg" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" />
+                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" />
+              </svg>
+            </Link>
+          </div>
           <h4 className="detail-title-campaign">
             Chi tiết chiến dịch
           </h4>
-          <div className="animated fadeIn" >
-            <div class="tab">
-              <List
-                sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                  <ListSubheader component="div" id="nested-list-subheader">
-                    Danh mục
-                  </ListSubheader>
-                }
-              >
-                {
-                  this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i) => {
-                    return (
-                      <ListItemButton
-                        key={item._id}
-                        className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
-                        onClick={() => this.ToggleViewConfigWeb(i)}
-                        sx={{ pl: 4 }}
-                      >
-                        <ListItemIcon>
-                          {item.icon}
-                        </ListItemIcon>
-                        <ListItemText className="tabcontent-left" style={{ fontSize: "14px !important", color: "rgb(52, 71, 103)" }} primary={item.name} />
-                      </ListItemButton>
-                    );
-                  }) : null
-                }
-              </List>
-            </div>
-            <div className="tabcontents">
-              <div className="tabcontent defaultOpen">
-                <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
-                  <thead>               
-                  </thead>
-                  <tbody>             
-                    <tr>
-                      <td className="pl-5">
-                      Ngày bắt đầu
-                      </td>
-                      <td className="color-red">
-                        25/06/2022
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="pl-5">
-                      Ngày kết thúc
-                      </td>
-                      <td className="color-red">
-                       ...
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="pl-5">
-                     Số lượng voucher đã áp dụng
-                      </td>
-                      <td className="color-red">
-                        403
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="pl-5">
-                     Số lượng voucher còn lại
-                      </td>
-                      <td className="color-red">
-                        203
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="pl-5">
-                     Trạng thái
-                      </td>
-                      <td className="color-red">
-                      Chuẩn bị Sales
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+          </div>
+            <div className="flex-tabs">
+              <div className="tab">
+                <List
+                  sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+                  component="nav"
+                  aria-labelledby="nested-list-subheader"
+
+                >
+                  {
+                    this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i) => {
+                      return (
+                        <ListItemButton
+                          key={item._id}
+                          className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
+                          onClick={() => this.ToggleViewConfigWeb(i)}
+                          sx={{ pl: 4 }}
+                        >
+                          <ListItemIcon>
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText className="tabcontent-left" style={{ fontSize: "14px !important", color: "rgb(52, 71, 103)" }} primary={item.name} />
+                        </ListItemButton>
+                      );
+                    }) : null
+                  }
+                </List>
               </div>
-              <div className="tabcontent">
-                <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
-                  <thead>
-                
-                  </thead>
-                  <tbody>             
-                    <tr>
-                      <td className="pl-5">
-                      Tên chiến dịch
-                      </td>
-                      <td className="color-red">
-                        Test
-                      </td>
-                    </tr>
-                    
-                    <tr>
-                      <td className="pl-5">
-                      Ngày kết thúc Sale
-                      </td> 
-                      <td className="color-red">
-                       ...
-                      </td>
-                    </tr>
-                    
-                  </tbody>
-                </table>
-              </div>
-              <div className="tabcontent">
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
-                  <thead>
-                
-                  </thead>
-                  <tbody>             
-                    <tr>
-                      <td className="pl-5">
-                      Tổng số lượng Voucher
-                      </td>
-                      <td className="color-red">
-                        300
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              <h4 className="detail-title-campaign-voucher mt-5">
-                  DANH SÁCH VOUCHER
-              </h4>
-              <CButton
-                      color="success"
-                      style={{ marginBottom: "20px", marginRight: '10px' }}
-                      size="md"
-                      className="flex-center"
-                      onClick={()=>this.ExportsFileExcel()}
-                    >
-                      <FaFileExport style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Xuất File</p>
-                    </CButton>
-                    <a id="download_excel" download></a>
-              <table
+              <div className="tabcontents">
+                <div className="tabcontent defaultOpen">
+                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
+                    <thead>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="pl-5">
+                          Ngày bắt đầu
+                        </td>
+                        <td className="color-red">
+                          25/06/2022
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Ngày kết thúc
+                        </td>
+                        <td className="color-red">
+                          ...
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Số lượng voucher đã áp dụng
+                        </td>
+                        <td className="color-red">
+                          403
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Số lượng voucher còn lại
+                        </td>
+                        <td className="color-red">
+                          203
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Trạng thái
+                        </td>
+                        <td className="color-red">
+                          Chuẩn bị Sales
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="tabcontent">
+                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="pl-5">
+                          Tên chiến dịch
+                        </td>
+                        <td className="color-red">
+                          Test
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td className="pl-5">
+                          Ngày kết thúc Sale
+                        </td>
+                        <td className="color-red">
+                          ...
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+                <div className="tabcontent">
+                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="pl-5">
+                          Tổng số lượng Voucher
+                        </td>
+                        <td className="color-red">
+                          300
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <h4 className="detail-title-campaign-voucher mt-5">
+                    DANH SÁCH VOUCHER
+                  </h4>
+                  <CButton
+                    color="success"
+                    style={{ marginBottom: "20px", marginRight: '10px' }}
+                    size="md"
+                    className="flex-center"
+                    onClick={() => this.ExportsFileExcel()}
+                  >
+                    <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Xuất File</p>
+                  </CButton>
+                  <a id="download_excel" download></a>
+                  <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
                   >
@@ -664,20 +673,20 @@ class Users extends Component {
                                 <Tag
                                   className="ant-tag"
                                   color={item.status === "0"
-                                  ? "#2eb85c"
-                                  : item.status === "1"
-                                    ? "#2db7f5"
-                                    : item.status === "2"
-                                      ? "#87d068"
-                                      : item.status === "3"
-                                        ? "#f50"
-                                        : item.status === "4"
-                                          ? "#dc0e04"
+                                    ? "#2eb85c"
+                                    : item.status === "1"
+                                      ? "#2db7f5"
+                                      : item.status === "2"
+                                        ? "#87d068"
+                                        : item.status === "3"
+                                          ? "#f50"
                                           : item.status === "4"
-                                          ? "#00D084"
-                                          : "#FF0004"}
+                                            ? "#dc0e04"
+                                            : item.status === "4"
+                                              ? "#00D084"
+                                              : "#FF0004"}
                                 >
-                                 {item.status === "0"
+                                  {item.status === "0"
                                     ? "Sẵn sàng"
                                     : item.status === "1"
                                       ? "Chờ xác nhận"
@@ -686,13 +695,13 @@ class Users extends Component {
                                         : item.status === "3"
                                           ? "Hủy bỏ"
                                           : item.status === "4"
-                                          ? "Xóa bỏ"
+                                            ? "Xóa bỏ"
                                             : "Khóa"
-                                            }
+                                  }
                                 </Tag>
                               </td>
                               <td className="text-center">
-                                <div class="flex" style={{minWidth : "237px"}}>
+                                <div class="flex" style={{ minWidth: "237px" }}>
                                   <CButton
                                     shape="rounded-pill"
                                     variant="outline"
@@ -746,43 +755,44 @@ class Users extends Component {
                     </tbody>
                   </table>
                   <div style={{ float: "right" }}>
-                <Pagination
-                  count={arrPagination.length}
-                  color="primary"
-                  onChange={(e, v) => {
-                    this.setState({
-                      data: arrPagination[v - 1],
-                      indexPage: v - 1,
-                    });
-                  }}
-                />
-              </div>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
 
-              </div>
-              <div className="tabcontent">
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign" >
-                  <thead>
-                
-                  </thead>
-                  <tbody>             
-                    <tr>
-                      <td className="pl-5">
-                      Tên công ty
-                      </td>
-                      <td className="color-red">
-                        SKT
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="pl-5">
-                      Brand
-                      </td>
-                      <td className="color-red">
-                       Hasaki
-                      </td>
-                    </tr>         
-                  </tbody>
-                </table>
+                </div>
+                <div className="tabcontent">
+                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign" >
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="pl-5">
+                          Tên công ty
+                        </td>
+                        <td className="color-red">
+                          SKT
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Brand
+                        </td>
+                        <td className="color-red">
+                          Hasaki
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
             <Modal

@@ -626,7 +626,7 @@ async remove(item){
                
                   <CRow>
                     <CCol md={4} className="mt-3">
-                    <div className="flex-center-space">
+                    <div className="">
 
                    
 <p className="title_filter">Mã Voucher</p>
@@ -644,7 +644,7 @@ async remove(item){
                    
                    
                     <CCol md={4} className="mt-3">
-                    <div className="flex-center-space">
+                    <div className="">
 
                    
 <p className="title_filter">Trạng thái</p>
@@ -704,12 +704,12 @@ async remove(item){
                 
                   
                   </CRow>
-                  <div className="flex-center mt-3">
+                  <div className="flex-end mt-4">
                   <CButton
                       color="info"
-                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      style={{ marginBottom: "10px"}}
                       size="md"
-                      className="flex-center"
+                      className="btn-main"
                       onClick={(e) => {
                         this.onSearch();
                       }}

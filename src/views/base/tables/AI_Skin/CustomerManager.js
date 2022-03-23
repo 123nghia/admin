@@ -540,7 +540,7 @@ render() {
           <Col>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"> Thống kê lượt khách hàng</i>
+              <i className="fa fa-align-justify title_header">Thống kê lượt khách hàng</i>
                 <div style={styles.tags}>
                   <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" />
                 </div>
@@ -604,7 +604,7 @@ render() {
               <Col>
                 <Card>
                   <CardHeader>
-                    <i className="fa fa-align-justify"> Thống kê lượt khách hàng theo từng tháng</i>
+                  <i className="fa fa-align-justify title_header"> Thống kê lượt khách hàng theo từng tháng</i>
                     <div style={styles.tags}>
                       Tháng
                       <CSelect onChange={async e => { this.getDataForCompanyByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
@@ -686,7 +686,7 @@ render() {
               <Col>
                 <Card>
                   <CardHeader>
-<i className="fa fa-align-justify"> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)</i>
+                  <i className="fa fa-align-justify title_header"> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)</i>
                   </CardHeader>
                   <CardBody>
 
@@ -791,7 +791,7 @@ tags: {
   width: "250px"
 },
 searchInput: {
-  width: "190px",
+  width: "200px",
   display: 'inline-block',
 },
 userActive: {
