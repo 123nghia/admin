@@ -395,11 +395,6 @@ class User extends Component {
     const { data, key, action, arrPagination, arrRoleSubAdmin } = this.state;
     const { classes } = this.props;
 
-
-    // for (let i = 10; i < 36; i++) {
-    //   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-    // }
-
     axios({
       method: 'POST',
       url: 'https://evoucher-api.applamdep.com/api/plugin-list-company',

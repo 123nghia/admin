@@ -294,6 +294,11 @@ export default {
   "DELETE_CONTACT_CUSTOMER": "/api/delete-contact-customers",
   "UPDATE_CONTACT_STATUS": "/api/update-contact-status",
 
+  "LIST_SALE_GROUP": "/api/saleGroup/getAll",
+  "ADD_SALE_GROUP": "/api/saleGroup/add",
+  "UPDATE_SALE_GROUP": "/api/saleGroup/update",
+  "DELETE_SALE_GROUP": "/api/saleGroup/delete",
+
   "ADD_ROLE_SUBADMIN": "/api/add-role-subadmin",
   "GET_ROLE_SUBADMIN": "/api/get-role-subadmin-by-id",
 
@@ -318,6 +323,5 @@ export default {
 
   "CONFIG_THEME_UPDATE": "/api/get-config-color/update",
   "CONFIG_THEME_GET": "/api/get-config-color",
-
 
 };

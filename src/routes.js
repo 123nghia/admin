@@ -29,6 +29,7 @@ const PluginCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/Plug
 const PluginCreateOrder = React.lazy(() => import('./views/base/tables/AI_Skin/PluginCreateOrder'));
 
 
+
 const PluginUserTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginUserTable'));
 const RewardInfomation = React.lazy(() => import('./views/base/tables/AI_Skin/RewardInfomation'));
 const ListFeatureOfCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ListFeatureOfCustomer'));
@@ -81,7 +82,9 @@ const Translation = React.lazy(() => import('./views/evoucher/Translation'));
 const NotEnough = React.lazy(() => import('./views/Pages/NotEnough/NotEnough'));
 const AdminConfigWebsite = React.lazy(() => import('././views/config/configWebAdmin'));
 const ManageSales = React.lazy(() => import('./views/evoucher/ManageSales'));
+const ManageSalesGroup = React.lazy(() => import('./views/evoucher/ManageSalesGroup'));
 const roleUser = localStorage.getItem('type');
+
 
 
 const routes = [
@@ -95,7 +98,7 @@ const routes = [
   { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher  },
   { path: '/manage-campaign', name: 'ManageCampaign', component:roleUser === "0" ? ManageCampaign : NotEnough },
   { path: '/manage-sales', name: 'ManageSales', component:roleUser === "0" ? ManageSales : NotEnough },
-
+  { path: '/manage-sales-group', name: 'ManageSalesGroup', component:roleUser === "0" ? ManageSalesGroup : NotEnough },
   { path: '/translation', name: 'Translation', component: Translation },
   { path: '/not-enough', name: 'NotEnough', component: NotEnough },
 
@@ -149,6 +152,7 @@ const routes = [
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
   { path: '/cau-hinh-trang-web', name: 'configWeb', component: roleUser !== "0" ? configWeb : NotEnough   },
+  
 
 
   
