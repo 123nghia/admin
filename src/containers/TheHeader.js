@@ -15,6 +15,7 @@ import {
   CCarouselItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import {ToggleNav} from '../reducers/Navbar';
 
 import {
   ModalHeader, ModalBody, ModalFooter, Modal,
@@ -32,6 +33,7 @@ import {
   // TheHeaderDropdownTasks
 } from './index'
 
+
 const TheHeader = () => {
   const [show, setShow] = useState(true);
   const [close, setClose] = useState(true);
@@ -39,13 +41,25 @@ const TheHeader = () => {
   const sidebarShow = useSelector(state => state.sidebarShow)
 
   const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
-    dispatch({ type: 'set', sidebarShow: val })
+    if(sidebarShow === 'responsive'){
+      dispatch(ToggleNav(true))      
+    }else{
+      dispatch(ToggleNav('responsive'))
+    }
   }
 
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
-    dispatch({ type: 'set', sidebarShow: val })
+    console.log("1",sidebarShow)
+
+    if(sidebarShow !== 'responsive'){
+      dispatch(ToggleNav('responsive'))
+      
+
+    }else{
+      dispatch(ToggleNav(true))      
+
+
+    }
   }
 
   return (
@@ -68,7 +82,7 @@ const TheHeader = () => {
         <CHeaderNavItem className="px-3" >
           {
             localStorage.getItem("type") == "0" || localStorage.getItem("type") == "1" ? "" :
-              <CButton color="info" onClick={() => { setShow(true) }} style={{ color: '#ffffff' }}>Hướng dẫn người dùng</CButton>
+              <CButton color="info" onClick={() => { setShow(true) }} style={{ color: '#ffff' }}>Hướng dẫn người dùng</CButton>
           }
         </CHeaderNavItem>
       </CHeaderNav>

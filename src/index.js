@@ -12,15 +12,15 @@ import { icons } from './assets/icons'
 import { Provider } from 'react-redux'
 // import store from './store'
 import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducers from "./../src/redux/reducers";
+
 import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
-import root from "./../src/redux/sagas"
+
 import "antd/dist/antd.css";
 import './assets/css/sidebar.css';
 
-import myReducer from './redux/reducers';
-import './css/root.css';
+import myReducer from './reducers/reducers';
+import './assets/css/root.css';
 
 
 
@@ -30,8 +30,7 @@ import './css/root.css';
 const store = createStore(
   myReducer,
   applyMiddleware(thunk)
-
-)
+);
 
 React.icons = icons
 

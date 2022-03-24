@@ -17,10 +17,9 @@ import CIcon from '@coreui/icons-react'
 import API_CONNECT from '../functions/callAPI'
 import Constants from '../contants/contants'
 import axios from "axios";
-
 // sidebar nav config
 import navigations from './_nav'
-
+import {ToggleNav } from '../reducers/Navbar';
 const callApiGetRoleSubAdmin = async (user) => {
 
   if (user == null || JSON.parse(user) == null) {
@@ -116,13 +115,13 @@ const TheSidebar = () => {
 
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)
-
   return (
     <CSidebar
-      show={show}
-      size={"lg"}
-      onShowChange={(val) => dispatch({ type: 'set', sidebarShow: val })}
+      show={show === "responsive" ? false : true}
+      size={"lg"} 
+     
     >
+      <div className="header-logo" style={{height:"80px", backgroundColor : '#ffff'}}>
       <CSidebarBrand className="d-md-down-none" to="/">
       <div class="flex-center">
         <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{ textDecoration: 'underline' }}>
@@ -134,6 +133,7 @@ const TheSidebar = () => {
           height={35}
         />
       </CSidebarBrand>
+      </div>
       <CSidebarNav>
         {/* <div>
           <CCreateElement
@@ -146,7 +146,7 @@ const TheSidebar = () => {
             }}
           />
         </div> */}
-        <div style={{ backgroundColor: '#fff9fe' }}>
+        <div style={{ backgroundColor: '#ffff' }}>
           <CCreateElement
             items={navigations[0]}
             components={{
@@ -157,7 +157,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#fff9fe' }}>
+        <div style={{ backgroundColor: '#ffff' }}>
           <CCreateElement
             items={navigations[1]}
             components={{
@@ -168,7 +168,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#fff9fe' }}>
+        <div style={{ backgroundColor: '#ffff' }}>
           <CCreateElement
             items={navigations[2]}
             components={{
@@ -179,7 +179,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#fff9fe' }}>
+        <div style={{ backgroundColor: '#ffff' }}>
           <CCreateElement
             items={navigations[3]}
             components={{
@@ -190,7 +190,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#fff9fe' }}>
+        <div style={{ backgroundColor: '#ffff' }}>
           <CCreateElement
             items={navigations[4]}
             components={{
@@ -202,7 +202,7 @@ const TheSidebar = () => {
           />
         </div>
 
-        <div style={{ backgroundColor: '#fff9fe' }}>
+        <div style={{ backgroundColor: '#ffff' }}>
           <CCreateElement
             items={navigations[5]}
             components={{

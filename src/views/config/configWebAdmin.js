@@ -81,6 +81,53 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tabNameConfig : [
+        {
+            _id : "t1",
+            name : "Thông tin trang chủ",
+            icon : <AiOutlineHome style={{width : "24px ", height : "24px "}} />
+        },
+        {
+            _id : "t2",
+            name : "Slider",
+            icon : <DoorSlidingIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t3",
+            name : "Cấu hình SEO",
+            icon : <PermDataSettingIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t4",
+            name : "Logos",
+            icon : <IoLogoBuffer style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t5",
+            name : "Mã Chat",
+            icon : <AiFillWechat style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t6",
+            name : "Cấu hình mạng xã hội",
+            icon : <FacebookIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t7",
+            name : "Thông tin footer",
+            icon : <InfoIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t8",
+            name : "Quản lý màu sắc",
+            icon : <LockResetIcon style={{width : "24px ", height : "24px "}}/>
+        },
+        {
+            _id : "t9",
+            name : "Quản lý Cache",
+            icon : <LockResetIcon style={{width : "24px ", height : "24px "}}/>
+        },
+    ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
         : "-1",
@@ -159,7 +206,7 @@ class Users extends Component {
     const colorInput = document.getElementById("colorpicker");
     if(colorInput){
       colorInput.addEventListener("input", (e) => {
-        document.body.style.setProperty("--main_web_admin", e.target.value);
+        // document.body.style.setProperty("--main_web_admin", e.target.value);
         localStorage.setItem("colorpicker",e.target.value);
        });
     }
@@ -170,15 +217,18 @@ class Users extends Component {
       updateLevel: e.target.value,
     });
   };
-  changeConfigWeb(id) {
-    var i, tabcontent;
+  ToggleViewConfigWeb(id) {
+    var i, tabcontent,tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
+    tablinks =  document.getElementsByClassName("tablinks");
     for (i = 0; i < tabcontent.length; i++) {
       if (i === id) {
+        tablinks[i].classList.add("tabcontent-left-active");
         tabcontent[i].classList.add("defaultOpen");
         tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
       } else {
         tabcontent[i].classList.remove("defaultOpen");
+        tablinks[i].classList.remove("tabcontent-left-active");
         tabcontent[i].style.animation = "none";
       }
     }
@@ -1085,7 +1135,8 @@ class Users extends Component {
       return (
         <div className="animated fadeIn">
           <div class="tab">
-            <List
+           
+               <List
               sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
               component="nav"
               aria-labelledby="nested-list-subheader"
@@ -1095,93 +1146,28 @@ class Users extends Component {
                 </ListSubheader>
               }
             >
-              <ListItemButton
-                className=" tablinks"
-                onClick={() => this.changeConfigWeb(0)}
-                sx={{ pl: 4 }}
-              >
-                <ListItemIcon>
-                  <AiOutlineHome style={{ width: "24px ", height: "24px " }} />
-                </ListItemIcon>
-                <ListItemText primary="Thông tin trang chủ" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(1)}
-                sx={{ pl: 4 }}
-              >
-                <ListItemIcon>
-                  <DoorSlidingIcon />
-                </ListItemIcon>
-                <ListItemText primary="Banner" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(2)}
-              >
-                <ListItemIcon>
-                  <PermDataSettingIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình SEO" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks "
-                onClick={() => this.changeConfigWeb(3)}
-              >
-                <ListItemIcon>
-                  <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />
-                </ListItemIcon>
-                <ListItemText primary="Logos" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks "
-                onClick={() => this.changeConfigWeb(4)}
-              >
-                <ListItemIcon>
-                  <AiFillWechat style={{ width: "24px ", height: "24px " }} />
-                </ListItemIcon>
-                <ListItemText primary="Mã Chat" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(5)}
-              >
-                <ListItemIcon>
-                  <FacebookIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình mạng xã hội" />
-              </ListItemButton>
-
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(6)}
-              >
-                <ListItemIcon>
-                  <InfoIcon />
-                </ListItemIcon>
-                <ListItemText primary="Thông tin footer" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(7)}
-              >
-                <ListItemIcon>
-                  <LockResetIcon />
-                </ListItemIcon>
-                <ListItemText primary="Quản lý màu sắc" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(8)}
-              >
-                <ListItemIcon>
-                  <LockResetIcon />
-                </ListItemIcon>
-                <ListItemText primary="Quản lý Cache" />
-              </ListItemButton>
+              {
+                this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i)=>{
+                  return (
+                        <ListItemButton
+                        key={item._id}
+                    className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
+                    onClick={() => this.ToggleViewConfigWeb(i)}
+                    sx={{ pl: 4 }}
+                  >
+                    <ListItemIcon>
+                     {item.icon}
+                    </ListItemIcon>
+                    <ListItemText className="tabcontent-left" style={{fontSize:"14px !important", color: "rgb(52, 71, 103)"}} primary={item.name} />
+                  </ListItemButton>
+                      );
+                }) : null
+              }
             </List>
+        
           </div>
-          <div id="tabcontent1" class="tabcontent defaultOpen">
+          <div className="tabcontents">
+          <div id="tabcontent1" className="tabcontent defaultOpen">
             <div class="mb-3 text-center">
             <CButton
                   onClick={() => this.SaveAllConfigWeb("logoCompany")}
@@ -1215,135 +1201,9 @@ class Users extends Component {
                   src={this.state.imageLogoCompany}
                 />
               </div>
-            {/* <div>
-            <div class="text-center">
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => this.SaveAllConfigWeb("homepage")}
-              >
-                Lưu thay đổi
-              </Button>
-            </div>
-            <TextFieldGroup
-              field="titlePen1"
-              label="Heading 1:"
-              value={this.state?.titlePen1}
-              onChange={(e) => {
-                this.setState({ titlePen1: e.target.value });
-              }}
-            />
-            <TextFieldGroup
-              field="titlePen2"
-              label="Heading 2: (Không thay đổi cú pháp (<span>) - chỉ thay đổi nội dung)"
-              value={this.state?.titlePen2}
-              onChange={(e) => {
-                this.setState({ titlePen2: e.target.value });
-              }}
-            />
-
-            <TextFieldGroup
-              field="sologan"
-              label="Sologan:"
-              value={this.state?.sologan}
-              placeholder={""}
-              onChange={(e) => {
-                this.setState({ sologan: e.target.value });
-              }}
-            />
-
-            <TextFieldGroup
-              field="introduce"
-              label="Giới thiệu:"
-              value={this.state?.introduce}
-              placeholder={""}
-              onChange={(e) => {
-                this.setState({ introduce: e.target.value });
-              }}
-            />
-            <div class="text-center">
-              <h6>Hình ảnh Startup</h6>
-            </div>
-
-            <TextFieldGroup
-              field="image1"
-              label="Hình ảnh 1: (170px x 170px)"
-              type={"file"}
-              className="mt-5"
-              onChange={(e) => {
-                this.onChangeImage(e, "image1", "image1_link", "image1_show");
-              }}
-              onClick={(e) => {
-                e.target.value = null;
-                this.setState({ image1_show: "" });
-              }}
-            />
-            <div class="text-center mb-5">
-              <img
-                alt=""
-                style={{ width: "140px", marginBottom: 20 }}
-                height="auto"
-                src={this.state?.image1}
-              />
-            </div>
-
-            <TextFieldGroup
-              field="image2"
-              label="Hình ảnh 2: (280px x 280px)"
-              type={"file"}
-              className="mt-5"
-              onChange={(e) => {
-                this.onChangeImage(e, "image2", "image2_link", "image2_show");
-              }}
-              onClick={(e) => {
-                e.target.value = null;
-                this.setState({ image2_show: "" });
-              }}
-            />
-            <div class="text-center mb-5">
-              <img
-                alt=""
-                style={{ width: "140px", marginBottom: 20 }}
-                height="auto"
-                src={this.state?.image2}
-              />
-            </div>
-
-            <TextFieldGroup
-              field="image3"
-              label="Hình ảnh 3: (170px x 170px)"
-              type={"file"}
-              className="mt-5"
-              onChange={(e) => {
-                this.onChangeImage(e, "image3", "image3_link", "image3_show");
-              }}
-              onClick={(e) => {
-                e.target.value = null;
-                this.setState({ image3_show: "" });
-              }}
-            />
-            <div class="text-center mb-5">
-              <img
-                alt=""
-                style={{ width: "140px", marginBottom: 20 }}
-                height="auto"
-                src={this.state?.image3}
-              />
-            </div>
-            <label className="control-label">
-              Text AI:(Không thay đổi cú pháp - chỉ thay đổi nội dung)
-            </label>
-            <CTextarea
-              name="textAi"
-              rows="8"
-              value={this.state?.textAi}
-              onChange={(e) => {
-                this.setState({ textAi: e.target.value });
-              }}
-            />
-            </div> */}
+            
           </div>
-          <div id="tabcontent2" class="tabcontent ">
+          <div id="tabcontent2" className="tabcontent ">
             <div>
               <div class="text-center">
                 <CButton
@@ -1452,7 +1312,7 @@ class Users extends Component {
               </table>
             </div>
           </div>
-          <div id="tabcontent3" class="tabcontent">
+          <div id="tabcontent3" className="tabcontent">
             <div className="text-center">
 
               <Button
@@ -1534,7 +1394,7 @@ class Users extends Component {
               />
             </div>
           </div>
-          <div id="tabcontent4" class="tabcontent ">
+          <div id="tabcontent4" className="tabcontent ">
             <div class="text-center">
               <CButton
                 onClick={() => this.SaveAllConfigWeb("logos")}
@@ -1654,7 +1514,7 @@ class Users extends Component {
               />
             </div>
           </div>
-          <div id="tabcontent5" class="tabcontent ">
+          <div id="tabcontent5" className="tabcontent ">
             <div class="text-center">
               <CButton
                 onClick={() => this.SaveAllConfigWeb("chats")}
@@ -1698,7 +1558,7 @@ class Users extends Component {
               ></textarea>
             </div>
           </div>
-          <div id="tabcontent6" class="tabcontent">
+          <div id="tabcontent6" className="tabcontent">
             <div class="text-center">
               <Button
                 variant="contained"
@@ -1836,7 +1696,7 @@ class Users extends Component {
               </div>
             </div>
           </div>
-          <div id="tabcontent7" class="tabcontent ">
+          <div id="tabcontent7" className="tabcontent ">
             <div class="text-center">
               <CButton onClick={this.openFormAddFooter} outline color="info" size="xm">
                 <MdAdd /> Thêm mới
@@ -1907,11 +1767,12 @@ class Users extends Component {
               </tbody>
             </table>
           </div>
-          <div id="tabcontent8" class="tabcontent">
-          <div class="color-menu">
+          <div id="tabcontent8" className="tabcontent">
+          {/* <div class="color-menu">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.7 464.7"><path d="M446.6 18.1a62 62 0 00-87.6 0L342.3 35a23 23 0 10-32.5 32.5l5.4 5.4-180.6 180.6L71.9 316c-5 5-8 11.6-8.2 18.7l-.2 3.3-2.5 56.7a9.4 9.4 0 009.4 9.8h.4l30-1.3 18.4-.8 8.3-.4a37 37 0 0024.5-10.8l240.9-240.9 4.5 4.6a23 23 0 0032.5 0c9-9 9-23.6 0-32.6l16.7-16.7a62 62 0 000-87.6zm-174 209.2l-84.6 16 138-138 34.4 34.3-87.8 87.7zM64.5 423.9C28.9 423.9 0 433 0 444.3c0 11.3 28.9 20.4 64.5 20.4s64.5-9.1 64.5-20.4C129 433 100 424 64.5 424z"/></svg>
      <input onChange={this.ChangeColorWeb} type="color" value={this.state?.colorWebCurrent} class="colorpicker" id="colorpicker"></input>
-   </div>
+   </div> */}
+
             {/* <div class="text-center">
               {isDisable ? (
                 <CButton
@@ -1973,6 +1834,7 @@ class Users extends Component {
                 Reset Cache
               </Button>
             </div> */}
+          </div>
           </div>
           <Modal
             size="xl"

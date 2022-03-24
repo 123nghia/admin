@@ -1,0 +1,36 @@
+
+.detail-title-campaign{
+    text-transform: uppercase;
+    padding-bottom: 20px;
+    font-size: 32px;
+    line-height: 32px;
+    color: rgb(52, 71, 103);
+    font-weight: 700;
+    opacity: 0.9;
+   
+    margin: 0;
+    
+    text-align: center;
+}
+.detail-title-campaign-voucher{
+    text-transform: uppercase;
+    padding-bottom: 20px;
+    font-size: 22px;
+    line-height: 32px;
+    color: rgb(52, 71, 103);
+    font-weight: 650;
+    opacity: 1;
+   
+    margin: 0;
+    
+    text-align: center;
+}
+.table-details-campaign tr td {
+    font-size: 18px;
+    font-weight: 600;
+};
+
+.detail-campaign-goback svg{ 
+    height: 24px;
+    width: 24px;
+}

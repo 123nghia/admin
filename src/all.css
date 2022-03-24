@@ -1,4 +1,11 @@
+@import './assets/css/evoucher.css';
+
+.color-red{
+  color: rgb(255,0,0,0.8);
+  font-weight: bold !important;
+}
 .configData_item {
+  background: #ffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -11,10 +18,12 @@
   line-height: 10px;
 }
 .tab {
+  background-color: #ffff;
+
   float: left;
   border: 1px solid #ccc;
-
-  width: 30%;
+  border-bottom:none !important;
+  width: 25%;
   min-height: 625px;
 }
 
@@ -104,21 +113,36 @@
   }
 }
 /* Style the tab content */
-.tabcontent {
+.tabcontent{
+  display:none;
+}
+.tabcontent-left > span{
+  font-size: 14px !important;
+}
+.tabcontents {
+  background-color: #ffff;
   padding: 26px;
   transition: all 1s;
   float: left;
   /* padding: 0px 12px; */
   border: 1px solid #ccc;
-  width: 70%;
-  display: none;
+  border-bottom: none;
+  width: 75%;
+ 
   border-left: none;
   min-height: 625px;
 }
 .defaultOpen {
   display: block;
 }
-
+.tablinks:hover{
+  width: 100% !important;
+  
+}
+.tabcontent-left-active {
+  width: 100%;
+  background: rgba(222, 217, 219, 0.7) !important;
+}
 .title_header {
   font-size: 20px;
 }

@@ -17,7 +17,7 @@ import Swal from "sweetalert2";
 import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
-
+import {Link} from 'react-router-dom';
 import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
 import "moment-timezone";
@@ -1424,15 +1424,18 @@ class EndUser extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên</th>
+                        <th className="text-center">Nhà cung cấp</th>
+                        <th className="text-center">Số lượng voucher</th>
+                        <th className="text-center">Tỷ lệ checkIn</th>
+
+                        <th className="text-center">Trạng thái</th>
 
                         <th className="text-center">Bắt đầu</th>
                         <th className="text-center">Kết thúc</th>
                         <th className="text-center">Ngày tạo</th>
 
-                        <th className="text-center">Mô tả</th>
-                        <th className="text-center">Số lượng voucher</th>
+                        {/* <th classNamưe="text-center">Mô tả</th> */}
 
-                        <th className="text-center">Trạng thái</th>
                         <th className="text-center"></th>
                       </tr>
                     </thead>
@@ -1450,20 +1453,7 @@ class EndUser extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                <td className="text-center">
-                                  {new Date(item.from).toLocaleDateString()}
-                                </td>
-                                <td className="text-center">
-                                  {new Date(item.to).toLocaleDateString()}
-                                </td>
-                                <td className="text-center">
-                                  {new Date(
-                                    item.create_at
-                                  ).toLocaleDateString()}
-                                </td>
-                                <td className="text-center">
-                                  {item.description}
-                                </td>
+                                <td className="text-center">Nhà cung cấp</td>
                                 <td className="text-center">
                                   <div className="flex-center">
                                     <p
@@ -1488,6 +1478,7 @@ class EndUser extends Component {
                                     </CButton>
                                   </div>
                                 </td>
+                                <td className="text-center">30%</td>
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
@@ -1504,8 +1495,43 @@ class EndUser extends Component {
                                       : "Không hoạt động"}
                                   </Tag>
                                 </td>
-
                                 <td className="text-center">
+                                  {new Date(item.from).toLocaleDateString()}
+                                </td>
+                                <td className="text-center">
+                                  {new Date(item.to).toLocaleDateString()}
+                                </td>
+                                <td className="text-center">
+                                  {new Date(
+                                    item.create_at
+                                  ).toLocaleDateString()}
+                                </td>
+                               
+                                {/* <td className="text-center">
+                                  {item.description}
+                                </td> */}
+                                
+                                
+
+                                <td className="text-center" style={{minWidth: '230px'}}>
+                               <div className="flex">
+                                  <Link to={"/detail-campaign/" + item._id}>
+                               <CButton
+                                      shape="rounded-pill"
+                                      variant="outline"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      className="flex-a-center "
+                                      // onClick={(e) =>
+                                      //   this.viewDetailCampaign(item._id)
+                                      // }
+                                    >
+                                      <BsSearch className="mr-1" />
+                                      Chi tiết
+                                    </CButton>
+                                    </Link>
+                               
                                   <CButton
                                     shape="rounded-pill"
                                     variant="ghost"
@@ -1534,6 +1560,7 @@ class EndUser extends Component {
                                       name="cilTrash"
                                     />
                                   </CButton>
+                               </div>     
                                 </td>
                               </tr>
                             );
