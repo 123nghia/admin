@@ -23,6 +23,11 @@ import {
   CButton,
   CTooltip
 } from '@coreui/react'
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 
 import Pagination from '@material-ui/lab/Pagination';
 import 'moment-timezone';
@@ -497,37 +502,47 @@ class PluginCustomerManager extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"> Danh sách công ty</i>
-                  <div style={styles.tags}>
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <CRow>
-                          <CCol sm="12" lg="6">
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
+                <i className="fa fa-align-justify title_header"> Danh sách công ty </i>
+                <CRow>
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+
+
+                        <p className="title_filter">Từ khóa</p>
+                        <Input style={styles.searchInput} onChange={(e) => {
                                 this.actionSearch(e, "key");
                               }} name="key" value={key} placeholder="Từ khóa" />
-                            </div>
-                          </CCol>
-                          <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                    </CRow>
-                  </div>
-                </CardHeader>
-                <CardBody>
-                <div class="text-center">
+                      </div>
+                    </CCol>
+                    
+                  </CRow>
+                  <div className="flex-end mt-4">
                     <CButton
-                      color="primary"
-                      style={{ marginBottom: "10px" }}
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
                       size="md"
+                      className="btn-main"
+                      onClick={e => { this.resetSearch() }}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Làm mới tìm kiếm</p>
+                    </CButton>
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      size="md"
+                      className="btn-main"
                       onClick={() => this.openFormAdd()}
                     >
-                      Thêm mới
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
+
                   </div>
+                  
+                </CardHeader>
+                <CardBody>
+            
                   <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                     <thead className="thead-light">
                       <tr>
@@ -567,22 +582,53 @@ class PluginCustomerManager extends Component {
                                   </CBadge>
                                 </td> */}
                                 <td className="text-center">
-
-                                  <CButton style={{ margin: 1 }} outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  {
-                                    type == "0" ?
-                                      <CButton style={{ margin: 1 }} outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                        <CIcon name="cilTrash" />
-                                      </CButton> : ""
-                                  }
-                                  {' '}
-                                  <CTooltip content="Xem chi tiết đơn hàng">
-                                    <CButton style={{ margin: 1 }} outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}>
-                                      <CIcon name="cil-magnifying-glass" />
+                                <div className="flex-center">
+                                 
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="outline"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      className="flex-a-center mr-1"
+                                      onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}
+                                    >
+                                      <BsSearch className="mr-1" />
+                                      Chi tiết
                                     </CButton>
-                                  </CTooltip>
+                             
+
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    className="mr-1"
+                                    size="md"
+                                    onClick={(e) => this.openUpdate(item)}
+                                  >
+                                    <FiEdit3
+                                      style={styles.icon}
+                                      name="cilPencil"
+                                      className="icon"
+
+                                    />
+                                  </CButton>{" "}
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="danger"
+                                    style={styles.mgl5}
+                                    onClick={(e) => { this.openDelete(item) }}
+                                  >
+                                    <BsTrash
+                                      style={styles.icon}
+                                      className="icon"
+                                      name="cilTrash"
+                                    />
+                                  </CButton>
+                                </div>
+                                 
                                 </td>
                               </tr>
                             );
@@ -590,14 +636,14 @@ class PluginCustomerManager extends Component {
                       }
                     </tbody>
                   </table>
-
-                </CardBody>
-              </Card>
-              <div style={{ float: 'right' }}>
+                  <div style={{ float: 'right' }}>
                 <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
+                </CardBody>
+              </Card>
+              
             </Col>
           </Row>
 
@@ -916,9 +962,9 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "160px",
+    width: "200px",
     display: 'inline-block',
-    margin: '1px'
+  
   },
   userActive: {
     color: 'green'

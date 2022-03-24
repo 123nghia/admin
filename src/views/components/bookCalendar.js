@@ -21,7 +21,10 @@ import {
   CTooltip,
   CTextarea,
 } from "@coreui/react";
-
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import API_CONNECT from "../../functions/callAPI";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
@@ -616,14 +619,14 @@ class BrandSlider extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"> Danh sách đặt lịch</i>
-                  <div style={styles.tags}>
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <CRow>
-                          <CCol sm="12" lg="12">
-                            <div class="flex-a-center">
-                              <Input
+                <i className="fa fa-align-justify title_header"> Danh sách đặt lịch</i>
+                <CRow>
+                    <CCol md={4} className="mt-3">
+                      <div className="flex-center-space">
+
+
+                        <p className="title_filter">Từ khóa</p>
+                        <Input
                               class="mr-2"
                                 style={styles.searchInput}
                                 onChange={(e) => {
@@ -633,35 +636,35 @@ class BrandSlider extends Component {
                                 value={key}
                                 placeholder="Từ khóa"
                               />
-                               <CButton
-                              color="primary"
-                              style={{ width: "50%" }}
-                              size="md"
-                              onClick={(e) =>this.onSearching()}
-                            >
-                              Tìm kiếm
-                            </CButton>
-                            
-                            </div>
-                          </CCol>
-                          <CCol sm="12" lg="6">
-                           
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                      <CCol sm="12" lg="12">
-                        <CButton
-                          outline
-                          color="primary"
-                          style={styles.floatRight}
-                          size="sm"
-                          onClick={(e) => this.toggleModal("new")}
-                        >
-                          Thêm mới
-                        </CButton>
-                      </CCol>
+                        
+                      </div>
+                    </CCol>
                     </CRow>
-                  </div>
+                    <div className="flex-end mt-4">
+                    <CButton
+                        color="info"
+                        style={{ marginBottom: "10px", marginRight: '10px' }}
+                        size="md"
+                        className="btn-main"
+                        onClick={(e) =>this.onSearching()}
+                      >
+                        <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Làm mới tìm kiếm</p>
+                      </CButton>
+                      <CButton
+                        color="info"
+                        style={{ marginBottom: "10px" }}
+                        size="md"
+                        className="btn-main"
+                        onClick={(e) => this.toggleModal("new")}
+                      >
+                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                      </CButton>
+
+                    </div>
+                
+                
                 </CardHeader>
                 <CardBody>
                   <table
@@ -715,27 +718,41 @@ class BrandSlider extends Component {
                                 </td>
 
                                 <td className="text-center">
-                                  <CButton
-                                    style={styles.mgl5}
-                                    outline
-                                    color="primary"
-                                    size="sm"
-                                    onClick={async (e) =>
-                                      await this.openUpdate(item)
-                                    }
-                                  >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{" "}
-                                  <CButton
-                                    outline
-                                    color="danger"
-                                    size="sm"
-                                    onClick={(e) => {
-                                      this.openDelete(item);
-                                    }}
-                                  >
-                                    <CIcon name="cilTrash" />
-                                  </CButton>
+                                <div className="flex-center">
+                                 
+                                   
+                             
+
+                                 <CButton
+                                   shape="rounded-pill"
+                                   variant="ghost"
+                                   color="info"
+                                   style={styles.mgl5}
+                                   className="mr-1"
+                                   size="md"
+                                   onClick={async (e) => await this.openUpdate(item)}
+                                 >
+                                   <FiEdit3
+                                     style={styles.icon}
+                                     name="cilPencil"
+                                     className="icon"
+
+                                   />
+                                 </CButton>{" "}
+                                 <CButton
+                                   shape="rounded-pill"
+                                   variant="ghost"
+                                   color="danger"
+                                   style={styles.mgl5}
+                                   onClick={(e) => { this.openDelete(item) }}
+                                 >
+                                   <BsTrash
+                                     style={styles.icon}
+                                     className="icon"
+                                     name="cilTrash"
+                                   />
+                                 </CButton>
+                               </div>
                                 </td>
                               </tr>
                             );
@@ -1007,7 +1024,7 @@ const styles = {
     marginRight: "5px",
   },
   searchInput: {
-    width: "190px",
+    width: "200px",
     display: "inline-block",
   },
   userActive: {

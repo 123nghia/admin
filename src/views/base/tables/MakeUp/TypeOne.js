@@ -17,7 +17,10 @@ import {
   CTextarea,
   CRow, CCol
 } from '@coreui/react'
-
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import CreatableSelect from 'react-select/creatable';
 import API_CONNECT from "../../../../functions/callAPI";
 import Pagination from '@material-ui/lab/Pagination';
@@ -697,35 +700,60 @@ class SuggestItem extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách sản phẩm da mặt </i>
-                  <div style={styles.tags}>
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <CRow>
-                          <CCol sm="12" lg="4">
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
+                <i className="fa fa-align-justify title_header">Danh sách sản phẩm da mặt </i>
+                <CRow>
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+
+
+                        <p className="title_filter">Từ khóa</p>
+                        <Input style={styles.searchInput} onChange={(e) => {
                                 this.setState({ key: e.target.value })
 
                                 if (e.target.value == "") {
                                   this.getDataPagination(this.state.limit * Number(indexPage), Number(indexPage))
                                 }
                               }} name="key" value={key} placeholder="Từ khóa" />
-                            </div>
-                          </CCol>
-                          <CCol sm="12" lg="4">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm theo từ khoá</CButton>
-                          </CCol>
-                          <CCol sm="12" lg="4">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                      <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
-                      </CCol>
+                      </div>
+                    </CCol>
                     </CRow>
+                    <div className="flex-end">
+
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      size="md"
+                      className="btn-main"
+                      onClick={e => { this.onSearch() }}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                    </CButton>
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      size="md"
+                      className="btn-main"
+                      onClick={e => { this.resetSearch() }}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Làm mới tìm kiếm</p>
+                    </CButton>
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px" }}
+                      size="md"
+                      className="btn-main"
+                      onClick={e => this.toggleModal("new")}
+                    >
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                    </CButton>
+                    
+
                   </div>
+                   
+                 
                 </CardHeader>
                 <CardBody>
                   {
@@ -795,26 +823,56 @@ class SuggestItem extends Component {
                                       {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
                                     </td> */}
                                     <td className="text-center">
-                                      <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                        <CIcon name="cilPencil" />
-                                      </CButton>{' '}
-                                      <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                        <CIcon name="cilTrash" />
-                                      </CButton>
-                                    </td>
+                                <div className="flex-center">
+                                 
+                                   
+                             
+
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    className="mr-1"
+                                    size="md"
+                                    onClick={async (e) => await this.openUpdate(item)}
+                                  >
+                                    <FiEdit3
+                                      style={styles.icon}
+                                      name="cilPencil"
+                                      className="icon"
+
+                                    />
+                                  </CButton>{" "}
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="danger"
+                                    style={styles.mgl5}
+                                    onClick={(e) => { this.openDelete(item) }}
+                                  >
+                                    <BsTrash
+                                      style={styles.icon}
+                                      className="icon"
+                                      name="cilTrash"
+                                    />
+                                  </CButton>
+                                </div>
+                                 
+                                </td>
+                                 
                                   </tr>
                                 );
                               }) : ""
                           }
                         </tbody>
-                      </table> :
+                      </table>
+                       :
                       <div className="sweet-loading" style={{ height: 370 }}>
                         <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoadingTable} speedMultiplier={1.5} />
                       </div>
                   }
-                </CardBody>
-              </Card>
-              <div style={{ float: 'right' }}>
+                  <div style={{ float: 'right' }}>
                 {isSearch ? "" :
                   <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
                     this.setState({ indexPage: v })
@@ -822,6 +880,9 @@ class SuggestItem extends Component {
                   }} />
                 }
               </div>
+                </CardBody>
+              </Card>
+              
 
             </Col>
           </Row>
@@ -1039,8 +1100,9 @@ const styles = {
     marginRight: "5px"
   },
   searchInput: {
-    width: "190px",
+    width: "200px",
     display: 'inline-block',
+   
   },
   userActive: {
     color: 'green'

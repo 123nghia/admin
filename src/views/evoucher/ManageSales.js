@@ -442,7 +442,7 @@ class User extends Component {
         const { classes } = this.props;
 
 
-      
+
 
         if (!this.state.isLoading) {
             return (
@@ -459,7 +459,7 @@ class User extends Component {
                                     </i>
                                     <CRow>
                                         <CCol md={4} className="mt-3">
-                                            <div className="flex-center-space">
+                                            <div className="">
 
 
                                                 <p className="title_filter">Từ khóa</p>
@@ -473,8 +473,8 @@ class User extends Component {
 
 
                                         <CCol md={4} className="mt-3">
-                                            <div className="flex-center-space">
-                                                <CLabel>Trạng thái:</CLabel>
+                                            <div className="">
+                                                <p className="title_filter">Trạng thái</p>
 
                                                 <div style={{ width: "200px" }} className="">
                                                     {arrLevel != undefined ? (
@@ -508,12 +508,12 @@ class User extends Component {
 
 
                                     </CRow>
-                                    <div className="flex-center mt-3">
+                                    <div className="flex-end mt-4">
                                         <CButton
                                             color="info"
                                             style={{ marginBottom: "10px" }}
                                             size="md"
-                                            className="flex-center"
+                                            className="btn-main"
                                             onClick={(e) => {
                                                 this.onSearch();
                                             }}
@@ -521,17 +521,11 @@ class User extends Component {
                                             <BsSearch style={{ margin: "auto 6px auto 0" }} />
                                             <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                                         </CButton>
-
-                                    </div>
-
-                                </CardHeader>
-                                <CardBody>
-                                    <div class="flex-center">
                                         <CButton
                                             color="info"
-                                            style={{ marginBottom: "10px", marginRight: '10px' }}
+                                            style={{ marginBottom: "10px" }}
                                             size="md"
-                                            className="flex-center"
+                                            className="btn-main"
                                             onClick={e => this.toggleModal("new")}
                                         >
                                             <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
@@ -540,6 +534,10 @@ class User extends Component {
 
 
                                     </div>
+
+                                </CardHeader>
+                                <CardBody>
+
                                     <table ble className="table table-hover table-outline mb-0 d-none d-sm-table ">
                                         <thead className="thead-light">
                                             <tr>
@@ -581,14 +579,14 @@ class User extends Component {
                                             }
                                         </tbody>
                                     </table>
-
+                                    <div style={{ float: 'right' }}>
+                                        <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                                            this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                                        }} />
+                                    </div>
                                 </CardBody>
                             </Card>
-                            <div style={{ float: 'right' }}>
-                                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                                    this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                                }} />
-                            </div>
+
                         </Col>
                     </Row>
 
@@ -822,7 +820,7 @@ const styles = {
         marginRight: "5px",
     },
     searchInput: {
-        width: "250px",
+        width: "200px",
         display: "inline-block",
 
     },

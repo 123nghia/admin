@@ -14,7 +14,8 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
-
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import {
   CLabel,
   CTooltip,
@@ -653,19 +654,21 @@ class Users extends Component {
               data-bs-parent="#accordionExample"
             >
               <div class="accordion-body">
-              <div class="flex-center">
+              <div class="flex-end">
               <CButton
-                                  style={styles.mgl5}
-                                  outline
-                                  color="primary"
-                                  size="md"
-                                  onClick={() =>
-                                     this.openFormAdd(valueK)
-                                  }
-                                >
-                                  {/* <CIcon name="cilPencil" /> */}
-                                 Thêm mới
-                                </CButton>
+                        color="info"
+                        style={{ marginBottom: "10px" }}
+                        size="md"
+                       
+                        className="btn-main"
+                        onClick={() =>
+                          this.openFormAdd(valueK)
+                       }
+                      >
+                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                      </CButton>
+            
               </div>
                 <table
                   ble
@@ -700,19 +703,21 @@ class Users extends Component {
             >
             
               <div class="accordion-body">
-              <div class="flex-center">
+              <div class="flex-end">
               <CButton
-                                  style={styles.mgl5}
-                                  outline
-                                  color="primary"
-                                  size="md"
-                                  onClick={() =>
-                                     this.openFormAdd(valueK)
-                                  }
-                                >
-                                  {/* <CIcon name="cilPencil" /> */}
-                                 Thêm mới
-                                </CButton>
+                        color="info"
+                        style={{ marginBottom: "10px" }}
+                        size="md"
+                       
+                        className="btn-main"
+                        onClick={() =>
+                          this.openFormAdd(valueK)
+                       }
+                      >
+                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                      </CButton>
+              
               </div>
                 <table
                   ble

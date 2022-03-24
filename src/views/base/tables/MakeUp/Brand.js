@@ -9,7 +9,8 @@ import {
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
-
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import {
   CButton,
   CRow,
@@ -427,26 +428,58 @@ class Brand extends Component {
                                   <a href={item.link} target="_blank">{item.link}</a>
                                 </td>
                                 <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                    <CIcon name="cilTrash" />
+                                <div className="flex-center">
+                                 
+                                   
+                             
+
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    className="mr-1"
+                                    size="md"
+                                    onClick={async (e) => await this.openUpdate(item)}
+                                  >
+                                    <FiEdit3
+                                      style={styles.icon}
+                                      name="cilPencil"
+                                      className="icon"
+
+                                    />
+                                  </CButton>{" "}
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="danger"
+                                    style={styles.mgl5}
+                                    onClick={(e) => { this.openDelete(item) }}
+                                  >
+                                    <BsTrash
+                                      style={styles.icon}
+                                      className="icon"
+                                      name="cilTrash"
+                                    />
                                   </CButton>
+                                </div>
+                                 
                                 </td>
+                                
                               </tr>
                             );
                           }) : ""
                       }
                     </tbody>
                   </table>
-                </CardBody>
-              </Card>
-              <div style={{ float: 'right' }}>
+                  <div style={{ float: 'right' }}>
                 <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
+                </CardBody>
+              </Card>
+             
               {/* {
                 arrPagination.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>

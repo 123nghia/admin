@@ -87,6 +87,7 @@ const ManageSalesGroup = React.lazy(() => import('./views/evoucher/ManageSalesGr
 // const roleUser = localStorage.getItem('type');
 
 const DetailCampaign = React.lazy(() => import('./views/evoucher/DetailCampaign'));
+const Provider = React.lazy(() => import('./views/evoucher/ManageProvider'));
 
 
 

@@ -632,40 +632,12 @@ class EndUser extends Component {
                   <i className="fa fa-align-justify title_header">
                     Quản lý Banner
                   </i>
-
-                  {/* <div style={styles.tags}>
-
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                      
-                        <CRow>
-                          <CCol sm="12" lg="6">
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
-                            </div>
-                          </CCol>
-                          <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Tìm kiếm</CButton>
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                      <CCol sm="12" lg="12">
-                     
-                      </CCol>
-                    </CRow>
-
-                  </div> */}
-                </CardHeader>
-                <CardBody>
-               
-                  <div className="flex-center">
+                  <div className="flex-end mt-4">
                   <CButton
                       color="info"
-                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      style={{ marginBottom: "10px" }}
                       size="md"
-                      className="flex-center"
+                      className="btn-main"
                       onClick={() => this.openVoucher()}
                     >
                       <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
@@ -674,6 +646,10 @@ class EndUser extends Component {
                    
                    
                   </div>
+                </CardHeader>
+                <CardBody>
+               
+                  
                   <table
                     ble
                     className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -780,9 +756,7 @@ class EndUser extends Component {
                         : ""}
                     </tbody>
                   </table>
-                </CardBody>
-              </Card>
-              <div style={{ float: "right" }}>
+                  <div style={{ float: "right" }}>
                 <Pagination
                   count={arrPagination.length}
                   color="primary"
@@ -794,6 +768,9 @@ class EndUser extends Component {
                   }}
                 />
               </div>
+                </CardBody>
+              </Card>
+             
             </Col>
           </Row>
 

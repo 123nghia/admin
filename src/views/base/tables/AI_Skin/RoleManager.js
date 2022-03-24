@@ -8,6 +8,9 @@ import {
   Row,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 
 import {
   CBadge,
@@ -294,13 +297,21 @@ class RoleManager extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách quyền</i>
-                  <div style={styles.tags}>
-                    {/* <div>
-                    <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm quyền</CButton>
-                    {/* </div> */}
-                  </div>
+                <i className="fa fa-align-justify title_header">Danh sách quyền</i>
+                 <div className="flex-end">
+                 <CButton
+                                            color="info"
+                                            style={{ marginBottom: "10px" }}
+                                            size="md"
+                                            className="btn-main"
+                                            onClick={async e => await this.toggleModal("new")}
+                                        >
+                                            <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                                            <p style={{ margin: "auto 0" }}>Thêm quyền</p>
+                                        </CButton>
+                 </div>
+             
+                  
                 </CardHeader>
                 <CardBody>
 
@@ -332,26 +343,58 @@ class RoleManager extends Component {
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                    <CIcon name="cilTrash" />
+                                <div className="flex-center">
+                                 
+                                   
+                             
+
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    className="mr-1"
+                                    size="md"
+                                    onClick={async (e) => await this.openUpdate(item)}
+                                  >
+                                    <FiEdit3
+                                      style={styles.icon}
+                                      name="cilPencil"
+                                      className="icon"
+
+                                    />
+                                  </CButton>{" "}
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="danger"
+                                    style={styles.mgl5}
+                                    onClick={(e) => { this.openDelete(item) }}
+                                  >
+                                    <BsTrash
+                                      style={styles.icon}
+                                      className="icon"
+                                      name="cilTrash"
+                                    />
                                   </CButton>
+                                </div>
+                                 
                                 </td>
+                             
                               </tr>
                             );
                           }) : ""
                       }
                     </tbody>
                   </table>
-                </CardBody>
-              </Card>
-              <div style={{ float: 'right' }}>
+                  <div style={{ float: 'right' }}>
                 <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
+                </CardBody>
+              </Card>
+            
               {/* {
                 arrPagination.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>

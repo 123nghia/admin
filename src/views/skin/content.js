@@ -14,7 +14,8 @@ import {
   ModalFooter,
   Modal,
 } from "reactstrap";
-
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import {
   CLabel,
   CTooltip,
@@ -668,19 +669,21 @@ class Users extends Component {
               data-bs-parent="#accordionExample"
             >
               <div class="accordion-body">
-              <div class="flex-center">
+              <div class="flex-end">
               <CButton
-                                  style={styles.mgl5}
-                                  outline
-                                  color="primary"
-                                  size="md"
-                                  onClick={() =>
-                                     this.openFormAdd(valueK)
-                                  }
-                                >
-                                  {/* <CIcon name="cilPencil" /> */}
-                                 Thêm mới
-                                </CButton>
+                        color="info"
+                        style={{ marginBottom: "10px" }}
+                        size="md"
+                       
+                        className="btn-main"
+                        onClick={() =>
+                          this.openFormAdd(valueK)
+                       }
+                      >
+                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                      </CButton>
+             
               </div>
                 <table
                   ble
@@ -715,19 +718,21 @@ class Users extends Component {
             >
             
               <div class="accordion-body">
-              <div class="flex-center">
+              <div class="flex-end">
               <CButton
-                                  style={styles.mgl5}
-                                  outline
-                                  color="primary"
-                                  size="md"
-                                  onClick={() =>
-                                     this.openFormAdd(valueK)
-                                  }
-                                >
-                                  {/* <CIcon name="cilPencil" /> */}
-                                 Thêm mới
-                                </CButton>
+                        color="info"
+                        style={{ marginBottom: "10px" }}
+                        size="md"
+                       
+                        className="btn-main"
+                        onClick={() =>
+                          this.openFormAdd(valueK)
+                       }
+                      >
+                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                      </CButton>
+             
               </div>
                 <table
                   ble
@@ -796,7 +801,7 @@ class Users extends Component {
         <div className="animated fadeIn">
           
 
-          <div class="accordion" id="accordionExample">
+          <div className="accordion accordion-font" id="accordionExample">
             {this.renderProductsSuggest(this.state.listK5,"headingOne","collapser1","Hỗ trợ giảm lão hóa da",true,"K5")}
             {this.renderProductsSuggest(this.state.listK6,"headingTwo","collapser2","Hỗ trợ điều trị mụn",false,"K6")}
             {this.renderProductsSuggest(this.state.listK7,"headingThree","collapser3","Hỗ trợ giảm quầng thâm mắt",false,"K7")}

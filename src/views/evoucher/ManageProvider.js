@@ -14,9 +14,7 @@ import {
   Modal,
 } from "reactstrap";
 import Swal from "sweetalert2";
-import { CMultiSelect } from '@coreui/react-pro'
-import {CDatePicker} from "@coreui/react-pro";
-import { CButton, CLabel, CSelect, CTextarea, CRow, CCol  } from "@coreui/react";
+import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { Link } from 'react-router-dom';
@@ -849,7 +847,7 @@ class EndUser extends Component {
                 }}
               />
               <label className="control-label">Công ty:</label>
-              <div style={{ width: "100%" }}>
+
               <Select
                 className="select_company"
                 showSearch
@@ -872,7 +870,6 @@ class EndUser extends Component {
                   })
                   : null}
               </Select>
-              </div>
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
@@ -881,7 +878,7 @@ class EndUser extends Component {
                       this.changeLevel(e);
                     }}
                     custom
-                    size="md"
+                    size="sm"
                     name="status"
                     id="SelectLm"
                   >
@@ -1143,7 +1140,7 @@ class EndUser extends Component {
                       this.changeLevel(e);
                     }}
                     custom
-                    size="md"
+                    size="sm"
                     name="status"
                     id="SelectLm"
                   >
@@ -1217,7 +1214,7 @@ class EndUser extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Quản lý chiến dịch
+                    Quản lý nhà cung cấp
                   </i>
 
                   <CRow>
@@ -1312,8 +1309,7 @@ class EndUser extends Component {
 
                         <div className="">
                           <p className="title_filter">Từ ngày</p>
-                         
-                          <div style={{width : '200px'}}>
+                          <div style={{width:'200px'}}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1334,7 +1330,7 @@ class EndUser extends Component {
                         </div>
                         <div className=" mt-3">
                           <p className="title_filter">Đến ngày</p>
-                          <div style={{width : '200px'}}>
+                          <div style={{width:'200px'}}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1426,19 +1422,11 @@ class EndUser extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên</th>
-                        <th className="text-center">Nhà cung cấp</th>
-                        <th className="text-center">Số lượng voucher</th>
-                        <th className="text-center">Tỷ lệ checkIn</th>
-
-                        <th className="text-center">Trạng thái</th>
-
-                        <th className="text-center">Bắt đầu</th>
-                        <th className="text-center">Kết thúc</th>
+                        <th className="text-center">Tên công ty</th>
+                        <th className="text-center">E-mail - SĐT</th>
                         <th className="text-center">Ngày tạo</th>
-
-                        {/* <th classNamưe="text-center">Mô tả</th> */}
-
+                        <th className="text-center">Định danh hệ thống</th>
+                        <th className="text-center">Địa chỉ</th>                     
                         <th className="text-center"></th>
                       </tr>
                     </thead>
@@ -1456,67 +1444,17 @@ class EndUser extends Component {
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.name}</td>
-                              <td className="text-center">Nhà cung cấp</td>
                               <td className="text-center">
-                                <div className="flex-center">
-                                  <p
-                                    className="mr-2"
-                                    style={{ margin: "auto" }}
-                                  >
-                                    {item.quatinity ? item.quatinity : "0"}
-                                  </p>
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="outline"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    className="flex-a-center "
-                                    onClick={(e) =>
-                                      this.openPopupVoucher(item)
-                                    }
-                                  >
-                                    <BsSearch className="mr-1" />
-                                    Xem
-                                  </CButton>
-                                </div>
-                              </td>
-                              <td className="text-center">30%</td>
-                              <td className="text-center">
-                                <Tag
-                                  className="ant-tag"
-                                  color={
-                                    item.status === "1"
-                                      ? "#87d068"
-
-                                      : "#f50"
-                                  }
-                                >
-                                  {item.status === "1"
-                                    ? "Hoạt động"
-
-                                    : "Không hoạt động"}
-                                </Tag>
+                                  <div>{item.Email}</div>
+                                  <div>------------</div>
+                                  <div>{item.Phone}</div>
                               </td>
                               <td className="text-center">
-                                {new Date(item.from).toLocaleDateString()}
+                              {new Date(item.from).toLocaleDateString()}
                               </td>
-                              <td className="text-center">
-                                {new Date(item.to).toLocaleDateString()}
-                              </td>
-                              <td className="text-center">
-                                {new Date(
-                                  item.create_at
-                                ).toLocaleDateString()}
-                              </td>
-
-                              {/* <td className="text-center">
-                                  {item.description}
-                                </td> */}
-
-
-
-                              <td className="text-center" style={{ minWidth: '230px' }}>
+                              <td className="text-center">{item.name}</td>
+                              <td className="text-center">{item.name}</td>
+                               <td className="text-center" style={{ minWidth: '230px' }}>
                                 <div className="flex">
                                   <Link to={"/detail-campaign/" + item._id}>
                                     <CButton

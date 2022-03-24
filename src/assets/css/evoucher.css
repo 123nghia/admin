@@ -1,7 +1,7 @@
 
 .detail-title-campaign{
     text-transform: uppercase;
-    padding-bottom: 20px;
+   padding:12px;
     font-size: 32px;
     line-height: 32px;
     color: rgb(52, 71, 103);
@@ -14,8 +14,8 @@
 }
 .detail-title-campaign-voucher{
     text-transform: uppercase;
-    padding-bottom: 20px;
-    font-size: 22px;
+  
+    font-size: 20px;
     line-height: 32px;
     color: rgb(52, 71, 103);
     font-weight: 650;
@@ -30,7 +30,5 @@
     font-weight: 600;
 };
 
-.detail-campaign-goback svg{ 
-    height: 24px;
-    width: 24px;
-}
+
+

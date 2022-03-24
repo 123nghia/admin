@@ -376,7 +376,19 @@ const _navOrther = [
       </CTooltip>,
     }
   },
-  
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý nhà cung cấp',
+    to: '/manage-provider',
+    icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
   // {
   //   _tag: 'CSidebarNavItem',
   //   name: 'Danh sách Voucher',

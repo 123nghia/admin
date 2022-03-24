@@ -10,7 +10,8 @@ import {
 } from 'reactstrap';
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
-
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import {
   CButton,
   CLabel, CSelect, CRow, CCol
@@ -234,7 +235,7 @@ class HistorySkin extends Component {
 
                   <CRow>
                     <CCol md={4} className="mt-3">
-                    <div className="flex-center-space">
+                    <div className="">
 
                    
 <p className="title_filter">Tên khách hàng</p>
@@ -251,7 +252,7 @@ class HistorySkin extends Component {
                     </CCol>
                    
                     <CCol md={4} className="mt-3">
-                    <div className="flex-center-space">
+                    <div className="">
 
                    
 <p className="title_filter">Số điện thoại</p>
@@ -267,60 +268,12 @@ class HistorySkin extends Component {
                         />
                       </div>
                     </CCol>
-                   
                     <CCol md={4} className="mt-3">
                       <div className="">
-                      
-                          <div className="flex-center-space">
-                           <p className="title_filter">Từ ngày</p>
-                            <div>
-                              <DatePicker
-                                style={styles.dateForm}
-                                onChange={(e, dateString) => {
-                                  let copy = dateString.split("-");
-                                  let newData = ``;
-                                  copy.forEach((item, index) => {
-                                    if (index === 0) {
-                                      newData += item;
-                                    } else {
-                                      newData += `/${item}`;
-                                    }
-                                  });
-                                  this.setState({ from: newData });
-                                }}
-                                format={dateFormat}
-                              />
-                            </div>
-                          </div>
-                          <div className="flex-center-space mt-3">
-                          <p className="title_filter">Đến ngày</p>
-                            <div>
-                              <DatePicker
-                              style={styles.dateForm}
-                                onChange={(e, dateString) => {
-                                  let copy = dateString.split("-");
-                                  let newData = ``;
-                                  copy.forEach((item, index) => {
-                                    if (index === 0) {
-                                      newData += item;
-                                    } else {
-                                      newData += `/${item}`;
-                                    }
-                                  });
-                                  this.setState({ to: newData });
-                                }}
-                                format={dateFormat}
-                              />
-                            </div>
-                          </div>
-                      
-                      </div>
-                    </CCol>
-                    <CCol md={4} className="mt-3">
-                      <div className="flex-center-space">
 
                    
                         <p className="title_filter">Danh sách Sales</p>
+                        <div style={{width:'200px'}}>
                         <Select
                           className="select_seo"
                           showSearch
@@ -343,22 +296,82 @@ class HistorySkin extends Component {
                             })
                             : null}
                         </Select>
-                     
+                        </div>
                      
                       </div>
                     </CCol>
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+                      
+                          <div className="">
+                           <p className="title_filter">Từ ngày</p>
+                            <div>
+                              <DatePicker
+                                style={styles.dateForm}
+                                onChange={(e, dateString) => {
+                                  let copy = dateString.split("-");
+                                  let newData = ``;
+                                  copy.forEach((item, index) => {
+                                    if (index === 0) {
+                                      newData += item;
+                                    } else {
+                                      newData += `/${item}`;
+                                    }
+                                  });
+                                  this.setState({ from: newData });
+                                }}
+                                format={dateFormat}
+                              />
+                            </div>
+                          </div>
+                        
+                      
+                      </div>
+                    </CCol>
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+                      
+                        
+                          <p className="title_filter">Đến ngày</p>
+                            <div>
+                              <DatePicker
+                              style={styles.dateForm}
+                                onChange={(e, dateString) => {
+                                  let copy = dateString.split("-");
+                                  let newData = ``;
+                                  copy.forEach((item, index) => {
+                                    if (index === 0) {
+                                      newData += item;
+                                    } else {
+                                      newData += `/${item}`;
+                                    }
+                                  });
+                                  this.setState({ to: newData });
+                                }}
+                                format={dateFormat}
+                              />
+                            </div>
+                        
+                      
+                      </div>
+                    </CCol>
+                    
                   </CRow>
 
-                  <div className="text-center mt-3">
-                    <CButton
-                      color="primary"
+                  <div className="flex-end mt-3">
+                  <CButton
+                      color="info"
+                      style={{ marginBottom: "10px" }}
                       size="md"
+                      className="btn-main"
                       onClick={(e) => {
                         this.onSearch();
                       }}
                     >
-                      Tìm kiếm
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                     </CButton>
+                   
                   </div>
                 </CardHeader>
               <CardBody>
@@ -410,21 +423,18 @@ class HistorySkin extends Component {
                     }
                   </tbody>
                 </table>
-                {/* :
-                    <div className="sweet-loading">
-                      <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoading} speedMultiplier={1.5} />
-                    </div> */}
+                <div style={{ float: 'right' }}>
+              <Pagination count={Math.ceil(itemsCount / itemPerPage)} color="primary" onChange={(e, v) => {
+                this.handlePageChange(v)
+              }} />
+            </div>
 
 
               </CardBody>
             </Card>
 
 
-            <div style={{ float: 'right' }}>
-              <Pagination count={Math.ceil(itemsCount / itemPerPage)} color="primary" onChange={(e, v) => {
-                this.handlePageChange(v)
-              }} />
-            </div>
+            
           </Col>
         </Row>
 
@@ -509,9 +519,9 @@ const styles = {
     marginRight: "5px",
   },
   searchInput: {
-    width: "250px",
+    width: "200px",
     display: "inline-block",
-    marginRight: "5px",
+    
   },
   userActive: {
     color: "green",
