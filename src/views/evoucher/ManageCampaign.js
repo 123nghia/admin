@@ -81,6 +81,7 @@ class EndUser extends Component {
       idCurrentUpdate: null,
       levelNormal: "0",
       dataCompany: [],
+      quantity : "0"
     };
   }
   changeLevel = (e) => {
@@ -90,9 +91,6 @@ class EndUser extends Component {
     });
   };
   async componentDidMount() {
-    console.log(this.state.from);
-    const { type } = this.state;
-
     this.getData();
     this.getDataCompany();
     let arr = JSON.parse(localStorage.getItem("url"));
@@ -190,13 +188,12 @@ class EndUser extends Component {
   async getData(key) {
     const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_CAMPAIGN;
+    let baseUrlCallApi = Constants.GET_ALL_CAMPAIGN_VER2;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .get(url, {
         params: {
-          company_id,
           keyword: key,
         },
       })
@@ -278,7 +275,8 @@ class EndUser extends Component {
       modalVoucher: true,
       name: "",
       from: new Date().toLocaleDateString(),
-      quantity: "",
+      saleEndDate : new Date().toLocaleDateString(),
+      quantity: "0",
       to: new Date().toLocaleDateString(),
       description: "",
       status: "1",
@@ -286,13 +284,14 @@ class EndUser extends Component {
   }
   openEditVoucher(item) {
     const { name, from, to, description, status } = this.state;
-
+    
     this.setState({
       actionVoucher: "edit",
       modalVoucher: true,
       idCurrentUpdate: item._id,
       quantity: item.quatinity,
       name: item.name,
+      saleEndDate : new Date(item.saleEndDate).toLocaleDateString(),
       from: new Date(item.from).toLocaleDateString(),
       to: new Date(item.to).toLocaleDateString(),
       description: item.description,
@@ -346,6 +345,7 @@ class EndUser extends Component {
       from,
       to,
       description,
+      saleEndDate,
       status,
       idCompany,
       company_id,
@@ -360,6 +360,7 @@ class EndUser extends Component {
         quatinity: quantity,
         company_id: idCompany,
         name,
+        saleEndDate,
         from,
         to,
         description,
@@ -417,10 +418,13 @@ class EndUser extends Component {
       relCode: "",
       description: "",
       status: "",
+    
     });
   }
   openUpdateVoucher(item) {
+  
     this.setState({
+      
       actionVoucherEditing2: "edit",
       modalVoucherEditing2: true,
       idCurrentUpdate: item._id,
@@ -454,6 +458,8 @@ class EndUser extends Component {
       company_id_search,
       from,
       to,
+      saleEndDate,
+      quantity,
       description,
       status,
       company_id,
@@ -467,9 +473,9 @@ class EndUser extends Component {
       .post(url, {
         code: codeVoucher,
         relCode: relCode,
-
+        saleEndDate,
+        quantity,
         content: description,
-
         status: status,
         company_id: company_id_search,
         id: idCurrentUpdate,
@@ -492,6 +498,8 @@ class EndUser extends Component {
       codeVoucher,
       from,
       to,
+      saleEndDate,
+      quantity,
       description,
       status,
       company_id_search,
@@ -500,13 +508,14 @@ class EndUser extends Component {
     let baseUrlCallApi = Constants.ADD_VOUCHER;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
+    console.log(saleEndDate);
     await axios
       .post(url, {
         code: codeVoucher,
         relCode: relCode,
-
+        quantity,
         content: description,
-
+        saleEndDate,
         status: status,
         company_id: company_id_search,
       })
@@ -651,7 +660,9 @@ class EndUser extends Component {
       modalInfo: itemRender,
     });
   }
-
+  GetDetailCampaign(){
+    
+  }
   render() {
     const {
       data,
@@ -790,15 +801,7 @@ class EndUser extends Component {
                 />
               )}
 
-              {/* <TextFieldGroup
-                field="to"
-                label="Kết thúc"
-                value={this.state.to}
-                type={"date"}
-                // error={errors.title}
-                onChange={(e) => this.setState({ to: e.target.value })}
-                // rows="5"
-              /> */}
+             
               <div className="mt-3"></div>
               <label>Kết thúc</label>
               {this.state.actionVoucher !== "new" ? (
@@ -834,6 +837,50 @@ class EndUser extends Component {
                       }
                     });
                     this.setState({ to: newData });
+                  }}
+                  defaultValue={moment()}
+                  format={dateFormat}
+                />
+              )}
+              <div className="mt-3"></div>
+              <label>Ngày kết thúc Sale</label>
+              {this.state.actionVoucher !== "new" ? (
+                <DatePicker
+                  onChange={(e, dateString) => {
+                    let copy = dateString.split("-");
+                    let newData = ``;
+                    copy.forEach((item, index) => {
+                      if (index === 0) {
+                        newData += item;
+                      } else {
+                        newData += `/${item}`;
+                      }
+                    });
+                    this.setState({ saleEndDate: newData });
+                    console.log(this.state.saleEndDate)
+
+                  }}
+                  defaultValue={moment(
+                    new Date(this.state.saleEndDate).toLocaleDateString(),
+                    dateFormat
+                  )}
+                  format={dateFormat}
+                />
+              ) : (
+                <DatePicker
+                  onChange={(e, dateString) => {
+                    let copy = dateString.split("-");
+                    let newData = ``;
+                    copy.forEach((item, index) => {
+                      if (index === 0) {
+                        newData += item;
+                      } else {
+                        newData += `/${item}`;
+                      }
+                    });
+                    this.setState({ saleEndDate: newData });
+                    console.log(this.state.saleEndDate)
+
                   }}
                   defaultValue={moment()}
                   format={dateFormat}
@@ -1456,7 +1503,9 @@ class EndUser extends Component {
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.name}</td>
-                              <td className="text-center">Nhà cung cấp</td>
+                              <td className="text-center">
+                                {item.vendor && item.vendor[0] ? item.vendor[0].Name : "Chưa có"}
+                              </td>
                               <td className="text-center">
                                 <div className="flex-center">
                                   <p
@@ -1477,11 +1526,14 @@ class EndUser extends Component {
                                     }
                                   >
                                     <BsSearch className="mr-1" />
-                                    Xem
+                                   
                                   </CButton>
                                 </div>
                               </td>
-                              <td className="text-center">30%</td>
+                              <td className="text-center">
+                                
+                                {item.CheckIn.length === 0 ? "Đang cập nhật" : item.CheckIn[0]}
+                              </td>
                               <td className="text-center">
                                 <Tag
                                   className="ant-tag"
@@ -1518,7 +1570,7 @@ class EndUser extends Component {
 
                               <td className="text-center" style={{ minWidth: '230px' }}>
                                 <div className="flex">
-                                  <Link to={"/detail-campaign/" + item._id}>
+                                  <Link onClick={()=>this.GetDetailCampaign()} to={"/detail-campaign/" + item._id}>
                                     <CButton
                                       shape="rounded-pill"
                                       variant="outline"

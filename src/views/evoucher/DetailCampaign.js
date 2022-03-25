@@ -252,22 +252,53 @@ class Users extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
-  async getDataVoucher(key) {
+ 
+  async getDetailCampaign(id) {
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_VOUCHER;
+    let baseUrlCallApi = Constants.GET_DETAIL_CAMPAIGN;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .get(url, {
         params: {
-          company_id,
-          keyword: key
+         id
         },
       })
       .then((res) => {
-        let val = res.data.data;
+        let val = res.data?.data[0];
+        this.setState({
+          detailCampaign : val
+        });
+        console.log(val)
+        // this.pagination(val);
+        // this.setState({ dataApi: val });
+
+        // let active = 0;
+
+        // this.setState({ isLoading: false, totalActive: active });
+      });
+  }
+  async getDataVoucher(id) {
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_DETAIL_CAMPAIGN_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+         id
+        },
+      })
+      .then((res) => {
+        let val = res.data?.data;
+        // this.setState({
+        //   detailCampaign : val
+        // });
+    
         this.pagination(val);
         this.setState({ dataApi: val });
 
@@ -276,9 +307,9 @@ class Users extends Component {
         this.setState({ isLoading: false, totalActive: active });
       });
   }
-
-  async componentDidMount() {
-    this.getDataVoucher();
+  async componentDidMount() {    
+    await this.getDetailCampaign(this.props.match.params.id);
+    await this.getDataVoucher(this.props.match.params.id);
 
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
@@ -479,7 +510,7 @@ class Users extends Component {
       dataFooter,
 
       isDisable,
-
+      detailCampaign,
       mainColor,
     } = this.state;
 
@@ -540,7 +571,9 @@ class Users extends Component {
                           Ngày bắt đầu
                         </td>
                         <td className="color-red">
-                          25/06/2022
+                          {
+                            detailCampaign ? new Date(detailCampaign.from).toLocaleDateString() : ""
+                          }
                         </td>
                       </tr>
                       <tr>
@@ -548,7 +581,9 @@ class Users extends Component {
                           Ngày kết thúc
                         </td>
                         <td className="color-red">
-                          ...
+                        {
+                            detailCampaign ? new Date(detailCampaign.to).toLocaleDateString() : ""
+                          }
                         </td>
                       </tr>
                       <tr>
@@ -556,7 +591,9 @@ class Users extends Component {
                           Số lượng voucher đã áp dụng
                         </td>
                         <td className="color-red">
-                          403
+                        {
+                            detailCampaign ?  detailCampaign.quantity : "0"
+                          }
                         </td>
                       </tr>
                       <tr>
@@ -564,7 +601,9 @@ class Users extends Component {
                           Số lượng voucher còn lại
                         </td>
                         <td className="color-red">
-                          203
+                        {
+                            detailCampaign ?  detailCampaign.quantity : "0"
+                          }
                         </td>
                       </tr>
                       <tr>
@@ -572,7 +611,23 @@ class Users extends Component {
                           Trạng thái
                         </td>
                         <td className="color-red">
-                          Chuẩn bị Sales
+                          {
+                            detailCampaign ?   <Tag
+                            className="ant-tag"
+                            color={
+                              detailCampaign.status === "1"
+                                ? "#87d068"
+
+                                : "#f50"
+                            }
+                          >
+                            {detailCampaign.status === "1"
+                              ? "Hoạt động"
+
+                              : "Không hoạt động"}
+                          </Tag> : ""
+                          }
+                      
                         </td>
                       </tr>
                     </tbody>
@@ -589,7 +644,9 @@ class Users extends Component {
                           Tên chiến dịch
                         </td>
                         <td className="color-red">
-                          Test
+                        {
+                            detailCampaign ?  detailCampaign.name : ""
+                          }
                         </td>
                       </tr>
 
@@ -598,7 +655,9 @@ class Users extends Component {
                           Ngày kết thúc Sale
                         </td>
                         <td className="color-red">
-                          ...
+                        {
+                            detailCampaign ? new Date(detailCampaign.saleEndDate).toLocaleDateString() : ""
+                          }
                         </td>
                       </tr>
 
@@ -616,9 +675,22 @@ class Users extends Component {
                           Tổng số lượng Voucher
                         </td>
                         <td className="color-red">
-                          300
+                        {
+                            detailCampaign ?  detailCampaign.quantity : "0"
+                          }
                         </td>
                       </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Mã chiến dịch
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign ?  detailCampaign.quantity : "0"
+                          }
+                        </td>
+                      </tr>
+                      
                     </tbody>
                   </table>
                   <h4 className="detail-title-campaign-voucher mt-5">
@@ -642,14 +714,17 @@ class Users extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên voucher</th>
+                   
 
                         <th className="text-center">Mã voucher</th>
-                        <th className="text-center">Mã chiến dịch</th>
+                     
+                      
                         <th className="text-center">Nội dung</th>
+                        <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">Ngày kết thúc</th>
                         <th className="text-center">trạng thái</th>
 
-                        <th className="text-center"></th>
+                        <th className="text-center">#</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -665,10 +740,14 @@ class Users extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.name}</td>
+              
                               <td className="text-center">{item.code}</td>
-                              <td className="text-center">{item.relCode}</td>
+                             
+
+                           
                               <td className="text-center">{item.content}</td>
+                              <td className="text-center">{new Date(item.create_at).toLocaleDateString()}</td>
+                              <td className="text-center">{new Date(item.to).toLocaleDateString()}</td>
                               <td className="text-center">
                                 <Tag
                                   className="ant-tag"
@@ -701,7 +780,7 @@ class Users extends Component {
                                 </Tag>
                               </td>
                               <td className="text-center">
-                                <div class="flex" style={{ minWidth: "237px" }}>
+                                <div class="flex" >
                                   <CButton
                                     shape="rounded-pill"
                                     variant="outline"
@@ -713,8 +792,8 @@ class Users extends Component {
                                       this.renderModalInfo(item)
                                     }
                                   >
-                                    <BsSearch className="mr-1" />
-                                    Xem chi tiết
+                                    <BsSearch className="mr-1 icon" />
+                                   
                                   </CButton>
                                   <CButton
                                     shape="rounded-pill"
@@ -727,6 +806,8 @@ class Users extends Component {
                                     }
                                   >
                                     <FiEdit3
+                                      className="icon"
+
                                       style={styles.icon}
                                       name="cilPencil"
                                     />
@@ -779,7 +860,9 @@ class Users extends Component {
                           Tên công ty
                         </td>
                         <td className="color-red">
-                          SKT
+                        {
+                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Name : ""
+                          }
                         </td>
                       </tr>
                       <tr>
@@ -787,7 +870,59 @@ class Users extends Component {
                           Brand
                         </td>
                         <td className="color-red">
-                          Hasaki
+                        {
+                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Name : ""
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Địa chỉ
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Address : ""
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Email
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Email : ""
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Số điện thoại
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Phone : ""
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                         Slug - Đường dẫn
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign  && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Slug : ""
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                         Website
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Website : ""
+                          }
                         </td>
                       </tr>
                     </tbody>

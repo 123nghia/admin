@@ -1609,11 +1609,7 @@ class Users extends Component {
                     <th className="text-center">STT.</th>
                     <th className="text-center">Tiêu đề</th>
                     <th className="text-center">Nội dung</th>
-
                     <th className="text-center">Link tham chiếu</th>
-
-
-
                     <th className="text-center">#</th>
                   </tr>
                 </thead>
@@ -1633,9 +1629,12 @@ class Users extends Component {
                           <td className="text-center">{i + 1}</td>
 
                           <td className="text-center">{item.title}</td>
-                          <td className="text-center">{item.content}</td>
-                          <td className="text-center">{item.href}</td>
-
+                          <td className="text-center">
+                            <div style={{overflowY: 'hidden', maxWidth : '300px' , maxHeight:'100px'}}>
+                            {item.content}
+                            </div>
+                            </td>
+                          <td className="text-center">{item.slug}</td>
                           <td className="text-center">
                             <div className="flex">
 

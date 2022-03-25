@@ -6,14 +6,14 @@ export default {
 
   "BASE_URL_CURRENT" : "https://admin-evoucher.applamdep.com/",
   // "BASE_URL_CURRENT" : "http://localhost:3019/",
+  "GET_ALL_CAMPAIGN_VER2" : "api/manager/campaign/getAll",
+  "GET_DETAIL_CAMPAIGN" : "api/campaign/getDetail",
+  "GET_DETAIL_CAMPAIGN_EVOUCHER" : "api/evoucher/getByCampangId",
   "BASE_URL_HISTORY_SKIN" : "https://shope.thulamua.com/lich-su-soi-da-with-iframe/",
 
-  "PLUGIN_SUBSALE_USER2" : "api/plugin-subsale-user_New",
   "EXPORT_CUSTOMER_EVOUCHER" : "api/get-file-export-customer-evoucher",
   "EXPORT_CUSTOMER" : "api/get-data-user",
   "GET_ALL_COMPANY" : "api/plugin-list-company",
-
-
   "GET_FOOTER" : "api/footerPage/getAll",
   "ADD_FOOTER" : "api/footerPage/add",
   "UPDATE_FOOTER" : "api/footerPage/update",
