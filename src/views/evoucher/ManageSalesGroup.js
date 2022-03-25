@@ -38,14 +38,14 @@ class User extends Component {
         super(props);
         this.state = {
             errorMessage: "",
-            companySelector: [],
-            brandList: [],
-            data: JSON.parse(localStorage.getItem('sales')) || [],
+            salesSelector: [],
+            saleList: [],
+            data: [],
             key: '',
             keyRole: '',
             keyStatus: '',
             modalCom: false,
-            dataApi: [],
+            dataApi: JSON.parse(localStorage.getItem('sales')) || [],
 
             action: 'new',
             Name: '',
@@ -69,15 +69,15 @@ class User extends Component {
             isLoading: false,
             token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             userData: localStorage.getItem('user'),
-            hidden: false,
+            hidden: true,
             arrRoleSubAdmin: [],
             idChangeRole: "",
         };
     }
     async componentDidMount() {
         // this.getData();
-        this.getAllRole();
-        this.getAllCompany();
+        // this.getAllRole();
+        await this.getAllSale();
         let arr = JSON.parse(localStorage.getItem('url'));
 
         for (let i = 0; i < arr.length; i++) {
@@ -90,11 +90,14 @@ class User extends Component {
     };
 
 
-    async getAllCompany() {
-        await axios.post(
-            Constants.BASE_URL + Constants.GET_ALL_COMPANY,
+    async getAllSale() {
+
+        await axios.get(
+            Constants.BASE_URL + Constants.GET_ALL_SALE,
         ).then(res => {
-            this.setState({ brandList: res.data.data })
+
+            this.setState({ saleList: res.data.data })
+            console.log(res.data.data)
         })
     }
     async getAllRole() {
@@ -172,10 +175,8 @@ class User extends Component {
     }
 
     handleChange = (value) => {
-
-        this.setState({ companySelector: value });
-
-
+        this.setState({ salesSelector: value });
+        // console.log(`selected ${value}`)
     }
 
     handleAddSale(saleInfo) {
@@ -185,14 +186,18 @@ class User extends Component {
 
         const newDataApi = [...this.state.dataApi];
 
+        console.log("newDataApi", newDataApi)
+
         newDataApi.push(saleInfo)
 
         this.setState({ dataApi: newDataApi })
+
+        console.log(newDataApi)
         localStorage.setItem('sales', JSON.stringify(newDataApi));
 
         this.pagination(newDataApi);
 
-        console.log(this.state.dataApi)
+        // console.log(this.state.dataApi)
         newDataApi.map(val => {
             if (val.Status == "Actived") {
                 active = active + 1
@@ -200,27 +205,31 @@ class User extends Component {
         })
 
         this.setState({ isLoading: false, totalActive: active });
+
     }
     async addUsers() {
-        const { Description, Title, SaleIds, LeadIds } = this.state
+        const { Description, Title, SaleIds, LeadIds, salesSelector } = this.state
+        // if (Description == null || Description == ''
+        //     || Title == null || Title == ''
+        //     || SaleIds == null || SaleIds == '') {
+        //     alert("Vui lòng nhập đầy đủ trường !!!");
+        //     return
+        // }
 
         const body = {
             Description,
-            LeadIds: SaleIds,
+            LeadIds,
             Title,
             SaleIds,
+            saleGroup: salesSelector
         }
-
         this.setState({ isLoading: true });
-
-
 
 
         const res = await API_CONNECT(Constants.ADD_SALE_GROUP, body, "", "POST")
 
         if (res.is_success == true) {
             this.handleAddSale(body)
-
             // this.getData();
             this.setState({ modalCom: !this.state.modalCom });
             this.setState({
@@ -239,41 +248,64 @@ class User extends Component {
         }
     }
 
+
     openUpdate(item) {
+        const { dataApi } = this.state;
+
+
+        const idxItem = dataApi.findIndex((data) => data.Title === item);
 
         this.setState({
             modalCom: !this.state.modalCom,
             action: "update",
-            Title: item.Title,
-            // LeadIds: item.SaleIds,
-            SaleIds: item.SaleIds,
-            Description: item.Description,
-            id: item['_id'],
-            Status: item.Status
+            Title: dataApi[idxItem].Title,
+            LeadIds: dataApi[idxItem].LeadIds,
+            SaleIds: dataApi[idxItem].SaleIds,
+            Description: dataApi[idxItem].Description,
         })
+
+
     }
 
     async updateUsers() {
-        const { Title, SaleIds, LeadIds, Description } = this.state
 
-        const body = {
-            Description,
-            LeadIds: SaleIds,
-            Title,
-            SaleIds,
-        }
+        const { Title, SaleIds, LeadIds, Description, dataApi } = this.state
+        console.log(Title, SaleIds, LeadIds, Description)
 
-        this.setState({ isLoading: true });
-        const res = await API_CONNECT(Constants.UPDATE_SALE_GROUP, body, "", "POST")
+        const idxItem = dataApi.findIndex((data) => data.Title === Title);
 
-        if (res.is_success == true) {
-            // this.getData();
-            this.handleAddSale(body)
-            this.setState({ modalCom: !this.state.modalCom })
-        } else {
-            alert(res.message);
-            this.setState({ isLoading: false });
-        }
+        const newDataApi = [...dataApi]
+        newDataApi.splice(idxItem, 1);
+        newDataApi.push({ Title, SaleIds, LeadIds, Description });
+
+        this.setState({ dataApi: newDataApi })
+        this.setState({ modalCom: !this.state.modalCom })
+
+        localStorage.setItem('sales', JSON.stringify(newDataApi));
+
+        // if (Description == null || Description == ''
+        //     || Title == null || Title == ''
+        //     || SaleIds == null || SaleIds == '') {
+        //     alert("Vui lòng nhập đầy đủ trường !!!");
+        //     return
+        // }
+        // const body = {
+        //     Description,
+        //     LeadIds: SaleIds,
+        //     Title,
+        //     SaleIds,
+        // }
+
+        // this.setState({ isLoading: true });
+        // const res = await API_CONNECT(Constants.UPDATE_SALE_GROUP, body, "", "POST")
+
+        // if (res.is_success == true) {
+        //     // this.getData();
+        //     this.setState({ modalCom: !this.state.modalCom })
+        // } else {
+        //     alert(res.message);
+        //     this.setState({ isLoading: false });
+        // }
     }
 
     openDelete = (item) => {
@@ -368,7 +400,13 @@ class User extends Component {
         }
     }
 
-
+    handleChangeSaleIds = (value) => {
+        this.setState({ SaleIds: value });
+    }
+    handleChangeLeadIds = (value) => {
+        console.log(value)
+        this.setState({ LeadIds: value });
+    }
 
     render() {
         const { Option } = Select;
@@ -390,9 +428,6 @@ class User extends Component {
 
 
         // console.log('dataApi', dataApi)
-
-
-
 
         if (!this.state.isLoading) {
             return (
@@ -440,18 +475,19 @@ class User extends Component {
                                         <tbody>
                                             <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                                             {
-                                                data !== undefined ?
-                                                    data.map((item, i) => {
+                                                dataApi !== undefined ?
+                                                    dataApi.map((item, i) => {
+                                                        console.log(item)
                                                         return (
                                                             <tr key={i}>
                                                                 <td className="text-center">{i + 1}</td>
                                                                 <td className="text-center">{item.Title}</td>
                                                                 <td className="text-center">{item.SaleIds}</td>
-                                                                <td className="text-center">{item.SaleIds}</td>
+                                                                <td className="text-center">{item.LeadIds}</td>
                                                                 <td className="text-center">{item.Description}</td>
                                                                 <td className="text-center">
-                                                                    <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</CButton>{' '}
-                                                                    <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</CButton>{' '}
+                                                                    <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item.Title)} >Cập nhật</CButton>{' '}
+                                                                    <CButton outline color="danger" size="sm" onClick={() => { this.openDelete(item) }}>Xoá</CButton>{' '}
                                                                     {/* <CButton outline color="success" size="sm" onClick={(e) => { this.onChangeRole(item) }}>Quyền</CButton> */}
                                                                 </td>
                                                             </tr>
@@ -489,25 +525,28 @@ class User extends Component {
                             // rows="5"
                             />
 
-                            <TextFieldGroup
-                                field="SaleIds"
-                                label="Nhóm sale"
-                                value={this.state.SaleIds}
-                                placeholder={"Nhóm sale"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("SaleIds", e.target.value)}
-                            // rows="5"
-                            />
 
-                            {/* <TextFieldGroup
-                                field="LeadId"
-                                label="Nhóm trưởng"
-                                value={this.state.LeadIds}
-                                placeholder={"Nhóm trưởng"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("LeadIds", e.target.value)}
-                            // rows="5"
-                            /> */}
+                            <CLabel>Nhóm sale</CLabel>
+                            <Select
+                                defaultValue={this.state.SaleIds}
+                                onChange={this.handleChangeSaleIds}
+                                placeholder="Chọn nhóm"
+                                style={{ width: 200, marginBottom: 15 }}>
+                                {this.state.saleList && this.state.saleList.map(opt => (
+                                    <Option value={opt._id} key={opt._id}>{opt._id}</Option>
+                                ))}
+                            </Select>
+
+                            <CLabel>Nhóm trưởng</CLabel>
+                            <Select
+                                defaultValue={this.state.LeadIds}
+                                onChange={this.handleChangeLeadIds}
+                                placeholder="Chọn nhóm trưởng"
+                                style={{ width: 200, marginBottom: 15 }}>
+                                {this.state.saleList && this.state.saleList.map(opt => (
+                                    <Option value={opt.Name} key={opt._id}>{opt.Name}</Option>
+                                ))}
+                            </Select>
 
                             <TextFieldGroup
                                 field="Description"
@@ -565,7 +604,7 @@ class User extends Component {
                     <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
                         <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
                         <ModalBody>
-                            <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+                            <label htmlFor="tag">{`Bạn có chắc chắn xóa?`}</label>
                         </ModalBody>
                         <ModalFooter>
                             <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}

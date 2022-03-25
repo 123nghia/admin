@@ -14,9 +14,9 @@ import {
   Modal,
 } from "reactstrap";
 import Swal from "sweetalert2";
-import { CMultiSelect } from '@coreui/react-pro'
-import {CDatePicker} from "@coreui/react-pro";
-import { CButton, CLabel, CSelect, CTextarea, CRow, CCol  } from "@coreui/react";
+
+
+import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { Link } from 'react-router-dom';
@@ -850,28 +850,28 @@ class EndUser extends Component {
               />
               <label className="control-label">Công ty:</label>
               <div style={{ width: "100%" }}>
-              <Select
-                className="select_company"
-                showSearch
-                placeholder="Chọn tên công ty"
-                optionFilterProp="children"
-                onChange={(value) =>
-                  this.setState({
-                    idCompany: value,
-                  })
-                }
-                onSearch={this.onSearchSelect}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-              >
-                {dataCompany
-                  ? dataCompany.map((item, i) => {
-                    return <Option value={item._id}>{item.Name}</Option>;
-                  })
-                  : null}
-              </Select>
+                <Select
+                  className="select_company"
+                  showSearch
+                  placeholder="Chọn tên công ty"
+                  optionFilterProp="children"
+                  onChange={(value) =>
+                    this.setState({
+                      idCompany: value,
+                    })
+                  }
+                  onSearch={this.onSearchSelect}
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                    0
+                  }
+                >
+                  {dataCompany
+                    ? dataCompany.map((item, i) => {
+                      return <Option value={item._id}>{item.Name}</Option>;
+                    })
+                    : null}
+                </Select>
               </div>
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
@@ -1312,8 +1312,8 @@ class EndUser extends Component {
 
                         <div className="">
                           <p className="title_filter">Từ ngày</p>
-                         
-                          <div style={{width : '200px'}}>
+
+                          <div style={{ width: '200px' }}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1334,7 +1334,7 @@ class EndUser extends Component {
                         </div>
                         <div className=" mt-3">
                           <p className="title_filter">Đến ngày</p>
-                          <div style={{width : '200px'}}>
+                          <div style={{ width: '200px' }}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1361,29 +1361,29 @@ class EndUser extends Component {
 
 
                         <p className="title_filter">Danh sách Sales</p>
-                        <div style={{width:'200px'}}>
-                        <Select
-                          className="select_seo"
-                          showSearch
-                          placeholder="Lọc theo Sales"
-                          optionFilterProp="children"
-                          onChange={(value) =>
-                            this.setState({
-                              idDataSales: value,
-                            })
-                          }
-                          onSearch={this.onSearchSelect}
-                          filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                            0
-                          }
-                        >
-                          {this.state.dataSales
-                            ? this.state.dataSales.map((item, i) => {
-                              return <Option value={item._id}>{item.Name}</Option>;
-                            })
-                            : null}
-                        </Select>
+                        <div style={{ width: '200px' }}>
+                          <Select
+                            className="select_seo"
+                            showSearch
+                            placeholder="Lọc theo Sales"
+                            optionFilterProp="children"
+                            onChange={(value) =>
+                              this.setState({
+                                idDataSales: value,
+                              })
+                            }
+                            onSearch={this.onSearchSelect}
+                            filterOption={(input, option) =>
+                              option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                              0
+                            }
+                          >
+                            {this.state.dataSales
+                              ? this.state.dataSales.map((item, i) => {
+                                return <Option value={item._id}>{item.Name}</Option>;
+                              })
+                              : null}
+                          </Select>
                         </div>
 
                       </div>
@@ -1572,20 +1572,20 @@ class EndUser extends Component {
                     </tbody>
                   </table>
                   <div style={{ float: "right" }}>
-                <Pagination
-                  count={arrPagination.length}
-                  color="primary"
-                  onChange={(e, v) => {
-                    this.setState({
-                      data: arrPagination[v - 1],
-                      indexPage: v - 1,
-                    });
-                  }}
-                />
-              </div>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-              
+
             </Col>
           </Row>
 
