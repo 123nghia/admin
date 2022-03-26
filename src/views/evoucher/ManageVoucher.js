@@ -644,7 +644,7 @@ class EndUser extends Component {
               <div class="mt-3"></div>
               <label className="mr-3">Tên chiến dịch</label>
               <Select
-                defaultValue={this.state.dataCampaign?.[0].name}
+                defaultValue={this.state.dataCampaign && this.state.dataCampaign?.[0] ? this.state.dataCampaign?.[0].name : ""}
                 className="select_company"
                 showSearch
                 placeholder="Chọn tên công ty"
@@ -978,7 +978,7 @@ class EndUser extends Component {
                               <td className="text-center">{i + 1}</td>
                             
                               <td className="text-center">{item.code}</td>
-                              <td className="text-center">{this.state.dataCampaign?.[0].name}</td>
+                              <td className="text-center">{this.state.dataCampaign && this.state.dataCampaign?.[0] ? this.state.dataCampaign?.[0].name : ""}</td>
                               <td className="text-center">{item.content}</td>
                               <td className="text-center">
                                 <Tag
