@@ -91,11 +91,7 @@ class Users extends Component {
     super(props);
     this.state = {
       tabNameConfig: [
-        {
-          _id: "t1",
-          name: "Tổng quan về chiến dịch",
-          icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />
-        },
+       
         {
           _id: "t2",
           name: "Thông tin về chiến dịch",
@@ -561,11 +557,23 @@ class Users extends Component {
                 </List>
               </div>
               <div className="tabcontents">
+               
                 <div className="tabcontent defaultOpen">
                   <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
                     <thead>
+
                     </thead>
                     <tbody>
+                      <tr>
+                        <td className="pl-5">
+                          Tên chiến dịch
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign ?  detailCampaign.name : ""
+                          }
+                        </td>
+                      </tr>
                       <tr>
                         <td className="pl-5">
                           Ngày bắt đầu
@@ -586,23 +594,15 @@ class Users extends Component {
                           }
                         </td>
                       </tr>
+                     
+                     
                       <tr>
                         <td className="pl-5">
-                          Số lượng voucher đã áp dụng
+                          Ngày kết thúc Sale
                         </td>
                         <td className="color-red">
                         {
-                            detailCampaign ?  detailCampaign.quantity : "0"
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Số lượng voucher còn lại
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ?  detailCampaign.quantity : "0"
+                            detailCampaign ? new Date(detailCampaign.saleEndDate).toLocaleDateString() : ""
                           }
                         </td>
                       </tr>
@@ -641,52 +641,41 @@ class Users extends Component {
                     <tbody>
                       <tr>
                         <td className="pl-5">
-                          Tên chiến dịch
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ?  detailCampaign.name : ""
-                          }
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td className="pl-5">
-                          Ngày kết thúc Sale
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ? new Date(detailCampaign.saleEndDate).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-                <div className="tabcontent">
-                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
-                    <thead>
-
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="pl-5">
                           Tổng số lượng Voucher
                         </td>
                         <td className="color-red">
                         {
-                            detailCampaign ?  detailCampaign.quantity : "0"
+                            detailCampaign && detailCampaign?.CheckIn[0] ? detailCampaign?.CheckIn[0]?.totalVoucher : "0"
                           }
                         </td>
                       </tr>
                       <tr>
                         <td className="pl-5">
-                          Mã chiến dịch
+                          Số lượng voucher đã áp dụng
                         </td>
                         <td className="color-red">
                         {
-                            detailCampaign ?  detailCampaign.quantity : "0"
+                            detailCampaign && detailCampaign?.CheckIn?.[0] ?  detailCampaign?.CheckIn?.[0].voucheredCount : "0"
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Số lượng voucher còn lại
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign && detailCampaign?.CheckIn[0] ?  parseInt(detailCampaign?.CheckIn[0]?.totalVoucher) - parseInt(detailCampaign?.CheckIn[0]?.voucheredCount) : "0"
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Tỷ lệ CheckIn Voucher
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign && detailCampaign?.CheckIn[0] ?  detailCampaign?.CheckIn[0]?.rateCheckIn : "0%"
                           }
                         </td>
                       </tr>

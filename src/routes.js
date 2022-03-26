@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'redux'
 
 const Dashboard = React.lazy(() => import('./views/DashBoard/Dashboard'));
 const TableUser = React.lazy(() => import('./views/base/tables/TableUser'));
@@ -27,6 +27,7 @@ const RoleManager = React.lazy(() => import('./views/base/tables/AI_Skin/RoleMan
 const PluginManager = React.lazy(() => import('./views/base/tables/AI_Skin/PluginManager'));
 const PluginCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/PluginCustomerManager'));
 const PluginCreateOrder = React.lazy(() => import('./views/base/tables/AI_Skin/PluginCreateOrder'));
+
 
 
 const PluginUserTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginUserTable'));
@@ -81,11 +82,17 @@ const Translation = React.lazy(() => import('./views/evoucher/Translation'));
 const NotEnough = React.lazy(() => import('./views/Pages/NotEnough/NotEnough'));
 const AdminConfigWebsite = React.lazy(() => import('././views/config/configWebAdmin'));
 const ManageSales = React.lazy(() => import('./views/evoucher/ManageSales'));
+
+const ManageSalesGroup = React.lazy(() => import('./views/evoucher/ManageSalesGroup'));
+// const roleUser = localStorage.getItem('type');
+
 const DetailCampaign = React.lazy(() => import('./views/evoucher/DetailCampaign'));
 const Provider = React.lazy(() => import('./views/evoucher/ManageProvider'));
 
 
+
 const roleUser = localStorage.getItem('type');
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -95,18 +102,21 @@ const routes = [
   { path: '/list-campaign', name: 'ListCampaign', component: ListCampaign },
   { path: '/banner-sales', name: 'BannerSales', component: roleUser === "0" ? BannerSales : NotEnough },
   { path: '/evoucher-statistics', name: 'Statistics', component: Statistics },
-  { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher  },
-  { path: '/manage-campaign', name: 'ManageCampaign', component:roleUser === "0" ? ManageCampaign : NotEnough },
-  { path: '/manage-sales', name: 'ManageSales', component:roleUser === "0" ? ManageSales : NotEnough },
-  { path: '/manage-provider', name: 'Provider', component:roleUser === "0" ? Provider : NotEnough },
+  { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher },
+  { path: '/manage-campaign', name: 'ManageCampaign', component: roleUser === "0" ? ManageCampaign : NotEnough },
+  { path: '/manage-sales', name: 'ManageSales', component: roleUser === "0" ? ManageSales : NotEnough },
 
-  { path: '/detail-campaign/:id', name: 'DetailCampaign', component:roleUser === "0" ? DetailCampaign : NotEnough },
+  { path: '/manage-sales-group', name: 'ManageSalesGroup', component: roleUser === "0" ? ManageSalesGroup : NotEnough },
+
+  { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign},
+
   { path: '/translation', name: 'Translation', component: Translation },
   { path: '/not-enough', name: 'NotEnough', component: NotEnough },
-  { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough  },
 
-  
-  
+  { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough },
+
+
+
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users', name: 'Users', component: TableUser },
   { path: '/company', name: 'Company', component: TableCompany },
@@ -127,17 +137,17 @@ const routes = [
   { path: '/transaction', name: 'Transaction', component: TransactionTable },
   { path: '/hardwaremanager', name: 'HardWare', component: HardWareManager },
   { path: '/profile', name: 'Profile', component: Profile },
-  { path: '/book-calendar', name: 'BookCalendar', component: roleUser !== "0" ? BookCalendar : NotEnough  },
+  { path: '/book-calendar', name: 'BookCalendar', component: roleUser !== "0" ? BookCalendar : NotEnough },
 
-  
+
   { path: '/spending_order', name: 'SPENDING', component: SPENDING },
   { path: '/role_manager', name: 'Role Manager', component: RoleManager },
   { path: '/plugin_manager', name: 'Plugin Manager', component: PluginManager },
-  { path: '/customer_manager', name: 'Customer Manager', component:roleUser === "0" ? PluginCustomer : NotEnough  },
+  { path: '/customer_manager', name: 'Customer Manager', component: roleUser === "0" ? PluginCustomer : NotEnough },
   { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
 
   { path: '/yeu-cau-ho-tro', name: 'Request Suport', component: RequestSupport },
-  
+
   { path: '/saleAdmin', name: 'SALE', component: PluginUserTable },
   { path: '/reward_info', name: 'REWARD_INFO', component: RewardInfomation },
   { path: '/feature_customer', name: 'REWARD_INFO', component: ListFeatureOfCustomer },
@@ -152,11 +162,12 @@ const routes = [
   { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
-  { path: '/cau-hinh-trang-web', name: 'configWeb', component: roleUser !== "0" ? configWeb : NotEnough   },
+  { path: '/cau-hinh-trang-web', name: 'configWeb', component: roleUser !== "0" ? configWeb : NotEnough },
 
 
-  
-  
+
+
+
   //admin product
   { path: '/products-special', name: 'productSpecial', component: ProductPlugin },
 
@@ -167,7 +178,7 @@ const routes = [
 
   { path: '/banner', name: 'Banner User', component: Banner },
 
-  { path: '/quan-ly-banner', name: 'BannerSlider', component:roleUser !== "0" ? BrandSlider : NotEnough  },
+  { path: '/quan-ly-banner', name: 'BannerSlider', component: roleUser !== "0" ? BrandSlider : NotEnough },
 
   { path: '/config-theme', name: 'Config themes', component: ConfigTheme },
 

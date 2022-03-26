@@ -14,9 +14,9 @@ import {
   Modal,
 } from "reactstrap";
 import Swal from "sweetalert2";
-import { CMultiSelect } from '@coreui/react-pro'
-import {CDatePicker} from "@coreui/react-pro";
-import { CButton, CLabel, CSelect, CTextarea, CRow, CCol  } from "@coreui/react";
+
+
+import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { Link } from 'react-router-dom';
@@ -115,6 +115,8 @@ class EndUser extends Component {
     });
   }
   pagination(dataApi) {
+    console.log(dataApi)
+
     var i,
       j,
       temparray,
@@ -124,6 +126,7 @@ class EndUser extends Component {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
+
 
     if (arrTotal.length == 0) {
       this.setState({
@@ -136,6 +139,7 @@ class EndUser extends Component {
     }
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+ 
   }
   paginationVoucher(dataApi) {
     var i,
@@ -160,15 +164,15 @@ class EndUser extends Component {
 
     this.setState({ arrPaginationVoucher: arrTotal, dataVoucher: arrTotal[0] });
   }
-  async getDataVoucher(company_id_search) {
+  async getDataVoucher(id) {
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_VOUCHER;
+    let baseUrlCallApi = Constants.GET_DETAIL_CAMPAIGN_EVOUCHER;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .get(url, {
         params: {
-          company_id: company_id_search,
+          id: id,
         },
       })
       .then((res) => {
@@ -200,10 +204,12 @@ class EndUser extends Component {
       .then((res) => {
         let val = res.data.data;
         this.pagination(val);
+        
+
         this.setState({ dataApi: val });
+        
 
         let active = 0;
-
         this.setState({ isLoading: false, totalActive: active });
       });
   }
@@ -270,6 +276,7 @@ class EndUser extends Component {
     });
   };
   openVoucher() {
+    
     this.setState({
       actionVoucher: "new",
       modalVoucher: true,
@@ -279,12 +286,25 @@ class EndUser extends Component {
       quantity: "0",
       to: new Date().toLocaleDateString(),
       description: "",
+      idCompany: "",
       status: "1",
+      nameCompanyChoose : ""
+
     });
+
   }
   openEditVoucher(item) {
     const { name, from, to, description, status } = this.state;
-    
+    this.state.dataCompany.forEach((name=>{
+      if(name._id === item.company_id) {
+        this.setState({
+          nameCompanyChoose : name.Name,
+          idCompany: item._id
+        });
+        return;
+      };
+    }))
+    console.log(this.state.nameCompanyChoose);
     this.setState({
       actionVoucher: "edit",
       modalVoucher: true,
@@ -306,6 +326,7 @@ class EndUser extends Component {
       description,
       idCompany,
       status,
+      saleEndDate,
       idCurrentUpdate,
       quantity,
     } = this.state;
@@ -316,11 +337,11 @@ class EndUser extends Component {
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .post(url, {
-        quatinity: quantity,
+        quantity: quantity,
         id: idCurrentUpdate,
         name,
         company_id: idCompany,
-
+        saleEndDate,
         from,
         to,
         description,
@@ -357,7 +378,7 @@ class EndUser extends Component {
 
     await axios
       .post(url, {
-        quatinity: quantity,
+        quantity: quantity,
         company_id: idCompany,
         name,
         saleEndDate,
@@ -532,19 +553,9 @@ class EndUser extends Component {
         this.getDataVoucher(this.state.company_id_search);
       });
   }
-  openPopupVoucher(item) {
-    if (this.state.company_id) {
-      this.setState(
-        {
-          company_id_search: this.state.company_id,
-        },
-        () => {
-          this.getDataVoucher(this.state.company_id_search);
-        }
-      );
-    } else {
-      this.getDataVoucher();
-    }
+  async openPopupVoucher(item) {
+    await this.getDataVoucher(item._id);
+     
     this.setState({
       actionVoucherEditing: "edit",
       modalVoucherEditing: true,
@@ -897,28 +908,31 @@ class EndUser extends Component {
               />
               <label className="control-label">Công ty:</label>
               <div style={{ width: "100%" }}>
-              <Select
-                className="select_company"
-                showSearch
-                placeholder="Chọn tên công ty"
-                optionFilterProp="children"
-                onChange={(value) =>
-                  this.setState({
-                    idCompany: value,
-                  })
-                }
-                onSearch={this.onSearchSelect}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-              >
-                {dataCompany
-                  ? dataCompany.map((item, i) => {
-                    return <Option value={item._id}>{item.Name}</Option>;
-                  })
-                  : null}
-              </Select>
+                <Select
+                  className="select_company"
+                  showSearch
+                  defaultValue={this.state.nameCompanyChoose}
+
+                  placeholder="Chọn tên công ty"
+                  optionFilterProp="children"
+                  onChange={(value) =>
+                  
+                    this.setState({
+                      idCompany: value,
+                    })
+                  }
+                  onSearch={this.onSearchSelect}
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                    0
+                  }
+                >
+                  {dataCompany
+                    ? dataCompany.map((item, i) => {
+                      return <Option value={item._id}>{item.Name}</Option>;
+                    })
+                    : null}
+                </Select>
               </div>
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
@@ -987,16 +1001,18 @@ class EndUser extends Component {
                 : `Danh sách Voucher`}
             </ModalHeader>
             <ModalBody>
-              <div class="text-center">
-
-                <CButton
-                  color="primary"
-                  style={{ marginBottom: "10px" }}
-                  size="md"
-                  onClick={() => this.openVoucherAdd()}
-                >
-                  Thêm mới
-                </CButton>
+              <div class="flex-end">
+              <CButton
+                        color="info"
+                        style={{ marginBottom: "10px" }}
+                        size="md"
+                        className="btn-main"
+                        onClick={() => this.openVoucherAdd()}
+                      >
+                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                      </CButton>
+              
               </div>
               <table
                 ble
@@ -1359,8 +1375,8 @@ class EndUser extends Component {
 
                         <div className="">
                           <p className="title_filter">Từ ngày</p>
-                         
-                          <div style={{width : '200px'}}>
+
+                          <div style={{ width: '200px' }}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1381,7 +1397,7 @@ class EndUser extends Component {
                         </div>
                         <div className=" mt-3">
                           <p className="title_filter">Đến ngày</p>
-                          <div style={{width : '200px'}}>
+                          <div style={{ width: '200px' }}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1408,29 +1424,29 @@ class EndUser extends Component {
 
 
                         <p className="title_filter">Danh sách Sales</p>
-                        <div style={{width:'200px'}}>
-                        <Select
-                          className="select_seo"
-                          showSearch
-                          placeholder="Lọc theo Sales"
-                          optionFilterProp="children"
-                          onChange={(value) =>
-                            this.setState({
-                              idDataSales: value,
-                            })
-                          }
-                          onSearch={this.onSearchSelect}
-                          filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                            0
-                          }
-                        >
-                          {this.state.dataSales
-                            ? this.state.dataSales.map((item, i) => {
-                              return <Option value={item._id}>{item.Name}</Option>;
-                            })
-                            : null}
-                        </Select>
+                        <div style={{ width: '200px' }}>
+                          <Select
+                            className="select_seo"
+                            showSearch
+                            placeholder="Lọc theo Sales"
+                            optionFilterProp="children"
+                            onChange={(value) =>
+                              this.setState({
+                                idDataSales: value,
+                              })
+                            }
+                            onSearch={this.onSearchSelect}
+                            filterOption={(input, option) =>
+                              option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                              0
+                            }
+                          >
+                            {this.state.dataSales
+                              ? this.state.dataSales.map((item, i) => {
+                                return <Option value={item._id}>{item.Name}</Option>;
+                              })
+                              : null}
+                          </Select>
                         </div>
 
                       </div>
@@ -1499,12 +1515,13 @@ class EndUser extends Component {
                       </td>
                       {data != undefined
                         ? data.map((item, i) => {
+                          console.log(item)
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.name}</td>
                               <td className="text-center">
-                                {item.vendor && item.vendor[0] ? item.vendor[0].Name : "Chưa có"}
+                                {item.vendor && item.vendor?.[0] ? item.vendor?.[0].Name : "Chưa có"}
                               </td>
                               <td className="text-center">
                                 <div className="flex-center">
@@ -1512,7 +1529,7 @@ class EndUser extends Component {
                                     className="mr-2"
                                     style={{ margin: "auto" }}
                                   >
-                                    {item.quatinity ? item.quatinity : "0"}
+                                     {item.CheckIn.length === 0 ? "Đang cập nhật" : item.CheckIn?.[0].totalVoucher}
                                   </p>
                                   <CButton
                                     shape="rounded-pill"
@@ -1532,7 +1549,7 @@ class EndUser extends Component {
                               </td>
                               <td className="text-center">
                                 
-                                {item.CheckIn.length === 0 ? "Đang cập nhật" : item.CheckIn[0]}
+                                {item.CheckIn.length === 0 ? "0" : item.CheckIn?.[0].rateCheckIn}
                               </td>
                               <td className="text-center">
                                 <Tag
@@ -1624,20 +1641,20 @@ class EndUser extends Component {
                     </tbody>
                   </table>
                   <div style={{ float: "right" }}>
-                <Pagination
-                  count={arrPagination.length}
-                  color="primary"
-                  onChange={(e, v) => {
-                    this.setState({
-                      data: arrPagination[v - 1],
-                      indexPage: v - 1,
-                    });
-                  }}
-                />
-              </div>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-              
+
             </Col>
           </Row>
 

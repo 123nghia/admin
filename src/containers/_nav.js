@@ -443,25 +443,12 @@ const _navOrther = [
     }
   },
  
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Màn hình Translation',
-    to: '/translation',
-    icon: <RiFileTransferLine style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2','5'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.none}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
   // {
   //   _tag: 'CSidebarNavItem',
-  //   name: 'Cấu hình email',
-  //   to: '/configuration-email',
+  //   name: 'Màn hình Translation',
+  //   to: '/translation',
   //   icon: <RiFileTransferLine style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
+  //   role: ['0', '1', '2','5'],
   //   badge: {
   //     color: 'info',
   //     text: <CTooltip placement={"right"} content={content.none}>
@@ -469,6 +456,7 @@ const _navOrther = [
   //     </CTooltip>,
   //   }
   // },
+  
   {
     _tag: 'CSidebarNavItem',
     name: 'Quản lý Voucher',
@@ -662,6 +650,7 @@ const _navOrther = [
     }
   },
 ]
+
 
 const _navContact = [
   // {

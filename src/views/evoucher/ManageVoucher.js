@@ -200,6 +200,7 @@ class EndUser extends Component {
   }
 
   pagination(dataApi) {
+
     var i,
       j,
       temparray,
@@ -221,6 +222,7 @@ class EndUser extends Component {
     }
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+
   }
   async onSearch() {
     const { from, to, idDataSales, phoneFilter, levelFilter, codeVoucher } = this.state;
@@ -318,9 +320,11 @@ class EndUser extends Component {
       modalVoucher: true,
       idCurrentUpdate: "",
       codeVoucher: "",
-      relCode: "",
+      relCode: this.state.dataCampaign?.[0].relCode,
       description: "",
       status: "0",
+      nameCompanyChoose : ""
+
     });
   }
   openEditVoucher(item) {
@@ -333,6 +337,15 @@ class EndUser extends Component {
       description: item.content,
       status: item.status,
     });
+    console.log(item.relCode)
+    this.state.dataCampaign.forEach((name=>{
+      if(name._id === item.relCode) {
+        this.setState({
+          nameCompanyChoose : name.Name,
+        });
+        return;
+      };
+    }))
   }
   async update() {
     const {
@@ -378,6 +391,7 @@ class EndUser extends Component {
     let baseUrlCallApi = Constants.ADD_VOUCHER;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
+    console.log(relCode);
     await axios
       .post(url, {
         code: codeVoucher,
@@ -551,6 +565,12 @@ class EndUser extends Component {
 
     console.log(this.state.modalInfo)
   }
+  changeSelect(value){
+    this.setState({
+      relCode: value,
+    })
+    console.log(this.state.relCode)
+  }
   render() {
     const {
       data,
@@ -624,15 +644,16 @@ class EndUser extends Component {
               <div class="mt-3"></div>
               <label className="mr-3">Tên chiến dịch</label>
               <Select
-                defaultValue={dataCampaign ? dataCampaign[0]?.name : ""}
+                defaultValue={this.state.dataCampaign?.[0].name}
                 className="select_company"
                 showSearch
                 placeholder="Chọn tên công ty"
                 optionFilterProp="children"
-                onChange={(value) =>
-                  this.setState({
-                    relCode: value,
-                  })
+                onChange={(value) => 
+                 this.setState({
+                  relCode : value
+                 })
+
                 }
                 onSearch={this.onSearchSelect}
                 filterOption={(input, option) =>
@@ -643,7 +664,7 @@ class EndUser extends Component {
                 {dataCampaign
                   ? dataCampaign.map((item, i) => {
                     if (i === 0) {
-                      return <Option key={i} value={item.name}>{item.name}</Option>;
+                      return <Option key={i} value={item._id}>{item.name}</Option>;
 
                     }
                   })
@@ -932,7 +953,7 @@ class EndUser extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên voucher</th>
+                   
 
                         <th className="text-center">Mã voucher</th>
                         <th className="text-center">Mã chiến dịch</th>
@@ -955,9 +976,9 @@ class EndUser extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.name}</td>
+                            
                               <td className="text-center">{item.code}</td>
-                              <td className="text-center">{item.relCode}</td>
+                              <td className="text-center">{this.state.dataCampaign?.[0].name}</td>
                               <td className="text-center">{item.content}</td>
                               <td className="text-center">
                                 <Tag

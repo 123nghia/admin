@@ -38,14 +38,14 @@ class User extends Component {
         super(props);
         this.state = {
             errorMessage: "",
-            companySelector: [],
-            brandList: [],
+            salesSelector: [],
+            saleList: [],
             data: [],
             key: '',
             keyRole: '',
             keyStatus: '',
             modalCom: false,
-            dataApi: [],
+            dataApi: JSON.parse(localStorage.getItem('sales')) || [],
 
             action: 'new',
             Name: '',
@@ -56,6 +56,10 @@ class User extends Component {
             UserName: '',
             Password: '',
             Status: '',
+            Title: '',
+            SaleIds: '',
+            LeadIds: '',
+            Description: '',
             modalDelete: false,
             modalRole: false,
             arrPagination: [],
@@ -65,15 +69,15 @@ class User extends Component {
             isLoading: false,
             token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             userData: localStorage.getItem('user'),
-            hidden: false,
+            hidden: true,
             arrRoleSubAdmin: [],
-            idChangeRole: ""
+            idChangeRole: "",
         };
     }
     async componentDidMount() {
-        this.getData();
-        this.getAllRole();
-        this.getAllCompany();
+        // this.getData();
+        // this.getAllRole();
+        await this.getAllSale();
         let arr = JSON.parse(localStorage.getItem('url'));
 
         for (let i = 0; i < arr.length; i++) {
@@ -86,11 +90,13 @@ class User extends Component {
     };
 
 
-    async getAllCompany() {
-        await axios.post(
-            Constants.BASE_URL + Constants.GET_ALL_COMPANY,
+    async getAllSale() {
+
+        await axios.get(
+            Constants.BASE_URL + Constants.GET_ALL_SALE,
         ).then(res => {
-            this.setState({ brandList: res.data.data })
+
+            this.setState({ saleList: res.data.data })
             console.log(res.data.data)
         })
     }
@@ -129,9 +135,9 @@ class User extends Component {
         const { userData } = this.state;
         console.log(userData)
         this.setState({ isLoading: true });
-        const res = await API_CONNECT(Constants.PLUGIN_SUBSALE_USER, {
-            company_id: JSON.parse(userData).company_id,
-            userId: JSON.parse(userData).sale_id,
+        const res = await API_CONNECT(Constants.LIST_SALE_GROUP, {
+            SaleIds: JSON.parse(userData).sale_id,
+            LeadIds: JSON.parse(userData).sale_id,
 
         }, this.state.token, "POST")
 
@@ -148,74 +154,18 @@ class User extends Component {
         })
 
         this.setState({ isLoading: false, totalActive: active });
+        console.log("sales", JSON.parse(localStorage.getItem('sales')))
     }
 
-    searchKey() {
-        const { indexPage, key, keyStatus, keyRole } = this.state;
-        // this.setState({ key: key })
-
-        if (key != '' || keyStatus != '' || keyRole != '') {
-            let d = []
-            this.state.dataApi.map(val => {
-                if ((val.Email.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-                    val.Name.toLocaleUpperCase().includes(key.toLocaleUpperCase()) ||
-                    val.Phone.toLocaleUpperCase().includes(key.toLocaleUpperCase())) &&
-                    val.Status.toLocaleUpperCase().includes(keyStatus.toLocaleUpperCase()) &&
-                    val.Role_Id.toLocaleUpperCase().includes(keyRole.toLocaleUpperCase())) {
-
-                    d.push(val)
-                }
-            })
-            let active = 0
-
-            d.map(val => {
-                if (val.Status == "Actived") {
-                    active = active + 1
-                }
-            })
-
-            this.setState({ data: d, totalActive: active })
-        } else {
-            let active = 0
-
-            this.state.dataApi.map(val => {
-                if (val.Status == "Actived") {
-                    active = active + 1
-                }
-            })
-
-            this.setState({ data: this.state.arrPagination[indexPage], totalActive: active })
-        }
-    }
-
-    actionSearch(e, name_action) {
-        this.setState({
-            [name_action]: e.target.value
-        }, () => {
-            this.searchKey();
-        });
-    }
-
-    resetSearch() {
-        this.setState({
-            key: '',
-            keyStatus: ''
-        }, () => {
-            this.searchKey();
-        });
-    }
 
     toggleModal(key) {
         if (key == 'new') {
             this.setState({
                 modalCom: !this.state.modalCom,
                 action: key,
-                Name: '',
-                Email: '',
-                Phone: '',
-                Address: '',
-                UserName: '',
-                Password: ''
+                Title: '',
+                Description: '',
+                SaleIds: ''
             })
         }
     }
@@ -225,42 +175,62 @@ class User extends Component {
     }
 
     handleChange = (value) => {
-
-        this.setState({ companySelector: value });
-
-
+        this.setState({ salesSelector: value });
+        // console.log(`selected ${value}`)
     }
-    async addUsers() {
-        const { Email, Name, Phone, UserName, Password, userData, companySelector, Address, groupSelector } = this.state
 
-        if (Email == null || Email == ''
-            || Name == null || Name == ''
-            || Phone == null || Phone == ''
-
-            || UserName == null || UserName == ''
-            || Password == null || Password == '') {
-            alert("Vui lòng nhập đầy đủ trường !!!");
-            return
-        }
-
-        const body = {
-            Name: Name,
-            Email: Email,
-            Phone: Phone,
-            Address,
-            saleGroup: groupSelector,
-            UserName: UserName,
-            Password: Password,
-            saleCompanyGroup: companySelector,
-            isSale: true
-        }
+    handleAddSale(saleInfo) {
+        let active = 0;
 
         this.setState({ isLoading: true });
 
-        const res = await API_CONNECT(Constants.PLUGIN_ADD_SUBSALE, body, "", "POST")
+        const newDataApi = [...this.state.dataApi];
+
+        console.log("newDataApi", newDataApi)
+
+        newDataApi.push(saleInfo)
+
+        this.setState({ dataApi: newDataApi })
+
+        console.log(newDataApi)
+        localStorage.setItem('sales', JSON.stringify(newDataApi));
+
+        this.pagination(newDataApi);
+
+        // console.log(this.state.dataApi)
+        newDataApi.map(val => {
+            if (val.Status == "Actived") {
+                active = active + 1
+            }
+        })
+
+        this.setState({ isLoading: false, totalActive: active });
+
+    }
+    async addUsers() {
+        const { Description, Title, SaleIds, LeadIds, salesSelector } = this.state
+        // if (Description == null || Description == ''
+        //     || Title == null || Title == ''
+        //     || SaleIds == null || SaleIds == '') {
+        //     alert("Vui lòng nhập đầy đủ trường !!!");
+        //     return
+        // }
+
+        const body = {
+            Description,
+            LeadIds,
+            Title,
+            SaleIds,
+            saleGroup: salesSelector
+        }
+        this.setState({ isLoading: true });
+
+
+        const res = await API_CONNECT(Constants.ADD_SALE_GROUP, body, "", "POST")
 
         if (res.is_success == true) {
-            this.getData();
+            this.handleAddSale(body)
+            // this.getData();
             this.setState({ modalCom: !this.state.modalCom });
             this.setState({
                 errorMessage: ""
@@ -278,54 +248,64 @@ class User extends Component {
         }
     }
 
+
     openUpdate(item) {
+        const { dataApi } = this.state;
+
+
+        const idxItem = dataApi.findIndex((data) => data.Title === item);
 
         this.setState({
             modalCom: !this.state.modalCom,
             action: "update",
-            Name: item.Name,
-            Email: item.Email,
-            Phone: item.Phone,
-            Address: item.Address,
-            UserName: item.UserName,
-            Password: item.Password,
-            id: item['_id'],
-            Status: item.Status
+            Title: dataApi[idxItem].Title,
+            LeadIds: dataApi[idxItem].LeadIds,
+            SaleIds: dataApi[idxItem].SaleIds,
+            Description: dataApi[idxItem].Description,
         })
+
+
     }
 
     async updateUsers() {
-        const { Email, Name, Phone, Address, Status, UserName, Password } = this.state
 
-        if (Email == null || Email == ''
-            || Name == null || Name == ''
-            || Phone == null || Phone == ''
-            || Address == null || Address == '') {
-            alert("Vui lòng nhập đầy đủ trường !!!");
-            return
-        }
+        const { Title, SaleIds, LeadIds, Description, dataApi } = this.state
+        console.log(Title, SaleIds, LeadIds, Description)
 
-        const body = {
-            Name: Name,
-            Email: Email,
-            Phone: Phone,
-            Address: Address,
-            UserName: UserName,
-            Password: Password,
-            Status: Status,
-            id: this.state.id
-        }
+        const idxItem = dataApi.findIndex((data) => data.Title === Title);
 
-        this.setState({ isLoading: true });
-        const res = await API_CONNECT(Constants.PLUGIN_UPDATE_USER, body, "", "POST")
+        const newDataApi = [...dataApi]
+        newDataApi.splice(idxItem, 1);
+        newDataApi.push({ Title, SaleIds, LeadIds, Description });
 
-        if (res.is_success == true) {
-            this.getData();
-            this.setState({ modalCom: !this.state.modalCom })
-        } else {
-            alert(res.message);
-            this.setState({ isLoading: false });
-        }
+        this.setState({ dataApi: newDataApi })
+        this.setState({ modalCom: !this.state.modalCom })
+
+        localStorage.setItem('sales', JSON.stringify(newDataApi));
+
+        // if (Description == null || Description == ''
+        //     || Title == null || Title == ''
+        //     || SaleIds == null || SaleIds == '') {
+        //     alert("Vui lòng nhập đầy đủ trường !!!");
+        //     return
+        // }
+        // const body = {
+        //     Description,
+        //     LeadIds: SaleIds,
+        //     Title,
+        //     SaleIds,
+        // }
+
+        // this.setState({ isLoading: true });
+        // const res = await API_CONNECT(Constants.UPDATE_SALE_GROUP, body, "", "POST")
+
+        // if (res.is_success == true) {
+        //     // this.getData();
+        //     this.setState({ modalCom: !this.state.modalCom })
+        // } else {
+        //     alert(res.message);
+        //     this.setState({ isLoading: false });
+        // }
     }
 
     openDelete = (item) => {
@@ -339,7 +319,7 @@ class User extends Component {
     async delete() {
         this.setState({ isLoading: true });
         console.log(this.state.delete['_id'])
-        const res = await API_CONNECT(Constants.PLUGIN_DELETE_USER, {
+        const res = await API_CONNECT(Constants.DELETE_SALE_GROUP, {
             "id": this.state.delete['_id']
         }, "", "POST")
 
@@ -420,11 +400,16 @@ class User extends Component {
         }
     }
 
-
+    handleChangeSaleIds = (value) => {
+        this.setState({ SaleIds: value });
+    }
+    handleChangeLeadIds = (value) => {
+        console.log(value)
+        this.setState({ LeadIds: value });
+    }
 
     render() {
         const { Option } = Select;
-        // const children = [];
         const arrLevel = [
 
             {
@@ -438,11 +423,11 @@ class User extends Component {
             },
         ];
 
-        const { data, key, action, arrPagination, arrRoleSubAdmin } = this.state;
+        const { data, dataApi, key, action, arrPagination, arrRoleSubAdmin } = this.state;
         const { classes } = this.props;
 
 
-
+        // console.log('dataApi', dataApi)
 
         if (!this.state.isLoading) {
             return (
@@ -455,77 +440,18 @@ class User extends Component {
                             <Card>
                                 <CardHeader>
                                     <i className="fa fa-align-justify title_header">
-                                        Danh sách Sales
+                                        Danh sách Nhóm Sales
                                     </i>
-                                    <CRow>
-                                        <CCol md={4} className="mt-3">
-                                            <div className="">
 
 
-                                                <p className="title_filter">Từ khóa</p>
-
-                                                <Input style={styles.searchInput} onChange={(e) => {
-                                                    this.actionSearch(e, "key");
-                                                }} name="key" value={key} placeholder="Từ khóa" />
-
-                                            </div>
-                                        </CCol>
-
-
-                                        <CCol md={4} className="mt-3">
-                                            <div className="">
-                                                <p className="title_filter">Trạng thái</p>
-
-                                                <div style={{ width: "200px" }} className="">
-                                                    {arrLevel != undefined ? (
-                                                        <CSelect
-                                                            onChange={e => {
-
-                                                                this.actionSearch(e, "keyStatus");
-
-                                                            }}
-                                                            custom
-                                                            size="md"
-                                                            name="status"
-                                                            id="SelectLm"
-                                                        >
-                                                            {
-                                                                ["Actived", 'Deactived', 'Locked'].map((item, i) => {
-                                                                    return (
-                                                                        <option key={i} value={item}>{item}</option>
-                                                                    );
-                                                                })
-                                                            }
-
-                                                        </CSelect>
-                                                    ) : null}
-
-
-                                                </div>
-
-                                            </div>
-                                        </CCol>
-
-
-                                    </CRow>
-                                    <div className="flex-end mt-4">
+                                </CardHeader>
+                                <CardBody>
+                                    <div class="flex-center">
                                         <CButton
                                             color="info"
-                                            style={{ marginBottom: "10px" }}
+                                            style={{ marginBottom: "10px", marginRight: '10px' }}
                                             size="md"
-                                            className="btn-main"
-                                            onClick={(e) => {
-                                                this.onSearch();
-                                            }}
-                                        >
-                                            <BsSearch style={{ margin: "auto 6px auto 0" }} />
-                                            <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
-                                        </CButton>
-                                        <CButton
-                                            color="info"
-                                            style={{ marginBottom: "10px" }}
-                                            size="md"
-                                            className="btn-main"
+                                            className="flex-center"
                                             onClick={e => this.toggleModal("new")}
                                         >
                                             <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
@@ -534,19 +460,14 @@ class User extends Component {
 
 
                                     </div>
-
-                                </CardHeader>
-                                <CardBody>
-
-                                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table ">
+                                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                                         <thead className="thead-light">
                                             <tr>
                                                 <th className="text-center">STT.</th>
-                                                <th className="text-center">Tên Sale</th>
-                                                <th className="text-center">Email</th>
-                                                <th className="text-center">Số điện thoại</th>
-                                                <th className="text-center">Địa chỉ</th>
-                                                <th className="text-center">Trạng thái</th>
+                                                <th className="text-center">Tiêu đề</th>
+                                                <th className="text-center">Nhóm sale</th>
+                                                <th className="text-center">Nhóm trưởng</th>
+                                                <th className="text-center">Mô tả</th>
                                                 <th className="text-center">#</th>
 
                                             </tr>
@@ -554,24 +475,20 @@ class User extends Component {
                                         <tbody>
                                             <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                                             {
-                                                data != undefined ?
-                                                    data.map((item, i) => {
+                                                dataApi !== undefined ?
+                                                    dataApi.map((item, i) => {
+                                                        console.log(item)
                                                         return (
                                                             <tr key={i}>
                                                                 <td className="text-center">{i + 1}</td>
-                                                                <td className="text-center">{item.Name}</td>
-                                                                <td className="text-center">{item.Email}</td>
-                                                                <td className="text-center">{item.Phone}</td>
-                                                                <td className="text-center">{item.Address}</td>
+                                                                <td className="text-center">{item.Title}</td>
+                                                                <td className="text-center">{item.SaleIds}</td>
+                                                                <td className="text-center">{item.LeadIds}</td>
+                                                                <td className="text-center">{item.Description}</td>
                                                                 <td className="text-center">
-                                                                    <CBadge color={this.getBadge(item.Status)}>
-                                                                        {item.Status}
-                                                                    </CBadge>
-                                                                </td>
-                                                                <td className="text-center">
-                                                                    <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</CButton>{' '}
-                                                                    <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</CButton>{' '}
-                                                                    <CButton outline color="success" size="sm" onClick={(e) => { this.onChangeRole(item) }}>Quyền</CButton>
+                                                                    <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item.Title)} >Cập nhật</CButton>{' '}
+                                                                    <CButton outline color="danger" size="sm" onClick={() => { this.openDelete(item) }}>Xoá</CButton>{' '}
+                                                                    {/* <CButton outline color="success" size="sm" onClick={(e) => { this.onChangeRole(item) }}>Quyền</CButton> */}
                                                                 </td>
                                                             </tr>
                                                         );
@@ -579,14 +496,14 @@ class User extends Component {
                                             }
                                         </tbody>
                                     </table>
-                                    <div style={{ float: 'right' }}>
-                                        <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                                            this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                                        }} />
-                                    </div>
+
                                 </CardBody>
                             </Card>
-
+                            <div style={{ float: 'right' }}>
+                                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                                    this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                                }} />
+                            </div>
                         </Col>
                     </Row>
 
@@ -597,91 +514,48 @@ class User extends Component {
                                 {this.state.errorMessage !== "" ? `${this.state.errorMessage} !!!` : null}
 
                             </div>
+
                             <TextFieldGroup
-                                field="Email"
-                                label="Email"
-                                value={this.state.Email}
-                                type={"email"}
-                                placeholder={"Emal"}
+                                field="Title"
+                                label="Tiêu đề"
+                                value={this.state.Title}
+                                placeholder={"Tiêu đề"}
                                 // error={errors.title}
-                                onChange={e => this.onChange("Email", e.target.value)}
-                            // rows="5"
-                            />
-                            <TextFieldGroup
-                                field="Name"
-                                label="Tên Sale"
-                                value={this.state.Name}
-                                placeholder={"Tên Sale"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Name", e.target.value)}
+                                onChange={e => this.onChange("Title", e.target.value)}
                             // rows="5"
                             />
 
-                            <TextFieldGroup
-                                field="UserName"
-                                label="Tên đăng nhập"
-                                value={this.state.UserName}
-                                placeholder={"Tên đăng nhập"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("UserName", e.target.value)}
-                            // rows="5"
-                            />
 
-                            <TextFieldGroup
-                                field="Password"
-                                label="Mật khẩu"
-                                type={"password"}
-                                value={this.state.Password}
-                                placeholder={"Mật khẩu"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Password", e.target.value)}
-                            // rows="5"
-                            />
-
-                            <TextFieldGroup
-                                field="Phone"
-                                label="Số điện thoại"
-                                value={this.state.Phone}
-                                placeholder={"Số điện thoại"}
-                                onChange={e => this.onChange("Phone", e.target.value)}
-                            // rows="5"
-                            />
-
-                            <TextFieldGroup
-                                field="Address"
-                                label="Địa chỉ"
-                                value={this.state.Address}
-                                placeholder={"Địa chỉ"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Address", e.target.value)}
-                            // rows="5"
-                            />
-                            <CLabel>Danh sách công ty</CLabel>
-
+                            <CLabel>Nhóm sale</CLabel>
                             <Select
-                                mode="multiple"
-                                allowClear
-                                style={{ width: '100%', marginBottom: '15px' }}
-                                placeholder="Chọn tên công ty"
-
-                                onChange={this.handleChange}
-                            >
-                                {this.state.brandList && this.state.brandList.map(opt => (
-                                    <Option key={opt._id}>{opt.Name}</Option>
+                                defaultValue={this.state.SaleIds}
+                                onChange={this.handleChangeSaleIds}
+                                placeholder="Chọn nhóm"
+                                style={{ width: 200, marginBottom: 15 }}>
+                                {this.state.saleList && this.state.saleList.map(opt => (
+                                    <Option value={opt._id} key={opt._id}>{opt._id}</Option>
                                 ))}
                             </Select>
 
-                            {
-                                action == 'new' ? "" : <div>
-                                    <label style={styles.flexLabel} htmlFor="tag">Trạng thái:    </label>
-                                    <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                                        <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                                        <option value={'Actived'}>Actived</option>
-                                        <option value={'Locked'}>Locked</option>
-                                        <option value={'Deactived'}>Deactived</option>
-                                    </select>
-                                </div>
-                            }
+                            <CLabel>Nhóm trưởng</CLabel>
+                            <Select
+                                defaultValue={this.state.LeadIds}
+                                onChange={this.handleChangeLeadIds}
+                                placeholder="Chọn nhóm trưởng"
+                                style={{ width: 200, marginBottom: 15 }}>
+                                {this.state.saleList && this.state.saleList.map(opt => (
+                                    <Option value={opt.Name} key={opt._id}>{opt.Name}</Option>
+                                ))}
+                            </Select>
+
+                            <TextFieldGroup
+                                field="Description"
+                                label="Mô tả"
+                                value={this.state.Description}
+                                placeholder={"Mô tả"}
+                                onChange={e => this.onChange("Description", e.target.value)}
+                            // rows="5"
+                            />
 
                         </ModalBody>
 
@@ -820,7 +694,7 @@ const styles = {
         marginRight: "5px",
     },
     searchInput: {
-        width: "200px",
+        width: "250px",
         display: "inline-block",
 
     },
