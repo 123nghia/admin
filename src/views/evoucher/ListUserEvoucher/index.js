@@ -1,8 +1,9 @@
-import { CButton, CCol, CLabel, CRow, CSelect } from "@coreui/react";
+import { CButton, CCol, CRow, CSelect } from "@coreui/react";
 import { css } from "@emotion/react";
 import Pagination from "@material-ui/lab/Pagination";
 import { BsDownload } from "@react-icons/all-files/bs/BsDownload";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { FaAngleRight } from "@react-icons/all-files/fa/FaAngleRight";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 import { DatePicker, Select, Tag } from "antd";
@@ -10,22 +11,11 @@ import "antd/dist/antd.css";
 import axios from "axios";
 import "moment-timezone";
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import DotLoader from "react-spinners/DotLoader";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Input,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Input, Row } from "reactstrap";
 import * as XLSX from "xlsx";
 import Constants from "../../../contants/contants";
-import TextFieldGroup from "../../Common/TextFieldGroup";
 
 const { Option } = Select;
 
@@ -87,8 +77,8 @@ class ListUserEvoucher extends Component {
 
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i].url == window.location.hash) {
-        if (arr[i].isHidden == true) {
+      if (arr[i].url === window.location.hash) {
+        if (arr[i].isHidden === true) {
           window.location.href = "#/";
         }
       }
@@ -185,7 +175,7 @@ class ListUserEvoucher extends Component {
       arrTotal.push(temparray);
     }
 
-    if (arrTotal.length == 0) {
+    if (arrTotal.length === 0) {
       this.setState({
         hidden: false,
       });
@@ -336,6 +326,38 @@ class ListUserEvoucher extends Component {
         item: "4",
       },
     ];
+
+    const headingList = [
+      "STT.",
+      "Tên",
+      "Số điện thoại",
+      "Mã Voucher",
+      "Lịch sử soi da",
+      "Ngày nhận",
+      "Trạng thái",
+      "Sale theo dõi",
+    ];
+
+    const checkStatusUserVoucherColor = (status) => {
+      const statusColorMap = {
+        A: "#2eb85c",
+        1: "#2db7f5",
+        2: "#87d068",
+        3: "#dc0e04",
+      };
+
+      return statusColorMap[status] || "#FF0004";
+    };
+    const checkStatusUserVoucherContent = (status) => {
+      const statusContentMap = {
+        A: "Đã giao KH",
+        1: "Đã xác nhận KH",
+        2: "Hoàn thành",
+        3: "Hủy bỏ",
+      };
+
+      return statusContentMap[status] || "Chưa xác nhận";
+    };
 
     const renderRowSearch = () => (
       <CRow>
@@ -514,80 +536,69 @@ class ListUserEvoucher extends Component {
       >
         <thead className="thead-light">
           <tr>
-            <th className="text-center">STT.</th>
-            <th className="text-center">Tên</th>
-
-            <th className="text-center">Số điện thoại</th>
-            <th className="text-center">Email</th>
-            <th className="text-center">Mã Voucher</th>
-            <th className="text-center">Ngày nhận</th>
-
-            <th className="text-center">Trạng thái</th>
+            {headingList.map((title) => (
+              <th className="text-center">{title}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
           <td colSpan="10" hidden={this.state.hidden} className="text-center">
             Không tìm thấy dữ liệu
           </td>
-          {data !== undefined
-            ? data.map((item, i) => {
-                return (
-                  <tr key={i}>
-                    <td className="text-center">{i + 1}</td>
-                    <td className="text-center">{item.fullName}</td>
-                    <td className="text-center">{item.phoneNumber}</td>
-                    <td className="text-center">{item.email}</td>
-                    <td className="text-center">{item.voucherCode}</td>
-                    <td className="text-center">
-                      {new Date(item.create_at).toLocaleDateString()}
-                    </td>
 
-                    <td className="text-center">
-                      <Tag
-                        className="ant-tag"
-                        color={
-                          item.status === "A"
-                            ? "#2eb85c"
-                            : item.status === "1"
-                            ? "#2db7f5"
-                            : item.status === "2"
-                            ? "#87d068"
-                            : item.status === "3"
-                            ? "#dc0e04"
-                            : "#FF0004"
-                        }
+          {data &&
+            data.map((item, i) => {
+              return (
+                <tr key={i}>
+                  <td className="text-center">{i + 1}</td>
+                  <td className="text-center">{item.fullName}</td>
+                  <td className="text-center">{item.phoneNumber}</td>
+                  <td className="text-center">{item.voucherCode}</td>
+                  <td className="text-center">{item.skinHistory}</td>
+                  <td className="text-center">
+                    {new Date(item.create_at).toLocaleDateString()}
+                  </td>
+                  <td className="text-center">
+                    <Tag
+                      className="ant-tag"
+                      color={checkStatusUserVoucherColor(item.status)}
+                    >
+                      {checkStatusUserVoucherContent(item.status)}
+                    </Tag>
+
+                    {this.state.type === "0" ? (
+                      <div>
+                        <CButton
+                          shape="rounded-pill"
+                          variant="ghost"
+                          color="info"
+                          style={styles.mgl5}
+                          size="md"
+                          onClick={(e) => this.openEditVoucher(item)}
+                        >
+                          {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
+                          Thay đổi
+                        </CButton>
+                      </div>
+                    ) : null}
+                  </td>
+                  <td className="text-center">{item.saleFollow}</td>
+                  <td className="text-center">
+                    <Link to={`/detail-evoucher/${item._id}`}>
+                      <CButton
+                        color="info"
+                        style={{ marginBottom: "10px" }}
+                        size="md"
+                        className="btn-main"
                       >
-                        {item.status === "A"
-                          ? "Đã giao KH"
-                          : item.status === "1"
-                          ? "Đã xác nhận KH"
-                          : item.status === "2"
-                          ? "Hoàn thành"
-                          : item.status === "3"
-                          ? "Hủy bỏ"
-                          : "Chưa xác nhận"}
-                      </Tag>
-
-                      {this.state.type == "0" ? (
-                        <div>
-                          <CButton
-                            shape="rounded-pill"
-                            variant="ghost"
-                            color="info"
-                            style={styles.mgl5}
-                            size="md"
-                            onClick={(e) => this.openEditVoucher(item)}
-                          >
-                            {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
-                            Thay đổi
-                          </CButton>
-                        </div>
-                      ) : null}
-                    </td>
-                  </tr>
-                );
-              })
-            : ""}
+                        <FaAngleRight style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xem chi tiết</p>
+                      </CButton>
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     );

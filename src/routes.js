@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { useSelector, useDispatch } from "redux";
-import ListUserEvoucher from "./views/evoucher/ListUserEvoucher";
+import DetailVoucher from "./views/evoucher/ListUserEvoucher/DetailVoucher";
 
 const Dashboard = React.lazy(() => import("./views/DashBoard/Dashboard"));
 const TableUser = React.lazy(() => import("./views/base/tables/TableUser"));
@@ -129,9 +129,10 @@ const TypeOne = React.lazy(() => import("./views/base/tables/MakeUp/TypeOne"));
 const Banner = React.lazy(() => import("./views/base/tables/Banner/Banner"));
 const RequestSupport = React.lazy(() => import("./views/info/requestSupport"));
 const ListEvoucher = React.lazy(() => import("./views/evoucher/ListVoucher"));
-// const ListUserEvoucher = React.lazy(() =>
-//   import("./views/evoucher/ListUserEvoucher/index.js")
-// );
+const ListUserEvoucher = React.lazy(() =>
+  import("./views/evoucher/ListUserEvoucher")
+);
+
 const ListCampaign = React.lazy(() => import("./views/evoucher/ListCampaign"));
 const ManageCampaign = React.lazy(() =>
   import("./views/evoucher/ManageCampaign")
@@ -168,6 +169,12 @@ const routes = [
     path: "/list-user-evoucher",
     name: "ListUserEvoucher",
     component: ListUserEvoucher,
+  },
+
+  {
+    path: "/detail-evoucher/:id",
+    name: "DetailVoucher",
+    component: DetailVoucher,
   },
   { path: "/list-campaign", name: "ListCampaign", component: ListCampaign },
   {
