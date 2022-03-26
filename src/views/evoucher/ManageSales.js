@@ -730,7 +730,7 @@ class User extends Component {
                     <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
                         <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
                         <ModalBody>
-                            <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+                            <label htmlFor="tag">{`Bạn có chắc chắn xóa?`}</label>
                         </ModalBody>
                         <ModalFooter>
                             <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
