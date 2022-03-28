@@ -13,6 +13,8 @@ export default {
   "GET_ALL_COMPANY" : "api/plugin-list-company",
 
   "BASE_URL_HISTORY_SKIN": "https://shope.thulamua.com/lich-su-soi-da-with-iframe/",
+  "BASE_URL_HISTORY_EVOUCHER": "https://deal24h.vn/lich-su-soi-da-with-iframe/",
+
 
   "PLUGIN_SUBSALE_USER2": "api/plugin-subsale-user_New",
   "EXPORT_CUSTOMER_EVOUCHER": "api/get-file-export-customer-evoucher",

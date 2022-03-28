@@ -40,7 +40,7 @@ function CalendarSkinHistory({ detailUserVoucher }) {
       </CButton>
       <IframeModal
         toggleView={toggleHistory}
-        link={Constants.BASE_URL_HISTORY_SKIN + idHistory}
+        link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
         closeModal={closeModal}
       />
     </Space>
