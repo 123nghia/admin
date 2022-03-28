@@ -7,7 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { BsPatchCheck } from "react-icons/bs";
 import { AiOutlineFundView } from "react-icons/ai";
 import { RiChatHistoryLine, RiCustomerService2Line } from "react-icons/ri";
-import EvoucherCard from "./EvoucherCard";
+import EvoucherInfoTable from "./EvoucherInfoTable";
 
 import "moment-timezone";
 import React, { Component } from "react";
@@ -20,6 +20,7 @@ import axios from "axios";
 import Constants from "./../../../contants/contants";
 import { toast } from "react-toastify";
 import { Redirect } from "react-router-dom";
+import NotInfoSale from "../../../assets/img/NotInfoSale.png";
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -31,7 +32,7 @@ class DetailVoucher extends Component {
     tabNameConfig: [
       {
         _id: "t1",
-        name: "Thông tin nhận voucher",
+        name: "Thông tin voucher",
         icon: (
           <AiOutlineFundView
             style={{
@@ -42,15 +43,15 @@ class DetailVoucher extends Component {
           />
         ),
       },
-      {
-        _id: "t2",
-        name: "Lịch sử soi da",
-        icon: (
-          <RiChatHistoryLine
-            style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
-          />
-        ),
-      },
+      // {
+      //   _id: "t2",
+      //   name: "Lịch sử soi da",
+      //   icon: (
+      //     <RiChatHistoryLine
+      //       style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
+      //     />
+      //   ),
+      // },
       {
         _id: "t3",
         name: "Thông tin check-in",
@@ -62,7 +63,7 @@ class DetailVoucher extends Component {
       },
       {
         _id: "t4",
-        name: "Thông tin chăm sóc khách hàng",
+        name: "Thông tin CSKH",
         icon: (
           <RiCustomerService2Line
             style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
@@ -209,23 +210,27 @@ class DetailVoucher extends Component {
             </div>
             <div className="tabcontents" style={{ minHeight: "50vh" }}>
               <div id="tabcontent1" className="tabcontent defaultOpen">
-                <h1>Mã voucher</h1>
-                <EvoucherCard
+                <EvoucherInfoTable
                   detailUserVoucher={this.state.detailUserVoucher}
                 />
+                {/* <EvoucherCard
+                  detailUserVoucher={this.state.detailUserVoucher}
+                /> */}
               </div>
-              <div id="tabcontent2" className="tabcontent ">
+              {/* <div id="tabcontent2" className="tabcontent ">
                 <CalendarSkinHistory
                   detailUserVoucher={this.state.detailUserVoucher}
                 />
-              </div>
+              </div> */}
               <div id="tabcontent3" className="tabcontent">
                 <CheckInForm detailUserVoucher={this.state.detailUserVoucher} />
               </div>
               <div id="tabcontent4" className="tabcontent ">
                 <div class="text-center">
-                  <CareCustomerForm
-                    detailUserVoucher={this.state.detailUserVoucher}
+                  <img
+                    style={{ objectFit: "contain", width: "80%" }}
+                    src={NotInfoSale}
+                    alt={NotInfoSale}
                   />
                 </div>
               </div>
@@ -290,7 +295,7 @@ const styles = {
     textAlign: "center",
   },
   tbody: {
-    height: "380px",
+    minHeight: "30vh",
     overflowY: "auto",
   },
   wh12: {

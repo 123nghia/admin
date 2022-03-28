@@ -5,50 +5,45 @@ import { CButton } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import IframeModal from "../../../views/components/Iframe";
 import Constants from "../../../contants/contants";
-registerLocale("vi", vi);
+import { Form, Space } from "antd";
+import { DateTimePicker, LocalizationProvider } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { TextField } from "@mui/material";
 
 function CalendarSkinHistory({ detailUserVoucher }) {
   const [idHistory, setIdHistory] = useState("");
   const [toggleHistory, setToggleHistory] = useState(false);
 
   const { skinHistory, create_at } = detailUserVoucher;
+
+  const dateFormat = "DD/MM/YYYY";
   const [startDate, setStartDate] = useState(new Date(create_at));
 
   function closeModal() {
     setToggleHistory(!toggleHistory);
   }
   return (
-    <>
-      <h1>Ngày soi da</h1>
-      <div class="text-center">
-        <ReactDatePicker
-          locale="vi"
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          inline
-        />
-      </div>
-      <div>
-        <h1>Lịch sử soi da</h1>
-        <td className="text-center">
-          <CButton
-            outline
-            color="primary"
-            onClick={(e) => {
-              setIdHistory(skinHistory);
-              setToggleHistory(!toggleHistory);
-            }}
-          >
-            <CIcon name="cil-magnifying-glass" /> Xem chi tiết
-          </CButton>
-        </td>
-      </div>
+    <Space>
+      <Form.Item label="Ngày soi da: ">
+        {new Date(create_at).toLocaleDateString()}
+      </Form.Item>
+      
+      <CButton
+        outline
+        color="primary"
+        onClick={(e) => {
+          setIdHistory(skinHistory);
+          setToggleHistory(!toggleHistory);
+        }}
+      >
+        <CIcon name="cil-magnifying-glass" /> Xem lịch sử soi da
+      </CButton>
       <IframeModal
         toggleView={toggleHistory}
         link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
         closeModal={closeModal}
       />
-    </>
+    </Space>
   );
 }
 
