@@ -294,9 +294,11 @@ class EndUser extends Component {
     if (image_link) {
       if (image_link.name) {
         img = `${Constants.BASE_URL}image_brand/${image_link.name}`;
+      }else{
+        img = image
       }
     }
-
+    console.log(img)
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_BANNER_SALES;
 
@@ -490,7 +492,7 @@ class EndUser extends Component {
                 // rows="5"
               />
               <div className="mt-3"></div>
-              <label>Tên công ty</label>
+              <label>Tên chiến dịch</label>
               <Select
               defaultValue={dataCampaign ? dataCampaign[0].name : ""}
 

@@ -839,7 +839,14 @@ class EndUser extends Component {
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">Email</th>
                         <th className="text-center">Mã Voucher</th>
+
                         <th className="text-center">Ngày nhận</th>
+                        <th className="text-center">Ngày CheckIn</th>
+                        <th className="text-center">Nhà cung cấp</th>
+                        <th className="text-center">Tên chiến dịch</th>
+                        <th className="text-center">Tỉnh/thành</th>
+                        <th className="text-center">Xem</th>
+                   
 
                         <th className="text-center">Trạng thái</th>
                       </tr>
@@ -865,6 +872,18 @@ class EndUser extends Component {
                               </td>
                               <td className="text-center">
                                 {new Date(item.create_at).toLocaleDateString()}
+                              </td>
+                              <td></td>
+                              <td></td>
+
+                              <td></td>
+                              <td className="text-center">
+                                <CButton outline color="primary" onClick={e => {
+                                  this.setState({
+                                    idHistory: item._id,
+                                    toggleHistory: !this.state.toggleHistory
+                                  })
+                                }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
                               </td>
 
                               <td className="text-center">
