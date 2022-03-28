@@ -13,6 +13,9 @@ import {
   Modal,
 } from "reactstrap";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
+import IframeModal from "../../views/components/Iframe";
+import { Link } from "react-router-dom";
+import { MdOpenInNew } from "react-icons/md";
 
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
@@ -425,8 +428,11 @@ class EndUser extends Component {
       data,
       arrPagination,
       key,
+      idHistory,
       phoneVoucher,
+      closeModal,
       nameVoucher,
+      toggleHistory,
       modalVoucher,
     } = this.state;
     const arrLevel = [
@@ -458,14 +464,12 @@ class EndUser extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          {/* <input
-            type="file"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              this.readExcel(file);
-            }}
-          /> */}
-
+       
+<IframeModal
+              toggleView={toggleHistory}
+              link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
+              closeModal={closeModal}
+            />
           <Modal
             isOpen={this.state.modalVoucher}
             className={this.props.className}
@@ -624,9 +628,9 @@ class EndUser extends Component {
                         return (
                           <option selected key={i} value={item.item}>
                             {item.item === "A"
-                              ? "Đã giao KH"
+                              ? "Đã nhận voucher"
                               : item.item === "1"
-                                ? "Đã xác nhận KH"
+                                ? "Đã checkIn"
                                 : item.item === "2"
                                   ? "Hoàn thành"
                                   : item.item === "3"
@@ -638,9 +642,9 @@ class EndUser extends Component {
                         return (
                           <option key={i} value={item.item}>
                            {item.item === "A"
-                              ? "Đã giao KH"
+                              ? "Đã nhận voucher"
                               : item.item === "1"
-                                ? "Đã xác nhận KH"
+                                ? "Đã checkIn"
                                 : item.item === "2"
                                   ? "Hoàn thành"
                                   : item.item === "3"
@@ -842,7 +846,7 @@ class EndUser extends Component {
 
                         <th className="text-center">Ngày nhận</th>
                         <th className="text-center">Ngày CheckIn</th>
-                        <th className="text-center">Nhà cung cấp</th>
+                  
                         <th className="text-center">Tên chiến dịch</th>
                         <th className="text-center">Tỉnh/thành</th>
                         <th className="text-center">Xem</th>
@@ -873,8 +877,7 @@ class EndUser extends Component {
                               <td className="text-center">
                                 {new Date(item.create_at).toLocaleDateString()}
                               </td>
-                              <td></td>
-                              <td></td>
+                             
 
                               <td></td>
                               <td className="text-center">
@@ -883,7 +886,7 @@ class EndUser extends Component {
                                     idHistory: item._id,
                                     toggleHistory: !this.state.toggleHistory
                                   })
-                                }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                                }}><CIcon name="cil-magnifying-glass" /></CButton>
                               </td>
 
                               <td className="text-center">
@@ -903,9 +906,9 @@ class EndUser extends Component {
                                 >
                                
                                    {item.status === "A"
-                              ? "Đã giao KH"
+                              ? "Đã nhận voucher"
                               : item.status === "1"
-                                ? "Đã xác nhận KH"
+                                ? "Đã checkIn"
                                 : item.status === "2"
                                   ? "Hoàn thành"
                                   : item.status === "3"
@@ -929,6 +932,21 @@ class EndUser extends Component {
                                       </CButton></div> : null
                                 }
                               </td>
+                              <td className="text-center">
+                    <Link to={`/detail-evoucher/${item._id}`}>
+                      <CButton
+                        shape="rounded-pill"
+                        variant="outline"
+                        color="info"
+                        style={styles.mgl5}
+                        size="md"
+                        className="flex-a-center "
+                      >
+                        Chi tiết
+                        <MdOpenInNew className="ml-1" />
+                      </CButton>
+                    </Link>
+                  </td>
                             </tr>
                           );
                         })

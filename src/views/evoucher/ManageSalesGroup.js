@@ -465,7 +465,7 @@ class User extends Component {
                                             <tr>
                                                 <th className="text-center">STT.</th>
                                                 <th className="text-center">Tiêu đề</th>
-                                                <th className="text-center">Nhóm sale</th>
+                                                {/* <th className="text-center">Nhóm sale</th> */}
                                                 <th className="text-center">Nhóm trưởng</th>
                                                 <th className="text-center">Mô tả</th>
                                                 <th className="text-center">#</th>
@@ -482,7 +482,7 @@ class User extends Component {
                                                             <tr key={i}>
                                                                 <td className="text-center">{i + 1}</td>
                                                                 <td className="text-center">{item.Title}</td>
-                                                                <td className="text-center">{item.SaleIds}</td>
+                                                                {/* <td className="text-center">{item.SaleIds}</td> */}
                                                                 <td className="text-center">{item.LeadIds}</td>
                                                                 <td className="text-center">{item.Description}</td>
                                                                 <td className="text-center">
@@ -526,7 +526,7 @@ class User extends Component {
                             />
 
 
-                            <CLabel>Nhóm sale</CLabel>
+                            {/* <CLabel>Nhóm sale</CLabel>
                             <Select
                                 defaultValue={this.state.SaleIds}
                                 onChange={this.handleChangeSaleIds}
@@ -535,7 +535,7 @@ class User extends Component {
                                 {this.state.saleList && this.state.saleList.map(opt => (
                                     <Option value={opt._id} key={opt._id}>{opt._id}</Option>
                                 ))}
-                            </Select>
+                            </Select> */}
 
                             <CLabel>Nhóm trưởng</CLabel>
                             <Select

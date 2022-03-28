@@ -13,6 +13,8 @@ export default {
   "GET_ALL_COMPANY" : "api/plugin-list-company",
 
   "BASE_URL_HISTORY_SKIN": "https://shope.thulamua.com/lich-su-soi-da-with-iframe/",
+  "BASE_URL_HISTORY_EVOUCHER": "https://deal24h.vn/lich-su-soi-da-with-iframe/",
+
 
   "PLUGIN_SUBSALE_USER2": "api/plugin-subsale-user_New",
   "EXPORT_CUSTOMER_EVOUCHER": "api/get-file-export-customer-evoucher",
@@ -39,11 +41,12 @@ export default {
   "ADD_VOUCHER": "api/evoucher/add",
   "UPDATE_VOUCHER": "api/evoucher/update",
   "DELETE_VOUCHER": "api/evoucher/delete",
-
+  
   "GET_USER_EVOUCHER": "api/evoucher/list-customer-request",
   "ADD_USER_EVOUCHER": "api/evoucher/list-customer-request",
   "UPDATE_USER_EVOUCHER": "api/evoucher/list-customer-request",
   "DELETE_USER_EVOUCHER": "api/evoucher/list-customer-request",
+  "FETCH_DETAIL_USER_VOUCHER": "api/transactionEvoucher",
 
   "LIST_USER": "/api/list-user",
   "LIST_USER_WITH_ID": "/api/list-user?id=",

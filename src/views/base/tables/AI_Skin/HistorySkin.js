@@ -480,7 +480,7 @@ class HistorySkin extends Component {
           </Col>
         </Row>
 
-        <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={this.closeModal} />
+        <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory} closeModal={this.closeModal} />
       </div>
     );
   }
