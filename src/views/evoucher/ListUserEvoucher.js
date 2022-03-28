@@ -315,7 +315,26 @@ class EndUser extends Component {
       this.setState({ isLoading: false });
     }
   }
+ checkStatusUserVoucherColor = (status) => {
+    const statusColorMap = {
+      A: "#2eb85c",
+      1: "#2db7f5",
+      2: "#87d068",
+      3: "#dc0e04",
+    };
 
+    return statusColorMap[status] || "#FF0004";
+  };
+ checkStatusUserVoucherContent = (status) => {
+    const statusContentMap = {
+      A: "Đã giao KH",
+      1: "Đã xác nhận KH",
+      2: "Hoàn thành",
+      3: "Hủy bỏ",
+    };
+
+    return statusContentMap[status] || "Chưa xác nhận";
+  };
   openDelete = (item) => {
     this.setState({
       modalDelete: !this.state.modalDelete,
@@ -841,18 +860,18 @@ class EndUser extends Component {
                         <th className="text-center">Tên</th>
 
                         <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Email</th>
+                  
                         <th className="text-center">Mã Voucher</th>
+                        <th className="text-center">Lịch sử soi da</th>
 
                         <th className="text-center">Ngày nhận</th>
-                        <th className="text-center">Ngày CheckIn</th>
-                  
-                        <th className="text-center">Tên chiến dịch</th>
-                        <th className="text-center">Tỉnh/thành</th>
-                        <th className="text-center">Xem</th>
-                   
-
                         <th className="text-center">Trạng thái</th>
+
+                  
+                        <th className="text-center">Sale Theo dõi</th>
+                        <th className="text-center">Tỉnh/thành</th>
+                            <th></th>
+
                       </tr>
                     </thead>
                     <tbody>
@@ -867,72 +886,56 @@ class EndUser extends Component {
                         ? data.map((item, i) => {
                           return (
                             <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.fullName}</td>
-                              <td className="text-center">{item.phoneNumber}</td>
-                              <td className="text-center">{item.email}</td>
-                              <td className="text-center">
-                                {item.voucherCode}
-                              </td>
-                              <td className="text-center">
-                                {new Date(item.create_at).toLocaleDateString()}
-                              </td>
-                             
+                       <td className="text-center">{i + 1}</td>
+                  <td className="text-center">{item.fullName}</td>
+                  <td className="text-center">{item.phoneNumber}</td>
+                  <td className="text-center">{item.voucherCode}</td>
+                  <td className="text-center">
+                    <CButton
+                      shape="rounded-pill"
+                      variant="outline"
+                      color="info"
+                      style={{ textAlign: "center" }}
+                      size="md"
+                      onClick={(e) => {
+                        this.setState({
+                          idHistory: item.skinHistory,
+                          toggleHistory: !toggleHistory,
+                        });
+                      }}
+                    >
+                      <CIcon name="cil-magnifying-glass" />
+                    </CButton>
+                  </td>
+                  <td className="text-center">
+                    {new Date(item.create_at).toLocaleDateString()}
+                  </td>
+                  <td className="text-center">
+                    <Tag
+                      className="ant-tag"
+                      color={this.checkStatusUserVoucherColor(item.status)}
+                    >
+                      {this.checkStatusUserVoucherContent(item.status)}
+                    </Tag>
 
-                              <td></td>
-                              <td className="text-center">
-                                <CButton outline color="primary" onClick={e => {
-                                  this.setState({
-                                    idHistory: item._id,
-                                    toggleHistory: !this.state.toggleHistory
-                                  })
-                                }}><CIcon name="cil-magnifying-glass" /></CButton>
-                              </td>
-
-                              <td className="text-center">
-                                <Tag
-                                  className="ant-tag"
-                                  color={item.status === "A"
-                                  ? "#2eb85c"
-                                  : item.status === "1"
-                                    ? "#2db7f5"
-                                    : item.status === "2"
-                                      ? "#87d068"
-                                      
-                                        : item.status === "3"
-                                          ? "#dc0e04"
-                                       
-                                          : "#FF0004"}
-                                >
-                               
-                                   {item.status === "A"
-                              ? "Đã nhận voucher"
-                              : item.status === "1"
-                                ? "Đã checkIn"
-                                : item.status === "2"
-                                  ? "Hoàn thành"
-                                  : item.status === "3"
-                                  ? "Hủy bỏ"
-                                  : "Chưa xác nhận"}
-                                </Tag>
-
-                                {
-                                  this.state.type == "0" ?
-                                    <div>
-                                      <CButton
-                                        shape="rounded-pill"
-                                        variant="ghost"
-                                        color="info"
-                                        style={styles.mgl5}
-                                        size="md"
-                                        onClick={(e) => this.openEditVoucher(item)}
-                                      >
-                                        {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
-                                        Thay đổi
-                                      </CButton></div> : null
-                                }
-                              </td>
-                              <td className="text-center">
+                    {this.state.type === "0" ? (
+                      <div>
+                        <CButton
+                          shape="rounded-pill"
+                          variant="ghost"
+                          color="info"
+                          style={styles.mgl5}
+                          size="md"
+                          onClick={(e) => this.openEditVoucher(item)}
+                        >
+                          {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
+                          Thay đổi
+                        </CButton>
+                      </div>
+                    ) : null}
+                  </td>
+                  <td className="text-center">{item.saleFollow}</td>
+                  <td className="text-center">
                     <Link to={`/detail-evoucher/${item._id}`}>
                       <CButton
                         shape="rounded-pill"

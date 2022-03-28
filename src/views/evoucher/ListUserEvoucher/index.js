@@ -347,6 +347,7 @@ class ListUserEvoucher extends Component {
       "Ngày nhận",
       "Trạng thái",
       "Sale theo dõi",
+      "Tỉnh/thành",
       "",
     ];
 
@@ -363,7 +364,7 @@ class ListUserEvoucher extends Component {
     const checkStatusUserVoucherContent = (status) => {
       const statusContentMap = {
         A: "Đã giao KH",
-        1: "Đã xác nhận KH",
+        1: "Đã checkIn",
         2: "Hoàn thành",
         3: "Hủy bỏ",
       };
@@ -567,7 +568,7 @@ class ListUserEvoucher extends Component {
                   <td className="text-center">{item.phoneNumber}</td>
                   <td className="text-center">{item.voucherCode}</td>
                   <td className="text-center">
-                    <CButton
+                    {item.historyId ?  <CButton
                       shape="rounded-pill"
                       variant="outline"
                       color="info"
@@ -575,13 +576,14 @@ class ListUserEvoucher extends Component {
                       size="md"
                       onClick={(e) => {
                         this.setState({
-                          idHistory: item.skinHistory,
+                          idHistory: item.historyId,
                           toggleHistory: !toggleHistory,
                         });
                       }}
                     >
                       <CIcon name="cil-magnifying-glass" />
-                    </CButton>
+                    </CButton> :null}
+                    
                   </td>
                   <td className="text-center">
                     {new Date(item.create_at).toLocaleDateString()}
@@ -611,6 +613,7 @@ class ListUserEvoucher extends Component {
                     ) : null}
                   </td>
                   <td className="text-center">{item.saleFollow}</td>
+                  <td></td>
                   <td className="text-center">
                     <Link to={`/detail-evoucher/${item._id}`}>
                       <CButton
@@ -767,7 +770,7 @@ class ListUserEvoucher extends Component {
             </Card>
             <IframeModal
               toggleView={toggleHistory}
-              link={Constants.BASE_URL_HISTORY_SKIN + idHistory}
+              link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
               closeModal={closeModal}
             />
           </Col>

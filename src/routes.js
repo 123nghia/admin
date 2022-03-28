@@ -130,7 +130,7 @@ const Banner = React.lazy(() => import("./views/base/tables/Banner/Banner"));
 const RequestSupport = React.lazy(() => import("./views/info/requestSupport"));
 const ListEvoucher = React.lazy(() => import("./views/evoucher/ListVoucher"));
 const ListUserEvoucher = React.lazy(() =>
-  import("./views/evoucher/ListUserEvoucher")
+  import("./views/evoucher/ListUserEvoucher/index")
 );
 
 const ListCampaign = React.lazy(() => import("./views/evoucher/ListCampaign"));

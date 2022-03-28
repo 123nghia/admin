@@ -782,10 +782,10 @@ class EndUser extends Component {
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
-                            this.setState({ codeVoucher: e.target.value });
+                            this.setState({ codeVoucherSearch: e.target.value });
                           }}
-                          name="codeVoucher"
-                          value={this.state.codeVoucher}
+                          name="codeVoucherSearch"
+                          value={this.state.codeVoucherSearch}
                           placeholder="Mã voucher"
                         />
                       </div>
