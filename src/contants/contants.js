@@ -39,11 +39,12 @@ export default {
   "ADD_VOUCHER": "api/evoucher/add",
   "UPDATE_VOUCHER": "api/evoucher/update",
   "DELETE_VOUCHER": "api/evoucher/delete",
-
+  
   "GET_USER_EVOUCHER": "api/evoucher/list-customer-request",
   "ADD_USER_EVOUCHER": "api/evoucher/list-customer-request",
   "UPDATE_USER_EVOUCHER": "api/evoucher/list-customer-request",
   "DELETE_USER_EVOUCHER": "api/evoucher/list-customer-request",
+  "FETCH_DETAIL_USER_VOUCHER": "api/transactionEvoucher",
 
   "LIST_USER": "/api/list-user",
   "LIST_USER_WITH_ID": "/api/list-user?id=",

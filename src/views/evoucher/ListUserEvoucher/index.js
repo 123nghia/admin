@@ -1,3 +1,4 @@
+import CIcon from "@coreui/icons-react";
 import { CButton, CCol, CRow, CSelect } from "@coreui/react";
 import { css } from "@emotion/react";
 import Pagination from "@material-ui/lab/Pagination";
@@ -16,6 +17,8 @@ import DotLoader from "react-spinners/DotLoader";
 import { Card, CardBody, CardHeader, Col, Input, Row } from "reactstrap";
 import * as XLSX from "xlsx";
 import Constants from "../../../contants/contants";
+import IframeModal from "../../../views/components/Iframe";
+import { MdOpenInNew } from "react-icons/md";
 
 const { Option } = Select;
 
@@ -56,6 +59,8 @@ class ListUserEvoucher extends Component {
       isLoading: false,
       idCurrentUpdate: null,
       levelNormal: "0",
+      idHistory: "",
+      toggleHistory: false,
       // from : new Date().toLocaleDateString(),
       // to : new Date().toLocaleDateString()
       from: "",
@@ -299,7 +304,13 @@ class ListUserEvoucher extends Component {
       phoneVoucher,
       nameVoucher,
       modalVoucher,
+      toggleHistory,
+      idHistory,
     } = this.state;
+
+    function closeModal() {
+      this.setState({ toggleHistory: !toggleHistory });
+    }
 
     const arrLevel = [
       {
@@ -336,6 +347,7 @@ class ListUserEvoucher extends Component {
       "Ngày nhận",
       "Trạng thái",
       "Sale theo dõi",
+      "",
     ];
 
     const checkStatusUserVoucherColor = (status) => {
@@ -554,7 +566,23 @@ class ListUserEvoucher extends Component {
                   <td className="text-center">{item.fullName}</td>
                   <td className="text-center">{item.phoneNumber}</td>
                   <td className="text-center">{item.voucherCode}</td>
-                  <td className="text-center">{item.skinHistory}</td>
+                  <td className="text-center">
+                    <CButton
+                      shape="rounded-pill"
+                      variant="outline"
+                      color="info"
+                      style={{ textAlign: "center" }}
+                      size="md"
+                      onClick={(e) => {
+                        this.setState({
+                          idHistory: item.skinHistory,
+                          toggleHistory: !toggleHistory,
+                        });
+                      }}
+                    >
+                      <CIcon name="cil-magnifying-glass" />
+                    </CButton>
+                  </td>
                   <td className="text-center">
                     {new Date(item.create_at).toLocaleDateString()}
                   </td>
@@ -586,13 +614,15 @@ class ListUserEvoucher extends Component {
                   <td className="text-center">
                     <Link to={`/detail-evoucher/${item._id}`}>
                       <CButton
+                        shape="rounded-pill"
+                        variant="outline"
                         color="info"
-                        style={{ marginBottom: "10px" }}
+                        style={styles.mgl5}
                         size="md"
-                        className="btn-main"
+                        className="flex-a-center "
                       >
-                        <FaAngleRight style={{ margin: "auto 6px auto 0" }} />
-                        <p style={{ margin: "auto 0" }}>Xem chi tiết</p>
+                        Chi tiết
+                        <MdOpenInNew className="ml-1" />
                       </CButton>
                     </Link>
                   </td>
@@ -735,6 +765,11 @@ class ListUserEvoucher extends Component {
                 </div>
               </CardBody>
             </Card>
+            <IframeModal
+              toggleView={toggleHistory}
+              link={Constants.BASE_URL_HISTORY_SKIN + idHistory}
+              closeModal={closeModal}
+            />
           </Col>
         </Row>
       </div>

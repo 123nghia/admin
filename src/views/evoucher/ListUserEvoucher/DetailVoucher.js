@@ -13,6 +13,13 @@ import "moment-timezone";
 import React, { Component } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import DotLoader from "react-spinners/DotLoader";
+import CalendarSkinHistory from "./CalendarSkinHistory";
+import CheckInForm from "./CheckInForm";
+import CareCustomerForm from "./CareCustomerForm";
+import axios from "axios";
+import Constants from "./../../../contants/contants";
+import { toast } from "react-toastify";
+import { Redirect } from "react-router-dom";
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -20,125 +27,111 @@ const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
 class DetailVoucher extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tabNameConfig: [
-        {
-          _id: "t1",
-          name: "Thông tin nhận voucher",
-          icon: (
-            <AiOutlineFundView
-              style={{
-                width: "24px ",
-                height: "24px ",
-                color: "#3399ff",
-              }}
-            />
-          ),
-        },
-        {
-          _id: "t2",
-          name: "Lịch sử soi da",
-          icon: (
-            <RiChatHistoryLine
-              style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
-            />
-          ),
-        },
-        {
-          _id: "t3",
-          name: "Thông tin check-in",
-          icon: (
-            <BsPatchCheck
-              style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
-            />
-          ),
-        },
-        {
-          _id: "t4",
-          name: "Thông tin chăm sóc khách hàng",
-          icon: (
-            <RiCustomerService2Line
-              style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
-            />
-          ),
-        },
-      ],
-      company_id: JSON.parse(localStorage.getItem("user")).company_id
-        ? JSON.parse(localStorage.getItem("user")).company_id
-        : "-1",
-      colorWebCurrent: localStorage.getItem("colorpicker"),
-      action: "new",
-      idUpdate: "",
-      checkFb: false,
-      checkGg: true,
-      data: [],
-      updated: "",
-      dataApi: [],
-      delete: null,
-      hidden: true,
-      token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      role: localStorage.getItem("role"),
-      type: localStorage.getItem("type"),
+  state = {
+    tabNameConfig: [
+      {
+        _id: "t1",
+        name: "Thông tin nhận voucher",
+        icon: (
+          <AiOutlineFundView
+            style={{
+              width: "24px ",
+              height: "24px ",
+              color: "#3399ff",
+            }}
+          />
+        ),
+      },
+      {
+        _id: "t2",
+        name: "Lịch sử soi da",
+        icon: (
+          <RiChatHistoryLine
+            style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
+          />
+        ),
+      },
+      {
+        _id: "t3",
+        name: "Thông tin check-in",
+        icon: (
+          <BsPatchCheck
+            style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
+          />
+        ),
+      },
+      {
+        _id: "t4",
+        name: "Thông tin chăm sóc khách hàng",
+        icon: (
+          <RiCustomerService2Line
+            style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
+          />
+        ),
+      },
+    ],
+    // company_id: JSON.parse(localStorage.getItem("user")).company_id
+    //   ? JSON.parse(localStorage.getItem("user")).company_id
+    //   : "-1",
+    // colorWebCurrent: localStorage.getItem("colorpicker"),
+    action: "new",
+    idUpdate: "",
+    // checkFb: false,
+    // checkGg: true,
+    data: [],
+    updated: "",
+    detailUserVoucher: null,
+    hiddenUrl: true,
+    token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    role: localStorage.getItem("role"),
+    type: localStorage.getItem("type"),
+    isChange: true,
+    isLoading: true,
+    updateLevel: "1",
+  };
 
-      current_slug: "",
-      companyID: "",
-      arrTotalPackage: [],
-      isChange: true,
-      isChangeSlug: true,
-      currentPassword: "",
-      isLoading: false,
-      isDisable: true,
-      Email: "",
-      sub2_mainColor: "",
-      button_color: "",
-      sucess_color: "",
-      error_color: "",
-      text_mainColor: "",
-      updateLevel: "1",
+  componentDidMount() {
+    let arr = JSON.parse(localStorage.getItem("url"));
+    for (let i = 0; i < arr.length; i++) {
+      if ("#" + arr[i].to === window.location.hash) {
+        if (arr[i].hiddenUrl === true) {
+          window.location.href = "#/";
+        }
+      }
+    }
+    const { params } = this.props.match;
+    console.log(params);
 
-      Message_Code: "",
-      sub_mainColor: "",
-
-      statusModalUpdate: false,
-
-      dataConfigWeb: null,
-      idUpdateCurrent: null,
-      loadingSaveLogo: false,
-      htmlFuncWeb: null,
-
-      openHomeItem: false,
-
-      modalSlide: false,
-      actionSlide: "new",
-      actionBanner: "new",
-      modalBanner: false,
-      configData: [
-        {
-          label: "Trạng thái Facebook",
-          value: true,
-          key: "fb",
-          pass: "",
-          code: "",
-        },
-        {
-          label: "Trạng thái Google",
-          value: true,
-          key: "gg",
-          pass: "",
-          code: "",
-        },
-        {
-          label: "Trạng thái Zalo",
-          value: true,
-          key: "gg",
-          pass: "",
-          code: "",
-        },
-      ],
-    };
+    axios({
+      url: `${Constants.BASE_URL}${Constants.FETCH_DETAIL_USER_VOUCHER}/getDetail?id=${params.id}`,
+      method: "GET",
+    })
+      .then((res) => {
+        let val = res.data.data[0];
+        this.setState({
+          detailUserVoucher: val,
+          isLoading: false,
+        });
+      })
+      .catch((err) => {
+        toast(`${err.message}`, {
+          type: "error",
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        console.log(err);
+      });
   }
+
+  onFetchDetailUserVoucher() {
+    return;
+  }
+
   ChangeColorWeb = () => {
     const colorInput = document.getElementById("colorpicker");
     if (colorInput) {
@@ -171,19 +164,80 @@ class DetailVoucher extends Component {
     }
   }
 
-  async componentDidMount() {
-    let arr = JSON.parse(localStorage.getItem("url"));
-    for (let i = 0; i < arr.length; i++) {
-      if ("#" + arr[i].to === window.location.hash) {
-        if (arr[i].hidden === true) {
-          window.location.href = "#/";
-        }
-      }
-    }
-  }
-
   render() {
-    this.state.isLoading && (
+    if (!this.state.isLoading) {
+      return (
+        <div className="animated fadeIn">
+          <div className="flex-tabs">
+            <div class="tab">
+              <List
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
+                }}
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+              >
+                {this.state.tabNameConfig
+                  ? this.state.tabNameConfig.map((item, i) => {
+                      return (
+                        <ListItemButton
+                          key={item._id}
+                          className={
+                            i === 0
+                              ? " tablinks tabcontent-left-active"
+                              : " tablinks"
+                          }
+                          onClick={() => this.ToggleViewConfigWeb(i)}
+                          sx={{ pl: 4 }}
+                        >
+                          <ListItemIcon>{item.icon}</ListItemIcon>
+                          <ListItemText
+                            className="tabcontent-left"
+                            style={{
+                              fontSize: "14px !important",
+                              color: "rgb(52, 71, 103)",
+                            }}
+                            primary={item.name}
+                          />
+                        </ListItemButton>
+                      );
+                    })
+                  : null}
+              </List>
+            </div>
+            <div className="tabcontents" style={{ minHeight: "50vh" }}>
+              <div id="tabcontent1" className="tabcontent defaultOpen">
+                <h1>Mã voucher</h1>
+                <EvoucherCard
+                  detailUserVoucher={this.state.detailUserVoucher}
+                />
+              </div>
+              <div id="tabcontent2" className="tabcontent ">
+                <CalendarSkinHistory
+                  detailUserVoucher={this.state.detailUserVoucher}
+                />
+              </div>
+              <div id="tabcontent3" className="tabcontent">
+                <CheckInForm detailUserVoucher={this.state.detailUserVoucher} />
+              </div>
+              <div id="tabcontent4" className="tabcontent ">
+                <div class="text-center">
+                  <CareCustomerForm
+                    detailUserVoucher={this.state.detailUserVoucher}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    console.log(this.state.isLoading, this.state.detailUserVoucher);
+
+    return (
       <div className="sweet-loading">
         <DotLoader
           css={override}
@@ -192,101 +246,6 @@ class DetailVoucher extends Component {
           loading={this.state.isLoading}
           speedMultiplier={1.5}
         />
-      </div>
-    );
-
-    return (
-      <div className="animated fadeIn">
-        <div className="flex-tabs">
-          <div class="tab">
-            <List
-              sx={{
-                width: "100%",
-                maxWidth: 360,
-                bgcolor: "background.paper",
-              }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-            >
-              {this.state.tabNameConfig
-                ? this.state.tabNameConfig.map((item, i) => {
-                    return (
-                      <ListItemButton
-                        key={item._id}
-                        className={
-                          i === 0
-                            ? " tablinks tabcontent-left-active"
-                            : " tablinks"
-                        }
-                        onClick={() => this.ToggleViewConfigWeb(i)}
-                        sx={{ pl: 4 }}
-                      >
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText
-                          className="tabcontent-left"
-                          style={{
-                            fontSize: "14px !important",
-                            color: "rgb(52, 71, 103)",
-                          }}
-                          primary={item.name}
-                        />
-                      </ListItemButton>
-                    );
-                  })
-                : null}
-            </List>
-          </div>
-          <div className="tabcontents">
-            <div id="tabcontent1" className="tabcontent defaultOpen">
-              <div class="mb-3 text-center">
-                <CButton
-                  onClick={() => this.SaveAllConfigWeb("logoCompany")}
-                  style={styles.mgl5}
-                  outline
-                  color="success"
-                  size="md"
-                >
-                  {/* <CIcon name="cilPencil" /> */}
-                  Lưu thay đổi
-                </CButton>
-              </div>
-              <h1>Mã voucher</h1>
-              <EvoucherCard />
-            </div>
-            <div id="tabcontent2" className="tabcontent ">
-              <div>
-                <div class="text-center">
-                  <CButton
-                    onClick={() => this.SaveAllConfigWeb("banner")}
-                    style={styles.mgl5}
-                    outline
-                    color="success"
-                    size="md"
-                  >
-                    {/* <CIcon name="cilPencil" /> */}
-                    Lưu thay đổi
-                  </CButton>
-                </div>
-                <h1>Banner 1 </h1>
-              </div>
-            </div>
-            <div id="tabcontent3" className="tabcontent"></div>
-            <div id="tabcontent4" className="tabcontent ">
-              <div class="text-center">
-                <CButton
-                  onClick={() => this.SaveAllConfigWeb("logos")}
-                  style={styles.mgl5}
-                  outline
-                  color="success"
-                  size="md"
-                >
-                  {/* <CIcon name="cilPencil" /> */}
-                  Lưu thay đổi
-                </CButton>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     );
   }

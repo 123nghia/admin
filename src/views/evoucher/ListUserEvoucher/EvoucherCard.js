@@ -2,7 +2,9 @@ import React from "react";
 import Box from "@mui/material/Box";
 import backgroundVoucher from "./../../../assets/img/background-voucher.jpg_.webp";
 
-function EvoucherCard() {
+function EvoucherCard({ detailUserVoucher }) {
+  const { voucherCode, voucher, branch } = detailUserVoucher;
+
   return (
     <Box
       sx={{
@@ -21,6 +23,7 @@ function EvoucherCard() {
         height: "172px",
         borderRadius: "18px",
         overflow: "hidden",
+        fontFamily: "Noto Sans",
       }}
     >
       <img
@@ -55,8 +58,7 @@ function EvoucherCard() {
         }}
       >
         <img
-          placeholder="//laz-img-cdn.alicdn.com/tfs/TB19HoKqQzoK1RjSZFlXXai4VXa-64-64.png"
-          src="https://vn-test-11.slatic.net/shop/d5e177df16697b8a0fcc805642353223.jpeg_2200x2200q75.jpg_.webp"
+          src="https://evoucher-api.applamdep.com/image_brand/logo24h.png"
           style={{
             width: 60,
             height: 60,
@@ -65,8 +67,9 @@ function EvoucherCard() {
             backgroundColor: "rgb(255, 255, 255)",
             objectFit: "contain",
           }}
-          alt="https://vn-test-11.slatic.net/shop/d5e177df16697b8a0fcc805642353223.jpeg_2200x2200q75.jpg_.webp"
+          alt="https://evoucher-api.applamdep.com/image_brand/logo24h.png"
         />
+
         <div
           style={{
             boxSizing: "border-box",
@@ -98,16 +101,16 @@ function EvoucherCard() {
               flexShrink: 0,
               fontSize: 14,
               whiteSpace: "pre-wrap",
-              color: "rgb(254, 73, 96)",
+              color: "rgb(10, 148, 244)",
               textAlign: "center",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              fontFamily: "NotoSans-Regular",
               MozBoxOrient: "vertical",
               WebkitLineClamp: 2,
             }}
           >
-            Pretty Valley Store
+            {branch}
+            Seoul Spa
           </span>
         </div>
       </div>
@@ -128,21 +131,9 @@ function EvoucherCard() {
           width: 242,
           height: 172,
           alignItems: "flex-start",
+          justifyContent: "center",
         }}
       >
-        <img
-          src="//gw.alicdn.com/imgextra/i1/O1CN01GsPouz1YtdDrcOPFK_!!6000000003117-2-tps-138-42.png_140x10000.jpg"
-          style={{
-            width: 138,
-            height: 42,
-            position: "absolute",
-            bottom: 13,
-            left: 10,
-            objectFit: "contain",
-          }}
-          alt=""
-        />
-
         <div
           style={{
             boxSizing: "border-box",
@@ -157,6 +148,9 @@ function EvoucherCard() {
             margin: "0vw",
             padding: "0vw",
             minWidth: "0vw",
+
+            fontWeight: 600,
+            color: "rgb(10, 148, 244)",
           }}
         >
           <span
@@ -173,14 +167,11 @@ function EvoucherCard() {
               flexShrink: 0,
               fontSize: 30,
               whiteSpace: "pre-wrap",
-              fontWeight: 600,
-              fontFamily: "NotoSans-SemiBold",
-              color: "rgb(254, 73, 96)",
             }}
           >
-            10
+            {voucher[0].content}
           </span>
-          <span
+          {/* <span
             className="text"
             style={{
               borderWidth: 0,
@@ -197,12 +188,10 @@ function EvoucherCard() {
               fontWeight: 600,
               marginRight: 4,
               marginTop: 10,
-              fontFamily: "NotoSans-SemiBold",
-              color: "rgb(254, 73, 96)",
             }}
           >
             %OFF
-          </span>
+          </span> */}
         </div>
         <div
           style={{
@@ -233,15 +222,55 @@ function EvoucherCard() {
               fontSize: "22px",
               whiteSpace: "no-wrap",
               fontWeight: 400,
-              fontFamily: "NotoSans-Regular",
               textOverflow: "ellipsis",
-              color: "rgb(254, 73, 96)",
+              color: "rgb(10, 148, 244)",
+              width: "222px",
+              lineHeight: "24px",
+              overflow: "hidden",
+              marginTop: "1.25rem",
+            }}
+          >
+            {voucherCode}
+          </span>
+        </div>
+        <div
+          style={{
+            boxSizing: "border-box",
+            display: "flex",
+            position: "relative",
+            flexDirection: "column",
+            flexShrink: 0,
+            alignContent: "flex-start",
+            borderWidth: "0vw",
+            borderStyle: "solid",
+            borderColor: "black",
+            margin: "0vw",
+            padding: "0vw",
+            minWidth: "0vw",
+          }}
+        >
+          <span
+            className="text"
+            style={{
+              borderWidth: 0,
+              borderStyle: "solid",
+              borderColor: "black",
+              position: "relative",
+              display: "block",
+              textAlign: "left",
+              flexShrink: 0,
+              fontSize: "0.8rem",
+              whiteSpace: "no-wrap",
+              fontWeight: 400,
+              textOverflow: "ellipsis",
+              color: "rgb(10, 148, 244)",
               width: "222px",
               lineHeight: "24px",
               overflow: "hidden",
             }}
           >
-            29-29 thg 3,2022
+            {voucher[0].from} {voucher[0].to}
+            28-29 thg 3,2022
           </span>
         </div>
       </div>
