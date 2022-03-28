@@ -21,6 +21,8 @@ import Constants from "./../../../contants/contants";
 import { toast } from "react-toastify";
 import { Redirect } from "react-router-dom";
 import NotInfoSale from "../../../assets/img/NotInfoSale.png";
+import { AiFillSchedule } from "react-icons/ai";
+import NoteHistory from "./NoteHistory/index.js";
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -53,7 +55,7 @@ class DetailVoucher extends Component {
       //   ),
       // },
       {
-        _id: "t3",
+        _id: "t2",
         name: "Thông tin check-in",
         icon: (
           <BsPatchCheck
@@ -62,10 +64,19 @@ class DetailVoucher extends Component {
         ),
       },
       {
-        _id: "t4",
+        _id: "t3",
         name: "Thông tin CSKH",
         icon: (
           <RiCustomerService2Line
+            style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
+          />
+        ),
+      },
+      {
+        _id: "t4",
+        name: "Lịch sử ghi chú",
+        icon: (
+          <AiFillSchedule
             style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
           />
         ),
@@ -222,10 +233,10 @@ class DetailVoucher extends Component {
                   detailUserVoucher={this.state.detailUserVoucher}
                 />
               </div> */}
-              <div id="tabcontent3" className="tabcontent">
+              <div id="tabcontent2" className="tabcontent">
                 <CheckInForm detailUserVoucher={this.state.detailUserVoucher} />
               </div>
-              <div id="tabcontent4" className="tabcontent ">
+              <div id="tabcontent3" className="tabcontent ">
                 <div class="text-center">
                   <img
                     style={{ objectFit: "contain", width: "80%" }}
@@ -233,6 +244,9 @@ class DetailVoucher extends Component {
                     alt={NotInfoSale}
                   />
                 </div>
+              </div>
+              <div id="tabcontent4" className="tabcontent">
+                <NoteHistory detailUserVoucher={this.state.detailUserVoucher} />
               </div>
             </div>
           </div>
