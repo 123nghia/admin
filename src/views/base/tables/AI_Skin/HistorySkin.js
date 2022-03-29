@@ -442,7 +442,7 @@ class HistorySkin extends Component {
                               <td className="text-center">{item.Phone}</td>
 
                               <td className="text-center">
-                                <img src={item.Image}  style={{ width: '50%', height: 50 }} />
+                                <img src={item.Image}  style={{ width: '100px', height: '83px' }} />
                               </td>
                               <td className="text-center"></td>
                               <td className="text-center"></td>

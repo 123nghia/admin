@@ -15,8 +15,7 @@ function Iframe({ toggleView, link, closeModal }) {
 
   const handleClose = () => {
     if (closeModal) {
-      toggleView = false;
-      closeModal = false;
+     
       closeModal();
     }
   }
@@ -36,9 +35,9 @@ function Iframe({ toggleView, link, closeModal }) {
           display="initial"
           position="relative" />
       </CModalBody>
-      {/* <CModalFooter>
+      <CModalFooter>
         <CButton color="secondary" onClick={() => { handleClose() }}>Đóng</CButton>
-      </CModalFooter> */}
+      </CModalFooter>
     </CModal>
   )
 }

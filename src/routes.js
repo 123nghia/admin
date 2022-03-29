@@ -204,7 +204,7 @@ const routes = [
   {
     path: "/detail-campaign/:id",
     name: "DetailCampaign",
-    component: roleUser === "0" ? DetailCampaign : NotEnough,
+    component:  DetailCampaign 
   },
 
   { path: "/translation", name: "Translation", component: Translation },

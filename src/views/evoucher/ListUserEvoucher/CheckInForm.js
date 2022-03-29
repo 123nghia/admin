@@ -13,14 +13,13 @@ function CheckInForm({ detailUserVoucher }) {
   const { noted, create_at, status, voucher, fullName, phoneNumber } =
     detailUserVoucher;
 
-  console.log(status);
-
-  const renderStatusContent = (statusCode) => {
+    const renderStatusContent = (statusCode) => {
     const statusCodeMap = {
-      0: "Đã nhận evoucher - có soi da",
-      1: "Đã nhận evoucher - không soi da",
+      0: "Đã nhận evoucher",
+      1: "Đã nhận evoucher",
       2: "Đã check-in",
     };
+    
     return statusCodeMap[statusCode] || "Không xác định";
   };
   const renderStatusColorTag = (statusCode) => {
@@ -31,7 +30,7 @@ function CheckInForm({ detailUserVoucher }) {
     };
     return statusCodeMap[statusCode] || "lime";
   };
-
+  console.log(voucher[0]);
   return (
     <Box>
       <Typography
@@ -73,7 +72,11 @@ function CheckInForm({ detailUserVoucher }) {
             gutterBottom
             component="div"
           >
-            {renderStatusContent(voucher[0].status)}
+
+            {renderStatusContent(voucher[0].status)} {" "}
+            {
+              voucher[0].status && voucher[0].status !=="2" && voucher[0].historyId && voucher[0].historyId !== null ? "- Có soi da" : "- Không soi da"
+            }
           </Typography>
         </Tag>
       </Typography>

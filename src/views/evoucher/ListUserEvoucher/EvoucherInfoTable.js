@@ -10,7 +10,7 @@ import { CButton } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 
 function EvoucherInfoTable({ detailUserVoucher }) {
-  const { voucherCode, voucher, branch, skinHistory, create_at } =
+  const { voucherCode, voucher, branch, historyId, create_at } =
     detailUserVoucher;
   const [idHistory, setIdHistory] = useState("");
   const [toggleHistory, setToggleHistory] = useState(false);
@@ -89,14 +89,15 @@ function EvoucherInfoTable({ detailUserVoucher }) {
           </td>
 
           <td className="text-center">
-            <CButton
+            {
+              historyId ?  <CButton
               shape="rounded-pill"
               variant="outline"
               color="info"
               size="md"
               className="flex-a-center "
               onClick={(e) => {
-                setIdHistory(skinHistory);
+                setIdHistory(historyId);
                 setToggleHistory(!toggleHistory);
               }}
             >
@@ -105,7 +106,9 @@ function EvoucherInfoTable({ detailUserVoucher }) {
                 style={{ marginLeft: "0.5rem" }}
                 name="cil-magnifying-glass"
               />
-            </CButton>
+            </CButton> : null 
+            }
+           
           </td>
         </tr>
       </tbody>
@@ -119,7 +122,7 @@ function EvoucherInfoTable({ detailUserVoucher }) {
           <Card>{renderUserVoucherList()}</Card>
           <IframeModal
             toggleView={toggleHistory}
-            link={Constants.BASE_URL_HISTORY_SKIN + idHistory}
+            link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
             closeModal={closeModal}
           />
         </Col>
