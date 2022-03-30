@@ -1,28 +1,24 @@
-import { CButton } from "@coreui/react";
 import { css } from "@emotion/react";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { BsPatchCheck } from "react-icons/bs";
-import { AiOutlineFundView } from "react-icons/ai";
-import { RiChatHistoryLine, RiCustomerService2Line } from "react-icons/ri";
-import EvoucherInfoTable from "./EvoucherInfoTable";
-
+import axios from "axios";
 import "moment-timezone";
 import React, { Component } from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import { AiFillSchedule, AiOutlineFundView } from "react-icons/ai";
+import { BsPatchCheck } from "react-icons/bs";
+import { RiCustomerService2Line } from "react-icons/ri";
 import DotLoader from "react-spinners/DotLoader";
-import CalendarSkinHistory from "./CalendarSkinHistory";
-import CheckInForm from "./CheckInForm";
-import CareCustomerForm from "./CareCustomerForm";
-import axios from "axios";
-import Constants from "./../../../contants/contants";
 import { toast } from "react-toastify";
-import { Redirect } from "react-router-dom";
-import NotInfoSale from "../../../assets/img/NotInfoSale.png";
-import { AiFillSchedule } from "react-icons/ai";
-import NoteHistory from "./NoteHistory/index.js";
+import Constants from "../../../../contants/contants";
+import NotInfoSale from "../../../../assets/img/NotInfoSale.png";
+
+import EvoucherInfoTable from "./TabContent/EvoucherInfoTable";
+import CheckInForm from "./TabContent/CheckInForm";
+import NoteHistory from "./TabContent/NoteHistory";
+
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");

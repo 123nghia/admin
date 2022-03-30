@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Timeline from "@mui/lab/Timeline";
-import TimelineItem from "@mui/lab/TimelineItem";
-import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
+import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
-import { Box } from "@mui/material";
-import axios from "axios";
-import Constants from "./../../../../contants/contants";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import { IconButton, Tooltip } from "@mui/material";
+import React, { Fragment, useEffect, useState } from "react";
+// import axios from "axios";
+// import Constants from "../../../../../contants/contants";
 
 function TimeLineNotes({ idUser }) {
   const [noteList, setNoteList] = useState([]);
@@ -29,50 +30,44 @@ function TimeLineNotes({ idUser }) {
   }, [noteList]);
 
   return (
-    <Box>
-      <Timeline position="alternate">
+    <Fragment>
+      <Timeline position="right">
         <TimelineItem>
-          <TimelineOppositeContent color="text.secondary">
+          <TimelineOppositeContent
+            color="text.secondary"
+            sx={{ flex: "0 0 auto" }}
+          >
             09:30 am
+            <Tooltip title="Xem chi tiết">
+              <IconButton size="small">
+                <InfoOutlinedIcon sx={{ color: "#3C93E3" }} />
+              </IconButton>
+            </Tooltip>
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineDot />
             <TimelineConnector />
           </TimelineSeparator>
-          <TimelineContent>Eat</TimelineContent>
+          <TimelineContent>Đã lên lịch hẹn vào lúc 10:30</TimelineContent>
         </TimelineItem>
         <TimelineItem>
-          <TimelineOppositeContent color="text.secondary">
-            10:00 am
+          <TimelineOppositeContent
+            color="text.secondary"
+            sx={{ flex: "0 1 auto" }}
+          >
+            09:30 am
+            <IconButton size="small">
+              <InfoOutlinedIcon sx={{ color: "#3C93E3" }} />
+            </IconButton>
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineDot />
             <TimelineConnector />
           </TimelineSeparator>
-          <TimelineContent>Code</TimelineContent>
-        </TimelineItem>
-        <TimelineItem>
-          <TimelineOppositeContent color="text.secondary">
-            12:00 am
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>Sleep</TimelineContent>
-        </TimelineItem>
-        <TimelineItem>
-          <TimelineOppositeContent color="text.secondary">
-            9:00 am
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>Repeat</TimelineContent>
+          <TimelineContent>Đã lên lịch hẹn vào lúc 10:30</TimelineContent>
         </TimelineItem>
       </Timeline>
-    </Box>
+    </Fragment>
   );
 }
 

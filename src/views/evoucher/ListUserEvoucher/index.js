@@ -1,24 +1,30 @@
 import CIcon from "@coreui/icons-react";
-import { CButton, CCol, CRow, CSelect } from "@coreui/react";
+import { CButton, CCol, CRow, CSelect, CTooltip } from "@coreui/react";
 import { css } from "@emotion/react";
-import Pagination from "@material-ui/lab/Pagination";
+import { Chip, IconButton, Tooltip } from "@mui/material";
 import { BsDownload } from "@react-icons/all-files/bs/BsDownload";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
-import { FaAngleRight } from "@react-icons/all-files/fa/FaAngleRight";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 import { DatePicker, Select, Tag } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import "moment-timezone";
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import { MdOpenInNew } from "react-icons/md";
 import { Link } from "react-router-dom";
 import DotLoader from "react-spinners/DotLoader";
 import { Card, CardBody, CardHeader, Col, Input, Row } from "reactstrap";
+import formatDate from "src/utils/formatDate";
 import * as XLSX from "xlsx";
 import Constants from "../../../contants/contants";
 import IframeModal from "../../../views/components/Iframe";
-import { MdOpenInNew } from "react-icons/md";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { freeSet } from "@coreui/icons";
+import { Box } from "@mui/system";
 
 const { Option } = Select;
 
@@ -36,33 +42,17 @@ class ListUserEvoucher extends Component {
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
         : null,
-      data: [],
       key: "",
       totalActive: 0,
-      modalCom: false,
-      updated: "",
       dataApi: [],
-      hidden: false,
       action: "new",
-      email: "",
-      modalVoucher: false,
-      username: "",
       phone: "",
-      modalDelete: false,
-      delete: null,
-      arrPagination: [],
-      indexPage: 0,
-      actionVoucher: "new",
       token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       type: localStorage.getItem("type"),
       user: localStorage.getItem("user"),
       isLoading: false,
-      idCurrentUpdate: null,
-      levelNormal: "0",
       idHistory: "",
       toggleHistory: false,
-      // from : new Date().toLocaleDateString(),
-      // to : new Date().toLocaleDateString()
       from: "",
       to: "",
       dataSalesDefault: [
@@ -71,12 +61,11 @@ class ListUserEvoucher extends Component {
           Name: "Không có",
         },
       ],
-      levelFilter: "A",
+      levelFilter: "0",
     };
   }
 
   async componentDidMount() {
-    const { type } = this.state;
     this.getDataSeo();
     this.getData();
 
@@ -169,30 +158,6 @@ class ListUserEvoucher extends Component {
     });
   };
 
-  pagination(dataApi) {
-    var i,
-      j,
-      temparray,
-      chunk = 8;
-    var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-
-    if (arrTotal.length === 0) {
-      this.setState({
-        hidden: false,
-      });
-    } else {
-      this.setState({
-        hidden: true,
-      });
-    }
-
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
-  }
-
   async onSearch() {
     const { from, to, idDataSales, phoneFilter, levelFilter, codeVoucher } =
       this.state;
@@ -253,12 +218,13 @@ class ListUserEvoucher extends Component {
       })
       .then((res) => {
         let val = res.data.data;
-        this.pagination(val);
         this.setState({ dataApi: val });
 
         let active = 0;
 
         this.setState({ isLoading: false, totalActive: active });
+
+        console.log(res.data.data);
       });
   }
 
@@ -266,63 +232,23 @@ class ListUserEvoucher extends Component {
     this.setState({ [key]: val });
   }
 
-  openVoucher() {
-    this.setState({
-      actionVoucher: "new",
-      modalVoucher: true,
-      idCurrentUpdate: "",
-      nameVoucher: "",
-      phoneVoucher: "",
-      levelNormal: "",
-    });
-  }
-
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  getBadge(status) {
-    switch (status) {
-      case "Actived":
-        return "success";
-      case "Inactive":
-        return "secondary";
-      case "Locked":
-        return "warning";
-      case "Deactived":
-        return "danger";
-      default:
-        return "primary";
-    }
-  }
-
   render() {
-    const {
-      data,
-      arrPagination,
-      key,
-      phoneVoucher,
-      nameVoucher,
-      modalVoucher,
-      toggleHistory,
-      idHistory,
-    } = this.state;
+    const { dataApi, toggleHistory, idHistory } = this.state;
 
     function closeModal() {
       this.setState({ toggleHistory: !toggleHistory });
     }
 
-    const arrLevel = [
-      {
-        item: "A",
-      },
-      {
-        item: "1",
-      },
-    ];
     const arrLevelFilter = [
       {
         item: "A",
+      },
+      {
+        item: "0",
       },
       {
         item: "1",
@@ -330,46 +256,43 @@ class ListUserEvoucher extends Component {
       {
         item: "2",
       },
-      {
-        item: "3",
-      },
-      {
-        item: "4",
-      },
-    ];
-
-    const headingList = [
-      "STT.",
-      "Tên",
-      "Số điện thoại",
-      "Mã Voucher",
-      "Lịch sử soi da",
-      "Ngày nhận",
-      "Trạng thái",
-      "Sale theo dõi",
-      "",
     ];
 
     const checkStatusUserVoucherColor = (status) => {
       const statusColorMap = {
-        A: "#2eb85c",
-        1: "#2db7f5",
-        2: "#87d068",
-        3: "#dc0e04",
+        2: "#2eb85c",
+        A: "#2db7f5",
+        1: "#87d068",
+        0: "#dc0e04",
       };
 
       return statusColorMap[status] || "#FF0004";
     };
     const checkStatusUserVoucherContent = (status) => {
       const statusContentMap = {
-        A: "Đã giao KH",
-        1: "Đã xác nhận KH",
-        2: "Hoàn thành",
-        3: "Hủy bỏ",
+        A: "Đã nhận voucher",
+        0: "Đã check-in",
+        1: "Hoàn thành",
+        2: "Hủy bỏ",
       };
 
       return statusContentMap[status] || "Chưa xác nhận";
     };
+
+    const headingList = [
+      "STT.",
+      "Họ tên",
+      "Số điện thoại",
+      "Tỉnh Thành",
+      "Mã Voucher",
+
+      "Trạng thái",
+      "Ngày nhận",
+      "Lịch sử soi da",
+      "Sale theo dõi",
+      "Ghi chú mới nhất",
+      "",
+    ];
 
     const renderRowSearch = () => (
       <CRow>
@@ -408,59 +331,22 @@ class ListUserEvoucher extends Component {
           <div className="">
             <p className="title_filter">Trạng thái</p>
             <div style={{ width: "200px" }} className="">
-              {arrLevel !== undefined ? (
-                <CSelect
-                  onChange={async (e) => {
-                    this.changeLevelValue(e, "levelFilter");
-                  }}
-                  custom
-                  size="md"
-                  name="levelFilter"
-                  id="SelectLm"
-                >
-                  {arrLevelFilter.map((item, i) => {
-                    if (item.item === this.state.levelFilter) {
-                      return (
-                        <option selected key={i} value={item.item}>
-                          {item.item === "A"
-                            ? "Đã giao KH"
-                            : item.item === "1"
-                            ? "Đã xác nhận KH"
-                            : item.item === "2"
-                            ? "Hoàn thành"
-                            : item.item === "3"
-                            ? "Hủy bỏ"
-                            : "Chưa xác nhận"}
-                        </option>
-                      );
-                    } else {
-                      return (
-                        <option key={i} value={item.item}>
-                          {item.item === "A"
-                            ? "Đã giao KH"
-                            : item.item === "1"
-                            ? "Đã xác nhận KH"
-                            : item.item === "2"
-                            ? "Hoàn thành"
-                            : item.item === "3"
-                            ? "Hủy bỏ"
-                            : "Chưa xác nhận"}
-                        </option>
-                      );
-                    }
-                  })}
-                </CSelect>
-              ) : null}
+              <CSelect
+                onChange={async (e) => {
+                  this.changeLevelValue(e, "levelFilter");
+                }}
+                custom
+                size="md"
+                name="levelFilter"
+                id="SelectLm"
+              >
+                {arrLevelFilter.map((item, i) => (
+                  <option selected key={i} value={item.item}>
+                    {checkStatusUserVoucherContent(item.item)}
+                  </option>
+                ))}
+              </CSelect>
             </div>
-            {/* <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ statusVoucher: e.target.value });
-                          }}
-                          name="statusVoucher"
-                          value={this.state.statusVoucher}
-                          placeholder="Trạng thái voucher"
-                        /> */}
           </div>
         </CCol>
         <CCol md={4} className="mt-3">
@@ -554,37 +440,40 @@ class ListUserEvoucher extends Component {
           </tr>
         </thead>
         <tbody>
-          <td colSpan="10" hidden={this.state.hidden} className="text-center">
-            Không tìm thấy dữ liệu
-          </td>
-
-          {data &&
-            data.map((item, i) => {
+          {dataApi ? (
+            dataApi.map((item, i) => {
               return (
                 <tr key={i}>
                   <td className="text-center">{i + 1}</td>
-                  <td className="text-center">{item.fullName}</td>
-                  <td className="text-center">{item.phoneNumber}</td>
-                  <td className="text-center">{item.voucherCode}</td>
-                  <td className="text-center">
-                    <CButton
-                      shape="rounded-pill"
-                      variant="outline"
-                      color="info"
-                      style={{ textAlign: "center" }}
-                      size="md"
-                      onClick={(e) => {
-                        this.setState({
-                          idHistory: item.skinHistory,
-                          toggleHistory: !toggleHistory,
-                        });
-                      }}
-                    >
-                      <CIcon name="cil-magnifying-glass" />
-                    </CButton>
+                  <td
+                    className="text-center"
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    {item.fullName.toLowerCase()}
                   </td>
+                  <td className="text-center">{item.phoneNumber}</td>
+                  <td className="text-center"> TP. Hồ Chí Minh</td>
                   <td className="text-center">
-                    {new Date(item.create_at).toLocaleDateString()}
+                    {item.voucherCode && (
+                      <Box sx={{ display: "flex" }}>
+                        <Chip
+                          label={item.voucherCode}
+                          variant="outlined"
+                          sx={{ backgroundColor: "#9fcfde", border: "none" }}
+                        />
+
+                        <CopyToClipboard
+                          text={item.voucherCode}
+                          onCopy={() => {}}
+                        >
+                          <Tooltip title="Copy">
+                            <IconButton size="small">
+                              <CIcon content={freeSet.cilCopy} />
+                            </IconButton>
+                          </Tooltip>
+                        </CopyToClipboard>
+                      </Box>
+                    )}
                   </td>
                   <td className="text-center">
                     <Tag
@@ -610,25 +499,49 @@ class ListUserEvoucher extends Component {
                       </div>
                     ) : null}
                   </td>
+                  <td className="text-center">{formatDate(item.create_at)}</td>
+                  <td className="text-center">
+                    <CButton
+                      shape="rounded-pill"
+                      variant="outline"
+                      color="info"
+                      style={{ textAlign: "center" }}
+                      size="md"
+                      onClick={(e) => {
+                        this.setState({
+                          idHistory: item.skinHistory,
+                          toggleHistory: !toggleHistory,
+                        });
+                      }}
+                    >
+                      <CIcon name="cil-magnifying-glass" />
+                    </CButton>
+                  </td>
                   <td className="text-center">{item.saleFollow}</td>
                   <td className="text-center">
+                    <Chip
+                      sx={{ marginLeft: "1.3rem" }}
+                      icon={<AccessTimeIcon />}
+                      label="3 giờ trước"
+                    />
+                  </td>
+                  <td className="text-center">
                     <Link to={`/detail-evoucher/${item._id}`}>
-                      <CButton
-                        shape="rounded-pill"
-                        variant="outline"
-                        color="info"
-                        style={styles.mgl5}
-                        size="md"
-                        className="flex-a-center "
-                      >
-                        Chi tiết
-                        <MdOpenInNew className="ml-1" />
-                      </CButton>
+                      <Tooltip title="Xem chi tiết">
+                        <IconButton size="small">
+                          <LaunchOutlinedIcon sx={{ color: "#3C93E3" }} />
+                        </IconButton>
+                      </Tooltip>
                     </Link>
                   </td>
                 </tr>
               );
-            })}
+            })
+          ) : (
+            <td colSpan="10" className="text-center">
+              Không tìm thấy dữ liệu
+            </td>
+          )}
         </tbody>
       </table>
     );
@@ -750,19 +663,6 @@ class ListUserEvoucher extends Component {
                 </div>
 
                 {renderUserVoucherList()}
-
-                <div style={{ float: "right" }}>
-                  <Pagination
-                    count={arrPagination.length}
-                    color="primary"
-                    onChange={(e, v) => {
-                      this.setState({
-                        data: arrPagination[v - 1],
-                        indexPage: v - 1,
-                      });
-                    }}
-                  />
-                </div>
               </CardBody>
             </Card>
             <IframeModal
@@ -786,9 +686,6 @@ const override = css`
 const styles = {
   dateForm: {
     width: "200px",
-  },
-  pagination: {
-    marginRight: "5px",
   },
   flexLabel: {
     width: 100,

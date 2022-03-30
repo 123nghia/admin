@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { useSelector, useDispatch } from "redux";
-import DetailVoucher from "./views/evoucher/ListUserEvoucher/DetailVoucher";
 
 const Dashboard = React.lazy(() => import("./views/DashBoard/Dashboard"));
 const TableUser = React.lazy(() => import("./views/base/tables/TableUser"));
@@ -131,6 +130,9 @@ const RequestSupport = React.lazy(() => import("./views/info/requestSupport"));
 const ListEvoucher = React.lazy(() => import("./views/evoucher/ListVoucher"));
 const ListUserEvoucher = React.lazy(() =>
   import("./views/evoucher/ListUserEvoucher/index.js")
+);
+const DetailVoucher = React.lazy(() =>
+  import("./views/evoucher/ListUserEvoucher/DetailUserVoucher/index.js")
 );
 
 const ListCampaign = React.lazy(() => import("./views/evoucher/ListCampaign"));
