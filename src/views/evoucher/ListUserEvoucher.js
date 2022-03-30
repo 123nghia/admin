@@ -99,9 +99,6 @@ class EndUser extends Component {
     setTimeout(function(){
       btnOuter.classList.add("file_uploaded");
       btnOuter.style.borderRadius = "50%";
-
-     
-
     },3000);
 
  

@@ -47,7 +47,6 @@ const BookCalendar = React.lazy(() => import('./views/components/bookCalendar'))
 const ConfigTheme = React.lazy(() => import('./views/base/tables/configSystem/ColorTheme'));
 
 
-
 const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginSubSaleTable'));
 
 //User
@@ -57,6 +56,9 @@ const configSkinDisplay = React.lazy(() => import('./views/skin/configDisplay'))
 const configContent = React.lazy(() => import('./views/skin/content'));
 const configOverView = React.lazy(() => import('./views/skin/overView'));
 const configWeb = React.lazy(() => import('./views/config/configWeb'));
+const GeneralStatistics = React.lazy(() => import('./views/evoucher/GeneralStatistics'));
+const ManageProvider = React.lazy(() => import('./views/evoucher/ManageProvider'));
+
 //ADMIN MakeUp
 const SuggestItem = React.lazy(() => import('./views/base/tables/MakeUp/SuggestItem'));
 const Brand = React.lazy(() => import('./views/base/tables/MakeUp/Brand'));
@@ -108,7 +110,7 @@ const routes = [
 
   { path: '/manage-sales-group', name: 'ManageSalesGroup', component: roleUser === "0" ? ManageSalesGroup : NotEnough },
 
-  { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign},
+  { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign },
 
   { path: '/translation', name: 'Translation', component: Translation },
   { path: '/not-enough', name: 'NotEnough', component: NotEnough },
@@ -147,6 +149,7 @@ const routes = [
   { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
 
   { path: '/yeu-cau-ho-tro', name: 'Request Suport', component: RequestSupport },
+  { path: '/manage-provider', name: 'Manage Provider', component: ManageProvider },
 
   { path: '/saleAdmin', name: 'SALE', component: PluginUserTable },
   { path: '/reward_info', name: 'REWARD_INFO', component: RewardInfomation },
@@ -163,6 +166,7 @@ const routes = [
   { path: '/skin/configContent', name: 'configContent', component: configContent },
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
   { path: '/cau-hinh-trang-web', name: 'configWeb', component: roleUser !== "0" ? configWeb : NotEnough },
+  { path: '/general-statistics', name: 'General Statistics', component: GeneralStatistics },
 
 
 

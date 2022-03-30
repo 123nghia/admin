@@ -72,7 +72,9 @@ class User extends Component {
             hidden: true,
             arrRoleSubAdmin: [],
             idChangeRole: "",
+           
         };
+        
     }
     async componentDidMount() {
         // this.getData();
@@ -169,6 +171,8 @@ class User extends Component {
             })
         }
     }
+    
+    
 
     onChange(key, val) {
         this.setState({ [key]: val })
@@ -465,7 +469,6 @@ class User extends Component {
                                             <tr>
                                                 <th className="text-center">STT.</th>
                                                 <th className="text-center">Tiêu đề</th>
-                                                {/* <th className="text-center">Nhóm sale</th> */}
                                                 <th className="text-center">Nhóm trưởng</th>
                                                 <th className="text-center">Mô tả</th>
                                                 <th className="text-center">#</th>
@@ -482,7 +485,6 @@ class User extends Component {
                                                             <tr key={i}>
                                                                 <td className="text-center">{i + 1}</td>
                                                                 <td className="text-center">{item.Title}</td>
-                                                                {/* <td className="text-center">{item.SaleIds}</td> */}
                                                                 <td className="text-center">{item.LeadIds}</td>
                                                                 <td className="text-center">{item.Description}</td>
                                                                 <td className="text-center">
@@ -525,17 +527,6 @@ class User extends Component {
                             // rows="5"
                             />
 
-
-                            {/* <CLabel>Nhóm sale</CLabel>
-                            <Select
-                                defaultValue={this.state.SaleIds}
-                                onChange={this.handleChangeSaleIds}
-                                placeholder="Chọn nhóm"
-                                style={{ width: 200, marginBottom: 15 }}>
-                                {this.state.saleList && this.state.saleList.map(opt => (
-                                    <Option value={opt._id} key={opt._id}>{opt._id}</Option>
-                                ))}
-                            </Select> */}
 
                             <CLabel>Nhóm trưởng</CLabel>
                             <Select

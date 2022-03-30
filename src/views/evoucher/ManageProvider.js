@@ -721,15 +721,6 @@ class EndUser extends Component {
               // rows="5"
               />
 
-              {/* <TextFieldGroup
-                field="company"
-                label="Tên công ty"
-                value={this.state.company}
-                // error={errors.title}
-                onChange={(e) => this.setState({ company: e.target.value })}
-                // rows="5"
-              /> */}
-
               <TextFieldGroup
                 field="quantity"
                 label="Số lượng Voucher"
@@ -1217,48 +1208,11 @@ class EndUser extends Component {
                     Quản lý nhà cung cấp
                   </i>
 
-                  <CRow>
+                  <CRow>    
                     <CCol md={4} className="mt-3">
                       <div className="">
-
-
-                        <p className="title_filter">Mã Voucher</p>
-                        <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ codeVoucher: e.target.value });
-                          }}
-                          name="codeVoucher"
-                          value={this.state.codeVoucher}
-                          placeholder="Mã voucher"
-                        />
-                      </div>
-                    </CCol>
-
-                    <CCol md={4} className="mt-3">
-                      <div className="">
-
-
-                        <p className="title_filter">Số điện thoại</p>
-                        <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ phoneFilter: e.target.value });
-                          }}
-                          type="number"
-                          name="phoneFilter"
-                          value={this.state.phoneFilter}
-                          placeholder="Số điện thoại"
-                        />
-                      </div>
-                    </CCol>
-                    <CCol md={4} className="mt-3">
-                      <div className="">
-
-
-                        <p className="title_filter">Trạng thái</p>
+                        <p className="title_filter">Trạng thái chiến dịch</p>
                         <div style={{ width: "200px" }} className="">
-
                           {arrLevel !== undefined ? (
                             <CSelect
                               onChange={async (e) => {
@@ -1293,15 +1247,6 @@ class EndUser extends Component {
                             </CSelect>
                           ) : null}
                         </div>
-                        {/* <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ statusVoucher: e.target.value });
-                          }}
-                          name="statusVoucher"
-                          value={this.state.statusVoucher}
-                          placeholder="Trạng thái voucher"
-                        /> */}
                       </div>
                     </CCol>
                     <CCol md={4} className="mt-3">
@@ -1356,12 +1301,12 @@ class EndUser extends Component {
                       <div className="">
 
 
-                        <p className="title_filter">Danh sách Sales</p>
+                        <p className="title_filter">Danh sách Brand</p>
                         <div style={{width:'200px'}}>
                         <Select
                           className="select_seo"
                           showSearch
-                          placeholder="Lọc theo Sales"
+                          placeholder="Lọc theo Brand"
                           optionFilterProp="children"
                           onChange={(value) =>
                             this.setState({
@@ -1423,11 +1368,13 @@ class EndUser extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên công ty</th>
-                        <th className="text-center">E-mail - SĐT</th>
+                        <th className="text-center">Brand</th>
+                        <th className="text-center">Loại</th>
+                        <th className="text-center">Địa chỉ</th>
+                        <th className="text-center">Website</th>                     
+                        <th className="text-center">SĐT</th>
+                        <th className="text-center">Người tạo</th>
                         <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Định danh hệ thống</th>
-                        <th className="text-center">Địa chỉ</th>                     
-                        <th className="text-center"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1446,63 +1393,15 @@ class EndUser extends Component {
                               <td className="text-center">{item.name}</td>
                               <td className="text-center">
                                   <div>{item.Email}</div>
-                                  <div>------------</div>
-                                  <div>{item.Phone}</div>
                               </td>
                               <td className="text-center">
                               {new Date(item.from).toLocaleDateString()}
                               </td>
                               <td className="text-center">{item.name}</td>
                               <td className="text-center">{item.name}</td>
-                               <td className="text-center" style={{ minWidth: '230px' }}>
-                                <div className="flex">
-                                  <Link to={"/detail-campaign/" + item._id}>
-                                    <CButton
-                                      shape="rounded-pill"
-                                      variant="outline"
-                                      color="info"
-                                      style={styles.mgl5}
-                                      size="md"
-                                      className="flex-a-center "
-                                    // onClick={(e) =>
-                                    //   this.viewDetailCampaign(item._id)
-                                    // }
-                                    >
-                                      <BsSearch className="mr-1" />
-                                      Chi tiết
-                                    </CButton>
-                                  </Link>
-
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openEditVoucher(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => {
-                                      this.remove(item);
-                                    }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                              </td>
+                              <td className="text-center">{item.name}</td>
+                              <td className="text-center">{item.name}</td>
+                              <td className="text-center">{item.name}</td>
                             </tr>
                           );
                         })
