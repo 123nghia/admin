@@ -460,8 +460,6 @@ class User extends Component {
                                     <CRow>
                                         <CCol md={3} className="">
                                             <div className="">
-
-
                                                 <p className="title_filter">Từ khóa</p>
 
                                                 <Input style={styles.searchInput} onChange={(e) => {

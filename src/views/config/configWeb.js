@@ -275,6 +275,7 @@ class Users extends Component {
           let dataConfig = res.data.data[0];
 
           let valueConfig = JSON.parse(dataConfig.Value);
+          console.log("webinfo",valueConfig)
 
           this.setState(
             {
