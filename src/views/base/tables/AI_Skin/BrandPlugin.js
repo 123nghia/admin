@@ -383,7 +383,7 @@ class BrandPlugin extends Component {
                 <i className="fa fa-align-justify title_header">Danh sách thương hiệu</i>
                 
                   <CRow>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="">
                       <div className="">
 
 
@@ -398,7 +398,7 @@ class BrandPlugin extends Component {
 
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      style={{  marginRight: "10px" }}
                       size="md"
                       className="btn-main"
                       onClick={e => { this.resetSearch() }}
@@ -408,7 +408,7 @@ class BrandPlugin extends Component {
                     </CButton>
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
+                     
                       size="md"
                       className="btn-main"
                       onClick={e => this.toggleModal("new")}

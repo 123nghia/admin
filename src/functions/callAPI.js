@@ -37,7 +37,6 @@ const connect = async function (url = "", data = {}, token = "", type) {
         if (del.is_success == false) {
           return null;
         }
-
         return del.data;
     }
 

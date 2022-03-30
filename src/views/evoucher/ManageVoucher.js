@@ -45,6 +45,7 @@ import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 
 
 const { Option } = Select;
+const dateFormat = "DD-MM-YYYY";
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
@@ -320,7 +321,7 @@ class EndUser extends Component {
       modalVoucher: true,
       idCurrentUpdate: "",
       codeVoucher: "",
-      relCode: this.state.dataCampaign?.[0].relCode,
+      relCode: this.state.dataCampaign?.[0]?.relCode,
       description: "",
       status: "0",
       nameCompanyChoose : ""
@@ -679,7 +680,7 @@ class EndUser extends Component {
                 // rows="5"
               /> */}
               <div className="mt-3"></div>
-              <label className="control-label">Mô tả:</label>
+              <label className="control-label">Nội dung:</label>
               <CTextarea
                 name="description"
                 rows="4"
@@ -697,7 +698,7 @@ class EndUser extends Component {
                       this.changeLevel(e);
                     }}
                     custom
-                    size="sm"
+                    size="md"
                     name="status"
                     id="SelectLm"
                   >
@@ -772,9 +773,8 @@ class EndUser extends Component {
                   <i className="fa fa-align-justify title_header">
                     Quản lý Voucher
                   </i>
-
                   <CRow>
-                    <CCol md={4} className="mt-3">
+                  <CCol md={3} className="">
                       <div className="">
 
 
@@ -782,17 +782,33 @@ class EndUser extends Component {
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
-                            this.setState({ codeVoucher: e.target.value });
+                            this.setState({ codeVoucherSearch: e.target.value });
                           }}
-                          name="codeVoucher"
-                          value={this.state.codeVoucher}
+                          name="codeVoucherSearch"
+                          value={this.state.codeVoucherSearch}
                           placeholder="Mã voucher"
                         />
                       </div>
                     </CCol>
 
+                    <CCol md={3} className="mt">
+                      <div className="">
 
-                    <CCol md={4} className="mt-3">
+
+                        <p className="title_filter">Số điện thoại</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ phoneFilter: e.target.value });
+                          }}
+                          type="number"
+                          name="phoneFilter"
+                          value={this.state.phoneFilter}
+                          placeholder="Số điện thoại"
+                        />
+                      </div>
+                    </CCol>
+                    <CCol md={3} className="">
                       <div className="">
 
 
@@ -852,15 +868,96 @@ class EndUser extends Component {
 
                       </div>
                     </CCol>
+                    <CCol md={3} className="mt">
+                      <div className="">
 
 
+                        <p className="title_filter">Danh sách Sales</p>
+                        <div style={{ width: '200px' }}>
+                          <Select
+                            className="select_seo"
+                            showSearch
+                            placeholder="Lọc theo Sales"
+                            optionFilterProp="children"
+                            onChange={(value) =>
+                              this.setState({
+                                idDataSales: value,
+                              })
+                            }
+                            onSearch={this.onSearchSelect}
+                            filterOption={(input, option) =>
+                              option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                              0
+                            }
+                          >
+                            {this.state.dataSales
+                              ? this.state.dataSales.map((item, i) => {
+                                return <Option value={item._id}>{item.Name}</Option>;
+                              })
+                              : null}
+                          </Select>
+                        </div>
+
+                      </div>
+                    </CCol>
+                    <CCol md={3} className="mt">
+                   
+                        <div className="">
+                          <p className="title_filter">Từ ngày</p>
+
+                          <div style={{ width: '200px' }}>
+                            <DatePicker
+                              style={styles.dateForm}
+                              onChange={(e, dateString) => {
+                                let copy = dateString.split("-");
+                                let newData = ``;
+                                copy.forEach((item, index) => {
+                                  if (index === 0) {
+                                    newData += item;
+                                  } else {
+                                    newData += `/${item}`;
+                                  }
+                                });
+                                this.setState({ from: newData });
+                              }}
+                              format={dateFormat}
+                            />
+                          </div>
+                        </div>
+                    </CCol>
+                    <CCol md={3} className="mt">
+                        <div className=" mt-1">
+                          <p className="title_filter">Đến ngày</p>
+                          <div style={{ width: '200px' }}>
+                            <DatePicker
+                              style={styles.dateForm}
+                              onChange={(e, dateString) => {
+                                let copy = dateString.split("-");
+                                let newData = ``;
+                                copy.forEach((item, index) => {
+                                  if (index === 0) {
+                                    newData += item;
+                                  } else {
+                                    newData += `/${item}`;
+                                  }
+                                });
+                                this.setState({ to: newData });
+                              }}
+                              format={dateFormat}
+                            />
+                          </div>
+                        </div>
+
+                   
+                    </CCol>
                   </CRow>
-                  <div className="flex-center-space mt-4">
+
+                  <div className="flex-center-space mt-1">
 
                     <div class=" flex">
                       <CButton
                         color="success"
-                        style={{ marginBottom: "10px", marginRight: '10px' }}
+                        style={{  marginRight: '10px' }}
                         size="md"
                         className="flex-center"
                         onClick={this.OpenFileExcel}
@@ -871,7 +968,7 @@ class EndUser extends Component {
                       <a href="/excel/template-import-voucher.xlsx" download>
                         <CButton
                           color="success"
-                          style={{ marginBottom: "10px", marginRight: '10px' }}
+                          style={{  marginRight: '10px' }}
                           size="md"
                           className="flex-center"
 
@@ -882,7 +979,7 @@ class EndUser extends Component {
                       </a>
                       <CButton
                         color="success"
-                        style={{ marginBottom: "10px", marginRight: '10px' }}
+                        style={{  marginRight: '10px' }}
                         size="md"
                         className="flex-center"
                         onClick={() => this.ExportsFileExcel()}
@@ -898,7 +995,7 @@ class EndUser extends Component {
                     <div className="flex">
                       <CButton
                         color="info"
-                        style={{ marginBottom: "10px", marginRight: '10px' }}
+                        style={{marginRight: '10px' }}
                         size="md"
                         className="btn-main"
                         onClick={(e) => {
@@ -910,7 +1007,7 @@ class EndUser extends Component {
                       </CButton>
                       <CButton
                         color="info"
-                        style={{ marginBottom: "10px" }}
+                     
                         size="md"
                         className="btn-main"
                         onClick={() => this.openVoucher()}
@@ -1316,7 +1413,7 @@ const styles = {
     marginRight: "5px",
   },
   searchInput: {
-    width: "250px",
+    width: "200px",
     display: "inline-block",
 
   },

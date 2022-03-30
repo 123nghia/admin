@@ -564,51 +564,9 @@ class Users extends Component {
 
                     </thead>
                     <tbody>
-                      <tr>
+                    <tr>
                         <td className="pl-5">
-                          Tên chiến dịch
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ?  detailCampaign.name : ""
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Ngày bắt đầu
-                        </td>
-                        <td className="color-red">
-                          {
-                            detailCampaign ? new Date(detailCampaign.from).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Ngày kết thúc
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ? new Date(detailCampaign.to).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                     
-                     
-                      <tr>
-                        <td className="pl-5">
-                          Ngày kết thúc Sale
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ? new Date(detailCampaign.saleEndDate).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Trạng thái
+                          Trạng thái chiến dịch
                         </td>
                         <td className="color-red">
                           {
@@ -628,6 +586,66 @@ class Users extends Component {
                           </Tag> : ""
                           }
                       
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Tên chiến dịch
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign ?  detailCampaign.name : ""
+                          }
+                        </td>
+                      </tr>
+                     
+                      <tr>
+                        <td className="pl-5">
+                          Nội dung chiến dịch
+                        </td>
+                        <td className="color-red">
+                         ...
+                      
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Ngày bắt đầu Sales
+                        </td>
+                        <td className="color-red">
+                          {
+                            detailCampaign ? new Date(detailCampaign.from).toLocaleDateString() : ""
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                          Ngày kết thúc Sales
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign ? new Date(detailCampaign.to).toLocaleDateString() : ""
+                          }
+                        </td>
+                      </tr>
+                     
+                     
+                      <tr>
+                        <td className="pl-5">
+                          Ngày kết thúc chiến dịch
+                        </td>
+                        <td className="color-red">
+                        {
+                            detailCampaign ? new Date(detailCampaign.saleEndDate).toLocaleDateString() : ""
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">
+                         Ghi chú
+                        </td>
+                        <td className="color-red">
+                        ...
                         </td>
                       </tr>
                     </tbody>
@@ -669,6 +687,14 @@ class Users extends Component {
                           }
                         </td>
                       </tr>
+                         <tr>
+                        <td className="pl-5">
+                          Số khách CheckIn
+                        </td>
+                        <td className="color-red">
+                       ...
+                        </td>
+                      </tr>
                       <tr>
                         <td className="pl-5">
                           Tỷ lệ CheckIn Voucher
@@ -679,6 +705,7 @@ class Users extends Component {
                           }
                         </td>
                       </tr>
+                   
                       
                     </tbody>
                   </table>
@@ -712,6 +739,7 @@ class Users extends Component {
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Ngày kết thúc</th>
                         <th className="text-center">trạng thái</th>
+                        <th className="text-center">tỉnh/thành</th>
 
                         <th className="text-center">#</th>
                       </tr>
@@ -768,7 +796,10 @@ class Users extends Component {
                                   }
                                 </Tag>
                               </td>
-                              <td className="text-center">
+                              <td>
+                                  ...
+                              </td>
+                              {/* <td className="text-center">
                                 <div class="flex" >
                                   <CButton
                                     shape="rounded-pill"
@@ -817,7 +848,7 @@ class Users extends Component {
                                     />
                                   </CButton>
                                 </div>
-                              </td>
+                              </td> */}
                             </tr>
                           );
                         })

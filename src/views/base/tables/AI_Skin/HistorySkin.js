@@ -12,6 +12,8 @@ import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
+
 import {
   CButton,
   CLabel, CSelect, CRow, CCol
@@ -63,6 +65,28 @@ class HistorySkin extends Component {
     };
     this.closeModal = this.closeModal.bind(this)
   }
+  async ExportsFileExcel() {
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  };
   async componentDidMount() {
     this.getDataSeo();
     if (this.state.type == '0') {
@@ -234,7 +258,7 @@ class HistorySkin extends Component {
                   </i>
 
                   <CRow>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                     <div className="">
 
                    
@@ -251,7 +275,7 @@ class HistorySkin extends Component {
                       </div>
                     </CCol>
                    
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                     <div className="">
 
                    
@@ -268,7 +292,7 @@ class HistorySkin extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
                    
@@ -300,7 +324,7 @@ class HistorySkin extends Component {
                      
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
                       
                           <div className="">
@@ -328,7 +352,7 @@ class HistorySkin extends Component {
                       
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
                       
                         
@@ -358,10 +382,23 @@ class HistorySkin extends Component {
                     
                   </CRow>
 
-                  <div className="flex-end mt-3">
+                  <div className="flex-center-space mt-1">
+                    <div>
+                  <CButton
+                        color="success"
+                       
+                        size="md"
+                        className="flex-center"
+                        onClick={() => this.ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                      </div>
                   <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
+                     
                       size="md"
                       className="btn-main"
                       onClick={(e) => {
@@ -383,6 +420,9 @@ class HistorySkin extends Component {
                       <th className="text-center">Số điện thoại</th>
 
                       <th className="text-center">Hình ảnh</th>
+                      <th className="text-center">Mã voucher</th>
+                      <th className="text-center">Tên chiến dịch</th>
+
                       <th className="text-center">Kết quả</th>
                       {/* <th className="text-center">Công ty</th>
                       <th className="text-center">Sale</th> */}
@@ -402,8 +442,10 @@ class HistorySkin extends Component {
                               <td className="text-center">{item.Phone}</td>
 
                               <td className="text-center">
-                                <img src={item.Image}  style={{ width: '50%', height: 50 }} />
+                                <img src={item.Image}  style={{ width: '100px', height: '83px' }} />
                               </td>
+                              <td className="text-center"></td>
+                              <td className="text-center"></td>
                               <td className="text-center">
                                 <CButton outline color="primary" onClick={e => {
                                   this.setState({
@@ -438,7 +480,7 @@ class HistorySkin extends Component {
           </Col>
         </Row>
 
-        <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={this.closeModal} />
+        <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory} closeModal={this.closeModal} />
       </div>
     );
   }

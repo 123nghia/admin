@@ -15,6 +15,7 @@ function Iframe({ toggleView, link, closeModal }) {
 
   const handleClose = () => {
     if (closeModal) {
+     
       closeModal();
     }
   }

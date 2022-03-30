@@ -431,7 +431,7 @@ const _navOrther = [
 
   {
     _tag: 'CSidebarNavItem',
-    name: 'Danh sách Chiến dịch tham gia',
+    name: 'Danh sách chiến dịch tham gia',
     to: '/list-campaign',
     icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],

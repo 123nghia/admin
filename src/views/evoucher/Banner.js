@@ -294,9 +294,11 @@ class EndUser extends Component {
     if (image_link) {
       if (image_link.name) {
         img = `${Constants.BASE_URL}image_brand/${image_link.name}`;
+      }else{
+        img = image
       }
     }
-
+    console.log(img)
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_BANNER_SALES;
 
@@ -490,7 +492,7 @@ class EndUser extends Component {
                 // rows="5"
               />
               <div className="mt-3"></div>
-              <label>Tên công ty</label>
+              <label>Tên chiến dịch</label>
               <Select
               defaultValue={dataCampaign ? dataCampaign[0].name : ""}
 
@@ -574,7 +576,7 @@ class EndUser extends Component {
                       this.changeLevel(e);
                     }}
                     custom
-                    size="sm"
+                    size="md"
                     name="status"
                     id="SelectLm"
                   >
@@ -632,10 +634,10 @@ class EndUser extends Component {
                   <i className="fa fa-align-justify title_header">
                     Quản lý Banner
                   </i>
-                  <div className="flex-end mt-4">
+                  <div className="flex-end ">
                   <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
+                     
                       size="md"
                       className="btn-main"
                       onClick={() => this.openVoucher()}
