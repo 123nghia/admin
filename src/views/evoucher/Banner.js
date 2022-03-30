@@ -576,7 +576,7 @@ class EndUser extends Component {
                       this.changeLevel(e);
                     }}
                     custom
-                    size="sm"
+                    size="md"
                     name="status"
                     id="SelectLm"
                   >

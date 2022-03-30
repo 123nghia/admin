@@ -593,7 +593,7 @@ class EndUser extends Component {
               Mã công ty : <span>{item.code}</span>
             </p>
             <p>
-              Khởi tạo :
+            Ngày giờ khởi tạo :
               <span>
                 Lúc{" "}
                 {new Date(item.create_at).toLocaleTimeString() +
@@ -603,11 +603,11 @@ class EndUser extends Component {
               </span>
             </p>
             <p>
-              Bắt đầu :
+              Ngày bắt đầu :
               <span>Ngày {new Date(item.from).toLocaleDateString()}</span>
             </p>
             <p>
-              Kết thúc :
+            Ngày kết thúc :
               <span>Ngày {new Date(item.to).toLocaleDateString()}</span>
             </p>
             <p>
@@ -772,7 +772,7 @@ class EndUser extends Component {
                 onChange={(e) => this.setState({ from: e.target.value })}
                 // rows="5"
               /> */}
-              <label>Bắt đầu</label>
+              <label>Ngày bắt đầu</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -814,7 +814,7 @@ class EndUser extends Component {
 
              
               <div className="mt-3"></div>
-              <label>Kết thúc</label>
+              <label>Ngày kết thúc</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -854,7 +854,7 @@ class EndUser extends Component {
                 />
               )}
               <div className="mt-3"></div>
-              <label>Ngày kết thúc Sale</label>
+              <label>Ngày kết thúc chiến dịch</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -897,7 +897,7 @@ class EndUser extends Component {
                   format={dateFormat}
                 />
               )}
-              <label className="control-label mt-3">Mô tả:</label>
+              <label className="control-label mt-3">Nội dung:</label>
               <CTextarea
                 name="description"
                 rows="4"
@@ -906,7 +906,7 @@ class EndUser extends Component {
                   this.setState({ description: e.target.value });
                 }}
               />
-              <label className="control-label">Công ty:</label>
+              <label className="control-label">Công ty - NCC:</label>
               <div style={{ width: "100%" }}>
                 <Select
                   className="select_company"

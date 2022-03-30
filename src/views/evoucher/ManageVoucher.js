@@ -680,7 +680,7 @@ class EndUser extends Component {
                 // rows="5"
               /> */}
               <div className="mt-3"></div>
-              <label className="control-label">Mô tả:</label>
+              <label className="control-label">Nội dung:</label>
               <CTextarea
                 name="description"
                 rows="4"
@@ -698,7 +698,7 @@ class EndUser extends Component {
                       this.changeLevel(e);
                     }}
                     custom
-                    size="sm"
+                    size="md"
                     name="status"
                     id="SelectLm"
                   >

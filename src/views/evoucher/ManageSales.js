@@ -105,7 +105,7 @@ class User extends Component {
     }
 
     pagination(dataApi) {
-        var i, j, temparray, chunk = 5;
+        var i, j, temparray, chunk = 7;
         var arrTotal = [];
         for (i = 0, j = dataApi.length; i < j; i += chunk) {
             temparray = dataApi.slice(i, i + chunk);
@@ -538,7 +538,7 @@ class User extends Component {
                                 </CardHeader>
                                 <CardBody>
 
-                                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table ">
+                                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
                                         <thead className="thead-light">
                                             <tr>
                                                 <th className="text-center">STT.</th>
