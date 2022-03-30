@@ -458,7 +458,7 @@ class User extends Component {
                                         Danh sách Sales
                                     </i>
                                     <CRow>
-                                        <CCol md={4} className="mt-3">
+                                        <CCol md={3} className="">
                                             <div className="">
 
 
@@ -472,7 +472,7 @@ class User extends Component {
                                         </CCol>
 
 
-                                        <CCol md={4} className="mt-3">
+                                        <CCol md={3} className="">
                                             <div className="">
                                                 <p className="title_filter">Trạng thái</p>
 
@@ -508,10 +508,10 @@ class User extends Component {
 
 
                                     </CRow>
-                                    <div className="flex-end mt-4">
+                                    <div className="flex-end">
                                         <CButton
                                             color="info"
-                                            style={{ marginBottom: "10px" }}
+                                            style={{ marginRight: "10px" }}
                                             size="md"
                                             className="btn-main"
                                             onClick={(e) => {
@@ -523,7 +523,7 @@ class User extends Component {
                                         </CButton>
                                         <CButton
                                             color="info"
-                                            style={{ marginBottom: "10px" }}
+                                           
                                             size="md"
                                             className="btn-main"
                                             onClick={e => this.toggleModal("new")}

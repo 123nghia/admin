@@ -363,7 +363,7 @@ class ListUserEvoucher extends Component {
     };
     const checkStatusUserVoucherContent = (status) => {
       const statusContentMap = {
-        A: "Đã giao KH",
+        A: "Đã nhận voucher",
         1: "Đã checkIn",
         2: "Hoàn thành",
         3: "Hủy bỏ",
@@ -374,7 +374,7 @@ class ListUserEvoucher extends Component {
 
     const renderRowSearch = () => (
       <CRow>
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
           <div className="">
             <p className="title_filter">Mã Voucher</p>
             <Input
@@ -389,7 +389,7 @@ class ListUserEvoucher extends Component {
           </div>
         </CCol>
 
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
           <div className="">
             <p className="title_filter">Số điện thoại</p>
 
@@ -405,7 +405,7 @@ class ListUserEvoucher extends Component {
             />
           </div>
         </CCol>
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
           <div className="">
             <p className="title_filter">Trạng thái</p>
             <div style={{ width: "200px" }} className="">
@@ -424,7 +424,7 @@ class ListUserEvoucher extends Component {
                       return (
                         <option selected key={i} value={item.item}>
                           {item.item === "A"
-                            ? "Đã giao KH"
+                            ? "Đã nhận voucher"
                             : item.item === "1"
                             ? "Đã checkIn"
                             : item.item === "2"
@@ -438,7 +438,7 @@ class ListUserEvoucher extends Component {
                       return (
                         <option key={i} value={item.item}>
                           {item.item === "A"
-                            ? "Đã giao KH"
+                            ? "Đã nhận voucher"
                             : item.item === "1"
                             ? "Đã checkIn"
                             : item.item === "2"
@@ -464,9 +464,9 @@ class ListUserEvoucher extends Component {
                         /> */}
           </div>
         </CCol>
-        <CCol md={4} className="mt-3">
-          <div className="">
-            <div className="">
+        <CCol md={3} className="mt">
+      
+       
               <p className="title_filter">Từ ngày</p>
               <div>
                 <DatePicker
@@ -486,8 +486,9 @@ class ListUserEvoucher extends Component {
                   format={dateFormat}
                 />
               </div>
-            </div>
-            <div className=" mt-3">
+              </CCol>
+              <CCol md={3} className="mt">
+       
               <p className="title_filter">Đến ngày</p>
               <div>
                 <DatePicker
@@ -507,10 +508,9 @@ class ListUserEvoucher extends Component {
                   format={dateFormat}
                 />
               </div>
-            </div>
-          </div>
+         
         </CCol>
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
           <div className="">
             <p className="title_filter">Danh sách Sales</p>
             <div style={{ width: "200px" }}>
@@ -664,7 +664,7 @@ class ListUserEvoucher extends Component {
                   <div class=" flex">
                     <CButton
                       color="success"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      style={{ marginRight: "10px" }}
                       size="md"
                       className="flex-center"
                       onClick={this.OpenFileExcel}
@@ -675,7 +675,7 @@ class ListUserEvoucher extends Component {
                     <a href="/excel/template-import-voucher.xlsx" download>
                       <CButton
                         color="success"
-                        style={{ marginBottom: "10px", marginRight: "10px" }}
+                        style={{marginRight: "10px" }}
                         size="md"
                         className="flex-center"
                       >
@@ -685,7 +685,7 @@ class ListUserEvoucher extends Component {
                     </a>
                     <CButton
                       color="success"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      style={{  marginRight: "10px" }}
                       size="md"
                       className="flex-center"
                       onClick={() => this.ExportsFileExcel()}
@@ -699,7 +699,7 @@ class ListUserEvoucher extends Component {
                   <div>
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
+                     
                       size="md"
                       className="btn-main"
                       onClick={(e) => {

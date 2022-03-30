@@ -414,7 +414,7 @@ class Users extends Component {
       });
   }
   async addDataConfig() {
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id;
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -463,7 +463,7 @@ class Users extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.DELETE_FOOTER;
     let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -490,7 +490,7 @@ class Users extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.UPDATE_FOOTER;
     let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -524,7 +524,7 @@ class Users extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.ADD_FOOTER;
     let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -592,7 +592,7 @@ class Users extends Component {
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id;
     let itOutput = "-1";
     if (newComany_id) {
       itOutput = newComany_id;
@@ -693,7 +693,7 @@ class Users extends Component {
   async onUpdate() {
     const { dataConfigWeb } = this.state;
 
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+    const newComany_id = this.state.company_id
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     await axios.post(url, {

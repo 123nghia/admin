@@ -634,10 +634,10 @@ class EndUser extends Component {
                   <i className="fa fa-align-justify title_header">
                     Quản lý Banner
                   </i>
-                  <div className="flex-end mt-4">
+                  <div className="flex-end ">
                   <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
+                     
                       size="md"
                       className="btn-main"
                       onClick={() => this.openVoucher()}
