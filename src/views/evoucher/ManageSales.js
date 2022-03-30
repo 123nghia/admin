@@ -105,7 +105,7 @@ class User extends Component {
     }
 
     pagination(dataApi) {
-        var i, j, temparray, chunk = 5;
+        var i, j, temparray, chunk = 7;
         var arrTotal = [];
         for (i = 0, j = dataApi.length; i < j; i += chunk) {
             temparray = dataApi.slice(i, i + chunk);
@@ -458,10 +458,8 @@ class User extends Component {
                                         Danh sách Sales
                                     </i>
                                     <CRow>
-                                        <CCol md={4} className="mt-3">
+                                        <CCol md={3} className="">
                                             <div className="">
-
-
                                                 <p className="title_filter">Từ khóa</p>
 
                                                 <Input style={styles.searchInput} onChange={(e) => {
@@ -472,7 +470,7 @@ class User extends Component {
                                         </CCol>
 
 
-                                        <CCol md={4} className="mt-3">
+                                        <CCol md={3} className="">
                                             <div className="">
                                                 <p className="title_filter">Trạng thái</p>
 
@@ -508,10 +506,10 @@ class User extends Component {
 
 
                                     </CRow>
-                                    <div className="flex-end mt-4">
+                                    <div className="flex-end">
                                         <CButton
                                             color="info"
-                                            style={{ marginBottom: "10px" }}
+                                            style={{ marginRight: "10px" }}
                                             size="md"
                                             className="btn-main"
                                             onClick={(e) => {
@@ -523,7 +521,7 @@ class User extends Component {
                                         </CButton>
                                         <CButton
                                             color="info"
-                                            style={{ marginBottom: "10px" }}
+                                           
                                             size="md"
                                             className="btn-main"
                                             onClick={e => this.toggleModal("new")}
@@ -538,7 +536,7 @@ class User extends Component {
                                 </CardHeader>
                                 <CardBody>
 
-                                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table ">
+                                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
                                         <thead className="thead-light">
                                             <tr>
                                                 <th className="text-center">STT.</th>

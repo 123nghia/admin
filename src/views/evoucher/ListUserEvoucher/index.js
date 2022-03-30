@@ -296,7 +296,7 @@ class ListUserEvoucher extends Component {
 
     const renderRowSearch = () => (
       <CRow>
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
           <div className="">
             <p className="title_filter">Mã Voucher</p>
             <Input
@@ -311,7 +311,7 @@ class ListUserEvoucher extends Component {
           </div>
         </CCol>
 
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
           <div className="">
             <p className="title_filter">Số điện thoại</p>
 
@@ -327,7 +327,7 @@ class ListUserEvoucher extends Component {
             />
           </div>
         </CCol>
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
           <div className="">
             <p className="title_filter">Trạng thái</p>
             <div style={{ width: "200px" }} className="">
@@ -349,53 +349,49 @@ class ListUserEvoucher extends Component {
             </div>
           </div>
         </CCol>
-        <CCol md={4} className="mt-3">
-          <div className="">
-            <div className="">
-              <p className="title_filter">Từ ngày</p>
-              <div>
-                <DatePicker
-                  style={styles.dateForm}
-                  onChange={(e, dateString) => {
-                    let copy = dateString.split("-");
-                    let newData = ``;
-                    copy.forEach((item, index) => {
-                      if (index === 0) {
-                        newData += item;
-                      } else {
-                        newData += `/${item}`;
-                      }
-                    });
-                    this.setState({ from: newData });
-                  }}
-                  format={dateFormat}
-                />
-              </div>
-            </div>
-            <div className=" mt-3">
-              <p className="title_filter">Đến ngày</p>
-              <div>
-                <DatePicker
-                  style={styles.dateForm}
-                  onChange={(e, dateString) => {
-                    let copy = dateString.split("-");
-                    let newData = ``;
-                    copy.forEach((item, index) => {
-                      if (index === 0) {
-                        newData += item;
-                      } else {
-                        newData += `/${item}`;
-                      }
-                    });
-                    this.setState({ to: newData });
-                  }}
-                  format={dateFormat}
-                />
-              </div>
-            </div>
+        <CCol md={3} className="mt">
+          <p className="title_filter">Từ ngày</p>
+          <div>
+            <DatePicker
+              style={styles.dateForm}
+              onChange={(e, dateString) => {
+                let copy = dateString.split("-");
+                let newData = ``;
+                copy.forEach((item, index) => {
+                  if (index === 0) {
+                    newData += item;
+                  } else {
+                    newData += `/${item}`;
+                  }
+                });
+                this.setState({ from: newData });
+              }}
+              format={dateFormat}
+            />
           </div>
         </CCol>
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
+          <p className="title_filter">Đến ngày</p>
+          <div>
+            <DatePicker
+              style={styles.dateForm}
+              onChange={(e, dateString) => {
+                let copy = dateString.split("-");
+                let newData = ``;
+                copy.forEach((item, index) => {
+                  if (index === 0) {
+                    newData += item;
+                  } else {
+                    newData += `/${item}`;
+                  }
+                });
+                this.setState({ to: newData });
+              }}
+              format={dateFormat}
+            />
+          </div>
+        </CCol>
+        <CCol md={3} className="mt">
           <div className="">
             <p className="title_filter">Danh sách Sales</p>
             <div style={{ width: "200px" }}>
@@ -574,7 +570,7 @@ class ListUserEvoucher extends Component {
                   <div class=" flex">
                     <CButton
                       color="success"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      style={{ marginRight: "10px" }}
                       size="md"
                       className="flex-center"
                       onClick={this.OpenFileExcel}
@@ -585,7 +581,7 @@ class ListUserEvoucher extends Component {
                     <a href="/excel/template-import-voucher.xlsx" download>
                       <CButton
                         color="success"
-                        style={{ marginBottom: "10px", marginRight: "10px" }}
+                        style={{ marginRight: "10px" }}
                         size="md"
                         className="flex-center"
                       >
@@ -595,7 +591,7 @@ class ListUserEvoucher extends Component {
                     </a>
                     <CButton
                       color="success"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      style={{ marginRight: "10px" }}
                       size="md"
                       className="flex-center"
                       onClick={() => this.ExportsFileExcel()}
@@ -609,7 +605,6 @@ class ListUserEvoucher extends Component {
                   <div>
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
                       size="md"
                       className="btn-main"
                       onClick={(e) => {
@@ -667,7 +662,7 @@ class ListUserEvoucher extends Component {
             </Card>
             <IframeModal
               toggleView={toggleHistory}
-              link={Constants.BASE_URL_HISTORY_SKIN + idHistory}
+              link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
               closeModal={closeModal}
             />
           </Col>

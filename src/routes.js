@@ -129,7 +129,7 @@ const Banner = React.lazy(() => import("./views/base/tables/Banner/Banner"));
 const RequestSupport = React.lazy(() => import("./views/info/requestSupport"));
 const ListEvoucher = React.lazy(() => import("./views/evoucher/ListVoucher"));
 const ListUserEvoucher = React.lazy(() =>
-  import("./views/evoucher/ListUserEvoucher/index.js")
+  import("./views/evoucher/ListUserEvoucher/index")
 );
 const DetailVoucher = React.lazy(() =>
   import("./views/evoucher/ListUserEvoucher/DetailUserVoucher/index.js")
@@ -206,7 +206,7 @@ const routes = [
   {
     path: "/detail-campaign/:id",
     name: "DetailCampaign",
-    component: roleUser === "0" ? DetailCampaign : NotEnough,
+    component:  DetailCampaign 
   },
 
   { path: "/translation", name: "Translation", component: Translation },

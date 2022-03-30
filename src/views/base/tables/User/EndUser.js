@@ -309,7 +309,7 @@ class EndUser extends Component {
                   
                 <i className="fa fa-align-justify title_header">Danh sách tài khoản người dùng</i>
         <CRow>
-        <CCol md={4} className="mt-3">
+        <CCol md={3} className="mt">
                       <div className="">
 
 
@@ -324,7 +324,7 @@ class EndUser extends Component {
 
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
 

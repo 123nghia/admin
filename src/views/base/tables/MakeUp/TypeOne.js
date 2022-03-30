@@ -702,7 +702,7 @@ class SuggestItem extends Component {
                 <CardHeader>
                 <i className="fa fa-align-justify title_header">Danh sách sản phẩm da mặt </i>
                 <CRow>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="">
                       <div className="">
 
 
@@ -721,7 +721,7 @@ class SuggestItem extends Component {
 
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      style={{  marginRight: "10px" }}
                       size="md"
                       className="btn-main"
                       onClick={e => { this.onSearch() }}
@@ -731,7 +731,7 @@ class SuggestItem extends Component {
                     </CButton>
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      style={{  marginRight: "10px" }}
                       size="md"
                       className="btn-main"
                       onClick={e => { this.resetSearch() }}
@@ -741,7 +741,7 @@ class SuggestItem extends Component {
                     </CButton>
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
+                
                       size="md"
                       className="btn-main"
                       onClick={e => this.toggleModal("new")}

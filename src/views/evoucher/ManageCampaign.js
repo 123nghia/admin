@@ -32,9 +32,9 @@ import DotLoader from "react-spinners/DotLoader";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { Tag, Divider } from "antd";
-import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import { DatePicker, Space } from "antd";
 
 const { Option } = Select;
 const dateFormat = "DD-MM-YYYY";
@@ -593,7 +593,7 @@ class EndUser extends Component {
               Mã công ty : <span>{item.code}</span>
             </p>
             <p>
-              Khởi tạo :
+            Ngày giờ khởi tạo :
               <span>
                 Lúc{" "}
                 {new Date(item.create_at).toLocaleTimeString() +
@@ -603,11 +603,11 @@ class EndUser extends Component {
               </span>
             </p>
             <p>
-              Bắt đầu :
+              Ngày bắt đầu :
               <span>Ngày {new Date(item.from).toLocaleDateString()}</span>
             </p>
             <p>
-              Kết thúc :
+            Ngày kết thúc :
               <span>Ngày {new Date(item.to).toLocaleDateString()}</span>
             </p>
             <p>
@@ -772,7 +772,7 @@ class EndUser extends Component {
                 onChange={(e) => this.setState({ from: e.target.value })}
                 // rows="5"
               /> */}
-              <label>Bắt đầu</label>
+              <label>Ngày bắt đầu</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -814,7 +814,7 @@ class EndUser extends Component {
 
              
               <div className="mt-3"></div>
-              <label>Kết thúc</label>
+              <label>Ngày kết thúc</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -854,7 +854,7 @@ class EndUser extends Component {
                 />
               )}
               <div className="mt-3"></div>
-              <label>Ngày kết thúc Sale</label>
+              <label>Ngày kết thúc chiến dịch</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -897,7 +897,7 @@ class EndUser extends Component {
                   format={dateFormat}
                 />
               )}
-              <label className="control-label mt-3">Mô tả:</label>
+              <label className="control-label mt-3">Nội dung:</label>
               <CTextarea
                 name="description"
                 rows="4"
@@ -906,7 +906,7 @@ class EndUser extends Component {
                   this.setState({ description: e.target.value });
                 }}
               />
-              <label className="control-label">Công ty:</label>
+              <label className="control-label">Công ty - NCC:</label>
               <div style={{ width: "100%" }}>
                 <Select
                   className="select_company"
@@ -1284,7 +1284,7 @@ class EndUser extends Component {
                   </i>
 
                   <CRow>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
 
@@ -1301,7 +1301,7 @@ class EndUser extends Component {
                       </div>
                     </CCol>
 
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
 
@@ -1318,7 +1318,7 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
 
@@ -1370,56 +1370,7 @@ class EndUser extends Component {
                         /> */}
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
-                      <div className="">
-
-                        <div className="">
-                          <p className="title_filter">Từ ngày</p>
-
-                          <div style={{ width: '200px' }}>
-                            <DatePicker
-                              style={styles.dateForm}
-                              onChange={(e, dateString) => {
-                                let copy = dateString.split("-");
-                                let newData = ``;
-                                copy.forEach((item, index) => {
-                                  if (index === 0) {
-                                    newData += item;
-                                  } else {
-                                    newData += `/${item}`;
-                                  }
-                                });
-                                this.setState({ from: newData });
-                              }}
-                              format={dateFormat}
-                            />
-                          </div>
-                        </div>
-                        <div className=" mt-3">
-                          <p className="title_filter">Đến ngày</p>
-                          <div style={{ width: '200px' }}>
-                            <DatePicker
-                              style={styles.dateForm}
-                              onChange={(e, dateString) => {
-                                let copy = dateString.split("-");
-                                let newData = ``;
-                                copy.forEach((item, index) => {
-                                  if (index === 0) {
-                                    newData += item;
-                                  } else {
-                                    newData += `/${item}`;
-                                  }
-                                });
-                                this.setState({ to: newData });
-                              }}
-                              format={dateFormat}
-                            />
-                          </div>
-                        </div>
-
-                      </div>
-                    </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
 
@@ -1451,13 +1402,63 @@ class EndUser extends Component {
 
                       </div>
                     </CCol>
+                    <CCol md={3} className="mt">
+                   
+                        <div className="">
+                          <p className="title_filter">Từ ngày</p>
+
+                          <div style={{ width: '200px' }}>
+                            <DatePicker
+                              style={styles.dateForm}
+                              onChange={(e, dateString) => {
+                                let copy = dateString.split("-");
+                                let newData = ``;
+                                copy.forEach((item, index) => {
+                                  if (index === 0) {
+                                    newData += item;
+                                  } else {
+                                    newData += `/${item}`;
+                                  }
+                                });
+                                this.setState({ from: newData });
+                              }}
+                              format={dateFormat}
+                            />
+                          </div>
+                        </div>
+                    </CCol>
+                    <CCol md={3} className="mt">
+                        <div className=" mt-1">
+                          <p className="title_filter">Đến ngày</p>
+                          <div style={{ width: '200px' }}>
+                            <DatePicker
+                              style={styles.dateForm}
+                              onChange={(e, dateString) => {
+                                let copy = dateString.split("-");
+                                let newData = ``;
+                                copy.forEach((item, index) => {
+                                  if (index === 0) {
+                                    newData += item;
+                                  } else {
+                                    newData += `/${item}`;
+                                  }
+                                });
+                                this.setState({ to: newData });
+                              }}
+                              format={dateFormat}
+                            />
+                          </div>
+                        </div>
+
+                   
+                    </CCol>
                   </CRow>
 
                   <div className="flex-end">
 
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
+                      style={{ marginRight: "10px" }}
                       size="md"
                       className="btn-main"
                       onClick={(e) => {
@@ -1469,7 +1470,7 @@ class EndUser extends Component {
                     </CButton>
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
+                 
                       size="md"
                       className="btn-main"
                       onClick={() => this.openVoucher()}

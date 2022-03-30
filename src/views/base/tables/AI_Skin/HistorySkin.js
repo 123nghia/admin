@@ -258,7 +258,7 @@ class HistorySkin extends Component {
                   </i>
 
                   <CRow>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                     <div className="">
 
                    
@@ -275,7 +275,7 @@ class HistorySkin extends Component {
                       </div>
                     </CCol>
                    
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                     <div className="">
 
                    
@@ -292,7 +292,7 @@ class HistorySkin extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
                    
@@ -324,7 +324,7 @@ class HistorySkin extends Component {
                      
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
                       
                           <div className="">
@@ -352,7 +352,7 @@ class HistorySkin extends Component {
                       
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
                       
                         
@@ -382,11 +382,11 @@ class HistorySkin extends Component {
                     
                   </CRow>
 
-                  <div className="flex-center-space mt-3">
+                  <div className="flex-center-space mt-1">
                     <div>
                   <CButton
                         color="success"
-                        style={{ marginBottom: "10px", marginRight: '10px' }}
+                       
                         size="md"
                         className="flex-center"
                         onClick={() => this.ExportsFileExcel()}
@@ -398,7 +398,7 @@ class HistorySkin extends Component {
                       </div>
                   <CButton
                       color="info"
-                      style={{ marginBottom: "10px" }}
+                     
                       size="md"
                       className="btn-main"
                       onClick={(e) => {
@@ -442,7 +442,7 @@ class HistorySkin extends Component {
                               <td className="text-center">{item.Phone}</td>
 
                               <td className="text-center">
-                                <img src={item.Image}  style={{ width: '50%', height: 50 }} />
+                                <img src={item.Image}  style={{ width: '100px', height: '83px' }} />
                               </td>
                               <td className="text-center"></td>
                               <td className="text-center"></td>
