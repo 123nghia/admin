@@ -1,11 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-=======
-import { connect } from "react-redux";
-
-import { useSelector, useDispatch } from "redux";
-import DetailVoucher from "./views/evoucher/ListUserEvoucher/DetailVoucher";
->>>>>>> fc0f2c6696fd14d6a6222fca4e8089c0cd5df9f6
 
 const Dashboard = React.lazy(() => import("./views/DashBoard/Dashboard"));
 const TableUser = React.lazy(() => import("./views/base/tables/TableUser"));
@@ -190,16 +183,11 @@ const routes = [
 
   { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign },
 
-<<<<<<< HEAD
   {
     path: "/detail-campaign/:id",
     name: "DetailCampaign",
     component: DetailCampaign,
   },
-=======
-  { path: '/translation', name: 'Translation', component: Translation },
-  { path: '/not-enough', name: 'NotEnough', component: NotEnough },
->>>>>>> fc0f2c6696fd14d6a6222fca4e8089c0cd5df9f6
 
   { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough },
 

@@ -513,6 +513,8 @@
   gap: 20px;
 }
 
-/* .c-main {
-  padding-top: 1rem !important;
-} */
+.card-body {
+  overflow-x: scroll;
+}
+
+
