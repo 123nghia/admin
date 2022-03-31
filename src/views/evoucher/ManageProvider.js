@@ -721,14 +721,14 @@ class EndUser extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
+              {/* <TextFieldGroup
                 field="quantity"
                 label="Số lượng Voucher"
                 value={this.state.quantity}
                 // error={errors.title}
                 onChange={(e) => this.setState({ quantity: e.target.value })}
               // rows="5"
-              />
+              /> */}
 
               {/* <TextFieldGroup
                 field="from"
@@ -828,15 +828,7 @@ class EndUser extends Component {
                   format={dateFormat}
                 />
               )}
-              <label className="control-label mt-3">Mô tả:</label>
-              <CTextarea
-                name="description"
-                rows="4"
-                value={this.state.description}
-                onChange={(e) => {
-                  this.setState({ description: e.target.value });
-                }}
-              />
+              
               <label className="control-label">Công ty:</label>
 
               <Select
@@ -1208,11 +1200,14 @@ class EndUser extends Component {
                     Quản lý nhà cung cấp
                   </i>
 
-                  <CRow>    
-                    <CCol md={4} className="mt-3">
+                  <CRow>
+                    <CCol md={3} className="mt">
                       <div className="">
+
+
                         <p className="title_filter">Trạng thái chiến dịch</p>
                         <div style={{ width: "200px" }} className="">
+
                           {arrLevel !== undefined ? (
                             <CSelect
                               onChange={async (e) => {
@@ -1247,14 +1242,47 @@ class EndUser extends Component {
                             </CSelect>
                           ) : null}
                         </div>
+                       
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
+
+                        <p className="title_filter">Danh sách Brand</p>
+                        <div style={{ width: '200px' }}>
+                          <Select
+                            className="select_seo"
+                            showSearch
+                            placeholder="Lọc theo Brand"
+                            optionFilterProp="children"
+                            onChange={(value) =>
+                              this.setState({
+                                idDataSales: value,
+                              })
+                            }
+                            onSearch={this.onSearchSelect}
+                            filterOption={(input, option) =>
+                              option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                              0
+                            }
+                          >
+                            {this.state.dataSales
+                              ? this.state.dataSales.map((item, i) => {
+                                return <Option value={item._id}>{item.Name}</Option>;
+                              })
+                              : null}
+                          </Select>
+                        </div>
+
+                      </div>
+                    </CCol>
+                    <CCol md={3} className="mt">
+                   
                         <div className="">
                           <p className="title_filter">Từ ngày</p>
-                          <div style={{width:'200px'}}>
+
+                          <div style={{ width: '200px' }}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1273,9 +1301,11 @@ class EndUser extends Component {
                             />
                           </div>
                         </div>
-                        <div className=" mt-3">
+                    </CCol>
+                    <CCol md={3} className="mt">
+                        <div className="">
                           <p className="title_filter">Đến ngày</p>
-                          <div style={{width:'200px'}}>
+                          <div style={{ width: '200px' }}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1295,39 +1325,7 @@ class EndUser extends Component {
                           </div>
                         </div>
 
-                      </div>
-                    </CCol>
-                    <CCol md={4} className="mt-3">
-                      <div className="">
-
-
-                        <p className="title_filter">Danh sách Brand</p>
-                        <div style={{width:'200px'}}>
-                        <Select
-                          className="select_seo"
-                          showSearch
-                          placeholder="Lọc theo Brand"
-                          optionFilterProp="children"
-                          onChange={(value) =>
-                            this.setState({
-                              idDataSales: value,
-                            })
-                          }
-                          onSearch={this.onSearchSelect}
-                          filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                            0
-                          }
-                        >
-                          {this.state.dataSales
-                            ? this.state.dataSales.map((item, i) => {
-                              return <Option value={item._id}>{item.Name}</Option>;
-                            })
-                            : null}
-                        </Select>
-                        </div>
-
-                      </div>
+                   
                     </CCol>
                   </CRow>
 
@@ -1362,11 +1360,12 @@ class EndUser extends Component {
 
                   <table
                     ble
-                    className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    className="mt-3 table table-outline table-hover mb-0 d-none d-sm-table table_dash"
                   >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
+                        <th className="text-center">Tên</th>
                         <th className="text-center">Tên công ty</th>
                         <th className="text-center">Brand</th>
                         <th className="text-center">Loại</th>
@@ -1375,6 +1374,8 @@ class EndUser extends Component {
                         <th className="text-center">SĐT</th>
                         <th className="text-center">Người tạo</th>
                         <th className="text-center">Ngày tạo</th>
+                        <th className="text-center">Trạng thái</th> 
+                        <th className="text-center"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1402,6 +1403,43 @@ class EndUser extends Component {
                               <td className="text-center">{item.name}</td>
                               <td className="text-center">{item.name}</td>
                               <td className="text-center">{item.name}</td>
+                              <td className="text-center">{item.name}</td>
+                              <td className="text-center">
+                                <Tag
+                                  className="ant-tag"
+                                  color={
+                                    item.status === "1"
+                                      ? "#87d068"
+
+                                      : "#f50"
+                                  }
+                                >
+                                  {item.status === "1"
+                                    ? "Hoạt động"
+
+                                    : "Không hoạt động"}
+                                </Tag>
+                              </td>
+                              <td className="text-center" style={{ minWidth: '230px' }}>
+                                <div className="flex">
+                                  <Link>
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="outline"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      className="flex-a-center "
+                                    // onClick={(e) =>
+                                    //   this.viewDetailCampaign(item._id)
+                                    // }
+                                    >
+                                      <BsSearch className="mr-1" />
+                                      Chi tiết
+                                    </CButton>
+                                  </Link>
+                                </div>
+                              </td>
                             </tr>
                           );
                         })
@@ -1440,14 +1478,14 @@ class EndUser extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
+              {/* <TextFieldGroup
                 field="voucher"
                 label="Số lượng Voucher"
                 value={this.state.voucher}
                 // error={errors.title}
                 onChange={(e) => this.setState({ voucher: e.target.value })}
               // rows="5"
-              />
+              /> */}
             </ModalBody>
             <ModalFooter>
               <CButton
