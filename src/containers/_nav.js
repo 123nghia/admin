@@ -747,6 +747,13 @@ const _navContact = [
     icon: <CgWebsite style={css} content={freeSet.none} className="c-sidebar-nav-icon" />,
     role: ['1','2'],
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Thống kê chung',
+    to: '/general-statistics',
+    icon: <CgWebsite style={css} content={freeSet.none} className="c-sidebar-nav-icon" />,
+    role: ['1','2'],
+  },
   // {
   //   _tag: 'CSidebarNavItem',
   //   name: 'Yêu cầu hỗ trợ',

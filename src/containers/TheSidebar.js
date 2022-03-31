@@ -19,7 +19,7 @@ import Constants from '../contants/contants'
 import axios from "axios";
 // sidebar nav config
 import navigations from './_nav'
-import {ToggleNav } from '../reducers/Navbar';
+import { ToggleNav } from '../reducers/Navbar';
 const callApiGetRoleSubAdmin = async (user) => {
 
   if (user == null || JSON.parse(user) == null) {
@@ -33,14 +33,14 @@ const callApiGetRoleSubAdmin = async (user) => {
 
 
 const TheSidebar = () => {
-  const [Logo,setLogo] = useState("");
+  const [Logo, setLogo] = useState("");
   const [sidebar, setSidebar] = useState([]);
   const type = localStorage.getItem('type');
   const user = localStorage.getItem('user');
   async function getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll";
-   
+
     await axios
       .get(url, {
         params: {
@@ -49,21 +49,23 @@ const TheSidebar = () => {
         },
       })
       .then((res) => {
-  
+
         if (res.data.data.length > 0) {
           let dataConfig = res.data.data[0];
-  
+
           let valueConfig = JSON.parse(dataConfig.Value);
           console.log(valueConfig);
           setLogo(valueConfig.value.logos.webAdmin.logo)
-          
-        }})}
+
+        }
+      })
+  }
   useEffect(async () => {
     var data = await callApiGetRoleSubAdmin(user)
     await getDataConfigWeb();
 
     setSidebar(data);
- 
+
 
   }, []);
 
@@ -118,21 +120,21 @@ const TheSidebar = () => {
   return (
     <CSidebar
       show={show === "responsive" ? false : true}
-      size={"lg"} 
-     
+      size={"lg"}
+
     >
-      <div className="header-logo" style={{height:"80px", backgroundColor : '#ffff'}}>
-      <CSidebarBrand className="d-md-down" to="/">
-      <div class="flex-center">
-        <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{ textDecoration: 'underline' }}>
-          <img src={Logo} width="110" height="auto" alt="HB Analytics Logo" className="navbar-brand-full" /></NavLink>
+      <div className="header-logo" style={{ height: "80px", backgroundColor: '#ffff' }}>
+        <CSidebarBrand className="d-md-down" to="/">
+          <div class="flex-center">
+            <NavLink style={{ fontSize: 20 }} href="/" className="nav-link" activeStyle={{ textDecoration: 'underline' }}>
+              <img src={Logo} width="110" height="auto" alt="HB Analytics Logo" className="navbar-brand-full" /></NavLink>
           </div>
-        <CIcon
-          className="c-sidebar-brand-minimized"
-          name="sygnet"
-          height={35}
-        />
-      </CSidebarBrand>
+          <CIcon
+            className="c-sidebar-brand-minimized"
+            name="sygnet"
+            height={35}
+          />
+        </CSidebarBrand>
       </div>
       <CSidebarNav>
         {/* <div>

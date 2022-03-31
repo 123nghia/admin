@@ -81,7 +81,7 @@ class EndUser extends Component {
       idCurrentUpdate: null,
       levelNormal: "0",
       dataCompany: [],
-      quantity : "0"
+      quantity: "0"
     };
   }
   changeLevel = (e) => {
@@ -139,7 +139,7 @@ class EndUser extends Component {
     }
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
- 
+
   }
   paginationVoucher(dataApi) {
     var i,
@@ -193,21 +193,21 @@ class EndUser extends Component {
     const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_ALL_CAMPAIGN_VER2;
-    
+
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .get(url, {
         params: {
-          company_id : this.state.company_id
+          company_id: this.state.company_id
         },
       })
       .then((res) => {
         let val = res.data.data;
         this.pagination(val);
-        
+
 
         this.setState({ dataApi: val });
-        
+
 
         let active = 0;
         this.setState({ isLoading: false, totalActive: active });
@@ -281,7 +281,7 @@ class EndUser extends Component {
       modalVoucher: true,
       name: "",
       from: new Date().toLocaleDateString(),
-      saleEndDate : new Date().toLocaleDateString(),
+      saleEndDate: new Date().toLocaleDateString(),
       quantity: "0",
       to: new Date().toLocaleDateString(),
       description: "",
@@ -292,11 +292,11 @@ class EndUser extends Component {
   openEditVoucher(item) {
     const { name, from, to, description, status } = this.state;
 
-    this.state.dataCompany.forEach((name=>{
-      if(name._id === item.company_id) {
+    this.state.dataCompany.forEach((name => {
+      if (name._id === item.company_id) {
         this.setState({
-          nameCompanyChoose : name.Name
-        
+          nameCompanyChoose: name.Name
+
         });
         return;
       };
@@ -304,12 +304,12 @@ class EndUser extends Component {
     console.log(this.state.nameCompanyChoose);
     this.setState({
       actionVoucher: "edit",
-     
+
       modalVoucher: true,
       idCurrentUpdate: item._id,
       quantity: item.quatinity,
       name: item.name,
-      saleEndDate : new Date(item.saleEndDate).toLocaleDateString(),
+      saleEndDate: new Date(item.saleEndDate).toLocaleDateString(),
       from: new Date(item.from).toLocaleDateString(),
       to: new Date(item.to).toLocaleDateString(),
       description: item.description,
@@ -437,13 +437,13 @@ class EndUser extends Component {
       relCode: "",
       description: "",
       status: "",
-    
+
     });
   }
   openUpdateVoucher(item) {
-  
+
     this.setState({
-      
+
       actionVoucherEditing2: "edit",
       modalVoucherEditing2: true,
       idCurrentUpdate: item._id,
@@ -553,7 +553,7 @@ class EndUser extends Component {
   }
   async openPopupVoucher(item) {
     await this.getDataVoucher(item._id);
-     
+
     this.setState({
       actionVoucherEditing: "edit",
       modalVoucherEditing: true,
@@ -669,8 +669,8 @@ class EndUser extends Component {
       modalInfo: itemRender,
     });
   }
-  GetDetailCampaign(){
-    
+  GetDetailCampaign() {
+
   }
   render() {
     const {
@@ -810,7 +810,7 @@ class EndUser extends Component {
                 />
               )}
 
-             
+
               <div className="mt-3"></div>
               <label>Kết thúc</label>
               {this.state.actionVoucher !== "new" ? (
@@ -913,7 +913,7 @@ class EndUser extends Component {
                   placeholder="Chọn tên công ty"
                   optionFilterProp="children"
                   onChange={(value) =>
-                  
+
                     this.setState({
                       idCompany: value,
                     })
@@ -999,17 +999,17 @@ class EndUser extends Component {
             </ModalHeader>
             <ModalBody>
               <div class="flex-end">
-              <CButton
-                        color="info"
-                        style={{ marginBottom: "10px" }}
-                        size="md"
-                        className="btn-main"
-                        onClick={() => this.openVoucherAdd()}
-                      >
-                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                      </CButton>
-              
+                <CButton
+                  color="info"
+                  style={{ marginBottom: "10px" }}
+                  size="md"
+                  className="btn-main"
+                  onClick={() => this.openVoucherAdd()}
+                >
+                  <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                  <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                </CButton>
+
               </div>
               <table
                 ble
@@ -1329,7 +1329,7 @@ class EndUser extends Component {
                                     className="mr-2"
                                     style={{ margin: "auto" }}
                                   >
-                                     {item.CheckIn.length === 0 ? "Đang cập nhật" : item.CheckIn?.[0].totalVoucher}
+                                    {item.CheckIn.length === 0 ? "Đang cập nhật" : item.CheckIn?.[0].totalVoucher}
                                   </p>
                                   <CButton
                                     shape="rounded-pill"
@@ -1343,12 +1343,12 @@ class EndUser extends Component {
                                     }
                                   >
                                     <BsSearch className="mr-1" />
-                                   
+
                                   </CButton>
                                 </div>
                               </td>
                               <td className="text-center">
-                                
+
                                 {item.CheckIn.length === 0 ? "0" : item.CheckIn?.[0].rateCheckIn}
                               </td>
                               <td className="text-center">
@@ -1387,7 +1387,7 @@ class EndUser extends Component {
 
                               <td className="text-center" style={{ minWidth: '230px' }}>
                                 <div className="flex">
-                                  <Link onClick={()=>this.GetDetailCampaign()} to={"/detail-campaign/" + item._id}>
+                                  <Link onClick={() => this.GetDetailCampaign()} to={"/detail-campaign/" + item._id}>
                                     <CButton
                                       shape="rounded-pill"
                                       variant="outline"
@@ -1404,7 +1404,7 @@ class EndUser extends Component {
                                     </CButton>
                                   </Link>
 
-                                  
+
                                 </div>
                               </td>
                             </tr>
