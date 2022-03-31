@@ -518,7 +518,7 @@ class ListUserEvoucher extends Component {
                     <Chip
                       sx={{ marginLeft: "1.3rem" }}
                       icon={<AccessTimeIcon />}
-                      label="3 giờ trước"
+                      label="Đã check in vào 10:30"
                     />
                   </td>
                   <td className="text-center">

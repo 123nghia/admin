@@ -1,6 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
-import { useSelector, useDispatch } from "redux";
 
 const Dashboard = React.lazy(() => import("./views/DashBoard/Dashboard"));
 const TableUser = React.lazy(() => import("./views/base/tables/TableUser"));
@@ -206,7 +204,7 @@ const routes = [
   {
     path: "/detail-campaign/:id",
     name: "DetailCampaign",
-    component:  DetailCampaign 
+    component: DetailCampaign,
   },
 
   { path: "/translation", name: "Translation", component: Translation },
