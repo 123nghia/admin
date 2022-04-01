@@ -743,15 +743,6 @@ class EndUser extends Component {
               // rows="5"
               />
 
-              {/* <TextFieldGroup
-                field="company"
-                label="Tên công ty"
-                value={this.state.company}
-                // error={errors.title}
-                onChange={(e) => this.setState({ company: e.target.value })}
-                // rows="5"
-              /> */}
-
               <TextFieldGroup
                 field="quantity"
                 label="Số lượng Voucher"
@@ -761,15 +752,6 @@ class EndUser extends Component {
               // rows="5"
               />
 
-              {/* <TextFieldGroup
-                field="from"
-                label="Bắt đầu"
-                value={this.state.from}
-                type={"date"}
-                // error={errors.title}
-                onChange={(e) => this.setState({ from: e.target.value })}
-                // rows="5"
-              /> */}
               <label>Bắt đầu</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker

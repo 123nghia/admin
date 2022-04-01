@@ -69,9 +69,8 @@ import logoMainnet from "../../assets/img/logo_head.png";
 import CircularProgress from "@mui/material/CircularProgress";
 import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
-import EmojiFlagsIcon from '@mui/icons-material/EmojiFlags';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 
 let headers = new Headers();
@@ -86,11 +85,16 @@ class Users extends Component {
             tabNameConfig: [
                 {
                     _id: "t1",
-                    name: "Chiến dịch",
-                    icon: <EmojiFlagsIcon style={{ width: "24px ", height: "24px " }} />
+                    name: "Thông tin NCC",
+                    icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />
                 },
                 {
                     _id: "t2",
+                    name: "Danh sách chiến dịch tham gia",
+                    icon: <ListAltIcon style={{ width: "24px ", height: "24px " }} />
+                },
+                {
+                    _id: "t3",
                     name: "E-voucher",
                     icon: <CardGiftcardIcon style={{ width: "24px ", height: "24px " }} />
                 },
@@ -133,8 +137,9 @@ class Users extends Component {
             Message_Code: "",
             sub_mainColor: "",
             modal: false,
-            modalVoucher: false,
             modalVoucherSent: false,
+            modalVoucher: false,
+            modalDetailProvider: false,
 
             statusModalUpdate: false,
 
@@ -1016,43 +1021,129 @@ class Users extends Component {
                         </div>
                         <div className="tabcontents">
                             <div id="tabcontent1" className="tabcontent defaultOpen">
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng chiến dịch
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modal: !this.state.modal })}>30</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modal: !this.state.modal })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng voucher phát
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modalVoucherSent: !this.state.modalVoucherSent })}>40</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modalVoucherSent: !this.state.modalVoucherSent })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Tỉ lệ hoàn thành
-                                    <a href="#" className="btn-link" style={styles.btnLink}>30</a>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng khách check in
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modalCusCheckIn: !this.state.modalCusCheckIn })}>40</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modalCusCheckIn: !this.state.modalCusCheckIn })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Tỉ lệ khách check in
-                                    <a href="#" className="btn-link" style={styles.btnLink}>30</a>
-                                </div>
+                                <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-detail-provider" >
+                                    <tbody>
+                                        <tr>
+                                            <td className="pl-3">
+                                                Tên công ty
+                                            </td>
+                                            <td className="table-info-provider">
+                                                ADBCNKJSLKSADLSDALS
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="pl-3">
+                                                Brand
+                                            </td>
+                                            <td className="table-info-provider">
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="pl-3">
+                                                Địa chỉ
+                                            </td>
+                                            <td className="table-info-provider">
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="pl-3">
+                                                Email
+                                            </td>
+                                            <td className="table-info-provider">
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="pl-3">
+                                                Số điện thoại
+                                            </td>
+                                            <td className="table-info-provider">
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="pl-3">
+                                                Slug - Đường dẫn
+                                            </td>
+                                            <td className="table-info-provider">
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="pl-3">
+                                                Website
+                                            </td>
+                                            <td className="table-info-provider">
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div id="tabcontent2" className="tabcontent ">
+                                <table
+                                    ble
+                                    className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                                >
+                                    <thead className="thead-light">
+                                        <tr>
+                                            <th className="text-center">STT.</th>
+                                            <th className="text-center">Tên chiến dịch</th>
+                                            <th className="text-center">Ngày bắt đầu</th>
+                                            <th className="text-center">Ngày kết thúc</th>
+                                            <th className="text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
+                                        {
+                                            data !== undefined ?
+                                                data.map((item, i) => {
+                                                    console.log(item)
+                                                    return (
+                                                        <tr key={i}>
+                                                            <td className="text-center">{i + 1}</td>
+                                                            <td className="text-center"></td>
+                                                            <td className="text-center"></td>
+                                                            <td className="text-center"></td>
+                                                            <td className="text-center" style={{ minWidth: '230px' }}>
+                                                                <div className="flex">
+                                                                    <CButton
+                                                                        shape="rounded-pill"
+                                                                        variant="outline"
+                                                                        color="info"
+                                                                        style={styles.mgl5}
+                                                                        size="md"
+                                                                        className="flex-a-center"
+                                                                        onClick={e => this.setState({ modalDetailProvider: !this.state.modalDetailProvider })}
+                                                                    >
+                                                                        <BsSearch className="mr-1" />
+                                                                        Chi tiết
+                                                                    </CButton>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }) : ""
+                                        }
+                                    </tbody>
+                                </table>
+                                <div style={{ float: "right" }}>
+                                    <Pagination
+                                        count={arrPagination.length}
+                                        color="primary"
+                                        onChange={(e, v) => {
+                                            this.setState({
+                                                data: arrPagination[v - 1],
+                                                indexPage: v - 1,
+                                            });
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div id="tabcontent3" className="tabcontent ">
                                 <div className="tabContentItem" style={styles.tabContentItem}>
                                     Số lượng voucher
                                     <a href="" className="btn-link"
@@ -1092,68 +1183,6 @@ class Users extends Component {
                         </div>
                     </div>
 
-                    <Modal isOpen={this.state.modal} className={this.props.className} size="xl">
-                        <ModalHeader>Danh sách các chiến dịch</ModalHeader>
-                        <ModalBody>
-                            <table
-                                ble
-                                className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
-                            >
-                                <thead className="thead-light">
-                                    <tr>
-                                        <th className="text-center">STT.</th>
-                                        <th className="text-center">Tên</th>
-                                        <th className="text-center">Nhà cung cấp</th>
-                                        <th className="text-center">Số lượng voucher</th>
-                                        <th className="text-center">Tỉ lệ check in</th>
-                                        <th className="text-center">Trạng thái</th>
-                                        <th className="text-center">Bắt đầu</th>
-                                        <th className="text-center">Kết thúc</th>
-                                        <th className="text-center">Ngày tạo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
-                                    {
-                                        data !== undefined ?
-                                            data.map((item, i) => {
-                                                console.log(item)
-                                                return (
-                                                    <tr key={i}>
-                                                        <td className="text-center">{i + 1}</td>
-                                                        <td className="text-center">{item.Name}</td>
-                                                        <td className="text-center">{item.Provider}</td>
-                                                        <td className="text-center">{item.totalVoucher}</td>
-                                                        <td className="text-center">{item.CheckIn}</td>
-                                                        <td className="text-center">{item.Status}</td>
-                                                        <td className="text-center"> {new Date(item.from).toLocaleDateString()}</td>
-                                                        <td className="text-center">{new Date(item.to).toLocaleDateString()}</td>
-                                                        <td className="text-center">{new Date(
-                                                            item.create_at
-                                                        ).toLocaleDateString()}</td>
-                                                    </tr>
-                                                );
-                                            }) : ""
-                                    }
-                                </tbody>
-                            </table>
-                            <div style={{ float: "right" }}>
-                                <Pagination
-                                    count={arrPagination.length}
-                                    color="primary"
-                                    onChange={(e, v) => {
-                                        this.setState({
-                                            data: arrPagination[v - 1],
-                                            indexPage: v - 1,
-                                        });
-                                    }}
-                                />
-                            </div>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="secondary" onClick={e => this.setState({ modal: !this.state.modal })}>Đóng</Button>
-                        </ModalFooter>
-                    </Modal>
                     <Modal isOpen={this.state.modalVoucher} className={this.props.className} size="xl">
                         <ModalHeader>Danh sách voucher</ModalHeader>
                         <ModalBody>
@@ -1275,6 +1304,7 @@ class Users extends Component {
                                         <th className="text-center">Tên</th>
                                         <th className="text-center">Số điện thoại</th>
                                         <th className="text-center">Email</th>
+                                        <th className="text-center">Tỉnh/Thành</th>
                                         <th className="text-center">Mã voucher</th>
                                     </tr>
                                 </thead>
@@ -1290,6 +1320,7 @@ class Users extends Component {
                                                         <td className="text-center">{item.Name}</td>
                                                         <td className="text-center">{item.Phone}</td>
                                                         <td className="text-center">{item.Email}</td>
+                                                        <td className="text-center">{item.City}</td>
                                                         <td className="text-center">{item.VoucherCode}</td>
                                                     </tr>
                                                 );
@@ -1312,6 +1343,32 @@ class Users extends Component {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={e => this.setState({ modalCusCheckIn: !this.state.modalCusCheckIn })}>Đóng</Button>
+                        </ModalFooter>
+                    </Modal>
+                    <Modal isOpen={this.state.modalDetailProvider} className={this.props.className} size="l">
+                        <ModalBody>
+                            <h5 className="text-center">Chi tiết chiến dịch tham gia</h5>
+                            <div className="tabContentItem" style={styles.tabContentItem}>
+                                <p className="modal-label">Trạng thái chiến dịch: <span className="modal-detail">
+                                <Tag></Tag></span></p>
+                                <p className="modal-label">Tên chiến dịch: <span className="modal-detail">hiiii</span></p>
+                                <p className="modal-label">Nội dung chiến dịch: <span className="modal-detail"></span></p>
+                                <p className="modal-label">Ngày bắt đầu sale: <span className="modal-detail"></span></p>
+                                <p className="modal-label">Ngày kết thúc sale: <span className="modal-detail"></span></p>
+                                <p className="modal-label">Ngày kết thúc chiến dịch: <span className="modal-detail"></span></p>
+                                <p className="modal-label">Ghi chú: <span className="modal-detail"></span></p>
+                            </div>
+                            <h5 className="text-center">Chi tiết evoucher</h5>
+                            <div className="tabContentItem" style={styles.tabContentItem}>
+                                <p className="modal-label">Số lượng voucher: <span className="modal-detail"></span></p>
+                                <p className="modal-label">Số lượng voucher phát: <span className="modal-detail">hiiii</span></p>
+                                <p className="modal-label">Tỉ lệ hoàn thành: <span className="modal-detail"></span></p>
+                                <p className="modal-label">Số lượng khách check in: <span className="modal-detail"></span></p>
+                                <p className="modal-label">Tỉ lệ khách check in: <span className="modal-detail"></span></p>
+                            </div>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="secondary" onClick={e => this.setState({ modalDetailProvider: !this.state.modalDetailProvider })}>Đóng</Button>
                         </ModalFooter>
                     </Modal>
 
