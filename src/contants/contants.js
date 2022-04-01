@@ -8,7 +8,7 @@ export default {
   // "BASE_URL_CURRENT" : "http://localhost:3019/",
 
   COLLABORATOR_GET : "api/collaborator/getAll",
-  
+  COLLABORATOR_DETAIL_GET_CUSTOMER : "api/collaborator/getAllCustomerByid",
   GET_ALL_CAMPAIGN_VER2: "api/manager/campaign/getAll",
   GET_DETAIL_CAMPAIGN: "api/campaign/getDetail",
   GET_DETAIL_CAMPAIGN_EVOUCHER: "api/evoucher/getByCampangId",
@@ -29,6 +29,7 @@ export default {
   DELETE_FOOTER: "api/footerPage/delete",
 
   GET_CAMPAIGN: "api/campaign/getAll",
+  GET_CAMPAIGN_IN_EVOUCHER: "api/evoucher/getAllCapang",
   ADD_CAMPAIGN: "api/campaign/add",
   UPDATE_CAMPAIGN: "api/campaign/update",
   DELETE_CAMPAIGN: "api/campaign/delete",

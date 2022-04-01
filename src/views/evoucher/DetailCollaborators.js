@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Chip, IconButton, Tooltip } from "@mui/material";
+
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ListSubheader from "@mui/material/ListSubheader";
@@ -17,6 +19,9 @@ import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsInfoCircleFill } from "@react-icons/all-files/bs/BsInfoCircleFill";
 import { Link } from 'react-router-dom';
+import CopyToClipboard from "react-copy-to-clipboard";
+import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
+
 import {
   Card,
   CardBody,
@@ -75,10 +80,12 @@ import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
 import { AiFillWechat } from "@react-icons/all-files/ai/AiFillWechat";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { GrClose } from "@react-icons/all-files/gr/GrClose";
+import { freeSet } from "@coreui/icons";
 
 
 import { Tag, Divider } from "antd";
 import Pagination from "@material-ui/lab/Pagination";
+import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill";
 
 
 let headers = new Headers();
@@ -91,7 +98,7 @@ class Users extends Component {
     super(props);
     this.state = {
       tabNameConfig: [
-       
+
         {
           _id: "t2",
           name: "Thông tin về chiến dịch",
@@ -99,10 +106,15 @@ class Users extends Component {
         },
         {
           _id: "t3",
-          name: "Thông tin về voucher",
-          icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
+          name: "Danh sách khách hàng",
+          icon: <HiUserGroup style={{ width: "24px ", height: "24px " }} />
         },
-       
+        {
+          _id: "t3",
+          name: "Thống kê",
+          icon: <BsFillBarChartFill style={{ width: "24px ", height: "24px " }} />
+        },
+
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
@@ -225,7 +237,7 @@ class Users extends Component {
     var i,
       j,
       temparray,
-      chunk = 6;
+      chunk = 7;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -244,7 +256,7 @@ class Users extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
- 
+
   async getDetailCampaign(id) {
     const { company_id } = this.state;
 
@@ -255,13 +267,13 @@ class Users extends Component {
     await axios
       .get(url, {
         params: {
-         id
+          id
         },
       })
       .then((res) => {
         let val = res.data?.data[0];
         this.setState({
-          detailCampaign : val
+          detailCampaign: val
         });
         console.log(val)
         // this.pagination(val);
@@ -272,17 +284,17 @@ class Users extends Component {
         // this.setState({ isLoading: false, totalActive: active });
       });
   }
-  async getDataVoucher(id) {
+  async getDataCustomer(id) {
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_DETAIL_CAMPAIGN_EVOUCHER;
+    let baseUrlCallApi = Constants.COLLABORATOR_DETAIL_GET_CUSTOMER;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .get(url, {
         params: {
-         id
+          saleId: id
         },
       })
       .then((res) => {
@@ -290,7 +302,7 @@ class Users extends Component {
         // this.setState({
         //   detailCampaign : val
         // });
-    
+
         this.pagination(val);
         this.setState({ dataApi: val });
 
@@ -299,9 +311,9 @@ class Users extends Component {
         this.setState({ isLoading: false, totalActive: active });
       });
   }
-  async componentDidMount() {    
+  async componentDidMount() {
     await this.getDetailCampaign(this.props.match.params.id);
-    await this.getDataVoucher(this.props.match.params.id);
+    await this.getDataCustomer(this.props.match.params.id);
 
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
@@ -474,6 +486,26 @@ class Users extends Component {
         }
       });
   }
+   checkStatusUserVoucherColor = (status) => {
+    const statusColorMap = {
+      2: "#2eb85c",
+      A: "#2db7f5",
+      1: "#87d068",
+      0: "#dc0e04",
+    };
+
+    return statusColorMap[status] || "#FF0004";
+  };
+  checkStatusUserVoucherContent = (status) => {
+    const statusContentMap = {
+      A: "Đã nhận voucher",
+      0: "Đã check-in",
+      1: "Hoàn thành",
+      2: "Hủy bỏ",
+    };
+
+    return statusContentMap[status] || "Chưa xác nhận";
+  };
 
   render() {
     const arrLevel = [
@@ -509,22 +541,22 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <>
-         
-         
+
+
           <div className="animated fadeIn " >
             <div className="header-flex-tabs">
-             <div className="detail-campaign-goback-position">
-            <Link className="" to="/manage-campaign">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="detail-campaign-goback bi bi-x-lg" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" />
-                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" />
-              </svg>
-            </Link>
-          </div>
-          <h4 className="detail-title-campaign">
-            Chi tiết chiến dịch
-          </h4>
-          </div>
+              <div className="detail-campaign-goback-position">
+                <Link className="" to="/manage-sales">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="detail-campaign-goback bi bi-x-lg" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" />
+                    <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" />
+                  </svg>
+                </Link>
+              </div>
+              <h4 className="detail-title-campaign">
+                Thông tin
+              </h4>
+            </div>
             <div className="flex-tabs">
               <div className="tab">
                 <List
@@ -553,317 +585,244 @@ class Users extends Component {
                 </List>
               </div>
               <div className="tabcontents">
-               
+
                 <div className="tabcontent defaultOpen">
-                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
-                    <thead>
+                  <div class="" style={{ width: '100%', overflowX: 'scroll' }}>
+                    <table
+                      ble
+                      className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    >
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">STT.</th>
+                          <th className="text-center">Tên</th>
+                          <th className="text-center">Thời gian</th>
+                          <th className="text-center">Lượng Evoucher - Khách CheckIn</th>
+                          <th className="text-center">Tỷ lệ CheckIn</th>
+                          <th className="text-center">Ghi chú</th>
+                          <th className="text-center">#</th>
 
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td className="pl-5">
-                          Nhà cung cấp
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td
+                          colSpan="10"
+                          hidden={this.state.hidden}
+                          className="text-center"
+                        >
+                          Không tìm thấy dữ liệu
                         </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ?  detailCampaign.name : ""
-                          }
-                        </td>
-                      </tr>
-                    <tr>
-                        <td className="pl-5">
-                          Trạng thái chiến dịch
-                        </td>
-                        <td className="color-red">
-                          {
-                            detailCampaign ?   <Tag
-                            className="ant-tag"
-                            color={
-                              detailCampaign.status === "1"
-                                ? "#87d068"
+                        {data != undefined
+                          ? data.map((item, i) => {
+                            console.log(item)
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.name}</td>
+                                <td className="text-center">{item.creat_at}</td>
+                                <td className="text-center">
+                                  {item.name}
+                                  -----
+                                  {item.name}
+                                </td>
+                                <td className="text-center">{item.address}</td>
 
-                                : "#f50"
-                            }
-                          >
-                            {detailCampaign.status === "1"
-                              ? "Hoạt động"
+                                <td className="text-center">{item.group}</td>
 
-                              : "Không hoạt động"}
-                          </Tag> : ""
-                          }
-                      
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Tên chiến dịch
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ?  detailCampaign.name : ""
-                          }
-                        </td>
-                      </tr>
-                     
-                      <tr>
-                        <td className="pl-5">
-                          Nội dung chiến dịch
-                        </td>
-                        <td className="color-red">
-                         ...
-                      
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Ngày bắt đầu Sales
-                        </td>
-                        <td className="color-red">
-                          {
-                            detailCampaign ? new Date(detailCampaign.from).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Ngày kết thúc Sales
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ? new Date(detailCampaign.to).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                               
-                      <tr>
-                        <td className="pl-5">
-                          Ngày kết thúc chiến dịch
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ? new Date(detailCampaign.saleEndDate).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                         Ghi chú
-                        </td>
-                        <td className="color-red">
-                        ...
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                                <td className="text-center" >
+                                  <div className="flex">
+                                    <CopyToClipboard
+                                      style={{ marginRight: '5px' }}
+                                      text={item.voucherCode}
+                                      onCopy={() => { }}
+                                    >
+                                      <Tooltip title="Copy">
+                                        <IconButton size="small">
+                                          <CIcon content={freeSet.cilCopy} />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </CopyToClipboard>
+                                    <Link to={"/detail-collaborators/" + item._id}>
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        className="flex-a-center height-detail-btn"
+
+                                      >
+                                        <BsSearch className="mr-1 " />
+
+                                      </CButton>
+                                    </Link>
+
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      onClick={(e) => this.openEditVoucher(item)}
+                                    >
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        name="cilPencil"
+                                        className="icon"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.remove(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
+                                    </CButton>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
+                          : ""}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
+
                 <div className="tabcontent">
-                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
-                    <thead>
+                  <div class="" style={{ width: '100%', overflowX: 'scroll' }}>
 
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="pl-5">
-                          Tổng số lượng Voucher
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign?.CheckIn[0] ? detailCampaign?.CheckIn[0]?.totalVoucher : "0"
-                          }
-                        </td>
-                      </tr>
-                     
-                         <tr>
-                        <td className="pl-5">
-                          Số khách CheckIn
-                        </td>
-                        <td className="color-red">
-                       ...
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Tỷ lệ CheckIn Voucher
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign?.CheckIn[0] ?  detailCampaign?.CheckIn[0]?.rateCheckIn : "0%"
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Ghi chú
-                        </td>
-                        <td className="color-red">
-                            ...
-                        </td>
-                      </tr>
-                   
-                      
-                    </tbody>
-                  </table>
-                  <h4 className="detail-title-campaign-voucher mt-5">
-                    DANH SÁCH VOUCHER
-                  </h4>
-                  <CButton
-                    color="success"
-                    style={{ marginBottom: "20px", marginRight: '10px' }}
-                    size="md"
-                    className="flex-center"
-                    onClick={() => this.ExportsFileExcel()}
-                  >
-                    <FaFileExport style={{ margin: "auto 6px auto 0" }} />
-                    <p style={{ margin: "auto 0" }}>Xuất File</p>
-                  </CButton>
-                  <a id="download_excel" download></a>
-                  <table
-                    ble
-                    className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
-                  >
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                   
+                    <table
+                      ble
+                      className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    >
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">STT.</th>
+                          <th className="text-center">Tên</th>
+                          <th className="text-center">Số điện thoại</th>
+                          <th className="text-center">Mã voucher</th>
+                          <th className="text-center">Trạng thái</th>
+                          <th className="text-center">#</th>
 
-                        <th className="text-center">Mã voucher</th>
-                     
-                      
-                        <th className="text-center">Nội dung</th>
-                        <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Ngày kết thúc</th>
-                        <th className="text-center">trạng thái</th>
-                        <th className="text-center">tỉnh/thành</th>
-
-                        <th className="text-center">#</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td
-                        colSpan="10"
-                        hidden={this.state.hidden}
-                        className="text-center"
-                      >
-                        Không tìm thấy dữ liệu
-                      </td>
-                      {data != undefined
-                        ? data.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-              
-                              <td className="text-center">{item.code}</td>
-                             
-
-                           
-                              <td className="text-center">{item.content}</td>
-                              <td className="text-center">{new Date(item.create_at).toLocaleDateString()}</td>
-                              <td className="text-center">{new Date(item.to).toLocaleDateString()}</td>
-                              <td className="text-center">
-                                <Tag
-                                  className="ant-tag"
-                                  color={item.status === "0"
-                                    ? "#2eb85c"
-                                    : item.status === "1"
-                                      ? "#2db7f5"
-                                      : item.status === "2"
-                                        ? "#87d068"
-                                        : item.status === "3"
-                                          ? "#f50"
-                                          : item.status === "4"
-                                            ? "#dc0e04"
-                                            : item.status === "4"
-                                              ? "#00D084"
-                                              : "#FF0004"}
-                                >
-                                  {item.status === "0"
-                                    ? "Sẵn sàng"
-                                    : item.status === "1"
-                                      ? "Chờ xác nhận"
-                                      : item.status === "2"
-                                        ? "Đã sử dụng"
-                                        : item.status === "3"
-                                          ? "Hủy bỏ"
-                                          : item.status === "4"
-                                            ? "Xóa bỏ"
-                                            : "Khóa"
-                                  }
-                                </Tag>
-                              </td>
-                              <td>
-                                  ...
-                              </td>
-                              {/* <td className="text-center">
-                                <div class="flex" >
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="outline"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    className="flex-a-center "
-                                    onClick={() =>
-                                      this.renderModalInfo(item)
-                                    }
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td
+                          colSpan="10"
+                          hidden={this.state.hidden}
+                          className="text-center"
+                        >
+                          Không tìm thấy dữ liệu
+                        </td>
+                        {data != undefined
+                          ? data.map((item, i) => {
+                            console.log(item)
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.fullName}</td>
+                                <td className="text-center">{item.phoneNumber}</td>
+                                <td className="text-center">{item.voucherCode}
+                                  <CopyToClipboard
+                                    text={item.voucherCode}
+                                    onCopy={() => { }}
                                   >
-                                    <BsSearch className="mr-1 icon" />
-                                   
-                                  </CButton>
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) =>
-                                      this.openEditVoucher(item)
-                                    }
+                                    <Tooltip title="Copy">
+                                      <IconButton size="small">
+                                        <CIcon content={freeSet.cilCopy} />
+                                      </IconButton>
+                                    </Tooltip>
+                                  </CopyToClipboard>
+                                </td>
+                                <td className="text-center">
+                                  <Tag
+                                    className="ant-tag"
+                                    color={this.checkStatusUserVoucherColor(item.status)}
                                   >
-                                    <FiEdit3
-                                      className="icon"
+                                    {this.checkStatusUserVoucherContent(item.status)}
+                                  </Tag>
 
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => {
-                                      this.remove(item);
-                                    }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                              </td> */}
-                            </tr>
-                          );
-                        })
-                        : ""}
-                    </tbody>
-                  </table>
-                  <div style={{ float: "right" }}>
-                    <Pagination
-                      count={arrPagination.length}
-                      color="primary"
-                      onChange={(e, v) => {
-                        this.setState({
-                          data: arrPagination[v - 1],
-                          indexPage: v - 1,
-                        });
-                      }}
-                    />
+                                </td>
+
+                                <td className="text-center" >
+                                  <div className="flex">
+                                    <Link to={"/detail-collaborators/" + item._id}>
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        className="flex-a-center height-detail-btn"
+
+                                      >
+                                        <BsSearch className="mr-1 " />
+
+                                      </CButton>
+                                    </Link>
+
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      onClick={(e) => this.openEditVoucher(item)}
+                                    >
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        name="cilPencil"
+                                        className="icon"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.remove(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
+                                    </CButton>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
+                          : ""}
+                      </tbody>
+                    </table>
+                    <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      data: arrPagination[v - 1],
+                      indexPage: v - 1,
+                    });
+                  }}
+                />
+              </div>
                   </div>
 
                 </div>
-              
+
               </div>
             </div>
             <Modal

@@ -723,6 +723,7 @@ class Users extends Component {
                     <p style={{ margin: "auto 0" }}>Xuất File</p>
                   </CButton>
                   <a id="download_excel" download></a>
+                  <div class="" style={{ width : '100%', overflowX: 'scroll'}}>
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -855,6 +856,7 @@ class Users extends Component {
                         : ""}
                     </tbody>
                   </table>
+                  </div>
                   <div style={{ float: "right" }}>
                     <Pagination
                       count={arrPagination.length}

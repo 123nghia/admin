@@ -170,7 +170,7 @@ class EndUser extends Component {
   async getDataCampaign() {
     const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_CAMPAIGN;
+    let baseUrlCallApi = Constants.GET_CAMPAIGN_IN_EVOUCHER;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
@@ -181,7 +181,7 @@ class EndUser extends Component {
       })
       .then((res) => {
         let val = res.data.data;
-
+        console.log("dataCampaign",res);
         this.setState({ dataCampaign: val });
       });
   }
@@ -321,7 +321,7 @@ class EndUser extends Component {
       modalVoucher: true,
       idCurrentUpdate: "",
       codeVoucher: "",
-      relCode: this.state.dataCampaign?.[0]?.relCode,
+      relCode: this.state.dataCampaign?.[0]?._id,
       description: "",
       status: "0",
       nameCompanyChoose : ""
@@ -663,11 +663,12 @@ class EndUser extends Component {
                 }
               >
                 {dataCampaign
+                
                   ? dataCampaign.map((item, i) => {
-                    if (i === 0) {
+                  
                       return <Option key={i} value={item._id}>{item.name}</Option>;
 
-                    }
+                    
                   })
                   : null}
               </Select>

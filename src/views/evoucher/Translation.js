@@ -9,7 +9,7 @@ import {
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
-import ModalAnt from './ModalAnt';
+
 import Swal from "sweetalert2";
 
 import {

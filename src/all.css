@@ -507,7 +507,10 @@
   right: 60px;
   z-index: 1;
 }
+.height-detail-btn{
+  height: 36.5px;
 
+}
 .card-flex-search {
   display: flex;
   gap: 20px;
