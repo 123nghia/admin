@@ -1,6 +1,6 @@
 export default {
-  BASE_URL: "https://evoucher-api.applamdep.com/",
-  // "BASE_URL":  "http://192.168.1.18:3018/",
+  // BASE_URL: "https://evoucher-api.applamdep.com/",
+  "BASE_URL":  "http://192.168.1.4:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
 
