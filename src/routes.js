@@ -163,6 +163,11 @@ const ManageSalesGroup = React.lazy(() =>
 const DetailCampaign = React.lazy(() =>
   import("./views/evoucher/DetailCampaign")
 );
+const DetailProvider = React.lazy(() =>
+import("./views/evoucher/DetailProvider")
+);
+
+
 const Provider = React.lazy(() => import("./views/evoucher/ManageProvider"));
 
 const roleUser = localStorage.getItem("type");
@@ -182,12 +187,8 @@ const routes = [
   { path: '/manage-sales-group', name: 'ManageSalesGroup', component: roleUser === "0" ? ManageSalesGroup : NotEnough },
 
   { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign },
+  { path: '/detail-provider/:id', name: 'DetailProvider', component: DetailProvider },
 
-  {
-    path: "/detail-campaign/:id",
-    name: "DetailCampaign",
-    component: DetailCampaign,
-  },
 
   { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough },
 

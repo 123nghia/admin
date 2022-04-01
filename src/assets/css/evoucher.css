@@ -28,7 +28,26 @@
 .table-details-campaign tr td {
     font-size: 18px;
     font-weight: 600;
-};
+}
+
+.table-detail-provider tr td {
+    font-size: 18px;
+}
+
+.table-info-provider {
+    font-weight: 500;
+}
+
+.modal-label, .modal-detail {
+    font-size: 19px;
+}
+
+.modal-detail {
+    margin-left: 15px;
+    font-weight: 600;
+}
+
+
 
 
 

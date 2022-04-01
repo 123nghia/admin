@@ -749,7 +749,7 @@ const _navContact = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Thống kê chung',
+    name: 'Dashboard',
     to: '/general-statistics',
     icon: <CgWebsite style={css} content={freeSet.none} className="c-sidebar-nav-icon" />,
     role: ['1','2'],
