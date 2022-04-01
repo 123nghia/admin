@@ -492,7 +492,7 @@ const _navOrther = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Danh sách Sales',
+    name: 'Danh sách cộng tác viên',
     to: '/manage-sales',
     icon: <HiUserGroup style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
     role: ['0'],
