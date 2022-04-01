@@ -133,7 +133,7 @@ const Banner = React.lazy(() => import("./views/base/tables/Banner/Banner"));
 const RequestSupport = React.lazy(() => import("./views/info/requestSupport"));
 const ListEvoucher = React.lazy(() => import("./views/evoucher/ListVoucher"));
 const ListUserEvoucher = React.lazy(() =>
-  import("./views/evoucher/ListUserEvoucher/index")
+  import("./views/evoucher/ListUserEvoucher/index.js")
 );
 const DetailVoucher = React.lazy(() =>
   import("./views/evoucher/ListUserEvoucher/DetailUserVoucher/index.js")
@@ -163,11 +163,17 @@ const ManageSalesGroup = React.lazy(() =>
 const DetailCampaign = React.lazy(() =>
   import("./views/evoucher/DetailCampaign")
 );
+<<<<<<< HEAD
 const DetailProvider = React.lazy(() =>
 import("./views/evoucher/DetailProvider")
 );
 
 
+=======
+const DetailCollaborators = React.lazy(() =>
+import("./views/evoucher/DetailCollaborators")
+);
+>>>>>>> 8303fa512628dbd2724eb61466f5a504f3180bbe
 const Provider = React.lazy(() => import("./views/evoucher/ManageProvider"));
 
 const roleUser = localStorage.getItem("type");
@@ -187,8 +193,18 @@ const routes = [
   { path: '/manage-sales-group', name: 'ManageSalesGroup', component: roleUser === "0" ? ManageSalesGroup : NotEnough },
 
   { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign },
+<<<<<<< HEAD
   { path: '/detail-provider/:id', name: 'DetailProvider', component: DetailProvider },
 
+=======
+  { path: '/detail-collaborators/:id', name: 'DetailCollaborators', component: DetailCollaborators },
+
+  {
+    path: "/detail-evoucher/:id",
+    name: "DetailVoucher",
+    component: DetailVoucher,
+  },
+>>>>>>> 8303fa512628dbd2724eb61466f5a504f3180bbe
 
   { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough },
 
