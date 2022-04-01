@@ -1,13 +1,12 @@
-import { css } from "@emotion/react";
+import CIcon from "@coreui/icons-react";
+import { CButton } from "@coreui/react";
 import { Card, Col, Row, Tag } from "antd";
 import "antd/dist/antd.css";
 import "moment-timezone";
-import React, { Component, useState } from "react";
-import DotLoader from "react-spinners/DotLoader";
-import IframeModal from "../../../views/components/Iframe";
-import Constants from "../../../contants/contants";
-import { CButton } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
+import React, { useState } from "react";
+import formatDate from "src/utils/formatDate";
+import Constants from "../../../../../contants/contants";
+import IframeModal from "../../../../components/Iframe";
 
 function EvoucherInfoTable({ detailUserVoucher }) {
   const { voucherCode, voucher, branch, historyId, create_at } =
@@ -48,9 +47,6 @@ function EvoucherInfoTable({ detailUserVoucher }) {
     setToggleHistory(!toggleHistory);
   }
 
-  const dateFormat = "DD/MM/YYYY";
-  const [startDate, setStartDate] = useState(new Date(create_at));
-
   const renderUserVoucherList = () => (
     <table
       ble
@@ -58,8 +54,10 @@ function EvoucherInfoTable({ detailUserVoucher }) {
     >
       <thead className="thead-light">
         <tr>
-          {headingList.map((title) => (
-            <th className="text-center">{title}</th>
+          {headingList.map((title, idx) => (
+            <th key={idx} className="text-center">
+              {title}
+            </th>
           ))}
         </tr>
       </thead>
@@ -101,7 +99,7 @@ function EvoucherInfoTable({ detailUserVoucher }) {
                 setToggleHistory(!toggleHistory);
               }}
             >
-              {new Date(create_at).toLocaleDateString()}
+              {formatDate(create_at)}
               <CIcon
                 style={{ marginLeft: "0.5rem" }}
                 name="cil-magnifying-glass"

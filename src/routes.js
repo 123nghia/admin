@@ -1,7 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
-import { useSelector, useDispatch } from "redux";
-import DetailVoucher from "./views/evoucher/ListUserEvoucher/DetailVoucher";
 
 const Dashboard = React.lazy(() => import("./views/DashBoard/Dashboard"));
 const TableUser = React.lazy(() => import("./views/base/tables/TableUser"));
@@ -95,17 +92,23 @@ const PluginSubSaleTable = React.lazy(() =>
   import("./views/base/tables/AI_Skin/PluginSubSaleTable")
 );
 
+
 //User
 const EndUserPlugin = React.lazy(() =>
   import("./views/base/tables/User/EndUser")
 );
 // config skin AI
-const configSkinDisplay = React.lazy(() =>
-  import("./views/skin/configDisplay")
-);
-const configContent = React.lazy(() => import("./views/skin/content"));
-const configOverView = React.lazy(() => import("./views/skin/overView"));
-const configWeb = React.lazy(() => import("./views/config/configWeb"));
+
+const configSkinDisplay = React.lazy(() => import('./views/skin/configDisplay'));
+const configContent = React.lazy(() => import('./views/skin/content'));
+const configOverView = React.lazy(() => import('./views/skin/overView'));
+const configWeb = React.lazy(() => import('./views/config/configWeb'));
+const GeneralStatistics = React.lazy(() => import('./views/evoucher/GeneralStatistics'));
+const ManageProvider = React.lazy(() => import('./views/evoucher/ManageProvider'));
+
+
+
+
 //ADMIN MakeUp
 const SuggestItem = React.lazy(() =>
   import("./views/base/tables/MakeUp/SuggestItem")
@@ -131,6 +134,9 @@ const RequestSupport = React.lazy(() => import("./views/info/requestSupport"));
 const ListEvoucher = React.lazy(() => import("./views/evoucher/ListVoucher"));
 const ListUserEvoucher = React.lazy(() =>
   import("./views/evoucher/ListUserEvoucher/index")
+);
+const DetailVoucher = React.lazy(() =>
+  import("./views/evoucher/ListUserEvoucher/DetailUserVoucher/index.js")
 );
 
 const ListCampaign = React.lazy(() => import("./views/evoucher/ListCampaign"));
@@ -164,143 +170,81 @@ const roleUser = localStorage.getItem("type");
 const routes = [
   { path: "/", exact: true, name: "Home" },
   // evoucher
-  { path: "/list-evoucher", name: "ListEvoucher", component: ListEvoucher },
-  {
-    path: "/list-user-evoucher",
-    name: "ListUserEvoucher",
-    component: ListUserEvoucher,
-  },
+  { path: '/list-evoucher', name: 'ListEvoucher', component: ListEvoucher },
+  { path: '/list-user-evoucher', name: 'ListUserEvoucher', component: ListUserEvoucher },
+  { path: '/list-campaign', name: 'ListCampaign', component: ListCampaign },
+  { path: '/banner-sales', name: 'BannerSales', component: roleUser === "0" ? BannerSales : NotEnough },
+  { path: '/evoucher-statistics', name: 'Statistics', component: Statistics },
+  { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher },
+  { path: '/manage-campaign', name: 'ManageCampaign', component: roleUser === "0" ? ManageCampaign : NotEnough },
+  { path: '/manage-sales', name: 'ManageSales', component: roleUser === "0" ? ManageSales : NotEnough },
 
-  {
-    path: "/detail-evoucher/:id",
-    name: "DetailVoucher",
-    component: DetailVoucher,
-  },
-  { path: "/list-campaign", name: "ListCampaign", component: ListCampaign },
-  {
-    path: "/banner-sales",
-    name: "BannerSales",
-    component: roleUser === "0" ? BannerSales : NotEnough,
-  },
-  { path: "/evoucher-statistics", name: "Statistics", component: Statistics },
-  { path: "/manage-voucher", name: "ManageVoucher", component: ManageVoucher },
-  {
-    path: "/manage-campaign",
-    name: "ManageCampaign",
-    component: roleUser === "0" ? ManageCampaign : NotEnough,
-  },
-  {
-    path: "/manage-sales",
-    name: "ManageSales",
-    component: roleUser === "0" ? ManageSales : NotEnough,
-  },
+  { path: '/manage-sales-group', name: 'ManageSalesGroup', component: roleUser === "0" ? ManageSalesGroup : NotEnough },
 
-  {
-    path: "/manage-sales-group",
-    name: "ManageSalesGroup",
-    component: roleUser === "0" ? ManageSalesGroup : NotEnough,
-  },
+  { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign },
 
   {
     path: "/detail-campaign/:id",
     name: "DetailCampaign",
-    component:  DetailCampaign 
+    component: DetailCampaign,
   },
 
-  { path: "/translation", name: "Translation", component: Translation },
-  { path: "/not-enough", name: "NotEnough", component: NotEnough },
+  { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough },
 
-  {
-    path: "/admin-config-web",
-    name: "AdminConfigWebsite",
-    component: roleUser === "0" ? AdminConfigWebsite : NotEnough,
-  },
 
-  { path: "/dashboard", name: "Dashboard", component: Dashboard },
-  { path: "/users", name: "Users", component: TableUser },
-  { path: "/company", name: "Company", component: TableCompany },
-  { path: "/key", name: "Key", component: TableKey },
-  { path: "/key_order", name: "Key", component: TableKeyOrder },
-  { path: "/pakage_sale", name: "Sale", component: TablePakageSale },
-  { path: "/pakage_sale_log", name: "SaleLog", component: TablePakageSaleLog },
-  { path: "/type_key", name: "TypeKey", component: TableTypeKey },
-  { path: "/role", name: "Role", component: TableRole },
-  { path: "/link", name: "Key", component: TableLink },
-  { path: "/history", name: "HistorySkin", component: HistorySkinUser },
-  { path: "/sales", name: "ShopManager", component: ListSale },
-  { path: "/shopmanager", name: "ShopManager", component: ListShopManager },
-  { path: "/customers", name: "Customers", component: ListCustomer },
-  { path: "/hardware", name: "HardWares", component: HardWare },
-  { path: "/orders", name: "Orders", component: Order },
-  { path: "/order_table", name: "Order Table", component: OrderTable },
-  { path: "/transaction", name: "Transaction", component: TransactionTable },
-  { path: "/hardwaremanager", name: "HardWare", component: HardWareManager },
-  { path: "/profile", name: "Profile", component: Profile },
-  {
-    path: "/book-calendar",
-    name: "BookCalendar",
-    component: roleUser !== "0" ? BookCalendar : NotEnough,
-  },
 
-  { path: "/spending_order", name: "SPENDING", component: SPENDING },
-  { path: "/role_manager", name: "Role Manager", component: RoleManager },
-  { path: "/plugin_manager", name: "Plugin Manager", component: PluginManager },
-  {
-    path: "/customer_manager",
-    name: "Customer Manager",
-    component: roleUser === "0" ? PluginCustomer : NotEnough,
-  },
-  {
-    path: "/plugin_create_order",
-    name: "Create Order",
-    component: PluginCreateOrder,
-  },
+  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
+  { path: '/users', name: 'Users', component: TableUser },
+  { path: '/company', name: 'Company', component: TableCompany },
+  { path: '/key', name: 'Key', component: TableKey },
+  { path: '/key_order', name: 'Key', component: TableKeyOrder },
+  { path: '/pakage_sale', name: 'Sale', component: TablePakageSale },
+  { path: '/pakage_sale_log', name: 'SaleLog', component: TablePakageSaleLog },
+  { path: '/type_key', name: 'TypeKey', component: TableTypeKey },
+  { path: '/role', name: 'Role', component: TableRole },
+  { path: '/link', name: 'Key', component: TableLink },
+  { path: '/history', name: 'HistorySkin', component: HistorySkinUser },
+  { path: '/sales', name: 'ShopManager', component: ListSale },
+  { path: '/shopmanager', name: 'ShopManager', component: ListShopManager },
+  { path: '/customers', name: 'Customers', component: ListCustomer },
+  { path: '/hardware', name: 'HardWares', component: HardWare },
+  { path: '/orders', name: 'Orders', component: Order },
+  { path: '/order_table', name: 'Order Table', component: OrderTable },
+  { path: '/transaction', name: 'Transaction', component: TransactionTable },
+  { path: '/hardwaremanager', name: 'HardWare', component: HardWareManager },
+  { path: '/profile', name: 'Profile', component: Profile },
+  { path: '/book-calendar', name: 'BookCalendar', component: roleUser !== "0" ? BookCalendar : NotEnough },
 
-  {
-    path: "/yeu-cau-ho-tro",
-    name: "Request Suport",
-    component: RequestSupport,
-  },
 
-  { path: "/saleAdmin", name: "SALE", component: PluginUserTable },
-  { path: "/reward_info", name: "REWARD_INFO", component: RewardInfomation },
-  {
-    path: "/feature_customer",
-    name: "REWARD_INFO",
-    component: ListFeatureOfCustomer,
-  },
-  { path: "/cus_request", name: "REWARD_INFO", component: CusRequest },
+  { path: '/spending_order', name: 'SPENDING', component: SPENDING },
+  { path: '/role_manager', name: 'Role Manager', component: RoleManager },
+  { path: '/plugin_manager', name: 'Plugin Manager', component: PluginManager },
+  { path: '/customer_manager', name: 'Customer Manager', component: roleUser === "0" ? PluginCustomer : NotEnough },
+  { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
 
-  { path: "/customer", name: "Customer Manager", component: CustomerManager },
-  { path: "/historyskin", name: "History Skin", component: HistorySkin },
-  { path: "/update_package", name: "UpdatePackage", component: UpdatePackage },
-  { path: "/brand_skin", name: "Brand Skin", component: BrandPlugin },
+  { path: '/yeu-cau-ho-tro', name: 'Request Suport', component: RequestSupport },
+  { path: '/manage-provider', name: 'Manage Provider', component: ManageProvider },
 
-  {
-    path: "/subsale",
-    name: "Sub Sale",
-    component: roleUser !== "0" ? NotEnough : PluginSubSaleTable,
-  },
-  {
-    path: "/skin/config",
-    name: "confgSkinDisplay",
-    component: configSkinDisplay,
-  },
-  {
-    path: "/skin/configContent",
-    name: "configContent",
-    component: configContent,
-  },
-  {
-    path: "/skin/configOverView",
-    name: "configOverView",
-    component: configOverView,
-  },
-  {
-    path: "/cau-hinh-trang-web",
-    name: "configWeb",
-    component: roleUser !== "0" ? configWeb : NotEnough,
-  },
+  { path: '/saleAdmin', name: 'SALE', component: PluginUserTable },
+  { path: '/reward_info', name: 'REWARD_INFO', component: RewardInfomation },
+  { path: '/feature_customer', name: 'REWARD_INFO', component: ListFeatureOfCustomer },
+  { path: '/cus_request', name: 'REWARD_INFO', component: CusRequest },
+
+  { path: '/customer', name: 'Customer Manager', component: CustomerManager },
+  { path: '/historyskin', name: 'History Skin', component: HistorySkin },
+  { path: '/update_package', name: 'UpdatePackage', component: UpdatePackage },
+  { path: '/brand_skin', name: 'Brand Skin', component: BrandPlugin },
+
+  { path: '/subsale', name: 'Sub Sale', component: roleUser !== "0" ? NotEnough : PluginSubSaleTable },
+  { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
+  { path: '/skin/configContent', name: 'configContent', component: configContent },
+  { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
+  { path: '/cau-hinh-trang-web', name: 'configWeb', component: roleUser !== "0" ? configWeb : NotEnough },
+  { path: '/general-statistics', name: 'General Statistics', component: GeneralStatistics },
+
+
+
+
 
   //admin product
   {

@@ -722,22 +722,13 @@ class EndUser extends Component {
               />
 
               {/* <TextFieldGroup
-                field="company"
-                label="Tên công ty"
-                value={this.state.company}
-                // error={errors.title}
-                onChange={(e) => this.setState({ company: e.target.value })}
-                // rows="5"
-              /> */}
-
-              <TextFieldGroup
                 field="quantity"
                 label="Số lượng Voucher"
                 value={this.state.quantity}
                 // error={errors.title}
                 onChange={(e) => this.setState({ quantity: e.target.value })}
               // rows="5"
-              />
+              /> */}
 
               {/* <TextFieldGroup
                 field="from"
@@ -837,15 +828,7 @@ class EndUser extends Component {
                   format={dateFormat}
                 />
               )}
-              <label className="control-label mt-3">Mô tả:</label>
-              <CTextarea
-                name="description"
-                rows="4"
-                value={this.state.description}
-                onChange={(e) => {
-                  this.setState({ description: e.target.value });
-                }}
-              />
+              
               <label className="control-label">Công ty:</label>
 
               <Select
@@ -1218,45 +1201,11 @@ class EndUser extends Component {
                   </i>
 
                   <CRow>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
 
-                        <p className="title_filter">Mã Voucher</p>
-                        <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ codeVoucher: e.target.value });
-                          }}
-                          name="codeVoucher"
-                          value={this.state.codeVoucher}
-                          placeholder="Mã voucher"
-                        />
-                      </div>
-                    </CCol>
-
-                    <CCol md={4} className="mt-3">
-                      <div className="">
-
-
-                        <p className="title_filter">Số điện thoại</p>
-                        <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ phoneFilter: e.target.value });
-                          }}
-                          type="number"
-                          name="phoneFilter"
-                          value={this.state.phoneFilter}
-                          placeholder="Số điện thoại"
-                        />
-                      </div>
-                    </CCol>
-                    <CCol md={4} className="mt-3">
-                      <div className="">
-
-
-                        <p className="title_filter">Trạng thái</p>
+                        <p className="title_filter">Trạng thái chiến dịch</p>
                         <div style={{ width: "200px" }} className="">
 
                           {arrLevel !== undefined ? (
@@ -1293,23 +1242,47 @@ class EndUser extends Component {
                             </CSelect>
                           ) : null}
                         </div>
-                        {/* <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ statusVoucher: e.target.value });
-                          }}
-                          name="statusVoucher"
-                          value={this.state.statusVoucher}
-                          placeholder="Trạng thái voucher"
-                        /> */}
+                       
                       </div>
                     </CCol>
-                    <CCol md={4} className="mt-3">
+                    <CCol md={3} className="mt">
                       <div className="">
 
+
+                        <p className="title_filter">Danh sách Brand</p>
+                        <div style={{ width: '200px' }}>
+                          <Select
+                            className="select_seo"
+                            showSearch
+                            placeholder="Lọc theo Brand"
+                            optionFilterProp="children"
+                            onChange={(value) =>
+                              this.setState({
+                                idDataSales: value,
+                              })
+                            }
+                            onSearch={this.onSearchSelect}
+                            filterOption={(input, option) =>
+                              option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                              0
+                            }
+                          >
+                            {this.state.dataSales
+                              ? this.state.dataSales.map((item, i) => {
+                                return <Option value={item._id}>{item.Name}</Option>;
+                              })
+                              : null}
+                          </Select>
+                        </div>
+
+                      </div>
+                    </CCol>
+                    <CCol md={3} className="mt">
+                   
                         <div className="">
                           <p className="title_filter">Từ ngày</p>
-                          <div style={{width:'200px'}}>
+
+                          <div style={{ width: '200px' }}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1328,9 +1301,11 @@ class EndUser extends Component {
                             />
                           </div>
                         </div>
-                        <div className=" mt-3">
+                    </CCol>
+                    <CCol md={3} className="mt">
+                        <div className="">
                           <p className="title_filter">Đến ngày</p>
-                          <div style={{width:'200px'}}>
+                          <div style={{ width: '200px' }}>
                             <DatePicker
                               style={styles.dateForm}
                               onChange={(e, dateString) => {
@@ -1350,39 +1325,7 @@ class EndUser extends Component {
                           </div>
                         </div>
 
-                      </div>
-                    </CCol>
-                    <CCol md={4} className="mt-3">
-                      <div className="">
-
-
-                        <p className="title_filter">Danh sách Sales</p>
-                        <div style={{width:'200px'}}>
-                        <Select
-                          className="select_seo"
-                          showSearch
-                          placeholder="Lọc theo Sales"
-                          optionFilterProp="children"
-                          onChange={(value) =>
-                            this.setState({
-                              idDataSales: value,
-                            })
-                          }
-                          onSearch={this.onSearchSelect}
-                          filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                            0
-                          }
-                        >
-                          {this.state.dataSales
-                            ? this.state.dataSales.map((item, i) => {
-                              return <Option value={item._id}>{item.Name}</Option>;
-                            })
-                            : null}
-                        </Select>
-                        </div>
-
-                      </div>
+                   
                     </CCol>
                   </CRow>
 
@@ -1417,16 +1360,21 @@ class EndUser extends Component {
 
                   <table
                     ble
-                    className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    className="mt-3 table table-outline table-hover mb-0 d-none d-sm-table table_dash"
                   >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
+                        <th className="text-center">Tên</th>
                         <th className="text-center">Tên công ty</th>
-                        <th className="text-center">E-mail - SĐT</th>
+                        <th className="text-center">Brand</th>
+                        <th className="text-center">Loại</th>
+                        <th className="text-center">Địa chỉ</th>
+                        <th className="text-center">Website</th>                     
+                        <th className="text-center">SĐT</th>
+                        <th className="text-center">Người tạo</th>
                         <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Định danh hệ thống</th>
-                        <th className="text-center">Địa chỉ</th>                     
+                        <th className="text-center">Trạng thái</th> 
                         <th className="text-center"></th>
                       </tr>
                     </thead>
@@ -1446,17 +1394,35 @@ class EndUser extends Component {
                               <td className="text-center">{item.name}</td>
                               <td className="text-center">
                                   <div>{item.Email}</div>
-                                  <div>------------</div>
-                                  <div>{item.Phone}</div>
                               </td>
                               <td className="text-center">
                               {new Date(item.from).toLocaleDateString()}
                               </td>
                               <td className="text-center">{item.name}</td>
                               <td className="text-center">{item.name}</td>
-                               <td className="text-center" style={{ minWidth: '230px' }}>
+                              <td className="text-center">{item.name}</td>
+                              <td className="text-center">{item.name}</td>
+                              <td className="text-center">{item.name}</td>
+                              <td className="text-center">{item.name}</td>
+                              <td className="text-center">
+                                <Tag
+                                  className="ant-tag"
+                                  color={
+                                    item.status === "1"
+                                      ? "#87d068"
+
+                                      : "#f50"
+                                  }
+                                >
+                                  {item.status === "1"
+                                    ? "Hoạt động"
+
+                                    : "Không hoạt động"}
+                                </Tag>
+                              </td>
+                              <td className="text-center" style={{ minWidth: '230px' }}>
                                 <div className="flex">
-                                  <Link to={"/detail-campaign/" + item._id}>
+                                  <Link>
                                     <CButton
                                       shape="rounded-pill"
                                       variant="outline"
@@ -1472,35 +1438,6 @@ class EndUser extends Component {
                                       Chi tiết
                                     </CButton>
                                   </Link>
-
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openEditVoucher(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => {
-                                      this.remove(item);
-                                    }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
                                 </div>
                               </td>
                             </tr>
@@ -1541,14 +1478,14 @@ class EndUser extends Component {
               // rows="5"
               />
 
-              <TextFieldGroup
+              {/* <TextFieldGroup
                 field="voucher"
                 label="Số lượng Voucher"
                 value={this.state.voucher}
                 // error={errors.title}
                 onChange={(e) => this.setState({ voucher: e.target.value })}
               // rows="5"
-              />
+              /> */}
             </ModalBody>
             <ModalFooter>
               <CButton

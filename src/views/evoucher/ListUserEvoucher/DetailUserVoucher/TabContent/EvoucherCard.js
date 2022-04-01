@@ -1,13 +1,10 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import backgroundVoucher from "./../../../assets/img/background-voucher.jpg_.webp";
-import { Form, Space } from "antd";
-import { CButton } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import IframeModal from "../../../views/components/Iframe";
-import Constants from "../../../contants/contants";
-import { Timeline } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
+import { CButton } from "@coreui/react";
+import Box from "@mui/material/Box";
+import React, { useState } from "react";
+import Constants from "../../../../../contants/contants";
+import IframeModal from "../../../../components/Iframe";
+import backgroundVoucher from "./../../../assets/img/background-voucher.jpg_.webp";
 
 function EvoucherCard({ detailUserVoucher }) {
   const { voucherCode, voucher, branch, skinHistory, create_at } =
