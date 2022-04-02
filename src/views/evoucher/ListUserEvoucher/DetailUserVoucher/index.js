@@ -179,7 +179,6 @@ class DetailVoucher extends Component {
                 {this.state.tabNameConfig
                   ? this.state.tabNameConfig
                       .filter(function (item) {
-                        console.log(type === "1" && item._id === "t3");
                         return !(type !== "1" && item._id === "t3");
                       })
                       .map((item, i) => {
