@@ -179,7 +179,7 @@ class DetailVoucher extends Component {
                 {this.state.tabNameConfig
                   ? this.state.tabNameConfig
                       .filter(function (item) {
-                        return !(type !== "1" && item._id === "t3");
+                        return !(type !== "0" && item._id === "t3");
                       })
                       .map((item, i) => {
                         return (
@@ -243,7 +243,7 @@ class DetailVoucher extends Component {
                   detailUserVoucher={this.state?.detailUserVoucher}
                 />
               </div>
-              {type === "1" ? (
+              {type === "0" ? (
                 <>
                   <div id="tabcontent3" className="tabcontent ">
                     <div class="text-center">

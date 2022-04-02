@@ -479,22 +479,6 @@ class ListUserEvoucher extends Component {
                     >
                       {checkStatusUserVoucherContent(item.status)}
                     </Tag>
-
-                    {this.state.type === "0" ? (
-                      <div>
-                        <CButton
-                          shape="rounded-pill"
-                          variant="ghost"
-                          color="info"
-                          style={styles.mgl5}
-                          size="md"
-                          onClick={(e) => this.openEditVoucher(item)}
-                        >
-                          {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
-                          Thay đổi
-                        </CButton>
-                      </div>
-                    ) : null}
                   </td>
                   <td className="text-center">{formatDate(item.create_at)}</td>
                   <td className="text-center">
