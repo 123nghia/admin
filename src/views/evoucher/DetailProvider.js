@@ -1033,7 +1033,7 @@ class Users extends Component {
                                         </tr>
                                         <tr>
                                             <td className="pl-3">
-                                                Brand
+                                                Thương hiệu
                                             </td>
                                             <td className="table-info-provider">
 
@@ -1079,6 +1079,14 @@ class Users extends Component {
 
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td className="pl-3">
+                                                Logo
+                                            </td>
+                                            <td className="table-info-provider">
+
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1091,8 +1099,8 @@ class Users extends Component {
                                         <tr>
                                             <th className="text-center">STT.</th>
                                             <th className="text-center">Tên chiến dịch</th>
-                                            <th className="text-center">Ngày bắt đầu</th>
-                                            <th className="text-center">Ngày kết thúc</th>
+                                            <th className="text-center">Trạng thái</th>
+                                            <th className="text-center">Số lượng voucher</th>
                                             <th className="text-center"></th>
                                         </tr>
                                     </thead>
@@ -1347,7 +1355,7 @@ class Users extends Component {
                     </Modal>
                     <Modal isOpen={this.state.modalDetailProvider} className={this.props.className} size="l">
                         <ModalBody>
-                            <h5 className="text-center">Chi tiết chiến dịch tham gia</h5>
+                            <h5 className="text-center modal-title">Chi tiết chiến dịch tham gia</h5>
                             <div className="tabContentItem" style={styles.tabContentItem}>
                                 <p className="modal-label">Trạng thái chiến dịch: <span className="modal-detail">
                                 <Tag></Tag></span></p>
@@ -1358,7 +1366,7 @@ class Users extends Component {
                                 <p className="modal-label">Ngày kết thúc chiến dịch: <span className="modal-detail"></span></p>
                                 <p className="modal-label">Ghi chú: <span className="modal-detail"></span></p>
                             </div>
-                            <h5 className="text-center">Chi tiết evoucher</h5>
+                            <h5 className="text-center modal-title">Chi tiết e-voucher</h5>
                             <div className="tabContentItem" style={styles.tabContentItem}>
                                 <p className="modal-label">Số lượng voucher: <span className="modal-detail"></span></p>
                                 <p className="modal-label">Số lượng voucher phát: <span className="modal-detail">hiiii</span></p>

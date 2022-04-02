@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import CIcon from "@coreui/icons-react";
+
 import moment from "moment";
 import {
   Card,
@@ -12,9 +13,10 @@ import {
   ModalBody,
   ModalFooter,
   Modal,
+  
 } from "reactstrap";
 import Swal from "sweetalert2";
-import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
+import { CButton, CLabel, CSelect, CTextarea, CRow, CCol, CBadge } from "@coreui/react";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { Link } from 'react-router-dom';
@@ -192,11 +194,11 @@ class EndUser extends Component {
   async getData(key) {
     const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_CAMPAIGN;
+    let baseUrlCallApi = Constants.GET_ALL_COMPANY;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .get(url, {
+      .post(url, {
         params: {
           company_id,
           keyword: key,
@@ -716,134 +718,40 @@ class EndUser extends Component {
               {this.state.actionVoucher == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-              <label className="control-label">Công ty:</label>
+              <div style={{ width: "100%" }} className="mt-3">
+                <label className="control-label">Tên công ty:</label>
+                <Select
+                  className="select_company"
+                  showSearch
+                  placeholder="Chọn tên công ty"
+                  optionFilterProp="children"
+                  onChange={(value) =>
+                    this.setState({
+                      idCompany: value,
+                    })
+                  }
+                  onSearch={this.onSearchSelect}
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                    0
+                  }
+                >
+                  {dataCompany
+                    ? dataCompany.map((item, i) => {
+                      return <Option value={item._id}>{item.Name}</Option>;
+                    })
+                    : null}
+                </Select>
+              </div>
 
-              <Select
-                className="select_company"
-                showSearch
-                placeholder="Chọn tên công ty"
-                optionFilterProp="children"
-                onChange={(value) =>
-                  this.setState({
-                    idCompany: value,
-                  })
-                }
-                onSearch={this.onSearchSelect}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-              >
-                {dataCompany
-                  ? dataCompany.map((item, i) => {
-                    return <Option value={item._id}>{item.Name}</Option>;
-                  })
-                  : null}
-              </Select>
-              <label>Bắt đầu</label>
-              {this.state.actionVoucher !== "new" ? (
-                <DatePicker
-                  onChange={(e, dateString) => {
-                    let copy = dateString.split("-");
-                    let newData = ``;
-                    copy.forEach((item, index) => {
-                      if (index === 0) {
-                        newData += item;
-                      } else {
-                        newData += `/${item}`;
-                      }
-                    });
-                    this.setState({ from: newData });
-                  }}
-                  defaultValue={moment(
-                    new Date(this.state.from).toLocaleDateString(),
-                    dateFormat
-                  )}
-                  format={dateFormat}
+              <div style={{ width: "100%" }} className="mt-3">
+                <TextFieldGroup
+                  field=""
+                  label="Tên thương hiệu:"
+                // value={this.state.quantity}
+                // onChange={(e) => this.setState({ quantity: e.target.value })}
                 />
-              ) : (
-                <DatePicker
-                  onChange={(e, dateString) => {
-                    let copy = dateString.split("-");
-                    let newData = ``;
-                    copy.forEach((item, index) => {
-                      if (index === 0) {
-                        newData += item;
-                      } else {
-                        newData += `/${item}`;
-                      }
-                    });
-                    this.setState({ from: newData });
-                  }}
-                  defaultValue={moment()}
-                  format={dateFormat}
-                />
-              )}
-
-              <div className="mt-3"></div>
-              <label>Kết thúc</label>
-              {this.state.actionVoucher !== "new" ? (
-                <DatePicker
-                  onChange={(e, dateString) => {
-                    let copy = dateString.split("-");
-                    let newData = ``;
-                    copy.forEach((item, index) => {
-                      if (index === 0) {
-                        newData += item;
-                      } else {
-                        newData += `/${item}`;
-                      }
-                    });
-                    this.setState({ to: newData });
-                  }}
-                  defaultValue={moment(
-                    new Date(this.state.to).toLocaleDateString(),
-                    dateFormat
-                  )}
-                  format={dateFormat}
-                />
-              ) : (
-                <DatePicker
-                  onChange={(e, dateString) => {
-                    let copy = dateString.split("-");
-                    let newData = ``;
-                    copy.forEach((item, index) => {
-                      if (index === 0) {
-                        newData += item;
-                      } else {
-                        newData += `/${item}`;
-                      }
-                    });
-                    this.setState({ to: newData });
-                  }}
-                  defaultValue={moment()}
-                  format={dateFormat}
-                />
-              )}
-
-              <label className="control-label">Brand:</label>
-              <Select
-                className="select_company"
-                showSearch
-                placeholder="Chọn brand"
-                optionFilterProp="children"
-                onChange={(value) =>
-                  this.setState({
-                    idCompany: value,
-                  })
-                }
-                onSearch={this.onSearchSelect}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-              >
-                {dataCompany
-                  ? dataCompany.map((item, i) => {
-                    return <Option value={item._id}>{item.Name}</Option>;
-                  })
-                  : null}
-              </Select>
+              </div>
 
               <label className="control-label">Loại: </label>
               <Select
@@ -866,11 +774,20 @@ class EndUser extends Component {
                 <Option value="1">Sản phẩm</Option>
               </Select>
 
-              <TextFieldGroup
-                field=""
-                label="Người tạo:"
+              <div style={{ width: "100%" }} className="mt-3">
+                <TextFieldGroup
+                  field=""
+                  label="Định danh hệ thống:"
                 // value={this.state.quantity}
                 // onChange={(e) => this.setState({ quantity: e.target.value })}
+                />
+              </div>
+
+              <TextFieldGroup
+                field=""
+                label="Logo:"
+              // value={this.state.quantity}
+              // onChange={(e) => this.setState({ quantity: e.target.value })}
               />
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
@@ -907,6 +824,14 @@ class EndUser extends Component {
                     })}
                   </CSelect>
                 ) : null}
+              </div>
+              <div style={{ width: "100%" }} className="mt-3">
+                <TextFieldGroup
+                  field=""
+                  label="Giới thiệu:"
+                // value={this.state.quantity}
+                // onChange={(e) => this.setState({ quantity: e.target.value })}
+                />
               </div>
             </ModalBody>
             <ModalFooter>
@@ -1268,12 +1193,12 @@ class EndUser extends Component {
                       <div className="">
 
 
-                        <p className="title_filter">Danh sách Brand</p>
+                        <p className="title_filter">Danh sách thương hiệu</p>
                         <div style={{ width: '200px' }}>
                           <Select
                             className="select_seo"
                             showSearch
-                            placeholder="Lọc theo Brand"
+                            placeholder="Lọc theo thương hiệu"
                             optionFilterProp="children"
                             onChange={(value) =>
                               this.setState({
@@ -1385,12 +1310,12 @@ class EndUser extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên công ty</th>
-                        <th className="text-center">Brand</th>
+                        <th className="text-center">Thương hiệu</th>
                         <th className="text-center">Loại</th>
                         <th className="text-center">Người tạo</th>
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
-                        <th className="text-center"></th>
+                        <th className="text-center">#</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1407,45 +1332,76 @@ class EndUser extends Component {
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">
-                                <div>{item.Email}</div>
+                                <div>{item.Name}</div>
                               </td>
                               <td className="text-center">
-                                {item.name}
+                                {item.Brand}
                               </td>
+                              <td className="text-center">{item.TypeName}</td>
                               <td className="text-center">{item.name}</td>
-                              <td className="text-center">{item.name}</td>
-                              <td className="text-center">{new Date(item.from).toLocaleDateString()}</td>
+                              <td className="text-center">{new Date(item.Create_Date).toLocaleDateString()}</td>
                               <td className="text-center">
-                                <Tag
+                                {/* <Tag
                                   className="ant-tag"
                                   color={
-                                    item.status === "1"
+                                    item.Status === "1"
                                       ? "#87d068"
 
                                       : "#f50"
                                   }
                                 >
-                                  {item.status === "1"
+                                  {item.Status === "1"
                                     ? "Hoạt động"
 
                                     : "Không hoạt động"}
-                                </Tag>
+                                </Tag> */}
+                                <CBadge color={this.getBadge(item.Status)}>
+                                    {item.Status}
+                                </CBadge>
                               </td>
-                              <td className="text-center" style={{ minWidth: '230px' }}>
-                                <div className="flex">
+                              <td className="text-center">
+                                <div class="flex">
                                   <Link onClick={() => this.GetDetailProvider()} to={"/detail-provider/" + item._id}>
                                     <CButton
                                       shape="rounded-pill"
                                       variant="outline"
                                       color="info"
                                       style={styles.mgl5}
-                                      size="md"
+                                      size="sm"
                                       className="flex-a-center "
                                     >
                                       <BsSearch className="mr-1" />
                                       Chi tiết
                                     </CButton>
                                   </Link>
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    size="md"
+                                    onClick={(e) => this.openUpdateVoucher(item)}
+                                  >
+                                    <FiEdit3
+                                      style={styles.icon}
+                                      name="cilPencil"
+                                    />
+                                  </CButton>{" "}
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="danger"
+                                    style={styles.mgl5}
+                                    onClick={(e) => {
+                                      this.removeVoucher(item);
+                                    }}
+                                  >
+                                    <BsTrash
+                                      style={styles.icon}
+                                      className="icon"
+                                      name="cilTrash"
+                                    />
+                                  </CButton>
                                 </div>
                               </td>
                             </tr>
