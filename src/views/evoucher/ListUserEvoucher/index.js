@@ -25,6 +25,7 @@ import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { freeSet } from "@coreui/icons";
 import { Box } from "@mui/system";
+import truncateString from "src/utils/truncateString";
 
 const { Option } = Select;
 
@@ -521,7 +522,7 @@ class ListUserEvoucher extends Component {
                   <td className="text-center">
                     <Chip
                       icon={<AccessTimeIcon />}
-                      label="Đã check in vào 10:30"
+                      label={truncateString("Đã check in vào 10:30", 20)}
                     />
                   </td>
                   <td className="text-center">
