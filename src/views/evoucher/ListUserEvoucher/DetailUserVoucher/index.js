@@ -40,15 +40,7 @@ class DetailVoucher extends Component {
           />
         ),
       },
-      // {
-      //   _id: "t2",
-      //   name: "Lịch sử soi da",
-      //   icon: (
-      //     <RiChatHistoryLine
-      //       style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
-      //     />
-      //   ),
-      // },
+
       {
         _id: "t2",
         name: "Thông tin check-in",
@@ -69,7 +61,7 @@ class DetailVoucher extends Component {
       },
       {
         _id: "t4",
-        name: "Lịch sử ghi chú",
+        name: "Lịch sử đặt hẹn và ghi chú",
         icon: (
           <AiFillSchedule
             style={{ width: "24px ", height: "24px ", color: "#3399ff" }}
@@ -77,14 +69,8 @@ class DetailVoucher extends Component {
         ),
       },
     ],
-    // company_id: JSON.parse(localStorage.getItem("user")).company_id
-    //   ? JSON.parse(localStorage.getItem("user")).company_id
-    //   : "-1",
-    // colorWebCurrent: localStorage.getItem("colorpicker"),
     action: "new",
     idUpdate: "",
-    // checkFb: false,
-    // checkGg: true,
     data: [],
     updated: "",
     detailUserVoucher: null,
@@ -172,6 +158,10 @@ class DetailVoucher extends Component {
   }
 
   render() {
+    const { type } = this.state;
+
+    console.log("type:", type);
+
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -187,7 +177,36 @@ class DetailVoucher extends Component {
                 aria-labelledby="nested-list-subheader"
               >
                 {this.state.tabNameConfig
-                  ? this.state.tabNameConfig.map((item, i) => {
+                  ? this.state.tabNameConfig
+                      .filter(function (item) {
+                        console.log(type === "1" && item._id === "t3");
+                        return !(type !== "1" && item._id === "t3");
+                      })
+                      .map((item, i) => {
+                        return (
+                          <ListItemButton
+                            key={item._id}
+                            className={
+                              i === 0
+                                ? " tablinks tabcontent-left-active"
+                                : " tablinks"
+                            }
+                            onClick={() => this.ToggleViewConfigWeb(i)}
+                            sx={{ pl: 4 }}
+                          >
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <ListItemText
+                              className="tabcontent-left"
+                              style={{
+                                fontSize: "14px !important",
+                                color: "rgb(52, 71, 103)",
+                              }}
+                              primary={item.name}
+                            />
+                          </ListItemButton>
+                        );
+                      })
+                  : this.state.tabNameConfig.map((item, i) => {
                       return (
                         <ListItemButton
                           key={item._id}
@@ -210,8 +229,7 @@ class DetailVoucher extends Component {
                           />
                         </ListItemButton>
                       );
-                    })
-                  : null}
+                    })}
               </List>
             </div>
             <div className="tabcontents" style={{ minHeight: "50vh" }}>
@@ -219,34 +237,38 @@ class DetailVoucher extends Component {
                 <EvoucherInfoTable
                   detailUserVoucher={this.state?.detailUserVoucher}
                 />
-                {/* <EvoucherCard
-                  detailUserVoucher={this.state.detailUserVoucher}
-                /> */}
               </div>
-              {/* <div id="tabcontent2" className="tabcontent ">
-                <CalendarSkinHistory
-                  detailUserVoucher={this.state.detailUserVoucher}
-                />
-              </div> */}
+
               <div id="tabcontent2" className="tabcontent">
                 <CheckInForm
                   detailUserVoucher={this.state?.detailUserVoucher}
                 />
               </div>
-              <div id="tabcontent3" className="tabcontent ">
-                <div class="text-center">
-                  <img
-                    style={{ objectFit: "contain", width: "80%" }}
-                    src={NotInfoSale}
-                    alt={NotInfoSale}
+              {type === "1" ? (
+                <>
+                  <div id="tabcontent3" className="tabcontent ">
+                    <div class="text-center">
+                      <img
+                        style={{ objectFit: "contain", width: "80%" }}
+                        src={NotInfoSale}
+                        alt={NotInfoSale}
+                      />
+                    </div>
+                    )
+                  </div>
+                  <div id="tabcontent4" className="tabcontent">
+                    <NoteHistory
+                      detailUserVoucher={this.state?.detailUserVoucher}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div id="tabcontent4" className="tabcontent">
+                  <NoteHistory
+                    detailUserVoucher={this.state?.detailUserVoucher}
                   />
                 </div>
-              </div>
-              <div id="tabcontent4" className="tabcontent">
-                <NoteHistory
-                  detailUserVoucher={this.state?.detailUserVoucher}
-                />
-              </div>
+              )}
             </div>
           </div>
         </div>

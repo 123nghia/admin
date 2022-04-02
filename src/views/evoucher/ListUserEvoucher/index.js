@@ -497,7 +497,7 @@ class ListUserEvoucher extends Component {
                   </td>
                   <td className="text-center">{formatDate(item.create_at)}</td>
                   <td className="text-center">
-                    {item?.skinHistory ? (
+                    {item?.historyId ? (
                       <CButton
                         shape="rounded-pill"
                         variant="outline"
@@ -506,7 +506,7 @@ class ListUserEvoucher extends Component {
                         size="md"
                         onClick={(e) => {
                           this.setState({
-                            idHistory: item?.skinHistory,
+                            idHistory: item?.historyId,
                             toggleHistory: !toggleHistory,
                           });
                         }}
