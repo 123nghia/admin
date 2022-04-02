@@ -56,13 +56,6 @@ function CheckInForm({ detailUserVoucher }) {
     return statusCodeMap[statusCode] || "lime";
   };
 
-  const options = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-
   return (
     <Fragment>
       <Box>

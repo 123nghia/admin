@@ -1,3 +1,4 @@
+import FaceIcon from "@mui/icons-material/Face";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Timeline from "@mui/lab/Timeline";
 import TimelineConnector from "@mui/lab/TimelineConnector";
@@ -6,67 +7,79 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import { IconButton, Tooltip } from "@mui/material";
-import React, { Fragment, useEffect, useState } from "react";
-// import axios from "axios";
-// import Constants from "../../../../../contants/contants";
+import { Chip, IconButton, Tooltip } from "@mui/material";
+import React, { Fragment } from "react";
+import formatDate from "src/utils/formatDate";
+import formatTime from "src/utils/formatTime";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import DoDisturbIcon from "@mui/icons-material/DoDisturb";
+import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 
-function TimeLineNotes({ idUser }) {
-  const [noteList, setNoteList] = useState([]);
+const renderStatus = (status) => {
+  const statusMap = {
+    "Lên lịch": <EventAvailableIcon />,
+    "Đã check-in": <CheckCircleOutlineIcon />,
+    "Hoãn lại": <AutoDeleteIcon />,
+  };
+  return statusMap[status] || <DoDisturbIcon />;
+};
 
-  useEffect(() => {
-    // const fetchNoteList = async () => {
-    //   try {
-    //     const response = await axios({
-    //       url: `${Constants.BASE_URL}${Constants.FETCH_ALL_NOTE_USER_VOUCHER}/getAll?id=${idUser}`,
-    //       method: "GET",
-    //     });
-    //     setNoteList(response.data.data);
-    //   } catch (error) {
-    //     console.log("Failed to fetch note list: ", error);
-    //   }
-    // };
-    // fetchNoteList();
-  }, [noteList]);
+const renderStatusColor = (status) => {
+  const statusMap = {
+    "Lên lịch": "info",
+    "Đã check-in": "success",
+    "Hoãn lại": "warning",
+  };
+  return statusMap[status] || "error";
+};
 
-  return (
-    <Fragment>
-      <Timeline position="right">
-        <TimelineItem>
-          <TimelineOppositeContent
-            color="text.secondary"
-            sx={{ flex: "0 0 auto" }}
-          >
-            09:30 am
-            <Tooltip title="Xem chi tiết">
-              <IconButton size="small">
-                <InfoOutlinedIcon sx={{ color: "#3C93E3" }} />
-              </IconButton>
-            </Tooltip>
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>Đã lên lịch hẹn vào lúc 10:30</TimelineContent>
-        </TimelineItem>
-        <TimelineItem>
-          <TimelineOppositeContent
-            color="text.secondary"
-            sx={{ flex: "0 1 auto" }}
-          >
-            09:30 am
+function TimeLineNotes({ noteList }) {
+  const renderTimeLineItem = (itemList) => {
+    return itemList.map((item) => (
+      <TimelineItem>
+        <TimelineOppositeContent
+          color="text.secondary"
+          sx={{ flex: "0 0 auto", minWidth: "15rem" }}
+        >
+          {formatTime(item?.create_at)}, {formatDate(item?.create_at)}
+          {/* <Tooltip title="Xem chi tiết">
             <IconButton size="small">
               <InfoOutlinedIcon sx={{ color: "#3C93E3" }} />
             </IconButton>
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>Đã lên lịch hẹn vào lúc 10:30</TimelineContent>
-        </TimelineItem>
-      </Timeline>
+          </Tooltip> */}
+        </TimelineOppositeContent>
+        <TimelineSeparator>
+          <TimelineDot />
+          <TimelineConnector />
+        </TimelineSeparator>
+        <TimelineContent>
+          <Chip
+            icon={renderStatus(item?.status)}
+            label={item?.status}
+            variant="outlined"
+            color={renderStatusColor(item?.status)}
+          />
+          {" - "}
+          {item?.noted}
+        </TimelineContent>
+      </TimelineItem>
+    ));
+  };
+
+  return (
+    <Fragment>
+      {noteList.length !== 0 ? (
+        <Fragment>
+          <Timeline position="right">{renderTimeLineItem(noteList)}</Timeline>
+        </Fragment>
+      ) : (
+        <p
+          style={{ textAlign: "center", backgroundColor: "rgb(222, 222, 222)" }}
+        >
+          Không có thông tin lịch hẹn!!
+        </p>
+      )}
     </Fragment>
   );
 }
