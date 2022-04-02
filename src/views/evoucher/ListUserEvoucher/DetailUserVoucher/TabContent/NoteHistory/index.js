@@ -38,7 +38,7 @@ function NoteHistory({ detailUserVoucher }) {
         onFetchNoteList();
         setTimeout(() => {
           setOpenAlert(false);
-        }, 1000);
+        }, 3000);
         setOpenAlert(true);
       })
       .catch((err) => console.log(err));
