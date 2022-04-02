@@ -497,26 +497,29 @@ class ListUserEvoucher extends Component {
                   </td>
                   <td className="text-center">{formatDate(item.create_at)}</td>
                   <td className="text-center">
-                    <CButton
-                      shape="rounded-pill"
-                      variant="outline"
-                      color="info"
-                      style={{ textAlign: "center" }}
-                      size="md"
-                      onClick={(e) => {
-                        this.setState({
-                          idHistory: item.skinHistory,
-                          toggleHistory: !toggleHistory,
-                        });
-                      }}
-                    >
-                      <CIcon name="cil-magnifying-glass" />
-                    </CButton>
+                    {item?.historyId ? (
+                      <CButton
+                        shape="rounded-pill"
+                        variant="outline"
+                        color="info"
+                        style={{ textAlign: "center" }}
+                        size="md"
+                        onClick={(e) => {
+                          this.setState({
+                            idHistory: item?.historyId,
+                            toggleHistory: !toggleHistory,
+                          });
+                        }}
+                      >
+                        <CIcon name="cil-magnifying-glass" />
+                      </CButton>
+                    ) : (
+                      <p>Chưa soi da</p>
+                    )}
                   </td>
                   <td className="text-center">{item.saleFollow}</td>
                   <td className="text-center">
                     <Chip
-                      sx={{ marginLeft: "1.3rem" }}
                       icon={<AccessTimeIcon />}
                       label="Đã check in vào 10:30"
                     />

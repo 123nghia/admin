@@ -143,6 +143,9 @@ const ListCampaign = React.lazy(() => import("./views/evoucher/ListCampaign"));
 const ManageCampaign = React.lazy(() =>
   import("./views/evoucher/ManageCampaign")
 );
+const ManageInventory = React.lazy(() =>
+  import("./views/evoucher/ManageInventory.js")
+);
 const ManageVoucher = React.lazy(() =>
   import("./views/evoucher/ManageVoucher")
 );
@@ -183,9 +186,9 @@ const routes = [
   { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher },
   { path: '/manage-campaign', name: 'ManageCampaign', component: roleUser === "0" ? ManageCampaign : NotEnough },
   { path: '/manage-sales', name: 'ManageSales', component: roleUser === "0" ? ManageSales : NotEnough },
-
+  { path: '/manage-inventory', name: 'ManageInventory', component : ManageInventory  },
   { path: '/manage-sales-group', name: 'ManageSalesGroup', component: roleUser === "0" ? ManageSalesGroup : NotEnough },
-
+  { path: '/detail-inventory/:id', name: 'DetailInventory', component: DetailInventory },
   { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign },
   { path: '/detail-provider/:id', name: 'DetailProvider', component: DetailProvider },
 

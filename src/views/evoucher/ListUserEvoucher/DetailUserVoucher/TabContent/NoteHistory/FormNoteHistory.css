@@ -4,3 +4,6 @@
 .itemform__label {
   margin-right: 2.3rem;
 }
+.MuiSnackbarContent-root {
+  background-color: #43a047 !important;
+}
