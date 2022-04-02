@@ -143,6 +143,9 @@ const ListCampaign = React.lazy(() => import("./views/evoucher/ListCampaign"));
 const ManageCampaign = React.lazy(() =>
   import("./views/evoucher/ManageCampaign")
 );
+const ManageInventory = React.lazy(() =>
+  import("./views/evoucher/ManageInventory.js")
+);
 const ManageVoucher = React.lazy(() =>
   import("./views/evoucher/ManageVoucher")
 );
@@ -163,17 +166,17 @@ const ManageSalesGroup = React.lazy(() =>
 const DetailCampaign = React.lazy(() =>
   import("./views/evoucher/DetailCampaign")
 );
-<<<<<<< HEAD
 const DetailProvider = React.lazy(() =>
 import("./views/evoucher/DetailProvider")
 );
 
 
-=======
 const DetailCollaborators = React.lazy(() =>
 import("./views/evoucher/DetailCollaborators")
 );
->>>>>>> 8303fa512628dbd2724eb61466f5a504f3180bbe
+const DetailInventory = React.lazy(() =>
+import("./views/evoucher/DetailInventory")
+);
 const Provider = React.lazy(() => import("./views/evoucher/ManageProvider"));
 
 const roleUser = localStorage.getItem("type");
@@ -189,23 +192,17 @@ const routes = [
   { path: '/manage-voucher', name: 'ManageVoucher', component: ManageVoucher },
   { path: '/manage-campaign', name: 'ManageCampaign', component: roleUser === "0" ? ManageCampaign : NotEnough },
   { path: '/manage-sales', name: 'ManageSales', component: roleUser === "0" ? ManageSales : NotEnough },
-
+  { path: '/manage-inventory', name: 'ManageInventory', component : ManageInventory  },
   { path: '/manage-sales-group', name: 'ManageSalesGroup', component: roleUser === "0" ? ManageSalesGroup : NotEnough },
-
+  { path: '/detail-inventory/:id', name: 'DetailInventory', component: DetailInventory },
   { path: '/detail-campaign/:id', name: 'DetailCampaign', component: DetailCampaign },
-<<<<<<< HEAD
   { path: '/detail-provider/:id', name: 'DetailProvider', component: DetailProvider },
-
-=======
   { path: '/detail-collaborators/:id', name: 'DetailCollaborators', component: DetailCollaborators },
-
   {
     path: "/detail-evoucher/:id",
     name: "DetailVoucher",
     component: DetailVoucher,
   },
->>>>>>> 8303fa512628dbd2724eb61466f5a504f3180bbe
-
   { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough },
 
 

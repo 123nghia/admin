@@ -389,19 +389,33 @@ const _navOrther = [
       </CTooltip>,
     }
   },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Danh sách Voucher',
-  //   to: '/list-evoucher',
-  //   icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.none}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý Voucher',
+    to: '/manage-voucher',
+    icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0','1','2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý tồn kho evoucher',
+    to: '/manage-inventory',
+    icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0','1','2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách người dùng Voucher',
@@ -415,19 +429,7 @@ const _navOrther = [
       </CTooltip>,
     }
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Banner',
-    to: '/banner-sales',
-    icon: <BsImageFill style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.none}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
+
 
   {
     _tag: 'CSidebarNavItem',
@@ -435,6 +437,19 @@ const _navOrther = [
     to: '/list-campaign',
     icon: <BsCardChecklist style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
     role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.none}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Banner',
+    to: '/banner-sales',
+    icon: <BsImageFill style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
+    role: ['0'],
     badge: {
       color: 'info',
       text: <CTooltip placement={"right"} content={content.none}>
@@ -457,21 +472,7 @@ const _navOrther = [
   //   }
   // },
   
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Quản lý Voucher',
-    to: '/manage-voucher',
-    icon: <AiFillSetting style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-    role: ['0','1','2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.none}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
  
-
   {
     _tag: 'CSidebarNavItem',
     name: 'Thống kê',
