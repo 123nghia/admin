@@ -19,7 +19,6 @@ import EvoucherInfoTable from "./TabContent/EvoucherInfoTable";
 import CheckInForm from "./TabContent/CheckInForm";
 import NoteHistory from "./TabContent/NoteHistory";
 
-
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 
@@ -218,7 +217,7 @@ class DetailVoucher extends Component {
             <div className="tabcontents" style={{ minHeight: "50vh" }}>
               <div id="tabcontent1" className="tabcontent defaultOpen">
                 <EvoucherInfoTable
-                  detailUserVoucher={this.state.detailUserVoucher}
+                  detailUserVoucher={this.state?.detailUserVoucher}
                 />
                 {/* <EvoucherCard
                   detailUserVoucher={this.state.detailUserVoucher}
@@ -230,7 +229,9 @@ class DetailVoucher extends Component {
                 />
               </div> */}
               <div id="tabcontent2" className="tabcontent">
-                <CheckInForm detailUserVoucher={this.state.detailUserVoucher} />
+                <CheckInForm
+                  detailUserVoucher={this.state?.detailUserVoucher}
+                />
               </div>
               <div id="tabcontent3" className="tabcontent ">
                 <div class="text-center">
@@ -242,15 +243,15 @@ class DetailVoucher extends Component {
                 </div>
               </div>
               <div id="tabcontent4" className="tabcontent">
-                <NoteHistory detailUserVoucher={this.state.detailUserVoucher} />
+                <NoteHistory
+                  detailUserVoucher={this.state?.detailUserVoucher}
+                />
               </div>
             </div>
           </div>
         </div>
       );
     }
-
-    console.log(this.state.isLoading, this.state.detailUserVoucher);
 
     return (
       <div className="sweet-loading">

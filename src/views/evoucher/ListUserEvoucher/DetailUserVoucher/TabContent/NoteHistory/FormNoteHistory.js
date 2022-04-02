@@ -15,62 +15,51 @@ import moment from "moment";
 const { Option } = Select;
 
 const layout = {
-  labelCol: { span: 4 },
+  labelCol: { span: 24 },
   wrapperCol: { span: 17 },
 };
 const tailLayout = {
   wrapperCol: { offset: 11, span: 5 },
 };
 
-function FormNoteHistory() {
+function FormNoteHistory({ company_id, onSumitAddNote }) {
   const [form] = Form.useForm();
   const [, forceUpdate] = useState({}); // To disable submit button at the beginning
 
-  const onGenderChange = (value) => {
-    console.log(value);
-  };
   const config = {
     rules: [
       {
         type: "object",
         required: true,
-        message: "Please select time!",
+        message: "Vui lòng chọn thời gian đặt hẹn!",
       },
     ],
   };
   const onFinish = (fieldsValue) => {
     const values = {
       ...fieldsValue,
-      "date-time-picker": fieldsValue["date-time-picker"].format(
-        "dd-MM-YYYY HH:mm:ss"
-      ),
+      bussinessTime: fieldsValue["bussinessTime"].format("YYYY-MM-DD HH:mm:ss"),
     };
     console.log("Received values of form: ", values);
+
+    onSumitAddNote(values);
+
+    form.resetFields();
   };
 
   return (
     <Fragment>
       <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-        <Row>
-          {/* select date-time */}
-          <Col span={16} offset={1}>
+        {/* select date-time */}
+        <Row gutter={8}>
+          <Col span={12}>
             <Form.Item
-              name="date-time-picker"
+              label="Chọn lịch hẹn"
+              name="bussinessTime"
               className="itemform__label"
               {...config}
+              hasFeedback
             >
-              <span
-                style={{
-                  color: "#ff4d4f",
-                  fontFamily: "SimSun, sans-serif",
-                  marginRight: "4px",
-                }}
-              >
-                *
-              </span>
-              <span style={{ lineHeight: "2.2rem", display: "inline-block" }}>
-                Ngày giờ khách đặt hẹn
-              </span>
               <DatePicker
                 placeholder="mm- dd- yyyy, --:--:--"
                 showTime
@@ -79,79 +68,55 @@ function FormNoteHistory() {
             </Form.Item>
           </Col>
           {/* end select date-time */}
-
-          {/* selector status book appointment */}
-          <Col span={6}>
+          <Col span={12}>
+            {/* selector status book appointment */}
             <Form.Item
-              name="gender"
+              name="status"
+              label="Trạng thái"
               rules={[
                 {
                   required: true,
+                  message: "Vui lòng chọn trạng thái!",
                 },
               ]}
+              hasFeedback
             >
-              <span
-                style={{
-                  color: "#ff4d4f",
-                  fontFamily: "SimSun, sans-serif",
-                  marginRight: "4px",
-                }}
-              >
-                *
-              </span>
-              <span style={{ lineHeight: "2.2rem", display: "inline-block" }}>
-                Trạng thái:
-              </span>
-              <Select
-                placeholder="Lên lịch"
-                onChange={onGenderChange}
-                allowClear
-              >
-                <Option value="booked">Lên lịch</Option>
-                <Option value="checked">Đã check-in</Option>
-                <Option value="delay">Hoãn lại</Option>
-                <Option value="cancel">Huỷ bỏ</Option>
+              <Select placeholder="Lên lịch" allowClear>
+                <Option value="Lên lịch">Lên lịch</Option>
+                <Option value="Đã check-in">Đã check-in</Option>
+                <Option value="Hoãn lại">Hoãn lại</Option>
+                <Option value="Huỷ bỏ">Huỷ bỏ</Option>
               </Select>
             </Form.Item>
           </Col>
-          {/* end selector status book appointment */}
+        </Row>
+        {/* end selector status book appointment */}
 
-          {/* note input */}
-          <Col span={22} offset={1}>
+        {/* note input */}
+        <Row gutter={8}>
+          <Col span={24}>
             <Form.Item
-              name="note"
+              name="noted"
+              label="Ghi chú:"
               rules={[
                 {
                   required: true,
-                  message: "Please input Intro",
+                  message: "Ghi chú không được để trống!",
                 },
               ]}
+              hasFeedback
             >
-              <span
-                style={{
-                  color: "#ff4d4f",
-                  fontFamily: "SimSun, sans-serif",
-                  marginRight: "4px",
-                }}
-              >
-                *
-              </span>
-              <span style={{ lineHeight: "2.2rem", display: "inline-block" }}>
-                Ghi chú
-              </span>
               <Input.TextArea showCount maxLength={100} />
-            </Form.Item>
-          </Col>
-          {/* end note input */}
-
-          <Col span={24}>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Lưu ghi chú
-              </Button>
-            </Form.Item>
+            </Form.Item>{" "}
           </Col>
         </Row>
+        {/* end note input */}
+
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            Lưu ghi chú
+          </Button>
+        </Form.Item>
       </Form>
     </Fragment>
   );
