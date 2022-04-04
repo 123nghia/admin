@@ -1,11 +1,11 @@
 export default {
-  BASE_URL: "https://evoucher-api.applamdep.com/",
+  BASE_URL: "https://api.deal24h.vn/",
   // BASE_URL:  "http://192.168.1.4:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
 
-  BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
-  // "BASE_URL_CURRENT" : "http://localhost:3019/",
+  // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
+  "BASE_URL_CURRENT" : "http://localhost:3019/",
 
   COLLABORATOR_GET : "api/collaborator/getAll",
   COLLABORATOR_DETAIL_GET_CUSTOMER : "api/collaborator/getAllCustomerByid",
@@ -330,4 +330,6 @@ export default {
 
   CONFIG_THEME_UPDATE: "/api/get-config-color/update",
   CONFIG_THEME_GET: "/api/get-config-color",
+
+  ADD_PROVIDER: "api/plugin-add-vendor",
 };

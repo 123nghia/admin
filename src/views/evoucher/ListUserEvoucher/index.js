@@ -25,6 +25,7 @@ import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { freeSet } from "@coreui/icons";
 import { Box } from "@mui/system";
+import truncateString from "src/utils/truncateString";
 
 const { Option } = Select;
 
@@ -478,22 +479,6 @@ class ListUserEvoucher extends Component {
                     >
                       {checkStatusUserVoucherContent(item.status)}
                     </Tag>
-
-                    {this.state.type === "0" ? (
-                      <div>
-                        <CButton
-                          shape="rounded-pill"
-                          variant="ghost"
-                          color="info"
-                          style={styles.mgl5}
-                          size="md"
-                          onClick={(e) => this.openEditVoucher(item)}
-                        >
-                          {/* <FiEdit3 style={styles.icon} name="cilPencil" /> */}
-                          Thay đổi
-                        </CButton>
-                      </div>
-                    ) : null}
                   </td>
                   <td className="text-center">{formatDate(item.create_at)}</td>
                   <td className="text-center">
@@ -521,7 +506,7 @@ class ListUserEvoucher extends Component {
                   <td className="text-center">
                     <Chip
                       icon={<AccessTimeIcon />}
-                      label="Đã check in vào 10:30"
+                      label={truncateString("Đã check in vào 10:30", 20)}
                     />
                   </td>
                   <td className="text-center">

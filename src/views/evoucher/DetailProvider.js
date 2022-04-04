@@ -155,29 +155,6 @@ class Users extends Component {
             actionSlide: "new",
             actionBanner: "new",
             modalBanner: false,
-            configData: [
-                {
-                    label: "Trạng thái Facebook",
-                    value: true,
-                    key: "fb",
-                    pass: "",
-                    code: "",
-                },
-                {
-                    label: "Trạng thái Google",
-                    value: true,
-                    key: "gg",
-                    pass: "",
-                    code: "",
-                },
-                {
-                    label: "Trạng thái Zalo",
-                    value: true,
-                    key: "gg",
-                    pass: "",
-                    code: "",
-                },
-            ],
         };
 
     }
@@ -765,136 +742,7 @@ class Users extends Component {
             indexSlideUpdate: i,
         });
     }
-    async deleteSlide(i) {
-        const { dataConfigWeb } = this.state;
-        let coppyData = {
-            ...dataConfigWeb,
-        };
-        coppyData.value.slideShow.splice(i, 1);
-        this.setState(
-            {
-                dataConfigWeb: coppyData,
-            },
-            async () => {
-                await this.onUpdate().then(() => {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Xóa thành công",
-                        showConfirmButton: false,
-                        timer: 700,
-                    });
-                    this.getDataConfigWeb();
-                });
-            }
-        );
-    }
-    async deleteBanner(i) {
-        const { dataConfigWeb } = this.state;
-        let coppyData = {
-            ...dataConfigWeb,
-        };
-        coppyData.value.banner.bannerSlide.splice(i, 1);
-        this.setState(
-            {
-                dataConfigWeb: coppyData,
-            },
-            async () => {
-                await this.onUpdate().then(() => {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Xóa thành công",
-                        showConfirmButton: false,
-                        timer: 700,
-                    });
-                    this.getDataConfigWeb();
-                });
-            }
-        );
-    }
 
-    async saveEditSlide() {
-        const { imageSlide, contentSlide, dataConfigWeb, indexSlideUpdate } =
-            this.state;
-        let ob = {
-            image: imageSlide,
-            content: contentSlide,
-        };
-        let coppy = { ...dataConfigWeb };
-        coppy.value.slideShow[indexSlideUpdate] = ob;
-
-        await this.setState(
-            {
-                dataConfigWeb: coppy,
-            },
-            async () => {
-                Swal.fire({
-                    icon: "success",
-                    title: "Cập nhật thành công",
-                    showConfirmButton: false,
-                    timer: 700,
-                });
-                this.setState({
-                    modalSlide: false,
-                });
-                await this.onUpdate();
-
-                this.getDataConfigWeb();
-            }
-        );
-    }
-
-    async saveEditBanner() {
-        const { image_banner2, contentBanner, dataConfigWeb, indexBannerEditor, hrefBanner } =
-            this.state;
-        let ob = {
-            image: image_banner2,
-            content: contentBanner,
-            href: hrefBanner
-        };
-        let coppy = { ...dataConfigWeb };
-        coppy.value.banner.bannerSlide[indexBannerEditor] = ob;
-
-        await this.setState(
-            {
-                dataConfigWeb: coppy,
-            },
-            async () => {
-                Swal.fire({
-                    icon: "success",
-                    title: "Cập nhật thành công",
-                    showConfirmButton: false,
-                    timer: 700,
-                });
-                this.setState({
-                    modalBanner: false,
-                });
-                await this.onUpdate();
-
-                this.getDataConfigWeb();
-            }
-        );
-    }
-
-    async resetCache() {
-        let url = "https://soida.pensilia.com/api/clear_cache";
-        await axios.get(url, {}).then((res) => {
-            if (res.data.success === "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "Clear cache thành công",
-                    showConfirmButton: false,
-                    timer: 700,
-                });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Xảy ra lỗi trong quá trình xử lý",
-                    showConfirmButton: false,
-                    timer: 700,
-                });
-            }
-        });
-    }
     async updateCompany() {
         const {
             mainColor,
@@ -946,6 +794,10 @@ class Users extends Component {
         }
     }
 
+    getDetailProvider() {
+        
+    }
+
 
     render() {
         const arrLevel = [
@@ -962,6 +814,7 @@ class Users extends Component {
 
         const {
             arrPagination,
+            detailProvider
         } = this.state;
 
         const data = [
@@ -1021,66 +874,18 @@ class Users extends Component {
                         </div>
                         <div className="tabcontents">
                             <div id="tabcontent1" className="tabcontent defaultOpen">
-                                <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-detail-provider" >
-                                    <tbody>
-                                        <tr>
-                                            <td className="pl-3">
-                                                Tên công ty
-                                            </td>
-                                            <td className="table-info-provider">
-                                                ADBCNKJSLKSADLSDALS
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="pl-3">
-                                                Brand
-                                            </td>
-                                            <td className="table-info-provider">
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="pl-3">
-                                                Địa chỉ
-                                            </td>
-                                            <td className="table-info-provider">
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="pl-3">
-                                                Email
-                                            </td>
-                                            <td className="table-info-provider">
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="pl-3">
-                                                Số điện thoại
-                                            </td>
-                                            <td className="table-info-provider">
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="pl-3">
-                                                Slug - Đường dẫn
-                                            </td>
-                                            <td className="table-info-provider">
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="pl-3">
-                                                Website
-                                            </td>
-                                            <td className="table-info-provider">
-
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div className="tabContentItem" style={styles.tabContentItem}>
+                                    <p className="modal-label">Tên công ty: 
+                                        <span className="modal-detail">{detailProvider}</span>
+                                    </p>
+                                    <p className="modal-label">Tên thương hiệu: <span className="modal-detail">hiiii</span></p>
+                                    <p className="modal-label">Địa chỉ: <span className="modal-detail"></span></p>
+                                    <p className="modal-label">Email: <span className="modal-detail"></span></p>
+                                    <p className="modal-label">Số điện thoại: <span className="modal-detail"></span></p>
+                                    <p className="modal-label">Slug: <span className="modal-detail"></span></p>
+                                    <p className="modal-label">Website: <span className="modal-detail"></span></p>
+                                    <p className="modal-label">Logo: <span className="modal-detail"></span></p>
+                                </div>
                             </div>
                             <div id="tabcontent2" className="tabcontent ">
                                 <table
@@ -1091,8 +896,8 @@ class Users extends Component {
                                         <tr>
                                             <th className="text-center">STT.</th>
                                             <th className="text-center">Tên chiến dịch</th>
-                                            <th className="text-center">Ngày bắt đầu</th>
-                                            <th className="text-center">Ngày kết thúc</th>
+                                            <th className="text-center">Trạng thái</th>
+                                            <th className="text-center">Số lượng voucher</th>
                                             <th className="text-center"></th>
                                         </tr>
                                     </thead>
@@ -1347,10 +1152,10 @@ class Users extends Component {
                     </Modal>
                     <Modal isOpen={this.state.modalDetailProvider} className={this.props.className} size="l">
                         <ModalBody>
-                            <h5 className="text-center">Chi tiết chiến dịch tham gia</h5>
+                            <h5 className="text-center modal-title">Chi tiết chiến dịch tham gia</h5>
                             <div className="tabContentItem" style={styles.tabContentItem}>
                                 <p className="modal-label">Trạng thái chiến dịch: <span className="modal-detail">
-                                <Tag></Tag></span></p>
+                                    <Tag></Tag></span></p>
                                 <p className="modal-label">Tên chiến dịch: <span className="modal-detail">hiiii</span></p>
                                 <p className="modal-label">Nội dung chiến dịch: <span className="modal-detail"></span></p>
                                 <p className="modal-label">Ngày bắt đầu sale: <span className="modal-detail"></span></p>
@@ -1358,7 +1163,7 @@ class Users extends Component {
                                 <p className="modal-label">Ngày kết thúc chiến dịch: <span className="modal-detail"></span></p>
                                 <p className="modal-label">Ghi chú: <span className="modal-detail"></span></p>
                             </div>
-                            <h5 className="text-center">Chi tiết evoucher</h5>
+                            <h5 className="text-center modal-title">Chi tiết e-voucher</h5>
                             <div className="tabContentItem" style={styles.tabContentItem}>
                                 <p className="modal-label">Số lượng voucher: <span className="modal-detail"></span></p>
                                 <p className="modal-label">Số lượng voucher phát: <span className="modal-detail">hiiii</span></p>
