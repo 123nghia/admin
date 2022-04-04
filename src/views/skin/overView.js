@@ -555,32 +555,20 @@ class Users extends Component {
                                
                                   <img
                                     src={`${item.Icon}`}
-                                    width={"60px"}
-                                    height={"60px"}
+                                 
+                                    height={"100px"}
                                     alt=""
                                   />
                               
                                 
                               </td>
-  
-                             
-                              {/* <td className="text-center">
-                            <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
-                          </td> */}
-                              {/* <td className="text-center">
-                                {item.brand_id == null
-                                  ? ""
-                                  : item.brand_id.name}
-                              </td> */}
-                              {/* <td className="text-center">
-                                {<img src={`https://api-soida.applamdep.com/public/image_brand/${item.brand_id.image_link}`} width={"60px"} height={"60px"} />}
-                              </td> */}
-                              {/* <td className="text-center">
-                                {item.type_product_id.Name}
+                              <td className="text-center" >
+                              <div style={{maxHeight: '120px',overflow : 'hidden'}}>
+                              {item.Content}
+
+                                </div>
+                                 
                               </td>
-                              <td className="text-center">
-                                {item.type_sdk_id.Name}
-                              </td> */}
                               <td className="text-center">
                                 {item.Level === "1" ? "Nhẹ" : item.Level === "2" ? "Trung bình" : item.Level === "3" ? "Nặng" : "Không có"}
                               </td>
@@ -678,6 +666,7 @@ class Users extends Component {
                       <th className="text-center">Tiêu đề</th>
                       <th className="text-center">Ảnh</th>
   
+                      <th className="text-center">Nội dung</th>
                    
                       {/* <th className="text-center">Thương hiệu</th> */}
                       {/* <th className="text-center">Ảnh thương hiệu</th> */}
@@ -724,6 +713,7 @@ class Users extends Component {
                       {/* <th className="text-center">Tên</th> */}
                       <th className="text-center">Tiêu đề</th>
                       <th className="text-center">Ảnh</th>
+                      <th className="text-center">Nội dung</th>
   
                       {/* <th className="text-center">Chi tiết</th> */}
                       {/* <th className="text-center">Thương hiệu</th> */}

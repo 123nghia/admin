@@ -475,19 +475,7 @@ const _navOrther = [
       </CTooltip>,
     }
   },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Quản lý ',
-    to: '/role_manager',
-    icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
-    role: ['0'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.role}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
+
   // {
   //   _tag: 'CSidebarNavItem',
   //   name: 'Tính năng AI, AR',
@@ -594,21 +582,21 @@ const _navContact = [
     name: 'Danh sách banner',
     to: '/quan-ly-banner',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2'],
+    role: ['2','0'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách đặt hẹn',
     to: '/book-calendar',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2'],
+    role: ['2','0'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Cấu hình trang web',
     to: '/cau-hinh-trang-web',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2'],
+    role: ['2','0'],
   },
   // {
   //   _tag: 'CSidebarNavItem',

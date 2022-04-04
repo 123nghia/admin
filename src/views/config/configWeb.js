@@ -62,7 +62,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
 import LockResetIcon from '@mui/icons-material/LockReset';
-
+import { MdAdd } from "@react-icons/all-files/md/MdAdd";
+import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
+import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
+import { AiFillWechat } from "@react-icons/all-files/ai/AiFillWechat";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { IoIosColorPalette } from "@react-icons/all-files/io/IoIosColorPalette";
 // import {HiInformationCircle
 // } from "react-icons/hi";
 let headers = new Headers();
@@ -74,6 +79,57 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tabNameConfig: [
+        {
+          _id: "t1",
+          name: "Thông tin trang chủ",
+          icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "t2",
+          name: "Slider",
+          icon: <svg  style={{ width: "24px ", height: "24px " }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-slides-fill" viewBox="0 0 16 16">
+          <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z"/>
+          <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z"/>
+            </svg>
+        },
+        {
+          _id: "t3",
+          name: "Cấu hình SEO",
+          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "t4",
+          name: "Logos",
+          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "t4",
+          name: "Mã Chat",
+          icon: <AiFillWechat style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "t6",
+          name: "Cấu hình mạng xã hội",
+          icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "t7",
+          name: "Thông tin footer",
+          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "t8",
+          name: "Quản lý màu sắc",
+          icon: <IoIosColorPalette style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "t8",
+          name: "Quản lý Cache",
+          icon: <LockResetIcon style={{ width: "24px ", height: "24px " }} />
+        },
+       
+      ],
       imgLogoFooter : "",
       imgLogoFooter_link : "",
       imgLogoFooter_show : "",
@@ -160,20 +216,31 @@ class Users extends Component {
       updateLevel: e.target.value,
     });
   };
-  changeConfigWeb(id) {
+  ToggleViewConfigWeb(id) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      
       if (i === id) {
+        tablinks[i].classList.add("tabcontent-left-active");
         tabcontent[i].classList.add("defaultOpen");
         tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
       } else {
         tabcontent[i].classList.remove("defaultOpen");
+        tablinks[i].classList.remove("tabcontent-left-active");
         tabcontent[i].style.animation = "none";
       }
     }
-    tablinks = document.getElementsByClassName("tablinks");
-  
+  }
+  onChangeImageCustom(e, value, valueLink, valueShow) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ [valueLink]: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
+    };
   }
 
   onChangeImage(e) {
@@ -292,10 +359,8 @@ class Users extends Component {
     if (data) {
       let x = data.map((item, i) => {
         return (
-          <tbody>
-            <td colSpan="10" hidden={this.state.hidden} className="text-center">
-              Không tìm thấy dữ liệu
-            </td>
+         
+          
 
             <tr key={i}>
               <td className="text-center">{i + 1}</td>
@@ -329,7 +394,7 @@ class Users extends Component {
                 </CButton>
               </td>
             </tr>
-          </tbody>
+        
         );
       });
       let render = (
@@ -349,7 +414,9 @@ class Users extends Component {
               <th className="text-center">#</th>
             </tr>
           </thead>
+          <tbody>
           {x}
+          </tbody>
         </table>
       );
       return render;
@@ -413,6 +480,13 @@ class Users extends Component {
               PassFb: valueConfig.value.facebook.password,
               PassGg: valueConfig.value.google.password,
               keyAppGg: valueConfig.value.google.appid,
+
+             
+              logoFooter : valueConfig.value.logoFooter,
+              logoHeader : valueConfig.value.logo,
+
+            
+              
             },
             () => {
               const {homepage, seoInfo} = this.state;
@@ -554,6 +628,25 @@ class Users extends Component {
       id: this.state.idUpdate,
     });
   }
+  async postImage(link) {
+    var newImage = "";
+    if (link && link !== "") {
+      const form = new FormData();
+
+      form.append("image", link);
+
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+        (res) => {
+
+        }
+      );
+
+      newImage = link.name;
+      return newImage;
+    } else {
+      return newImage;
+    }
+  }
   async BlurForm(change) {
     const {
       dataConfigWeb,
@@ -631,56 +724,57 @@ class Users extends Component {
       form1.append("image", image1_link);
      
       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
+      if(image1_link){
+        if(image1_link.name){
+         var newImage = `${Constants.BASE_URL}image_brand/${image1_link.name}`;
+ 
+        }
+ 
       }
-     if(image1_link){
-       if(image1_link.name){
-        var newImage = `${Constants.BASE_URL}image_brand/${image1_link.name}`;
-
-       }
-
-     }
-
-      const form2 = new FormData();
-
-      form2.append("image", image2_link);
-     
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST").then((res)=>{console.log(res)})
-    
-   if(image2_link){
-    if(image2_link.name){
-    var newImage2 = `${Constants.BASE_URL}image_brand/${image2_link.name}`;
-    }
-     }
-
-    const form3 = new FormData();
-    form3.append("image", image3_link);
-     
-    await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
-    
-    if(image3_link){
-      if(image3_link.name){
-      var newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
-    }
-     }
-     coppyData.value.homepage.title1 = this.state.titlePen1;
-     coppyData.value.homepage.title2 = this.state.titlePen2;
-     coppyData.value.homepage.textAi = this.state.textAi;
-    
-      coppyData.value.homepage.sologan = sologan;
-      coppyData.value.homepage.introduction = introduce;
-      if(newImage!==undefined){
-        coppyData.value.homepage.image1 = newImage;
-
-      }
+ 
+       const form2 = new FormData();
+ 
+       form2.append("image", image2_link);
       
-      if(newImage2){
-      coppyData.value.homepage.image2 = newImage2;
-        
+     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form2, "", "POST").then((res)=>{console.log(res)})
+     
+    if(image2_link){
+     if(image2_link.name){
+     var newImage2 = `${Constants.BASE_URL}image_brand/${image2_link.name}`;
+     }
       }
-      if(newImage3){
-      coppyData.value.homepage.image3 = newImage3;
-        
+ 
+     const form3 = new FormData();
+     form3.append("image", image3_link);
+      
+     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form3, "", "POST").then((res)=>{console.log(res)})
+     
+     if(image3_link){
+       if(image3_link.name){
+       var newImage3 = `${Constants.BASE_URL}image_brand/${image3_link.name}`;
+     }
       }
+      coppyData.value.homepage.title1 = this.state.titlePen1;
+      coppyData.value.homepage.title2 = this.state.titlePen2;
+      coppyData.value.homepage.textAi = this.state.textAi;
+     
+       coppyData.value.homepage.sologan = sologan;
+       coppyData.value.homepage.introduction = introduce;
+       if(newImage!==undefined){
+         coppyData.value.homepage.image1 = newImage;
+ 
+       }
+       
+       if(newImage2){
+       coppyData.value.homepage.image2 = newImage2;
+         
+       }
+       if(newImage3){
+       coppyData.value.homepage.image3 = newImage3;
+         
+       }
+      }
+     
       
     
     if (change === "seoInfo") {
@@ -694,12 +788,32 @@ class Users extends Component {
     form1.append("image", imgLayout_link);
      
     await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form1, "", "POST").then((res)=>{console.log(res)})
-    }
     let newImage4 = `${Constants.BASE_URL}image_brand/${imgLayout_link.name}`;
     
     coppyData.value.seoInfo.imageShare = newImage4;
+    }
     
-
+    if(change === "logos"){
+      let newImage1 = await this.postImage(this.state.logoHeader_link);
+      let newImage2 = await this.postImage(this.state.logoFooter_link);
+     
+      if (newImage1) {
+        coppyData.value.logo = `${Constants.BASE_URL}image_brand/${newImage1}`;
+      }
+      if (newImage2) {
+        coppyData.value.logoFooter = `${Constants.BASE_URL}image_brand/${newImage2}`;
+      }
+    }
+    if(change === "chats"){
+  
+     
+  
+        coppyData.value.tawk = this.state.codeChat
+     
+ 
+        coppyData.value.chatMess = this.state.codeMess
+      
+    }
     this.setState({
       dataConfigWeb: coppyData,
     });
@@ -712,11 +826,12 @@ class Users extends Component {
         id: this.state.idUpdate,
       })
       .then(() => {
+        this.getDataConfigWeb();
         Swal.fire({
           icon: "success",
           title: "Hoàn tất !",
           showConfirmButton: false,
-          timer: 1000,
+          timer: 1200,
         });
        
       });
@@ -756,7 +871,9 @@ class Users extends Component {
       dataType: "1",
       type: "system",
       id: this.state.idUpdate,
-    });
+    }).then(()=>{
+      this.getDataConfigWeb();
+    })
   }
   openDelete = (i) => {
     const { dataConfigWeb } = this.state;
@@ -1195,114 +1312,37 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
+          <div class="flex-tabs">
           <div class="tab">
-            <List
+
+          <List
               sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
               component="nav"
               aria-labelledby="nested-list-subheader"
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  Lựa chọn
-                </ListSubheader>
-              }
+             
             >
-              <ListItemButton
-                className=""
-                onClick={(e) => this.setState({ openHomeItem: !openHomeItem })}
-              >
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary="Quản lý trang chủ" />
-                {openHomeItem ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={openHomeItem} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton
-                    className=" tablinks"
-                    onClick={() => this.changeConfigWeb(0)}
-                    sx={{ pl: 4 }}
-                  >
-                    <ListItemIcon>
-                      <InfoIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Thông tin" />
-                  </ListItemButton>
-                  <ListItemButton
-                    className="tablinks"
-                    onClick={() => this.changeConfigWeb(1)}
-                    sx={{ pl: 4 }}
-                  >
-                    <ListItemIcon>
-                      <DoorSlidingIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Slider hiển thị" />
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(2)}
-              >
-                <ListItemIcon>
-                 <PermDataSettingIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình SEO" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks "
-                onClick={() => this.changeConfigWeb(3)}
-              >
-                <ListItemIcon>
-                  <InfoIcon />
-                </ListItemIcon>
-                <ListItemText primary="Thông tin chung" />
-              </ListItemButton>
-              {/* <ListItemButton onClick={() => this.changeConfigWeb(1)}>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Thông tin tính năng" />
-      </ListItemButton> */}
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(4)}
-              >
-                <ListItemIcon>
-                 <FacebookIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cấu hình mạng xã hội" />
-              </ListItemButton>
-        
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(5)}
-              >
-                <ListItemIcon>
-                  <InfoIcon />
-                </ListItemIcon>
-                <ListItemText primary="Thông tin footer" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(6)}
-              >
-                <ListItemIcon>
-                  <LockResetIcon />
-                </ListItemIcon>
-                <ListItemText primary="Quản lý Cache" />
-              </ListItemButton>
-              <ListItemButton
-                className="tablinks"
-                onClick={() => this.changeConfigWeb(7)}
-              >
-                <ListItemIcon>
-                  <LockResetIcon />
-                </ListItemIcon>
-                <ListItemText primary="Quản lý màu sắc" />
-              </ListItemButton>
+              {
+                this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i) => {
+                  return (
+                    <ListItemButton
+                      key={item._id}
+                      className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
+                      onClick={() => this.ToggleViewConfigWeb(i)}
+                      sx={{ pl: 4 }}
+                    >
+                      <ListItemIcon>
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText className="tabcontent-left" style={{ fontSize: "14px !important", color: "rgb(52, 71, 103)" }} primary={item.name} />
+                    </ListItemButton>
+                  );
+                }) : null
+              }
             </List>
           </div>
+
+          <div className="tabcontents">
+
           <div id="tabcontent1" class="tabcontent defaultOpen">
             <div class="text-center">
               <Button
@@ -1334,7 +1374,7 @@ class Users extends Component {
             
             <TextFieldGroup
               field="sologan"
-              label="Sologan (text):"
+              label="Sologan:"
               value={sologan}
               placeholder={""}
               onChange={(e) => {
@@ -1344,7 +1384,7 @@ class Users extends Component {
 
             <TextFieldGroup
               field="introduce"
-              label="Giới thiệu: (text):"
+              label="Giới thiệu:"
               value={introduce}
               placeholder={""}
               onChange={(e) => {
@@ -1515,7 +1555,7 @@ class Users extends Component {
             </div>
             <TextFieldGroup
               field="titleSeo"
-              label="Tiêu đề (text):"
+              label="Tiêu đề:"
               value={titleSeo}
               placeholder={""}
               onChange={(e) => {
@@ -1524,7 +1564,7 @@ class Users extends Component {
             />
             <TextFieldGroup
               field="titleSeo2"
-              label="Tiêu đề 2(text):"
+              label="Tiêu đề 2:"
               value={titleSeo2}
               placeholder={""}
               onChange={(e) => {
@@ -1533,14 +1573,14 @@ class Users extends Component {
             />
             <TextFieldGroup
               field="keywordSeo"
-              label="Từ khóa: (text):"
+              label="Từ khóa:"
               value={keywordSeo}
               placeholder={""}
               onChange={(e) => {
                 this.setState({ keywordSeo: e.target.value });
               }}
             />
-            <label className="control-label">Mô tả (text):</label>
+            <label className="control-label">Mô tả:</label>
             <CTextarea
               name="descSeo"
               rows="4"
@@ -1551,7 +1591,7 @@ class Users extends Component {
             />
             <TextFieldGroup
               field="authorSeo"
-              label="Tác giả: (text):"
+              label="Tác giả:"
               value={authorSeo}
               placeholder={""}
               onChange={(e) => {
@@ -1581,96 +1621,118 @@ class Users extends Component {
            
           </div>
           <div id="tabcontent4" class="tabcontent ">
-            <div class="flex-a-center">
-              <div class="col-sm-12 col-md-5">
-                <p class="mr-2">Logo web :(2:1)</p>
-              </div>
-              <div class="col-sm-12 col-md-7">
-                <img
-                  alt=""
-                  style={{ width: "140px", marginBottom: 20 }}
-                  height="auto"
-                  src={this.state.image}
-                />
-
-                <br></br>
-                <CButton
-                  onClick={() => this.saveLogo()}
-                  style={styles.mgl5}
-                  outline
-                  color="success"
-                  size="md"
-                >
-                  {/* <CIcon name="cilPencil" /> */}
-                  Lưu
-                </CButton>
-                <CButton
-                  onClick={this.canelLogo}
-                  style={styles.mgl5}
-                  outline
-                  color="danger"
-                  size="md"
-                >
-                  {/* <CIcon name="cilPencil" /> */}
-                  Hủy
-                </CButton>
-                {this.state.loadingSaveLogo ? (
-                  <div class="position_loading">
-                    <CircularProgress />
-                  </div>
-                ) : null}
+          <div class="text-center">
+                  <CButton
+                    onClick={() => this.BlurForm("logos")}
+                    style={styles.mgl5}
+                    outline
+                    color="success"
+                    size="md"
+                  >
+                    {/* <CIcon name="cilPencil" /> */}
+                    Lưu thay đổi
+                  </CButton>
+                </div>
+                <div className="mt-3"></div>
                 <div class="mt-3">
+                  <h1>Header</h1>
                   <TextFieldGroup
                     field="image"
-                    label="Ảnh minh họa : "
+                    label="Logo :(Tỷ lệ 2:1)"
                     type={"file"}
-                    className="mt-5"
-                    // value={this.state.image}
                     onChange={(e) => {
-                      this.onChangeImage(e);
+                      this.onChangeImageCustom(e, "logoHeader", "logoHeader_link", "logoHeader_show");
                     }}
                     onClick={(e) => {
                       e.target.value = null;
-                      this.setState({ image_show: "" });
+                      this.setState({ logoHeader_show: "" });
                     }}
                   />
+                  <div class="text-center">
+                    <img
+                      alt=""
+                      style={{ width: "140px" }}
+                      height="auto"
+                      src={this.state.logoHeader}
+                    />
+                  </div>
+                
                 </div>
-              </div>
-            </div>
-            <div class="flex-as-center">
-              <div class="col-sm-12 col-md-5">
-                <p class="mr-2">Mã chat tawk(nếu có) :</p>
-              </div>
-              <div class="col-sm-12 col-md-7">
-                <textarea
-                  onBlur={() => this.onFocusOutText()}
-                  name="codeChat"
-                  value={this.state.codeChat}
-                  onChange={(e) => this.setState({ codeChat: e.target.value })}
-                  class="mt-3"
-                  cols="60"
-                  rows="8"
-                ></textarea>
-              </div>
-            </div>
-            <div class="flex-as-center">
-              <div class="col-sm-12 col-md-5">
-                <p class="mr-2">Mã chat message(nhắn tin với khách hàng) :</p>
-              </div>
-              <div class="col-sm-12 col-md-7">
-                <textarea
-                  onBlur={() => this.onFocusOutCodeMess()}
-                  name="codeMess"
-                  value={this.state.codeMess}
-                  onChange={(e) => this.setState({ codeMess: e.target.value })}
-                  class="mt-3"
-                  cols="60"
-                  rows="8"
-                ></textarea>
-              </div>
-            </div>
+                <hr />
+                <h1>Footer</h1>
+                <TextFieldGroup
+                  field="logoFooter"
+                  label="Logo :(Tỷ lệ 2:1)"
+                  type={"file"}
+                  className="mt-5"
+                  onChange={(e) => {
+                    this.onChangeImageCustom(
+                      e,
+                      "logoFooter",
+                      "logoFooter_link",
+                      "logoFooter_show"
+                    );
+                  }}
+                  onClick={(e) => {
+                    e.target.value = null;
+                    this.setState({ logoFooter_show: "" });
+                  }}
+                />
+                <div className="text-center">
+                  <img
+                    alt=""
+                    style={{ width: "200px", marginBottom: 20 }}
+                    src={this.state.logoFooter}
+                  />
+                </div>  
           </div>
-          <div id="tabcontent5" class="tabcontent">
+          <div className="tabcontent"> 
+          <div class="text-center">
+                  <CButton
+                    onClick={() => this.BlurForm("chats")}
+                    style={styles.mgl5}
+                    outline
+                    color="success"
+                    size="md"
+                  >
+                    {/* <CIcon name="cilPencil" /> */}
+                    Lưu thay đổi
+                  </CButton>
+                </div>
+                <div className="text-center">
+                  <div className="mt-3">
+                    <p>Mã chat tawk:</p>
+                  </div>
+
+                  <textarea
+
+                    name="codeChat"
+                    value={this.state.codeChat}
+                    onChange={(e) => this.setState({ codeChat: e.target.value })}
+                    class="mt-3"
+                    cols="60"
+                    rows="8"
+                  ></textarea>
+                </div>
+                <div class="text-center">
+                  <div className="mt-3">
+                    <p>Mã chat message:</p>
+                  </div>
+
+                  <textarea
+
+                    name="codeMess"
+                    value={this.state.codeMess}
+                  onChange={(e) => this.setState({ codeMess: e.target.value })}
+                    class="mt-3"
+                    cols="60"
+                    rows="8"
+                  ></textarea>
+                </div>
+            
+
+          </div>
+          <div id="" class="tabcontent">
           <div class="text-center">
               <Button
                 variant="contained"
@@ -1755,38 +1817,7 @@ class Users extends Component {
             </div>
           </div>
           
-          <div id="tabcontent6" class="tabcontent ">
-          <div class="text-center">
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => this.BlurForm("logoFooter")}
-              >
-                Lưu thay đổi
-              </Button>
-            </div>
-          
-          <TextFieldGroup
-              field="logoFooter"
-              label="Logo footer: (2:1)"
-              type={"file"}
-              className="mt-5"
-              onChange={(e) => {
-                this.onChangeLogoFooter(e);
-              }}
-              onClick={(e) => {
-                e.target.value = null;
-                this.setState({ imgLogoFooter_show: "" });
-              }}
-            />
-         
-            <img
-              alt=""
-              style={{ width: "auto", marginBottom: 20 }}
-              height="140px"
-              src={this.state.imgLogoFooter}
-            />
-           
+          <div id="" class="tabcontent ">
             <Row>
               <Col>
                 <p style={styles.success}>{this.state.updated}</p>
@@ -1826,20 +1857,8 @@ class Users extends Component {
             </Row>
            
           </div>
-          <div id="tabcontent7" class="tabcontent ">
-          <div className="text-center">
-          <Button
-                variant="contained"
-                color="success"
-                style={{ paddingRight:'20px', paddingLeft:'20px' , fontSize : "20px"}}
-                size="md"
-                onClick={() => this.resetCache()}
-              >
-                Reset Cache
-              </Button>
-          </div>
-          </div>
-        <div id="tabcontent8" class="tabcontent">
+          
+        <div id="" class="tabcontent">
     <Row>
       <Col>
         <p style={styles.success}>{this.state.updated}</p>
@@ -1855,9 +1874,7 @@ class Users extends Component {
                       <strong>Thay đổi màu</strong>
                     </CLabel>
                   </CCol>
-                  {type == "0" || type == "1" ? (
-                    ""
-                  ) : (
+                 
                     <CCol sm="6" lg="4">
                       <CTooltip content="Xem chi tiết đơn hàng">
                         {isDisable ? (
@@ -1886,7 +1903,7 @@ class Users extends Component {
                         )}
                       </CTooltip>
                     </CCol>
-                  )}
+               
                 </CRow>
                 <CRow>
                   <CCol sm="12" lg="12">
@@ -1986,30 +2003,27 @@ class Users extends Component {
       </Col>
       
     </Row>
+        </div> 
+        <div id="" class="tabcontent ">
+          <div className="text-center">
+          <Button
+                variant="contained"
+                color="success"
+                style={{ paddingRight:'20px', paddingLeft:'20px' , fontSize : "20px"}}
+                size="md"
+                onClick={() => this.resetCache()}
+              >
+                Reset Cache
+              </Button>
+          </div>
+          </div> 
         </div>  
-
-
-  <div id="tabcontent2" class="tabcontent">
-    <div id="renderInfoFuncWebId"></div> 
-     <div class="flex-a-center info_func mt-2">
-     <span class="mr-2">Tình trạng dịch vụ : </span><span style={{color:'#e55353'}}>Đang sử dụng</span>
-     </div>
+        </div>  
+        
+       
      
-     <div class="flex-a-center info_func mt-2">
-     <span class="mr-2">Tổng số lần sử dụng : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
-     </div>
-   
-     <div class="flex-a-center info_func mt-2">
-     <span class="mr-2">Tính năng dịch vụ : </span><span style={{color:'#e55353'}}>Soi da - Trang điểm</span>
-     </div>
-     <div class="flex-a-center info_func mt-2">
-     <span class="mr-2">Ngày bắt đầu: </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
-     </div>
-     <div class="flex-a-center info_func mt-2">
-     <span class="mr-2">Ngày hết hạn : </span><span style={{color:'#e55353'}}>Đang cập nhật...</span>
-     </div>
 
-     </div> 
+
 
 
 

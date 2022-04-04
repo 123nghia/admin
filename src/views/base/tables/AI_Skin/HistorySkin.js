@@ -180,7 +180,7 @@ class HistorySkin extends Component {
           <Col>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify">Lịch sử soi da</i>
+                <i className="fa fa-align-justify title_header">Lịch sử soi da</i>
               </CardHeader>
               <CardBody>
                 <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
@@ -188,6 +188,8 @@ class HistorySkin extends Component {
                     <tr>
                       <th className="text-center">STT.</th>
                       <th className="text-center">Tên</th>
+                      <th className="text-center">SĐT</th>
+
                       <th className="text-center">Hình ảnh</th>
                       <th className="text-center">Kết quả</th>
                       {/* <th className="text-center">Công ty</th>
@@ -204,9 +206,12 @@ class HistorySkin extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
+
                               <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.Phone}</td>
+
                               <td className="text-center">
-                                <img src={item.Image}  style={{ width: '50%', height: 50 }} />
+                                <img src={item.Image}  style={{  height: '80px' }} />
                               </td>
                               <td className="text-center">
                                 <CButton outline color="primary" onClick={e => {

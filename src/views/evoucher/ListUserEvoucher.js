@@ -26,7 +26,7 @@ import axios from "axios";
 import md5 from "md5";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-import * as XLSX from "xlsx";
+
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
@@ -309,30 +309,7 @@ class EndUser extends Component {
         return "primary";
     }
   }
-  readExcel = (file) => {
-    const promise = new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(file);
-
-      fileReader.onload = (e) => {
-        const bufferArray = e.target.result;
-
-        const wb = XLSX.read(bufferArray, { type: "buffer" });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
-
-        resolve(data);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-
-    promise.then((data) => {
-      console.log(data);
-    });
-  };
+ ;
   render() {
     const {
       data,
