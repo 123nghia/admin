@@ -1,14 +1,15 @@
 export default {
-  BASE_URL: "https://evoucher-api.applamdep.com/",
-  // BASE_URL:  "http://192.168.1.4:3018/",
+  // BASE_URL: "https://api.deal24h.vn/",
+  BASE_URL: "https://api.deal24h.vn/",
+  // BASE_URL: "http://192.168.1.4:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
 
   BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
   // "BASE_URL_CURRENT" : "http://localhost:3019/",
 
-  COLLABORATOR_GET : "api/collaborator/getAll",
-  COLLABORATOR_DETAIL_GET_CUSTOMER : "api/collaborator/getAllCustomerByid",
+  COLLABORATOR_GET: "api/collaborator/getAll",
+  COLLABORATOR_DETAIL_GET_CUSTOMER: "api/collaborator/getAllCustomerByid",
   GET_ALL_CAMPAIGN_VER2: "api/manager/campaign/getAll",
   GET_DETAIL_CAMPAIGN: "api/campaign/getDetail",
   GET_DETAIL_CAMPAIGN_EVOUCHER: "api/evoucher/getByCampangId",

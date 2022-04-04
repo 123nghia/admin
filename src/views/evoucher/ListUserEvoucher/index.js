@@ -237,12 +237,12 @@ class ListUserEvoucher extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  handleCloseModal() {
+    this.setState({ toggleHistory: !this.state.toggleHistory });
+  }
+
   render() {
     const { dataApi, toggleHistory, idHistory } = this.state;
-
-    function closeModal() {
-      this.setState({ toggleHistory: !toggleHistory });
-    }
 
     const arrLevelFilter = [
       {
@@ -651,7 +651,7 @@ class ListUserEvoucher extends Component {
             <IframeModal
               toggleView={toggleHistory}
               link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
-              closeModal={closeModal}
+              closeModal={() => this.handleCloseModal()}
             />
           </Col>
         </Row>

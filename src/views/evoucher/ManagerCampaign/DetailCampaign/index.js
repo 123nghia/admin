@@ -1,85 +1,25 @@
-import React, { Component } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import ListSubheader from "@mui/material/ListSubheader";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { CButton } from "@coreui/react";
+import { css } from "@emotion/react";
+import Pagination from "@material-ui/lab/Pagination";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import SendIcon from "@mui/icons-material/Send";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
-import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
-import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsInfoCircleFill } from "@react-icons/all-files/bs/BsInfoCircleFill";
-import { Link } from 'react-router-dom';
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Row,
-  Button,
-  Input,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Modal,
-} from "reactstrap";
-import Swal from "sweetalert2";
-import update from "react-addons-update";
-import PropTypes from "prop-types";
-import TextFieldGroup from "../../views/Common/TextFieldGroup";
-import API_CONNECT from "../../../src/functions/callAPI";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
-import { TiArrowBack } from "@react-icons/all-files/ti/TiArrowBack";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import InfoIcon from "@mui/icons-material/Info";
-import PermDataSettingIcon from "@mui/icons-material/PermDataSetting";
-import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
-import {
-  CLabel,
-  CRow,
-  CCol,
-  CSelect,
-  CButton,
-  CTooltip,
-  CTextarea,
-} from "@coreui/react";
-import Checkbox from "@mui/material/Checkbox";
-import CIcon from "@coreui/icons-react";
-import "moment-timezone";
-import "react-datepicker/dist/react-datepicker.css";
-import Constants from "./../../contants/contants";
+import { Tag } from "antd";
 import axios from "axios";
-import { css } from "@emotion/react";
+import "moment-timezone";
+import React, { Component } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+import { Link } from "react-router-dom";
 import DotLoader from "react-spinners/DotLoader";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import logoMainnet from "../../assets/img/logo_head.png";
-import CircularProgress from "@mui/material/CircularProgress";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
-import LockResetIcon from "@mui/icons-material/LockReset";
-import { MdAdd } from "@react-icons/all-files/md/MdAdd";
-import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
-import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
-import { AiFillWechat } from "@react-icons/all-files/ai/AiFillWechat";
-import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
-import { GrClose } from "@react-icons/all-files/gr/GrClose";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import TextFieldGroup from "src/views/Common/TextFieldGroup.js";
 
-
-import { Tag, Divider } from "antd";
-import Pagination from "@material-ui/lab/Pagination";
-
+import Constants from "../../../../contants/contants.js";
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -91,21 +31,26 @@ class Users extends Component {
     super(props);
     this.state = {
       tabNameConfig: [
-       
         {
           _id: "t2",
           name: "Thông tin về chiến dịch",
-          icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
+          ),
         },
         {
           _id: "t3",
           name: "Thông tin về voucher",
-          icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
+          ),
         },
         {
           _id: "t4",
           name: "Thông tin về nhà cung cấp",
-          icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />
+          ),
         },
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
@@ -199,7 +144,7 @@ class Users extends Component {
         }
         a.click();
       });
-  };
+  }
   ToggleViewConfigWeb(id) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -248,7 +193,7 @@ class Users extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
- 
+
   async getDetailCampaign(id) {
     const { company_id } = this.state;
 
@@ -259,15 +204,15 @@ class Users extends Component {
     await axios
       .get(url, {
         params: {
-         id
+          id,
         },
       })
       .then((res) => {
         let val = res.data?.data[0];
         this.setState({
-          detailCampaign : val
+          detailCampaign: val,
         });
-        console.log(val)
+        console.log(val);
         // this.pagination(val);
         // this.setState({ dataApi: val });
 
@@ -286,7 +231,7 @@ class Users extends Component {
     await axios
       .get(url, {
         params: {
-         id
+          id,
         },
       })
       .then((res) => {
@@ -294,7 +239,7 @@ class Users extends Component {
         // this.setState({
         //   detailCampaign : val
         // });
-    
+
         this.pagination(val);
         this.setState({ dataApi: val });
 
@@ -303,7 +248,7 @@ class Users extends Component {
         this.setState({ isLoading: false, totalActive: active });
       });
   }
-  async componentDidMount() {    
+  async componentDidMount() {
     await this.getDetailCampaign(this.props.match.params.id);
     await this.getDataVoucher(this.props.match.params.id);
 
@@ -335,7 +280,6 @@ class Users extends Component {
         },
       })
       .then((res) => {
-
         if (res.data.data.length > 0) {
           let dataConfig = res.data.data[0];
 
@@ -355,7 +299,8 @@ class Users extends Component {
               configData: valueConfig.value.statusConfig,
             },
             () => {
-              const { homepage, seoInfo, logos, chats, configData, mxh } = this.state;
+              const { homepage, seoInfo, logos, chats, configData, mxh } =
+                this.state;
               if (homepage) {
                 this.setState({
                   textAi: this.state.homepage.textAi,
@@ -401,8 +346,8 @@ class Users extends Component {
               if (chats) {
                 this.setState({
                   codeChat: this.state.chats.tawk,
-                  codeMess: this.state.chats.mess
-                })
+                  codeMess: this.state.chats.mess,
+                });
               }
               if (mxh) {
                 this.setState({
@@ -417,8 +362,7 @@ class Users extends Component {
                   keyAppGg: this.state.mxh.google.appid,
                   PassGg: this.state.mxh.google.password,
                   hrefGg: this.state.mxh.google.href,
-                })
-
+                });
               }
             }
           );
@@ -463,7 +407,6 @@ class Users extends Component {
                   href: "",
                 },
               },
-
             },
           };
 
@@ -513,200 +456,186 @@ class Users extends Component {
     if (!this.state.isLoading) {
       return (
         <>
-         
-         
-          <div className="animated fadeIn " >
+          <div className="animated fadeIn ">
             <div className="header-flex-tabs">
-             <div className="detail-campaign-goback-position">
-            <Link className="" to="/manage-campaign">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="detail-campaign-goback bi bi-x-lg" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" />
-                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" />
-              </svg>
-            </Link>
-          </div>
-          <h4 className="detail-title-campaign">
-            Chi tiết chiến dịch
-          </h4>
-          </div>
+              <div className="detail-campaign-goback-position">
+                <Link className="" to="/manage-campaign">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="detail-campaign-goback bi bi-x-lg"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"
+                    />
+                  </svg>
+                </Link>
+              </div>
+              <h4 className="detail-title-campaign">Chi tiết chiến dịch</h4>
+            </div>
             <div className="flex-tabs">
               <div className="tab">
                 <List
-                  sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+                  sx={{
+                    width: "100%",
+                    maxWidth: 360,
+                    bgcolor: "background.paper",
+                  }}
                   component="nav"
                   aria-labelledby="nested-list-subheader"
-
                 >
-                  {
-                    this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i) => {
-                      return (
-                        <ListItemButton
-                          key={item._id}
-                          className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
-                          onClick={() => this.ToggleViewConfigWeb(i)}
-                          sx={{ pl: 4 }}
-                        >
-                          <ListItemIcon>
-                            {item.icon}
-                          </ListItemIcon>
-                          <ListItemText className="tabcontent-left" style={{ fontSize: "14px !important", color: "rgb(52, 71, 103)" }} primary={item.name} />
-                        </ListItemButton>
-                      );
-                    }) : null
-                  }
+                  {this.state.tabNameConfig
+                    ? this.state.tabNameConfig.map((item, i) => {
+                        return (
+                          <ListItemButton
+                            key={item._id}
+                            className={
+                              i === 0
+                                ? " tablinks tabcontent-left-active"
+                                : " tablinks"
+                            }
+                            onClick={() => this.ToggleViewConfigWeb(i)}
+                            sx={{ pl: 4 }}
+                          >
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <ListItemText
+                              className="tabcontent-left"
+                              style={{
+                                fontSize: "14px !important",
+                                color: "rgb(52, 71, 103)",
+                              }}
+                              primary={item.name}
+                            />
+                          </ListItemButton>
+                        );
+                      })
+                    : null}
                 </List>
               </div>
               <div className="tabcontents">
-               
                 <div className="tabcontent defaultOpen">
                   <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
-                    <thead>
-
-                    </thead>
+                    <thead></thead>
                     <tbody>
-                    <tr>
-                        <td className="pl-5">
-                          Trạng thái chiến dịch
-                        </td>
+                      <tr>
+                        <td className="pl-5">Trạng thái chiến dịch</td>
                         <td className="color-red">
-                          {
-                            detailCampaign ?   <Tag
-                            className="ant-tag"
-                            color={
-                              detailCampaign.status === "1"
-                                ? "#87d068"
+                          {detailCampaign ? (
+                            <Tag
+                              className="ant-tag"
+                              color={
+                                detailCampaign.status === "1"
+                                  ? "#87d068"
+                                  : "#f50"
+                              }
+                            >
+                              {detailCampaign.status === "1"
+                                ? "Hoạt động"
+                                : "Không hoạt động"}
+                            </Tag>
+                          ) : (
+                            ""
+                          )}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">Tên chiến dịch</td>
+                        <td className="color-red">
+                          {detailCampaign ? detailCampaign.name : ""}
+                        </td>
+                      </tr>
 
-                                : "#f50"
-                            }
-                          >
-                            {detailCampaign.status === "1"
-                              ? "Hoạt động"
+                      <tr>
+                        <td className="pl-5">Nội dung chiến dịch</td>
+                        <td className="color-red">...</td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">Ngày bắt đầu Sales</td>
+                        <td className="color-red">
+                          {detailCampaign
+                            ? new Date(detailCampaign.from).toLocaleDateString()
+                            : ""}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">Ngày kết thúc Sales</td>
+                        <td className="color-red">
+                          {detailCampaign
+                            ? new Date(detailCampaign.to).toLocaleDateString()
+                            : ""}
+                        </td>
+                      </tr>
 
-                              : "Không hoạt động"}
-                          </Tag> : ""
-                          }
-                      
+                      <tr>
+                        <td className="pl-5">Ngày kết thúc chiến dịch</td>
+                        <td className="color-red">
+                          {detailCampaign
+                            ? new Date(
+                                detailCampaign.saleEndDate
+                              ).toLocaleDateString()
+                            : ""}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                          Tên chiến dịch
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ?  detailCampaign.name : ""
-                          }
-                        </td>
-                      </tr>
-                     
-                      <tr>
-                        <td className="pl-5">
-                          Nội dung chiến dịch
-                        </td>
-                        <td className="color-red">
-                         ...
-                      
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Ngày bắt đầu Sales
-                        </td>
-                        <td className="color-red">
-                          {
-                            detailCampaign ? new Date(detailCampaign.from).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                          Ngày kết thúc Sales
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ? new Date(detailCampaign.to).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                     
-                     
-                      <tr>
-                        <td className="pl-5">
-                          Ngày kết thúc chiến dịch
-                        </td>
-                        <td className="color-red">
-                        {
-                            detailCampaign ? new Date(detailCampaign.saleEndDate).toLocaleDateString() : ""
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pl-5">
-                         Ghi chú
-                        </td>
-                        <td className="color-red">
-                        ...
-                        </td>
+                        <td className="pl-5">Ghi chú</td>
+                        <td className="color-red">...</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
                 <div className="tabcontent">
                   <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
-                    <thead>
-
-                    </thead>
+                    <thead></thead>
                     <tbody>
                       <tr>
-                        <td className="pl-5">
-                          Tổng số lượng Voucher
-                        </td>
+                        <td className="pl-5">Tổng số lượng Voucher</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign?.CheckIn[0] ? detailCampaign?.CheckIn[0]?.totalVoucher : "0"
-                          }
+                          {detailCampaign && detailCampaign?.CheckIn[0]
+                            ? detailCampaign?.CheckIn[0]?.totalVoucher
+                            : "0"}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                          Số lượng voucher đã áp dụng
-                        </td>
+                        <td className="pl-5">Số lượng voucher đã áp dụng</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign?.CheckIn?.[0] ?  detailCampaign?.CheckIn?.[0].voucheredCount : "0"
-                          }
+                          {detailCampaign && detailCampaign?.CheckIn?.[0]
+                            ? detailCampaign?.CheckIn?.[0].voucheredCount
+                            : "0"}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                          Số lượng voucher còn lại
-                        </td>
+                        <td className="pl-5">Số lượng voucher còn lại</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign?.CheckIn[0] ?  parseInt(detailCampaign?.CheckIn[0]?.totalVoucher) - parseInt(detailCampaign?.CheckIn[0]?.voucheredCount) : "0"
-                          }
-                        </td>
-                      </tr>
-                         <tr>
-                        <td className="pl-5">
-                          Số khách CheckIn
-                        </td>
-                        <td className="color-red">
-                       ...
+                          {detailCampaign && detailCampaign?.CheckIn[0]
+                            ? parseInt(
+                                detailCampaign?.CheckIn[0]?.totalVoucher
+                              ) -
+                              parseInt(
+                                detailCampaign?.CheckIn[0]?.voucheredCount
+                              )
+                            : "0"}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                          Tỷ lệ CheckIn Voucher
-                        </td>
+                        <td className="pl-5">Số khách CheckIn</td>
+                        <td className="color-red">...</td>
+                      </tr>
+                      <tr>
+                        <td className="pl-5">Tỷ lệ CheckIn Voucher</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign?.CheckIn[0] ?  detailCampaign?.CheckIn[0]?.rateCheckIn : "0%"
-                          }
+                          {detailCampaign && detailCampaign?.CheckIn[0]
+                            ? detailCampaign?.CheckIn[0]?.rateCheckIn
+                            : "0%"}
                         </td>
                       </tr>
-                   
-                      
                     </tbody>
                   </table>
                   <h4 className="detail-title-campaign-voucher mt-5">
@@ -714,7 +643,7 @@ class Users extends Component {
                   </h4>
                   <CButton
                     color="success"
-                    style={{ marginBottom: "20px", marginRight: '10px' }}
+                    style={{ marginBottom: "20px", marginRight: "10px" }}
                     size="md"
                     className="flex-center"
                     onClick={() => this.ExportsFileExcel()}
@@ -723,84 +652,87 @@ class Users extends Component {
                     <p style={{ margin: "auto 0" }}>Xuất File</p>
                   </CButton>
                   <a id="download_excel" download></a>
-                  <div class="" style={{ width : '100%', overflowX: 'scroll'}}>
-                  <table
-                    ble
-                    className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
-                  >
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                   
+                  <div class="" style={{ width: "100%", overflowX: "scroll" }}>
+                    <table
+                      ble
+                      className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    >
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">STT.</th>
 
-                        <th className="text-center">Mã voucher</th>
-                     
-                      
-                        <th className="text-center">Nội dung</th>
-                        <th className="text-center">Ngày tạo</th>
-                        <th className="text-center">Ngày kết thúc</th>
-                        <th className="text-center">trạng thái</th>
-                        <th className="text-center">tỉnh/thành</th>
+                          <th className="text-center">Mã voucher</th>
 
-                        <th className="text-center">#</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td
-                        colSpan="10"
-                        hidden={this.state.hidden}
-                        className="text-center"
-                      >
-                        Không tìm thấy dữ liệu
-                      </td>
-                      {data != undefined
-                        ? data.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-              
-                              <td className="text-center">{item.code}</td>
-                             
+                          <th className="text-center">Nội dung</th>
+                          <th className="text-center">Ngày tạo</th>
+                          <th className="text-center">Ngày kết thúc</th>
+                          <th className="text-center">trạng thái</th>
+                          <th className="text-center">tỉnh/thành</th>
 
-                           
-                              <td className="text-center">{item.content}</td>
-                              <td className="text-center">{new Date(item.create_at).toLocaleDateString()}</td>
-                              <td className="text-center">{new Date(item.to).toLocaleDateString()}</td>
-                              <td className="text-center">
-                                <Tag
-                                  className="ant-tag"
-                                  color={item.status === "0"
-                                    ? "#2eb85c"
-                                    : item.status === "1"
-                                      ? "#2db7f5"
-                                      : item.status === "2"
-                                        ? "#87d068"
-                                        : item.status === "3"
+                          <th className="text-center">#</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td
+                          colSpan="10"
+                          hidden={this.state.hidden}
+                          className="text-center"
+                        >
+                          Không tìm thấy dữ liệu
+                        </td>
+                        {data != undefined
+                          ? data.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{i + 1}</td>
+
+                                  <td className="text-center">{item.code}</td>
+
+                                  <td className="text-center">
+                                    {item.content}
+                                  </td>
+                                  <td className="text-center">
+                                    {new Date(
+                                      item.create_at
+                                    ).toLocaleDateString()}
+                                  </td>
+                                  <td className="text-center">
+                                    {new Date(item.to).toLocaleDateString()}
+                                  </td>
+                                  <td className="text-center">
+                                    <Tag
+                                      className="ant-tag"
+                                      color={
+                                        item.status === "0"
+                                          ? "#2eb85c"
+                                          : item.status === "1"
+                                          ? "#2db7f5"
+                                          : item.status === "2"
+                                          ? "#87d068"
+                                          : item.status === "3"
                                           ? "#f50"
                                           : item.status === "4"
-                                            ? "#dc0e04"
-                                            : item.status === "4"
-                                              ? "#00D084"
-                                              : "#FF0004"}
-                                >
-                                  {item.status === "0"
-                                    ? "Sẵn sàng"
-                                    : item.status === "1"
-                                      ? "Chờ xác nhận"
-                                      : item.status === "2"
+                                          ? "#dc0e04"
+                                          : item.status === "4"
+                                          ? "#00D084"
+                                          : "#FF0004"
+                                      }
+                                    >
+                                      {item.status === "0"
+                                        ? "Sẵn sàng"
+                                        : item.status === "1"
+                                        ? "Chờ xác nhận"
+                                        : item.status === "2"
                                         ? "Đã sử dụng"
                                         : item.status === "3"
-                                          ? "Hủy bỏ"
-                                          : item.status === "4"
-                                            ? "Xóa bỏ"
-                                            : "Khóa"
-                                  }
-                                </Tag>
-                              </td>
-                              <td>
-                                  ...
-                              </td>
-                              {/* <td className="text-center">
+                                        ? "Hủy bỏ"
+                                        : item.status === "4"
+                                        ? "Xóa bỏ"
+                                        : "Khóa"}
+                                    </Tag>
+                                  </td>
+                                  <td>...</td>
+                                  {/* <td className="text-center">
                                 <div class="flex" >
                                   <CButton
                                     shape="rounded-pill"
@@ -850,12 +782,12 @@ class Users extends Component {
                                   </CButton>
                                 </div>
                               </td> */}
-                            </tr>
-                          );
-                        })
-                        : ""}
-                    </tbody>
-                  </table>
+                                </tr>
+                              );
+                            })
+                          : ""}
+                      </tbody>
+                    </table>
                   </div>
                   <div style={{ float: "right" }}>
                     <Pagination
@@ -869,82 +801,65 @@ class Users extends Component {
                       }}
                     />
                   </div>
-
                 </div>
                 <div className="tabcontent">
-                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign" >
-                    <thead>
-
-                    </thead>
+                  <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
+                    <thead></thead>
                     <tbody>
                       <tr>
-                        <td className="pl-5">
-                          Tên công ty
-                        </td>
+                        <td className="pl-5">Tên công ty</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Name : ""
-                          }
+                          {detailCampaign && detailCampaign.vendor?.[0]
+                            ? detailCampaign.vendor?.[0].Name
+                            : ""}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                          Brand
-                        </td>
+                        <td className="pl-5">Brand</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Name : ""
-                          }
+                          {detailCampaign && detailCampaign.vendor?.[0]
+                            ? detailCampaign.vendor?.[0].Name
+                            : ""}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                          Địa chỉ
-                        </td>
+                        <td className="pl-5">Địa chỉ</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Address : ""
-                          }
+                          {detailCampaign && detailCampaign.vendor?.[0]
+                            ? detailCampaign.vendor?.[0].Address
+                            : ""}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                          Email
-                        </td>
+                        <td className="pl-5">Email</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Email : ""
-                          }
+                          {detailCampaign && detailCampaign.vendor?.[0]
+                            ? detailCampaign.vendor?.[0].Email
+                            : ""}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                          Số điện thoại
-                        </td>
+                        <td className="pl-5">Số điện thoại</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Phone : ""
-                          }
+                          {detailCampaign && detailCampaign.vendor?.[0]
+                            ? detailCampaign.vendor?.[0].Phone
+                            : ""}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                         Slug - Đường dẫn
-                        </td>
+                        <td className="pl-5">Slug - Đường dẫn</td>
                         <td className="color-red">
-                        {
-                            detailCampaign  && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Slug : ""
-                          }
+                          {detailCampaign && detailCampaign.vendor?.[0]
+                            ? detailCampaign.vendor?.[0].Slug
+                            : ""}
                         </td>
                       </tr>
                       <tr>
-                        <td className="pl-5">
-                         Website
-                        </td>
+                        <td className="pl-5">Website</td>
                         <td className="color-red">
-                        {
-                            detailCampaign && detailCampaign.vendor?.[0] ?  detailCampaign.vendor?.[0].Website : ""
-                          }
+                          {detailCampaign && detailCampaign.vendor?.[0]
+                            ? detailCampaign.vendor?.[0].Website
+                            : ""}
                         </td>
                       </tr>
                     </tbody>
@@ -977,15 +892,14 @@ class Users extends Component {
                   data={this.state.contentFooter}
                   onReady={(editor) => {
                     // You can store the "editor" and use when it is needed.
-
                   }}
                   onChange={(event, editor) => {
                     const data = editor.getData();
 
                     this.setState({ contentFooter: data });
                   }}
-                  onBlur={(event, editor) => { }}
-                  onFocus={(event, editor) => { }}
+                  onBlur={(event, editor) => {}}
+                  onFocus={(event, editor) => {}}
                 />
                 <TextFieldGroup
                   field="updateLink"
@@ -1211,6 +1125,3 @@ const styles = {
 };
 
 export default Users;
-
-
-

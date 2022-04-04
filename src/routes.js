@@ -141,9 +141,11 @@ const DetailVoucher = React.lazy(() =>
   import("./views/evoucher/ListUserEvoucher/DetailUserVoucher/index.js")
 );
 
-const ListCampaign = React.lazy(() => import("./views/evoucher/ListCampaign"));
+const ListCampaign = React.lazy(() =>
+  import("./views/evoucher/ManagerCampaign/ListCampaign/index.js")
+);
 const ManageCampaign = React.lazy(() =>
-  import("./views/evoucher/ManageCampaign")
+  import("./views/evoucher/ManagerCampaign/index.js")
 );
 const ManageInventory = React.lazy(() =>
   import("./views/evoucher/ManageInventory.js")
@@ -166,7 +168,7 @@ const ManageSalesGroup = React.lazy(() =>
 // const roleUser = localStorage.getItem('type');
 
 const DetailCampaign = React.lazy(() =>
-  import("./views/evoucher/DetailCampaign")
+  import("./views/evoucher/ManagerCampaign/DetailCampaign/index.js")
 );
 const DetailProvider = React.lazy(() =>
   import("./views/evoucher/DetailProvider")
@@ -354,7 +356,7 @@ const routes = [
   {
     path: "/quan-ly-banner",
     name: "BannerSlider",
-    component: roleUser !== "0" ? BrandSlider : NotEnough,
+    component: roleUser === "0" ? BrandSlider : NotEnough,
   },
 
   { path: "/config-theme", name: "Config themes", component: ConfigTheme },

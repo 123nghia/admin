@@ -79,7 +79,7 @@ function EvoucherCard({ detailUserVoucher }) {
           }}
         >
           <img
-            src="https://evoucher-api.applamdep.com/image_brand/logo24h.png"
+            src="https://api.deal24h.vn/image_brand/logo24h.png"
             style={{
               width: 60,
               height: 60,
@@ -88,7 +88,7 @@ function EvoucherCard({ detailUserVoucher }) {
               backgroundColor: "rgb(255, 255, 255)",
               objectFit: "contain",
             }}
-            alt="https://evoucher-api.applamdep.com/image_brand/logo24h.png"
+            alt="https://api.deal24h.vn/image_brand/logo24h.png"
           />
 
           <div
