@@ -78,7 +78,9 @@ class Login extends Component {
                 <CCard className="p-4">
                   <CCardBody>
                     <form onSubmit={async e => await this.onSubmit(e)}>
-                      <h1>Quên mật khẩu</h1>
+                    <h1 class="login-title">Quên mật khẩu</h1>
+
+                     
                       <CInputGroup className="mb-3">
                         <CInputGroupPrepend>
                           <CInputGroupText>

@@ -621,8 +621,8 @@ class BrandSlider extends Component {
                 <CardHeader>
                 <i className="fa fa-align-justify title_header"> Danh sách đặt lịch</i>
                 <CRow>
-                    <CCol md={4} className="mt-3">
-                      <div className="flex-center-space">
+                    <CCol md={3} className="">
+                      <div className="">
 
 
                         <p className="title_filter">Từ khóa</p>
@@ -640,10 +640,10 @@ class BrandSlider extends Component {
                       </div>
                     </CCol>
                     </CRow>
-                    <div className="flex-end mt-4">
+                    <div className="flex-end">
                     <CButton
                         color="info"
-                        style={{ marginBottom: "10px", marginRight: '10px' }}
+                        style={{  marginRight: '10px' }}
                         size="md"
                         className="btn-main"
                         onClick={(e) =>this.onSearching()}
@@ -653,7 +653,7 @@ class BrandSlider extends Component {
                       </CButton>
                       <CButton
                         color="info"
-                        style={{ marginBottom: "10px" }}
+                  
                         size="md"
                         className="btn-main"
                         onClick={(e) => this.toggleModal("new")}

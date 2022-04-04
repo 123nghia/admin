@@ -611,32 +611,7 @@ const _navOrther = [
       </CTooltip>,
     }
   },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Quản lý ',
-  //   to: '/role_manager',
-  //   icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.role}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Tính năng AI, AR',
-  //   to: '/feature_customer',
-  //   icon: <CIcon style={css} name="cil-laptop" customClasses="c-sidebar-nav-icon" />,
-  //   role: ['2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.package_company}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
+
   {
     _tag: 'CSidebarNavItem',
     name: 'Quản lý nâng cấp',
@@ -654,25 +629,7 @@ const _navOrther = [
 
 
 const _navContact = [
-  // {
-  //   _tag: 'CSidebarNavDropdown',
-  //   name: 'Quản lý tính năng AI AR',
-  //   icon: <CIcon style={css} content={freeSet.cilApplications} customClasses="c-sidebar-nav-icon" />,
-  //   _children: [{
-  //     _tag: 'CSidebarNavItem',
-  //     name: 'Quản lý gói sản phẩm',
-  //     to: '/plugin_manager',
-  //     role: ['0'],
-  //     badge: {
-  //       color: 'info',
-  //       text: <CTooltip placement={"right"} content={content.package}>
-  //         <CIcon content={freeSet.cilBellExclamation} />
-  //       </CTooltip>,
-  //     }
-  //   },],
-  //   role: ['0']
-  // },
-
+ 
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Quản lý tài khoản',
@@ -691,19 +648,7 @@ const _navContact = [
         </CTooltip>,
       }
     },
-    //  {
-    //   _tag: 'CSidebarNavItem',
-    //   name: 'Danh sách tài khoản hệ thống',
-    //   to: '/saleAdmin',
-    //   role: ['0'],
-    //   badge: {
-    //     color: 'info',
-    //     text: <CTooltip placement={"right"} content={content.accountSale}>
-    //       <CIcon content={freeSet.cilBellExclamation} />
-    //     </CTooltip>,
-    //   }
-    // }, 
-    
+ 
     {
       _tag: 'CSidebarNavItem',
       name: 'Danh sách khách hàng',

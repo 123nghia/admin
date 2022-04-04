@@ -169,8 +169,6 @@ const DetailCampaign = React.lazy(() =>
 const DetailProvider = React.lazy(() =>
 import("./views/evoucher/DetailProvider")
 );
-
-
 const DetailCollaborators = React.lazy(() =>
 import("./views/evoucher/DetailCollaborators")
 );
@@ -183,6 +181,7 @@ const roleUser = localStorage.getItem("type");
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
+  
   // evoucher
   { path: '/list-evoucher', name: 'ListEvoucher', component: ListEvoucher },
   { path: '/list-user-evoucher', name: 'ListUserEvoucher', component: ListUserEvoucher },
@@ -204,6 +203,8 @@ const routes = [
     component: DetailVoucher,
   },
   { path: '/admin-config-web', name: 'AdminConfigWebsite', component: roleUser === "0" ? AdminConfigWebsite : NotEnough },
+
+
 
 
 
