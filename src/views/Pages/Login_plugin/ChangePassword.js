@@ -8,6 +8,7 @@ import {
 
 import {
   CCard,
+  CButton,
   CCardBody,
   CCardGroup,
   CCol,
@@ -55,24 +56,24 @@ class Login extends Component {
 
         <CContainer>
           <CRow className="justify-content-center">
-            <CCol md="8">
+            <CCol md="4">
               <CCardGroup>
                 <CCard className="p-4">
-                  <CCardBody>
+                  <CCardBody style={{overflow: 'hidden'}}>
                     <form onSubmit={async e => await this.onSubmit(e)}>
-                      <h1>Quên mật khẩu</h1>
-                      <CInputGroup className="mb-3">
-                        <CInputGroupPrepend>
-                          <CInputGroupText>
-                            <CIcon name="cil-user" />
-                          </CInputGroupText>
-                        </CInputGroupPrepend>
-                        <CInput type="email" placeholder="Email" name="email" onChange={e => this.onChange(e, 'email')} autoComplete="name" />
+                    <h1 class="login-title">Quên mật khẩu</h1>
+
+                      <CInputGroup className="mb-2 mt-3 login-input">
+                      
+                        <CInput className="login-input" type="email" placeholder="Email" name="email" onChange={e => this.onChange(e, 'email')} autoComplete="name" />
                       </CInputGroup>
 
                       <Row>
                         <Col xs="12" lg="12" sm="12">
-                          <Button color="primary" className="px-4" disabled={isLoading}>Đặt lại mật khẩu</Button>
+                          <CButton    
+                            color="info"
+                            size="lg"
+                            className=" w-100 mt-3 btn-main" disabled={isLoading}><p style={{ margin: "auto" }}>Đặt lại mật khẩu</p></CButton>
                         </Col>
                       </Row>
 

@@ -21,6 +21,7 @@ import './assets/css/sidebar.css';
 
 import myReducer from './reducers/reducers';
 import './assets/css/root.css';
+import './assets/css/all.css';
 
 
 

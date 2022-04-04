@@ -94,7 +94,7 @@ const TheHeader = () => {
         <TheHeaderDropdown />
       </CHeaderNav>
 
-      {
+      {/* {
         localStorage.getItem("isAD") == "0" ? "" :
           <Modal size="xl" isOpen={show}>
             <ModalHeader style={{ alignSelf: 'center' }}>
@@ -151,7 +151,7 @@ const TheHeader = () => {
               <CButton color="success" style={{ width: 400, marginRight: 150 }} onClick={e => { setShow(false) }}>Bỏ qua</CButton>
             </ModalFooter>
           </Modal>
-      }
+      } */}
     </CHeader>
   )
 }

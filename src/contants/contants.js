@@ -5,8 +5,8 @@ export default {
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
 
-  BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
-  // "BASE_URL_CURRENT" : "http://localhost:3019/",
+  // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
+  BASE_URL_CURRENT: "http://localhost:3019/",
 
   COLLABORATOR_GET: "api/collaborator/getAll",
   COLLABORATOR_DETAIL_GET_CUSTOMER: "api/collaborator/getAllCustomerByid",
@@ -331,4 +331,6 @@ export default {
 
   CONFIG_THEME_UPDATE: "/api/get-config-color/update",
   CONFIG_THEME_GET: "/api/get-config-color",
+
+  ADD_PROVIDER: "api/plugin-add-vendor",
 };

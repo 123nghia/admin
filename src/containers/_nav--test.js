@@ -43,21 +43,33 @@ const content = {
 
 const _navOverview = [
   {
-    _tag: "CSidebarNavItem",
-    name: "Dashboard",
-    to: "/general-statistics",
-    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-    // badge: {
-    //   color: "info",
-    //   text: "NEW",
-    // },
+    _tag: "CSidebarNavTitle",
+    _children: ["PHẦN QUẢN LÝ & THỐNG KÊ"],
     role: ["0", "1", "2", "5"],
   },
-  //   {
-  //     _tag: "CSidebarNavTitle",
-  //     _children: ["Thông tin chung"],
-  //     role: ["0", "1", "2", "5"],
-  //   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Tổng quan",
+    to: "/dashboard",
+    hidden: true,
+    icon: (
+      <CIcon
+        style={css}
+        content={freeSet.cilSpeedometer}
+        customClasses="c-sidebar-nav-icon"
+      />
+    ),
+    role: ["0", "1"],
+    badge: {
+      color: "info",
+      text: (
+        <CTooltip placement={"right"} content={content.dashboard}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>
+      ),
+    },
+  },
+
   {
     _tag: "CSidebarNavDropdown",
     name: "Thông tin chung",
@@ -108,7 +120,7 @@ const _navOverview = [
             name: "Danh sách tài khoản hệ thống",
 
             to: "/subsale",
-            role: ["0", "1", "2", "5"],
+            role: ["0"],
             badge: {
               color: "info",
               text: (
@@ -123,7 +135,7 @@ const _navOverview = [
             _tag: "CSidebarNavItem",
             name: "Danh sách khách hàng",
             to: "/customer_manager",
-            role: ["0", "1", "2", "5"],
+            role: ["0"],
             badge: {
               color: "info",
               text: (
@@ -137,6 +149,19 @@ const _navOverview = [
       },
       {
         _tag: "CSidebarNavItem",
+        name: "Cấu hình Web",
+        to: "/cau-hinh-trang-web",
+        icon: (
+          <CgWebsite
+            style={css}
+            content={freeSet.none}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["1", "2"],
+      },
+      {
+        _tag: "CSidebarNavItem",
         name: "Cấu hình Web-Admin",
         to: "/admin-config-web",
         icon: (
@@ -146,7 +171,7 @@ const _navOverview = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -168,7 +193,7 @@ const _navOverview = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -178,8 +203,28 @@ const _navOverview = [
           ),
         },
       },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý nâng cấp",
+        to: "/update_package",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilExpandUp}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.update_package}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>
+          ),
+        },
+      },
     ],
-    role: ["0", "1", "2", "5"],
   },
 ];
 
@@ -200,7 +245,7 @@ const _navMangerProviders = [
         className="c-sidebar-nav-icon"
       />
     ),
-    role: ["0", "1", "2", "5"],
+    role: ["0"],
     badge: {
       color: "info",
       text: (
@@ -240,7 +285,7 @@ const _navMangerSales = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -261,7 +306,7 @@ const _navMangerSales = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -273,19 +318,14 @@ const _navMangerSales = [
       },
     ],
 
-    role: ["0", "1", "2", "5"],
+    role: ["0"],
   },
 ];
 
 const _navMangerCampaigns = [
-  //   {
-  //     _tag: "CSidebarNavTitle",
-  //     _children: ["Quản lý Chiến dịch"],
-  //     role: ["0", "1", "2", "5"],
-  //   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý Chiến dịch",
+    name: "Quản lý khuyến mãi",
     icon: (
       <CIcon
         style={css}
@@ -296,11 +336,31 @@ const _navMangerCampaigns = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-
         name: "Quản lý chiến dịch",
         to: "/manage-campaign",
         icon: (
           <AiFillSetting
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Danh sách người dùng Voucher",
+        to: "/list-user-evoucher",
+        icon: (
+          <HiUserGroup
             style={css}
             content={freeSet.cilUserPlus}
             className="c-sidebar-nav-icon"
@@ -327,7 +387,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -369,7 +429,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -390,7 +450,7 @@ const _navMangerCampaigns = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["2"],
       },
       {
         _tag: "CSidebarNavItem",
@@ -403,7 +463,28 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilBellExclamation} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý Voucher",
+        to: "/manage-voucher",
+        icon: (
+          <AiFillSetting
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -435,6 +516,7 @@ const _navMangerUser = [
   {
     _tag: "CSidebarNavDropdown",
     name: "Quản lý người dùng",
+
     icon: (
       <CIcon
         style={css}
@@ -442,7 +524,7 @@ const _navMangerUser = [
         customClasses="c-sidebar-nav-icon"
       />
     ),
-    role: ["0", "1", "2", "5"],
+    role: ["0", "1", "2"],
     _children: [
       {
         _tag: "CSidebarNavItem",
@@ -455,7 +537,7 @@ const _navMangerUser = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -477,7 +559,7 @@ const _navMangerUser = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -508,21 +590,16 @@ const _navMangerUser = [
           ),
         },
       },
-      //   {
-      //     _tag: "CSidebarNavTitle",
-      //     _children: ["Quản lý khuyến mãi"],
-      //     role: ["0", "1", "2", "5"],
-      //   },
     ],
   },
 ];
 
 const _navSkinCare = [
-  //   {
-  //     _tag: "CSidebarNavTitle",
-  //     _children: ["Quản lý giao diện soi da"],
-  //     role: ["0", "1", "2", "5"],
-  //   },
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["PHẦN VẬN HÀNH"],
+    role: ["0", "1", "2", "5"],
+  },
   {
     _tag: "CSidebarNavDropdown",
     name: "Quản lý giao diện soi da",
@@ -545,7 +622,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -566,7 +643,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -587,7 +664,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -608,7 +685,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -629,7 +706,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -650,7 +727,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -671,7 +748,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -693,7 +770,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -716,7 +793,7 @@ const _navSkinCare = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -748,7 +825,7 @@ const _navManagerStatistics = [
         className="c-sidebar-nav-icon"
       />
     ),
-    role: ["0", "1", "2", "5"],
+    role: ["0", "1", "2"],
     badge: {
       color: "info",
       text: (
@@ -780,6 +857,32 @@ const _navManagerStatistics = [
       ),
     },
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Danh sách đặt hẹn",
+    to: "/book-calendar",
+    icon: (
+      <CIcon
+        style={css}
+        content={freeSet.cilList}
+        customClasses="c-sidebar-nav-icon"
+      />
+    ),
+    role: ["2"],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Dashboard",
+    to: "/general-statistics",
+    icon: (
+      <CgWebsite
+        style={css}
+        content={freeSet.none}
+        className="c-sidebar-nav-icon"
+      />
+    ),
+    role: ["1", "2"],
+  },
 ];
 
 // const _navContact = [
@@ -789,20 +892,6 @@ const _navManagerStatistics = [
 //     role: ["0", "1", "2", "5"],
 //   },
 
-//     {
-//       _tag: "CSidebarNavItem",
-//       name: "Danh sách đặt hẹn",
-//       to: "/book-calendar",
-//       icon: (
-//         <CIcon
-//           style={css}
-//           content={freeSet.cilList}
-//           customClasses="c-sidebar-nav-icon"
-//         />
-//       ),
-//       role: ["0", "1", "2", "5"],
-//     },
-// ];
 const _navLogOut = [
   {
     _tag: "CSidebarNavItem",
