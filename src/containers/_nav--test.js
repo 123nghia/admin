@@ -64,7 +64,7 @@ const _navOverview = [
       color: "info",
       text: (
         <CTooltip placement={"right"} content={content.dashboard}>
-          <CIcon content={freeSet.cilBellExclamation} />
+          <CIcon content={freeSet.cilInfo} />
         </CTooltip>
       ),
     },
@@ -77,7 +77,7 @@ const _navOverview = [
     icon: (
       <CIcon
         style={css}
-        content={freeSet.cilList}
+        content={freeSet.cilCenterFocus}
         customClasses="c-sidebar-nav-icon"
       />
     ),
@@ -98,7 +98,7 @@ const _navOverview = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.profile}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -125,7 +125,7 @@ const _navOverview = [
               color: "info",
               text: (
                 <CTooltip placement={"right"} content={content.accountSale}>
-                  <CIcon content={freeSet.cilBellExclamation} />
+                  <CIcon content={freeSet.cilInfo} />
                 </CTooltip>
               ),
             },
@@ -140,7 +140,7 @@ const _navOverview = [
               color: "info",
               text: (
                 <CTooltip placement={"right"} content={content.accountCompany}>
-                  <CIcon content={freeSet.cilBellExclamation} />
+                  <CIcon content={freeSet.cilInfo} />
                 </CTooltip>
               ),
             },
@@ -176,7 +176,7 @@ const _navOverview = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -198,7 +198,7 @@ const _navOverview = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.role}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -219,7 +219,7 @@ const _navOverview = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.update_package}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -241,7 +241,7 @@ const _navMangerProviders = [
     icon: (
       <AiFillSetting
         style={css}
-        content={freeSet.cilUserPlus}
+        content={freeSet.cilTruck}
         className="c-sidebar-nav-icon"
       />
     ),
@@ -250,7 +250,7 @@ const _navMangerProviders = [
       color: "info",
       text: (
         <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
+          <CIcon content={freeSet.cilInfo} />
         </CTooltip>
       ),
     },
@@ -281,7 +281,7 @@ const _navMangerSales = [
         icon: (
           <HiUserGroup
             style={css}
-            content={freeSet.cilUserPlus}
+            content={freeSet.cilPeople}
             className="c-sidebar-nav-icon"
           />
         ),
@@ -290,7 +290,7 @@ const _navMangerSales = [
           color: "info",
           text: (
             <CTooltip placement={"right"}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -302,7 +302,7 @@ const _navMangerSales = [
         icon: (
           <HiUserGroup
             style={css}
-            content={freeSet.cilUserPlus}
+            content={freeSet.cilUserFemale}
             className="c-sidebar-nav-icon"
           />
         ),
@@ -311,7 +311,7 @@ const _navMangerSales = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.customer}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -329,7 +329,7 @@ const _navMangerCampaigns = [
     icon: (
       <CIcon
         style={css}
-        content={freeSet.cilList}
+        content={freeSet.cilBullhorn}
         customClasses="c-sidebar-nav-icon"
       />
     ),
@@ -350,7 +350,7 @@ const _navMangerCampaigns = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -371,7 +371,7 @@ const _navMangerCampaigns = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -392,7 +392,7 @@ const _navMangerCampaigns = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -413,7 +413,7 @@ const _navMangerCampaigns = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -447,7 +447,7 @@ const _navMangerCampaigns = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -468,7 +468,7 @@ const _navMangerCampaigns = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -478,7 +478,7 @@ const _navMangerCampaigns = [
       color: "info",
       text: (
         <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
+          <CIcon content={freeSet.cilInfo} />
         </CTooltip>
       ),
     },
@@ -521,7 +521,7 @@ const _navMangerUser = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.customer}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -543,7 +543,7 @@ const _navMangerUser = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.role}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -564,7 +564,7 @@ const _navMangerUser = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.history_skin}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -587,7 +587,7 @@ const _navMangerUser = [
       color: "info",
       text: (
         <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
+          <CIcon content={freeSet.cilInfo} />
         </CTooltip>
       ),
     },
@@ -627,7 +627,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.brand}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -648,7 +648,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -669,7 +669,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -690,7 +690,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -711,7 +711,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -732,7 +732,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -753,7 +753,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -775,7 +775,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -798,7 +798,7 @@ const _navSkinCare = [
           color: "info",
           text: (
             <CTooltip placement={"right"} content={content.suggest}>
-              <CIcon content={freeSet.cilBellExclamation} />
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },

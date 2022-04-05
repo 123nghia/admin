@@ -161,3 +161,7 @@
 .table-hover tbody tr:hover .color-red {
   color: rgb(255, 0, 0, 0.8) !important;
 }
+.badge-info {
+  color: #4680ff;
+  background-color: transparent;
+}
