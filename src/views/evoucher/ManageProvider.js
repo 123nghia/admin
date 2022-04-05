@@ -85,7 +85,6 @@ class EndUser extends Component {
       action: 'new',
       SystemIdentifier: "",
       introduction: "",
-      data: [],
       Email: "",
       TypeId: "0",
       Logo: "",
@@ -283,12 +282,7 @@ class EndUser extends Component {
     }
   }
 
-  openDelete = (item) => {
-    this.setState({
-      modalDelete: !this.state.modalDelete,
-      id: item._id,
-    });
-  };
+
   async openUpdate(item) {
     this.state.dataCompany.forEach((name => {
       if (name._id === item.company_id) {
@@ -382,31 +376,34 @@ class EndUser extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_PROVIDER;
     let url = baseUrlapi + baseUrlCallApi;
-
+    this.setState({ isLoading: true });
     await axios
       .post(url, {
-        UserName,
-        Email,
-        Brand,
-        TypeId,
-        Logo,
-        Phone,
-        Slug,
-        introduction,
-        Password,
-        Name
+        "userName": UserName,
+        "email": Email,
+        "brand": Brand,
+        "typeId": TypeId,
+        "logo": Logo,
+        "phone": "0345489995",
+        "slug": "rr5",
+        "introduction": introduction,
+        "password": Password,
+        "name": "nguyen van e"
       })
       .then((res) => {
+        let val = res.data;
+        console.log(val)
+        this.pagination(val);
+        this.setState({ data: val });
         Swal.fire({
           icon: "success",
           title: "Thêm thành công",
           showConfirmButton: false,
           timer: 700,
         });
-        // this.setState({
-        //   modalVoucher: false,
-        // });
-        // this.getData();
+        this.setState({
+          modalVoucher: false,
+        });
         if (res.is_success == true) {
           this.getData();
           this.setState({ modalVoucher: !this.state.modalVoucher });
@@ -426,23 +423,37 @@ class EndUser extends Component {
         }
       });
   }
-  async remove(item) {
-    let baseUrlCallApi = Constants.DELETE_CAMPAIGN;
+  openDelete = (item) => {
+    this.setState({
+      modalDelete: !this.state.modalDelete,
+      id: item._id,
+    });
+  };
+  async remove() {
+    let baseUrlCallApi = Constants.DELETE_PROVIDER;
 
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
+    this.setState({ isLoading: true });
     await axios
-      .post(url, {
-        id: item._id,
+      .delete(url, {
+        id: ""
       })
       .then((res) => {
+        console.log(res.data.data)
         Swal.fire({
           icon: "success",
           title: "Xóa thành công",
           showConfirmButton: false,
           timer: 700,
         });
-        this.getData();
+        if (res.is_success == true) {
+          this.getData();
+          this.setState({ modalDelete: !this.state.modalDelete, delete: null })
+        } else {
+          alert(res.message);
+          this.setState({ isLoading: false });
+        }
       });
   }
 
@@ -455,25 +466,6 @@ class EndUser extends Component {
       to: dateString[1],
     });
   };
-
-  async removeVoucher(item) {
-    let baseUrlCallApi = Constants.DELETE_VOUCHER;
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + baseUrlCallApi;
-    await axios
-      .post(url, {
-        id: item._id,
-      })
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Xóa thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-        this.getDataVoucher(this.state.company_id_search);
-      });
-  }
 
   renderModalInfo(item) {
     let itemRender = (
@@ -576,7 +568,7 @@ class EndUser extends Component {
       nameVoucher,
       dataVoucher,
       arrPaginationVoucher,
-      modalVoucher, 
+      modalVoucher,
       dataCompany,
       action
     } = this.state;
@@ -1162,7 +1154,7 @@ class EndUser extends Component {
                                     color="danger"
                                     style={styles.mgl5}
                                     onClick={(e) => {
-                                      this.removeVoucher(item);
+                                      this.openDelete(item);
                                     }}
                                   >
                                     <BsTrash
@@ -1216,12 +1208,12 @@ class EndUser extends Component {
               }
             >{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+              <label htmlFor="tag">{`Bạn có chắc chắn xóa ?`}</label>
             </ModalBody>
             <ModalFooter>
               <CButton
                 color="primary"
-                onClick={(e) => this.delete()}
+                onClick={(e) => this.remove()}
                 disabled={this.state.isLoading}
               >
                 Xoá
