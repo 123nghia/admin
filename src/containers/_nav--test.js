@@ -399,7 +399,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách Banner",
+        name: "Quản lý Banner Trang chủ",
         to: "/banner-sales",
         icon: (
           <BsImageFill
@@ -420,7 +420,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách Banner Trang chủ",
+        name: "Danh sách Banner",
         to: "/quan-ly-banner",
         icon: (
           <CIcon
