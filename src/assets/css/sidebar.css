@@ -3,7 +3,7 @@
 }
 .c-sidebar ul li.c-sidebar-nav-title {
   color: #252525;
-  font-size: 13px;
+  font-size: 1rem;
 }
 
 .c-sidebar ul li.c-sidebar-nav-item .c-active {
@@ -89,6 +89,7 @@
 .c-sidebar .c-sidebar-nav-dropdown-toggle {
   color: rgb(52, 71, 103) !important;
   border-bottom: 0.02rem solid rgb(222, 229, 235);
+  font-size: 0.9rem;
 }
 .c-sidebar .c-sidebar-nav-dropdown.c-show .c-sidebar-nav-link {
   color: rgb(52, 71, 103) !important;

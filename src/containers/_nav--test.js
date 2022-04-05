@@ -592,6 +592,27 @@ const _navMangerUser = [
       },
     ],
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Thống kê",
+    to: "/evoucher-statistics",
+    icon: (
+      <BsFillBarChartFill
+        style={css}
+        content={freeSet.cilUserPlus}
+        className="c-sidebar-nav-icon"
+      />
+    ),
+    role: ["0", "1", "2"],
+    badge: {
+      color: "info",
+      text: (
+        <CTooltip placement={"right"} content={content.none}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>
+      ),
+    },
+  },
 ];
 
 const _navSkinCare = [
@@ -814,49 +835,7 @@ const _navManagerStatistics = [
   //     _children: ["Thống kê"],
   //     role: ["0", "1", "2", "5"],
   //   },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Thống kê",
-    to: "/evoucher-statistics",
-    icon: (
-      <BsFillBarChartFill
-        style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
 
-  {
-    _tag: "CSidebarNavItem",
-    name: "Quản lý nâng cấp",
-    to: "/update_package",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilExpandUp}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.update_package}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
   {
     _tag: "CSidebarNavItem",
     name: "Danh sách đặt hẹn",
