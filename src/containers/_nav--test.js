@@ -106,7 +106,7 @@ const _navOverview = [
       {
         _tag: "CSidebarNavDropdown",
         name: "Quản lý Loại tài khoản",
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1"],
         icon: (
           <CIcon
             style={css}
@@ -158,7 +158,7 @@ const _navOverview = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["1", "2"],
+        role: ["0", "1", "2"],
       },
       {
         _tag: "CSidebarNavItem",
@@ -214,7 +214,7 @@ const _navOverview = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["2"],
+        role: ["0", "2"],
         badge: {
           color: "info",
           text: (
@@ -236,7 +236,7 @@ const _navMangerProviders = [
   //   },
   {
     _tag: "CSidebarNavItem",
-    name: "Quản lý nhà cung cấp",
+    name: "Quản Lý Nhà Cung Cấp",
     to: "/manage-provider",
     icon: (
       <AiFillSetting
@@ -245,7 +245,7 @@ const _navMangerProviders = [
         className="c-sidebar-nav-icon"
       />
     ),
-    role: ["0"],
+    role: ["0", "1", "2"],
     badge: {
       color: "info",
       text: (
@@ -285,7 +285,7 @@ const _navMangerSales = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0"],
+        role: ["0", "2", "5"],
         badge: {
           color: "info",
           text: (
@@ -297,7 +297,7 @@ const _navMangerSales = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách cộng tác viên",
+        name: "Quản lý Cộng tác viên",
         to: "/manage-sales",
         icon: (
           <HiUserGroup
@@ -306,7 +306,7 @@ const _navMangerSales = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0"],
+        role: ["0", "2", "5"],
         badge: {
           color: "info",
           text: (
@@ -325,7 +325,7 @@ const _navMangerSales = [
 const _navMangerCampaigns = [
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý khuyến mãi",
+    name: "Quản lý chiến dịch",
     icon: (
       <CIcon
         style={css}
@@ -345,28 +345,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0"],
-        badge: {
-          color: "info",
-          text: (
-            <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilBellExclamation} />
-            </CTooltip>
-          ),
-        },
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Danh sách người dùng Voucher",
-        to: "/list-user-evoucher",
-        icon: (
-          <HiUserGroup
-            style={css}
-            content={freeSet.cilUserPlus}
-            className="c-sidebar-nav-icon"
-          />
-        ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -408,7 +387,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -420,7 +399,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Banner",
+        name: "Danh sách Banner",
         to: "/banner-sales",
         icon: (
           <BsImageFill
@@ -429,7 +408,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0"],
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
@@ -441,7 +420,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách banner",
+        name: "Danh sách Banner Trang chủ",
         to: "/quan-ly-banner",
         icon: (
           <CIcon
@@ -454,7 +433,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý tồn kho evoucher",
+        name: "Quản lý Tồn kho eVoucher",
         to: "/manage-inventory",
         icon: (
           <AiFillSetting
@@ -475,7 +454,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý Voucher",
+        name: "Quản lý eVoucher",
         to: "/manage-voucher",
         icon: (
           <AiFillSetting
@@ -503,7 +482,7 @@ const _navMangerCampaigns = [
         </CTooltip>
       ),
     },
-    role: ["0", "1", "2", "5"],
+    role: ["0", "1", "2"],
   },
 ];
 
@@ -537,7 +516,7 @@ const _navMangerUser = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -580,7 +559,7 @@ const _navMangerUser = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2", "5"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -619,11 +598,11 @@ const _navSkinCare = [
   {
     _tag: "CSidebarNavTitle",
     _children: ["PHẦN VẬN HÀNH"],
-    role: ["0", "1", "2", "5"],
+    role: ["0", "1", "2"],
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý giao diện soi da",
+    name: "Quản lý Giao Diện Soi Da",
     icon: (
       <CIcon
         style={css}
@@ -825,51 +804,25 @@ const _navSkinCare = [
         },
       },
     ],
-    role: ["0", "1", "2", "5"],
+    role: ["0", "1", "2"],
   },
 ];
 
 const _navManagerStatistics = [
   //   {
-  //     _tag: "CSidebarNavTitle",
-  //     _children: ["Thống kê"],
-  //     role: ["0", "1", "2", "5"],
+  //     _tag: "CSidebarNavItem",
+  //     name: "Dashboard",
+  //     to: "/general-statistics",
+  //     icon: (
+  //       <CgWebsite
+  //         style={css}
+  //         content={freeSet.none}
+  //         className="c-sidebar-nav-icon"
+  //       />
+  //     ),
+  //     role: ["1", "2"],
   //   },
-
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách đặt hẹn",
-    to: "/book-calendar",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilList}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["2"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Dashboard",
-    to: "/general-statistics",
-    icon: (
-      <CgWebsite
-        style={css}
-        content={freeSet.none}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["1", "2"],
-  },
 ];
-
-// const _navContact = [
-//   {
-//     _tag: "CSidebarNavTitle",
-//     _children: ["Thông tin liên hệ"],
-//     role: ["0", "1", "2", "5"],
-//   },
 
 const _navLogOut = [
   {
