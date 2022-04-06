@@ -906,7 +906,6 @@ class Users extends Component {
                                         {
                                             data !== undefined ?
                                                 data.map((item, i) => {
-                                                    console.log(item)
                                                     return (
                                                         <tr key={i}>
                                                             <td className="text-center">{i + 1}</td>
