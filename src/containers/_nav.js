@@ -71,6 +71,18 @@ const _navOverview = [
   },
 
   {
+    _tag: "CSidebarNavItem",
+    name: "Dashboard",
+    to: "/general-statistics",
+    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
+    badge: {
+      color: "info",
+      text: "DÀNH CHO NCC",
+    },
+    role: ["1", "2"],
+  },
+
+  {
     _tag: "CSidebarNavDropdown",
     name: "Thông tin chung",
     role: ["0", "1", "2", "5"],
