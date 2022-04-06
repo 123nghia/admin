@@ -16,7 +16,7 @@ import { NavLink } from "reactstrap";
 import Constants from "../contants/contants";
 import API_CONNECT from "../functions/callAPI";
 // sidebar nav config
-import navigations from "./_nav--test";
+import navigations from "./_nav";
 const callApiGetRoleSubAdmin = async (user) => {
   if (user == null || JSON.parse(user) == null) {
     return;

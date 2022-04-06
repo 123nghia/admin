@@ -1,16 +1,13 @@
-import React from "react";
+import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import { CTooltip, CButton } from "@coreui/react";
-import { cifAU, freeSet } from "@coreui/icons";
-import { BsCardList } from "@react-icons/all-files/bs/BsCardList";
-import { CgUserList } from "@react-icons/all-files/cg/CgUserList";
-import { BsCardChecklist } from "@react-icons/all-files/bs/BsCardChecklist";
-import { BsImageFill } from "@react-icons/all-files/bs/BsImageFill";
-import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill";
-import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
+import { CTooltip } from "@coreui/react";
 import { AiFillSetting } from "@react-icons/all-files/ai/AiFillSetting";
-import { RiFileTransferLine } from "@react-icons/all-files/ri/RiFileTransferLine";
+import { BsCardChecklist } from "@react-icons/all-files/bs/BsCardChecklist";
+import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill";
+import { BsImageFill } from "@react-icons/all-files/bs/BsImageFill";
 import { CgWebsite } from "@react-icons/all-files/cg/CgWebsite";
+import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
+import React from "react";
 
 const css = {};
 const content = {
@@ -44,12 +41,11 @@ const content = {
   none: "...",
 };
 
-const _navDashboard = [
+const _navOverview = [
   {
     _tag: "CSidebarNavTitle",
-    _children: ["Tổng quan"],
-    role: ["0", "1"],
-    hidden: true,
+    _children: ["PHẦN QUẢN LÝ & THỐNG KÊ"],
+    role: ["0", "1", "2", "5"],
   },
   {
     _tag: "CSidebarNavItem",
@@ -68,566 +64,513 @@ const _navDashboard = [
       color: "info",
       text: (
         <CTooltip placement={"right"} content={content.dashboard}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-];
-
-const _navSoida = [
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Quản lý soi da"],
-    role: ["0", "1", "2"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Nhãn hiệu sản phẩm soi da",
-    to: "/brand_skin",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilBookmark}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.brand}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Hỗ trợ giảm lão hóa da",
-    to: "/items/1",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilMoodVeryGood}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.suggest}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Hỗ trợ điều trị mụn",
-    to: "/items/2",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilMoodVeryGood}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.suggest}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Hỗ trợ giảm quầng thâm mắt",
-    to: "/items/3",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilMoodVeryGood}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.suggest}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Hỗ trợ giảm lỗ chân lông",
-    to: "/items/4",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilMoodVeryGood}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.suggest}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Hỗ trợ giảm thâm nám da",
-    to: "/items/5",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilMoodVeryGood}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.suggest}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Bộ lọc sản phẩm",
-    to: "/skin/config",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilMoodVeryGood}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.suggest}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Tư vấn tổng quan",
-
-    to: "/skin/configContent",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilMoodVeryGood}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.suggest}>
-          <CIcon content={freeSet.cilBellExclamation} />
+          <CIcon content={freeSet.cilInfo} />
         </CTooltip>
       ),
     },
   },
 
   {
-    _tag: "CSidebarNavItem",
-    name: "Tư vấn chi tiết",
-
-    to: "/skin/configOverView",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilMoodVeryGood}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.suggest}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-];
-
-const _navSpecialProduct = [
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Quản lý sản phẩm"],
-    role: ["0", "1", "2"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Sản phẩm nổi bật",
-    to: "/products-special",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilBookmark}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.brand}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-];
-const _navMakeUp = [
-  // {
-  //   _tag: 'CSidebarNavTitle',
-  //   _children: ['Quản lý trang điểm'],
-  //   role: ['0', '1', '2'],
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Nhãn hiệu sản phẩm trang điểm',
-  //   to: '/brand',
-  //   icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.brand}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Danh mục trang điểm',
-  //   to: '/subtype_makeup',
-  //   icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.subType}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Màu trang điểm',
-  //   to: '/color',
-  //   icon: <CIcon style={css} content={freeSet.cilColorPalette} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.color}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Sản phẩm',
-  //   to: '/product',
-  //   icon: <CIcon style={css} content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.product}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Danh mục tóc',
-  //   to: '/subtype_hair',
-  //   icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.subType}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Sản phẩm',
-  //   to: '/product_hair',
-  //   icon: <CIcon style={css} content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.product}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-];
-
-const _navOrther = [
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Quản lý người dùng"],
-    role: ["0", "1", "2"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách người dùng",
-    to: "/customer",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilUserPlus}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.customer}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách tài khoản người dùng",
-    to: "/end_user",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilUserPlus}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.role}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Lịch sử soi da",
-    to: "/historyskin",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilHistory}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
+    _tag: "CSidebarNavDropdown",
+    name: "Thông tin chung",
     role: ["0", "1", "2", "5"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.history_skin}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Quản lý khuyến mãi"],
-    role: ["0", "1", "2", "5"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Quản lý chiến dịch",
-    to: "/manage-campaign",
     icon: (
-      <AiFillSetting
+      <CIcon
         style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
+        content={freeSet.cilCenterFocus}
+        customClasses="c-sidebar-nav-icon"
       />
     ),
-    role: ["0"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Thông tin tài khoản",
+        to: "/profile",
+        icon: (
+          <CIcon
+            style={css}
+            name="cil-user"
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2", "5"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.profile}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavDropdown",
+        name: "Quản lý Loại tài khoản",
+        role: ["0", "1"],
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilList}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        _children: [
+          {
+            _tag: "CSidebarNavItem",
+            name: "Danh sách tài khoản hệ thống",
+
+            to: "/subsale",
+            role: ["0"],
+            badge: {
+              color: "info",
+              text: (
+                <CTooltip placement={"right"} content={content.accountSale}>
+                  <CIcon content={freeSet.cilInfo} />
+                </CTooltip>
+              ),
+            },
+          },
+
+          {
+            _tag: "CSidebarNavItem",
+            name: "Danh sách khách hàng",
+            to: "/customer_manager",
+            role: ["0"],
+            badge: {
+              color: "info",
+              text: (
+                <CTooltip placement={"right"} content={content.accountCompany}>
+                  <CIcon content={freeSet.cilInfo} />
+                </CTooltip>
+              ),
+            },
+          },
+        ],
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Cấu hình Web",
+        to: "/cau-hinh-trang-web",
+        icon: (
+          <CgWebsite
+            style={css}
+            content={freeSet.none}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Cấu hình Web-Admin",
+        to: "/admin-config-web",
+        icon: (
+          <CgWebsite
+            style={css}
+            name="cil-user"
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý phân quyền",
+        to: "/role_manager",
+        icon: (
+          <CIcon
+            style={css}
+            name="cil-people"
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.role}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý nâng cấp",
+        to: "/update_package",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilExpandUp}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.update_package}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+    ],
   },
+];
+
+const _navMangerProviders = [
+  //   {
+  //     _tag: "CSidebarNavTitle",
+  //     _children: ["Quản lý nhà cung cấp"],
+  //     role: ["0", "1", "2", "5"],
+  //   },
   {
     _tag: "CSidebarNavItem",
-    name: "Quản lý nhà cung cấp",
+    name: "Quản Lý Nhà Cung Cấp",
     to: "/manage-provider",
     icon: (
       <AiFillSetting
         style={css}
-        content={freeSet.cilUserPlus}
+        content={freeSet.cilTruck}
         className="c-sidebar-nav-icon"
       />
     ),
+    role: ["0", "1", "2"],
+    badge: {
+      color: "info",
+      text: (
+        <CTooltip placement={"right"} content={content.none}>
+          <CIcon content={freeSet.cilInfo} />
+        </CTooltip>
+      ),
+    },
+  },
+];
+
+const _navMangerSales = [
+  //   {
+  //     _tag: "CSidebarNavTitle",
+  //     _children: ["Quản lý Sales"],
+  //     role: ["0", "1", "2", "5"],
+  //   },
+  {
+    _tag: "CSidebarNavDropdown",
+    name: "Quản lý Sales",
+    icon: (
+      <CIcon
+        style={css}
+        content={freeSet.cilList}
+        customClasses="c-sidebar-nav-icon"
+      />
+    ),
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Danh sách Nhóm Sales",
+        to: "/manage-sales-group",
+        icon: (
+          <HiUserGroup
+            style={css}
+            content={freeSet.cilPeople}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "2", "5"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý Cộng tác viên",
+        to: "/manage-sales",
+        icon: (
+          <HiUserGroup
+            style={css}
+            content={freeSet.cilUserFemale}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "2", "5"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.customer}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+    ],
+
     role: ["0"],
+  },
+];
+
+const _navMangerCampaigns = [
+  {
+    _tag: "CSidebarNavDropdown",
+    name: "Quản lý chiến dịch",
+    icon: (
+      <CIcon
+        style={css}
+        content={freeSet.cilBullhorn}
+        customClasses="c-sidebar-nav-icon"
+      />
+    ),
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý chiến dịch",
+        to: "/manage-campaign",
+        icon: (
+          <AiFillSetting
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Danh sách chiến dịch tham gia",
+        to: "/list-campaign",
+        icon: (
+          <BsCardChecklist
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Danh sách người dùng Voucher",
+        to: "/list-user-evoucher",
+        icon: (
+          <HiUserGroup
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý Banner Trang chủ",
+        to: "/banner-sales",
+        icon: (
+          <BsImageFill
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Danh sách Banner",
+        to: "/quan-ly-banner",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilList}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["2"],
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý Tồn kho eVoucher",
+        to: "/manage-inventory",
+        icon: (
+          <AiFillSetting
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý eVoucher",
+        to: "/manage-voucher",
+        icon: (
+          <AiFillSetting
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+    ],
     badge: {
       color: "info",
       text: (
         <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
+          <CIcon content={freeSet.cilInfo} />
         </CTooltip>
       ),
     },
+    role: ["0", "1", "2"],
   },
+];
+
+const _navMangerUser = [
+  //   {
+  //     _tag: "CSidebarNavTitle",
+  //     _children: ["Quản lý người dùng"],
+  //     role: ["0", "1", "2", "5"],
+  //   },
   {
-    _tag: "CSidebarNavItem",
-    name: "Quản lý Voucher",
-    to: "/manage-voucher",
+    _tag: "CSidebarNavDropdown",
+    name: "Quản lý người dùng",
+
     icon: (
-      <AiFillSetting
+      <CIcon
         style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
+        content={freeSet.cilList}
+        customClasses="c-sidebar-nav-icon"
       />
     ),
     role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Quản lý tồn kho evoucher",
-    to: "/manage-inventory",
-    icon: (
-      <AiFillSetting
-        style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Danh sách người dùng",
+        to: "/customer",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilUserPlus}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.customer}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
 
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách người dùng Voucher",
-    to: "/list-user-evoucher",
-    icon: (
-      <HiUserGroup
-        style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2", "5"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Danh sách tài khoản người dùng",
+        to: "/end_user",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilUserPlus}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.role}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Lịch sử soi da",
+        to: "/historyskin",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilHistory}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.history_skin}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+    ],
   },
-
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách chiến dịch tham gia",
-    to: "/list-campaign",
-    icon: (
-      <BsCardChecklist
-        style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0", "1", "2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Banner",
-    to: "/banner-sales",
-    icon: (
-      <BsImageFill
-        style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Màn hình Translation',
-  //   to: '/translation',
-  //   icon: <RiFileTransferLine style={css} content={freeSet.cilUserPlus} className="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2','5'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.none}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-
   {
     _tag: "CSidebarNavItem",
     name: "Thống kê",
@@ -644,193 +587,22 @@ const _navOrther = [
       color: "info",
       text: (
         <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Quản lý Sales"],
-    role: ["0"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách cộng tác viên",
-    to: "/manage-sales",
-    icon: (
-      <HiUserGroup
-        style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.customer}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách Nhóm",
-    to: "/manage-sales-group",
-    icon: (
-      <HiUserGroup
-        style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Lịch sử trang điểm',
-  //   to: '/historyskin-makeup',
-  //   icon: <CIcon style={css} content={freeSet.cilHistory} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.history_skin}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-  // {
-  // _tag: 'CSidebarNavTitle',
-  //   _children: ['Quản lý chương trình khuyến mãi'],
-  //   role: ['0', '1', '2'],
-  // },
-  // {
-  //   _tag: 'CSidebarNavDropdown',
-  //   name: 'Chương trình khuyến mãi',
-  //   icon: <CIcon style={css} content={freeSet.cilBell} customClasses="c-sidebar-nav-icon" />,
-  //   _children: [{
-  //     _tag: 'CSidebarNavItem',
-  //     name: 'Nội dung khuyến mãi',
-  //     to: '/reward_info',
-  //     role: ['0', '1', '2'],
-  //     badge: {
-  //       color: 'info',
-  //       text: <CTooltip placement={"right"} content={content.reward_info}>
-  //         <CIcon content={freeSet.cilBellExclamation} />
-  //       </CTooltip>,
-  //     }
-  //   }],
-  //   role: ['0', '1', '2'],
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Danh sách khuyến mãi',
-  //   to: '/cus_request',
-  //   icon: <CIcon style={css} content={freeSet.cilGift} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.reward_customer}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // }
-
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Thông tin chung"],
-    role: ["0", "1", "2", "5"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Cấu hình Web-Admin",
-    to: "/admin-config-web",
-    icon: (
-      <CgWebsite style={css} name="cil-user" className="c-sidebar-nav-icon" />
-    ),
-    role: ["0"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Thông tin tài khoản",
-    to: "/profile",
-    icon: (
-      <CIcon style={css} name="cil-user" customClasses="c-sidebar-nav-icon" />
-    ),
-    role: ["0", "1", "2", "5"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.profile}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Quản lý phân quyền",
-    to: "/role_manager",
-    icon: (
-      <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />
-    ),
-    role: ["0"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.role}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-
-  {
-    _tag: "CSidebarNavItem",
-    name: "Quản lý nâng cấp",
-    to: "/update_package",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilExpandUp}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["2"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.update_package}>
-          <CIcon content={freeSet.cilBellExclamation} />
+          <CIcon content={freeSet.cilInfo} />
         </CTooltip>
       ),
     },
   },
 ];
 
-const _navContact = [
+const _navSkinCare = [
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["PHẦN VẬN HÀNH"],
+    role: ["0", "1", "2"],
+  },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý tài khoản",
-    role: ["0"],
+    name: "Quản lý Giao Diện Soi Da",
     icon: (
       <CIcon
         style={css}
@@ -841,15 +613,169 @@ const _navContact = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách tài khoản hệ thống",
-
-        to: "/subsale",
-        role: ["0"],
+        name: "Nhãn hiệu sản phẩm soi da",
+        to: "/brand_skin",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilBookmark}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
-            <CTooltip placement={"right"} content={content.accountSale}>
-              <CIcon content={freeSet.cilBellExclamation} />
+            <CTooltip placement={"right"} content={content.brand}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Hỗ trợ giảm lão hóa da",
+        to: "/items/1",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilMoodVeryGood}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.suggest}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Hỗ trợ điều trị mụn",
+        to: "/items/2",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilMoodVeryGood}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.suggest}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Hỗ trợ giảm quầng thâm mắt",
+        to: "/items/3",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilMoodVeryGood}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.suggest}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Hỗ trợ giảm lỗ chân lông",
+        to: "/items/4",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilMoodVeryGood}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.suggest}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Hỗ trợ giảm thâm nám da",
+        to: "/items/5",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilMoodVeryGood}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.suggest}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Bộ lọc sản phẩm",
+        to: "/skin/config",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilMoodVeryGood}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.suggest}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Tư vấn tổng quan",
+
+        to: "/skin/configContent",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilMoodVeryGood}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.suggest}>
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -857,14 +783,22 @@ const _navContact = [
 
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách khách hàng",
-        to: "/customer_manager",
-        role: ["0"],
+        name: "Tư vấn chi tiết",
+
+        to: "/skin/configOverView",
+        icon: (
+          <CIcon
+            style={css}
+            content={freeSet.cilMoodVeryGood}
+            customClasses="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0", "1", "2"],
         badge: {
           color: "info",
           text: (
-            <CTooltip placement={"right"} content={content.accountCompany}>
-              <CIcon content={freeSet.cilBellExclamation} />
+            <CTooltip placement={"right"} content={content.suggest}>
+              <CIcon content={freeSet.cilInfo} />
             </CTooltip>
           ),
         },
@@ -872,93 +806,24 @@ const _navContact = [
     ],
     role: ["0", "1", "2"],
   },
-
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Thông tin liên hệ"],
-    role: ["0", "1", "5"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách khách hàng",
-    to: "/customer_manager",
-    role: ["0"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.accountCompany}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>
-      ),
-    },
-  },
-
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Thông tin liên hệ"],
-    role: ["0", "1", "5"],
-  },
-
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách banner",
-    to: "/quan-ly-banner",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilList}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["2"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Danh sách đặt hẹn",
-    to: "/book-calendar",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilList}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["2"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Cấu hình Web",
-    to: "/cau-hinh-trang-web",
-    icon: (
-      <CgWebsite
-        style={css}
-        content={freeSet.none}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["1", "2"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Dashboard",
-    to: "/general-statistics",
-    icon: (
-      <CgWebsite
-        style={css}
-        content={freeSet.none}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["1", "2"],
-  },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Yêu cầu hỗ trợ',
-  //   icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-  //   to: '/yeu-cau-ho-tro',
-  //   role: ['0', '1', '2'],
-  // },
 ];
+
+const _navManagerStatistics = [
+  //   {
+  //     _tag: "CSidebarNavItem",
+  //     name: "Dashboard",
+  //     to: "/general-statistics",
+  //     icon: (
+  //       <CgWebsite
+  //         style={css}
+  //         content={freeSet.none}
+  //         className="c-sidebar-nav-icon"
+  //       />
+  //     ),
+  //     role: ["1", "2"],
+  //   },
+];
+
 const _navLogOut = [
   {
     _tag: "CSidebarNavItem",
@@ -975,4 +840,13 @@ const _navLogOut = [
   },
 ];
 
-export default [_navSoida, _navMakeUp, _navOrther, _navContact, _navLogOut];
+export default [
+  _navOverview,
+  _navMangerProviders,
+  _navMangerSales,
+  _navMangerCampaigns,
+  _navMangerUser,
+  _navSkinCare,
+  _navManagerStatistics,
+  _navLogOut,
+];

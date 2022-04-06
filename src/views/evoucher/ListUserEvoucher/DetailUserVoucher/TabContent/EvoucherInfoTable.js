@@ -76,37 +76,36 @@ function EvoucherInfoTable({ detailUserVoucher }) {
               />
             )}
           </td>
-          <td className="text-center">{voucher[0].content}</td>
+          <td className="text-center">{voucher[0]?.content}</td>
           <td className="text-center">
             <Tag
               className="ant-tag"
-              color={checkStatusUserVoucherColor(voucher[0].status)}
+              color={checkStatusUserVoucherColor(voucher[0]?.status)}
             >
-              {checkStatusUserVoucherContent(voucher[0].status)}
+              {checkStatusUserVoucherContent(voucher[0]?.status)}
             </Tag>
           </td>
 
           <td className="text-center">
-            {
-              historyId ?  <CButton
-              shape="rounded-pill"
-              variant="outline"
-              color="info"
-              size="md"
-              className="flex-a-center "
-              onClick={(e) => {
-                setIdHistory(historyId);
-                setToggleHistory(!toggleHistory);
-              }}
-            >
-              {formatDate(create_at)}
-              <CIcon
-                style={{ marginLeft: "0.5rem" }}
-                name="cil-magnifying-glass"
-              />
-            </CButton> : null 
-            }
-           
+            {historyId ? (
+              <CButton
+                shape="rounded-pill"
+                variant="outline"
+                color="info"
+                size="md"
+                className="flex-a-center "
+                onClick={(e) => {
+                  setIdHistory(historyId);
+                  setToggleHistory(!toggleHistory);
+                }}
+              >
+                {formatDate(create_at)}
+                <CIcon
+                  style={{ marginLeft: "0.5rem" }}
+                  name="cil-magnifying-glass"
+                />
+              </CButton>
+            ) : null}
           </td>
         </tr>
       </tbody>

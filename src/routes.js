@@ -207,7 +207,8 @@ const routes = [
   {
     path: "/manage-campaign",
     name: "ManageCampaign",
-    component: roleUser === "0" ? ManageCampaign : NotEnough,
+    component: ManageCampaign,
+    // component: roleUser === "0" ? ManageCampaign : NotEnough,
   },
   {
     path: "/manage-sales",

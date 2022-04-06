@@ -15,7 +15,7 @@ function NoteHistory({ detailUserVoucher }) {
   const onFetchNoteList = async () => {
     try {
       const response = await axios({
-        url: `https://api.deal24h.vn/api/evoucherNote/noted/getAll?company_id=${company_id}&transactionId=${voucher[0]._id}`,
+        url: `https://api.deal24h.vn/api/evoucherNote/noted/getAll?company_id=${company_id}&transactionId=${voucher[0]?._id}`,
         method: "GET",
       });
       setNoteList(response.data.data);
@@ -49,7 +49,7 @@ function NoteHistory({ detailUserVoucher }) {
   const handleSubmitAddNote = (noteValue) => {
     const data = {
       ...newNote,
-      transactionId: `${voucher[0]._id}`,
+      transactionId: `${voucher[0]?._id}`,
       company_id: `${company_id}`,
       ...noteValue,
     };
