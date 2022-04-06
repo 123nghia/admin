@@ -1019,7 +1019,7 @@ class EndUser extends Component {
                     </div>
                   </div>
                 </CardHeader>
-                <CardBody>
+                <CardBody className="table__overflow">
                   <div
                     className="pb-3"
                     style={{

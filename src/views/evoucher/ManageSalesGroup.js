@@ -434,174 +434,305 @@ class User extends Component {
 
         if (!this.state.isLoading) {
             return (
-                <div className="animated fadeIn">
-
-                    <Row>
-                        <Col>
-                            <p style={styles.success}>{this.state.updated}</p>
-                            <p style={styles.danger}>{this.state.deleted}</p>
-                            <Card>
-                                <CardHeader>
-                                    <i className="fa fa-align-justify title_header">
-                                        Danh sách Nhóm Sales
-                                    </i>
-
-
-                                </CardHeader>
-                                <CardBody>
-                                    <div class="flex-center">
+              <div className="animated fadeIn">
+                <Row>
+                  <Col>
+                    <p style={styles.success}>{this.state.updated}</p>
+                    <p style={styles.danger}>{this.state.deleted}</p>
+                    <Card>
+                      <CardHeader>
+                        <i className="fa fa-align-justify title_header">
+                          Danh sách Nhóm Sales
+                        </i>
+                      </CardHeader>
+                      <CardBody className="table__overflow">
+                        <div class="flex-center">
+                          <CButton
+                            color="info"
+                            style={{
+                              marginBottom: "10px",
+                              marginRight: "10px",
+                            }}
+                            size="md"
+                            className="flex-center"
+                            onClick={(e) => this.toggleModal("new")}
+                          >
+                            <MdLibraryAdd
+                              style={{ margin: "auto 6px auto 0" }}
+                            />
+                            <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                          </CButton>
+                        </div>
+                        <table
+                          ble
+                          className="table table-hover table-outline mb-0 d-none d-sm-table"
+                        >
+                          <thead className="thead-light">
+                            <tr>
+                              <th className="text-center">STT.</th>
+                              <th className="text-center">Tiêu đề</th>
+                              <th className="text-center">Nhóm trưởng</th>
+                              <th className="text-center">Mô tả</th>
+                              <th className="text-center">#</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <td
+                              colSpan="9"
+                              hidden={this.state.hidden}
+                              className="text-center"
+                            >
+                              Không tìm thấy dữ liệu
+                            </td>
+                            {dataApi !== undefined
+                              ? dataApi.map((item, i) => {
+                                  console.log(item);
+                                  return (
+                                    <tr key={i}>
+                                      <td className="text-center">{i + 1}</td>
+                                      <td className="text-center">
+                                        {item.Title}
+                                      </td>
+                                      <td className="text-center">
+                                        {item.LeadIds}
+                                      </td>
+                                      <td className="text-center">
+                                        {item.Description}
+                                      </td>
+                                      <td className="text-center">
                                         <CButton
-                                            color="info"
-                                            style={{ marginBottom: "10px", marginRight: '10px' }}
-                                            size="md"
-                                            className="flex-center"
-                                            onClick={e => this.toggleModal("new")}
+                                          outline
+                                          color="primary"
+                                          size="sm"
+                                          onClick={(e) =>
+                                            this.openUpdate(item.Title)
+                                          }
                                         >
-                                            <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                                            <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                                        </CButton>
-
-
-                                    </div>
-                                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                                        <thead className="thead-light">
-                                            <tr>
-                                                <th className="text-center">STT.</th>
-                                                <th className="text-center">Tiêu đề</th>
-                                                <th className="text-center">Nhóm trưởng</th>
-                                                <th className="text-center">Mô tả</th>
-                                                <th className="text-center">#</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                                            {
-                                                dataApi !== undefined ?
-                                                    dataApi.map((item, i) => {
-                                                        console.log(item)
-                                                        return (
-                                                            <tr key={i}>
-                                                                <td className="text-center">{i + 1}</td>
-                                                                <td className="text-center">{item.Title}</td>
-                                                                <td className="text-center">{item.LeadIds}</td>
-                                                                <td className="text-center">{item.Description}</td>
-                                                                <td className="text-center">
-                                                                    <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item.Title)} >Cập nhật</CButton>{' '}
-                                                                    <CButton outline color="danger" size="sm" onClick={() => { this.openDelete(item) }}>Xoá</CButton>{' '}
-                                                                    {/* <CButton outline color="success" size="sm" onClick={(e) => { this.onChangeRole(item) }}>Quyền</CButton> */}
-                                                                </td>
-                                                            </tr>
-                                                        );
-                                                    }) : ""
-                                            }
-                                        </tbody>
-                                    </table>
-
-                                </CardBody>
-                            </Card>
-                            <div style={{ float: 'right' }}>
-                                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                                    this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                                }} />
-                            </div>
-                        </Col>
-                    </Row>
-
-                    <Modal isOpen={this.state.modalCom} className={this.props.className}>
-                        <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
-                        <ModalBody>
-                            <div className="text-center error_msg">
-                                {this.state.errorMessage !== "" ? `${this.state.errorMessage} !!!` : null}
-
-                            </div>
-
-                            <TextFieldGroup
-                                field="Title"
-                                label="Tiêu đề"
-                                value={this.state.Title}
-                                placeholder={"Tiêu đề"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Title", e.target.value)}
-                            // rows="5"
-                            />
-
-
-                            <CLabel>Nhóm trưởng</CLabel>
-                            <Select
-                                defaultValue={this.state.LeadIds}
-                                onChange={this.handleChangeLeadIds}
-                                placeholder="Chọn nhóm trưởng"
-                                style={{ width: 200, marginBottom: 15 }}>
-                                {this.state.saleList && this.state.saleList.map(opt => (
-                                    <Option value={opt.Name} key={opt._id}>{opt.Name}</Option>
-                                ))}
-                            </Select>
-
-                            <TextFieldGroup
-                                field="Description"
-                                label="Mô tả"
-                                value={this.state.Description}
-                                placeholder={"Mô tả"}
-                                onChange={e => this.onChange("Description", e.target.value)}
-                            // rows="5"
-                            />
-
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addUsers() : this.updateUsers() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-                            <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
-                        </ModalFooter>
-                    </Modal>
-
-                    <Modal isOpen={this.state.modalRole} toggle={e => this.setState({ modalRole: !this.state.modalRole })} className={this.props.className}>
-                        <ModalHeader toggle={e => this.setState({ modalRole: !this.state.modalRole })}>{`Phân quyền`}</ModalHeader>
-                        <ModalBody>
-                            {
-                                ['0', '1', '2'].map((item, i) => {
-                                    return (
-                                        <CFormGroup variant="checkbox" className="checkbox">
-                                            <CInputCheckbox
-                                                id={item}
-                                                defaultChecked={arrRoleSubAdmin.includes(item) == true ? true : false}
-                                                name={item}
-                                                value={item}
-                                                onChange={(e) => {
-                                                    if (e.target.checked == true) {
-                                                        arrRoleSubAdmin.push(item);
-                                                        this.setState({ arrRoleSubAdmin: arrRoleSubAdmin })
-                                                    } else {
-                                                        const index = (indx) => indx == item;
-                                                        var currentIndex = arrRoleSubAdmin.findIndex(index)
-                                                        arrRoleSubAdmin.splice(currentIndex, 1);
-                                                        this.setState({ arrRoleSubAdmin: arrRoleSubAdmin })
-                                                    }
-                                                }}
-                                            />
-                                            <CLabel variant="checkbox" className="form-check-label" htmlFor={item}>{this.getLableRole(item)}</CLabel>
-                                        </CFormGroup>
-                                    );
+                                          Cập nhật
+                                        </CButton>{" "}
+                                        <CButton
+                                          outline
+                                          color="danger"
+                                          size="sm"
+                                          onClick={() => {
+                                            this.openDelete(item);
+                                          }}
+                                        >
+                                          Xoá
+                                        </CButton>{" "}
+                                        {/* <CButton outline color="success" size="sm" onClick={(e) => { this.onChangeRole(item) }}>Quyền</CButton> */}
+                                      </td>
+                                    </tr>
+                                  );
                                 })
-                            }
-                        </ModalBody>
-                        <ModalFooter>
-                            <CButton color="primary" onClick={e => { this.onSaveRole() }}>Lưu</CButton>{' '}
-                            <CButton color="secondary" onClick={e => this.setState({ modalRole: !this.state.modalRole })}>Đóng</CButton>
-                        </ModalFooter>
-                    </Modal>
+                              : ""}
+                          </tbody>
+                        </table>
+                      </CardBody>
+                    </Card>
+                    <div style={{ float: "right" }}>
+                      <Pagination
+                        count={arrPagination.length}
+                        color="primary"
+                        onChange={(e, v) => {
+                          this.setState({
+                            data: arrPagination[v - 1],
+                            indexPage: v - 1,
+                          });
+                        }}
+                      />
+                    </div>
+                  </Col>
+                </Row>
 
-                    <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-                        <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
-                        <ModalBody>
-                            <label htmlFor="tag">{`Bạn có chắc chắn xóa?`}</label>
-                        </ModalBody>
-                        <ModalFooter>
-                            <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-                            <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
-                        </ModalFooter>
-                    </Modal>
-                </div >
+                <Modal
+                  isOpen={this.state.modalCom}
+                  className={this.props.className}
+                >
+                  <ModalHeader>
+                    {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+                  </ModalHeader>
+                  <ModalBody>
+                    <div className="text-center error_msg">
+                      {this.state.errorMessage !== ""
+                        ? `${this.state.errorMessage} !!!`
+                        : null}
+                    </div>
+
+                    <TextFieldGroup
+                      field="Title"
+                      label="Tiêu đề"
+                      value={this.state.Title}
+                      placeholder={"Tiêu đề"}
+                      // error={errors.title}
+                      onChange={(e) => this.onChange("Title", e.target.value)}
+                      // rows="5"
+                    />
+
+                    <CLabel>Nhóm trưởng</CLabel>
+                    <Select
+                      defaultValue={this.state.LeadIds}
+                      onChange={this.handleChangeLeadIds}
+                      placeholder="Chọn nhóm trưởng"
+                      style={{ width: 200, marginBottom: 15 }}
+                    >
+                      {this.state.saleList &&
+                        this.state.saleList.map((opt) => (
+                          <Option value={opt.Name} key={opt._id}>
+                            {opt.Name}
+                          </Option>
+                        ))}
+                    </Select>
+
+                    <TextFieldGroup
+                      field="Description"
+                      label="Mô tả"
+                      value={this.state.Description}
+                      placeholder={"Mô tả"}
+                      onChange={(e) =>
+                        this.onChange("Description", e.target.value)
+                      }
+                      // rows="5"
+                    />
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <CButton
+                      color="primary"
+                      onClick={(e) => {
+                        this.state.action === "new"
+                          ? this.addUsers()
+                          : this.updateUsers();
+                      }}
+                      disabled={this.state.isLoading}
+                    >
+                      Lưu
+                    </CButton>{" "}
+                    <CButton
+                      color="secondary"
+                      onClick={(e) => this.toggleModal("new")}
+                    >
+                      Đóng
+                    </CButton>
+                  </ModalFooter>
+                </Modal>
+
+                <Modal
+                  isOpen={this.state.modalRole}
+                  toggle={(e) =>
+                    this.setState({ modalRole: !this.state.modalRole })
+                  }
+                  className={this.props.className}
+                >
+                  <ModalHeader
+                    toggle={(e) =>
+                      this.setState({ modalRole: !this.state.modalRole })
+                    }
+                  >{`Phân quyền`}</ModalHeader>
+                  <ModalBody>
+                    {["0", "1", "2"].map((item, i) => {
+                      return (
+                        <CFormGroup variant="checkbox" className="checkbox">
+                          <CInputCheckbox
+                            id={item}
+                            defaultChecked={
+                              arrRoleSubAdmin.includes(item) == true
+                                ? true
+                                : false
+                            }
+                            name={item}
+                            value={item}
+                            onChange={(e) => {
+                              if (e.target.checked == true) {
+                                arrRoleSubAdmin.push(item);
+                                this.setState({
+                                  arrRoleSubAdmin: arrRoleSubAdmin,
+                                });
+                              } else {
+                                const index = (indx) => indx == item;
+                                var currentIndex =
+                                  arrRoleSubAdmin.findIndex(index);
+                                arrRoleSubAdmin.splice(currentIndex, 1);
+                                this.setState({
+                                  arrRoleSubAdmin: arrRoleSubAdmin,
+                                });
+                              }
+                            }}
+                          />
+                          <CLabel
+                            variant="checkbox"
+                            className="form-check-label"
+                            htmlFor={item}
+                          >
+                            {this.getLableRole(item)}
+                          </CLabel>
+                        </CFormGroup>
+                      );
+                    })}
+                  </ModalBody>
+                  <ModalFooter>
+                    <CButton
+                      color="primary"
+                      onClick={(e) => {
+                        this.onSaveRole();
+                      }}
+                    >
+                      Lưu
+                    </CButton>{" "}
+                    <CButton
+                      color="secondary"
+                      onClick={(e) =>
+                        this.setState({ modalRole: !this.state.modalRole })
+                      }
+                    >
+                      Đóng
+                    </CButton>
+                  </ModalFooter>
+                </Modal>
+
+                <Modal
+                  isOpen={this.state.modalDelete}
+                  toggle={(e) =>
+                    this.setState({
+                      modalDelete: !this.state.modalDelete,
+                      delete: null,
+                    })
+                  }
+                  className={this.props.className}
+                >
+                  <ModalHeader
+                    toggle={(e) =>
+                      this.setState({
+                        modalDelete: !this.state.modalDelete,
+                        delete: null,
+                      })
+                    }
+                  >{`Xoá`}</ModalHeader>
+                  <ModalBody>
+                    <label htmlFor="tag">{`Bạn có chắc chắn xóa?`}</label>
+                  </ModalBody>
+                  <ModalFooter>
+                    <CButton
+                      color="primary"
+                      onClick={(e) => this.delete()}
+                      disabled={this.state.isLoading}
+                    >
+                      Xoá
+                    </CButton>{" "}
+                    <CButton
+                      color="secondary"
+                      onClick={(e) =>
+                        this.setState({
+                          modalDelete: !this.state.modalDelete,
+                          delete: null,
+                        })
+                      }
+                    >
+                      Đóng
+                    </CButton>
+                  </ModalFooter>
+                </Modal>
+              </div>
             );
         }
 

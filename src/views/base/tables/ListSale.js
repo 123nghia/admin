@@ -753,54 +753,73 @@ class Users extends Component {
 
     if (!this.state.isLoading) {
       return (
-
         <div>
-
           <Card>
             <CardHeader>
-
               Danh sách Sales ( Page: {this.state.indexPage + 1} )
-
               <div style={styles.tags}>
                 <CRow>
                   <CCol sm="6" lg="12">
                     <CRow>
                       <CCol sm="12" lg="4">
                         <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "key");
-                          }} name="key" value={key} placeholder="Tên" />
+                          <Input
+                            style={styles.searchInput}
+                            onChange={(e) => {
+                              this.actionSearch(e, "key");
+                            }}
+                            name="key"
+                            value={key}
+                            placeholder="Tên"
+                          />
                         </div>
                       </CCol>
                       <CCol sm="12" lg="4">
-                        <CSelect style={styles.flexOption} onChange={e => {
-
-                          this.actionSearch(e, "keyStatus");
-
-                        }} custom>
-                          {
-                            ['Actived', 'Deactived', 'Locked'].map((item, i) => {
-                              return (
-                                <option value={item}>{item}</option>
-                              );
-                            })
-                          }
+                        <CSelect
+                          style={styles.flexOption}
+                          onChange={(e) => {
+                            this.actionSearch(e, "keyStatus");
+                          }}
+                          custom
+                        >
+                          {["Actived", "Deactived", "Locked"].map((item, i) => {
+                            return <option value={item}>{item}</option>;
+                          })}
                         </CSelect>
                       </CCol>
                       <CCol sm="12" lg="4">
-                        <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                        <Button
+                          color="primary"
+                          style={{ width: "100%", marginTop: 5 }}
+                          size="sm"
+                          onClick={(e) => {
+                            this.resetSearch();
+                          }}
+                        >
+                          Làm mới tìm kiếm
+                        </Button>
                       </CCol>
                     </CRow>
                   </CCol>
                   <CCol sm="6" lg="12">
-                    <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
+                    <Button
+                      outline
+                      color="primary"
+                      style={styles.floatRight}
+                      size="sm"
+                      onClick={(e) => this.toggleModal("new")}
+                    >
+                      Thêm mới
+                    </Button>
                   </CCol>
                 </CRow>
               </div>
             </CardHeader>
-            <CardBody>
-
-              <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+            <CardBody className="table__overflow">
+              <table
+                ble
+                className="table table-hover table-outline mb-0 d-none d-sm-table"
+              >
                 <thead className="thead-light">
                   <tr>
                     <th className="text-center">STT.</th>
@@ -815,10 +834,11 @@ class Users extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <td colSpan="10" hidden={hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                  {
-                    data != undefined ?
-                      data.map((item, i) => {
+                  <td colSpan="10" hidden={hidden} className="text-center">
+                    Không tìm thấy dữ liệu
+                  </td>
+                  {data != undefined
+                    ? data.map((item, i) => {
                         return (
                           <tr key={i}>
                             <td className="text-center">{i + 1}</td>
@@ -830,61 +850,95 @@ class Users extends Component {
                             <td className="text-center">
                               <CBadge color={this.getBadge(item.Status)}>
                                 {item.Status}
-                              </CBadge></td>
-                            <td className="text-center">
-                              {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                              </CBadge>
                             </td>
                             <td className="text-center">
-                              <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Cập nhật</Button>{' '}
-                              <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>{' '}
-
+                              {new Date(item.Create_Date).toLocaleDateString() +
+                                " " +
+                                new Date(item.Create_Date).toLocaleTimeString()}
+                            </td>
+                            <td className="text-center">
+                              <Button
+                                style={styles.mgl5}
+                                outline
+                                color="primary"
+                                size="sm"
+                                onClick={async (e) =>
+                                  await this.openUpdate(item)
+                                }
+                              >
+                                Cập nhật
+                              </Button>{" "}
+                              <Button
+                                outline
+                                color="danger"
+                                size="sm"
+                                onClick={(e) => {
+                                  this.openDelete(item);
+                                }}
+                              >
+                                Xoá
+                              </Button>{" "}
                             </td>
                           </tr>
                         );
-                      }) : ""
-                  }
+                      })
+                    : ""}
                 </tbody>
               </table>
-
             </CardBody>
           </Card>
-          {
-            arrPagination.length == 1 ? "" :
-              <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                <tr style={styles.row}>
-                  {
-                    arrPagination.map((item, i) => {
-                      return (
-                        <td>
-                          <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                        </td>
-                      );
-                    })
-                  }
-                </tr>
-              </div>
-          }
+          {arrPagination.length == 1 ? (
+            ""
+          ) : (
+            <div
+              style={{ float: "right", marginRight: "10px", padding: "10px" }}
+            >
+              <tr style={styles.row}>
+                {arrPagination.map((item, i) => {
+                  return (
+                    <td>
+                      <Button
+                        style={styles.pagination}
+                        color={i == indexPage ? "primary" : "danger"}
+                        onClick={(e) => {
+                          this.setState({
+                            data: arrPagination[i],
+                            indexPage: i,
+                          });
+                        }}
+                      >
+                        {i + 1}
+                      </Button>
+                    </td>
+                  );
+                })}
+              </tr>
+            </div>
+          )}
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="Email"
                 label="Email"
                 value={this.state.Email}
                 placeholder={"Email"}
-                type={'email'}
-                onChange={e => this.onChange("Email", e.target.value)}
-              // rows="5"
+                type={"email"}
+                onChange={(e) => this.onChange("Email", e.target.value)}
+                // rows="5"
               />
               <TextFieldGroup
                 field="Address"
                 label="Địa chỉ"
                 value={this.state.Address}
                 placeholder={"Địa chỉ"}
-                type={'email'}
-                onChange={e => this.onChange("Address", e.target.value)}
-              // rows="5"
+                type={"email"}
+                onChange={(e) => this.onChange("Address", e.target.value)}
+                // rows="5"
               />
               <TextFieldGroup
                 field="Name"
@@ -892,8 +946,8 @@ class Users extends Component {
                 value={this.state.Name}
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Name", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -902,9 +956,9 @@ class Users extends Component {
                 value={this.state.Password}
                 type={"password"}
                 placeholder={"Mật khẩu"}
-                readOnly={action == 'new' ? false : true}
-                onChange={e => this.onChange("Password", e.target.value)}
-              // rows="5"
+                readOnly={action == "new" ? false : true}
+                onChange={(e) => this.onChange("Password", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -913,8 +967,8 @@ class Users extends Component {
                 placeholder={"Code"}
                 value={this.state.Code}
                 // error={errors.title}
-                onChange={e => this.onChange("Code", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Code", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -923,8 +977,8 @@ class Users extends Component {
                 placeholder={"Tên đăng nhập"}
                 value={this.state.UserName}
                 // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("UserName", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -933,16 +987,26 @@ class Users extends Component {
                 value={this.state.Phone}
                 placeholder={"Số điện thoại"}
                 // error={errors.title}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Phone", e.target.value)}
+                // rows="5"
               />
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Giới tính:    </label>
-                <select style={styles.flexOption} name="Gender" onChange={e => this.onChange("Gender", e.target.value)}>
-                  <option value={this.state.Gender}>{this.state.Gender == '' ? ` - - - - - - - - - - ` : this.state.Gender}</option>
-                  <option value={'Nam'}>Nam</option>
-                  <option value={'Nữ'}>Nữ</option>
+                <label style={styles.flexLabel} htmlFor="tag">
+                  Giới tính:{" "}
+                </label>
+                <select
+                  style={styles.flexOption}
+                  name="Gender"
+                  onChange={(e) => this.onChange("Gender", e.target.value)}
+                >
+                  <option value={this.state.Gender}>
+                    {this.state.Gender == ""
+                      ? ` - - - - - - - - - - `
+                      : this.state.Gender}
+                  </option>
+                  <option value={"Nam"}>Nam</option>
+                  <option value={"Nữ"}>Nữ</option>
                 </select>
               </div>
 
@@ -967,30 +1031,32 @@ class Users extends Component {
               </div> */}
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Phân quyền:    </label>
-                <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
+                <label style={styles.flexLabel} htmlFor="tag">
+                  Phân quyền:{" "}
+                </label>
+                <select
+                  style={styles.flexOption}
+                  name="Role_Id"
+                  onChange={(e) => this.onChange("Role_Id", e.target.value)}
+                >
                   <option value={this.state.Role_Id}>-----</option>
-                  {
-                    this.state.role == 'ADMIN' || this.state.role == 'ADMINSALE' ?
-                      dataRole.map((item, i) => {
+                  {this.state.role == "ADMIN" || this.state.role == "ADMINSALE"
+                    ? dataRole.map((item, i) => {
                         if (item.Name == currentRole) {
                           return (
-                            <option selected value={item._id}>{item.Name}</option>
+                            <option selected value={item._id}>
+                              {item.Name}
+                            </option>
                           );
-                        }
-                        else {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        }
-                      }) : dataRole.map((item, i) => {
-                        if (item.Name == 'SALES') {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
+                        } else {
+                          return <option value={item._id}>{item.Name}</option>;
                         }
                       })
-                  }
+                    : dataRole.map((item, i) => {
+                        if (item.Name == "SALES") {
+                          return <option value={item._id}>{item.Name}</option>;
+                        }
+                      })}
                 </select>
               </div>
 
@@ -1015,19 +1081,68 @@ class Users extends Component {
               </div> */}
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
+              <Button
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addUser()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </Button>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Do you want to delete user "${
+                this.state.delete ? this.state.delete.Email : ""
+              }" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
+              <Button
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </Button>
             </ModalFooter>
           </Modal>
         </div>

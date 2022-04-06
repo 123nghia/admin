@@ -204,21 +204,24 @@ class Order extends Component {
           <CardHeader>
             <i className="fa fa-align-justify">Quản lý đơn hàng</i>
           </CardHeader>
-          <CardBody>
+          <CardBody className="table__overflow">
             <div style={styles.tags}>
               <CRow>
                 <CCol sm="12" lg="12">
                   <div>
-                    <label style={styles.flexLabel} htmlFor="tag">Chọn công ty:    </label>
-                    <select style={styles.flexOption} onChange={e => { this.setState({ Company_Id: e.target.value }); }}>
+                    <label style={styles.flexLabel} htmlFor="tag">
+                      Chọn công ty:{" "}
+                    </label>
+                    <select
+                      style={styles.flexOption}
+                      onChange={(e) => {
+                        this.setState({ Company_Id: e.target.value });
+                      }}
+                    >
                       <option value={this.state.Company_Id}>-----</option>
-                      {
-                        dataCompany.map((item, i) => {
-                          return (
-                            <option value={item._id}>{item.Name}</option>
-                          );
-                        })
-                      }
+                      {dataCompany.map((item, i) => {
+                        return <option value={item._id}>{item.Name}</option>;
+                      })}
                     </select>
                   </div>
                 </CCol>
@@ -226,16 +229,29 @@ class Order extends Component {
                 <CCol sm="12" lg="12">
                   <CRow>
                     <CCol sm="12" lg="6">
-                      <label htmlFor="tag">DANH SÁCH PHẦN CỨNG ĐÃ CHỌN    </label>
+                      <label htmlFor="tag">DANH SÁCH PHẦN CỨNG ĐÃ CHỌN </label>
                     </CCol>
                     <CCol sm="12" lg="6">
-                      <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => { this.toggleModal("new") }}>Chọn phần cứng</Button>
+                      <Button
+                        outline
+                        color="primary"
+                        style={styles.floatRight}
+                        size="sm"
+                        onClick={(e) => {
+                          this.toggleModal("new");
+                        }}
+                      >
+                        Chọn phần cứng
+                      </Button>
                     </CCol>
                   </CRow>
                 </CCol>
 
                 <CCol sm="12" lg="12">
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -245,9 +261,8 @@ class Order extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {
-                        arrHardWard != undefined ?
-                          arrHardWard.map((item, i) => {
+                      {arrHardWard != undefined
+                        ? arrHardWard.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
@@ -257,25 +272,38 @@ class Order extends Component {
                                     {item[0].Status}
                                   </CBadge>
                                 </td>
-                                <td className="text-center">{item[0].Create_Date}</td>
+                                <td className="text-center">
+                                  {item[0].Create_Date}
+                                </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
                 </CCol>
 
                 <CCol sm="12" lg="12">
-                  <label style={{ marginTop: 10 }} htmlFor="tag">Số lượng phần cứng: {this.state.arrHardWard.length}    </label>
+                  <label style={{ marginTop: 10 }} htmlFor="tag">
+                    Số lượng phần cứng: {this.state.arrHardWard.length}{" "}
+                  </label>
                 </CCol>
 
                 <CCol sm="12" lg="12">
                   <CRow>
+                    <CCol sm="12" lg="6"></CCol>
                     <CCol sm="12" lg="6">
-                    </CCol>
-                    <CCol sm="12" lg="6">
-                      <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => { await this.addOrder() }}>Lưu</Button>
+                      <Button
+                        outline
+                        color="primary"
+                        style={styles.floatRight}
+                        size="sm"
+                        onClick={async (e) => {
+                          await this.addOrder();
+                        }}
+                      >
+                        Lưu
+                      </Button>
                     </CCol>
                   </CRow>
                 </CCol>
@@ -284,13 +312,11 @@ class Order extends Component {
           </CardBody>
         </Card>
 
-        <Modal isOpen={this.state.modalCom} >
+        <Modal isOpen={this.state.modalCom}>
           <ModalHeader>Danh sách phần cứng</ModalHeader>
 
           <ModalBody>
-            {
-              this.renderSelect(arrT)
-            }
+            {this.renderSelect(arrT)}
             {/* <div>
               <label style={styles.flexLabel} htmlFor="tag">Chọn phần cứng:    </label>
               <select style={styles.flexOption} onChange={e => { arrT.push(e.target.value); }}>
@@ -305,13 +331,21 @@ class Order extends Component {
             </div> */}
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Lưu</Button>{' '}
-            <Button color="secondary" onClick={e => this.toggleModal("new")}>Close</Button>
+            <Button
+              color="primary"
+              onClick={(e) => {
+                this.setState({ arrHardWard: this.state.arrChooseHard });
+              }}
+            >
+              Lưu
+            </Button>{" "}
+            <Button color="secondary" onClick={(e) => this.toggleModal("new")}>
+              Close
+            </Button>
           </ModalFooter>
         </Modal>
-      </div >
-
-    )
+      </div>
+    );
 
   }
 }

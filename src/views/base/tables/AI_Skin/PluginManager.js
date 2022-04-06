@@ -504,40 +504,68 @@ class PluginManager extends Component {
                         <CRow>
                           <CCol sm="12" lg="4">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
 
                           <CCol sm="12" lg="4">
-                            <CSelect style={styles.flexOption} onChange={e => {
-
-                              this.actionSearch(e, "keyStatus");
-
-                            }} custom>
-                              {
-                                ["0", "1"].map((item, i) => {
-                                  return (
-                                    <option value={item}>{item == 0 ? 'DISABLE' : 'ENABLE'}</option>
-                                  );
-                                })
-                              }
+                            <CSelect
+                              style={styles.flexOption}
+                              onChange={(e) => {
+                                this.actionSearch(e, "keyStatus");
+                              }}
+                              custom
+                            >
+                              {["0", "1"].map((item, i) => {
+                                return (
+                                  <option value={item}>
+                                    {item == 0 ? "DISABLE" : "ENABLE"}
+                                  </option>
+                                );
+                              })}
                             </CSelect>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+                        <CButton
+                          outline
+                          color="primary"
+                          style={styles.floatRight}
+                          size="sm"
+                          onClick={(e) => this.toggleModal("new")}
+                        >
+                          Thêm mới
+                        </CButton>
                       </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
-                <CardBody>
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -547,31 +575,49 @@ class PluginManager extends Component {
                         <th className="text-center">Tính năng</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
-
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Name} </td>
                                 <td className="text-center">{item.Value}</td>
-                                <td className="text-center">{item.Unit == '0' ? 'Ngày' : item.Unit == '1' ? "Tháng" : "Năm"}</td>
+                                <td className="text-center">
+                                  {item.Unit == "0"
+                                    ? "Ngày"
+                                    : item.Unit == "1"
+                                    ? "Tháng"
+                                    : "Năm"}
+                                </td>
                                 <td className="text-center">
                                   {item.Array_Feature.map((item, i) => {
                                     if (i < 2) {
                                       return (
-                                        <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
-                                      )
+                                        <div>
+                                          <a
+                                            href={item.Value}
+                                            target="_blank"
+                                            key={i}
+                                          >
+                                            {item.Value}
+                                          </a>
+                                        </div>
+                                      );
                                     }
                                   })}
-                                  {
-                                    (item.Array_Feature.length - 2) <= 0 ? "" : "..."
-                                  }
+                                  {item.Array_Feature.length - 2 <= 0
+                                    ? ""
+                                    : "..."}
                                 </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -579,26 +625,44 @@ class PluginManager extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
+                                  <CButton
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={(e) => this.openUpdate(item)}
+                                  >
                                     <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                  </CButton>{" "}
+                                  <CButton
+                                    outline
+                                    color="danger"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      this.openDelete(item);
+                                    }}
+                                  >
                                     <CIcon name="cilTrash" />
                                   </CButton>
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
-
                 </CardBody>
               </Card>
-              <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      data: arrPagination[v - 1],
+                      indexPage: v - 1,
+                    });
+                  }}
+                />
               </div>
               {/* {
                 arrPagination.length == 1 ? "" :
@@ -616,12 +680,13 @@ class PluginManager extends Component {
                     </tr>
                   </div>
               } */}
-
             </Col>
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="Name"
@@ -629,8 +694,8 @@ class PluginManager extends Component {
                 value={this.state.Name}
                 placeholder={"Nhập tên gói"}
                 // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Name", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -639,8 +704,8 @@ class PluginManager extends Component {
                 value={this.state.Value}
                 placeholder={"Nhập giá trị"}
                 // error={errors.title}
-                onChange={e => this.onChange("Value", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Value", e.target.value)}
+                // rows="5"
               />
 
               {/* <TextFieldGroup
@@ -653,69 +718,138 @@ class PluginManager extends Component {
               // rows="5"
               /> */}
               <div style={{ marginTop: 5 }}>
-                <label style={styles.flexLabel} htmlFor="tag">Đơn vị    </label>
-                <CSelect style={styles.flexOption} onChange={e => this.onChange("Unit", e.target.value)} custom>
-                  <option value={this.state.Unit}>{this.state.Unit == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                  {
-                    ['0', '1', '2'].map((item, i) => {
-                      if (item == this.state.Unit) {
-                        return (
-                          <option selected value={item}>{item == '0' ? "Ngày" : item == '1' ? "Tháng" : "Năm"}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item}>{item == '0' ? "Ngày" : item == '1' ? "Tháng" : "Năm"}</option>
-                        );
-                      }
-                    })
-                  }
+                <label style={styles.flexLabel} htmlFor="tag">
+                  Đơn vị{" "}
+                </label>
+                <CSelect
+                  style={styles.flexOption}
+                  onChange={(e) => this.onChange("Unit", e.target.value)}
+                  custom
+                >
+                  <option value={this.state.Unit}>
+                    {this.state.Unit == ""
+                      ? ` - - - - - - - - - - `
+                      : this.state.Status}
+                  </option>
+                  {["0", "1", "2"].map((item, i) => {
+                    if (item == this.state.Unit) {
+                      return (
+                        <option selected value={item}>
+                          {item == "0" ? "Ngày" : item == "1" ? "Tháng" : "Năm"}
+                        </option>
+                      );
+                    } else {
+                      return (
+                        <option value={item}>
+                          {item == "0" ? "Ngày" : item == "1" ? "Tháng" : "Năm"}
+                        </option>
+                      );
+                    }
+                  })}
                 </CSelect>
-                {
-                  action == 'new' ? "" : <div>
-                    <label style={styles.flexLabel} htmlFor="tag">Trạng thái    </label>
-                    <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                      <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                      {
-                        ["0", "1"].map((item, i) => {
-                          if (item == this.state.Status) {
-                            return (
-                              <option selected value={item}>{item == 0 ? 'DISABLE' : 'ENABLE'}</option>
-                            );
-                          } else {
-                            return (
-                              <option value={item}>{item == 0 ? 'DISABLE' : 'ENABLE'}</option>
-                            );
-                          }
-
-                        })
-                      }
+                {action == "new" ? (
+                  ""
+                ) : (
+                  <div>
+                    <label style={styles.flexLabel} htmlFor="tag">
+                      Trạng thái{" "}
+                    </label>
+                    <select
+                      style={styles.flexOption}
+                      name="Status"
+                      onChange={(e) => this.onChange("Status", e.target.value)}
+                    >
+                      <option value={this.state.Status}>
+                        {this.state.Status == ""
+                          ? ` - - - - - - - - - - `
+                          : this.state.Status}
+                      </option>
+                      {["0", "1"].map((item, i) => {
+                        if (item == this.state.Status) {
+                          return (
+                            <option selected value={item}>
+                              {item == 0 ? "DISABLE" : "ENABLE"}
+                            </option>
+                          );
+                        } else {
+                          return (
+                            <option value={item}>
+                              {item == 0 ? "DISABLE" : "ENABLE"}
+                            </option>
+                          );
+                        }
+                      })}
                     </select>
                   </div>
-
-                }
+                )}
               </div>
-              {
-                this.renderSelect()
-              }
+              {this.renderSelect()}
             </ModalBody>
 
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addCompany()
+                    : this.updateCompany();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
-        </div >
+        </div>
       );
     }
     return (

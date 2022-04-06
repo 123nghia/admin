@@ -304,143 +304,283 @@ class PackageSale extends Component {
         const { data, key, action, End_Date, dataCompany, currentCompany, arrPagination, indexPage } = this.state;
         if (!this.state.isLoading) {
             return (
-                <div className="animated fadeIn">
-                    <Row>
-                        <Col>
-                            <p style={styles.success}>{this.state.updated}</p>
-                            <p style={styles.danger}>{this.state.deleted}</p>
-                            <Card>
-                                <CardHeader>
-                                    <i className="fa fa-align-justify"> PAKAGE SALE (Total: {this.state.data != undefined || this.state.data != null ?
-                                        this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})</i>
-                                    <div style={styles.tags}>
-                                        <div>
-                                            <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
-                                            <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Add</Button>
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardBody>
-                                    <Table responsive>
-                                        <thead>
-                                            <tr>
-                                                <th style={styles.wa10}>No.</th>
-                                                <th style={styles.wh16}>Name</th>
-                                                <th style={styles.wh16}>Company ID</th>
-                                                <th style={styles.wh16}>End Date</th>
-                                                <th style={styles.wh16}>Status</th>
-                                                <th style={styles.w5}>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                data != undefined ?
-                                                data.map((item, i) => {
-                                                    return (
-                                                        <tr key={i} style={styles.row}>
-                                                            <td style={styles.wa10}>{i + 1}</td>
-                                                            <td style={styles.wh16}>{item.Name}</td>
-                                                            <td style={styles.wh16}>{item.Company_Id}</td>
-                                                            <td style={styles.wh16}>
-                                                                {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
-                                                            </td>
-                                                            <td style={styles.wh16}>{item.Status}</td>
-                                                            <td style={styles.w5}>
-                                                                <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '}
-                                                                <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                }) : ""
-                                            }
-                                        </tbody>
-                                    </Table>
-                                </CardBody>
-                            </Card>
-                            {
-                                arrPagination.length == 1 ? "" :
-                                    <div style={{ float: 'right', marginRight: '10px', padding: '10px'  }}>
-                                        <tr style={styles.row}>
-                                            {
-                                                arrPagination.map((item, i) => {
-                                                    return (
-                                                        <td>
-                                                            <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                                                        </td>
-                                                    );
-                                                })
-                                            }
-                                        </tr>
-                                    </div>
-                            }
-                        </Col>
-                    </Row>
-
-                    <Modal isOpen={this.state.modalCom} className={this.props.className}>
-                        <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
-                        <ModalBody>
-                            <TextFieldGroup
-                                field="Name"
-                                label="Name"
-                                value={this.state.Name}
-                                placeholder={"Name Package"}
-                                // error={errors.title}
-                                onChange={e => this.onChange("Name", e.target.value)}
-                            // rows="5"
+              <div className="animated fadeIn">
+                <Row>
+                  <Col>
+                    <p style={styles.success}>{this.state.updated}</p>
+                    <p style={styles.danger}>{this.state.deleted}</p>
+                    <Card>
+                      <CardHeader>
+                        <i className="fa fa-align-justify">
+                          {" "}
+                          PAKAGE SALE (Total:{" "}
+                          {this.state.data != undefined ||
+                          this.state.data != null
+                            ? this.state.data.length
+                            : 0}
+                          , Active: {this.state.totalActive}, Page:{" "}
+                          {this.state.indexPage + 1})
+                        </i>
+                        <div style={styles.tags}>
+                          <div>
+                            <Input
+                              style={styles.searchInput}
+                              onChange={(e) => this.searchKey(e.target.value)}
+                              name="key"
+                              value={key}
+                              placeholder="Search"
                             />
-                            <div style={styles.datePicker}>
-                                <label>End Date:  </label>
-                                <DatePicker selected={new Date(End_Date)} onChange={(date) => this.setState({ End_Date: date })} />
-                            </div>
-                            {
-                                action == 'new' ? "" : <div>
-                                    <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
-                                    <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                                        <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                                        <option value={'Actived'}>Actived</option>
-                                        <option value={'Locked'}>Locked</option>
-                                        <option value={'Deactived'}>Deactived</option>
-                                    </select>
-                                </div>
-                            }
+                            <Button
+                              outline
+                              color="primary"
+                              style={styles.floatRight}
+                              size="sm"
+                              onClick={(e) => this.toggleModal("new")}
+                            >
+                              Add
+                            </Button>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardBody className="table__overflow">
+                        <Table responsive>
+                          <thead>
+                            <tr>
+                              <th style={styles.wa10}>No.</th>
+                              <th style={styles.wh16}>Name</th>
+                              <th style={styles.wh16}>Company ID</th>
+                              <th style={styles.wh16}>End Date</th>
+                              <th style={styles.wh16}>Status</th>
+                              <th style={styles.w5}>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {data != undefined
+                              ? data.map((item, i) => {
+                                  return (
+                                    <tr key={i} style={styles.row}>
+                                      <td style={styles.wa10}>{i + 1}</td>
+                                      <td style={styles.wh16}>{item.Name}</td>
+                                      <td style={styles.wh16}>
+                                        {item.Company_Id}
+                                      </td>
+                                      <td style={styles.wh16}>
+                                        {new Date(
+                                          item.End_Date
+                                        ).toLocaleDateString() +
+                                          " " +
+                                          new Date(
+                                            item.End_Date
+                                          ).toLocaleTimeString()}
+                                      </td>
+                                      <td style={styles.wh16}>{item.Status}</td>
+                                      <td style={styles.w5}>
+                                        <Button
+                                          outline
+                                          color="primary"
+                                          size="sm"
+                                          onClick={(e) => this.openUpdate(item)}
+                                        >
+                                          Cập nhật
+                                        </Button>{" "}
+                                        <Button
+                                          outline
+                                          color="danger"
+                                          size="sm"
+                                          onClick={(e) => {
+                                            this.openDelete(item);
+                                          }}
+                                        >
+                                          Xoá
+                                        </Button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })
+                              : ""}
+                          </tbody>
+                        </Table>
+                      </CardBody>
+                    </Card>
+                    {arrPagination.length == 1 ? (
+                      ""
+                    ) : (
+                      <div
+                        style={{
+                          float: "right",
+                          marginRight: "10px",
+                          padding: "10px",
+                        }}
+                      >
+                        <tr style={styles.row}>
+                          {arrPagination.map((item, i) => {
+                            return (
+                              <td>
+                                <Button
+                                  style={styles.pagination}
+                                  color={i == indexPage ? "primary" : "danger"}
+                                  onClick={(e) => {
+                                    this.setState({
+                                      data: arrPagination[i],
+                                      indexPage: i,
+                                    });
+                                  }}
+                                >
+                                  {i + 1}
+                                </Button>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      </div>
+                    )}
+                  </Col>
+                </Row>
 
-                            <div>
-                                <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
-                                <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
-                                <option value={this.state.Company_Id}>-----</option>
-                                    {
-                                        dataCompany.map((item, i) => {
-                                            if(item.Name == currentCompany){
-                                                return (
-                                                    <option selected value={item._id}>{item.Name}</option>
-                                                );
-                                            } else {
-                                                return (
-                                                    <option value={item._id}>{item.Name}</option>
-                                                );
-                                            }
-                                        })
-                                    }
-                                </select>
-                            </div>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addPackageSale() : this.updatePackageSale() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
-                            <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
-                        </ModalFooter>
-                    </Modal>
+                <Modal
+                  isOpen={this.state.modalCom}
+                  className={this.props.className}
+                >
+                  <ModalHeader>
+                    {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+                  </ModalHeader>
+                  <ModalBody>
+                    <TextFieldGroup
+                      field="Name"
+                      label="Name"
+                      value={this.state.Name}
+                      placeholder={"Name Package"}
+                      // error={errors.title}
+                      onChange={(e) => this.onChange("Name", e.target.value)}
+                      // rows="5"
+                    />
+                    <div style={styles.datePicker}>
+                      <label>End Date: </label>
+                      <DatePicker
+                        selected={new Date(End_Date)}
+                        onChange={(date) => this.setState({ End_Date: date })}
+                      />
+                    </div>
+                    {action == "new" ? (
+                      ""
+                    ) : (
+                      <div>
+                        <label style={styles.flexLabel} htmlFor="tag">
+                          Trạng thái:
+                        </label>
+                        <select
+                          style={styles.flexOption}
+                          name="Status"
+                          onChange={(e) =>
+                            this.onChange("Status", e.target.value)
+                          }
+                        >
+                          <option value={this.state.Status}>
+                            {this.state.Status == ""
+                              ? ` - - - - - - - - - - `
+                              : this.state.Status}
+                          </option>
+                          <option value={"Actived"}>Actived</option>
+                          <option value={"Locked"}>Locked</option>
+                          <option value={"Deactived"}>Deactived</option>
+                        </select>
+                      </div>
+                    )}
 
-                    <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-                        <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
-                        <ModalBody>
-                            <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
-                            <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
-                        </ModalFooter>
-                    </Modal>
-                </div>
+                    <div>
+                      <label style={styles.flexLabel} htmlFor="tag">
+                        Company:{" "}
+                      </label>
+                      <select
+                        style={styles.flexOption}
+                        name="Company_Id"
+                        onChange={(e) =>
+                          this.onChange("Company_Id", e.target.value)
+                        }
+                      >
+                        <option value={this.state.Company_Id}>-----</option>
+                        {dataCompany.map((item, i) => {
+                          if (item.Name == currentCompany) {
+                            return (
+                              <option selected value={item._id}>
+                                {item.Name}
+                              </option>
+                            );
+                          } else {
+                            return (
+                              <option value={item._id}>{item.Name}</option>
+                            );
+                          }
+                        })}
+                      </select>
+                    </div>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="primary"
+                      onClick={(e) => {
+                        this.state.action === "new"
+                          ? this.addPackageSale()
+                          : this.updatePackageSale();
+                      }}
+                      disabled={this.state.isLoading}
+                    >
+                      Lưu
+                    </Button>{" "}
+                    <Button
+                      color="secondary"
+                      onClick={(e) => this.toggleModal("new")}
+                    >
+                      Đóng
+                    </Button>
+                  </ModalFooter>
+                </Modal>
+
+                <Modal
+                  isOpen={this.state.modalDelete}
+                  toggle={(e) =>
+                    this.setState({
+                      modalDelete: !this.state.modalDelete,
+                      delete: null,
+                    })
+                  }
+                  className={this.props.className}
+                >
+                  <ModalHeader
+                    toggle={(e) =>
+                      this.setState({
+                        modalDelete: !this.state.modalDelete,
+                        delete: null,
+                      })
+                    }
+                  >{`Xoá`}</ModalHeader>
+                  <ModalBody>
+                    <label htmlFor="tag">{`Do you want to delete user "${
+                      this.state.delete ? this.state.delete.Email : ""
+                    }" ?`}</label>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="primary"
+                      onClick={(e) => this.delete()}
+                      disabled={this.state.isLoading}
+                    >
+                      Xoá
+                    </Button>{" "}
+                    <Button
+                      color="secondary"
+                      onClick={(e) =>
+                        this.setState({
+                          modalDelete: !this.state.modalDelete,
+                          delete: null,
+                        })
+                      }
+                    >
+                      Đóng
+                    </Button>
+                  </ModalFooter>
+                </Modal>
+              </div>
             );
         }
         return (

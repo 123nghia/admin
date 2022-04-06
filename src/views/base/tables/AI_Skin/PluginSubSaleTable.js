@@ -555,7 +555,7 @@ class User extends Component {
                     </CButton>
                   </div>
                 </CardHeader>
-                <CardBody>
+                <CardBody className="table__overflow">
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table"

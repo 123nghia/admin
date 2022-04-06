@@ -431,39 +431,40 @@ async remove(item){
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-         <Modal isOpen={this.state.modalVoucher} className={this.props.className}>
+          <Modal
+            isOpen={this.state.modalVoucher}
+            className={this.props.className}
+          >
             <ModalHeader>
               {this.state.actionVoucher == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-            <TextFieldGroup
+              <TextFieldGroup
                 field="codeVoucher"
                 label="Mã voucher"
                 value={this.state.codeVoucher}
-                
                 // error={errors.title}
-                onChange={e => this.setState({codeVoucher : e.target.value})}
-              // rows="5"
+                onChange={(e) => this.setState({ codeVoucher: e.target.value })}
+                // rows="5"
               />
- <TextFieldGroup
+              <TextFieldGroup
                 field="relCode"
                 label="Mã chiến dịch"
                 value={this.state.relCode}
-                
                 // error={errors.title}
-                onChange={e => this.setState({relCode : e.target.value})}
-              // rows="5"
+                onChange={(e) => this.setState({ relCode: e.target.value })}
+                // rows="5"
               />
-            <label className="control-label">Mô tả:</label>
-            <CTextarea
-              name="description"
-              rows="4"
-              value={this.state.description}
-              onChange={(e) => {
-                this.setState({ description: e.target.value });
-              }}
-            />
-            <div style={{ width: "100%" }} className="mt-3">
+              <label className="control-label">Mô tả:</label>
+              <CTextarea
+                name="description"
+                rows="4"
+                value={this.state.description}
+                onChange={(e) => {
+                  this.setState({ description: e.target.value });
+                }}
+              />
+              <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
@@ -529,51 +530,69 @@ async remove(item){
             <Col>
               <Card>
                 <CardHeader>
-                
-                  <i className="fa fa-align-justify title_header">Danh sách Voucher</i>
-                 
-                  
-                  <div class="flex mt-3"> 
-                            
-                            <Input style={styles.searchInput} onChange={(e) => {
-                              this.setState({ key : e.target.value });
-                            }} name="key" value={key} placeholder="Từ khóa" />
-                         
-                    
-                          <CButton color="primary" size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm</CButton>
-                          </div>
+                  <i className="fa fa-align-justify title_header">
+                    Danh sách Voucher
+                  </i>
+
+                  <div class="flex mt-3">
+                    <Input
+                      style={styles.searchInput}
+                      onChange={(e) => {
+                        this.setState({ key: e.target.value });
+                      }}
+                      name="key"
+                      value={key}
+                      placeholder="Từ khóa"
+                    />
+
+                    <CButton
+                      color="primary"
+                      size="sm"
+                      onClick={(e) => {
+                        this.onSearch();
+                      }}
+                    >
+                      Tìm kiếm
+                    </CButton>
+                  </div>
                 </CardHeader>
-                <CardBody>
-                {/* <div class="text-center">
+                <CardBody className="table__overflow">
+                  {/* <div class="text-center">
                   <CButton color="primary" style={{ marginBottom: "10px" }} size="md" onClick={()=>this.openVoucher()}>Thêm mới</CButton>
                   </div> */}
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên voucher</th>
-                     
+
                         <th className="text-center">Mã voucher</th>
                         <th className="text-center">Mã chiến dịch</th>
                         <th className="text-center">Nội dung</th>
                         <th className="text-center">trạng thái</th>
-                   
-                        <th className="text-center"></th>
 
-                 
+                        <th className="text-center"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">{item.code}</td>
-                                <td className="text-center">{item.relCode}</td>     
+                                <td className="text-center">{item.relCode}</td>
                                 <td className="text-center">{item.content}</td>
                                 <td className="text-center">
                                   <Tag
@@ -594,40 +613,46 @@ async remove(item){
                                   </Tag>
                                 </td>
                                 <td className="text-center">
-                                <CButton
-                                      shape="rounded-pill"
-                                      variant="outline"
-                                      color="info"
-                                      style={styles.mgl5}
-                                      size="md"
-                                      className="flex-a-center "
-                                      onClick={() =>
-                                        this.renderModalInfo(item)
-                                      }
-                                    >
-                                      <BsSearch className="mr-1" />
-                                      Xem chi tiết
-                                    </CButton>
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="outline"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    size="md"
+                                    className="flex-a-center "
+                                    onClick={() => this.renderModalInfo(item)}
+                                  >
+                                    <BsSearch className="mr-1" />
+                                    Xem chi tiết
+                                  </CButton>
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
-                  <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
-              </div>
+                  <div style={{ float: "right" }}>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-             
             </Col>
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="username"
@@ -635,8 +660,8 @@ async remove(item){
                 value={this.state.username}
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
-                onChange={e => this.onChange("username", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("username", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -646,8 +671,8 @@ async remove(item){
                 placeholder={"Email"}
                 type={"email"}
                 // error={errors.title}
-                onChange={e => this.onChange("email", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("email", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -656,10 +681,10 @@ async remove(item){
                 value={this.state.phone}
                 placeholder={"Số điện thoại"}
                 // error={errors.title}
-                onChange={e => this.onChange("phone", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("phone", e.target.value)}
+                // rows="5"
               />
-<div style={{ width: "100%" }} className="mt-3">
+              <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Cấp độ:</CLabel>
                 {arrLevel !== undefined ? (
                   <CSelect
@@ -675,35 +700,96 @@ async remove(item){
                       if (item.item === this.state.levelNormal) {
                         return (
                           <option selected key={i} value={item.item}>
-                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Chưa hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
+                            {item.item === "0"
+                              ? "Lên lịch"
+                              : item.item === "1"
+                              ? "Chưa hẹn"
+                              : item.item === "2"
+                              ? "Đã gặp"
+                              : "Hoàn tất"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                          {item.item === "0" ? "Lên lịch" : (item.item === "1") ? "Chưa hẹn" : (item.item === "2") ? "Đã gặp" : "Hoàn tất"}
+                            {item.item === "0"
+                              ? "Lên lịch"
+                              : item.item === "1"
+                              ? "Chưa hẹn"
+                              : item.item === "2"
+                              ? "Đã gặp"
+                              : "Hoàn tất"}
                           </option>
                         );
                       }
                     })}
                   </CSelect>
                 ) : null}
-              </div>           
+              </div>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addRoles()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({ modalCom: !this.state.modalCom })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

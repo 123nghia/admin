@@ -446,32 +446,59 @@ class SuggestItem extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách sản phẩm da mặt</i>
+                  <i className="fa fa-align-justify">
+                    Danh sách sản phẩm da mặt
+                  </i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
                           <CCol sm="12" lg="6">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
                           <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+                        <CButton
+                          outline
+                          color="primary"
+                          style={styles.floatRight}
+                          size="sm"
+                          onClick={(e) => this.toggleModal("new")}
+                        >
+                          Thêm mới
+                        </CButton>
                       </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
-                <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -488,16 +515,29 @@ class SuggestItem extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  <img src={item.image || this.state.BASE_URL + "/images/calendar.png"} width={"60px"} height={"60px"} />
+                                  <img
+                                    src={
+                                      item.image ||
+                                      this.state.BASE_URL +
+                                        "/images/calendar.png"
+                                    }
+                                    width={"60px"}
+                                    height={"60px"}
+                                  />
                                   {/* <a href={item.image} target="_blank">
                                     {item.image ? "View Image" : ""}
                                   </a> */}
@@ -519,25 +559,47 @@ class SuggestItem extends Component {
                                   {item.type_sdk_id.Name}
                                 </td>
                                 <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                  <CButton
+                                    style={styles.mgl5}
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={async (e) =>
+                                      await this.openUpdate(item)
+                                    }
+                                  >
                                     <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                  </CButton>{" "}
+                                  <CButton
+                                    outline
+                                    color="danger"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      this.openDelete(item);
+                                    }}
+                                  >
                                     <CIcon name="cilTrash" />
                                   </CButton>
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
                 </CardBody>
               </Card>
-              <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      data: arrPagination[v - 1],
+                      indexPage: v - 1,
+                    });
+                  }}
+                />
               </div>
               {/* {
                 arrPagination.length == 1 ? "" :
@@ -559,7 +621,9 @@ class SuggestItem extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="name"
@@ -567,8 +631,8 @@ class SuggestItem extends Component {
                 value={this.state.name}
                 placeholder={"Tên sản phẩm"}
                 // error={errors.title}
-                onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("name", e.target.value)}
+                // rows="5"
               />
 
               {/* <TextFieldGroup
@@ -586,14 +650,24 @@ class SuggestItem extends Component {
                 label="Ảnh thương hiệu"
                 type={"file"}
                 // error={errors.title}
-                onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null }}
-              // rows="5"
+                onChange={(e) => {
+                  this.onChangeImage(e);
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                }}
+                // rows="5"
               />
-              {
-                this.state.image == "" ? "" :
-                  <img width="250" height="300" src={this.state.image} style={{ marginBottom: 20 }} />
-              }
+              {this.state.image == "" ? (
+                ""
+              ) : (
+                <img
+                  width="250"
+                  height="300"
+                  src={this.state.image}
+                  style={{ marginBottom: 20 }}
+                />
+              )}
 
               <TextFieldGroup
                 field="title"
@@ -601,8 +675,8 @@ class SuggestItem extends Component {
                 value={this.state.title}
                 placeholder={"Tiêu đề"}
                 // error={errors.title}
-                onChange={e => this.onChange("title", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("title", e.target.value)}
+                // rows="5"
               />
 
               <label className="control-label">Mô tả</label>
@@ -610,7 +684,9 @@ class SuggestItem extends Component {
                 name="description"
                 rows="7"
                 value={this.state.description}
-                onChange={(e) => { this.setState({ description: e.target.value }) }}
+                onChange={(e) => {
+                  this.setState({ description: e.target.value });
+                }}
                 placeholder="Mô tả"
               />
 
@@ -620,45 +696,65 @@ class SuggestItem extends Component {
                 value={this.state.linkdetail}
                 placeholder={"Chi tiết"}
                 // error={errors.title}
-                onChange={e => this.onChange("linkdetail", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("linkdetail", e.target.value)}
+                // rows="5"
               />
 
               <CLabel>Loại SDK:</CLabel>
               <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.setState({ type_sdk_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    arrOptionSdkType.map((item, i) => {
-                      if (item._id == this.state.type_sdk_id) {
-                        return (
-                          <option selected key={i} value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
+                <CSelect
+                  onChange={async (e) => {
+                    this.setState({ type_sdk_id: e.target.value });
+                  }}
+                  custom
+                  size="sm"
+                  name="selectSm"
+                  id="SelectLm"
+                >
+                  {arrOptionSdkType.map((item, i) => {
+                    if (item._id == this.state.type_sdk_id) {
+                      return (
+                        <option selected key={i} value={item._id}>
+                          {item.Name}
+                        </option>
+                      );
+                    } else {
+                      return (
+                        <option key={i} value={item._id}>
+                          {item.Name}
+                        </option>
+                      );
+                    }
+                  })}
                 </CSelect>
               </div>
 
               <CLabel>Loại sản phẩm:</CLabel>
               <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.setState({ type_product_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    arrOptionProductType.map((item, i) => {
-                      if (item._id == this.state.type_product_id) {
-                        return (
-                          <option selected key={i} value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
+                <CSelect
+                  onChange={async (e) => {
+                    this.setState({ type_product_id: e.target.value });
+                  }}
+                  custom
+                  size="sm"
+                  name="selectSm"
+                  id="SelectLm"
+                >
+                  {arrOptionProductType.map((item, i) => {
+                    if (item._id == this.state.type_product_id) {
+                      return (
+                        <option selected key={i} value={item._id}>
+                          {item.Name}
+                        </option>
+                      );
+                    } else {
+                      return (
+                        <option key={i} value={item._id}>
+                          {item.Name}
+                        </option>
+                      );
+                    }
+                  })}
                 </CSelect>
               </div>
 
@@ -686,19 +782,66 @@ class SuggestItem extends Component {
               </div> */}
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addRoles()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

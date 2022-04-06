@@ -457,260 +457,411 @@ render() {
   if (!this.state.isLoading) {
     return (
       <div className="animated fadeIn">
+        <div
+          className={
+            toggleHistory ? "block fullScreenIframe" : "none fullScreenIframe"
+          }
+          style={{ zIndex: "1200" }}
+        >
+          <IframeModal
+            toggleView={toggleHistory}
+            link={Constants.BASE_URL_HISTORY_SKIN + idHistory}
+            closeModal={(e) =>
+              this.setState({ toggleHistory: !this.state.toggleHistory })
+            }
+          />
+        </div>
 
+        <Modal
+          style={{ minWidth: "900px" }}
+          isOpen={this.state.modalHistory}
+          className={this.props.className}
+        >
+          <ModalHeader>Lịch sử soi da</ModalHeader>
+          <ModalBody>
+            <table
+              ble
+              className="table table-hover table-outline mb-0 d-none d-sm-table"
+            >
+              <thead className="thead-light">
+                <tr>
+                  <th className="text-center">STT.</th>
+                  <th className="text-center">Tên</th>
+                  <th className="text-center">Số điện thoại</th>
+                  <th className="text-center">Hình ảnh</th>
 
-      <div className={toggleHistory ? 'block fullScreenIframe' : 'none fullScreenIframe'} style={{ zIndex: '1200' }}>
-          <IframeModal  toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_SKIN + idHistory} closeModal={e => this.setState({ toggleHistory: !this.state.toggleHistory })} />
-      </div>
-       
-   
-        <Modal style={{ minWidth : '900px' }} isOpen={this.state.modalHistory} className={this.props.className}>
-            <ModalHeader>Lịch sử soi da</ModalHeader>
-            <ModalBody>
-            <table ble className="table table-hover table-outline mb-0 d-none d-sm-table" >
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">STT.</th>
-                      <th className="text-center">Tên</th>
-                      <th className="text-center">Số điện thoại</th>
-                      <th className="text-center">Hình ảnh</th>
-                     
-
-                      <th className="text-center">Kết quả</th>
-                      {/* <th className="text-center">Công ty</th>
+                  <th className="text-center">Kết quả</th>
+                  {/* <th className="text-center">Công ty</th>
                       <th className="text-center">Sale</th> */}
-                      <th className="text-center">Ngày soi da</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <td colSpan="10" hidden={data.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
-                    {
-                      dataModalHistory != undefined ?
-                      dataModalHistory.map((item, i) => {
-                          
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.Phone}</td>
-                              <td className="text-center">
-                                <img src={item.Image}  style={{ width: '50%', height: 50 }} />
-                              </td>
-                             
-                              <td className="text-center">
-                                <CButton outline color="primary" onClick={e => {
-                                  this.setState({
-                                    idHistory: item._id,
-                                    toggleHistory: !toggleHistory
-                                  })
-                                }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
-                              </td>
-                              {/* <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
+                  <th className="text-center">Ngày soi da</th>
+                </tr>
+              </thead>
+              <tbody>
+                <td
+                  colSpan="10"
+                  hidden={data.length > 0 ? true : false}
+                  className="text-center"
+                >
+                  Không tìm thấy dữ liệu
+                </td>
+                {dataModalHistory != undefined
+                  ? dataModalHistory.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <td className="text-center">{i + 1}</td>
+                          <td className="text-center">{item.Name}</td>
+                          <td className="text-center">{item.Phone}</td>
+                          <td className="text-center">
+                            <img
+                              src={item.Image}
+                              style={{ width: "50%", height: 50 }}
+                            />
+                          </td>
+
+                          <td className="text-center">
+                            <CButton
+                              outline
+                              color="primary"
+                              onClick={(e) => {
+                                this.setState({
+                                  idHistory: item._id,
+                                  toggleHistory: !toggleHistory,
+                                });
+                              }}
+                            >
+                              <CIcon name="cil-magnifying-glass" /> Xem chi tiết
+                            </CButton>
+                          </td>
+                          {/* <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
                               <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td> */}
-                              <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                              </td>
-                            </tr>
-                          );
-                        }) : ""
-                    }
-                  </tbody>
-                </table>
-         
-
-
-
-            </ModalBody>
-            <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalHistory: !this.state.modalHistory })}>Đóng</CButton>
-            </ModalFooter>
-          </Modal>
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
-            <ModalBody>
-              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
-            </ModalBody>
-            <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
-            </ModalFooter>
-          </Modal>
+                          <td className="text-center">
+                            {new Date(item.Create_Date).toLocaleDateString() +
+                              " " +
+                              new Date(item.Create_Date).toLocaleTimeString()}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  : ""}
+              </tbody>
+            </table>
+          </ModalBody>
+          <ModalFooter>
+            <CButton
+              color="primary"
+              onClick={(e) => {
+                this.state.action === "new"
+                  ? this.addRoles()
+                  : this.updateUser();
+              }}
+              disabled={this.state.isLoading}
+            >
+              Lưu
+            </CButton>{" "}
+            <CButton
+              color="secondary"
+              onClick={(e) =>
+                this.setState({ modalHistory: !this.state.modalHistory })
+              }
+            >
+              Đóng
+            </CButton>
+          </ModalFooter>
+        </Modal>
+        <Modal
+          isOpen={this.state.modalDelete}
+          toggle={(e) =>
+            this.setState({
+              modalDelete: !this.state.modalDelete,
+              delete: null,
+            })
+          }
+          className={this.props.className}
+        >
+          <ModalHeader
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+          >{`Xoá`}</ModalHeader>
+          <ModalBody>
+            <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+          </ModalBody>
+          <ModalFooter>
+            <CButton
+              color="primary"
+              onClick={(e) => this.delete()}
+              disabled={this.state.isLoading}
+            >
+              Xoá
+            </CButton>{" "}
+            <CButton
+              color="secondary"
+              onClick={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >
+              Đóng
+            </CButton>
+          </ModalFooter>
+        </Modal>
         <Row>
           <Col>
             <Card>
               <CardHeader>
-              <i className="fa fa-align-justify title_header">Thống kê lượt khách hàng</i>
+                <i className="fa fa-align-justify title_header">
+                  Thống kê lượt khách hàng
+                </i>
                 <div style={styles.tags}>
-                  <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" />
+                  <Input
+                    style={styles.searchInput}
+                    onChange={(e) => this.searchKey(e.target.value)}
+                    name="key"
+                    value={key}
+                    placeholder="Tìm kiếm"
+                  />
                 </div>
               </CardHeader>
-              <CardBody>
-
-                <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+              <CardBody className="table__overflow">
+                <table
+                  ble
+                  className="table table-hover table-outline mb-0 d-none d-sm-table"
+                >
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
                       <th className="text-center">Tên</th>
-                   
+
                       <th className="text-center">Số điện thoại</th>
-                      {
-                        type == '0' || type == '1' ?
-                          <th className="text-center">Công ty</th> : ""
-                      }
+                      {type == "0" || type == "1" ? (
+                        <th className="text-center">Công ty</th>
+                      ) : (
+                        ""
+                      )}
                       <th className="text-center">Lần đến gần nhất</th>
                       <th className="text-center">Số lần đến</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                    {
-                      data != undefined ?
-                      data.map((item, i) => {
+                    <td
+                      colSpan="10"
+                      hidden={this.state.hidden}
+                      className="text-center"
+                    >
+                      Không tìm thấy dữ liệu
+                    </td>
+                    {data != undefined
+                      ? data.map((item, i) => {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.UserName}</td>
 
                               <td className="text-center">{item.Phone}</td>
-                              {
-                                type == '0' || type == '1' ?
-                                  <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td> : ""
-                              }
+                              {type == "0" || type == "1" ? (
+                                <td className="text-center">
+                                  {item.Company_Id == null ||
+                                  item.Company_Id == undefined
+                                    ? "admin"
+                                    : item.Company_Id.Name}
+                                </td>
+                              ) : (
+                                ""
+                              )}
                               <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                {new Date(
+                                  item.Create_Date
+                                ).toLocaleDateString() +
+                                  " " +
+                                  new Date(
+                                    item.Create_Date
+                                  ).toLocaleTimeString()}
                               </td>
                               <td className="text-center">{item.Count}</td>
                             </tr>
                           );
-                        }) : ""
-                    }
+                        })
+                      : ""}
                   </tbody>
                 </table>
               </CardBody>
             </Card>
-            <div style={{ float: 'right' }}>
-              <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-              }} />
+            <div style={{ float: "right" }}>
+              <Pagination
+                count={arrPagination.length}
+                color="primary"
+                onChange={(e, v) => {
+                  this.setState({
+                    data: arrPagination[v - 1],
+                    indexPage: v - 1,
+                  });
+                }}
+              />
             </div>
-
           </Col>
         </Row>
 
-        {
-          type == "2" || type == "5" ?
-            <Row>
-              <Col>
-                <Card>
-                  <CardHeader>
-                  <i className="fa fa-align-justify title_header"> Thống kê lượt khách hàng theo từng tháng</i>
-                    <div style={styles.tags}>
-                      Tháng
-                      <CSelect onChange={async e => { this.getDataForCompanyByMonth(e.target.value) }} custom size="sm" name="selectSm" id="SelectLm">
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                      </CSelect>
-                    </div>
-                  </CardHeader>
-                  <CardBody>
-
-                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                      <thead className="thead-light">
-                        <tr>
-                          <th className="text-center">STT.</th>
-                          <th className="text-center">Tên</th>
-
-                          <th className="text-center">Số điện thoại</th>
-                          {
-                            type == '0' || type == '1' ?
-                              <th className="text-center">Công ty</th> : ""
-                          }
-                          <th className="text-center">Lần đến gần nhất trong tháng</th>
-                          <th className="text-center">Số lần đến</th>
-                          <th className="text-center">#</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <td colSpan="10" hidden={this.state.hidden_m} className="text-center">Không tìm thấy dữ liệu</td>
-                        {
-                          dataByMonth != undefined ?
-                            dataByMonth.map((item, i) => {
-                              return (
-                                <tr key={i}>
-                                  <td className="text-center">{i + 1}</td>
-                                  <td className="text-center">{item.UserName}</td>
-                                 
-                                  <td className="text-center">{item.Phone}</td>
-                                  {
-                                    type == '0' || type == '1' ?
-                                      <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td> : ""
-                                  }
-                                  <td className="text-center">
-                                    {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
-                                  </td>
-                                  <td className="text-center">{item.Count}</td>
-
-                                  <td className="text-center">
-                                    <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={(e)=>{
-                                      this.openModalHistory(item)
-                                    }} >
-                                      Lịch sử soi da
-                                    </CButton>
-                                  </td>
-                                </tr>
-                              );
-                            }) : ""
-                        }
-                      </tbody>
-                    </table>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row> : ""
-        }
-
-        {
-          type == "2" || type == "5" ?
-            <Row>
-              <Col>
-                <Card>
-                  <CardHeader>
-                  <i className="fa fa-align-justify title_header"> Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng mới sẽ được tính lại từ đầu khi sang tháng mới)</i>
-                  </CardHeader>
-                  <CardBody>
-
-                    <CChartBar
-                      datasets={[
-                        {
-                          label: 'Lượt khách hàng mới của tháng',
-                          backgroundColor: '#f87979',
-                          data: dataChart
-                        }
-                      ]}
-                      labels="months"
-                      options={{
-                        tooltips: {
-                          enabled: true
-                        }
+        {type == "2" || type == "5" ? (
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify title_header">
+                    {" "}
+                    Thống kê lượt khách hàng theo từng tháng
+                  </i>
+                  <div style={styles.tags}>
+                    Tháng
+                    <CSelect
+                      onChange={async (e) => {
+                        this.getDataForCompanyByMonth(e.target.value);
                       }}
-                    />
+                      custom
+                      size="sm"
+                      name="selectSm"
+                      id="SelectLm"
+                    >
+                      <option value="01">01</option>
+                      <option value="02">02</option>
+                      <option value="03">03</option>
+                      <option value="04">04</option>
+                      <option value="05">05</option>
+                      <option value="06">06</option>
+                      <option value="07">07</option>
+                      <option value="08">08</option>
+                      <option value="09">09</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                    </CSelect>
+                  </div>
+                </CardHeader>
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
+                    <thead className="thead-light">
+                      <tr>
+                        <th className="text-center">STT.</th>
+                        <th className="text-center">Tên</th>
 
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row> : ""
-        }
+                        <th className="text-center">Số điện thoại</th>
+                        {type == "0" || type == "1" ? (
+                          <th className="text-center">Công ty</th>
+                        ) : (
+                          ""
+                        )}
+                        <th className="text-center">
+                          Lần đến gần nhất trong tháng
+                        </th>
+                        <th className="text-center">Số lần đến</th>
+                        <th className="text-center">#</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden_m}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {dataByMonth != undefined
+                        ? dataByMonth.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.UserName}</td>
+
+                                <td className="text-center">{item.Phone}</td>
+                                {type == "0" || type == "1" ? (
+                                  <td className="text-center">
+                                    {item.Company_Id == null ||
+                                    item.Company_Id == undefined
+                                      ? "admin"
+                                      : item.Company_Id.Name}
+                                  </td>
+                                ) : (
+                                  ""
+                                )}
+                                <td className="text-center">
+                                  {new Date(
+                                    item.Create_Date
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.Create_Date
+                                    ).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">{item.Count}</td>
+
+                                <td className="text-center">
+                                  <CButton
+                                    style={styles.mgl5}
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      this.openModalHistory(item);
+                                    }}
+                                  >
+                                    Lịch sử soi da
+                                  </CButton>
+                                </td>
+                              </tr>
+                            );
+                          })
+                        : ""}
+                    </tbody>
+                  </table>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        ) : (
+          ""
+        )}
+
+        {type == "2" || type == "5" ? (
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify title_header">
+                    {" "}
+                    Biểu đồ thể hiện lượt khách hàng theo từng tháng (Khách hàng
+                    mới sẽ được tính lại từ đầu khi sang tháng mới)
+                  </i>
+                </CardHeader>
+                <CardBody className="table__overflow">
+                  <CChartBar
+                    datasets={[
+                      {
+                        label: "Lượt khách hàng mới của tháng",
+                        backgroundColor: "#f87979",
+                        data: dataChart,
+                      },
+                    ]}
+                    labels="months"
+                    options={{
+                      tooltips: {
+                        enabled: true,
+                      },
+                    }}
+                  />
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        ) : (
+          ""
+        )}
       </div>
     );
   }

@@ -67,10 +67,10 @@ class Login extends Component {
         <Container>
           <Row className="justify-content-center">
             <Col md="4">
-              <form onSubmit={async e => await this.onSubmit(e)}>
+              <form onSubmit={async (e) => await this.onSubmit(e)}>
                 <CardGroup>
                   <Card className="p-4">
-                    <CardBody>
+                    <CardBody className="table__overflow">
                       <h1>Login</h1>
                       <span className="error">{errors.common}</span>
                       <InputGroup className="mb-3">
@@ -79,7 +79,7 @@ class Login extends Component {
                           label="Username"
                           value={username}
                           error={errors.username}
-                          onChange={e => this.onChange(e)}
+                          onChange={(e) => this.onChange(e)}
                         />
                       </InputGroup>
                       <InputGroup className="mb-4">
@@ -89,12 +89,18 @@ class Login extends Component {
                           label="Password"
                           value={password}
                           error={errors.password}
-                          onChange={e => this.onChange(e)}
+                          onChange={(e) => this.onChange(e)}
                         />
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="primary" className="px-4" disabled={isLoading}>Login</Button>
+                          <Button
+                            color="primary"
+                            className="px-4"
+                            disabled={isLoading}
+                          >
+                            Login
+                          </Button>
                         </Col>
                       </Row>
                     </CardBody>

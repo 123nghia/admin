@@ -114,39 +114,96 @@ class Banner extends Component {
           <Row>
             <Col>
               <Card>
-                <CardHeader>
-                  THÔNG TIN BANNER
-                </CardHeader>
-                <CardBody>
+                <CardHeader>THÔNG TIN BANNER</CardHeader>
+                <CardBody className="table__overflow">
                   <CRow>
                     <CCol sm="12" lg="12">
                       <CRow>
                         <CCol sm="12" lg="12">
-                          <CLabel><strong>Banner chính: <a href={`${banner}`}>{`${banner}`}</a></strong></CLabel>
+                          <CLabel>
+                            <strong>
+                              Banner chính:{" "}
+                              <a href={`${banner}`}>{`${banner}`}</a>
+                            </strong>
+                          </CLabel>
                           <TextFieldGroup
                             field="image"
                             type={"file"}
-                            onChange={e => { this.onChangeImageBanner(e) }}
+                            onChange={(e) => {
+                              this.onChangeImageBanner(e);
+                            }}
                           />
-                          {
-                            banner != "" ?
-                              <img width="100%" height="400" src={`${banner}`} style={{ marginBottom: 20, paddingLeft: 150, paddingRight: 150 }} /> :
-                              <img width="100%" height="400" src={`${image_banner}`} style={{ marginBottom: 20, paddingLeft: 150, paddingRight: 150 }} onError={(e)=>{e.target.onerror = null; e.target.src="https://aina.vn/wp-content/uploads/2021/08/default-image-620x600-1.jpg"}}/>
-                          }
+                          {banner != "" ? (
+                            <img
+                              width="100%"
+                              height="400"
+                              src={`${banner}`}
+                              style={{
+                                marginBottom: 20,
+                                paddingLeft: 150,
+                                paddingRight: 150,
+                              }}
+                            />
+                          ) : (
+                            <img
+                              width="100%"
+                              height="400"
+                              src={`${image_banner}`}
+                              style={{
+                                marginBottom: 20,
+                                paddingLeft: 150,
+                                paddingRight: 150,
+                              }}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src =
+                                  "https://aina.vn/wp-content/uploads/2021/08/default-image-620x600-1.jpg";
+                              }}
+                            />
+                          )}
                         </CCol>
                         <CCol sm="12" lg="12">
-                          <CLabel><strong>Banner phụ: <a href={`${sub_banner}`}>{`${sub_banner}`}</a></strong></CLabel>
+                          <CLabel>
+                            <strong>
+                              Banner phụ:{" "}
+                              <a href={`${sub_banner}`}>{`${sub_banner}`}</a>
+                            </strong>
+                          </CLabel>
                           <TextFieldGroup
                             field="image"
                             type={"file"}
-                            onChange={e => { this.onChangeImageSubBanner(e) }}
+                            onChange={(e) => {
+                              this.onChangeImageSubBanner(e);
+                            }}
                           />
-                          {
-                            sub_banner != "" ?
-                              <img width="100%" height="400" src={`${sub_banner}`} style={{ marginBottom: 20, paddingLeft: 150, paddingRight: 150 }} /> :
-                              <img width="100%" height="400" src={`${image_sub_banner}`} style={{ marginBottom: 20, paddingLeft: 150, paddingRight: 150 }} onError={(e)=>{e.target.onerror = null; e.target.src="https://aina.vn/wp-content/uploads/2021/08/default-image-620x600-1.jpg"}}/>
-                          }
-
+                          {sub_banner != "" ? (
+                            <img
+                              width="100%"
+                              height="400"
+                              src={`${sub_banner}`}
+                              style={{
+                                marginBottom: 20,
+                                paddingLeft: 150,
+                                paddingRight: 150,
+                              }}
+                            />
+                          ) : (
+                            <img
+                              width="100%"
+                              height="400"
+                              src={`${image_sub_banner}`}
+                              style={{
+                                marginBottom: 20,
+                                paddingLeft: 150,
+                                paddingRight: 150,
+                              }}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src =
+                                  "https://aina.vn/wp-content/uploads/2021/08/default-image-620x600-1.jpg";
+                              }}
+                            />
+                          )}
                         </CCol>
                       </CRow>
                     </CCol>

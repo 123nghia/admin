@@ -229,97 +229,140 @@ class ColorTheme extends Component {
               <p style={styles.success}>{this.state.updated}</p>
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
-                <CardHeader>
-                  THÔNG TIN MÀU
-                </CardHeader>
-                <CardBody>
+                <CardHeader>THÔNG TIN MÀU</CardHeader>
+                <CardBody className="table__overflow">
                   <CRow>
                     <CCol sm="12" lg="12">
                       <CRow>
                         <CCol sm="12" lg="10">
-                          <CLabel><strong>Thay đổi màu</strong></CLabel>
+                          <CLabel>
+                            <strong>Thay đổi màu</strong>
+                          </CLabel>
                         </CCol>
-                        {
-                          type == '0' || type == '1' ? "" :
-                            <CCol sm="12" lg="2">
-                              <CTooltip content="Xem chi tiết đơn hàng">
-
-                                {
-                                  isDisable ?
-                                    <CButton outline color="info" size="xm" onClick={async (e) => {
-                                      this.setState({ isDisable: !isDisable })
-                                    }}>
-                                      <CIcon name="cil-pencil" /> Cập nhật
-                                    </CButton> :
-                                    <CButton outline color="info" size="sm" onClick={async (e) => {
-                                      this.updateCompany()
-                                    }}>
-                                      <CIcon name="cil-pencil" /> Xác nhận cập nhật
-                                    </CButton>
-                                }
-
-                              </CTooltip>
-                            </CCol>
-                        }
+                        {type == "0" || type == "1" ? (
+                          ""
+                        ) : (
+                          <CCol sm="12" lg="2">
+                            <CTooltip content="Xem chi tiết đơn hàng">
+                              {isDisable ? (
+                                <CButton
+                                  outline
+                                  color="info"
+                                  size="xm"
+                                  onClick={async (e) => {
+                                    this.setState({ isDisable: !isDisable });
+                                  }}
+                                >
+                                  <CIcon name="cil-pencil" /> Cập nhật
+                                </CButton>
+                              ) : (
+                                <CButton
+                                  outline
+                                  color="info"
+                                  size="sm"
+                                  onClick={async (e) => {
+                                    this.updateCompany();
+                                  }}
+                                >
+                                  <CIcon name="cil-pencil" /> Xác nhận cập nhật
+                                </CButton>
+                              )}
+                            </CTooltip>
+                          </CCol>
+                        )}
                       </CRow>
                       <CRow>
                         <CCol sm="12" lg="12">
                           <div>
                             <CLabel>Màu chủ đạo</CLabel>
-                            <Input style={styles.searchInput} onChange={(e) => { this.setState({ mainColor: e.target.value }) }} value={mainColor} readOnly={isDisable} />
+                            <Input
+                              style={styles.searchInput}
+                              onChange={(e) => {
+                                this.setState({ mainColor: e.target.value });
+                              }}
+                              value={mainColor}
+                              readOnly={isDisable}
+                            />
                           </div>
                         </CCol>
 
                         <CCol sm="12" lg="12">
                           <CLabel>Màu chủ đạo 1</CLabel>
-                          <Input style={styles.searchInput} value={sub_mainColor} onChange={(e) => { this.setState({ sub_mainColor: e.target.value }) }} readOnly={isDisable} />
+                          <Input
+                            style={styles.searchInput}
+                            value={sub_mainColor}
+                            onChange={(e) => {
+                              this.setState({ sub_mainColor: e.target.value });
+                            }}
+                            readOnly={isDisable}
+                          />
                         </CCol>
                         <CCol sm="12" lg="12">
                           <CLabel>Màu chủ đạo 2</CLabel>
-                          <Input style={styles.searchInput} value={sub2_mainColor} onChange={(e) => { this.setState({ sub2_mainColor: e.target.value }) }} readOnly={isDisable} />
+                          <Input
+                            style={styles.searchInput}
+                            value={sub2_mainColor}
+                            onChange={(e) => {
+                              this.setState({ sub2_mainColor: e.target.value });
+                            }}
+                            readOnly={isDisable}
+                          />
                         </CCol>
                         <CCol sm="12" lg="12">
                           <div>
                             <CLabel>Màu chữ</CLabel>
-                            <Input style={styles.searchInput} value={text_mainColor} onChange={(e) => { this.setState({ text_mainColor: e.target.value }) }} readOnly={isDisable} />
+                            <Input
+                              style={styles.searchInput}
+                              value={text_mainColor}
+                              onChange={(e) => {
+                                this.setState({
+                                  text_mainColor: e.target.value,
+                                });
+                              }}
+                              readOnly={isDisable}
+                            />
                           </div>
                         </CCol>
-                        
-                 
 
                         <CCol sm="12" lg="12">
                           <CLabel>Màu button </CLabel>
-                          <Input style={styles.searchInput} value={button_color} onChange={(e) => { this.setState({ button_color: e.target.value }) }} readOnly={isDisable} />
+                          <Input
+                            style={styles.searchInput}
+                            value={button_color}
+                            onChange={(e) => {
+                              this.setState({ button_color: e.target.value });
+                            }}
+                            readOnly={isDisable}
+                          />
                         </CCol>
-
-                      
-   
-     
-
 
                         <CCol sm="12" lg="12">
                           <div>
                             <CLabel>Màu báo thành công</CLabel>
-                            <Input style={styles.searchInput} value={sucess_color} onChange={(e) => { this.setState({ sucess_color: e.target.value }) }} readOnly={isDisable} />
+                            <Input
+                              style={styles.searchInput}
+                              value={sucess_color}
+                              onChange={(e) => {
+                                this.setState({ sucess_color: e.target.value });
+                              }}
+                              readOnly={isDisable}
+                            />
                           </div>
                         </CCol>
 
                         <CCol sm="12" lg="12">
                           <div>
                             <CLabel>Màu báo lỗi</CLabel>
-                            <Input style={styles.searchInput} value={error_color} onChange={(e) => { this.setState({ error_color: e.target.value }) }} readOnly={isDisable} />
+                            <Input
+                              style={styles.searchInput}
+                              value={error_color}
+                              onChange={(e) => {
+                                this.setState({ error_color: e.target.value });
+                              }}
+                              readOnly={isDisable}
+                            />
                           </div>
                         </CCol>
-
-                        
- 
-      
-                        
-                        
-                      
-
-                        
-                       
                       </CRow>
                     </CCol>
                   </CRow>

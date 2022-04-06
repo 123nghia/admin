@@ -430,37 +430,48 @@ class Users extends Component {
         <div>
           <Card>
             <CardHeader>
-
               Danh sách khách hàng ( Page: {this.state.indexPage + 1} )
-
               <div style={styles.tags}>
                 <CRow>
                   <CCol sm="6" lg="12">
                     <CRow>
                       <CCol sm="6" lg="4">
                         <div>
-                          <Input style={styles.searchInput} onChange={(e) => {
-                            this.actionSearch(e, "key");
-                          }} name="key" value={key} placeholder="Từ khóa" />
+                          <Input
+                            style={styles.searchInput}
+                            onChange={(e) => {
+                              this.actionSearch(e, "key");
+                            }}
+                            name="key"
+                            value={key}
+                            placeholder="Từ khóa"
+                          />
                         </div>
                       </CCol>
                       <CCol sm="6" lg="4">
-                        <CSelect style={styles.flexOption} onChange={e => {
-
-                          this.actionSearch(e, "keyStatus");
-
-                        }} custom>
-                          {
-                            ['Actived', 'Deactived', 'Locked'].map((item, i) => {
-                              return (
-                                <option value={item}>{item}</option>
-                              );
-                            })
-                          }
+                        <CSelect
+                          style={styles.flexOption}
+                          onChange={(e) => {
+                            this.actionSearch(e, "keyStatus");
+                          }}
+                          custom
+                        >
+                          {["Actived", "Deactived", "Locked"].map((item, i) => {
+                            return <option value={item}>{item}</option>;
+                          })}
                         </CSelect>
                       </CCol>
                       <CCol sm="6" lg="4">
-                        <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                        <Button
+                          color="primary"
+                          style={{ width: "100%", marginTop: 5 }}
+                          size="sm"
+                          onClick={(e) => {
+                            this.resetSearch();
+                          }}
+                        >
+                          Làm mới tìm kiếm
+                        </Button>
                       </CCol>
                     </CRow>
                   </CCol>
@@ -470,7 +481,7 @@ class Users extends Component {
                 </CRow>
               </div>
             </CardHeader>
-            <CardBody>
+            <CardBody className="table__overflow">
               {
                 <table className="table table-hover table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-light">
@@ -487,10 +498,11 @@ class Users extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <td colSpan="8" hidden={hidden_all} className="text-center">Không tìm thấy dữ liệu</td>
-                    {
-                      dataAll != undefined ?
-                        dataAll.map((item, i) => {
+                    <td colSpan="8" hidden={hidden_all} className="text-center">
+                      Không tìm thấy dữ liệu
+                    </td>
+                    {dataAll != undefined
+                      ? dataAll.map((item, i) => {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
@@ -506,54 +518,74 @@ class Users extends Component {
                                 </CBadge>
                               </td>
                               <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                {new Date(
+                                  item.Create_Date
+                                ).toLocaleDateString() +
+                                  " " +
+                                  new Date(
+                                    item.Create_Date
+                                  ).toLocaleTimeString()}
                               </td>
                             </tr>
                           );
-                        }) : ""
-                    }
+                        })
+                      : ""}
                   </tbody>
                 </table>
               }
             </CardBody>
           </Card>
-          {
-            arrPagination_All.length == 1 ? "" :
-              <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                <tr style={styles.row}>
-                  {
-                    arrPagination_All.map((item, i) => {
-                      return (
-                        <td>
-                          <Button style={styles.pagination} color={i == indexPage_All ? 'primary' : 'danger'} onClick={e => { this.setState({ dataAll: arrPagination_All[i], indexPage_All: i }) }}>{i + 1}</Button>
-                        </td>
-                      );
-                    })
-                  }
-                </tr>
-              </div>
-          }
+          {arrPagination_All.length == 1 ? (
+            ""
+          ) : (
+            <div
+              style={{ float: "right", marginRight: "10px", padding: "10px" }}
+            >
+              <tr style={styles.row}>
+                {arrPagination_All.map((item, i) => {
+                  return (
+                    <td>
+                      <Button
+                        style={styles.pagination}
+                        color={i == indexPage_All ? "primary" : "danger"}
+                        onClick={(e) => {
+                          this.setState({
+                            dataAll: arrPagination_All[i],
+                            indexPage_All: i,
+                          });
+                        }}
+                      >
+                        {i + 1}
+                      </Button>
+                    </td>
+                  );
+                })}
+              </tr>
+            </div>
+          )}
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="Email"
                 label="Email"
                 value={this.state.Email}
                 placeholder={"Email"}
-                type={'email'}
-                onChange={e => this.onChange("Email", e.target.value)}
-              // rows="5"
+                type={"email"}
+                onChange={(e) => this.onChange("Email", e.target.value)}
+                // rows="5"
               />
               <TextFieldGroup
                 field="Address"
                 label="Address"
                 value={this.state.Address}
                 placeholder={"Email"}
-                type={'email'}
-                onChange={e => this.onChange("Address", e.target.value)}
-              // rows="5"
+                type={"email"}
+                onChange={(e) => this.onChange("Address", e.target.value)}
+                // rows="5"
               />
               <TextFieldGroup
                 field="Name"
@@ -561,8 +593,8 @@ class Users extends Component {
                 value={this.state.Name}
                 placeholder={"Name"}
                 // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Name", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -571,9 +603,9 @@ class Users extends Component {
                 value={this.state.Password}
                 type={"password"}
                 placeholder={"Password"}
-                readOnly={action == 'new' ? false : true}
-                onChange={e => this.onChange("Password", e.target.value)}
-              // rows="5"
+                readOnly={action == "new" ? false : true}
+                onChange={(e) => this.onChange("Password", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -582,8 +614,8 @@ class Users extends Component {
                 placeholder={"Code"}
                 value={this.state.Code}
                 // error={errors.title}
-                onChange={e => this.onChange("Code", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Code", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -592,8 +624,8 @@ class Users extends Component {
                 placeholder={"Username"}
                 value={this.state.UserName}
                 // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("UserName", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -602,56 +634,74 @@ class Users extends Component {
                 value={this.state.Phone}
                 placeholder={"Phone"}
                 // error={errors.title}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Phone", e.target.value)}
+                // rows="5"
               />
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Gender:    </label>
-                <select style={styles.flexOption} name="Gender" onChange={e => this.onChange("Gender", e.target.value)}>
-                  <option value={this.state.Gender}>{this.state.Gender == '' ? ` - - - - - - - - - - ` : this.state.Gender}</option>
-                  <option value={'Nam'}>Nam</option>
-                  <option value={'Nữ'}>Nữ</option>
+                <label style={styles.flexLabel} htmlFor="tag">
+                  Gender:{" "}
+                </label>
+                <select
+                  style={styles.flexOption}
+                  name="Gender"
+                  onChange={(e) => this.onChange("Gender", e.target.value)}
+                >
+                  <option value={this.state.Gender}>
+                    {this.state.Gender == ""
+                      ? ` - - - - - - - - - - `
+                      : this.state.Gender}
+                  </option>
+                  <option value={"Nam"}>Nam</option>
+                  <option value={"Nữ"}>Nữ</option>
                 </select>
               </div>
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
-                <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
+                <label style={styles.flexLabel} htmlFor="tag">
+                  Company:{" "}
+                </label>
+                <select
+                  style={styles.flexOption}
+                  name="Company_Id"
+                  onChange={(e) => this.onChange("Company_Id", e.target.value)}
+                >
                   <option value={this.state.Company_Id}>-----</option>
-                  {
-                    dataCompany.map((item, i) => {
-                      if (item.Name == currentCompany) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
+                  {dataCompany.map((item, i) => {
+                    if (item.Name == currentCompany) {
+                      return (
+                        <option selected value={item._id}>
+                          {item.Name}
+                        </option>
+                      );
+                    } else {
+                      return <option value={item._id}>{item.Name}</option>;
+                    }
+                  })}
                 </select>
               </div>
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Role:    </label>
-                <select style={styles.flexOption} name="Role_Id" onChange={e => this.onChange("Role_Id", e.target.value)}>
+                <label style={styles.flexLabel} htmlFor="tag">
+                  Role:{" "}
+                </label>
+                <select
+                  style={styles.flexOption}
+                  name="Role_Id"
+                  onChange={(e) => this.onChange("Role_Id", e.target.value)}
+                >
                   <option value={this.state.Role_Id}>-----</option>
-                  {
-                    dataRole.map((item, i) => {
-                      if (item.Name == currentRole) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
+                  {dataRole.map((item, i) => {
+                    if (item.Name == currentRole) {
+                      return (
+                        <option selected value={item._id}>
+                          {item.Name}
+                        </option>
+                      );
+                    } else {
+                      return <option value={item._id}>{item.Name}</option>;
+                    }
+                  })}
                 </select>
               </div>
 
@@ -675,19 +725,51 @@ class Users extends Component {
                 </select>
               </div> */}
             </ModalBody>
-            <ModalFooter>
-
-            </ModalFooter>
+            <ModalFooter></ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Do you want to delete user "${
+                this.state.delete ? this.state.delete.Email : ""
+              }" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
+              <Button
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </Button>
             </ModalFooter>
           </Modal>
         </div>

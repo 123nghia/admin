@@ -252,52 +252,46 @@ class HistorySkin extends Component {
         <Row>
           <Col>
             <Card>
-            <CardHeader>
-                  <i className="fa fa-align-justify title_header">
-                    Lịch sử soi da
-                  </i>
+              <CardHeader>
+                <i className="fa fa-align-justify title_header">
+                  Lịch sử soi da
+                </i>
 
-                  <CRow>
-                    <CCol md={3} className="mt">
+                <CRow>
+                  <CCol md={3} className="mt">
                     <div className="">
+                      <p className="title_filter">Tên khách hàng</p>
+                      <Input
+                        style={styles.searchInput}
+                        onChange={(e) => {
+                          this.setState({ nameUser: e.target.value });
+                        }}
+                        name="nameUser"
+                        value={this.state.nameUser}
+                        placeholder="Tên"
+                      />
+                    </div>
+                  </CCol>
 
-                   
-<p className="title_filter">Tên khách hàng</p>
-                        <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ nameUser: e.target.value });
-                          }}
-                          name="nameUser"
-                          value={this.state.nameUser}
-                          placeholder="Tên"
-                        />
-                      </div>
-                    </CCol>
-                   
-                    <CCol md={3} className="mt">
+                  <CCol md={3} className="mt">
                     <div className="">
-
-                   
-<p className="title_filter">Số điện thoại</p>
-                        <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ numberUser: e.target.value });
-                          }}
-                          type="number"
-                          name="numberUser"
-                          value={this.state.numberUser}
-                          placeholder="Số điện thoại"
-                        />
-                      </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-
-                   
-                        <p className="title_filter">Danh sách Sales</p>
-                        <div style={{width:'200px'}}>
+                      <p className="title_filter">Số điện thoại</p>
+                      <Input
+                        style={styles.searchInput}
+                        onChange={(e) => {
+                          this.setState({ numberUser: e.target.value });
+                        }}
+                        type="number"
+                        name="numberUser"
+                        value={this.state.numberUser}
+                        placeholder="Số điện thoại"
+                      />
+                    </div>
+                  </CCol>
+                  <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Danh sách Sales</p>
+                      <div style={{ width: "200px" }}>
                         <Select
                           className="select_seo"
                           showSearch
@@ -310,109 +304,103 @@ class HistorySkin extends Component {
                           }
                           onSearch={this.onSearchSelect}
                           filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                            0
+                            option.children
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
                           }
                         >
                           {this.state.dataSales
                             ? this.state.dataSales.map((item, i) => {
-                              return <Option value={item._id}>{item.Name}</Option>;
-                            })
+                                return (
+                                  <Option value={item._id}>{item.Name}</Option>
+                                );
+                              })
                             : null}
                         </Select>
+                      </div>
+                    </div>
+                  </CCol>
+                  <CCol md={3} className="mt">
+                    <div className="">
+                      <div className="">
+                        <p className="title_filter">Từ ngày</p>
+                        <div>
+                          <DatePicker
+                            style={styles.dateForm}
+                            onChange={(e, dateString) => {
+                              let copy = dateString.split("-");
+                              let newData = ``;
+                              copy.forEach((item, index) => {
+                                if (index === 0) {
+                                  newData += item;
+                                } else {
+                                  newData += `/${item}`;
+                                }
+                              });
+                              this.setState({ from: newData });
+                            }}
+                            format={dateFormat}
+                          />
                         </div>
-                     
                       </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                      
-                          <div className="">
-                           <p className="title_filter">Từ ngày</p>
-                            <div>
-                              <DatePicker
-                                style={styles.dateForm}
-                                onChange={(e, dateString) => {
-                                  let copy = dateString.split("-");
-                                  let newData = ``;
-                                  copy.forEach((item, index) => {
-                                    if (index === 0) {
-                                      newData += item;
-                                    } else {
-                                      newData += `/${item}`;
-                                    }
-                                  });
-                                  this.setState({ from: newData });
-                                }}
-                                format={dateFormat}
-                              />
-                            </div>
-                          </div>
-                        
-                      
+                    </div>
+                  </CCol>
+                  <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Đến ngày</p>
+                      <div>
+                        <DatePicker
+                          style={styles.dateForm}
+                          onChange={(e, dateString) => {
+                            let copy = dateString.split("-");
+                            let newData = ``;
+                            copy.forEach((item, index) => {
+                              if (index === 0) {
+                                newData += item;
+                              } else {
+                                newData += `/${item}`;
+                              }
+                            });
+                            this.setState({ to: newData });
+                          }}
+                          format={dateFormat}
+                        />
                       </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                      
-                        
-                          <p className="title_filter">Đến ngày</p>
-                            <div>
-                              <DatePicker
-                              style={styles.dateForm}
-                                onChange={(e, dateString) => {
-                                  let copy = dateString.split("-");
-                                  let newData = ``;
-                                  copy.forEach((item, index) => {
-                                    if (index === 0) {
-                                      newData += item;
-                                    } else {
-                                      newData += `/${item}`;
-                                    }
-                                  });
-                                  this.setState({ to: newData });
-                                }}
-                                format={dateFormat}
-                              />
-                            </div>
-                        
-                      
-                      </div>
-                    </CCol>
-                    
-                  </CRow>
+                    </div>
+                  </CCol>
+                </CRow>
 
-                  <div className="flex-center-space mt-1">
-                    <div>
-                  <CButton
-                        color="success"
-                       
-                        size="md"
-                        className="flex-center"
-                        onClick={() => this.ExportsFileExcel()}
-                      >
-                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
-                        <p style={{ margin: "auto 0" }}>Xuất File</p>
-                      </CButton>
-                      <a id="download_excel" download></a>
-                      </div>
-                  <CButton
-                      color="info"
-                     
+                <div className="flex-center-space mt-1">
+                  <div>
+                    <CButton
+                      color="success"
                       size="md"
-                      className="btn-main"
-                      onClick={(e) => {
-                        this.onSearch();
-                      }}
+                      className="flex-center"
+                      onClick={() => this.ExportsFileExcel()}
                     >
-                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                      <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Xuất File</p>
                     </CButton>
-                   
+                    <a id="download_excel" download></a>
                   </div>
-                </CardHeader>
-              <CardBody>
-                <table ble className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table">
+                  <CButton
+                    color="info"
+                    size="md"
+                    className="btn-main"
+                    onClick={(e) => {
+                      this.onSearch();
+                    }}
+                  >
+                    <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                  </CButton>
+                </div>
+              </CardHeader>
+              <CardBody className="table__overflow">
+                <table
+                  ble
+                  className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table"
+                >
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
@@ -430,11 +418,15 @@ class HistorySkin extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <td colSpan="10" hidden={data.length > 0 ? true : false} className="text-center">Không tìm thấy dữ liệu</td>
-                    {
-                      data != undefined ?
-                        data.map((item, i) => {
-                          
+                    <td
+                      colSpan="10"
+                      hidden={data.length > 0 ? true : false}
+                      className="text-center"
+                    >
+                      Không tìm thấy dữ liệu
+                    </td>
+                    {data != undefined
+                      ? data.map((item, i) => {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
@@ -442,45 +434,60 @@ class HistorySkin extends Component {
                               <td className="text-center">{item.Phone}</td>
 
                               <td className="text-center">
-                                <img src={item.Image}  style={{ width: '100px', height: '83px' }} />
+                                <img
+                                  src={item.Image}
+                                  style={{ width: "100px", height: "83px" }}
+                                />
                               </td>
                               <td className="text-center"></td>
                               <td className="text-center"></td>
                               <td className="text-center">
-                                <CButton outline color="primary" onClick={e => {
-                                  this.setState({
-                                    idHistory: item._id,
-                                    toggleHistory: !toggleHistory
-                                  })
-                                }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                                <CButton
+                                  outline
+                                  color="primary"
+                                  onClick={(e) => {
+                                    this.setState({
+                                      idHistory: item._id,
+                                      toggleHistory: !toggleHistory,
+                                    });
+                                  }}
+                                >
+                                  <CIcon name="cil-magnifying-glass" /> Xem chi
+                                  tiết
+                                </CButton>
                               </td>
                               {/* <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
                               <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td> */}
                               <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString()}
+                                {new Date(
+                                  item.Create_Date
+                                ).toLocaleDateString()}
                               </td>
                             </tr>
                           );
-                        }) : ""
-                    }
+                        })
+                      : ""}
                   </tbody>
                 </table>
-                <div style={{ float: 'right' }}>
-              <Pagination count={Math.ceil(itemsCount / itemPerPage)} color="primary" onChange={(e, v) => {
-                this.handlePageChange(v)
-              }} />
-            </div>
-
-
+                <div style={{ float: "right" }}>
+                  <Pagination
+                    count={Math.ceil(itemsCount / itemPerPage)}
+                    color="primary"
+                    onChange={(e, v) => {
+                      this.handlePageChange(v);
+                    }}
+                  />
+                </div>
               </CardBody>
             </Card>
-
-
-            
           </Col>
         </Row>
 
-        <IframeModal toggleView={toggleHistory} link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory} closeModal={this.closeModal} />
+        <IframeModal
+          toggleView={toggleHistory}
+          link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
+          closeModal={this.closeModal}
+        />
       </div>
     );
   }

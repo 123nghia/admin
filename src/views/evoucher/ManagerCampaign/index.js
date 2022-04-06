@@ -1423,7 +1423,7 @@ class EndUser extends Component {
                     </CButton>
                   </div>
                 </CardHeader>
-                <CardBody>
+                <CardBody className="table__overflow">
                   <table
                     ble
                     className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"

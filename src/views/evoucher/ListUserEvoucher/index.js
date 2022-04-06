@@ -606,7 +606,7 @@ class ListUserEvoucher extends Component {
                 </div>
               </CardHeader>
 
-              <CardBody>
+              <CardBody className="table__overflow">
                 <div
                   className="pb-3"
                   style={{

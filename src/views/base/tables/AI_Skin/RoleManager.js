@@ -297,25 +297,27 @@ class RoleManager extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                <i className="fa fa-align-justify title_header">Danh sách quyền</i>
-                 <div className="flex-end">
-                 <CButton
-                                            color="info"
-                                            style={{ marginBottom: "10px" }}
-                                            size="md"
-                                            className="btn-main"
-                                            onClick={async e => await this.toggleModal("new")}
-                                        >
-                                            <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                                            <p style={{ margin: "auto 0" }}>Thêm quyền</p>
-                                        </CButton>
-                 </div>
-             
-                  
+                  <i className="fa fa-align-justify title_header">
+                    Danh sách quyền
+                  </i>
+                  <div className="flex-end">
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px" }}
+                      size="md"
+                      className="btn-main"
+                      onClick={async (e) => await this.toggleModal("new")}
+                    >
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm quyền</p>
+                    </CButton>
+                  </div>
                 </CardHeader>
-                <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -326,10 +328,15 @@ class RoleManager extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
@@ -340,61 +347,71 @@ class RoleManager extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                  {new Date(
+                                    item.Create_Date
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.Create_Date
+                                    ).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
-                                <div className="flex-center">
-                                 
-                                   
-                             
-
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    className="mr-1"
-                                    size="md"
-                                    onClick={async (e) => await this.openUpdate(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                      className="icon"
-
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => { this.openDelete(item) }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                                 
+                                  <div className="flex-center">
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      className="mr-1"
+                                      size="md"
+                                      onClick={async (e) =>
+                                        await this.openUpdate(item)
+                                      }
+                                    >
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        name="cilPencil"
+                                        className="icon"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.openDelete(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
+                                    </CButton>
+                                  </div>
                                 </td>
-                             
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
-                  <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
-              </div>
+                  <div style={{ float: "right" }}>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-            
+
               {/* {
                 arrPagination.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
@@ -415,7 +432,9 @@ class RoleManager extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="Name"
@@ -423,8 +442,8 @@ class RoleManager extends Component {
                 value={this.state.Name}
                 placeholder={"Name"}
                 // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Name", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -433,36 +452,95 @@ class RoleManager extends Component {
                 value={this.state.Type}
                 placeholder={"Type"}
                 // error={errors.title}
-                onChange={e => this.onChange("Type", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Type", e.target.value)}
+                // rows="5"
               />
 
-              {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'Actived'}>Actived</option>
-                    <option value={'Locked'}>Locked</option>
-                    <option value={'Deactived'}>Deactived</option>
+              {action == "new" ? (
+                ""
+              ) : (
+                <div>
+                  <label style={styles.flexLabel} htmlFor="tag">
+                    Trạng thái:
+                  </label>
+                  <select
+                    style={styles.flexOption}
+                    name="Status"
+                    onChange={(e) => this.onChange("Status", e.target.value)}
+                  >
+                    <option value={this.state.Status}>
+                      {this.state.Status == ""
+                        ? ` - - - - - - - - - - `
+                        : this.state.Status}
+                    </option>
+                    <option value={"Actived"}>Actived</option>
+                    <option value={"Locked"}>Locked</option>
+                    <option value={"Deactived"}>Deactived</option>
                   </select>
                 </div>
-              }
+              )}
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addRoles()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

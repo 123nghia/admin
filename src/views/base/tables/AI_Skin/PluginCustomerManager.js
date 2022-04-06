@@ -502,34 +502,42 @@ class PluginCustomerManager extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                <i className="fa fa-align-justify title_header"> Danh sách công ty </i>
-                <CRow>
+                  <i className="fa fa-align-justify title_header">
+                    {" "}
+                    Danh sách công ty{" "}
+                  </i>
+                  <CRow>
                     <CCol md={4} className="mt-3">
                       <div className="">
-
-
                         <p className="title_filter">Từ khóa</p>
-                        <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.actionSearch(e, "key");
+                          }}
+                          name="key"
+                          value={key}
+                          placeholder="Từ khóa"
+                        />
                       </div>
                     </CCol>
-                    
                   </CRow>
                   <div className="flex-end mt-4">
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      style={{ marginBottom: "10px", marginRight: "10px" }}
                       size="md"
                       className="btn-main"
-                      onClick={e => { this.resetSearch() }}
+                      onClick={(e) => {
+                        this.resetSearch();
+                      }}
                     >
                       <BsSearch style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Làm mới tìm kiếm</p>
                     </CButton>
                     <CButton
                       color="info"
-                      style={{ marginBottom: "10px", marginRight: '10px' }}
+                      style={{ marginBottom: "10px", marginRight: "10px" }}
                       size="md"
                       className="btn-main"
                       onClick={() => this.openFormAdd()}
@@ -537,13 +545,13 @@ class PluginCustomerManager extends Component {
                       <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
-
                   </div>
-                  
                 </CardHeader>
-                <CardBody>
-            
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -554,14 +562,18 @@ class PluginCustomerManager extends Component {
                         <th className="text-center">Ngày tạo</th>
                         {/* <th className="text-center">Trạng thái</th> */}
                         <th className="text-center">#</th>
-
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
@@ -572,9 +584,15 @@ class PluginCustomerManager extends Component {
                                   <div>{item.Phone}</div>
                                 </td>
                                 {/* <td className="text-center">{item.Address}</td> */}
-                                <td className="text-center">{item.Create_By == null ? "ADMIN" : item.Create_By.Name}</td>
                                 <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString()}
+                                  {item.Create_By == null
+                                    ? "ADMIN"
+                                    : item.Create_By.Name}
+                                </td>
+                                <td className="text-center">
+                                  {new Date(
+                                    item.Create_Date
+                                  ).toLocaleDateString()}
                                 </td>
                                 {/* <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -582,8 +600,7 @@ class PluginCustomerManager extends Component {
                                   </CBadge>
                                 </td> */}
                                 <td className="text-center">
-                                <div className="flex-center">
-                                 
+                                  <div className="flex-center">
                                     <CButton
                                       shape="rounded-pill"
                                       variant="outline"
@@ -591,74 +608,92 @@ class PluginCustomerManager extends Component {
                                       style={styles.mgl5}
                                       size="md"
                                       className="flex-a-center mr-1"
-                                      onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}
+                                      onClick={async (e) => {
+                                        await this.onView(
+                                          item.Name,
+                                          item._id,
+                                          item.Phone,
+                                          item.Slug
+                                        );
+                                      }}
                                     >
                                       <BsSearch className="mr-1" />
                                       Chi tiết
                                     </CButton>
-                             
-
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    className="mr-1"
-                                    size="md"
-                                    onClick={(e) => this.openUpdate(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                      className="icon"
-
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => { this.openDelete(item) }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                                 
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      className="mr-1"
+                                      size="md"
+                                      onClick={(e) => this.openUpdate(item)}
+                                    >
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        name="cilPencil"
+                                        className="icon"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.openDelete(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
+                                    </CButton>
+                                  </div>
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
-                  <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
-              </div>
+                  <div style={{ float: "right" }}>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-              
             </Col>
           </Row>
 
           <CModal
             show={this.state.toggleView}
-            onClose={() => { this.setState({ toggleView: !this.state.toggleView }) }}
+            onClose={() => {
+              this.setState({ toggleView: !this.state.toggleView });
+            }}
             size="xl"
           >
             <CModalHeader closeButton>
               <CModalTitle>Danh sách đơn hàng của {company_name}</CModalTitle>
-              <CModalTitle style={{ marginLeft: 50 }}>Số điện thoại: {phone_number}</CModalTitle>
+              <CModalTitle style={{ marginLeft: 50 }}>
+                Số điện thoại: {phone_number}
+              </CModalTitle>
             </CModalHeader>
 
             <CModalBody>
-              <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+              <table
+                ble
+                className="table table-hover table-outline mb-0 d-none d-sm-table"
+              >
                 <thead className="thead-light">
                   <tr>
                     <th className="text-center">STT.</th>
@@ -673,14 +708,17 @@ class PluginCustomerManager extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {
-                    arrTotalPackage == 0 ?
-                      <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
-                      <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
-                  }
-                  {
-                    arrTotalPackage != undefined ?
-                      arrTotalPackage.map((item, i) => {
+                  {arrTotalPackage == 0 ? (
+                    <td colSpan="10" hidden={false} className="text-center">
+                      Không tìm thấy dữ liệu
+                    </td>
+                  ) : (
+                    <td colSpan="10" hidden={true} className="text-center">
+                      Không tìm thấy dữ liệu
+                    </td>
+                  )}
+                  {arrTotalPackage != undefined
+                    ? arrTotalPackage.map((item, i) => {
                         return (
                           <tr key={i}>
                             <th className="text-center">{i + 1}</th>
@@ -689,70 +727,111 @@ class PluginCustomerManager extends Component {
                               {item.Array_Feature.map((item, i) => {
                                 if (i < 2) {
                                   return (
-                                    <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
-                                  )
+                                    <div>
+                                      <a
+                                        href={item.Value}
+                                        target="_blank"
+                                        key={i}
+                                      >
+                                        {item.Value}
+                                      </a>
+                                    </div>
+                                  );
                                 }
                               })}
-                              {
-                                (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
-                              }
+                              {item.Array_Feature.length - 2 <= 0
+                                ? ""
+                                : item.Array_Feature.length - 2 + " mores..."}
                             </th>
-                            <th className="text-center">{`${item.Value} ${this.convertUnitToDate(item.Unit)}`}</th>
+                            <th className="text-center">{`${
+                              item.Value
+                            } ${this.convertUnitToDate(item.Unit)}`}</th>
                             <th className="text-center">
-                              {item.Status == "1" ? new Date(item.Active_Date).toLocaleDateString() : "-----"}
+                              {item.Status == "1"
+                                ? new Date(
+                                    item.Active_Date
+                                  ).toLocaleDateString()
+                                : "-----"}
                             </th>
                             <th className="text-center">
-                              {item.Status == "1" ? new Date(item.End_Date).toLocaleDateString() : "-----"}
+                              {item.Status == "1"
+                                ? new Date(item.End_Date).toLocaleDateString()
+                                : "-----"}
                             </th>
-                            {
-                              item.Status == "1" ? <th className="text-center" style={
-                                this.calDateLeft(item.End_Date, Date.now()) > 30 ? { color: 'green' } :
-                                  this.calDateLeft(item.End_Date, Date.now()) < 15 ? { color: 'yellow' } : { color: 'red' }
-                              }>
-                                {
-                                  this.calDateLeft(item.End_Date, Date.now())
-                                } ngày nữa
-                              </th> : <th className="text-center">-----</th>
-                            }
-                            <th className="text-center" >
+                            {item.Status == "1" ? (
+                              <th
+                                className="text-center"
+                                style={
+                                  this.calDateLeft(item.End_Date, Date.now()) >
+                                  30
+                                    ? { color: "green" }
+                                    : this.calDateLeft(
+                                        item.End_Date,
+                                        Date.now()
+                                      ) < 15
+                                    ? { color: "yellow" }
+                                    : { color: "red" }
+                                }
+                              >
+                                {this.calDateLeft(item.End_Date, Date.now())}{" "}
+                                ngày nữa
+                              </th>
+                            ) : (
+                              <th className="text-center">-----</th>
+                            )}
+                            <th className="text-center">
                               <CBadge color={this.getBadgeStatus(item.Status)}>
                                 {this.getStatus(item.Status)}
                               </CBadge>
                             </th>
 
                             <td className="text-center">
-                              <CButton outline color="info" size="sm"
+                              <CButton
+                                outline
+                                color="info"
+                                size="sm"
                                 onClick={async (e) => {
-                                  console.log(item.Company_Id)
-                                  console.log(item.Package_Id)
+                                  console.log(item.Company_Id);
+                                  console.log(item.Package_Id);
                                   this.setState({
-                                    arrDetailPackage: item.Array_Feature, current_package: item.Name
-                                  })
-                                }}>
+                                    arrDetailPackage: item.Array_Feature,
+                                    current_package: item.Name,
+                                  });
+                                }}
+                              >
                                 <CIcon name="cil-magnifying-glass" />
                               </CButton>
                             </td>
                           </tr>
-                        )
-                      }) : ""
-                  }
+                        );
+                      })
+                    : ""}
                 </tbody>
               </table>
               <br />
               <CModalHeader>
-                <CModalTitle>Chi tiết tính năng ({current_package})</CModalTitle>
+                <CModalTitle>
+                  Chi tiết tính năng ({current_package})
+                </CModalTitle>
               </CModalHeader>
-              {
-                this.renderDetailPackage()
-              }
+              {this.renderDetailPackage()}
             </CModalBody>
             <CModalFooter>
-              <CButton color="secondary" onClick={() => { this.setState({ toggleView: !this.state.toggleView }) }}>Đóng</CButton>
+              <CButton
+                color="secondary"
+                onClick={() => {
+                  this.setState({ toggleView: !this.state.toggleView });
+                }}
+              >
+                Đóng
+              </CButton>
             </CModalFooter>
           </CModal>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="Email"
@@ -761,8 +840,8 @@ class PluginCustomerManager extends Component {
                 type={"email"}
                 placeholder={"Emal"}
                 // error={errors.title}
-                onChange={e => this.onChange("Email", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Email", e.target.value)}
+                // rows="5"
               />
               <TextFieldGroup
                 field="Name"
@@ -770,8 +849,8 @@ class PluginCustomerManager extends Component {
                 value={this.state.Name}
                 placeholder={"Tên công ty"}
                 // error={errors.title}
-                onChange={e => this.onChange("Name", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Name", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -780,8 +859,8 @@ class PluginCustomerManager extends Component {
                 value={UserName}
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("UserName", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -789,8 +868,8 @@ class PluginCustomerManager extends Component {
                 label="Số điện thoại"
                 value={this.state.Phone}
                 placeholder={"Số điện thoại"}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Phone", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -799,8 +878,8 @@ class PluginCustomerManager extends Component {
                 value={this.state.Fax}
                 placeholder={"Fax"}
                 // error={errors.title}
-                onChange={e => this.onChange("Fax", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Fax", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -809,25 +888,37 @@ class PluginCustomerManager extends Component {
                 value={this.state.Address}
                 placeholder={"Địa chỉ"}
                 // error={errors.title}
-                onChange={e => this.onChange("Address", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Address", e.target.value)}
+                // rows="5"
               />
 
-              <label style={styles.flexLabel} htmlFor="tag">Tỉnh  </label>
-              <CSelect onChange={async e => { this.setState({ current_province: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                {
-                  province.map((item, i) => {
-                    if (item.province_name == current_province) {
-                      return (
-                        <option selected value={item.province_name}>{item.province_name}</option>
-                      );
-                    } else {
-                      return (
-                        <option value={item.province_name}>{item.province_name}</option>
-                      );
-                    }
-                  })
-                }
+              <label style={styles.flexLabel} htmlFor="tag">
+                Tỉnh{" "}
+              </label>
+              <CSelect
+                onChange={async (e) => {
+                  this.setState({ current_province: e.target.value });
+                }}
+                custom
+                size="sm"
+                name="selectSm"
+                id="SelectLm"
+              >
+                {province.map((item, i) => {
+                  if (item.province_name == current_province) {
+                    return (
+                      <option selected value={item.province_name}>
+                        {item.province_name}
+                      </option>
+                    );
+                  } else {
+                    return (
+                      <option value={item.province_name}>
+                        {item.province_name}
+                      </option>
+                    );
+                  }
+                })}
               </CSelect>
 
               <TextFieldGroup
@@ -836,8 +927,8 @@ class PluginCustomerManager extends Component {
                 value={this.state.Slug}
                 placeholder={"Slug"}
                 // error={errors.title}
-                onChange={e => this.onChange("Slug", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Slug", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -846,39 +937,90 @@ class PluginCustomerManager extends Component {
                 value={this.state.Website}
                 placeholder={"Website"}
                 // error={errors.title}
-                onChange={e => this.onChange("Website", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Website", e.target.value)}
+                // rows="5"
               />
-              {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái    </label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'Actived'}>Actived</option>
-                    <option value={'Deactived'}>Deactived</option>
+              {action == "new" ? (
+                ""
+              ) : (
+                <div>
+                  <label style={styles.flexLabel} htmlFor="tag">
+                    Trạng thái{" "}
+                  </label>
+                  <select
+                    style={styles.flexOption}
+                    name="Status"
+                    onChange={(e) => this.onChange("Status", e.target.value)}
+                  >
+                    <option value={this.state.Status}>
+                      {this.state.Status == ""
+                        ? ` - - - - - - - - - - `
+                        : this.state.Status}
+                    </option>
+                    <option value={"Actived"}>Actived</option>
+                    <option value={"Deactived"}>Deactived</option>
                   </select>
                 </div>
-              }
-
+              )}
             </ModalBody>
 
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateCompany() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => {this.setState({ modalCom: !this.state.modalCom })}}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addCompany()
+                    : this.updateCompany();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => {
+                  this.setState({ modalCom: !this.state.modalCom });
+                }}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({ modalDelete: !this.state.modalDelete })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({ modalDelete: !this.state.modalDelete })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({ modalDelete: !this.state.modalDelete })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
-        </div >
+        </div>
       );
     }
 
