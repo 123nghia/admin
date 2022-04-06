@@ -333,6 +333,6 @@ export default {
   CONFIG_THEME_GET: "/api/get-config-color",
 
   ADD_PROVIDER: "api/plugin-add-vendor",
-  UPDATE_PROVIDER: "/api/plugin-update-vendor",
-  DELETE_PROVIDER: "/api/plugin-delete-vendor"
+  UPDATE_PROVIDER: "api/plugin-update-vendor",
+  DELETE_PROVIDER: "api/plugin-delete-vendor"
 };
