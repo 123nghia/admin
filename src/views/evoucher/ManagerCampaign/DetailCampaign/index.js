@@ -400,8 +400,8 @@ class DetailCampaign extends Component {
                         }}
                       >
                         <span>
-                          {detailCampaign && detailCampaign?.CheckIn[0]
-                            ? detailCampaign?.CheckIn[0]?.totalVoucher
+                          {detailCampaign && detailCampaign?.campaignOverview[0]
+                            ? detailCampaign?.campaignOverview[0]?.totalVoucher
                             : "0"}{" "}
                         </span>
                         <ConfirmationNumberIcon />
@@ -411,34 +411,41 @@ class DetailCampaign extends Component {
                       <td className="pl-5">Số lượng voucher đã áp dụng:</td>
 
                       <td>
-                        {detailCampaign && detailCampaign?.CheckIn?.[0] && (
-                          <>
-                            {" "}
-                            <Chip
-                              label={
-                                detailCampaign?.CheckIn?.[0].voucheredCount ||
-                                "0"
-                              }
-                              color="success"
-                              variant="outlined"
-                              icon={<DoneIcon />}
-                            />
-                          </>
-                        )}
+                        {detailCampaign &&
+                          detailCampaign?.campaignOverview?.[0] && (
+                            <>
+                              {" "}
+                              <Chip
+                                label={
+                                  detailCampaign?.campaignOverview?.[0]
+                                    .countVoucher || "0"
+                                }
+                                color="success"
+                                variant="outlined"
+                                icon={<DoneIcon />}
+                              />
+                            </>
+                          )}
                       </td>
                     </tr>
                     <tr>
                       <td className="pl-5">Số lượng voucher còn lại:</td>
                       <td>
-                        {detailCampaign && detailCampaign?.CheckIn[0]
-                          ? parseInt(detailCampaign?.CheckIn[0]?.totalVoucher) -
-                            parseInt(detailCampaign?.CheckIn[0]?.voucheredCount)
+                        {detailCampaign && detailCampaign?.campaignOverview[0]
+                          ? parseInt(
+                              detailCampaign?.campaignOverview[0]?.totalVoucher
+                            ) -
+                            parseInt(
+                              detailCampaign?.campaignOverview[0]?.countVoucher
+                            )
                           : "0"}
                       </td>
                     </tr>
                     <tr>
                       <td className="pl-5">Số khách Check-in:</td>
-                      <td>Chưa có</td>
+                      <td>
+                        {detailCampaign?.campaignOverview[0]?.voucheredCount}
+                      </td>
                     </tr>
                     <tr>
                       <td className="pl-5">Tỷ lệ check-in/ Voucher phát:</td>
