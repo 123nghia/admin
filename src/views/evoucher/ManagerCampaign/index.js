@@ -72,6 +72,7 @@ class EndUser extends Component {
     idCurrentUpdate: null,
     dataCompany: [],
     quantity: "0",
+    noted: "",
   };
 
   changeLevel = (e) => {
@@ -96,22 +97,22 @@ class EndUser extends Component {
       .catch((err) => console.log(err));
   }
 
-  // async onGetCompanyList() {
-  //   this.setState({ isLoading: true });
-  //   const res = await axios({
-  //     baseURL: Constants.BASE_URL,
-  //     url: Constants.PLUGIN_LIST_COMPANY,
-  //     method: "POST",
-  //   });
-  //   let val = res.data.data;
-  //   this.setState({
-  //     dataCompany: val,
-  //   });
-  // }
+  async onGetCompanyList() {
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.PLUGIN_LIST_COMPANY,
+      method: "POST",
+    });
+    let val = res.data.data;
+    this.setState({
+      dataCompany: val,
+    });
+  }
 
   async componentDidMount() {
     this.onGetCampaignList();
-    // this.onGetCompanyList();
+    this.onGetCompanyList();
   }
 
   onChange(key, val) {
@@ -260,28 +261,29 @@ class EndUser extends Component {
   }
 
   openEditVoucher(item) {
-    const { name, from, to, description, status } = this.state;
     this.state.dataCompany.forEach((name) => {
       if (name._id === item.company_id) {
         this.setState({
           nameCompanyChoose: name.Name,
-          idCompany: item._id,
+          idCompany: item?._id,
         });
         return;
       }
     });
-    console.log(this.state.nameCompanyChoose);
+
     this.setState({
       actionVoucher: "edit",
       modalVoucher: true,
-      idCurrentUpdate: item._id,
-      quantity: item.quatinity,
-      name: item.name,
-      saleEndDate: new Date(item.saleEndDate).toLocaleDateString(),
-      from: new Date(item.from).toLocaleDateString(),
-      to: new Date(item.to).toLocaleDateString(),
-      description: item.description,
-      status: item.status,
+      idCurrentUpdate: item?._id,
+      quantity: item?.quatinity,
+      name: item?.name,
+      saleEndDate: new Date(item?.saleEndDate).toLocaleDateString(),
+      from: new Date(item?.from).toLocaleDateString(),
+      to: new Date(item?.to).toLocaleDateString(),
+      description: item?.description,
+      status: item?.status,
+      noted: item?.noted,
+      nameCompanyChoose: item?.vendor[0]?.Name,
     });
   }
   async update() {
@@ -295,6 +297,8 @@ class EndUser extends Component {
       saleEndDate,
       idCurrentUpdate,
       quantity,
+      noted,
+      nameCompanyChoose,
     } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
@@ -312,6 +316,8 @@ class EndUser extends Component {
         to,
         description,
         status,
+        noted,
+        nameCompanyChoose,
       })
       .then((res) => {
         Swal.fire({
@@ -335,8 +341,9 @@ class EndUser extends Component {
       saleEndDate,
       status,
       idCompany,
-      company_id,
       quantity,
+      noted,
+      nameCompanyChoose,
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_CAMPAIGN;
@@ -353,6 +360,8 @@ class EndUser extends Component {
         description,
         status,
         create_by: "1",
+        noted,
+        nameCompanyChoose,
       })
       .then((res) => {
         Swal.fire({
@@ -492,7 +501,6 @@ class EndUser extends Component {
     let baseUrlCallApi = Constants.ADD_VOUCHER;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
-    console.log(saleEndDate);
     await axios
       .post(url, {
         code: codeVoucher,
@@ -529,20 +537,7 @@ class EndUser extends Component {
       status: item.status,
     });
   }
-  getBadge(status) {
-    switch (status) {
-      case "Actived":
-        return "success";
-      case "Inactive":
-        return "secondary";
-      case "Locked":
-        return "warning";
-      case "Deactived":
-        return "danger";
-      default:
-        return "primary";
-    }
-  }
+
   renderModalInfo(item) {
     let itemRender = (
       <div>
@@ -647,6 +642,7 @@ class EndUser extends Component {
       arrPaginationVoucher,
       modalVoucher,
       dataCompany,
+      noted,
     } = this.state;
     const dateArray = [this.state.from, this.state.to];
     const arrLevel = [
@@ -827,7 +823,6 @@ class EndUser extends Component {
                       }
                     });
                     this.setState({ saleEndDate: newData });
-                    console.log(this.state.saleEndDate);
                   }}
                   defaultValue={moment(
                     new Date(this.state.saleEndDate).toLocaleDateString(),
@@ -848,7 +843,6 @@ class EndUser extends Component {
                       }
                     });
                     this.setState({ saleEndDate: newData });
-                    console.log(this.state.saleEndDate);
                   }}
                   defaultValue={moment()}
                   format={dateFormat}
@@ -861,6 +855,15 @@ class EndUser extends Component {
                 value={this.state.description}
                 onChange={(e) => {
                   this.setState({ description: e.target.value });
+                }}
+              />
+              <label className="control-label mt-3">Ghi chú:</label>
+              <CTextarea
+                name="noted"
+                rows="4"
+                value={this.state.noted}
+                onChange={(e) => {
+                  this.setState({ noted: e.target.value });
                 }}
               />
               <label className="control-label">Công ty - NCC:</label>
@@ -1154,7 +1157,7 @@ class EndUser extends Component {
               />
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
-                {arrLevel != undefined ? (
+                {arrLevel !== undefined ? (
                   <CSelect
                     onChange={async (e) => {
                       this.changeLevel(e);
@@ -1452,9 +1455,8 @@ class EndUser extends Component {
                       >
                         Không tìm thấy dữ liệu
                       </td>
-                      {data != undefined
+                      {data !== undefined
                         ? data.map((item, i) => {
-                            console.log(item);
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>

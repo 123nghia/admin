@@ -8,60 +8,60 @@ function ProviderContent({ detailCampaign }) {
         <thead></thead>
         <tbody>
           <tr>
-            <td className="pl-5">Tên công ty</td>
-            <td className="color-red">
-              {detailCampaign && detailCampaign.vendor?.[0]
-                ? detailCampaign.vendor?.[0].Name
+            <td className="pl-5">Tên nhà cung cấp:</td>
+            <td>
+              {detailCampaign && detailCampaign?.vendor?.[0]
+                ? detailCampaign?.vendor?.[0].Name
                 : ""}
             </td>
           </tr>
           <tr>
-            <td className="pl-5">Brand</td>
-            <td className="color-red">
-              {detailCampaign && detailCampaign.vendor?.[0]
-                ? detailCampaign.vendor?.[0].Name
+            <td className="pl-5">Thương hiệu:</td>
+            <td>
+              {detailCampaign && detailCampaign?.vendor?.[0]
+                ? detailCampaign?.vendor?.[0].Name
                 : ""}
             </td>
           </tr>
           <tr>
-            <td className="pl-5">Địa chỉ</td>
-            <td className="color-red">
-              {detailCampaign && detailCampaign.vendor?.[0]
-                ? detailCampaign.vendor?.[0].Address
+            <td className="pl-5">Địa chỉ:</td>
+            <td>
+              {detailCampaign && detailCampaign?.vendor?.[0]
+                ? detailCampaign?.vendor?.[0].Address
                 : ""}
             </td>
           </tr>
           <tr>
-            <td className="pl-5">Email</td>
-            <td className="color-red">
-              {detailCampaign && detailCampaign.vendor?.[0]
-                ? detailCampaign.vendor?.[0].Email
+            {detailCampaign?.vendor?.[0]?.Email && (
+              <>
+                <td className="pl-5">Email:</td>
+                <td>{detailCampaign?.vendor?.[0].Email}</td>
+              </>
+            )}
+          </tr>
+          <tr>
+            <td className="pl-5">Số điện thoại:</td>
+            <td>
+              {detailCampaign && detailCampaign?.vendor?.[0]
+                ? detailCampaign?.vendor?.[0].Phone
                 : ""}
             </td>
           </tr>
           <tr>
-            <td className="pl-5">Số điện thoại</td>
-            <td className="color-red">
-              {detailCampaign && detailCampaign.vendor?.[0]
-                ? detailCampaign.vendor?.[0].Phone
+            <td className="pl-5">Slug - Đường dẫn:</td>
+            <td>
+              {detailCampaign && detailCampaign?.vendor?.[0]
+                ? detailCampaign?.vendor?.[0].Slug
                 : ""}
             </td>
           </tr>
           <tr>
-            <td className="pl-5">Slug - Đường dẫn</td>
-            <td className="color-red">
-              {detailCampaign && detailCampaign.vendor?.[0]
-                ? detailCampaign.vendor?.[0].Slug
-                : ""}
-            </td>
-          </tr>
-          <tr>
-            <td className="pl-5">Website</td>
-            <td className="color-red">
-              {detailCampaign && detailCampaign.vendor?.[0]
-                ? detailCampaign.vendor?.[0].Website
-                : ""}
-            </td>
+            {detailCampaign?.vendor?.[0]?.Website && (
+              <>
+                <td className="pl-5">Website:</td>
+                <td>{detailCampaign?.vendor?.[0].Website}</td>
+              </>
+            )}
           </tr>
         </tbody>
       </table>

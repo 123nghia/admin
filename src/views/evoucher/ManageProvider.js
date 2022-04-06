@@ -92,8 +92,6 @@ class EndUser extends Component {
       action: "new",
       SystemIdentifier: "",
       introduction: "",
-      data: [],
-      Email: "",
       TypeId: "0",
       Logo: "",
       Phone: "",
@@ -167,51 +165,7 @@ class EndUser extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
-  paginationVoucher(dataApi) {
-    var i,
-      j,
-      temparray,
-      chunk = 8;
-    var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
 
-    if (arrTotal.length == 0) {
-      this.setState({
-        hiddenVoucher: false,
-      });
-    } else {
-      this.setState({
-        hiddenVoucher: true,
-      });
-    }
-
-    this.setState({ arrPaginationVoucher: arrTotal, dataVoucher: arrTotal[0] });
-  }
-  async getDataVoucher(company_id_search) {
-    var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_VOUCHER;
-
-    let url = baseUrlapi + baseUrlCallApi;
-    await axios
-      .get(url, {
-        params: {
-          company_id: company_id_search,
-        },
-      })
-      .then((res) => {
-        let val = res.data.data;
-
-        this.paginationVoucher(val);
-        this.setState({ dataApiVoucher: val });
-
-        let active = 0;
-
-        this.setState({ isLoading: false, totalActiveVoucher: active });
-      });
-  }
   onSearch() {
     this.getData(this.state.key);
   }
@@ -243,99 +197,38 @@ class EndUser extends Component {
     this.setState({ [key]: val });
   }
 
-  async updateUser() {
-    const { email, phone, password, username } = this.state;
-
-    if (
-      email == null ||
-      email == "" ||
-      phone == null ||
-      phone == "" ||
-      username == null ||
-      username == ""
-    ) {
-      alert("Hãy nhập đầy đủ trường !!!");
-      return;
-    }
-
-    const body = {
-      email: email,
-      phone: phone,
-      username: username,
-      id: this.state.id,
-    };
-
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_END_USER,
-      method: "POST",
-      data: body,
-    });
-
-    if (res.status == 200) {
-      this.getData();
-
-      this.setState({ modalCom: !this.state.modalCom });
-    } else {
-      alert("Cập nhật thất bại");
-      this.setState({ isLoading: false });
-    }
-  }
-
-  openDelete = (item) => {
-    this.setState({
-      modalDelete: !this.state.modalDelete,
-      id: item._id,
-    });
-  };
   async openUpdate(item) {
-    this.state.dataCompany.forEach((name) => {
-      if (name._id === item.company_id) {
-        this.setState({
-          nameCompanyChoose: name.Name,
-          idCompany: item._id,
-        });
-        return;
-      }
-    });
-
     this.setState({
       action: "edit",
       modalEdit: true,
-      Brand: item.Brand,
-      UserName: item.UserName,
       Name: item.Name,
-      Create_Date: item.Create_Date,
+      Email: item.Email,
+      introduction: item.introduction,
+      Status: item.Status,
+      Brand: item.Brand,
+      TypeId: item.TypeId,
+      Logo: item.Logo,
+      UserName: item.UserName,
       id: item["_id"],
     });
   }
   async update() {
-    const {
-      Name,
-      Brand,
-      UserName,
-      Password,
-      introduction,
-      Status,
-      TypeId,
-      SystemIdentifier,
-    } = this.state;
+    const { Name, Brand, introduction, Status, TypeId, Email, Logo } =
+      this.state;
 
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.UPDATE_CAMPAIGN;
+    let baseUrlCallApi = Constants.UPDATE_PROVIDER;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .post(url, {
-        Name,
-        Brand,
-        UserName,
-        Password,
-        introduction,
-        Status,
-        TypeId,
-        SystemIdentifier,
+        Name: Name,
+        Email: Email,
+        introduction: introduction,
+        Status: Status,
+        Brand: Brand,
+        TypeId: TypeId,
+        Logo: Logo,
       })
       .then((res) => {
         Swal.fire({
@@ -344,10 +237,18 @@ class EndUser extends Component {
           showConfirmButton: false,
           timer: 700,
         });
-        this.setState({
-          modalVoucher: false,
-        });
-        this.getData();
+        // this.setState({
+        //   modalEdit: false,
+        // });
+
+        if (res.status == 200) {
+          this.getData();
+
+          this.setState({ modalEdit: !this.state.modalEdit });
+        } else {
+          alert("Cập nhật thất bại");
+          this.setState({ isLoading: false });
+        }
       });
   }
   openCreate() {
@@ -382,21 +283,25 @@ class EndUser extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_PROVIDER;
     let url = baseUrlapi + baseUrlCallApi;
-
+    this.setState({ isLoading: true });
     await axios
       .post(url, {
-        UserName,
-        Email,
-        Brand,
-        TypeId,
-        Logo,
-        Phone,
-        Slug,
-        introduction,
-        Password,
-        Name,
+        userName: UserName,
+        email: Email,
+        brand: Brand,
+        typeId: TypeId,
+        logo: Logo,
+        phone: Phone,
+        slug: Slug,
+        introduction: introduction,
+        password: Password,
+        name: Name,
       })
       .then((res) => {
+        let val = res.data;
+        this.pagination(val);
+        this.setState({ data: val });
+        console.log(val);
         Swal.fire({
           icon: "success",
           title: "Thêm thành công",
@@ -406,7 +311,6 @@ class EndUser extends Component {
         // this.setState({
         //   modalVoucher: false,
         // });
-        // this.getData();
         if (res.is_success == true) {
           this.getData();
           this.setState({ modalVoucher: !this.state.modalVoucher });
@@ -425,23 +329,37 @@ class EndUser extends Component {
         }
       });
   }
-  async remove(item) {
-    let baseUrlCallApi = Constants.DELETE_CAMPAIGN;
+  openDelete = () => {
+    this.setState({
+      modalDelete: !this.state.modalDelete,
+      id: "",
+    });
+  };
+  async remove() {
+    let baseUrlCallApi = Constants.DELETE_PROVIDER;
 
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
+    this.setState({ isLoading: true });
     await axios
-      .post(url, {
-        id: item._id,
+      .delete(url, {
+        id: "",
       })
       .then((res) => {
+        console.log(res.data);
         Swal.fire({
           icon: "success",
           title: "Xóa thành công",
           showConfirmButton: false,
           timer: 700,
         });
-        this.getData();
+        if (res.is_success == true) {
+          this.getData();
+          this.setState({ modalDelete: !this.state.modalDelete, delete: null });
+        } else {
+          alert(res.message);
+          this.setState({ isLoading: false });
+        }
       });
   }
 
@@ -454,118 +372,6 @@ class EndUser extends Component {
       to: dateString[1],
     });
   };
-
-  async removeVoucher(item) {
-    let baseUrlCallApi = Constants.DELETE_VOUCHER;
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + baseUrlCallApi;
-    await axios
-      .post(url, {
-        id: item._id,
-      })
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Xóa thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-        this.getDataVoucher(this.state.company_id_search);
-      });
-  }
-
-  renderModalInfo(item) {
-    let itemRender = (
-      <div>
-        <Modal isOpen={true} size="md">
-          <ModalHeader>Chi tiết Voucher</ModalHeader>
-          <ModalBody className="info_voucher">
-            <p>
-              Mã voucher : <span>{item.code}</span>
-            </p>
-            <p>
-              Mã công ty : <span>{item.code}</span>
-            </p>
-            <p>
-              Khởi tạo :
-              <span>
-                Lúc{" "}
-                {new Date(item.create_at).toLocaleTimeString() +
-                  " giờ " +
-                  " ngày " +
-                  new Date(item.create_at).toLocaleDateString()}
-              </span>
-            </p>
-            <p>
-              Bắt đầu :
-              <span>Ngày {new Date(item.from).toLocaleDateString()}</span>
-            </p>
-            <p>
-              Kết thúc :
-              <span>Ngày {new Date(item.to).toLocaleDateString()}</span>
-            </p>
-            <p>
-              Nội dung voucher : <span>{item.content}</span>
-            </p>
-            <p>
-              Trạng thái :
-              <span>
-                <Tag
-                  className="ant-tag"
-                  color={
-                    item.status === "0"
-                      ? "#2eb85c"
-                      : item.status === "1"
-                      ? "#2db7f5"
-                      : item.status === "2"
-                      ? "#87d068"
-                      : item.status === "3"
-                      ? "#f50"
-                      : item.status === "4"
-                      ? "#dc0e04"
-                      : item.status === "4"
-                      ? "#00D084"
-                      : "#FF0004"
-                  }
-                >
-                  {item.status === "0"
-                    ? "Sẵn sàng"
-                    : item.status === "1"
-                    ? "Chờ xác nhận"
-                    : item.status === "2"
-                    ? "Đã sử dụng"
-                    : item.status === "3"
-                    ? "Hủy bỏ"
-                    : item.status === "4"
-                    ? "Xóa bỏ"
-                    : "Khóa"}
-                </Tag>
-              </span>
-            </p>
-
-            <p>
-              Id voucher : <span>{item._id}</span>
-            </p>
-          </ModalBody>
-          <ModalFooter>
-            <CButton
-              color="secondary"
-              onClick={(e) =>
-                this.setState({
-                  modalInfo: null,
-                })
-              }
-            >
-              Đóng
-            </CButton>
-          </ModalFooter>
-        </Modal>
-      </div>
-    );
-    this.setState({
-      modalInfo: itemRender,
-    });
-  }
 
   render() {
     const {
@@ -638,30 +444,12 @@ class EndUser extends Component {
             </ModalHeader>
             <ModalBody>
               <div style={{ width: "100%" }} className="mt-3">
-                <label className="control-label">Tên công ty:</label>
-                <Select
-                  className="select_company"
-                  showSearch
-                  placeholder="Chọn tên công ty"
-                  optionFilterProp="children"
-                  onChange={(value) =>
-                    this.setState({
-                      idCompany: value,
-                    })
-                  }
-                  onSearch={this.onSearchSelect}
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {dataCompany
-                    ? dataCompany.map((item, i) => {
-                        return <Option value={item._id}>{item.Name}</Option>;
-                      })
-                    : null}
-                </Select>
+                <TextFieldGroup
+                  field="Name"
+                  label="Tên công ty:"
+                  value={this.state.Name}
+                  onChange={(e) => this.setState({ Name: e.target.value })}
+                />
               </div>
 
               <div style={{ width: "100%" }} className="mt-3">
@@ -708,10 +496,8 @@ class EndUser extends Component {
                 <TextFieldGroup
                   field=""
                   label="Định danh hệ thống:"
-                  value={this.state.SystemIdentifier}
-                  onChange={(e) =>
-                    this.setState({ SystemIdentifier: e.target.value })
-                  }
+                  value={this.state.Slug}
+                  onChange={(e) => this.setState({ Slug: e.target.value })}
                 />
               </div>
 
@@ -793,6 +579,16 @@ class EndUser extends Component {
                   // rows="5"
                 />
               </div>
+              <div style={{ width: "100%" }} className="mt-3">
+                <TextFieldGroup
+                  field="Phone"
+                  label="Số điện thoại: "
+                  value={this.state.Phone}
+                  placeholder={"Số điện thoại"}
+                  onChange={(e) => this.onChange("Phone", e.target.value)}
+                  // rows="5"
+                />
+              </div>
             </ModalBody>
             <ModalFooter>
               <CButton
@@ -821,31 +617,14 @@ class EndUser extends Component {
             </ModalHeader>
             <ModalBody>
               <div style={{ width: "100%" }}>
-                <CLabel>Tên công ty</CLabel>
-                <Select
-                  className="select_company"
-                  showSearch
-                  defaultValue={this.state.nameCompanyChoose}
-                  placeholder="Chọn tên công ty"
-                  optionFilterProp="children"
-                  onChange={(value) =>
-                    this.setState({
-                      idCompany: value,
-                    })
-                  }
-                  onSearch={this.onSearchSelect}
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {dataCompany
-                    ? dataCompany.map((item, i) => {
-                        return <Option value={item._id}>{item.Name}</Option>;
-                      })
-                    : null}
-                </Select>
+                <TextFieldGroup
+                  field="Name"
+                  label="Tên công ty"
+                  value={this.state.Name}
+                  // error={errors.title}
+                  onChange={(e) => this.setState({ Name: e.target.value })}
+                  // rows="5"
+                />
               </div>
               <div style={{ width: "100%" }} className="mt-3">
                 <TextFieldGroup
@@ -933,40 +712,6 @@ class EndUser extends Component {
                               })}
                             </CSelect>
                           ) : null}
-                        </div>
-                      </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Danh sách thương hiệu</p>
-                        <div style={{ width: "200px" }}>
-                          <Select
-                            className="select_seo"
-                            showSearch
-                            placeholder="Lọc theo thương hiệu"
-                            optionFilterProp="children"
-                            onChange={(value) =>
-                              this.setState({
-                                idDataSales: value,
-                              })
-                            }
-                            onSearch={this.onSearchSelect}
-                            filterOption={(input, option) =>
-                              option.children
-                                .toLowerCase()
-                                .indexOf(input.toLowerCase()) >= 0
-                            }
-                          >
-                            {this.state.dataSales
-                              ? this.state.dataSales.map((item, i) => {
-                                  return (
-                                    <Option value={item._id}>
-                                      {item.Name}
-                                    </Option>
-                                  );
-                                })
-                              : null}
-                          </Select>
                         </div>
                       </div>
                     </CCol>
@@ -1136,7 +881,7 @@ class EndUser extends Component {
                                       color="danger"
                                       style={styles.mgl5}
                                       onClick={(e) => {
-                                        this.removeVoucher(item);
+                                        this.openDelete(item);
                                       }}
                                     >
                                       <BsTrash
@@ -1189,12 +934,12 @@ class EndUser extends Component {
               }
             >{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
+              <label htmlFor="tag">{`Bạn có chắc chắn xóa ?`}</label>
             </ModalBody>
             <ModalFooter>
               <CButton
                 color="primary"
-                onClick={(e) => this.delete()}
+                onClick={(e) => this.remove()}
                 disabled={this.state.isLoading}
               >
                 Xoá

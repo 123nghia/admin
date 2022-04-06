@@ -1,11 +1,14 @@
-import { CButton } from "@coreui/react";
+import { CBadge, CButton, CListGroup, CListGroupItem } from "@coreui/react";
 import { css } from "@emotion/react";
 import Pagination from "@material-ui/lab/Pagination";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { BsInfoCircleFill } from "@react-icons/all-files/bs/BsInfoCircleFill";
+import { AiOutlineBank } from "react-icons/ai";
+import { MdOutlineCampaign } from "react-icons/md";
+import { HiOutlineTicket } from "react-icons/hi";
+import { IoBarcodeOutline } from "react-icons/io5";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 import { Tag } from "antd";
 import axios from "axios";
@@ -17,6 +20,16 @@ import DotLoader from "react-spinners/DotLoader";
 import campaignApi from "src/apis/managerCampaignApi.js";
 import Constants from "../../../../contants/contants.js";
 import ProviderContent from "./ProviderContent.js";
+import formatDate from "src/utils/formatDate";
+import { Box, Chip, IconButton, Tooltip, Typography } from "@mui/material";
+import DynamicFormIcon from "@mui/icons-material/DynamicForm";
+import CircularProgressWithLabel from "src/views/components/CircularProgressWithLabel.js";
+import DoneIcon from "@mui/icons-material/Done";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import CopyToClipboard from "react-copy-to-clipboard";
+import CIcon from "@coreui/icons-react";
+import { freeSet } from "@coreui/icons";
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -30,17 +43,33 @@ class DetailCampaign extends Component {
       {
         _id: "t1",
         name: "Thông tin về nhà cung cấp",
-        icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />,
+        icon: (
+          <AiOutlineBank
+            style={{
+              width: "24px ",
+              height: "24px ",
+              color: "#389bff",
+            }}
+          />
+        ),
       },
       {
         _id: "t2",
         name: "Thông tin về chiến dịch",
-        icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />,
+        icon: (
+          <MdOutlineCampaign
+            style={{ width: "24px ", height: "24px ", color: "#389bff" }}
+          />
+        ),
       },
       {
         _id: "t3",
         name: "Thông tin về voucher",
-        icon: <BsInfoCircleFill style={{ width: "24px ", height: "24px " }} />,
+        icon: (
+          <HiOutlineTicket
+            style={{ width: "24px ", height: "24px ", color: "#389bff" }}
+          />
+        ),
       },
     ],
     company_id: JSON.parse(localStorage.getItem("user")).company_id
@@ -86,6 +115,7 @@ class DetailCampaign extends Component {
         code: "",
       },
     ],
+    detailCampaign: null,
   };
 
   async ExportsFileExcel() {
@@ -222,6 +252,8 @@ class DetailCampaign extends Component {
   render() {
     const { data, arrPagination, detailCampaign } = this.state;
 
+    console.log("Thông tin chiến dịch: ", detailCampaign);
+
     if (this.state.isLoading) {
       return (
         <div className="sweet-loading">
@@ -284,46 +316,49 @@ class DetailCampaign extends Component {
                   <thead></thead>
                   <tbody>
                     <tr>
-                      <td className="pl-5">Trạng thái chiến dịch</td>
-                      <td className="color-red">
-                        {detailCampaign ? (
-                          <Tag
-                            className="ant-tag"
-                            color={
-                              detailCampaign.status === "1" ? "#87d068" : "#f50"
-                            }
-                          >
-                            {detailCampaign.status === "1"
-                              ? "Hoạt động"
-                              : "Không hoạt động"}
-                          </Tag>
-                        ) : (
-                          ""
-                        )}
+                      <td className="pl-5">Trạng thái chiến dịch:</td>
+                      <td>
+                        <Tag
+                          className="ant-tag"
+                          color={
+                            detailCampaign?.status === "1" ? "#87d068" : "#f50"
+                          }
+                        >
+                          {detailCampaign?.status === "1"
+                            ? "Hoạt động"
+                            : "Không hoạt động"}
+                        </Tag>
                       </td>
                     </tr>
+                    {detailCampaign?.vendor[0]?.Code && (
+                      <tr>
+                        <td className="pl-5">Mã chiến dịch:</td>
+                        <td>
+                          <Chip
+                            icon={<DynamicFormIcon />}
+                            label={detailCampaign?.vendor[0]?.Code}
+                            variant="outlined"
+                          />
+                        </td>
+                      </tr>
+                    )}
+
                     <tr>
-                      <td className="pl-5">Tên chiến dịch</td>
-                      <td className="color-red">
-                        {detailCampaign ? detailCampaign.name : ""}
-                      </td>
+                      <td className="pl-5">Tên chiến dịch:</td>
+                      <td>{detailCampaign?.name}</td>
                     </tr>
 
                     <tr>
-                      <td className="pl-5">Nội dung chiến dịch</td>
-                      <td className="color-red">...</td>
+                      <td className="pl-5">Nội dung chiến dịch:</td>
+                      <td>{detailCampaign?.description}</td>
                     </tr>
                     <tr>
-                      <td className="pl-5">Ngày bắt đầu Sales</td>
-                      <td className="color-red">
-                        {detailCampaign
-                          ? new Date(detailCampaign.from).toLocaleDateString()
-                          : ""}
-                      </td>
+                      <td className="pl-5">Ngày bắt đầu Sales:</td>
+                      <td>{formatDate(detailCampaign?.from)}</td>
                     </tr>
                     <tr>
-                      <td className="pl-5">Ngày kết thúc Sales</td>
-                      <td className="color-red">
+                      <td className="pl-5">Ngày kết thúc Sales:</td>
+                      <td>
                         {detailCampaign
                           ? new Date(detailCampaign.to).toLocaleDateString()
                           : ""}
@@ -331,8 +366,8 @@ class DetailCampaign extends Component {
                     </tr>
 
                     <tr>
-                      <td className="pl-5">Ngày kết thúc chiến dịch</td>
-                      <td className="color-red">
+                      <td className="pl-5">Ngày kết thúc chiến dịch:</td>
+                      <td>
                         {detailCampaign
                           ? new Date(
                               detailCampaign.saleEndDate
@@ -340,10 +375,13 @@ class DetailCampaign extends Component {
                           : ""}
                       </td>
                     </tr>
-                    <tr>
-                      <td className="pl-5">Ghi chú</td>
-                      <td className="color-red">...</td>
-                    </tr>
+                    {detailCampaign?.noted && (
+                      <tr>
+                        <td className="pl-5">Ghi chú: </td>
+
+                        <td>{detailCampaign?.noted}</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -352,24 +390,46 @@ class DetailCampaign extends Component {
                   <thead></thead>
                   <tbody>
                     <tr>
-                      <td className="pl-5">Tổng số lượng Voucher</td>
-                      <td className="color-red">
-                        {detailCampaign && detailCampaign?.CheckIn[0]
-                          ? detailCampaign?.CheckIn[0]?.totalVoucher
-                          : "0"}
+                      <td className="pl-5">Tổng số lượng Voucher:</td>
+                      <td
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                          gap: "0.3rem",
+                        }}
+                      >
+                        <span>
+                          {detailCampaign && detailCampaign?.CheckIn[0]
+                            ? detailCampaign?.CheckIn[0]?.totalVoucher
+                            : "0"}{" "}
+                        </span>
+                        <ConfirmationNumberIcon />
                       </td>
                     </tr>
                     <tr>
-                      <td className="pl-5">Số lượng voucher đã áp dụng</td>
-                      <td className="color-red">
-                        {detailCampaign && detailCampaign?.CheckIn?.[0]
-                          ? detailCampaign?.CheckIn?.[0].voucheredCount
-                          : "0"}
+                      <td className="pl-5">Số lượng voucher đã áp dụng:</td>
+
+                      <td>
+                        {detailCampaign && detailCampaign?.CheckIn?.[0] && (
+                          <>
+                            {" "}
+                            <Chip
+                              label={
+                                detailCampaign?.CheckIn?.[0].voucheredCount ||
+                                "0"
+                              }
+                              color="success"
+                              variant="outlined"
+                              icon={<DoneIcon />}
+                            />
+                          </>
+                        )}
                       </td>
                     </tr>
                     <tr>
-                      <td className="pl-5">Số lượng voucher còn lại</td>
-                      <td className="color-red">
+                      <td className="pl-5">Số lượng voucher còn lại:</td>
+                      <td>
                         {detailCampaign && detailCampaign?.CheckIn[0]
                           ? parseInt(detailCampaign?.CheckIn[0]?.totalVoucher) -
                             parseInt(detailCampaign?.CheckIn[0]?.voucheredCount)
@@ -377,15 +437,17 @@ class DetailCampaign extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <td className="pl-5">Số khách CheckIn</td>
-                      <td className="color-red">...</td>
+                      <td className="pl-5">Số khách Check-in:</td>
+                      <td>Chưa có</td>
                     </tr>
                     <tr>
-                      <td className="pl-5">Tỷ lệ CheckIn Voucher</td>
-                      <td className="color-red">
-                        {detailCampaign && detailCampaign?.CheckIn[0]
-                          ? detailCampaign?.CheckIn[0]?.rateCheckIn
-                          : "0%"}
+                      <td className="pl-5">Tỷ lệ check-in/ Voucher phát:</td>
+                      <td>
+                        {detailCampaign && detailCampaign?.CheckIn[0] && (
+                          <CircularProgressWithLabel
+                            value={detailCampaign?.CheckIn[0]?.rateCheckIn}
+                          />
+                        )}
                       </td>
                     </tr>
                   </tbody>
@@ -419,9 +481,7 @@ class DetailCampaign extends Component {
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Ngày kết thúc</th>
                         <th className="text-center">trạng thái</th>
-                        <th className="text-center">tỉnh/thành</th>
-
-                        <th className="text-center">#</th>
+                        <th className="text-center">Tỉnh thành</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -437,10 +497,37 @@ class DetailCampaign extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
+                                <td className="text-center">
+                                  {item?.code && (
+                                    <Box sx={{ display: "flex" }}>
+                                      <Chip
+                                        label={item?.code}
+                                        variant="outlined"
+                                        sx={{
+                                          backgroundColor: "#9fcfde",
+                                          border: "none",
+                                        }}
+                                      />
 
-                                <td className="text-center">{item.code}</td>
+                                      <CopyToClipboard
+                                        text={item?.code}
+                                        onCopy={() => {}}
+                                      >
+                                        <Tooltip title="Copy">
+                                          <IconButton size="small">
+                                            <CIcon content={freeSet.cilCopy} />
+                                          </IconButton>
+                                        </Tooltip>
+                                      </CopyToClipboard>
+                                    </Box>
+                                  )}
+                                </td>
+                                <CListGroup accent>
+                                  <CListGroupItem accent="info" color="info">
+                                    {item.content}
+                                  </CListGroupItem>
+                                </CListGroup>
 
-                                <td className="text-center">{item.content}</td>
                                 <td className="text-center">
                                   {new Date(
                                     item.create_at
@@ -481,7 +568,7 @@ class DetailCampaign extends Component {
                                       : "Khóa"}
                                   </Tag>
                                 </td>
-                                <td>...</td>
+                                <td>Hồ Chí Minh</td>
                               </tr>
                             );
                           })
