@@ -167,7 +167,7 @@ class EndUser extends Component {
   onSearch() {
     this.getData(this.state.key);
   }
-  async getData(key) {
+  async getData() {
     const { company_id } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_ALL_COMPANY;
@@ -175,18 +175,23 @@ class EndUser extends Component {
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .post(url, {
-        params: {
-          company_id,
-          keyword: key,
-        },
+        // params: {
+        //   company_id,
+        //   keyword: key,
+        // },
       })
       .then((res) => {
         let val = res.data.data;
+        // console.log(res)
         this.pagination(val);
         this.setState({ dataApi: val });
 
         let active = 0;
-
+        val.map(val => {
+          if (val.Status == "Actived") {
+            active = active + 1
+          }
+        })
         this.setState({ isLoading: false, totalActive: active });
       });
   }
@@ -220,13 +225,15 @@ class EndUser extends Component {
       Status,
       TypeId,
       Email,
-      Logo
+      Logo,
+      UserName
     } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_PROVIDER;
 
     let url = baseUrlapi + baseUrlCallApi;
+    this.setState({ isLoading: true });
     await axios
       .post(url, {
         "Name": Name,
@@ -235,9 +242,11 @@ class EndUser extends Component {
         "Status": Status,
         "Brand": Brand,
         "TypeId": TypeId,
-        "Logo": Logo
+        "Logo": Logo,
+        "UserName": UserName
       })
       .then((res) => {
+        console.log(res)
         Swal.fire({
           icon: "success",
           title: "Cập nhật hoàn tất",
@@ -250,7 +259,6 @@ class EndUser extends Component {
 
         if (res.status == 200) {
           this.getData();
-
           this.setState({ modalEdit: !this.state.modalEdit });
         } else {
           alert("Cập nhật thất bại");
@@ -315,9 +323,6 @@ class EndUser extends Component {
           showConfirmButton: false,
           timer: 700,
         });
-        // this.setState({
-        //   modalVoucher: false,
-        // });
         if (res.is_success == true) {
           this.getData();
           this.setState({ modalVoucher: !this.state.modalVoucher });
@@ -337,24 +342,26 @@ class EndUser extends Component {
         }
       });
   }
-  openDelete = () => {
+  openDelete = (item) => {
+
+
     this.setState({
       modalDelete: !this.state.modalDelete,
-      id: "",
+      id: item._id,
     });
   };
-  async remove() {
+  async delete() {
     let baseUrlCallApi = Constants.DELETE_PROVIDER;
-
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
+    console.log(this.state.id);
     this.setState({ isLoading: true });
     await axios
       .delete(url, {
-        id: ""
+        "id": this.state.id
       })
       .then((res) => {
-        console.log(res.data)
+        console.log(res)
         Swal.fire({
           icon: "success",
           title: "Xóa thành công",
@@ -365,7 +372,7 @@ class EndUser extends Component {
           this.getData();
           this.setState({ modalDelete: !this.state.modalDelete, delete: null })
         } else {
-          alert(res.message);
+          // alert(res.message);
           this.setState({ isLoading: false });
         }
       });
@@ -956,16 +963,16 @@ class EndUser extends Component {
 
           <Modal
             isOpen={this.state.modalDelete}
-            toggle={(e) =>
-              this.setState({
-                modalDelete: !this.state.modalDelete,
-                delete: null,
-              })
-            }
+            // toggle={(e) =>
+            //   this.setState({
+            //     modalDelete: !this.state.modalDelete,
+            //     delete: null,
+            //   })
+            // }
             className={this.props.className}
           >
             <ModalHeader
-              toggle={(e) =>
+              onClick={(e) =>
                 this.setState({
                   modalDelete: !this.state.modalDelete,
                   delete: null,
@@ -978,7 +985,7 @@ class EndUser extends Component {
             <ModalFooter>
               <CButton
                 color="primary"
-                onClick={(e) => this.remove()}
+                onClick={(e) => this.delete()}
                 disabled={this.state.isLoading}
               >
                 Xoá

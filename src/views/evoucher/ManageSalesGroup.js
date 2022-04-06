@@ -313,7 +313,6 @@ class User extends Component {
     }
 
     openDelete = (item) => {
-        console.log(item)
         this.setState({
             modalDelete: !this.state.modalDelete,
             delete: item
