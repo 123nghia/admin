@@ -445,7 +445,9 @@ class DetailCampaign extends Component {
                       <td>
                         {detailCampaign && detailCampaign?.CheckIn[0] && (
                           <CircularProgressWithLabel
-                            value={detailCampaign?.CheckIn[0]?.rateCheckIn}
+                            value={
+                              detailCampaign?.campaignOverview[0]?.rateCheckIn
+                            }
                           />
                         )}
                       </td>
