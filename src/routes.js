@@ -169,14 +169,10 @@ const DetailCampaign = React.lazy(() =>
   import("./views/evoucher/DetailCampaign")
 );
 const DetailProvider = React.lazy(() =>
-<<<<<<< HEAD
 import("./views/evoucher/DetailProvider")
 );
 const DetailCollaborators = React.lazy(() =>
 import("./views/evoucher/DetailCollaborators")
-=======
-  import("./views/evoucher/DetailProvider")
->>>>>>> f230b73bc980b2f33b884f104ae5bbeca8388e83
 );
 const DetailInventory = React.lazy(() =>
   import("./views/evoucher/DetailInventory")
@@ -277,7 +273,6 @@ const routes = [
     component: roleUser !== "0" ? BookCalendar : NotEnough,
   },
 
-<<<<<<< HEAD
 
 
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -328,7 +323,6 @@ const routes = [
   { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
   { path: '/cau-hinh-trang-web', name: 'configWeb', component: roleUser !== "0" ? configWeb : NotEnough },
   { path: '/general-statistics', name: 'General Statistics', component: GeneralStatistics },
-=======
   { path: "/spending_order", name: "SPENDING", component: SPENDING },
   { path: "/role_manager", name: "Role Manager", component: RoleManager },
   { path: "/plugin_manager", name: "Plugin Manager", component: PluginManager },
@@ -342,7 +336,6 @@ const routes = [
     name: "Create Order",
     component: PluginCreateOrder,
   },
->>>>>>> f230b73bc980b2f33b884f104ae5bbeca8388e83
 
   {
     path: "/yeu-cau-ho-tro",
