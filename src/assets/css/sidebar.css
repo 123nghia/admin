@@ -152,6 +152,17 @@
   background-color: var(--main_web_admin);
   border-color: var(--main_web_admin);
 }
+
+.table .thead-light .header__table--span > th {
+  font-weight: 700;
+
+  background-color: var(--main_web_admin);
+  border: 1px solid white;
+}
+.table .thead-light .header__table--bottom > th {
+  background-color: #fff;
+  color: #4e6387;
+}
 .card {
   box-shadow: rgb(0 0 0 / 25%) 0px 14px 28px, rgb(0 0 0 / 22%) 0px 10px 10px;
 }
