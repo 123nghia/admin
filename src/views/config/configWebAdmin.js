@@ -75,8 +75,6 @@ import { AiFillWechat } from "@react-icons/all-files/ai/AiFillWechat";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { IoIosColorPalette } from "@react-icons/all-files/io/IoIosColorPalette";
 
-
-
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 
@@ -90,48 +88,61 @@ class Users extends Component {
         {
           _id: "t1",
           name: "Thông tin trang chủ",
-          icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />
+          icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "t2",
           name: "Slider",
-          icon: <svg  style={{ width: "24px ", height: "24px " }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-slides-fill" viewBox="0 0 16 16">
-          <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z"/>
-          <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z"/>
+          icon: (
+            <svg
+              style={{ width: "24px ", height: "24px " }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-file-slides-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
+              <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
             </svg>
+          ),
         },
         {
           _id: "t3",
           name: "Cấu hình SEO",
-          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          ),
         },
         {
           _id: "t4",
           name: "Logos",
-          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />
+          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
         },
-        
+
         {
           _id: "t6",
           name: "Cấu hình mạng xã hội",
-          icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "t7",
           name: "Thông tin footer",
-          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "t8",
           name: "Quản lý màu sắc",
-          icon: <IoIosColorPalette style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <IoIosColorPalette style={{ width: "24px ", height: "24px " }} />
+          ),
         },
-       
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
         : "-1",
-      colorWebCurrent: localStorage.getItem('colorpicker'),
+      colorWebCurrent: localStorage.getItem("colorpicker"),
       action: "new",
       idUpdate: "",
       checkFb: false,
@@ -210,7 +221,7 @@ class Users extends Component {
         localStorage.setItem("colorpicker", e.target.value);
       });
     }
-  }
+  };
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
@@ -274,7 +285,6 @@ class Users extends Component {
         },
       })
       .then((res) => {
-
         if (res.data.data.length > 0) {
           let dataConfig = res.data.data[0];
 
@@ -292,16 +302,24 @@ class Users extends Component {
               slideShow: valueConfig.value.slideShow,
               mxh: valueConfig.value.mxh,
               configData: valueConfig.value.statusConfig,
-              banner: valueConfig.value.banner
+              banner: valueConfig.value.banner,
             },
             () => {
-              const { homepage, seoInfo, logos, chats, configData, mxh, banner } = this.state;
+              const {
+                homepage,
+                seoInfo,
+                logos,
+                chats,
+                configData,
+                mxh,
+                banner,
+              } = this.state;
               if (banner) {
                 this.setState({
                   image_banner1: this.state.banner.banner1,
-                  bannerSlide: this.state.banner.bannerSlide
+                  bannerSlide: this.state.banner.bannerSlide,
                 });
-              };
+              }
               if (homepage) {
                 this.setState({
                   imageLogoCompany: this.state.homepage.LogoCompany,
@@ -324,7 +342,7 @@ class Users extends Component {
                   image2: this.state.homepage.image2,
                   image2_show: this.state.homepage.image2,
                 });
-              };
+              }
 
               if (seoInfo) {
                 this.setState({
@@ -338,7 +356,7 @@ class Users extends Component {
                   keywordSeo: this.state.seoInfo.key,
                   authorSeo: this.state.seoInfo.author,
                 });
-              };
+              }
               if (logos) {
                 this.setState({
                   hrefLogoHeader: valueConfig.value.logos.header.href,
@@ -346,15 +364,14 @@ class Users extends Component {
                   image: valueConfig.value.logos.header.logo,
                   imgLogoFooter: valueConfig.value.logos.footer.logo,
                   imgLogoAdmin: valueConfig.value.logos.webAdmin.logo,
-
                 });
-              };
+              }
               if (chats) {
                 this.setState({
                   codeChat: this.state.chats.tawk,
-                  codeMess: this.state.chats.mess
+                  codeMess: this.state.chats.mess,
                 });
-              };
+              }
               if (mxh) {
                 this.setState({
                   keyAppFb: this.state.mxh.facebook.appid,
@@ -369,12 +386,9 @@ class Users extends Component {
                   PassGg: this.state.mxh.google.password,
                   hrefGg: this.state.mxh.google.href,
                 });
-
-              };
+              }
             }
           );
-
-
         } else {
           let templateDataConfigWeb = {
             key: "webinfo_admin",
@@ -394,7 +408,7 @@ class Users extends Component {
               },
               banner: {
                 banner1: "",
-                bannerSlide: []
+                bannerSlide: [],
               },
               slideShow: [],
               statusConfig: [],
@@ -419,7 +433,6 @@ class Users extends Component {
                   href: "",
                 },
               },
-
             },
           };
 
@@ -433,7 +446,7 @@ class Users extends Component {
           );
         }
       });
-  };
+  }
   async addDataConfig() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/add";
@@ -445,10 +458,8 @@ class Users extends Component {
         value: JSON.stringify(this.state.dataConfigWeb),
         type: "system",
       })
-      .then((res) => {
-
-      });
-  };
+      .then((res) => {});
+  }
   async getFooter() {
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.GET_FOOTER;
@@ -470,7 +481,6 @@ class Users extends Component {
         this.setState({
           dataFooter: res.data.data,
         });
-
       });
   }
   async deleteFooter(item) {
@@ -487,7 +497,6 @@ class Users extends Component {
     await axios
       .post(url, {
         id: item._id,
-
       })
       .then(() => {
         Swal.fire({
@@ -528,8 +537,8 @@ class Users extends Component {
           timer: 700,
         });
         this.setState({
-          statusModalUpdate: false
-        })
+          statusModalUpdate: false,
+        });
         this.getFooter();
       });
   }
@@ -561,8 +570,8 @@ class Users extends Component {
           timer: 700,
         });
         this.setState({
-          statusModalUpdate: false
-        })
+          statusModalUpdate: false,
+        });
         this.getFooter();
       });
   }
@@ -574,9 +583,7 @@ class Users extends Component {
       form.append("image", link);
 
       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
-        (res) => {
-
-        }
+        (res) => {}
       );
 
       newImage = link.name;
@@ -602,7 +609,6 @@ class Users extends Component {
       image1_link,
       image2_link,
       image3_link,
-
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
@@ -619,15 +625,14 @@ class Users extends Component {
       let newImage1 = await this.postImage(this.state.imageLogoCompany_link);
       if (newImage1) {
         coppyData.value.homepage.LogoCompany = `${Constants.BASE_URL}image_brand/${newImage1}`;
-
-      };
+      }
     }
     if (change === "banner") {
       let newImage1 = await this.postImage(this.state.image_banner1_link);
       if (newImage1) {
         coppyData.value.banner.banner1 = `${Constants.BASE_URL}image_brand/${newImage1}`;
-      };
-    };
+      }
+    }
     if (change === "mxh") {
       // coppyData.value.statusConfig = this.state.configData;
       coppyData.value.mxh.facebook.appid = this.state.keyAppFb;
@@ -641,13 +646,11 @@ class Users extends Component {
       coppyData.value.mxh.zalo.appid = this.state.keyAppZalo;
       coppyData.value.mxh.zalo.password = this.state.PassZalo;
       coppyData.value.mxh.zalo.href = this.state.hrefZalo;
-
-
-    };
+    }
     if (change === "chats") {
       coppyData.value.chats.tawk = this.state.codeChat;
       coppyData.value.chats.mess = this.state.codeMess;
-    };
+    }
     if (change === "homepage") {
       coppyData.value.homepage.title1 = this.state.titlePen1;
       coppyData.value.homepage.title2 = this.state.titlePen2;
@@ -666,7 +669,7 @@ class Users extends Component {
       if (newImage3) {
         coppyData.value.homepage.image3 = `${Constants.BASE_URL}image_brand/${newImage3}`;
       }
-    };
+    }
     if (change === "seoInfo") {
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
@@ -680,7 +683,7 @@ class Users extends Component {
       this.setState({
         dataConfigWeb: coppyData,
       });
-    };
+    }
     if (change === "logos") {
       let newImage3 = await this.postImage(this.state.imgLogoAdmin_link);
       if (newImage3) {
@@ -699,7 +702,7 @@ class Users extends Component {
       this.setState({
         dataConfigWeb: coppyData,
       });
-    };
+    }
     await axios
       .post(url, {
         value: JSON.stringify(coppyData),
@@ -736,7 +739,7 @@ class Users extends Component {
     const newComany_id = JSON.parse(this.state.company_id).company_id;
     let idOutput = "-1";
     if (newComany_id) {
-      idOutput = newComany_id
+      idOutput = newComany_id;
     }
     this.setState({ isLoading: true });
     const res = await axios({
@@ -858,7 +861,8 @@ class Users extends Component {
   }
 
   async saveAddBanner() {
-    const { contentBanner, dataConfigWeb, image_banner2_link, hrefBanner } = this.state;
+    const { contentBanner, dataConfigWeb, image_banner2_link, hrefBanner } =
+      this.state;
     let newImage = await this.postImage(image_banner2_link);
     let imageOutput;
     if (newImage) {
@@ -869,7 +873,7 @@ class Users extends Component {
     let ob = {
       image: imageOutput,
       content: contentBanner,
-      href: hrefBanner
+      href: hrefBanner,
     };
     let coppy = { ...dataConfigWeb };
     coppy.value.banner.bannerSlide.push(ob);
@@ -895,7 +899,6 @@ class Users extends Component {
   }
 
   openFormEditBanner(item, i) {
-
     this.setState({
       actionBanner: "edit",
 
@@ -907,7 +910,6 @@ class Users extends Component {
     });
   }
   openFormEditSlide(item, i) {
-
     this.setState({
       actionSlide: "edit",
 
@@ -998,12 +1000,17 @@ class Users extends Component {
   }
 
   async saveEditBanner() {
-    const { image_banner2, contentBanner, dataConfigWeb, indexBannerEditor, hrefBanner } =
-      this.state;
+    const {
+      image_banner2,
+      contentBanner,
+      dataConfigWeb,
+      indexBannerEditor,
+      hrefBanner,
+    } = this.state;
     let ob = {
       image: image_banner2,
       content: contentBanner,
-      href: hrefBanner
+      href: hrefBanner,
     };
     let coppy = { ...dataConfigWeb };
     coppy.value.banner.bannerSlide[indexBannerEditor] = ob;
@@ -1135,78 +1142,49 @@ class Users extends Component {
       return (
         <div className="animated fadeIn">
           <div className="flex-tabs">
-          <div class="tab">
-
-            <List
-              sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-             
-            >
-              {
-                this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i) => {
-                  return (
-                    <ListItemButton
-                      key={item._id}
-                      className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
-                      onClick={() => this.ToggleViewConfigWeb(i)}
-                      sx={{ pl: 4 }}
-                    >
-                      <ListItemIcon>
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText className="tabcontent-left" style={{ fontSize: "14px !important", color: "rgb(52, 71, 103)" }} primary={item.name} />
-                    </ListItemButton>
-                  );
-                }) : null
-              }
-            </List>
-
-          </div>
-          <div className="tabcontents">
-            <div id="tabcontent1" className="tabcontent defaultOpen">
-              <div class="mb-3 text-center">
-                <CButton
-                  onClick={() => this.SaveAllConfigWeb("logoCompany")}
-                  style={styles.mgl5}
-                  outline
-                  color="success"
-                  size="md"
-                >
-                  {/* <CIcon name="cilPencil" /> */}
-                  Lưu thay đổi
-                </CButton>
-              </div>
-              <h1>
-                Logo công ty
-              </h1>
-              <TextFieldGroup
-                field="imageLogoCompany"
-                label="Hình ảnh (240px * 72px)"
-                type={"file"}
-                onChange={(e) => {
-                  this.onChangeImage(e, "imageLogoCompany", "imageLogoCompany_link", "imageLogoCompany_show");
+            <div class="tab">
+              <List
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
                 }}
-                onClick={(e) => {
-                  e.target.value = null;
-                  this.setState({ imageLogoCompany_show: "" });
-                }}
-              />
-              <div class="text-center">
-                <img
-                  alt=""
-                  style={{ width: "200px" }}
-                  height="auto"
-                  src={this.state.imageLogoCompany}
-                />
-              </div>
-
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+              >
+                {this.state.tabNameConfig
+                  ? this.state.tabNameConfig.map((item, i) => {
+                      return (
+                        <ListItemButton
+                          key={item._id}
+                          className={
+                            i === 0
+                              ? " tablinks tabcontent-left-active"
+                              : " tablinks"
+                          }
+                          onClick={() => this.ToggleViewConfigWeb(i)}
+                          sx={{ pl: 4 }}
+                        >
+                          <ListItemIcon>{item.icon}</ListItemIcon>
+                          <ListItemText
+                            className="tabcontent-left"
+                            style={{
+                              fontSize: "14px !important",
+                              color: "rgb(52, 71, 103)",
+                            }}
+                            primary={item.name}
+                          />
+                        </ListItemButton>
+                      );
+                    })
+                  : null}
+              </List>
             </div>
-            <div id="tabcontent2" className="tabcontent ">
-              <div>
-                <div class="text-center">
+            <div className="tabcontents">
+              <div id="tabcontent1" className="tabcontent defaultOpen">
+                <div class="mb-3 text-center">
                   <CButton
-                    onClick={() => this.SaveAllConfigWeb("banner")}
+                    onClick={() => this.SaveAllConfigWeb("logoCompany")}
                     style={styles.mgl5}
                     outline
                     color="success"
@@ -1216,45 +1194,440 @@ class Users extends Component {
                     Lưu thay đổi
                   </CButton>
                 </div>
-                <h1>Banner 1 </h1>
+                <h1>Logo công ty</h1>
                 <TextFieldGroup
-                  field="image"
-                  label="Hình ảnh (1519px * 570px)"
+                  field="imageLogoCompany"
+                  label="Hình ảnh (240px * 72px)"
                   type={"file"}
                   onChange={(e) => {
-                    this.onChangeImage(e, "image_banner1", "image_banner1_link", "image_banner1_show");
+                    this.onChangeImage(
+                      e,
+                      "imageLogoCompany",
+                      "imageLogoCompany_link",
+                      "imageLogoCompany_show"
+                    );
                   }}
                   onClick={(e) => {
                     e.target.value = null;
-                    this.setState({ image_banner1_show: "" });
+                    this.setState({ imageLogoCompany_show: "" });
                   }}
                 />
                 <div class="text-center">
                   <img
                     alt=""
-
-                    style={{ width: "400px" }}
-                    height="150"
-                    src={this.state.image_banner1}
+                    style={{ width: "200px" }}
+                    height="auto"
+                    src={this.state.imageLogoCompany}
                   />
                 </div>
-                <div class="mt-3">
-                  <hr />
+              </div>
+              <div id="tabcontent2" className="tabcontent">
+                <div>
+                  <div class="text-center">
+                    <CButton
+                      onClick={() => this.SaveAllConfigWeb("banner")}
+                      style={styles.mgl5}
+                      outline
+                      color="success"
+                      size="md"
+                    >
+                      {/* <CIcon name="cilPencil" /> */}
+                      Lưu thay đổi
+                    </CButton>
+                  </div>
+                  <h1>Banner 1 </h1>
+                  <TextFieldGroup
+                    field="image"
+                    label="Hình ảnh (1519px * 570px)"
+                    type={"file"}
+                    onChange={(e) => {
+                      this.onChangeImage(
+                        e,
+                        "image_banner1",
+                        "image_banner1_link",
+                        "image_banner1_show"
+                      );
+                    }}
+                    onClick={(e) => {
+                      e.target.value = null;
+                      this.setState({ image_banner1_show: "" });
+                    }}
+                  />
+                  <div class="text-center">
+                    <img
+                      alt=""
+                      style={{ width: "400px" }}
+                      height="150"
+                      src={this.state.image_banner1}
+                    />
+                  </div>
+                  <div class="mt-3">
+                    <hr />
+                  </div>
+                  <h1>Banner 2 </h1>
+                  <p>Hình ảnh (1110px * 287px)</p>
+                  <div class="flex-end mt-3">
+                    <CButton
+                      color="info"
+                      style={{ marginBottom: "10px" }}
+                      size="md"
+                      className="btn-main"
+                      onClick={() => this.openFormAddBanner()}
+                    >
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                    </CButton>
+                  </div>
+                  <div className="table__overflow">
+                    <table
+                      ble
+                      className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table table_dash"
+                    >
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">STT.</th>
+                          {/* <th className="text-center">Tên</th> */}
+                          <th className="text-center">Hình ảnh</th>
+
+                          <th className="text-center">Đường dẫn</th>
+                          <th className="text-center"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.bannerSlide
+                          ? this.state.bannerSlide.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{i + 1}</td>
+                                  <td className="text-center">
+                                    <img
+                                      width="300"
+                                      height="77"
+                                      src={item.image}
+                                      alt=""
+                                    />
+                                  </td>
+
+                                  <td className="text-center">{item.href}</td>
+                                  <td className="text-center">
+                                    <div className="flex">
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="ghost"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        onClick={() =>
+                                          this.openFormEditBanner(item, i)
+                                        }
+                                      >
+                                        <FiEdit3
+                                          style={styles.icon}
+                                          className="icon"
+                                          name="cilPencil"
+                                        />
+                                      </CButton>{" "}
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="ghost"
+                                        color="danger"
+                                        style={styles.mgl5}
+                                        onClick={() => this.deleteBanner(i)}
+                                      >
+                                        <BsTrash
+                                          style={styles.icon}
+                                          className="icon"
+                                          name="cilTrash"
+                                        />
+                                      </CButton>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          : null}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <h1>Banner 2 </h1>
-                <p>Hình ảnh (1110px * 287px)</p>
-                <div class="flex-end mt-3">
+              </div>
+              <div id="tabcontent3" className="tabcontent"></div>
+              <div id="tabcontent4" className="tabcontent ">
+                <div class="text-center">
+                  <CButton
+                    onClick={() => this.SaveAllConfigWeb("logos")}
+                    style={styles.mgl5}
+                    outline
+                    color="success"
+                    size="md"
+                  >
+                    {/* <CIcon name="cilPencil" /> */}
+                    Lưu thay đổi
+                  </CButton>
+                </div>
+                <div className="mt-3"></div>
+                <div class="mt-3">
+                  <h1>Header</h1>
+                  <TextFieldGroup
+                    field="image"
+                    label="Logo (Tỷ lệ 2:1)"
+                    type={"file"}
+                    onChange={(e) => {
+                      this.onChangeImage(
+                        e,
+                        "image",
+                        "image_link",
+                        "image_show"
+                      );
+                    }}
+                    onClick={(e) => {
+                      e.target.value = null;
+                      this.setState({ image_show: "" });
+                    }}
+                  />
+                  <div class="text-center">
+                    <img
+                      alt=""
+                      style={{ width: "140px" }}
+                      height="auto"
+                      src={this.state.image}
+                    />
+                  </div>
+                  <TextFieldGroup
+                    field="hrefLogoHeader"
+                    label="Đường dẫn"
+                    value={this.state.hrefLogoHeader}
+                    placeholder=""
+                    type={"text"}
+                    className="mt-3"
+                    // value={this.state.image}
+                    onChange={(e) => {
+                      this.setState({
+                        hrefLogoHeader: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <hr />
+                <h1>Footer</h1>
+                <TextFieldGroup
+                  field="logoFooter"
+                  label="Logo (Tỷ lệ 2:1)"
+                  type={"file"}
+                  className="mt-5"
+                  onChange={(e) => {
+                    this.onChangeImage(
+                      e,
+                      "imgLogoFooter",
+                      "imgLogoFooter_link",
+                      "imgLogoFooter_show"
+                    );
+                  }}
+                  onClick={(e) => {
+                    e.target.value = null;
+                    this.setState({ imgLogoFooter_show: "" });
+                  }}
+                />
+                <div className="text-center">
+                  <img
+                    alt=""
+                    style={{ width: "200px", marginBottom: 20 }}
+                    src={this.state.imgLogoFooter}
+                  />
+                </div>
+                <TextFieldGroup
+                  field="hrefLogoHeader"
+                  label="Đường dẫn"
+                  value={this.state.hrefLogoFooter}
+                  placeholder=""
+                  type={"text"}
+                  className="mt-3"
+                  // value={this.state.image}
+                  onChange={(e) => {
+                    this.setState({
+                      hrefLogoFooter: e.target.value,
+                    });
+                  }}
+                />
+                <hr />
+                <h1>Web Admin</h1>
+                <TextFieldGroup
+                  field="imgLogoAdmin"
+                  label="Logo (Tỷ lệ 2:1)"
+                  type={"file"}
+                  className="mt-5"
+                  onChange={(e) => {
+                    this.onChangeImage(
+                      e,
+                      "imgLogoAdmin",
+                      "imgLogoAdmin_link",
+                      "imgLogoAdmin_show"
+                    );
+                  }}
+                  onClick={(e) => {
+                    e.target.value = null;
+                    this.setState({ imgLogoAdmin_show: "" });
+                  }}
+                />
+                <div className="text-center">
+                  <img
+                    alt=""
+                    style={{ width: "200px", marginBottom: 20 }}
+                    src={this.state.imgLogoAdmin}
+                  />
+                </div>
+              </div>
+
+              <div id="tabcontent6" className="tabcontent">
+                <div class="text-center">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => this.SaveAllConfigWeb("mxh")}
+                  >
+                    Lưu thay đổi
+                  </Button>
+                </div>
+                <div class="mt-3"></div>
+                {this.state.configData.map((product, i) => {
+                  return (
+                    <div class="configData_item">
+                      <div class="">
+                        <strong>{product.label}</strong>
+                      </div>
+                      <div class="">
+                        <FormGroup>
+                          <FormControlLabel
+                            onChange={(e) => {
+                              let x = [...this.state.configData];
+                              x[i].value = !x[i].value;
+                              this.setState({
+                                configData: x,
+                              });
+                            }}
+                            checked={product.value}
+                            control={<Switch defaultChecked />}
+                            label=""
+                          />
+                        </FormGroup>
+                        <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div class="text-center">
+                  <p>Facebook</p>
+                </div>
+                <div class="col-md-12 mt-3">
+                  <div>
+                    <TextFieldGroup
+                      field=""
+                      label="Mã ứng dụng"
+                      value={this.state.keyAppFb}
+                      onChange={(e) => {
+                        this.setState({ keyAppFb: e.target.value });
+                      }}
+                    />
+
+                    <TextFieldGroup
+                      field=""
+                      label="Mật khẩu"
+                      value={this.state.PassFb}
+                      onChange={(e) => {
+                        this.setState({ PassFb: e.target.value });
+                      }}
+                    />
+                    <TextFieldGroup
+                      field=""
+                      label="Đường dẫn"
+                      value={this.state.hrefFb}
+                      onChange={(e) => {
+                        this.setState({ hrefFb: e.target.value });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div class="text-center">
+                  <p>Google</p>
+                </div>
+                <div class="col-md-12 mt-3">
+                  <div>
+                    <TextFieldGroup
+                      field=""
+                      label="Mã ứng dụng"
+                      value={this.state.keyAppGg}
+                      placeholder={"Mã app"}
+                      onChange={(e) => {
+                        this.setState({ keyAppGg: e.target.value });
+                      }}
+                    />
+
+                    <TextFieldGroup
+                      field=""
+                      label="Mật khẩu"
+                      value={this.state.PassGg}
+                      placeholder={"Mật khẩu"}
+                      onChange={(e) => {
+                        this.setState({ PassGg: e.target.value });
+                      }}
+                    />
+                    <TextFieldGroup
+                      field=""
+                      label="Đường dẫn"
+                      value={this.state.hrefGg}
+                      onChange={(e) => {
+                        this.setState({ hrefGg: e.target.value });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div class="text-center">
+                  <p>Zalo</p>
+                </div>
+                <div class="col-md-12 mt-3">
+                  <div>
+                    <TextFieldGroup
+                      field=""
+                      label="Mã ứng dụng"
+                      value={this.state.keyAppZalo}
+                      placeholder={"Mã app"}
+                      onChange={(e) => {
+                        this.setState({ keyAppZalo: e.target.value });
+                      }}
+                    />
+
+                    <TextFieldGroup
+                      field=""
+                      label="Mật khẩu"
+                      value={this.state.PassZalo}
+                      placeholder={"Mật khẩu"}
+                      onChange={(e) => {
+                        this.setState({ PassZalo: e.target.value });
+                      }}
+                    />
+                    <TextFieldGroup
+                      field=""
+                      label="Đường dẫn"
+                      value={this.state.hrefZalo}
+                      onChange={(e) => {
+                        this.setState({ hrefZalo: e.target.value });
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div id="tabcontent7" className="tabcontent ">
+                <div class="flex-end">
                   <CButton
                     color="info"
                     style={{ marginBottom: "10px" }}
                     size="md"
                     className="btn-main"
-                    onClick={() => this.openFormAddBanner()}
+                    onClick={this.openFormAddFooter}
                   >
                     <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                     <p style={{ margin: "auto 0" }}>Thêm mới</p>
                   </CButton>
-
                 </div>
                 <table
                   ble
@@ -1263,426 +1636,81 @@ class Users extends Component {
                   <thead className="thead-light">
                     <tr>
                       <th className="text-center">STT.</th>
-                      {/* <th className="text-center">Tên</th> */}
-                      <th className="text-center">Hình ảnh</th>
-
-                      <th className="text-center">Đường dẫn</th>
-                      <th className="text-center"></th>
+                      <th className="text-center">Tiêu đề</th>
+                      <th className="text-center">Nội dung</th>
+                      <th className="text-center">Link tham chiếu</th>
+                      <th className="text-center">#</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.bannerSlide
-                      ? this.state.bannerSlide.map((item, i) => {
-                        return (
-                          <tr key={i}>
-                            <td className="text-center">{i + 1}</td>
-                            <td className="text-center">
-                              <img
-                                width="300"
-                                height="77"
-                                src={item.image}
-                                alt=""
-                              />
-                            </td>
+                    <td
+                      colSpan="10"
+                      hidden={this.state.hidden}
+                      className="text-center"
+                    >
+                      Không tìm thấy dữ liệu
+                    </td>
 
-                            <td className="text-center">{item.href}</td>
-                            <td className="text-center">
-                              <div className="flex">
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="ghost"
-                                  color="info"
-                                  style={styles.mgl5}
-                                  size="md"
-                                  onClick={() => this.openFormEditBanner(item, i)}
+                    {dataFooter
+                      ? dataFooter.map((item, i) => {
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+
+                              <td className="text-center">{item.title}</td>
+                              <td className="text-center">
+                                <div
+                                  style={{
+                                    overflowY: "hidden",
+                                    maxWidth: "300px",
+                                    maxHeight: "100px",
+                                  }}
                                 >
-                                  <FiEdit3
-                                    style={styles.icon}
-                                    className="icon"
-
-                                    name="cilPencil"
-                                  />
-                                </CButton>{" "}
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="ghost"
-                                  color="danger"
-                                  style={styles.mgl5}
-                                  onClick={() => this.deleteBanner(i)}
-                                >
-                                  <BsTrash
-                                    style={styles.icon}
-                                    className="icon"
-
-                                    name="cilTrash"
-                                  />
-                                </CButton>
-                              </div>
-                            </td>
-
-                          </tr>
-                        );
-                      })
+                                  {item.content}
+                                </div>
+                              </td>
+                              <td className="text-center">{item.slug}</td>
+                              <td className="text-center">
+                                <div className="flex">
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="info"
+                                    style={styles.mgl5}
+                                    size="md"
+                                    onClick={() =>
+                                      this.openFormEditFooter(item)
+                                    }
+                                  >
+                                    <FiEdit3
+                                      style={styles.icon}
+                                      name="cilPencil"
+                                      className="icon"
+                                    />
+                                  </CButton>{" "}
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="danger"
+                                    style={styles.mgl5}
+                                    onClick={() => this.deleteFooter(item)}
+                                  >
+                                    <BsTrash
+                                      style={styles.icon}
+                                      className="icon"
+                                      name="cilTrash"
+                                    />
+                                  </CButton>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
                       : null}
                   </tbody>
                 </table>
               </div>
             </div>
-            <div id="tabcontent3" className="tabcontent">
-
-            </div>
-            <div id="tabcontent4" className="tabcontent ">
-              <div class="text-center">
-                <CButton
-                  onClick={() => this.SaveAllConfigWeb("logos")}
-                  style={styles.mgl5}
-                  outline
-                  color="success"
-                  size="md"
-                >
-                  {/* <CIcon name="cilPencil" /> */}
-                  Lưu thay đổi
-                </CButton>
-              </div>
-              <div className="mt-3"></div>
-              <div class="mt-3">
-                <h1>Header</h1>
-                <TextFieldGroup
-                  field="image"
-                  label="Logo (Tỷ lệ 2:1)"
-                  type={"file"}
-                  onChange={(e) => {
-                    this.onChangeImage(e, "image", "image_link", "image_show");
-                  }}
-                  onClick={(e) => {
-                    e.target.value = null;
-                    this.setState({ image_show: "" });
-                  }}
-                />
-                <div class="text-center">
-                  <img
-                    alt=""
-                    style={{ width: "140px" }}
-                    height="auto"
-                    src={this.state.image}
-                  />
-                </div>
-                <TextFieldGroup
-                  field="hrefLogoHeader"
-                  label="Đường dẫn"
-                  value={this.state.hrefLogoHeader}
-                  placeholder=""
-                  type={"text"}
-                  className="mt-3"
-                  // value={this.state.image}
-                  onChange={(e) => {
-                    this.setState({
-                      hrefLogoHeader: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <hr />
-              <h1>Footer</h1>
-              <TextFieldGroup
-                field="logoFooter"
-                label="Logo (Tỷ lệ 2:1)"
-                type={"file"}
-                className="mt-5"
-                onChange={(e) => {
-                  this.onChangeImage(
-                    e,
-                    "imgLogoFooter",
-                    "imgLogoFooter_link",
-                    "imgLogoFooter_show"
-                  );
-                }}
-                onClick={(e) => {
-                  e.target.value = null;
-                  this.setState({ imgLogoFooter_show: "" });
-                }}
-              />
-              <div className="text-center">
-                <img
-                  alt=""
-                  style={{ width: "200px", marginBottom: 20 }}
-                  src={this.state.imgLogoFooter}
-                />
-              </div>
-              <TextFieldGroup
-                field="hrefLogoHeader"
-                label="Đường dẫn"
-                value={this.state.hrefLogoFooter}
-                placeholder=""
-                type={"text"}
-                className="mt-3"
-                // value={this.state.image}
-                onChange={(e) => {
-                  this.setState({
-                    hrefLogoFooter: e.target.value,
-                  });
-                }}
-              />
-              <hr />
-              <h1>Web Admin</h1>
-              <TextFieldGroup
-                field="imgLogoAdmin"
-                label="Logo (Tỷ lệ 2:1)"
-                type={"file"}
-                className="mt-5"
-                onChange={(e) => {
-                  this.onChangeImage(
-                    e,
-                    "imgLogoAdmin",
-                    "imgLogoAdmin_link",
-                    "imgLogoAdmin_show"
-                  );
-                }}
-                onClick={(e) => {
-                  e.target.value = null;
-                  this.setState({ imgLogoAdmin_show: "" });
-                }}
-              />
-              <div className="text-center">
-                <img
-                  alt=""
-                  style={{ width: "200px", marginBottom: 20 }}
-                  src={this.state.imgLogoAdmin}
-                />
-              </div>
-            </div>
-          
-            <div id="tabcontent6" className="tabcontent">
-              <div class="text-center">
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={() => this.SaveAllConfigWeb("mxh")}
-                >
-                  Lưu thay đổi
-                </Button>
-              </div>
-              <div class="mt-3"></div>
-              {this.state.configData.map((product, i) => {
-                return (
-                  <div class="configData_item">
-                    <div class="">
-                      <strong>{product.label}</strong>
-                    </div>
-                    <div class="">
-                      <FormGroup>
-                        <FormControlLabel
-                          onChange={(e) => {
-                            let x = [...this.state.configData];
-                            x[i].value = !x[i].value;
-                            this.setState({
-                              configData: x,
-                            });
-                          }}
-                          checked={product.value}
-                          control={<Switch defaultChecked />}
-                          label=""
-                        />
-                      </FormGroup>
-                      <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
-                    </div>
-                  </div>
-                );
-              })}
-              <div class="text-center">
-                <p>Facebook</p>
-              </div>
-              <div class="col-md-12 mt-3">
-                <div>
-                  <TextFieldGroup
-                    field=""
-                    label="Mã ứng dụng"
-                    value={this.state.keyAppFb}
-                    onChange={(e) => {
-                      this.setState({ keyAppFb: e.target.value });
-                    }}
-                  />
-
-                  <TextFieldGroup
-                    field=""
-                    label="Mật khẩu"
-                    value={this.state.PassFb}
-                    onChange={(e) => {
-                      this.setState({ PassFb: e.target.value });
-                    }}
-                  />
-                  <TextFieldGroup
-                    field=""
-                    label="Đường dẫn"
-                    value={this.state.hrefFb}
-                    onChange={(e) => {
-                      this.setState({ hrefFb: e.target.value });
-                    }}
-                  />
-                </div>
-              </div>
-              <div class="text-center">
-                <p>Google</p>
-              </div>
-              <div class="col-md-12 mt-3">
-                <div>
-                  <TextFieldGroup
-                    field=""
-                    label="Mã ứng dụng"
-                    value={this.state.keyAppGg}
-                    placeholder={"Mã app"}
-                    onChange={(e) => {
-                      this.setState({ keyAppGg: e.target.value });
-                    }}
-                  />
-
-                  <TextFieldGroup
-                    field=""
-                    label="Mật khẩu"
-                    value={this.state.PassGg}
-                    placeholder={"Mật khẩu"}
-                    onChange={(e) => {
-                      this.setState({ PassGg: e.target.value });
-                    }}
-                  />
-                  <TextFieldGroup
-                    field=""
-                    label="Đường dẫn"
-                    value={this.state.hrefGg}
-                    onChange={(e) => {
-                      this.setState({ hrefGg: e.target.value });
-                    }}
-                  />
-                </div>
-              </div>
-              <div class="text-center">
-                <p>Zalo</p>
-              </div>
-              <div class="col-md-12 mt-3">
-                <div>
-                  <TextFieldGroup
-                    field=""
-                    label="Mã ứng dụng"
-                    value={this.state.keyAppZalo}
-                    placeholder={"Mã app"}
-                    onChange={(e) => {
-                      this.setState({ keyAppZalo: e.target.value });
-                    }}
-                  />
-
-                  <TextFieldGroup
-                    field=""
-                    label="Mật khẩu"
-                    value={this.state.PassZalo}
-                    placeholder={"Mật khẩu"}
-                    onChange={(e) => {
-                      this.setState({ PassZalo: e.target.value });
-                    }}
-                  />
-                  <TextFieldGroup
-                    field=""
-                    label="Đường dẫn"
-                    value={this.state.hrefZalo}
-                    onChange={(e) => {
-                      this.setState({ hrefZalo: e.target.value });
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div id="tabcontent7" className="tabcontent ">
-              <div class="flex-end">
-                <CButton
-                  color="info"
-                  style={{ marginBottom: "10px" }}
-                  size="md"
-                  className="btn-main"
-                  onClick={this.openFormAddFooter}
-                >
-                  <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                  <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                </CButton>
-
-              </div>
-              <table
-                ble
-                className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-              >
-                <thead className="thead-light">
-                  <tr>
-                    <th className="text-center">STT.</th>
-                    <th className="text-center">Tiêu đề</th>
-                    <th className="text-center">Nội dung</th>
-                    <th className="text-center">Link tham chiếu</th>
-                    <th className="text-center">#</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <td
-                    colSpan="10"
-                    hidden={this.state.hidden}
-                    className="text-center"
-                  >
-                    Không tìm thấy dữ liệu
-                  </td>
-
-                  {dataFooter
-                    ? dataFooter.map((item, i) => {
-                      return (
-                        <tr key={i}>
-                          <td className="text-center">{i + 1}</td>
-
-                          <td className="text-center">{item.title}</td>
-                          <td className="text-center">
-                            <div style={{overflowY: 'hidden', maxWidth : '300px' , maxHeight:'100px'}}>
-                            {item.content}
-                            </div>
-                            </td>
-                          <td className="text-center">{item.slug}</td>
-                          <td className="text-center">
-                            <div className="flex">
-
-                              <CButton
-                                shape="rounded-pill"
-                                variant="ghost"
-
-                                color="info"
-                                style={styles.mgl5}
-                                size="md"
-                                onClick={() => this.openFormEditFooter(item)}
-                              >
-                                <FiEdit3
-                                  style={styles.icon}
-                                  name="cilPencil"
-                                  className="icon"
-
-                                />
-                              </CButton>{" "}
-                              <CButton
-                                shape="rounded-pill"
-                                variant="ghost"
-                                color="danger"
-                                style={styles.mgl5}
-                                onClick={() => this.deleteFooter(item)}
-                              >
-                                <BsTrash
-                                  style={styles.icon}
-                                  className="icon"
-                                  name="cilTrash"
-                                />
-                              </CButton>
-                            </div>
-                          </td>
-
-                        </tr>
-                      );
-                    })
-                    : null}
-                </tbody>
-              </table>
-            </div>
-           
-          </div>
           </div>
           <Modal
             size="xl"
@@ -1709,17 +1737,15 @@ class Users extends Component {
                 data={this.state.contentFooter}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
-
                 }}
-
                 style={{ height: "300px" }}
                 onChange={(event, editor) => {
                   const data = editor.getData();
 
                   this.setState({ contentFooter: data });
                 }}
-                onBlur={(event, editor) => { }}
-                onFocus={(event, editor) => { }}
+                onBlur={(event, editor) => {}}
+                onFocus={(event, editor) => {}}
               />
 
               <TextFieldGroup
@@ -1840,7 +1866,6 @@ class Users extends Component {
               {this.state.actionBanner === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-
               <TextFieldGroup
                 field="image_banner2"
                 label="Hình ảnh: (1110px * 287px)"
