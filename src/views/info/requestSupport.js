@@ -639,29 +639,26 @@ class BrandSlider extends Component {
                           <CCol sm="12" lg="12">
                             <div class="flex-a-center">
                               <Input
-                              class="mr-2"
+                                class="mr-2"
                                 style={styles.searchInput}
                                 onChange={(e) => {
-                                  this.setState({ key : e.target.value});
+                                  this.setState({ key: e.target.value });
                                 }}
                                 name="key"
                                 value={key}
                                 placeholder="Từ khóa"
                               />
-                               <CButton
-                              color="primary"
-                              style={{ width: "50%" }}
-                              size="md"
-                              onClick={(e) =>this.onSearching()}
-                            >
-                              Tìm kiếm
-                            </CButton>
-                            
+                              <CButton
+                                color="primary"
+                                style={{ width: "50%" }}
+                                size="md"
+                                onClick={(e) => this.onSearching()}
+                              >
+                                Tìm kiếm
+                              </CButton>
                             </div>
                           </CCol>
-                          <CCol sm="12" lg="6">
-                           
-                          </CCol>
+                          <CCol sm="12" lg="6"></CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
@@ -678,7 +675,7 @@ class BrandSlider extends Component {
                     </CRow>
                   </div>
                 </CardHeader>
-                <CardBody>
+                <CardBody className="table__overflow">
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table"
@@ -690,73 +687,63 @@ class BrandSlider extends Component {
                         <th className="text-center">Số điện thoại</th>
 
                         <th className="text-center">Ngày, giờ tạo</th>
-                      
+
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
-                    <tbody>     
-                                
+                    <tbody>
                       {dataDatlich.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">
-                                {item.type === "0"
-                              ? "Hệ Thống"
-                              : item.status === "1" 
-                              ? "Hỗ Trợ" : "Vấn đề khác" }
+                        return (
+                          <tr key={i}>
+                            <td className="text-center">{i + 1}</td>
+                            <td className="text-center">
+                              {item.type === "0"
+                                ? "Hệ Thống"
+                                : item.status === "1"
+                                ? "Hỗ Trợ"
+                                : "Vấn đề khác"}
+                            </td>
+                            <td className="text-center">{item.number}</td>
 
-                                
-                                </td>
-                                <td className="text-center">
-                                  {item.number}
-                                </td>
-
-
-                                <td className="text-center">
-
-                      
+                            <td className="text-center">
                               {/* {   (new Date(item.booking_date)).toLocaleString().replace(/,/g, '').slice(8) } */}
-                            {item.create_at}
-                                
-                                </td>
-                                <td className="text-center">
-                                {item.status === "0"
-                              ? "Gửi yêu cầu"
-                              : item.status === "1" 
-                              ? "Trong quá trình xử lý" : "Hoàn thành" }
-                                </td>
+                              {item.create_at}
+                            </td>
+                            <td className="text-center">
+                              {item.status === "0"
+                                ? "Gửi yêu cầu"
+                                : item.status === "1"
+                                ? "Trong quá trình xử lý"
+                                : "Hoàn thành"}
+                            </td>
 
-                              
-
-                                <td className="text-center">
-                                  <CButton
-                                    style={styles.mgl5}
-                                    outline
-                                    color="primary"
-                                    size="sm"
-                                    onClick={async (e) =>
-                                      await this.openUpdate(item)
-                                    }
-                                  >
-                                    <CIcon name="cilPencil" />
-                                  </CButton>{" "}
-                                  <CButton
-                                    outline
-                                    color="danger"
-                                    size="sm"
-                                    onClick={(e) => {
-                                      this.openDelete(item);
-                                    }}
-                                  >
-                                    <CIcon name="cilTrash" />
-                                  </CButton>
-                                </td>
-                              </tr>
-                            );
-                          })
-                        }
+                            <td className="text-center">
+                              <CButton
+                                style={styles.mgl5}
+                                outline
+                                color="primary"
+                                size="sm"
+                                onClick={async (e) =>
+                                  await this.openUpdate(item)
+                                }
+                              >
+                                <CIcon name="cilPencil" />
+                              </CButton>{" "}
+                              <CButton
+                                outline
+                                color="danger"
+                                size="sm"
+                                onClick={(e) => {
+                                  this.openDelete(item);
+                                }}
+                              >
+                                <CIcon name="cilTrash" />
+                              </CButton>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </CardBody>
@@ -817,7 +804,7 @@ class BrandSlider extends Component {
                 // rows="5"
               />
               <TextFieldGroup
-              type="date"
+                type="date"
                 field="dateThamChieu"
                 label="Ngày đặt hẹn"
                 value={this.state.dateThamChieu}
@@ -826,8 +813,8 @@ class BrandSlider extends Component {
                 onChange={(e) => this.onChange("dateThamChieu", e.target.value)}
                 // rows="5"
               />
- <TextFieldGroup
-              type="time"
+              <TextFieldGroup
+                type="time"
                 field="timetext"
                 label="Giờ đặt hẹn"
                 value={this.state.timetext}
@@ -836,7 +823,7 @@ class BrandSlider extends Component {
                 onChange={(e) => this.onChange("timetext", e.target.value)}
                 // rows="5"
               />
-               <div style={{ width: "100%" }} className="mt-3">
+              <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
@@ -854,21 +841,23 @@ class BrandSlider extends Component {
                           <option selected key={i} value={item.item}>
                             {item.item === "0"
                               ? "Đang đặt lịch"
-                              : item.item === "1" 
-                              ? "Đã  gặp" : item.item ==="2" 
-                              ? "Hẹn gặp lại" : 
-                              "Không gặp"}
+                              : item.item === "1"
+                              ? "Đã  gặp"
+                              : item.item === "2"
+                              ? "Hẹn gặp lại"
+                              : "Không gặp"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                          {item.item === "0"
+                            {item.item === "0"
                               ? "Đang đặt lịch"
-                              : item.item === "1" 
-                              ? "Đã  gặp" : item.item ==="2" 
-                              ? "Hẹn gặp lại" : 
-                              "Không gặp"}
+                              : item.item === "1"
+                              ? "Đã  gặp"
+                              : item.item === "2"
+                              ? "Hẹn gặp lại"
+                              : "Không gặp"}
                           </option>
                         );
                       }

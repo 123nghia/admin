@@ -441,76 +441,87 @@ async remove(item){
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-         <Modal isOpen={this.state.modalVoucher} size="lg">
-            <ModalHeader >
-              {this.state.actionVoucher == "new" ? `Danh sách Voucher` : `Danh sách Voucher`}
+          <Modal isOpen={this.state.modalVoucher} size="lg">
+            <ModalHeader>
+              {this.state.actionVoucher == "new"
+                ? `Danh sách Voucher`
+                : `Danh sách Voucher`}
             </ModalHeader>
             <ModalBody>
-           
-            <table ble className="table table-hover table-outline mb-0 d-none d-sm-table table_dash" >
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        
-                     
-                        <th className="text-center">Loại</th>
-                        <th className="text-center">Ngày tạo</th>
+              <table
+                ble
+                className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+              >
+                <thead className="thead-light">
+                  <tr>
+                    <th className="text-center">STT.</th>
 
-                        <th className="text-center">Mã voucher</th>
- 
-        
-                        <th className="text-center">trạng thái</th>
-                 
+                    <th className="text-center">Loại</th>
+                    <th className="text-center">Ngày tạo</th>
 
-                        
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        dataVoucher != undefined ?
-                        dataVoucher.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.type}</td>
-                                <td className="text-center">
-                                {(new Date(item.create_at)).toLocaleDateString() + ' ' + (new Date(item.create_at)).toLocaleTimeString()}                          
-                                </td>
-                                <td className="text-center">{item.code}</td>
-                                <td className="text-center">
-                                  <Tag
-                                    className="ant-tag"
-                                    color={
-                                      item.status === "1"
-                                        ? "#2db7f5"
-                                        : item.status === "2"
-                                        ? "#f50"
-                                        : "#87d068"
-                                    }
-                                  >
-                                    {item.status == "1"
-                                      ? "Bắt đầu"
-                                      : item.status == "2"
-                                      ? "Trong quá trình"
-                                      : "Hoàn thành"}
-                                  </Tag>
-                                </td>
-                                
-                              </tr>
-                            );
-                          }) : ""
-                      }
-                    </tbody>
-                  </table>
-                  <div style={{ float: 'right' }}>
-                <Pagination count={arrPaginationVoucher.length} color="primary" onChange={(e, v) => {
-                  this.setState({ dataVoucher: arrPaginationVoucher[v - 1], indexPageVoucher: v - 1 })
-                }} />
+                    <th className="text-center">Mã voucher</th>
+
+                    <th className="text-center">trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <td
+                    colSpan="10"
+                    hidden={this.state.hidden}
+                    className="text-center"
+                  >
+                    Không tìm thấy dữ liệu
+                  </td>
+                  {dataVoucher != undefined
+                    ? dataVoucher.map((item, i) => {
+                        return (
+                          <tr key={i}>
+                            <td className="text-center">{i + 1}</td>
+                            <td className="text-center">{item.type}</td>
+                            <td className="text-center">
+                              {new Date(item.create_at).toLocaleDateString() +
+                                " " +
+                                new Date(item.create_at).toLocaleTimeString()}
+                            </td>
+                            <td className="text-center">{item.code}</td>
+                            <td className="text-center">
+                              <Tag
+                                className="ant-tag"
+                                color={
+                                  item.status === "1"
+                                    ? "#2db7f5"
+                                    : item.status === "2"
+                                    ? "#f50"
+                                    : "#87d068"
+                                }
+                              >
+                                {item.status == "1"
+                                  ? "Bắt đầu"
+                                  : item.status == "2"
+                                  ? "Trong quá trình"
+                                  : "Hoàn thành"}
+                              </Tag>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    : ""}
+                </tbody>
+              </table>
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPaginationVoucher.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      dataVoucher: arrPaginationVoucher[v - 1],
+                      indexPageVoucher: v - 1,
+                    });
+                  }}
+                />
               </div>
             </ModalBody>
             <ModalFooter>
-             
               <CButton
                 color="secondary"
                 onClick={(e) =>
@@ -522,39 +533,42 @@ async remove(item){
             </ModalFooter>
           </Modal>
           {this.state.modalInfo}
-          <Modal isOpen={this.state.modalVoucherEditing} className={this.props.className}>
+          <Modal
+            isOpen={this.state.modalVoucherEditing}
+            className={this.props.className}
+          >
             <ModalHeader>
-              {this.state.actionVoucherEditing == "new" ? `Tạo mới` : `Cập nhật`}
+              {this.state.actionVoucherEditing == "new"
+                ? `Tạo mới`
+                : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-            <TextFieldGroup
+              <TextFieldGroup
                 field="codeVoucher"
                 label="Mã voucher"
                 value={this.state.codeVoucher}
-                
                 // error={errors.title}
-                onChange={e => this.setState({codeVoucher : e.target.value})}
-              // rows="5"
+                onChange={(e) => this.setState({ codeVoucher: e.target.value })}
+                // rows="5"
               />
- <TextFieldGroup
+              <TextFieldGroup
                 field="relCode"
                 label="Mã chiến dịch"
                 value={this.state.relCode}
-                
                 // error={errors.title}
-                onChange={e => this.setState({relCode : e.target.value})}
-              // rows="5"
+                onChange={(e) => this.setState({ relCode: e.target.value })}
+                // rows="5"
               />
-            <label className="control-label">Mô tả:</label>
-            <CTextarea
-              name="description"
-              rows="4"
-              value={this.state.description}
-              onChange={(e) => {
-                this.setState({ description: e.target.value });
-              }}
-            />
-            <div style={{ width: "100%" }} className="mt-3">
+              <label className="control-label">Mô tả:</label>
+              <CTextarea
+                name="description"
+                rows="4"
+                value={this.state.description}
+                onChange={(e) => {
+                  this.setState({ description: e.target.value });
+                }}
+              />
+              <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
@@ -608,7 +622,9 @@ async remove(item){
               <CButton
                 color="secondary"
                 onClick={(e) =>
-                  this.setState({ modalVoucherEditing: !this.state.modalVoucherEditing })
+                  this.setState({
+                    modalVoucherEditing: !this.state.modalVoucherEditing,
+                  })
                 }
               >
                 Đóng
@@ -619,17 +635,14 @@ async remove(item){
             <Col>
               <Card>
                 <CardHeader>
-                
-                  <i className="fa fa-align-justify title_header">Màn hình Translation</i>
-               
-                 
-               
+                  <i className="fa fa-align-justify title_header">
+                    Màn hình Translation
+                  </i>
+
                   <CRow>
                     <CCol md={4} className="mt-3">
-                    <div className="">
-
-                   
-<p className="title_filter">Mã Voucher</p>
+                      <div className="">
+                        <p className="title_filter">Mã Voucher</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
@@ -641,73 +654,62 @@ async remove(item){
                         />
                       </div>
                     </CCol>
-                   
-                   
-                    <CCol md={4} className="mt-3">
-                    <div className="">
 
-                   
-<p className="title_filter">Trạng thái</p>
-<div style={{ width: "200px" }} className="">
-             
-                {arrLevelFilter !== undefined ? (
-                  <CSelect
-                    onChange={async (e) => {
-                      this.changeLevelValue(e,"levelFilter");
-                    }}
-                    custom
-                    size="md"
-                    name="levelFilter"
-                    id="SelectLm"
-                  >
-                    {arrLevelFilter.map((item, i) => {
-                      if (item.item === this.state.levelFilter) {
-                        return (
-                          <option selected key={i} value={item.item}>
-                            {item.item === "0"
-                                    ? "Chờ xác nhận"
-                                    : item.item === "1"
-                                      ? "Đã sử dụng"
-                                      : item.item === "2"
+                    <CCol md={4} className="mt-3">
+                      <div className="">
+                        <p className="title_filter">Trạng thái</p>
+                        <div style={{ width: "200px" }} className="">
+                          {arrLevelFilter !== undefined ? (
+                            <CSelect
+                              onChange={async (e) => {
+                                this.changeLevelValue(e, "levelFilter");
+                              }}
+                              custom
+                              size="md"
+                              name="levelFilter"
+                              id="SelectLm"
+                            >
+                              {arrLevelFilter.map((item, i) => {
+                                if (item.item === this.state.levelFilter) {
+                                  return (
+                                    <option selected key={i} value={item.item}>
+                                      {item.item === "0"
+                                        ? "Chờ xác nhận"
+                                        : item.item === "1"
+                                        ? "Đã sử dụng"
+                                        : item.item === "2"
                                         ? "Hủy bỏ"
                                         : item.item === "3"
-                                          ? "Xóa bỏ"
-                                       
-                                            : "Khóa"
-                                            }
-                          </option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item.item}>
-                           {item.item === "0"
-                                    ? "Chờ xác nhận"
-                                    : item.item === "1"
-                                      ? "Đã sử dụng"
-                                      : item.item === "2"
+                                        ? "Xóa bỏ"
+                                        : "Khóa"}
+                                    </option>
+                                  );
+                                } else {
+                                  return (
+                                    <option key={i} value={item.item}>
+                                      {item.item === "0"
+                                        ? "Chờ xác nhận"
+                                        : item.item === "1"
+                                        ? "Đã sử dụng"
+                                        : item.item === "2"
                                         ? "Hủy bỏ"
                                         : item.item === "3"
-                                          ? "Xóa bỏ"
-                                       
-                                            : "Khóa"
-                                            }
-                          </option>
-                        );
-                      }
-                    })}
-                  </CSelect>
-                ) : null}
-              </div>
-                       
+                                        ? "Xóa bỏ"
+                                        : "Khóa"}
+                                    </option>
+                                  );
+                                }
+                              })}
+                            </CSelect>
+                          ) : null}
+                        </div>
                       </div>
                     </CCol>
-                
-                  
                   </CRow>
                   <div className="flex-end mt-4">
-                  <CButton
+                    <CButton
                       color="info"
-                      style={{ marginBottom: "10px"}}
+                      style={{ marginBottom: "10px" }}
                       size="md"
                       className="btn-main"
                       onClick={(e) => {
@@ -717,44 +719,45 @@ async remove(item){
                       <BsSearch style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                     </CButton>
-                   
                   </div>
                 </CardHeader>
-                <CardBody>
-
-                  <table ble className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash">
-                  <thead className="thead-light">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                  >
+                    <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        
-                     
+
                         <th className="text-center">Loại</th>
                         <th className="text-center">Ngày tạo</th>
 
                         <th className="text-center">Mã voucher</th>
- 
-        
-                        <th className="text-center">trạng thái</th>
-                 
 
-                        
+                        <th className="text-center">trạng thái</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.type}</td>
                                 <td className="text-center">
-                                  {new Date(item.create_at).toLocaleDateString() 
-                                    }
+                                  {new Date(
+                                    item.create_at
+                                  ).toLocaleDateString()}
                                 </td>
                                 <td className="text-center">{item.code}</td>
-                                
 
                                 <td className="text-center">
                                   <Tag
@@ -774,26 +777,28 @@ async remove(item){
                                       : "Hoàn thành"}
                                   </Tag>
                                 </td>
-                                
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
-                  <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
-              </div>
+                  <div style={{ float: "right" }}>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-              
             </Col>
           </Row>
-
-       
-
         </div>
       );
     }

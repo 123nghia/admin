@@ -423,13 +423,28 @@ class Color extends Component {
                         <CRow>
                           <CCol sm="12" lg="6">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
                           <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </CButton>
                           </CCol>
                         </CRow>
                       </CCol>
@@ -437,12 +452,13 @@ class Color extends Component {
                         {/* <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton> */}
                       </CCol>
                     </CRow>
-
                   </div>
                 </CardHeader>
-                <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -450,27 +466,41 @@ class Color extends Component {
                         <th className="text-center">Hex</th>
                         <th className="text-center">MakeUp ID</th>
                         <th className="text-center">Alpha</th>
-                        
+
                         {/* <th className="text-center">Danh mục cấp 2</th> */}
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{item.id}</td>
                                 <td className="text-center">
                                   {item.hex}
-                                  <div style={{ backgroundColor: item.hex, width: '100%', height: '30px' }}> </div>
+                                  <div
+                                    style={{
+                                      backgroundColor: item.hex,
+                                      width: "100%",
+                                      height: "30px",
+                                    }}
+                                  >
+                                    {" "}
+                                  </div>
                                 </td>
-                                <td className="text-center">{item.makeup_id}</td>
+                                <td className="text-center">
+                                  {item.makeup_id}
+                                </td>
                                 <td className="text-center">{item.alpha}</td>
-                             
-                                
+
                                 {/* <td className="text-center">{item.subName}</td> */}
                                 <td className="text-center">
                                   {/* <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
@@ -482,16 +512,23 @@ class Color extends Component {
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
                 </CardBody>
               </Card>
-              <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      data: arrPagination[v - 1],
+                      indexPage: v - 1,
+                    });
+                  }}
+                />
               </div>
               {/* {
                 arrPagination.length == 1 ? "" :
@@ -513,7 +550,9 @@ class Color extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="hex"
@@ -521,17 +560,17 @@ class Color extends Component {
                 value={this.state.hex}
                 placeholder={"Hex"}
                 // error={errors.title}
-                onChange={e => this.onChange("hex", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("hex", e.target.value)}
+                // rows="5"
               />
-               <TextFieldGroup
+              <TextFieldGroup
                 field="makeup_id"
                 label="Tên gợi nhớ"
                 value={this.state.name}
                 placeholder={"Tên gợi nhớ"}
                 // error={errors.title}
-                onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("name", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -540,53 +579,110 @@ class Color extends Component {
                 value={this.state.makeup_id}
                 placeholder={"Mã Makeup"}
                 // error={errors.title}
-                onChange={e => this.onChange("makeup_id", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("makeup_id", e.target.value)}
+                // rows="5"
               />
-   
+
               <TextFieldGroup
                 field="alpha"
                 label="Alpha"
                 value={this.state.alpha}
                 placeholder={"Alpha"}
                 // error={errors.title}
-                onChange={e => this.onChange("alpha", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("alpha", e.target.value)}
+                // rows="5"
               />
 
               <CLabel>Phiên bản:</CLabel>
               <div style={{ width: "100%" }}>
-                <CSelect onChange={async e => { this.setState({ version: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                  {
-                    ['v3', 'v4'].map((item, i) => {
-                      if (item == this.state.version) {
-                        return (
-                          <option selected key={i} value={item}>{item}</option>
-                        );
-                      } else {
-                        return (
-                          <option key={i} value={item}>{item}</option>
-                        );
-                      }
-                    })
-                  }
+                <CSelect
+                  onChange={async (e) => {
+                    this.setState({ version: e.target.value });
+                  }}
+                  custom
+                  size="sm"
+                  name="selectSm"
+                  id="SelectLm"
+                >
+                  {["v3", "v4"].map((item, i) => {
+                    if (item == this.state.version) {
+                      return (
+                        <option selected key={i} value={item}>
+                          {item}
+                        </option>
+                      );
+                    } else {
+                      return (
+                        <option key={i} value={item}>
+                          {item}
+                        </option>
+                      );
+                    }
+                  })}
                 </CSelect>
               </div>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addRoles()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

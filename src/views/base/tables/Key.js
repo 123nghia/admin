@@ -385,41 +385,70 @@ class Users extends Component {
                         <CRow>
                           <CCol sm="6" lg="4">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
 
                           <CCol sm="6" lg="4">
-                            <CSelect style={styles.flexOption} onChange={e => {
-
-                              this.actionSearch(e, "keyStatus");
-
-                            }} custom>
+                            <CSelect
+                              style={styles.flexOption}
+                              onChange={(e) => {
+                                this.actionSearch(e, "keyStatus");
+                              }}
+                              custom
+                            >
                               <option value={""}>-----</option>
-                              {
-                                ['INSTOCK', 'AVAILABLE', 'ACTIVED', 'DISABLE'].map((item, i) => {
-                                  return (
-                                    <option value={item}>{item}</option>
-                                  );
-                                })
-                              }
+                              {[
+                                "INSTOCK",
+                                "AVAILABLE",
+                                "ACTIVED",
+                                "DISABLE",
+                              ].map((item, i) => {
+                                return <option value={item}>{item}</option>;
+                              })}
                             </CSelect>
                           </CCol>
                           <CCol sm="6" lg="4">
-                            <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                            <Button
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </Button>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="6" lg="12">
-                        <Button outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</Button>
+                        <Button
+                          outline
+                          color="primary"
+                          style={styles.floatRight}
+                          size="sm"
+                          onClick={(e) => this.toggleModal("new")}
+                        >
+                          Thêm mới
+                        </Button>
                       </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
-                <CardBody>
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -432,25 +461,38 @@ class Users extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td colSpan="10" hidden={hidden} className="text-center">
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Name}</td>
                                 <td className="text-center">
-                                  {
-                                    item.Start_Date != null || item.Start_Date != undefined ?
-                                      (new Date(item.Start_Date)).toLocaleDateString() + ' ' + (new Date(item.Start_Date)).toLocaleTimeString() : ""
-                                  }
+                                  {item.Start_Date != null ||
+                                  item.Start_Date != undefined
+                                    ? new Date(
+                                        item.Start_Date
+                                      ).toLocaleDateString() +
+                                      " " +
+                                      new Date(
+                                        item.Start_Date
+                                      ).toLocaleTimeString()
+                                    : ""}
                                 </td>
                                 <td className="text-center">
-                                  {
-                                    item.End_Date != null || item.End_Date != undefined ?
-                                      (new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString() : ""
-                                  }
+                                  {item.End_Date != null ||
+                                  item.End_Date != undefined
+                                    ? new Date(
+                                        item.End_Date
+                                      ).toLocaleDateString() +
+                                      " " +
+                                      new Date(
+                                        item.End_Date
+                                      ).toLocaleTimeString()
+                                    : ""}
                                 </td>
                                 <td className="text-center">{item.Value}</td>
                                 <td className="text-center">
@@ -459,67 +501,167 @@ class Users extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Cập nhật</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
+                                  <Button
+                                    style={styles.mgl5}
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={async (e) =>
+                                      await this.openUpdate(item)
+                                    }
+                                  >
+                                    Cập nhật
+                                  </Button>{" "}
+                                  <Button
+                                    outline
+                                    color="danger"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      this.openDelete(item);
+                                    }}
+                                  >
+                                    Xoá
+                                  </Button>
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
                 </CardBody>
               </Card>
-              {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              }
+              {arrPagination.length == 1 ? (
+                ""
+              ) : (
+                <div
+                  style={{
+                    float: "right",
+                    marginRight: "10px",
+                    padding: "10px",
+                  }}
+                >
+                  <tr style={styles.row}>
+                    {arrPagination.map((item, i) => {
+                      return (
+                        <td>
+                          <Button
+                            style={styles.pagination}
+                            color={i == indexPage ? "primary" : "danger"}
+                            onClick={(e) => {
+                              this.setState({
+                                data: arrPagination[i],
+                                indexPage: i,
+                              });
+                            }}
+                          >
+                            {i + 1}
+                          </Button>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                </div>
+              )}
             </Col>
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
 
             <ModalBody>
-              {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'INSTOCK'}>INSTOCK</option>
-                    <option value={'AVAILABLE'}>AVAILABLE</option>
-                    <option value={'ACTIVED'}>ACTIVED</option>
-                    <option value={'DISABLE'}>DISABLE</option>
+              {action == "new" ? (
+                ""
+              ) : (
+                <div>
+                  <label style={styles.flexLabel} htmlFor="tag">
+                    Trạng thái:
+                  </label>
+                  <select
+                    style={styles.flexOption}
+                    name="Status"
+                    onChange={(e) => this.onChange("Status", e.target.value)}
+                  >
+                    <option value={this.state.Status}>
+                      {this.state.Status == ""
+                        ? ` - - - - - - - - - - `
+                        : this.state.Status}
+                    </option>
+                    <option value={"INSTOCK"}>INSTOCK</option>
+                    <option value={"AVAILABLE"}>AVAILABLE</option>
+                    <option value={"ACTIVED"}>ACTIVED</option>
+                    <option value={"DISABLE"}>DISABLE</option>
                   </select>
                 </div>
-              }
+              )}
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.updateUser() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</Button>
+              <Button
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.updateUser()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({ modalCom: !this.state.modalCom })
+                }
+              >
+                Đóng
+              </Button>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Do you want to delete user "${
+                this.state.delete ? this.state.delete.Email : ""
+              }" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
+              <Button
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </Button>
             </ModalFooter>
           </Modal>
         </div>

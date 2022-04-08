@@ -795,7 +795,7 @@ class Users extends Component {
     }
 
     getDetailProvider() {
-        
+
     }
 
 
@@ -875,7 +875,7 @@ class Users extends Component {
                         <div className="tabcontents">
                             <div id="tabcontent1" className="tabcontent defaultOpen">
                                 <div className="tabContentItem" style={styles.tabContentItem}>
-                                    <p className="modal-label">Tên công ty: 
+                                    <p className="modal-label">Tên công ty:
                                         <span className="modal-detail">{detailProvider}</span>
                                     </p>
                                     <p className="modal-label">Tên thương hiệu: <span className="modal-detail">hiiii</span></p>
@@ -906,7 +906,6 @@ class Users extends Component {
                                         {
                                             data !== undefined ?
                                                 data.map((item, i) => {
-                                                    console.log(item)
                                                     return (
                                                         <tr key={i}>
                                                             <td className="text-center">{i + 1}</td>

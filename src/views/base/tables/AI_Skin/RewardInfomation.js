@@ -363,23 +363,37 @@ class RewardInfomation extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách nội dung chương trình khuyến mãi</i>
+                  <i className="fa fa-align-justify">
+                    Danh sách nội dung chương trình khuyến mãi
+                  </i>
                   <div style={styles.tags}>
                     {/* <div>
                     <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Tìm kiếm" /> */}
-                    <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm mới</CButton>
+                    <CButton
+                      outline
+                      color="primary"
+                      style={styles.floatRight}
+                      size="sm"
+                      onClick={async (e) => await this.toggleModal("new")}
+                    >
+                      Thêm mới
+                    </CButton>
                     {/* </div> */}
                   </div>
                 </CardHeader>
-                <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        {
-                          type == '0' || type == '1' ? <th className="text-center">Công ty</th> : ""
-                        }
+                        {type == "0" || type == "1" ? (
+                          <th className="text-center">Công ty</th>
+                        ) : (
+                          ""
+                        )}
                         <th className="text-center">Tiêu đề</th>
                         <th className="text-center">Nội dung</th>
                         <th className="text-center">Templates</th>
@@ -390,24 +404,46 @@ class RewardInfomation extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                {
-                                  type == '0' || type == '1' ? <td className="text-center">{item.Company_Id == null || item.Company_Id == "null" ? "Admin" : item.Company_Id.Name }</td> : ""
-                                }
+                                {type == "0" || type == "1" ? (
+                                  <td className="text-center">
+                                    {item.Company_Id == null ||
+                                    item.Company_Id == "null"
+                                      ? "Admin"
+                                      : item.Company_Id.Name}
+                                  </td>
+                                ) : (
+                                  ""
+                                )}
                                 <td className="text-center">{item.Subject}</td>
                                 <td className="text-center">{item.Content}</td>
-                                <td className="text-center">{item.Templates}</td>
                                 <td className="text-center">
-                                  <a href={item.Link} target="_blank">{item.Link}</a>
+                                  {item.Templates}
                                 </td>
                                 <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                  <a href={item.Link} target="_blank">
+                                    {item.Link}
+                                  </a>
+                                </td>
+                                <td className="text-center">
+                                  {new Date(
+                                    item.Create_Date
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.Create_Date
+                                    ).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -415,25 +451,47 @@ class RewardInfomation extends Component {
                                   </CBadge>
                                 </td>
                                 <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                  <CButton
+                                    style={styles.mgl5}
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={async (e) =>
+                                      await this.openUpdate(item)
+                                    }
+                                  >
                                     <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                  </CButton>{" "}
+                                  <CButton
+                                    outline
+                                    color="danger"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      this.openDelete(item);
+                                    }}
+                                  >
                                     <CIcon name="cilTrash" />
                                   </CButton>
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
                 </CardBody>
               </Card>
-              <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      data: arrPagination[v - 1],
+                      indexPage: v - 1,
+                    });
+                  }}
+                />
               </div>
               {/* {
                 arrPagination.length == 1 ? "" :
@@ -455,7 +513,9 @@ class RewardInfomation extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="Subject"
@@ -463,8 +523,8 @@ class RewardInfomation extends Component {
                 value={this.state.Subject}
                 placeholder={"Tiêu đề"}
                 // error={errors.title}
-                onChange={e => this.onChange("Subject", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Subject", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -473,8 +533,8 @@ class RewardInfomation extends Component {
                 value={this.state.Content}
                 placeholder={"Nhập nội dung"}
                 // error={errors.title}
-                onChange={e => this.onChange("Content", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Content", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -483,8 +543,8 @@ class RewardInfomation extends Component {
                 value={this.state.Templates}
                 placeholder={"Nhập nội dung sms"}
                 // error={errors.title}
-                onChange={e => this.onChange("Templates", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Templates", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -493,8 +553,8 @@ class RewardInfomation extends Component {
                 value={this.state.Link}
                 placeholder={"Đường dẫn kèm theo"}
                 // error={errors.title}
-                onChange={e => this.onChange("Link", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Link", e.target.value)}
+                // rows="5"
               />
 
               {/* {
@@ -510,19 +570,66 @@ class RewardInfomation extends Component {
             } */}
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addRoles()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

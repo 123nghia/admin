@@ -313,16 +313,37 @@ class Users extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"> KEY ORDER (Total: {this.state.data != undefined || this.state.data != null ?
-                    this.state.data.length : 0}, Active: {this.state.totalActive}, Page: {this.state.indexPage + 1})</i>
+                  <i className="fa fa-align-justify">
+                    {" "}
+                    KEY ORDER (Total:{" "}
+                    {this.state.data != undefined || this.state.data != null
+                      ? this.state.data.length
+                      : 0}
+                    , Active: {this.state.totalActive}, Page:{" "}
+                    {this.state.indexPage + 1})
+                  </i>
                   <div style={styles.tags}>
                     <div>
-                      <Input style={styles.searchInput} onChange={(e) => this.searchKey(e.target.value)} name="key" value={key} placeholder="Search" />
-                      <Button outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Add</Button>
+                      <Input
+                        style={styles.searchInput}
+                        onChange={(e) => this.searchKey(e.target.value)}
+                        name="key"
+                        value={key}
+                        placeholder="Search"
+                      />
+                      <Button
+                        outline
+                        color="primary"
+                        style={styles.floatRight}
+                        size="sm"
+                        onClick={async (e) => await this.toggleModal("new")}
+                      >
+                        Add
+                      </Button>
                     </div>
                   </div>
                 </CardHeader>
-                <CardBody>
+                <CardBody className="table__overflow">
                   <Table responsive>
                     <thead>
                       <tr>
@@ -337,9 +358,8 @@ class Users extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i} style={styles.row}>
                                 <td style={styles.wa10}>{i + 1}</td>
@@ -350,38 +370,75 @@ class Users extends Component {
                                 <td style={styles.wh12}>{item.Phone}</td>
                                 <td style={styles.wh12}>{item.Status}</td>
                                 <td style={styles.w5}>
-                                  <Button style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >Cập nhật</Button>{' '}
-                                  <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button>
+                                  <Button
+                                    style={styles.mgl5}
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={async (e) =>
+                                      await this.openUpdate(item)
+                                    }
+                                  >
+                                    Cập nhật
+                                  </Button>{" "}
+                                  <Button
+                                    outline
+                                    color="danger"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      this.openDelete(item);
+                                    }}
+                                  >
+                                    Xoá
+                                  </Button>
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </Table>
                 </CardBody>
               </Card>
-              {
-                arrPagination.length == 1 ? "" :
-                  <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                    <tr style={styles.row}>
-                      {
-                        arrPagination.map((item, i) => {
-                          return (
-                            <td>
-                              <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  </div>
-              }
+              {arrPagination.length == 1 ? (
+                ""
+              ) : (
+                <div
+                  style={{
+                    float: "right",
+                    marginRight: "10px",
+                    padding: "10px",
+                  }}
+                >
+                  <tr style={styles.row}>
+                    {arrPagination.map((item, i) => {
+                      return (
+                        <td>
+                          <Button
+                            style={styles.pagination}
+                            color={i == indexPage ? "primary" : "danger"}
+                            onClick={(e) => {
+                              this.setState({
+                                data: arrPagination[i],
+                                indexPage: i,
+                              });
+                            }}
+                          >
+                            {i + 1}
+                          </Button>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                </div>
+              )}
             </Col>
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="UserName"
@@ -389,27 +446,31 @@ class Users extends Component {
                 value={this.state.UserName}
                 placeholder={"UserName"}
                 // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("UserName", e.target.value)}
+                // rows="5"
               />
 
               <div>
-                <label style={styles.flexLabel} htmlFor="tag">Company:    </label>
-                <select style={styles.flexOption} name="Company_Id" onChange={e => this.onChange("Company_Id", e.target.value)}>
+                <label style={styles.flexLabel} htmlFor="tag">
+                  Company:{" "}
+                </label>
+                <select
+                  style={styles.flexOption}
+                  name="Company_Id"
+                  onChange={(e) => this.onChange("Company_Id", e.target.value)}
+                >
                   <option value={this.state.Company_Id}>-----</option>
-                  {
-                    dataCompany.map((item, i) => {
-                      if (item.Name == currentCompany) {
-                        return (
-                          <option selected value={item._id}>{item.Name}</option>
-                        );
-                      } else {
-                        return (
-                          <option value={item._id}>{item.Name}</option>
-                        );
-                      }
-                    })
-                  }
+                  {dataCompany.map((item, i) => {
+                    if (item.Name == currentCompany) {
+                      return (
+                        <option selected value={item._id}>
+                          {item.Name}
+                        </option>
+                      );
+                    } else {
+                      return <option value={item._id}>{item.Name}</option>;
+                    }
+                  })}
                 </select>
               </div>
 
@@ -419,8 +480,8 @@ class Users extends Component {
                 value={this.state.Email}
                 placeholder={"Email"}
                 // error={errors.title}
-                onChange={e => this.onChange("Email", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Email", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -429,8 +490,8 @@ class Users extends Component {
                 value={this.state.Address}
                 placeholder={"Address"}
                 // error={errors.title}
-                onChange={e => this.onChange("Address", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Address", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -439,38 +500,97 @@ class Users extends Component {
                 value={this.state.Phone}
                 placeholder={"Phone"}
                 // error={errors.title}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Phone", e.target.value)}
+                // rows="5"
               />
 
-              {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'Actived'}>Actived</option>
-                    <option value={'Locked'}>Locked</option>
-                    <option value={'Deactived'}>Deactived</option>
+              {action == "new" ? (
+                ""
+              ) : (
+                <div>
+                  <label style={styles.flexLabel} htmlFor="tag">
+                    Trạng thái:
+                  </label>
+                  <select
+                    style={styles.flexOption}
+                    name="Status"
+                    onChange={(e) => this.onChange("Status", e.target.value)}
+                  >
+                    <option value={this.state.Status}>
+                      {this.state.Status == ""
+                        ? ` - - - - - - - - - - `
+                        : this.state.Status}
+                    </option>
+                    <option value={"Actived"}>Actived</option>
+                    <option value={"Locked"}>Locked</option>
+                    <option value={"Deactived"}>Deactived</option>
                   </select>
                 </div>
-              }
-
-
+              )}
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addUser() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
+              <Button
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addUser()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </Button>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Do you want to delete user "${
+                this.state.delete ? this.state.delete.Email : ""
+              }" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
+              <Button
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </Button>
             </ModalFooter>
           </Modal>
         </div>

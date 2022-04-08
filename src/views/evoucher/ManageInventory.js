@@ -765,7 +765,7 @@ renderStatusColorTag  = (statusCode) => {
                 value={this.state.name}
                 // error={errors.title}
                 onChange={(e) => this.setState({ name: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
 
               {/* <TextFieldGroup
@@ -783,7 +783,7 @@ renderStatusColorTag  = (statusCode) => {
                 value={this.state.quantity}
                 // error={errors.title}
                 onChange={(e) => this.setState({ quantity: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
 
               {/* <TextFieldGroup
@@ -834,7 +834,6 @@ renderStatusColorTag  = (statusCode) => {
                   format={dateFormat}
                 />
               )}
-
 
               <div className="mt-3"></div>
               <label>Ngày kết thúc</label>
@@ -891,8 +890,7 @@ renderStatusColorTag  = (statusCode) => {
                       }
                     });
                     this.setState({ saleEndDate: newData });
-                    console.log(this.state.saleEndDate)
-
+                    console.log(this.state.saleEndDate);
                   }}
                   defaultValue={moment(
                     new Date(this.state.saleEndDate).toLocaleDateString(),
@@ -913,8 +911,7 @@ renderStatusColorTag  = (statusCode) => {
                       }
                     });
                     this.setState({ saleEndDate: newData });
-                    console.log(this.state.saleEndDate)
-
+                    console.log(this.state.saleEndDate);
                   }}
                   defaultValue={moment()}
                   format={dateFormat}
@@ -935,25 +932,24 @@ renderStatusColorTag  = (statusCode) => {
                   className="select_company"
                   showSearch
                   defaultValue={this.state.nameCompanyChoose}
-
                   placeholder="Chọn tên công ty"
                   optionFilterProp="children"
                   onChange={(value) =>
-
                     this.setState({
                       idCompany: value,
                     })
                   }
                   onSearch={this.onSearchSelect}
                   filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                    0
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
                   }
                 >
                   {dataCompany
                     ? dataCompany.map((item, i) => {
-                      return <Option value={item._id}>{item.Name}</Option>;
-                    })
+                        return <Option value={item._id}>{item.Name}</Option>;
+                      })
                     : null}
                 </Select>
               </div>
@@ -975,7 +971,6 @@ renderStatusColorTag  = (statusCode) => {
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
                               ? "Hoạt động"
-
                               : "Không hoạt động"}
                           </option>
                         );
@@ -984,7 +979,6 @@ renderStatusColorTag  = (statusCode) => {
                           <option key={i} value={item.item}>
                             {item.item === "1"
                               ? "Hoạt động"
-
                               : "Không hoạt động"}
                           </option>
                         );
@@ -1035,7 +1029,6 @@ renderStatusColorTag  = (statusCode) => {
                   <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                   <p style={{ margin: "auto 0" }}>Thêm mới</p>
                 </CButton>
-
               </div>
               <table
                 ble
@@ -1065,98 +1058,99 @@ renderStatusColorTag  = (statusCode) => {
                   </td>
                   {dataVoucher != undefined
                     ? dataVoucher.map((item, i) => {
-                      return (
-                        <tr key={i}>
-                          <td className="text-center">{i + 1}</td>
+                        return (
+                          <tr key={i}>
+                            <td className="text-center">{i + 1}</td>
 
-                          <td className="text-center">{item.code}</td>
-                          <td className="text-center">
-                            {new Date(item.create_at).toLocaleDateString() +
-                              " " +
-                              new Date(item.create_at).toLocaleTimeString()}
-                          </td>
-                          <td className="text-center">
-                            {item.user ? item.user : "Chưa có"}
-                          </td>
+                            <td className="text-center">{item.code}</td>
+                            <td className="text-center">
+                              {new Date(item.create_at).toLocaleDateString() +
+                                " " +
+                                new Date(item.create_at).toLocaleTimeString()}
+                            </td>
+                            <td className="text-center">
+                              {item.user ? item.user : "Chưa có"}
+                            </td>
 
-                          <td className="text-center">
-                            <Tag
-                              className="ant-tag"
-                              color={item.status === "0"
-                                ? "#2eb85c"
-                                : item.status === "1"
-                                  ? "#2db7f5"
-                                  : item.status === "2"
+                            <td className="text-center">
+                              <Tag
+                                className="ant-tag"
+                                color={
+                                  item.status === "0"
+                                    ? "#2eb85c"
+                                    : item.status === "1"
+                                    ? "#2db7f5"
+                                    : item.status === "2"
                                     ? "#87d068"
                                     : item.status === "3"
-                                      ? "#f50"
-                                      : item.status === "4"
-                                        ? "#dc0e04"
-                                        : item.status === "4"
-                                          ? "#00D084"
-                                          : "#FF0004"}
-                            >
-                              {item.status === "0"
-                                ? "Sẵn sàng"
-                                : item.status === "1"
+                                    ? "#f50"
+                                    : item.status === "4"
+                                    ? "#dc0e04"
+                                    : item.status === "4"
+                                    ? "#00D084"
+                                    : "#FF0004"
+                                }
+                              >
+                                {item.status === "0"
+                                  ? "Sẵn sàng"
+                                  : item.status === "1"
                                   ? "Chờ xác nhận"
                                   : item.status === "2"
-                                    ? "Đã sử dụng"
-                                    : item.status === "3"
-                                      ? "Hủy bỏ"
-                                      : item.status === "4"
-                                        ? "Xóa bỏ"
-                                        : "Khóa"
-                              }
-                            </Tag>
-                          </td>
-                          <td className="text-center">
-                            <div class="flex">
-                              <CButton
-                                shape="rounded-pill"
-                                variant="outline"
-                                color="info"
-                                style={styles.mgl5}
-                                size="md"
-                                className="flex-a-center "
-                                onClick={() => this.renderModalInfo(item)}
-                              >
-                                <BsSearch className="mr-1" />
-                                Xem chi tiết
-                              </CButton>
-                              <CButton
-                                shape="rounded-pill"
-                                variant="ghost"
-                                color="info"
-                                style={styles.mgl5}
-                                size="md"
-                                onClick={(e) => this.openUpdateVoucher(item)}
-                              >
-                                <FiEdit3
-                                  style={styles.icon}
-                                  name="cilPencil"
-                                />
-                              </CButton>{" "}
-                              <CButton
-                                shape="rounded-pill"
-                                variant="ghost"
-                                color="danger"
-                                style={styles.mgl5}
-                                onClick={(e) => {
-                                  this.removeVoucher(item);
-                                }}
-                              >
-                                <BsTrash
-                                  style={styles.icon}
-                                  className="icon"
-                                  name="cilTrash"
-                                />
-                              </CButton>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
+                                  ? "Đã sử dụng"
+                                  : item.status === "3"
+                                  ? "Hủy bỏ"
+                                  : item.status === "4"
+                                  ? "Xóa bỏ"
+                                  : "Khóa"}
+                              </Tag>
+                            </td>
+                            <td className="text-center">
+                              <div class="flex">
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="outline"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  size="md"
+                                  className="flex-a-center "
+                                  onClick={() => this.renderModalInfo(item)}
+                                >
+                                  <BsSearch className="mr-1" />
+                                  Xem chi tiết
+                                </CButton>
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  size="md"
+                                  onClick={(e) => this.openUpdateVoucher(item)}
+                                >
+                                  <FiEdit3
+                                    style={styles.icon}
+                                    name="cilPencil"
+                                  />
+                                </CButton>{" "}
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="danger"
+                                  style={styles.mgl5}
+                                  onClick={(e) => {
+                                    this.removeVoucher(item);
+                                  }}
+                                >
+                                  <BsTrash
+                                    style={styles.icon}
+                                    className="icon"
+                                    name="cilTrash"
+                                  />
+                                </CButton>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
                     : ""}
                 </tbody>
               </table>
@@ -1202,7 +1196,7 @@ renderStatusColorTag  = (statusCode) => {
                 value={this.state.codeVoucher}
                 // error={errors.title}
                 onChange={(e) => this.setState({ codeVoucher: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
               <TextFieldGroup
                 field="relCode"
@@ -1210,7 +1204,7 @@ renderStatusColorTag  = (statusCode) => {
                 value={this.state.relCode}
                 // error={errors.title}
                 onChange={(e) => this.setState({ relCode: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
               <label className="control-label">Mô tả:</label>
               <CTextarea
@@ -1240,15 +1234,14 @@ renderStatusColorTag  = (statusCode) => {
                             {item.item === "0"
                               ? "Sẵn sàng"
                               : item.item === "1"
-                                ? "Chờ xác nhận"
-                                : item.item === "2"
-                                  ? "Đã sử dụng"
-                                  : item.item === "3"
-                                    ? "Hủy bỏ"
-                                    : item.item === "4"
-                                      ? "Xóa bỏ"
-                                      : "Khóa"
-                            }
+                              ? "Chờ xác nhận"
+                              : item.item === "2"
+                              ? "Đã sử dụng"
+                              : item.item === "3"
+                              ? "Hủy bỏ"
+                              : item.item === "4"
+                              ? "Xóa bỏ"
+                              : "Khóa"}
                           </option>
                         );
                       } else {
@@ -1257,15 +1250,14 @@ renderStatusColorTag  = (statusCode) => {
                             {item.item === "0"
                               ? "Sẵn sàng"
                               : item.item === "1"
-                                ? "Chờ xác nhận"
-                                : item.item === "2"
-                                  ? "Đã sử dụng"
-                                  : item.item === "3"
-                                    ? "Hủy bỏ"
-                                    : item.item === "4"
-                                      ? "Xóa bỏ"
-                                      : "Khóa"
-                            }
+                              ? "Chờ xác nhận"
+                              : item.item === "2"
+                              ? "Đã sử dụng"
+                              : item.item === "3"
+                              ? "Hủy bỏ"
+                              : item.item === "4"
+                              ? "Xóa bỏ"
+                              : "Khóa"}
                           </option>
                         );
                       }
@@ -1309,8 +1301,6 @@ renderStatusColorTag  = (statusCode) => {
                   <CRow>
                     <CCol md={3} className="mt">
                       <div className="">
-
-
                         <p className="title_filter">Mã Voucher</p>
                         <Input
                           style={styles.searchInput}
@@ -1326,8 +1316,6 @@ renderStatusColorTag  = (statusCode) => {
 
                     <CCol md={3} className="mt">
                       <div className="">
-
-
                         <p className="title_filter">Số điện thoại</p>
                         <Input
                           style={styles.searchInput}
@@ -1343,11 +1331,8 @@ renderStatusColorTag  = (statusCode) => {
                     </CCol>
                     <CCol md={3} className="mt">
                       <div className="">
-
-
                         <p className="title_filter">Trạng thái</p>
                         <div style={{ width: "200px" }} className="">
-
                           {arrLevel !== undefined ? (
                             <CSelect
                               onChange={async (e) => {
@@ -1364,7 +1349,6 @@ renderStatusColorTag  = (statusCode) => {
                                     <option selected key={i} value={item.item}>
                                       {item.item === "0"
                                         ? "Hoạt động"
-
                                         : "Không hoạt động"}
                                     </option>
                                   );
@@ -1373,7 +1357,6 @@ renderStatusColorTag  = (statusCode) => {
                                     <option key={i} value={item.item}>
                                       {item.item === "0"
                                         ? "Hoạt động"
-
                                         : "Không hoạt động"}
                                     </option>
                                   );
@@ -1395,10 +1378,8 @@ renderStatusColorTag  = (statusCode) => {
                     </CCol>
                     <CCol md={3} className="mt">
                       <div className="">
-
-
                         <p className="title_filter">Danh sách Sales</p>
-                        <div style={{ width: '200px' }}>
+                        <div style={{ width: "200px" }}>
                           <Select
                             className="select_seo"
                             showSearch
@@ -1411,26 +1392,29 @@ renderStatusColorTag  = (statusCode) => {
                             }
                             onSearch={this.onSearchSelect}
                             filterOption={(input, option) =>
-                              option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                              0
+                              option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
                             }
                           >
                             {this.state.dataSales
                               ? this.state.dataSales.map((item, i) => {
-                                return <Option value={item._id}>{item.Name}</Option>;
-                              })
+                                  return (
+                                    <Option value={item._id}>
+                                      {item.Name}
+                                    </Option>
+                                  );
+                                })
                               : null}
                           </Select>
                         </div>
-
                       </div>
                     </CCol>
                     <CCol md={3} className="mt">
-
                       <div className="">
                         <p className="title_filter">Từ ngày</p>
 
-                        <div style={{ width: '200px' }}>
+                        <div style={{ width: "200px" }}>
                           <DatePicker
                             style={styles.dateForm}
                             onChange={(e, dateString) => {
@@ -1453,7 +1437,7 @@ renderStatusColorTag  = (statusCode) => {
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Đến ngày</p>
-                        <div style={{ width: '200px' }}>
+                        <div style={{ width: "200px" }}>
                           <DatePicker
                             style={styles.dateForm}
                             onChange={(e, dateString) => {
@@ -1472,13 +1456,10 @@ renderStatusColorTag  = (statusCode) => {
                           />
                         </div>
                       </div>
-
-
                     </CCol>
                   </CRow>
 
                   <div className="flex-end">
-
                     <CButton
                       color="info"
                       style={{ marginRight: "10px" }}
@@ -1493,7 +1474,6 @@ renderStatusColorTag  = (statusCode) => {
                     </CButton>
                     <CButton
                       color="info"
-
                       size="md"
                       className="btn-main"
                       onClick={() => this.openVoucher()}
@@ -1501,11 +1481,9 @@ renderStatusColorTag  = (statusCode) => {
                       <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
-
                   </div>
                 </CardHeader>
-                <CardBody>
-
+                <CardBody className="table__overflow">
                   <table
                     ble
                     className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -1513,11 +1491,10 @@ renderStatusColorTag  = (statusCode) => {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                       
+
                         <th className="text-center">Nhà cung cấp</th>
                         <th className="text-center">Loại hình</th>
                         <th className="text-center">Nội dung chiến dịch</th>
-                        
 
                         <th className="text-center">Tên khách hàng</th>
                         <th className="text-center">Số điện thoại</th>
@@ -1537,76 +1514,80 @@ renderStatusColorTag  = (statusCode) => {
                       </td>
                       {data != undefined
                         ? data.map((item, i) => {
-            
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.ncc}</td>
-                              <td className="text-center">{item.type}</td>
-                              <td className="text-center">{item.content}</td>
-                              <td className="text-center">{item.name}</td>
-                              <td className="text-center">{item.phone}</td>
-                              <td className="text-center">
-                                <Tag
-                                  className="ant-tag"
-                                  color={this.renderStatusColorTag(item.status)}
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.ncc}</td>
+                                <td className="text-center">{item.type}</td>
+                                <td className="text-center">{item.content}</td>
+                                <td className="text-center">{item.name}</td>
+                                <td className="text-center">{item.phone}</td>
+                                <td className="text-center">
+                                  <Tag
+                                    className="ant-tag"
+                                    color={this.renderStatusColorTag(
+                                      item.status
+                                    )}
+                                  >
+                                    {this.renderStatusContent(item.status)}{" "}
+                                  </Tag>
+                                </td>
+
+                                <td
+                                  className="text-center"
+                                  style={{ minWidth: "230px" }}
                                 >
-                                 {this.renderStatusContent(item.status)} {" "}
-                                </Tag>
-                              </td>
-           
-                              <td className="text-center" style={{ minWidth: '230px' }}>
-                                <div className="flex">
-                                  <Link to={"/detail-inventory/" + item._id}>
+                                  <div className="flex">
+                                    <Link to={"/detail-inventory/" + item._id}>
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        className="flex-a-center height-detail-btn"
+                                        // onClick={(e) =>
+                                        //   this.viewDetailCampaign(item._id)
+                                        // }
+                                      >
+                                        <BsSearch className="mr-1" />
+                                      </CButton>
+                                    </Link>
                                     <CButton
                                       shape="rounded-pill"
-                                      variant="outline"
+                                      variant="ghost"
                                       color="info"
                                       style={styles.mgl5}
                                       size="md"
-                                      className="flex-a-center height-detail-btn"
-                                    // onClick={(e) =>
-                                    //   this.viewDetailCampaign(item._id)
-                                    // }
+                                      onClick={(e) =>
+                                        this.openEditVoucher(item)
+                                      }
                                     >
-                                      <BsSearch className="mr-1" />
-                                  
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        name="cilPencil"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.remove(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
                                     </CButton>
-                                  </Link>
-
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openEditVoucher(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => {
-                                      this.remove(item);
-                                    }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
                         : ""}
                     </tbody>
                   </table>
@@ -1624,7 +1605,6 @@ renderStatusColorTag  = (statusCode) => {
                   </div>
                 </CardBody>
               </Card>
-
             </Col>
           </Row>
 
@@ -1639,7 +1619,7 @@ renderStatusColorTag  = (statusCode) => {
                 value={this.state.name}
                 // error={errors.title}
                 onChange={(e) => this.setState({ name: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -1648,7 +1628,7 @@ renderStatusColorTag  = (statusCode) => {
                 value={this.state.voucher}
                 // error={errors.title}
                 onChange={(e) => this.setState({ voucher: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
             </ModalBody>
             <ModalFooter>

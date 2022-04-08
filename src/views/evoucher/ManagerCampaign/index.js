@@ -1,40 +1,34 @@
-import React, { Component } from "react";
-import CIcon from "@coreui/icons-react";
+import { CButton, CCol, CLabel, CRow, CSelect, CTextarea } from "@coreui/react";
+import { css } from "@emotion/react";
+import Pagination from "@material-ui/lab/Pagination";
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
+import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { DatePicker, Select, Tag } from "antd";
+import "antd/dist/antd.css";
+import axios from "axios";
 import moment from "moment";
+import "moment-timezone";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import DotLoader from "react-spinners/DotLoader";
 import {
   Card,
   CardBody,
   CardHeader,
   Col,
-  Row,
   Input,
-  ModalHeader,
+  Modal,
   ModalBody,
   ModalFooter,
-  Modal,
+  ModalHeader,
+  Row,
 } from "reactstrap";
 import Swal from "sweetalert2";
-
-
-import { CButton, CLabel, CSelect, CTextarea, CRow, CCol } from "@coreui/react";
-import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
-import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
-import { Link } from 'react-router-dom';
-import API_CONNECT from "../../functions/callAPI";
-import Pagination from "@material-ui/lab/Pagination";
-import "moment-timezone";
-import Constants from "../../contants/contants";
-import TextFieldGroup from "../Common/TextFieldGroup";
-import axios from "axios";
-import md5 from "md5";
-import { css } from "@emotion/react";
-import DotLoader from "react-spinners/DotLoader";
-import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
-import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
-import { Tag, Divider } from "antd";
-import "antd/dist/antd.css";
-import { Select } from "antd";
-import { DatePicker, Space } from "antd";
+import Constants from "../../../contants/contants";
+import TextFieldGroup from "../../Common/TextFieldGroup";
+import campaignApi from "src/apis/managerCampaignApi";
 
 const { Option } = Select;
 const dateFormat = "DD-MM-YYYY";
@@ -44,65 +38,66 @@ headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
 const { RangePicker } = DatePicker;
 class EndUser extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      company_id: JSON.parse(localStorage.getItem("user")).company_id
-        ? JSON.parse(localStorage.getItem("user")).company_id
-        : null,
-      data: [],
-      actionVoucherEditing: "new",
-      modalPopupVoucher: false,
-      actionPopupVoucher: "new",
-      modalVoucherEditing: false,
-      key: "",
-      dataVoucher: [],
-      arrPaginationVoucher: [],
-      indexPageVoucher: 0,
-      totalActive: 0,
-      modalCom: false,
-      updated: "",
-      dataApi: [],
-      hidden: false,
-      action: "new",
-      email: "",
-      modalVoucher: false,
-      username: "",
-      phone: "",
-      modalDelete: false,
-      delete: null,
-      arrPagination: [],
-      indexPage: 0,
-      actionVoucher: "new",
-      token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      type: localStorage.getItem("type"),
-      user: localStorage.getItem("user"),
-      isLoading: false,
-      idCurrentUpdate: null,
-      levelNormal: "0",
-      dataCompany: [],
-      quantity: "0"
-    };
-  }
+  state = {
+    company_id: JSON.parse(localStorage.getItem("user")).company_id
+      ? JSON.parse(localStorage.getItem("user")).company_id
+      : null,
+    data: [],
+    actionVoucherEditing: "new",
+    modalPopupVoucher: false,
+    modalVoucherEditing: false,
+    key: "",
+    dataVoucher: [],
+    arrPaginationVoucher: [],
+    indexPageVoucher: 0,
+    totalActive: 0,
+    modalCom: false,
+    updated: "",
+    dataApi: [],
+    hidden: false,
+    action: "new",
+    email: "",
+    modalVoucher: false,
+    username: "",
+    phone: "",
+    modalDelete: false,
+    delete: null,
+    arrPagination: [],
+    indexPage: 0,
+    actionVoucher: "new",
+    token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    type: localStorage.getItem("type"),
+    user: localStorage.getItem("user"),
+    isLoading: false,
+    idCurrentUpdate: null,
+    dataCompany: [],
+    quantity: "0",
+    noted: "",
+  };
+
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
       status: e.target.value,
     });
   };
-  async componentDidMount() {
-    this.getData();
-    this.getDataCompany();
-    let arr = JSON.parse(localStorage.getItem("url"));
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].url == window.location.hash) {
-        if (arr[i].isHidden == true) {
-          window.location.href = "#/";
-        }
-      }
-    }
+
+  async onGetCampaignList() {
+    await campaignApi
+      .fecthAllCampaignList()
+      .then((res) => {
+        let campaignList = res.data.data;
+        this.handlePagination(campaignList);
+
+        this.setState({ dataApi: campaignList });
+
+        let active = 0;
+        this.setState({ isLoading: false, totalActive: active });
+      })
+      .catch((err) => console.log(err));
   }
-  async getDataCompany() {
+
+  async onGetCompanyList() {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -114,9 +109,17 @@ class EndUser extends Component {
       dataCompany: val,
     });
   }
-  pagination(dataApi) {
-    console.log(dataApi)
 
+  async componentDidMount() {
+    this.onGetCampaignList();
+    this.onGetCompanyList();
+  }
+
+  onChange(key, val) {
+    this.setState({ [key]: val });
+  }
+
+  handlePagination(dataApi) {
     var i,
       j,
       temparray,
@@ -127,8 +130,7 @@ class EndUser extends Component {
       arrTotal.push(temparray);
     }
 
-
-    if (arrTotal.length == 0) {
+    if (arrTotal.length === 0) {
       this.setState({
         hidden: false,
       });
@@ -139,8 +141,8 @@ class EndUser extends Component {
     }
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
-
   }
+
   paginationVoucher(dataApi) {
     var i,
       j,
@@ -152,7 +154,7 @@ class EndUser extends Component {
       arrTotal.push(temparray);
     }
 
-    if (arrTotal.length == 0) {
+    if (arrTotal.length === 0) {
       this.setState({
         hiddenVoucher: false,
       });
@@ -164,6 +166,7 @@ class EndUser extends Component {
 
     this.setState({ arrPaginationVoucher: arrTotal, dataVoucher: arrTotal[0] });
   }
+
   async getDataVoucher(id) {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_DETAIL_CAMPAIGN_EVOUCHER;
@@ -187,35 +190,7 @@ class EndUser extends Component {
       });
   }
   onSearch() {
-    this.getData(this.state.key);
-  }
-  async getData(key) {
-    const { company_id } = this.state;
-    var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.COLLABORATOR_GET;
-
-    let url = baseUrlapi + baseUrlCallApi;
-    await axios
-      .get(url, {
-        params: {
-          keyword: key,
-        },
-      })
-      .then((res) => {
-        let val = res.data.data;
-        this.pagination(val);
-
-
-        this.setState({ dataApi: val });
-
-
-        let active = 0;
-        this.setState({ isLoading: false, totalActive: active });
-      });
-  }
-
-  onChange(key, val) {
-    this.setState({ [key]: val });
+    this.onGetCampaignList(this.state.key);
   }
 
   async openUpdate(item) {
@@ -232,14 +207,7 @@ class EndUser extends Component {
   async updateUser() {
     const { email, phone, password, username } = this.state;
 
-    if (
-      email == null ||
-      email == "" ||
-      phone == null ||
-      phone == "" ||
-      username == null ||
-      username == ""
-    ) {
+    if (!email || !phone || !username) {
       alert("Hãy nhập đầy đủ trường !!!");
       return;
     }
@@ -259,8 +227,8 @@ class EndUser extends Component {
       data: body,
     });
 
-    if (res.status == 200) {
-      this.getData();
+    if (res.status === 200) {
+      this.onGetCampaignList();
 
       this.setState({ modalCom: !this.state.modalCom });
     } else {
@@ -275,8 +243,8 @@ class EndUser extends Component {
       id: item._id,
     });
   };
-  openVoucher() {
 
+  openVoucher() {
     this.setState({
       actionVoucher: "new",
       modalVoucher: true,
@@ -288,34 +256,34 @@ class EndUser extends Component {
       description: "",
       idCompany: "",
       status: "1",
-      nameCompanyChoose: ""
-
+      nameCompanyChoose: "",
     });
-
   }
+
   openEditVoucher(item) {
-    const { name, from, to, description, status } = this.state;
-    this.state.dataCompany.forEach((name => {
+    this.state.dataCompany.forEach((name) => {
       if (name._id === item.company_id) {
         this.setState({
           nameCompanyChoose: name.Name,
-          idCompany: item._id
+          idCompany: item?._id,
         });
         return;
-      };
-    }))
-    console.log(this.state.nameCompanyChoose);
+      }
+    });
+
     this.setState({
       actionVoucher: "edit",
       modalVoucher: true,
-      idCurrentUpdate: item._id,
-      quantity: item.quatinity,
-      name: item.name,
-      saleEndDate: new Date(item.saleEndDate).toLocaleDateString(),
-      from: new Date(item.from).toLocaleDateString(),
-      to: new Date(item.to).toLocaleDateString(),
-      description: item.description,
-      status: item.status,
+      idCurrentUpdate: item?._id,
+      quantity: item?.quatinity,
+      name: item?.name,
+      saleEndDate: new Date(item?.saleEndDate).toLocaleDateString(),
+      from: new Date(item?.from).toLocaleDateString(),
+      to: new Date(item?.to).toLocaleDateString(),
+      description: item?.description,
+      status: item?.status,
+      noted: item?.noted,
+      nameCompanyChoose: item?.vendor[0]?.Name,
     });
   }
   async update() {
@@ -329,6 +297,8 @@ class EndUser extends Component {
       saleEndDate,
       idCurrentUpdate,
       quantity,
+      noted,
+      nameCompanyChoose,
     } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
@@ -346,6 +316,8 @@ class EndUser extends Component {
         to,
         description,
         status,
+        noted,
+        nameCompanyChoose,
       })
       .then((res) => {
         Swal.fire({
@@ -357,7 +329,7 @@ class EndUser extends Component {
         this.setState({
           modalVoucher: false,
         });
-        this.getData();
+        this.onGetCampaignList();
       });
   }
   async add() {
@@ -369,8 +341,9 @@ class EndUser extends Component {
       saleEndDate,
       status,
       idCompany,
-      company_id,
       quantity,
+      noted,
+      nameCompanyChoose,
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_CAMPAIGN;
@@ -387,6 +360,8 @@ class EndUser extends Component {
         description,
         status,
         create_by: "1",
+        noted,
+        nameCompanyChoose,
       })
       .then((res) => {
         Swal.fire({
@@ -398,7 +373,7 @@ class EndUser extends Component {
         this.setState({
           modalVoucher: false,
         });
-        this.getData();
+        this.onGetCampaignList();
       });
   }
   async remove(item) {
@@ -417,7 +392,7 @@ class EndUser extends Component {
           showConfirmButton: false,
           timer: 700,
         });
-        this.getData();
+        this.onGetCampaignList();
       });
   }
 
@@ -439,13 +414,10 @@ class EndUser extends Component {
       relCode: "",
       description: "",
       status: "",
-
     });
   }
   openUpdateVoucher(item) {
-
     this.setState({
-
       actionVoucherEditing2: "edit",
       modalVoucherEditing2: true,
       idCurrentUpdate: item._id,
@@ -529,7 +501,6 @@ class EndUser extends Component {
     let baseUrlCallApi = Constants.ADD_VOUCHER;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
-    console.log(saleEndDate);
     await axios
       .post(url, {
         code: codeVoucher,
@@ -566,38 +537,100 @@ class EndUser extends Component {
       status: item.status,
     });
   }
-  getBadge(status) {
-    switch (status) {
-      case "Actived":
-        return "success";
-      case "Inactive":
-        return "secondary";
-      case "Locked":
-        return "warning";
-      case "Deactived":
-        return "danger";
-      default:
-        return "primary";
-    }
+
+  renderModalInfo(item) {
+    let itemRender = (
+      <div>
+        <Modal isOpen={true} size="md">
+          <ModalHeader>Chi tiết Voucher</ModalHeader>
+          <ModalBody className="info_voucher">
+            <p>
+              Mã voucher : <span>{item.code}</span>
+            </p>
+            <p>
+              Mã công ty : <span>{item.code}</span>
+            </p>
+            <p>
+              Ngày giờ khởi tạo :
+              <span>
+                Lúc{" "}
+                {new Date(item.create_at).toLocaleTimeString() +
+                  " giờ " +
+                  " ngày " +
+                  new Date(item.create_at).toLocaleDateString()}
+              </span>
+            </p>
+            <p>
+              Ngày bắt đầu :
+              <span>Ngày {new Date(item.from).toLocaleDateString()}</span>
+            </p>
+            <p>
+              Ngày kết thúc :
+              <span>Ngày {new Date(item.to).toLocaleDateString()}</span>
+            </p>
+            <p>
+              Nội dung voucher : <span>{item.content}</span>
+            </p>
+            <p>
+              Trạng thái :
+              <span>
+                <Tag
+                  className="ant-tag"
+                  color={
+                    item.status === "0"
+                      ? "#2eb85c"
+                      : item.status === "1"
+                      ? "#2db7f5"
+                      : item.status === "2"
+                      ? "#87d068"
+                      : item.status === "3"
+                      ? "#f50"
+                      : item.status === "4"
+                      ? "#dc0e04"
+                      : item.status === "4"
+                      ? "#00D084"
+                      : "#FF0004"
+                  }
+                >
+                  {item.status === "0"
+                    ? "Sẵn sàng"
+                    : item.status === "1"
+                    ? "Chờ xác nhận"
+                    : item.status === "2"
+                    ? "Đã sử dụng"
+                    : item.status === "3"
+                    ? "Hủy bỏ"
+                    : item.status === "4"
+                    ? "Xóa bỏ"
+                    : "Khóa"}
+                </Tag>
+              </span>
+            </p>
+
+            <p>
+              Id voucher : <span>{item._id}</span>
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <CButton
+              color="secondary"
+              onClick={(e) =>
+                this.setState({
+                  modalInfo: null,
+                })
+              }
+            >
+              Đóng
+            </CButton>
+          </ModalFooter>
+        </Modal>
+      </div>
+    );
+    this.setState({
+      modalInfo: itemRender,
+    });
   }
-   checkStatusSalesColor = (status) => {
-    const statusColorMap = {
-      A: "#2eb85c",
-      0: "#87d068",
-      1: "#dc0e04",
-    };
-
-    return statusColorMap[status] || "#FF0004";
-  };
-   checkStatusSalesContent = (status) => {
-    const statusContentMap = {
-      A: "Actived",
-      0: "Deactived",
-      1: "Locked",
-    };
-
-    return statusContentMap[status] || "Chưa xác nhận";
-  };
+  GetDetailCampaign() {}
   render() {
     const {
       data,
@@ -609,6 +642,7 @@ class EndUser extends Component {
       arrPaginationVoucher,
       modalVoucher,
       dataCompany,
+      noted,
     } = this.state;
     const dateArray = [this.state.from, this.state.to];
     const arrLevel = [
@@ -618,7 +652,6 @@ class EndUser extends Component {
       {
         item: "2",
       },
-
     ];
     const arrLevelFilter = [
       {
@@ -627,7 +660,6 @@ class EndUser extends Component {
       {
         item: "1",
       },
-
     ];
     const levelVoucher = [
       {
@@ -648,7 +680,7 @@ class EndUser extends Component {
       {
         item: "5",
       },
-    ]
+    ];
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -657,7 +689,7 @@ class EndUser extends Component {
             className={this.props.className}
           >
             <ModalHeader>
-              {this.state.actionVoucher == "new" ? `Tạo mới` : `Cập nhật`}
+              {this.state.actionVoucher === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
               <TextFieldGroup
@@ -791,7 +823,6 @@ class EndUser extends Component {
                       }
                     });
                     this.setState({ saleEndDate: newData });
-                    console.log(this.state.saleEndDate);
                   }}
                   defaultValue={moment(
                     new Date(this.state.saleEndDate).toLocaleDateString(),
@@ -812,7 +843,6 @@ class EndUser extends Component {
                       }
                     });
                     this.setState({ saleEndDate: newData });
-                    console.log(this.state.saleEndDate);
                   }}
                   defaultValue={moment()}
                   format={dateFormat}
@@ -825,6 +855,15 @@ class EndUser extends Component {
                 value={this.state.description}
                 onChange={(e) => {
                   this.setState({ description: e.target.value });
+                }}
+              />
+              <label className="control-label mt-3">Ghi chú:</label>
+              <CTextarea
+                name="noted"
+                rows="4"
+                value={this.state.noted}
+                onChange={(e) => {
+                  this.setState({ noted: e.target.value });
                 }}
               />
               <label className="control-label">Công ty - NCC:</label>
@@ -914,7 +953,7 @@ class EndUser extends Component {
           {this.state.modalInfo}
           <Modal isOpen={this.state.modalVoucherEditing} size="xl">
             <ModalHeader>
-              {this.state.actionVoucherEditing == "new"
+              {this.state.actionVoucherEditing === "new"
                 ? `Danh sách Voucher`
                 : `Danh sách Voucher`}
             </ModalHeader>
@@ -1086,7 +1125,7 @@ class EndUser extends Component {
             className={this.props.className}
           >
             <ModalHeader>
-              {this.state.actionVoucherEditing2 == "new"
+              {this.state.actionVoucherEditing2 === "new"
                 ? `Tạo mới`
                 : `Cập nhật`}
             </ModalHeader>
@@ -1118,7 +1157,7 @@ class EndUser extends Component {
               />
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
-                {arrLevel != undefined ? (
+                {arrLevel !== undefined ? (
                   <CSelect
                     onChange={async (e) => {
                       this.changeLevel(e);
@@ -1196,7 +1235,7 @@ class EndUser extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Danh sách cộng tác viên
+                    Quản lý chiến dịch
                   </i>
 
                   <CRow>
@@ -1392,12 +1431,19 @@ class EndUser extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Tên </th>
-                        <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Email</th>
-                        <th className="text-center">Địa chỉ</th>
+                        <th className="text-center">Tên</th>
+                        <th className="text-center">Nhà cung cấp</th>
+                        <th className="text-center">Số lượng voucher</th>
+                        <th className="text-center">Tỷ lệ checkIn</th>
+
                         <th className="text-center">Trạng thái</th>
-                        <th className="text-center">Nhóm</th>
+
+                        <th className="text-center">Bắt đầu</th>
+                        <th className="text-center">Kết thúc</th>
+                        <th className="text-center">Ngày tạo</th>
+
+                        {/* <th classNamưe="text-center">Mô tả</th> */}
+
                         <th className="text-center"></th>
                       </tr>
                     </thead>
@@ -1409,37 +1455,83 @@ class EndUser extends Component {
                       >
                         Không tìm thấy dữ liệu
                       </td>
-                      {data != undefined
+                      {data !== undefined
                         ? data.map((item, i) => {
-                            console.log(item);
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
-                                <td className="text-center">{item.phone}</td>
-                                <td className="text-center">{item.email}</td>
-                                <td className="text-center">{item.address}</td>
-
+                                <td className="text-center">
+                                  {item.vendor && item.vendor?.[0]
+                                    ? item.vendor?.[0].Name
+                                    : "Chưa có"}
+                                </td>
+                                <td className="text-center">
+                                  <div className="flex-center">
+                                    <p
+                                      className="mr-2"
+                                      style={{ margin: "auto" }}
+                                    >
+                                      {item.CheckIn.length === 0
+                                        ? "Đang cập nhật"
+                                        : item.CheckIn?.[0].totalVoucher}
+                                    </p>
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="outline"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      className="flex-a-center "
+                                      onClick={(e) =>
+                                        this.openPopupVoucher(item)
+                                      }
+                                    >
+                                      <BsSearch className="mr-1" />
+                                    </CButton>
+                                  </div>
+                                </td>
+                                <td className="text-center">
+                                  {item.CheckIn.length === 0
+                                    ? "0"
+                                    : item.CheckIn?.[0].rateCheckIn}
+                                </td>
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
-                                    color={() =>
-                                      this.checkStatusSalesColor(item.status)
+                                    color={
+                                      item.status === "1" ? "#87d068" : "#f50"
                                     }
                                   >
-                                    {() =>
-                                      this.checkStatusSalesContent(item.status)
-                                    }
+                                    {item.status === "1"
+                                      ? "Hoạt động"
+                                      : "Không hoạt động"}
                                   </Tag>
                                 </td>
-                                <td className="text-center">{item.group}</td>
+                                <td className="text-center">
+                                  {new Date(item.from).toLocaleDateString()}
+                                </td>
+                                <td className="text-center">
+                                  {new Date(item.to).toLocaleDateString()}
+                                </td>
+                                <td className="text-center">
+                                  {new Date(
+                                    item.create_at
+                                  ).toLocaleDateString()}
+                                </td>
+
+                                {/* <td className="text-center">
+                                  {item.description}
+                                </td> */}
+
                                 <td
                                   className="text-center"
                                   style={{ minWidth: "230px" }}
                                 >
                                   <div className="flex">
                                     <Link
-                                      to={"/detail-collaborators/" + item._id}
+                                      onClick={() => this.GetDetailCampaign()}
+                                      to={"/detail-campaign/" + item._id}
                                     >
                                       <CButton
                                         shape="rounded-pill"
@@ -1448,6 +1540,9 @@ class EndUser extends Component {
                                         style={styles.mgl5}
                                         size="md"
                                         className="flex-a-center "
+                                        // onClick={(e) =>
+                                        //   this.viewDetailCampaign(item._id)
+                                        // }
                                       >
                                         <BsSearch className="mr-1" />
                                         Chi tiết
@@ -1510,7 +1605,7 @@ class EndUser extends Component {
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>
-              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+              {this.state.action === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
               <TextFieldGroup
@@ -1686,7 +1781,6 @@ const styles = {
   searchInput: {
     width: "200px",
     display: "inline-block",
-
   },
   userActive: {
     color: "green",

@@ -3,7 +3,7 @@
 }
 .c-sidebar ul li.c-sidebar-nav-title {
   color: #252525;
-  font-size: 13px;
+  font-size: 1rem;
 }
 
 .c-sidebar ul li.c-sidebar-nav-item .c-active {
@@ -20,7 +20,6 @@
   align-items: center;
   justify-content: center;
 }
-
 .c-body {
   background: rgb(255, 255, 255, 0.1);
 }
@@ -89,6 +88,16 @@
 .c-sidebar .c-sidebar-nav-link,
 .c-sidebar .c-sidebar-nav-dropdown-toggle {
   color: rgb(52, 71, 103) !important;
+  border-bottom: 0.02rem solid rgb(222, 229, 235);
+  font-size: 0.9rem;
+}
+.c-sidebar .c-sidebar-nav-dropdown.c-show .c-sidebar-nav-link {
+  color: rgb(52, 71, 103) !important;
+  border-bottom: 0;
+}
+.c-sidebar .c-sidebar-nav-dropdown-toggle::after {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='rgb(179, 184, 189)' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E");
+  height: 10px;
 }
 
 .c-sidebar .c-sidebar-brand {
@@ -96,12 +105,23 @@
   background: #ffff !important;
   color: #fff !important;
 }
-.c-sidebar .c-sidebar-nav-link:hover,
+
+.c-sidebar .c-sidebar-nav-item .c-sidebar-nav-link:hover,
 .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
   color: #fff !important;
   background: var(--main_web_admin);
   /* background: linear-gradient(to right, #5CB3FF 26%,#7db9e8 94%); */
   box-shadow: 0px 4px 8px 3px rgb(0 0 0 / 10%);
+}
+.c-sidebar
+  .c-sidebar-nav-dropdown.c-show
+  .c-sidebar-nav-dropdown-toggle:hover
+  .c-sidebar-nav-icon,
+.c-sidebar
+  .c-sidebar-nav-dropdown
+  .c-sidebar-nav-dropdown-toggle:hover
+  .c-sidebar-nav-icon {
+  color: #fff !important;
 }
 .c-sidebar-nav-icon {
   color: #39f !important;
@@ -132,13 +152,16 @@
   background-color: var(--main_web_admin);
   border-color: var(--main_web_admin);
 }
-.card{
+.card {
   box-shadow: rgb(0 0 0 / 25%) 0px 14px 28px, rgb(0 0 0 / 22%) 0px 10px 10px;
 }
-.table-hover tbody tr:hover{
-
-  background-color:rgb(128,128,128,0.1);
+.table-hover tbody tr:hover {
+  background-color: rgb(128, 128, 128, 0.1);
 }
-.table-hover tbody tr:hover .color-red{
- color: rgb(255,0,0,0.8) !important
+.table-hover tbody tr:hover .color-red {
+  color: rgb(255, 0, 0, 0.8) !important;
+}
+.badge-info {
+  color: #4680ff;
+  background-color: transparent;
 }

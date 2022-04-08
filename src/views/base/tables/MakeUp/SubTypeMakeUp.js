@@ -589,25 +589,50 @@ class SubTypeMakeUp extends Component {
                         <CRow>
                           <CCol sm="12" lg="6">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
                           <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+                        <CButton
+                          outline
+                          color="primary"
+                          style={styles.floatRight}
+                          size="sm"
+                          onClick={(e) => this.toggleModal("new")}
+                        >
+                          Thêm mới
+                        </CButton>
                       </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
-                <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -619,69 +644,116 @@ class SubTypeMakeUp extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{item.id}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  <img src={item.image} style={{ width: '50px', height: '50px' }} />
+                                  <img
+                                    src={item.image}
+                                    style={{ width: "50px", height: "50px" }}
+                                  />
                                 </td>
                                 <td className="text-center">{item.vi}</td>
-                                <td className="text-center" style={{ width: 200 }}>
-                                  {
-                                    item.color_id.length
-                                  }
+                                <td
+                                  className="text-center"
+                                  style={{ width: 200 }}
+                                >
+                                  {item.color_id.length}
                                 </td>
                                 <td className="text-center">
-                                  <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
+                                  <CButton
+                                    style={styles.mgl5}
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={async (e) =>
+                                      await this.openUpdate(item)
+                                    }
+                                  >
                                     <CIcon name="cilPencil" />
-                                  </CButton>{' '}
-                                  <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
+                                  </CButton>{" "}
+                                  <CButton
+                                    outline
+                                    color="danger"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      this.openDelete(item);
+                                    }}
+                                  >
                                     <CIcon name="cilTrash" />
                                   </CButton>
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
                 </CardBody>
               </Card>
-              <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      data: arrPagination[v - 1],
+                      indexPage: v - 1,
+                    });
+                  }}
+                />
               </div>
             </Col>
           </Row>
 
-          <Modal size="lg" isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+          <Modal
+            size="lg"
+            isOpen={this.state.modalCom}
+            className={this.props.className}
+          >
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="vi"
                 label="Tên"
                 value={this.state.vi}
                 placeholder={"Tên"}
-                onChange={e => this.onChange("vi", e.target.value)}
+                onChange={(e) => this.onChange("vi", e.target.value)}
               />
 
               <TextFieldGroup
                 field="image"
                 label="Ảnh thương hiệu"
                 type={"file"}
-                onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null }}
+                onChange={(e) => {
+                  this.onChangeImage(e);
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                }}
               />
-              {
-                this.state.image == "" ? "" :
-                  <img width="100" height="150" src={this.state.image} style={{ marginBottom: 20 }} />
-              }
+              {this.state.image == "" ? (
+                ""
+              ) : (
+                <img
+                  width="100"
+                  height="150"
+                  src={this.state.image}
+                  style={{ marginBottom: 20 }}
+                />
+              )}
 
               {/* <TextFieldGroup
                 field="hover"
@@ -718,9 +790,9 @@ class SubTypeMakeUp extends Component {
               <div>
                 <CLabel>Chọn màu</CLabel>
                 <div style={{ width: "100%" }}>
-                  {
-                    this.state.action == 'new' ? this.renderSelect() : this.renderSelectUpdate()
-                  }
+                  {this.state.action == "new"
+                    ? this.renderSelect()
+                    : this.renderSelectUpdate()}
                 </div>
               </div>
               {/* {
@@ -747,24 +819,68 @@ class SubTypeMakeUp extends Component {
                   </div>
 
               } */}
-
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => {
-                this.state.action === 'new' ? this.addRoles() : this.updateUser()
-              }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addRoles()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

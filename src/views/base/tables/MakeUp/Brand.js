@@ -374,32 +374,55 @@ class Brand extends Component {
                 <CardHeader>
                   <i className="fa fa-align-justify">Danh sách thương hiệu</i>
                   <div style={styles.tags}>
-
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
                           <CCol sm="12" lg="6">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
                           <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
+                        <CButton
+                          outline
+                          color="primary"
+                          style={styles.floatRight}
+                          size="sm"
+                          onClick={(e) => this.toggleModal("new")}
+                        >
+                          Thêm mới
+                        </CButton>
                       </CCol>
                     </CRow>
-
                   </div>
                 </CardHeader>
-                <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -410,76 +433,100 @@ class Brand extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
-                                  {
-                                    item.image_link == null || item.image_link == "" ? <img src={`${item.image}`} width={"60px"} height={"60px"} /> :
-                                      <img src={ Constants.BASE_URL + `image_plugin/${item.image_link}`} width={"60px"} height={"60px"} />
-                                  }
+                                  {item.image_link == null ||
+                                  item.image_link == "" ? (
+                                    <img
+                                      src={`${item.image}`}
+                                      width={"60px"}
+                                      height={"60px"}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={
+                                        Constants.BASE_URL +
+                                        `image_plugin/${item.image_link}`
+                                      }
+                                      width={"60px"}
+                                      height={"60px"}
+                                    />
+                                  )}
                                 </td>
                                 <td className="text-center">
-                                  <a href={item.link} target="_blank">{item.link}</a>
+                                  <a href={item.link} target="_blank">
+                                    {item.link}
+                                  </a>
                                 </td>
                                 <td className="text-center">
-                                <div className="flex-center">
-                                 
-                                   
-                             
-
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    className="mr-1"
-                                    size="md"
-                                    onClick={async (e) => await this.openUpdate(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                      className="icon"
-
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => { this.openDelete(item) }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                                 
+                                  <div className="flex-center">
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      className="mr-1"
+                                      size="md"
+                                      onClick={async (e) =>
+                                        await this.openUpdate(item)
+                                      }
+                                    >
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        name="cilPencil"
+                                        className="icon"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.openDelete(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
+                                    </CButton>
+                                  </div>
                                 </td>
-                                
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
-                  <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
-              </div>
+                  <div style={{ float: "right" }}>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-             
+
               {/* {
                 arrPagination.length == 1 ? "" :
                   <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
@@ -500,7 +547,9 @@ class Brand extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="name"
@@ -508,8 +557,8 @@ class Brand extends Component {
                 value={this.state.name}
                 placeholder={"Tên thương hiệu"}
                 // error={errors.title}
-                onChange={e => this.onChange("name", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("name", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -517,16 +566,32 @@ class Brand extends Component {
                 label="Ảnh thương hiệu"
                 type={"file"}
                 // error={errors.title}
-                onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null; this.setState({ image_show: ""  }) }}
-              // rows="5"
+                onChange={(e) => {
+                  this.onChangeImage(e);
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                  this.setState({ image_show: "" });
+                }}
+                // rows="5"
               />
-              {
-                this.state.image == "" || this.state.image == null || this.state.image == undefined ?
-                  "" :
-                  <img width="250" height="300" src={
-                    this.state.image_show == "" ? Constants.BASE_URL + `public/image_brand/${this.state.image_link}` : this.state.image} style={{ marginBottom: 20 }} />
-              }
+              {this.state.image == "" ||
+              this.state.image == null ||
+              this.state.image == undefined ? (
+                ""
+              ) : (
+                <img
+                  width="250"
+                  height="300"
+                  src={
+                    this.state.image_show == ""
+                      ? Constants.BASE_URL +
+                        `public/image_brand/${this.state.image_link}`
+                      : this.state.image
+                  }
+                  style={{ marginBottom: 20 }}
+                />
+              )}
 
               <TextFieldGroup
                 field="link"
@@ -534,24 +599,71 @@ class Brand extends Component {
                 value={this.state.link}
                 placeholder={"Link thương hiệu"}
                 // error={errors.title}
-                onChange={e => this.onChange("link", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("link", e.target.value)}
+                // rows="5"
               />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addRoles()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

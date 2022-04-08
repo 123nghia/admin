@@ -4,8 +4,6 @@ import FormNoteHistory from "./FormNoteHistory";
 import { Divider } from "antd";
 import { Snackbar, Typography } from "@mui/material";
 import axios from "axios";
-// import axios from "axios";
-// import Constants from "../../../../../contants/contants";
 
 function NoteHistory({ detailUserVoucher }) {
   const { voucher, company_id } = detailUserVoucher;
@@ -17,7 +15,7 @@ function NoteHistory({ detailUserVoucher }) {
   const onFetchNoteList = async () => {
     try {
       const response = await axios({
-        url: `https://evoucher-api.applamdep.com/api/evoucherNote/noted/getAll?company_id=${company_id}&transactionId=${voucher[0]._id}`,
+        url: `https://api.deal24h.vn/api/evoucherNote/noted/getAll?company_id=${company_id}&transactionId=${voucher[0]?._id}`,
         method: "GET",
       });
       setNoteList(response.data.data);
@@ -30,7 +28,7 @@ function NoteHistory({ detailUserVoucher }) {
   const onAddNoteBookAppointment = (note) => {
     console.log(note);
     axios({
-      url: "https://evoucher-api.applamdep.com/api/evoucherNote/noted/add",
+      url: "https://api.deal24h.vn/api/evoucherNote/noted/add",
       method: "POST",
       data: note,
     })
@@ -51,7 +49,7 @@ function NoteHistory({ detailUserVoucher }) {
   const handleSubmitAddNote = (noteValue) => {
     const data = {
       ...newNote,
-      transactionId: `${voucher[0]._id}`,
+      transactionId: `${voucher[0]?._id}`,
       company_id: `${company_id}`,
       ...noteValue,
     };

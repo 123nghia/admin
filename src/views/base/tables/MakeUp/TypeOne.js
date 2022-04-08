@@ -700,224 +700,263 @@ class SuggestItem extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                <i className="fa fa-align-justify title_header">Danh sách sản phẩm da mặt </i>
-                <CRow>
+                  <i className="fa fa-align-justify title_header">
+                    Danh sách sản phẩm da mặt{" "}
+                  </i>
+                  <CRow>
                     <CCol md={3} className="">
                       <div className="">
-
-
                         <p className="title_filter">Từ khóa</p>
-                        <Input style={styles.searchInput} onChange={(e) => {
-                                this.setState({ key: e.target.value })
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ key: e.target.value });
 
-                                if (e.target.value == "") {
-                                  this.getDataPagination(this.state.limit * Number(indexPage), Number(indexPage))
-                                }
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                            if (e.target.value == "") {
+                              this.getDataPagination(
+                                this.state.limit * Number(indexPage),
+                                Number(indexPage)
+                              );
+                            }
+                          }}
+                          name="key"
+                          value={key}
+                          placeholder="Từ khóa"
+                        />
                       </div>
                     </CCol>
-                    </CRow>
-                    <div className="flex-end">
-
+                  </CRow>
+                  <div className="flex-end">
                     <CButton
                       color="info"
-                      style={{  marginRight: "10px" }}
+                      style={{ marginRight: "10px" }}
                       size="md"
                       className="btn-main"
-                      onClick={e => { this.onSearch() }}
+                      onClick={(e) => {
+                        this.onSearch();
+                      }}
                     >
                       <BsSearch style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                     </CButton>
                     <CButton
                       color="info"
-                      style={{  marginRight: "10px" }}
+                      style={{ marginRight: "10px" }}
                       size="md"
                       className="btn-main"
-                      onClick={e => { this.resetSearch() }}
+                      onClick={(e) => {
+                        this.resetSearch();
+                      }}
                     >
                       <BsSearch style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Làm mới tìm kiếm</p>
                     </CButton>
                     <CButton
                       color="info"
-                
                       size="md"
                       className="btn-main"
-                      onClick={e => this.toggleModal("new")}
+                      onClick={(e) => this.toggleModal("new")}
                     >
                       <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
-                    
-
                   </div>
-                   
-                 
                 </CardHeader>
-                <CardBody>
-                  {
-                    this.state.isLoadingTable == false ?
-                      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                        <thead className="thead-light">
-                          <tr>
-                            <th className="text-center">STT.</th>
-                            {/* <th className="text-center">Tên</th> */}
-                            <th className="text-center">Tiêu đề</th>
-                            <th className="text-center">Ảnh</th>
-  
-                            <th className="text-center">Chi tiết</th>
-                            <th className="text-center">Thương hiệu</th>
-                            {/* <th className="text-center">Ảnh thương hiệu</th> */}
-                            {/* <th className="text-center">Loại</th>
+                <CardBody className="table__overflow">
+                  {this.state.isLoadingTable == false ? (
+                    <table
+                      ble
+                      className="table table-hover table-outline mb-0 d-none d-sm-table"
+                    >
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">STT.</th>
+                          {/* <th className="text-center">Tên</th> */}
+                          <th className="text-center">Tiêu đề</th>
+                          <th className="text-center">Ảnh</th>
+
+                          <th className="text-center">Chi tiết</th>
+                          <th className="text-center">Thương hiệu</th>
+                          {/* <th className="text-center">Ảnh thương hiệu</th> */}
+                          {/* <th className="text-center">Loại</th>
                             <th className="text-center">Loại SDK </th> */}
-                            <th className="text-center">Mức độ</th>
-                            {/* <th className="text-center">Giá</th> */}
-                            <th className="text-center">#</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                          {
-                            data != undefined ?
-                              data.map((item, i) => {
-                                return (
-                                  <tr key={i}>
-                                    <td className="text-center">{item.id + 1}</td>
-                                    <td className="text-center">
-                                      {item.title.substr(0, 100) +
-                                        (item.title.length > 100 ? "..." : "")}
-                                    </td>
-                                    {/* <td className="text-center">{item.name}</td> */}
-                                    <td className="text-center">
+                          <th className="text-center">Mức độ</th>
+                          {/* <th className="text-center">Giá</th> */}
+                          <th className="text-center">#</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td
+                          colSpan="10"
+                          hidden={this.state.hidden}
+                          className="text-center"
+                        >
+                          Không tìm thấy dữ liệu
+                        </td>
+                        {data != undefined
+                          ? data.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{item.id + 1}</td>
+                                  <td className="text-center">
+                                    {item.title.substr(0, 100) +
+                                      (item.title.length > 100 ? "..." : "")}
+                                  </td>
+                                  {/* <td className="text-center">{item.name}</td> */}
+                                  <td className="text-center">
                                     <img
                                       alt=""
-                                      style={{ width: "100px", marginBottom: 20 }}
+                                      style={{
+                                        width: "100px",
+                                        marginBottom: 20,
+                                      }}
                                       height="auto"
                                       src={item.image_link}
                                     />
-                                    </td>
-       
-                                    <td className="text-center">
-                                      <a target="_blank" href={item.linkdetail}>Xem chi tiết sản phẩm</a>
-                                    </td>
-                                    {/* <td className="text-center">
+                                  </td>
+
+                                  <td className="text-center">
+                                    <a target="_blank" href={item.linkdetail}>
+                                      Xem chi tiết sản phẩm
+                                    </a>
+                                  </td>
+                                  {/* <td className="text-center">
                                   <a href={item.linkdetail} target="_blank">{item.linkdetail}</a>
                                 </td> */}
-                                    <td className="text-center">
-                                      {item.brand_id == null ? "" : item.brand_id.name}
-                                    </td>
-                                    {/* <td className="text-center">
+                                  <td className="text-center">
+                                    {item.brand_id == null
+                                      ? ""
+                                      : item.brand_id.name}
+                                  </td>
+                                  {/* <td className="text-center">
                                       {<img src={`https://api-soida.applamdep.com/public/image_brand/${item.brand_id.image_link}`} width={"60px"} height={"60px"} />}
                                     </td> */}
-                                    {/* <td className="text-center">
+                                  {/* <td className="text-center">
                                       {item.type_product_id.Name}
                                     </td>
                                     <td className="text-center">
                                       {item.type_sdk_id.Name}
                                     </td> */}
-                                    <td className="text-center">
-                                      {item.name_level}
-                                    </td>
-                                    {/* <td className="text-center">
+                                  <td className="text-center">
+                                    {item.name_level}
+                                  </td>
+                                  {/* <td className="text-center">
                                       {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
                                     </td> */}
-                                    <td className="text-center">
-                                <div className="flex-center">
-                                 
-                                   
-                             
-
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    className="mr-1"
-                                    size="md"
-                                    onClick={async (e) => await this.openUpdate(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                      className="icon"
-
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => { this.openDelete(item) }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                                 
-                                </td>
-                                 
-                                  </tr>
-                                );
-                              }) : ""
-                          }
-                        </tbody>
-                      </table>
-                       :
-                      <div className="sweet-loading" style={{ height: 370 }}>
-                        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoadingTable} speedMultiplier={1.5} />
-                      </div>
-                  }
-                  <div style={{ float: 'right' }}>
-                {isSearch ? "" :
-                  <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
-                    this.setState({ indexPage: v })
-                    await this.getDataPagination(this.state.limit * (v), v)
-                  }} />
-                }
-              </div>
+                                  <td className="text-center">
+                                    <div className="flex-center">
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="ghost"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        className="mr-1"
+                                        size="md"
+                                        onClick={async (e) =>
+                                          await this.openUpdate(item)
+                                        }
+                                      >
+                                        <FiEdit3
+                                          style={styles.icon}
+                                          name="cilPencil"
+                                          className="icon"
+                                        />
+                                      </CButton>{" "}
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="ghost"
+                                        color="danger"
+                                        style={styles.mgl5}
+                                        onClick={(e) => {
+                                          this.openDelete(item);
+                                        }}
+                                      >
+                                        <BsTrash
+                                          style={styles.icon}
+                                          className="icon"
+                                          name="cilTrash"
+                                        />
+                                      </CButton>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          : ""}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <div className="sweet-loading" style={{ height: 370 }}>
+                      <DotLoader
+                        css={override}
+                        size={50}
+                        color={"#123abc"}
+                        loading={this.state.isLoadingTable}
+                        speedMultiplier={1.5}
+                      />
+                    </div>
+                  )}
+                  <div style={{ float: "right" }}>
+                    {isSearch ? (
+                      ""
+                    ) : (
+                      <Pagination
+                        count={arrPagination.length}
+                        color="primary"
+                        onChange={async (e, v) => {
+                          this.setState({ indexPage: v });
+                          await this.getDataPagination(this.state.limit * v, v);
+                        }}
+                      />
+                    )}
+                  </div>
                 </CardBody>
               </Card>
-              
-
             </Col>
           </Row>
 
-          <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+          <Modal
+            size="xl"
+            isOpen={this.state.modalCom}
+            className={this.props.className}
+          >
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="name"
                 label="Tên sản phẩm"
                 value={this.state.name}
                 placeholder={"Tên sản phẩm"}
-                onChange={e => this.onChange("name", e.target.value)}
+                onChange={(e) => this.onChange("name", e.target.value)}
               />
 
               <TextFieldGroup
                 field="image"
                 label="Ảnh sản phẩm"
                 type={"file"}
-                onChange={e => { this.onChangeImage(e) }}
-                onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
+                onChange={(e) => {
+                  this.onChangeImage(e);
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                  this.setState({ image_show: "" });
+                }}
               />
               <img
-                                      alt=""
-                                      style={{ width: "100px", marginBottom: 20 }}
-                                      height="auto"
-                                      src={this.state.image_show}
-                                    />
+                alt=""
+                style={{ width: "100px", marginBottom: 20 }}
+                height="auto"
+                src={this.state.image_show}
+              />
 
               <TextFieldGroup
                 field="title"
                 label="Tiêu đề"
                 value={this.state.title}
                 placeholder={"Tiêu đề"}
-                onChange={e => this.onChange("title", e.target.value)}
+                onChange={(e) => this.onChange("title", e.target.value)}
               />
 
               <label className="control-label">Mô tả</label>
@@ -925,7 +964,9 @@ class SuggestItem extends Component {
                 name="description"
                 rows="3"
                 value={this.state.description}
-                onChange={(e) => { this.setState({ description: e.target.value }) }}
+                onChange={(e) => {
+                  this.setState({ description: e.target.value });
+                }}
                 placeholder="Mô tả"
               />
 
@@ -934,7 +975,7 @@ class SuggestItem extends Component {
                 label="Đường dẫn chi tiết sản phẩm"
                 value={this.state.linkdetail}
                 placeholder={"Đường dẫn chi tiết sản phẩm"}
-                onChange={e => this.onChange("linkdetail", e.target.value)}
+                onChange={(e) => this.onChange("linkdetail", e.target.value)}
               />
               <CLabel>Nhãn hiệu:</CLabel>
               <CreatableSelect
@@ -945,82 +986,158 @@ class SuggestItem extends Component {
                 options={arrOptionBrand}
               />
 
-
-              {
-                action == "new" ? "" :
-                  <div style={{ width: "100%" }} className="mt-3">
-                    <CLabel>Loại SDK:</CLabel>
-                    <CSelect onChange={async e => {
-                      this.setState({ type_sdk_id: e.target.value.split("/")[0], arrLevel: JSON.parse(e.target.value.split("/")[1]) })
-                    }} custom size="sm" name="selectSm" id="SelectLm">
-                      {
-                        arrOptionSdkType.map((item, i) => {
-                          if (item._id == this.state.type_sdk_id) {
-                            return (
-                              <option selected key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
-                            );
-                          } else {
-                            return (
-                              <option key={i} value={item._id + "/" + JSON.stringify(item.Level)}>{this.getBadge(item.Name, item.Name)}</option>
-                            );
-                          }
-                        })
+              {action == "new" ? (
+                ""
+              ) : (
+                <div style={{ width: "100%" }} className="mt-3">
+                  <CLabel>Loại SDK:</CLabel>
+                  <CSelect
+                    onChange={async (e) => {
+                      this.setState({
+                        type_sdk_id: e.target.value.split("/")[0],
+                        arrLevel: JSON.parse(e.target.value.split("/")[1]),
+                      });
+                    }}
+                    custom
+                    size="sm"
+                    name="selectSm"
+                    id="SelectLm"
+                  >
+                    {arrOptionSdkType.map((item, i) => {
+                      if (item._id == this.state.type_sdk_id) {
+                        return (
+                          <option
+                            selected
+                            key={i}
+                            value={item._id + "/" + JSON.stringify(item.Level)}
+                          >
+                            {this.getBadge(item.Name, item.Name)}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option
+                            key={i}
+                            value={item._id + "/" + JSON.stringify(item.Level)}
+                          >
+                            {this.getBadge(item.Name, item.Name)}
+                          </option>
+                        );
                       }
-                    </CSelect>
-                  </div>
-              }
-
+                    })}
+                  </CSelect>
+                </div>
+              )}
 
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Mức độ:</CLabel>
-                {
-                  arrLevel != undefined ? (
-                    <CSelect onChange={async e => { this.changeLevel(e) }} custom size="sm" name="selectSm" id="SelectLm">
-                      {
-                        arrLevel.map((item, i) => {
-                          if (item == this.state.sdktype) {
-                            return (
-                              <option selected key={i} value={item}>
-                                {item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng"}
-                              </option>
-                            );
-                          } else {
-                            return (
-                              <option key={i} value={item}>
-                                {item == "1" ? "Nhẹ" : item == "2" ? "Trung" : "Nặng"}
-                              </option>
-                            );
-                          }
-                        })
+                {arrLevel != undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevel(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="selectSm"
+                    id="SelectLm"
+                  >
+                    {arrLevel.map((item, i) => {
+                      if (item == this.state.sdktype) {
+                        return (
+                          <option selected key={i} value={item}>
+                            {item == "1"
+                              ? "Nhẹ"
+                              : item == "2"
+                              ? "Trung"
+                              : "Nặng"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item}>
+                            {item == "1"
+                              ? "Nhẹ"
+                              : item == "2"
+                              ? "Trung"
+                              : "Nặng"}
+                          </option>
+                        );
                       }
-                    </CSelect>
-                  ) : null
-                }
+                    })}
+                  </CSelect>
+                ) : null}
               </div>
 
               <TextFieldGroup
                 field="price"
                 label="Giá"
-                type={'number'}
+                type={"number"}
                 value={this.state.price}
                 placeholder={"Giá"}
-                onChange={e => this.onChange("price", e.target.value)}
+                onChange={(e) => this.onChange("price", e.target.value)}
               />
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addProduct() : this.updateProduct() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addProduct()
+                    : this.updateProduct();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

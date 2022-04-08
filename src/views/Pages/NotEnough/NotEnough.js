@@ -8,8 +8,10 @@ export default function NotEnough() {
     <>
       <div className="text-center">
         <h1>Không đủ quyền để truy cập trang này, hãy quay lại</h1>
+      </div>
+    <div className="flex-center">
         <CButton
-          className="mt-3"
+          className="mt-3 btn-main"
           shape="rounded-pill"
           variant=""
           color="info"
@@ -19,7 +21,7 @@ export default function NotEnough() {
         >
           Về trang chủ
         </CButton>
-      </div>
+        </div>
     </>
   );
 }

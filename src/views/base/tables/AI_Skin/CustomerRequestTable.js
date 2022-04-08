@@ -410,73 +410,118 @@ class CustomerRequest extends Component {
                         <CRow>
                           <CCol sm="12" lg="4">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <CSelect style={styles.flexOption} onChange={e => {
-
-                              this.actionSearch(e, "keyStatus");
-
-                            }} custom>
-                              {
-                                ['0', '1'].map((item, i) => {
-                                  return (
-                                    <option value={item}>{item == "0" ? "Chưa nhận quà" : "Đã nhận quà"}</option>
-                                  );
-                                })
-                              }
+                            <CSelect
+                              style={styles.flexOption}
+                              onChange={(e) => {
+                                this.actionSearch(e, "keyStatus");
+                              }}
+                              custom
+                            >
+                              {["0", "1"].map((item, i) => {
+                                return (
+                                  <option value={item}>
+                                    {item == "0"
+                                      ? "Chưa nhận quà"
+                                      : "Đã nhận quà"}
+                                  </option>
+                                );
+                              })}
                             </CSelect>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
-                <CardBody>
-
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên</th>
                         <th className="text-center">Tên đầy đủ</th>
                         <th className="text-center">Số điện thoại</th>
-                        {
-                          type == '0' || type == '1' ? <th className="text-center">Tạo bởi</th> : ""
-                        }
-                        {
-                          type == '0' || type == '1' ? <th className="text-center">Loại</th> : ""
-                        }
+                        {type == "0" || type == "1" ? (
+                          <th className="text-center">Tạo bởi</th>
+                        ) : (
+                          ""
+                        )}
+                        {type == "0" || type == "1" ? (
+                          <th className="text-center">Loại</th>
+                        ) : (
+                          ""
+                        )}
                         <th className="text-center">Ngày tạo</th>
                         <th className="text-center">Trạng thái</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      <td
+                        colSpan="10"
+                        hidden={this.state.hidden}
+                        className="text-center"
+                      >
+                        Không tìm thấy dữ liệu
+                      </td>
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">{item.FullName}</td>
                                 <td className="text-center">{item.Phone}</td>
-                                {
-                                  type == '0' || type == '1' ? <td className="text-center">{item.Company_Id == null || item.Company_Id == undefined ? "admin" : item.Company_Id.Name}</td> : ""
-                                }
-                                {
-                                  type == '0' || type == '1' ? <td className="text-center">{item.Type}</td> : ""
-                                }
+                                {type == "0" || type == "1" ? (
+                                  <td className="text-center">
+                                    {item.Company_Id == null ||
+                                    item.Company_Id == undefined
+                                      ? "admin"
+                                      : item.Company_Id.Name}
+                                  </td>
+                                ) : (
+                                  ""
+                                )}
+                                {type == "0" || type == "1" ? (
+                                  <td className="text-center">{item.Type}</td>
+                                ) : (
+                                  ""
+                                )}
                                 <td className="text-center">
-                                  {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                  {new Date(
+                                    item.Create_Date
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.Create_Date
+                                    ).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -493,16 +538,23 @@ class CustomerRequest extends Component {
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
                 </CardBody>
               </Card>
-              <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                }} />
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    this.setState({
+                      data: arrPagination[v - 1],
+                      indexPage: v - 1,
+                    });
+                  }}
+                />
               </div>
               {/* {
                 arrPagination.length == 1 ? "" :
@@ -524,7 +576,9 @@ class CustomerRequest extends Component {
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
               <TextFieldGroup
                 field="UserName"
@@ -532,8 +586,8 @@ class CustomerRequest extends Component {
                 value={this.state.UserName}
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
-                onChange={e => this.onChange("UserName", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("UserName", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -542,8 +596,8 @@ class CustomerRequest extends Component {
                 value={this.state.FullName}
                 placeholder={"Tên đầy đủ"}
                 // error={errors.title}
-                onChange={e => this.onChange("FullName", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("FullName", e.target.value)}
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -552,8 +606,8 @@ class CustomerRequest extends Component {
                 value={this.state.Phone}
                 placeholder={"Số điện thoại"}
                 // error={errors.title}
-                onChange={e => this.onChange("Phone", e.target.value)}
-              // rows="5"
+                onChange={(e) => this.onChange("Phone", e.target.value)}
+                // rows="5"
               />
 
               {/* <TextFieldGroup
@@ -567,49 +621,108 @@ class CustomerRequest extends Component {
             /> */}
 
               <label htmlFor="tag">Chọn loại khuyến mãi </label>
-              <CSelect onChange={async e => {
-                this.setState({ Type: e.target.value });
-              }}>
-                {
-                  arrTypeRequest.map((item, i) => {
-                    if (item.Value == this.state.Type) {
-                      return (
-                        <option selected value={item.Value}>{item.Value}</option>
-                      );
-                    } else {
-                      return (
-                        <option value={item.Value}>{item.Value}</option>
-                      );
-                    }
-                  })
-                }
+              <CSelect
+                onChange={async (e) => {
+                  this.setState({ Type: e.target.value });
+                }}
+              >
+                {arrTypeRequest.map((item, i) => {
+                  if (item.Value == this.state.Type) {
+                    return (
+                      <option selected value={item.Value}>
+                        {item.Value}
+                      </option>
+                    );
+                  } else {
+                    return <option value={item.Value}>{item.Value}</option>;
+                  }
+                })}
               </CSelect>
 
-              {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái:</label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    <option value={'0'}>Chưa nhận quà</option>
-                    <option value={'1'}>Đã nhận quà</option>
+              {action == "new" ? (
+                ""
+              ) : (
+                <div>
+                  <label style={styles.flexLabel} htmlFor="tag">
+                    Trạng thái:
+                  </label>
+                  <select
+                    style={styles.flexOption}
+                    name="Status"
+                    onChange={(e) => this.onChange("Status", e.target.value)}
+                  >
+                    <option value={this.state.Status}>
+                      {this.state.Status == ""
+                        ? ` - - - - - - - - - - `
+                        : this.state.Status}
+                    </option>
+                    <option value={"0"}>Chưa nhận quà</option>
+                    <option value={"1"}>Đã nhận quà</option>
                   </select>
                 </div>
-              }
+              )}
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addRoles() : this.updateUser() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addRoles()
+                    : this.updateUser();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

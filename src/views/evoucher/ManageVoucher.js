@@ -19,13 +19,23 @@ import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
+import InfoIcon from "@mui/icons-material/Info";
 
 import * as XLSX from "xlsx";
 
 import Swal from "sweetalert2";
 
-import { CButton, CLabel, CTextarea, CSelect, CRow, CCol } from "@coreui/react";
-
+import {
+  CButton,
+  CLabel,
+  CTextarea,
+  CSelect,
+  CRow,
+  CCol,
+  CListGroup,
+  CListGroupItem,
+} from "@coreui/react";
 
 import Pagination from "@material-ui/lab/Pagination";
 import "moment-timezone";
@@ -41,8 +51,11 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
-
-
+import CopyToClipboard from "react-copy-to-clipboard";
+import { Box, Chip, IconButton, Tooltip } from "@mui/material";
+import CIcon from "@coreui/icons-react";
+import { freeSet } from "@coreui/icons";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 const { Option } = Select;
 const dateFormat = "DD-MM-YYYY";
@@ -55,7 +68,9 @@ class EndUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : "-1",
+      company_id: JSON.parse(localStorage.getItem("user")).company_id
+        ? JSON.parse(localStorage.getItem("user")).company_id
+        : "-1",
       modalInfo: null,
       data: [],
       key: "",
@@ -84,16 +99,13 @@ class EndUser extends Component {
     };
   }
 
-
   OpenFileExcel = () => {
     this.setState({
-      statusExcel: !this.state.statusExcel
-    })
-  }
+      statusExcel: !this.state.statusExcel,
+    });
+  };
   readExcel = (file) => {
-
     var btnOuter = document.getElementById("button_outer"),
-
       name_excel = document.getElementById("name_excel");
 
     btnOuter.classList.add("file_uploading");
@@ -101,11 +113,7 @@ class EndUser extends Component {
     setTimeout(function () {
       btnOuter.classList.add("file_uploaded");
       btnOuter.style.borderRadius = "50%";
-
-
-
     }, 3000);
-
 
     name_excel.innerHTML = `${file.name}`;
 
@@ -154,7 +162,7 @@ class EndUser extends Component {
         }
         a.click();
       });
-  };
+  }
   changeLevelValue = (e, value) => {
     e.preventDefault();
     this.setState({
@@ -181,7 +189,7 @@ class EndUser extends Component {
       })
       .then((res) => {
         let val = res.data.data;
-        console.log("dataCampaign",res);
+        console.log("dataCampaign", res);
         this.setState({ dataCampaign: val });
       });
   }
@@ -201,7 +209,6 @@ class EndUser extends Component {
   }
 
   pagination(dataApi) {
-
     var i,
       j,
       temparray,
@@ -223,11 +230,18 @@ class EndUser extends Component {
     }
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
-
   }
   async onSearch() {
-    const { from, to, idDataSales, phoneFilter, levelFilter, codeVoucher } = this.state;
-    await this.getData(idDataSales, phoneFilter, levelFilter, codeVoucher, from, to);
+    const { from, to, idDataSales, phoneFilter, levelFilter, codeVoucher } =
+      this.state;
+    await this.getData(
+      idDataSales,
+      phoneFilter,
+      levelFilter,
+      codeVoucher,
+      from,
+      to
+    );
   }
   async getData(key) {
     const { company_id } = this.state;
@@ -240,7 +254,7 @@ class EndUser extends Component {
       .get(url, {
         params: {
           company_id,
-          keyword: key
+          keyword: key,
         },
       })
       .then((res) => {
@@ -324,8 +338,7 @@ class EndUser extends Component {
       relCode: this.state.dataCampaign?.[0]?._id,
       description: "",
       status: "0",
-      nameCompanyChoose : ""
-
+      nameCompanyChoose: "",
     });
   }
   openEditVoucher(item) {
@@ -338,15 +351,15 @@ class EndUser extends Component {
       description: item.content,
       status: item.status,
     });
-    console.log(item.relCode)
-    this.state.dataCampaign.forEach((name=>{
-      if(name._id === item.relCode) {
+    console.log(item.relCode);
+    this.state.dataCampaign.forEach((name) => {
+      if (name._id === item.relCode) {
         this.setState({
-          nameCompanyChoose : name.Name,
+          nameCompanyChoose: name.Name,
         });
         return;
-      };
-    }))
+      }
+    });
   }
   async update() {
     const {
@@ -474,75 +487,77 @@ class EndUser extends Component {
     }
   }
   renderModalInfo(item) {
-
     let itemRender = (
       <div>
         <Modal isOpen={true} size="md">
           <ModalHeader>Chi tiết Voucher</ModalHeader>
           <ModalBody className="info_voucher">
-            <p>Mã voucher : <span>{item.code}</span></p>
-            <p>Mã công ty : <span>{item.code}</span></p>
+            <p>
+              Mã voucher : <span>{item.code}</span>
+            </p>
+            <p>
+              Mã công ty : <span>{item.code}</span>
+            </p>
             <p>
               Khởi tạo :
               <span>
-                Lúc {" "}
+                Lúc{" "}
                 {new Date(item.create_at).toLocaleTimeString() +
-                  " giờ " + " ngày " +
+                  " giờ " +
+                  " ngày " +
                   new Date(item.create_at).toLocaleDateString()}
               </span>
             </p>
             <p>
               Bắt đầu :
-              <span>
-                Ngày {" "}
-                {new Date(item.from).toLocaleDateString()}
-              </span>
+              <span>Ngày {new Date(item.from).toLocaleDateString()}</span>
             </p>
             <p>
               Kết thúc :
-
-              <span>
-                Ngày {" "}
-                {new Date(item.to).toLocaleDateString()}
-              </span>
+              <span>Ngày {new Date(item.to).toLocaleDateString()}</span>
             </p>
-            <p>Nội dung voucher : <span>{item.content}</span></p>
+            <p>
+              Nội dung voucher : <span>{item.content}</span>
+            </p>
             <p>
               Trạng thái :
               <span>
                 <Tag
                   className="ant-tag"
-                  color={item.status === "0"
-                    ? "#2eb85c"
-                    : item.status === "1"
+                  color={
+                    item.status === "0"
+                      ? "#2eb85c"
+                      : item.status === "1"
                       ? "#2db7f5"
                       : item.status === "2"
-                        ? "#87d068"
-                        : item.status === "3"
-                          ? "#f50"
-                          : item.status === "4"
-                            ? "#dc0e04"
-                            : item.status === "4"
-                              ? "#00D084"
-                              : "#FF0004"}
+                      ? "#87d068"
+                      : item.status === "3"
+                      ? "#f50"
+                      : item.status === "4"
+                      ? "#dc0e04"
+                      : item.status === "4"
+                      ? "#00D084"
+                      : "#FF0004"
+                  }
                 >
                   {item.status === "0"
                     ? "Sẵn sàng"
                     : item.status === "1"
-                      ? "Chờ xác nhận"
-                      : item.status === "2"
-                        ? "Đã sử dụng"
-                        : item.status === "3"
-                          ? "Hủy bỏ"
-                          : item.status === "4"
-                            ? "Xóa bỏ"
-                            : "Khóa"
-                  }
+                    ? "Chờ xác nhận"
+                    : item.status === "2"
+                    ? "Đã sử dụng"
+                    : item.status === "3"
+                    ? "Hủy bỏ"
+                    : item.status === "4"
+                    ? "Xóa bỏ"
+                    : "Khóa"}
                 </Tag>
               </span>
             </p>
 
-            <p>Id voucher : <span>{item._id}</span></p>
+            <p>
+              Id voucher : <span>{item._id}</span>
+            </p>
           </ModalBody>
           <ModalFooter>
             <CButton
@@ -560,17 +575,17 @@ class EndUser extends Component {
       </div>
     );
     this.setState({
-      modalInfo: itemRender
+      modalInfo: itemRender,
     });
-    console.log(itemRender)
+    console.log(itemRender);
 
-    console.log(this.state.modalInfo)
+    console.log(this.state.modalInfo);
   }
-  changeSelect(value){
+  changeSelect(value) {
     this.setState({
       relCode: value,
-    })
-    console.log(this.state.relCode)
+    });
+    console.log(this.state.relCode);
   }
   render() {
     const {
@@ -601,7 +616,6 @@ class EndUser extends Component {
       {
         item: "5",
       },
-
     ];
     const arrLevelFilter = [
       {
@@ -620,8 +634,8 @@ class EndUser extends Component {
         item: "4",
       },
       {
-        item: "5"
-      }
+        item: "5",
+      },
     ];
     if (!this.state.isLoading) {
       return (
@@ -640,21 +654,24 @@ class EndUser extends Component {
                 value={this.state.codeVoucher}
                 // error={errors.title}
                 onChange={(e) => this.setState({ codeVoucher: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
               <div class="mt-3"></div>
               <label className="mr-3">Tên chiến dịch</label>
               <Select
-                defaultValue={this.state.dataCampaign && this.state.dataCampaign?.[0] ? this.state.dataCampaign?.[0].name : ""}
+                defaultValue={
+                  this.state.dataCampaign && this.state.dataCampaign?.[0]
+                    ? this.state.dataCampaign?.[0].name
+                    : ""
+                }
                 className="select_company"
                 showSearch
                 placeholder="Chọn tên công ty"
                 optionFilterProp="children"
-                onChange={(value) => 
-                 this.setState({
-                  relCode : value
-                 })
-
+                onChange={(value) =>
+                  this.setState({
+                    relCode: value,
+                  })
                 }
                 onSearch={this.onSearchSelect}
                 filterOption={(input, option) =>
@@ -663,13 +680,13 @@ class EndUser extends Component {
                 }
               >
                 {dataCampaign
-                
                   ? dataCampaign.map((item, i) => {
-                  
-                      return <Option key={i} value={item._id}>{item.name}</Option>;
-
-                    
-                  })
+                      return (
+                        <Option key={i} value={item._id}>
+                          {item.name}
+                        </Option>
+                      );
+                    })
                   : null}
               </Select>
               {/* <TextFieldGroup
@@ -691,7 +708,6 @@ class EndUser extends Component {
                 }}
               />
               <div style={{ width: "100%" }} className="mt-3">
-
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
@@ -710,15 +726,14 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Sẵn sàng"
                               : item.item === "1"
-                                ? "Chờ xác nhận"
-                                : item.item === "2"
-                                  ? "Đã sử dụng"
-                                  : item.item === "3"
-                                    ? "Hủy bỏ"
-                                    : item.item === "4"
-                                      ? "Xóa bỏ"
-                                      : "Khóa"
-                            }
+                              ? "Chờ xác nhận"
+                              : item.item === "2"
+                              ? "Đã sử dụng"
+                              : item.item === "3"
+                              ? "Hủy bỏ"
+                              : item.item === "4"
+                              ? "Xóa bỏ"
+                              : "Khóa"}
                           </option>
                         );
                       } else {
@@ -727,15 +742,14 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Sẵn sàng"
                               : item.item === "1"
-                                ? "Chờ xác nhận"
-                                : item.item === "2"
-                                  ? "Đã sử dụng"
-                                  : item.item === "3"
-                                    ? "Hủy bỏ"
-                                    : item.item === "4"
-                                      ? "Xóa bỏ"
-                                      : "Khóa"
-                            }
+                              ? "Chờ xác nhận"
+                              : item.item === "2"
+                              ? "Đã sử dụng"
+                              : item.item === "3"
+                              ? "Hủy bỏ"
+                              : item.item === "4"
+                              ? "Xóa bỏ"
+                              : "Khóa"}
                           </option>
                         );
                       }
@@ -775,15 +789,15 @@ class EndUser extends Component {
                     Quản lý Voucher
                   </i>
                   <CRow>
-                  <CCol md={3} className="">
+                    <CCol md={3} className="">
                       <div className="">
-
-
                         <p className="title_filter">Mã Voucher</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
-                            this.setState({ codeVoucherSearch: e.target.value });
+                            this.setState({
+                              codeVoucherSearch: e.target.value,
+                            });
                           }}
                           name="codeVoucherSearch"
                           value={this.state.codeVoucherSearch}
@@ -794,8 +808,6 @@ class EndUser extends Component {
 
                     <CCol md={3} className="mt">
                       <div className="">
-
-
                         <p className="title_filter">Số điện thoại</p>
                         <Input
                           style={styles.searchInput}
@@ -811,11 +823,8 @@ class EndUser extends Component {
                     </CCol>
                     <CCol md={3} className="">
                       <div className="">
-
-
                         <p className="title_filter">Trạng thái</p>
                         <div style={{ width: "200px" }} className="">
-
                           {arrLevelFilter !== undefined ? (
                             <CSelect
                               onChange={async (e) => {
@@ -833,15 +842,14 @@ class EndUser extends Component {
                                       {item.item === "0"
                                         ? "Sẵn sàng"
                                         : item.item === "1"
-                                          ? "Chờ xác nhận"
-                                          : item.item === "2"
-                                            ? "Đã sử dụng"
-                                            : item.item === "3"
-                                              ? "Hủy bỏ"
-                                              : item.item === "4"
-                                                ? "Xóa bỏ"
-                                                : "Khóa"
-                                      }
+                                        ? "Chờ xác nhận"
+                                        : item.item === "2"
+                                        ? "Đã sử dụng"
+                                        : item.item === "3"
+                                        ? "Hủy bỏ"
+                                        : item.item === "4"
+                                        ? "Xóa bỏ"
+                                        : "Khóa"}
                                     </option>
                                   );
                                 } else {
@@ -850,15 +858,14 @@ class EndUser extends Component {
                                       {item.item === "0"
                                         ? "Sẵn sàng"
                                         : item.item === "1"
-                                          ? "Chờ xác nhận"
-                                          : item.item === "2"
-                                            ? "Đã sử dụng"
-                                            : item.item === "3"
-                                              ? "Hủy bỏ"
-                                              : item.item === "4"
-                                                ? "Xóa bỏ"
-                                                : "Khóa"
-                                      }
+                                        ? "Chờ xác nhận"
+                                        : item.item === "2"
+                                        ? "Đã sử dụng"
+                                        : item.item === "3"
+                                        ? "Hủy bỏ"
+                                        : item.item === "4"
+                                        ? "Xóa bỏ"
+                                        : "Khóa"}
                                     </option>
                                   );
                                 }
@@ -866,15 +873,12 @@ class EndUser extends Component {
                             </CSelect>
                           ) : null}
                         </div>
-
                       </div>
                     </CCol>
                     <CCol md={3} className="mt">
                       <div className="">
-
-
                         <p className="title_filter">Danh sách Sales</p>
-                        <div style={{ width: '200px' }}>
+                        <div style={{ width: "200px" }}>
                           <Select
                             className="select_seo"
                             showSearch
@@ -887,78 +891,78 @@ class EndUser extends Component {
                             }
                             onSearch={this.onSearchSelect}
                             filterOption={(input, option) =>
-                              option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                              0
+                              option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
                             }
                           >
                             {this.state.dataSales
                               ? this.state.dataSales.map((item, i) => {
-                                return <Option value={item._id}>{item.Name}</Option>;
-                              })
+                                  return (
+                                    <Option value={item._id}>
+                                      {item.Name}
+                                    </Option>
+                                  );
+                                })
                               : null}
                           </Select>
                         </div>
-
                       </div>
                     </CCol>
                     <CCol md={3} className="mt">
-                   
-                        <div className="">
-                          <p className="title_filter">Từ ngày</p>
+                      <div className="">
+                        <p className="title_filter">Từ ngày</p>
 
-                          <div style={{ width: '200px' }}>
-                            <DatePicker
-                              style={styles.dateForm}
-                              onChange={(e, dateString) => {
-                                let copy = dateString.split("-");
-                                let newData = ``;
-                                copy.forEach((item, index) => {
-                                  if (index === 0) {
-                                    newData += item;
-                                  } else {
-                                    newData += `/${item}`;
-                                  }
-                                });
-                                this.setState({ from: newData });
-                              }}
-                              format={dateFormat}
-                            />
-                          </div>
+                        <div style={{ width: "200px" }}>
+                          <DatePicker
+                            style={styles.dateForm}
+                            onChange={(e, dateString) => {
+                              let copy = dateString.split("-");
+                              let newData = ``;
+                              copy.forEach((item, index) => {
+                                if (index === 0) {
+                                  newData += item;
+                                } else {
+                                  newData += `/${item}`;
+                                }
+                              });
+                              this.setState({ from: newData });
+                            }}
+                            format={dateFormat}
+                          />
                         </div>
+                      </div>
                     </CCol>
                     <CCol md={3} className="mt">
-                        <div className=" mt-1">
-                          <p className="title_filter">Đến ngày</p>
-                          <div style={{ width: '200px' }}>
-                            <DatePicker
-                              style={styles.dateForm}
-                              onChange={(e, dateString) => {
-                                let copy = dateString.split("-");
-                                let newData = ``;
-                                copy.forEach((item, index) => {
-                                  if (index === 0) {
-                                    newData += item;
-                                  } else {
-                                    newData += `/${item}`;
-                                  }
-                                });
-                                this.setState({ to: newData });
-                              }}
-                              format={dateFormat}
-                            />
-                          </div>
+                      <div className=" mt-1">
+                        <p className="title_filter">Đến ngày</p>
+                        <div style={{ width: "200px" }}>
+                          <DatePicker
+                            style={styles.dateForm}
+                            onChange={(e, dateString) => {
+                              let copy = dateString.split("-");
+                              let newData = ``;
+                              copy.forEach((item, index) => {
+                                if (index === 0) {
+                                  newData += item;
+                                } else {
+                                  newData += `/${item}`;
+                                }
+                              });
+                              this.setState({ to: newData });
+                            }}
+                            format={dateFormat}
+                          />
                         </div>
-
-                   
+                      </div>
                     </CCol>
                   </CRow>
 
                   <div className="flex-center-space mt-1">
-
                     <div class=" flex">
                       <CButton
                         color="success"
-                        style={{  marginRight: '10px' }}
+                        style={{ marginRight: "10px" }}
                         size="md"
                         className="flex-center"
                         onClick={this.OpenFileExcel}
@@ -969,10 +973,9 @@ class EndUser extends Component {
                       <a href="/excel/template-import-voucher.xlsx" download>
                         <CButton
                           color="success"
-                          style={{  marginRight: '10px' }}
+                          style={{ marginRight: "10px" }}
                           size="md"
                           className="flex-center"
-
                         >
                           <BsDownload style={{ margin: "auto 6px auto 0" }} />
                           <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
@@ -980,7 +983,7 @@ class EndUser extends Component {
                       </a>
                       <CButton
                         color="success"
-                        style={{  marginRight: '10px' }}
+                        style={{ marginRight: "10px" }}
                         size="md"
                         className="flex-center"
                         onClick={() => this.ExportsFileExcel()}
@@ -989,14 +992,12 @@ class EndUser extends Component {
                         <p style={{ margin: "auto 0" }}>Xuất File</p>
                       </CButton>
                       <a id="download_excel" download></a>
-                      <div>
-
-                      </div>
+                      <div></div>
                     </div>
                     <div className="flex">
                       <CButton
                         color="info"
-                        style={{marginRight: '10px' }}
+                        style={{ marginRight: "10px" }}
                         size="md"
                         className="btn-main"
                         onClick={(e) => {
@@ -1008,7 +1009,6 @@ class EndUser extends Component {
                       </CButton>
                       <CButton
                         color="info"
-                     
                         size="md"
                         className="btn-main"
                         onClick={() => this.openVoucher()}
@@ -1019,10 +1019,13 @@ class EndUser extends Component {
                     </div>
                   </div>
                 </CardHeader>
-                <CardBody>
-
-
-                  <div className="pb-3" style={{ display: this.state.statusExcel ? "block" : "none" }}>
+                <CardBody className="table__overflow">
+                  <div
+                    className="pb-3"
+                    style={{
+                      display: this.state.statusExcel ? "block" : "none",
+                    }}
+                  >
                     <div className="button_outer" id="button_outer">
                       <div className="btn_upload">
                         <input
@@ -1034,7 +1037,17 @@ class EndUser extends Component {
                           }}
                         />
                         <div className="flex-center">
-                          <svg viewBox="64 64 896 896" focusable="false" data-icon="upload" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"></path></svg>
+                          <svg
+                            viewBox="64 64 896 896"
+                            focusable="false"
+                            data-icon="upload"
+                            width="1em"
+                            height="1em"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"></path>
+                          </svg>
                           <p>Tải lên File Excel</p>
                         </div>
                       </div>
@@ -1051,7 +1064,6 @@ class EndUser extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                   
 
                         <th className="text-center">Mã voucher</th>
                         <th className="text-center">Mã chiến dịch</th>
@@ -1069,117 +1081,161 @@ class EndUser extends Component {
                       >
                         Không tìm thấy dữ liệu
                       </td>
-                      {data != undefined
+                      {data !== undefined
                         ? data.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                            
-                              <td className="text-center">{item.code}</td>
-                              <td className="text-center">{this.state.dataCampaign && this.state.dataCampaign?.[0] ? this.state.dataCampaign?.[0].name : ""}</td>
-                              <td className="text-center">{item.content}</td>
-                              <td className="text-center">
-                                <Tag
-                                  className="ant-tag"
-                                  color={item.status === "0"
-                                    ? "#2eb85c"
-                                    : item.status === "1"
-                                      ? "#2db7f5"
-                                      : item.status === "2"
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+
+                                <td className="text-center">
+                                  {item?.code && (
+                                    <Box sx={{ display: "flex" }}>
+                                      <Chip
+                                        label={item?.code}
+                                        variant="outlined"
+                                        sx={{
+                                          backgroundColor: "#9fcfde",
+                                          border: "none",
+                                        }}
+                                      />
+
+                                      <CopyToClipboard
+                                        text={item?.code}
+                                        onCopy={() => {}}
+                                      >
+                                        <Tooltip title="Copy">
+                                          <IconButton size="small">
+                                            <CIcon content={freeSet.cilCopy} />
+                                          </IconButton>
+                                        </Tooltip>
+                                      </CopyToClipboard>
+                                    </Box>
+                                  )}
+                                </td>
+                                <td
+                                  className="text-center"
+                                  style={{ fontWeight: "bold" }}
+                                >
+                                  {this.state.dataCampaign &&
+                                  this.state.dataCampaign?.[0]
+                                    ? this.state.dataCampaign?.[0].name
+                                    : ""}
+                                </td>
+                                <td className="text-center">
+                                  <CListGroup accent>
+                                    <CListGroupItem
+                                      accent="info"
+                                      color="info"
+                                      style={{ borderRadius: "1.2rem" }}
+                                    >
+                                      {item.content}
+                                    </CListGroupItem>
+                                  </CListGroup>
+                                </td>
+                                <td className="text-center">
+                                  <Tag
+                                    className="ant-tag"
+                                    color={
+                                      item.status === "0"
+                                        ? "#2eb85c"
+                                        : item.status === "1"
+                                        ? "#2db7f5"
+                                        : item.status === "2"
                                         ? "#87d068"
                                         : item.status === "3"
-                                          ? "#f50"
-                                          : item.status === "4"
-                                            ? "#dc0e04"
-                                            : item.status === "4"
-                                              ? "#00D084"
-                                              : "#FF0004"}
-                                >
-                                  {item.status === "0"
-                                    ? "Sẵn sàng"
-                                    : item.status === "1"
+                                        ? "#f50"
+                                        : item.status === "4"
+                                        ? "#dc0e04"
+                                        : item.status === "4"
+                                        ? "#00D084"
+                                        : "#FF0004"
+                                    }
+                                  >
+                                    {item.status === "0"
+                                      ? "Sẵn sàng"
+                                      : item.status === "1"
                                       ? "Chờ xác nhận"
                                       : item.status === "2"
-                                        ? "Đã sử dụng"
-                                        : item.status === "3"
-                                          ? "Hủy bỏ"
-                                          : item.status === "4"
-                                            ? "Xóa bỏ"
-                                            : "Khóa"
-                                  }
-                                </Tag>
-                              </td>
-                              <td className="text-center">
-                                <div class="flex">
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="outline"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    className="flex-a-center "
-                                    onClick={() =>
-                                      this.renderModalInfo(item)
-                                    }
-                                  >
-                                    <BsSearch className="mr-1" />
-                                    Xem chi tiết
-                                  </CButton>
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) =>
-                                      this.openEditVoucher(item)
-                                    }
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      className="icon"
-
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => {
-                                      this.remove(item);
-                                    }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })
+                                      ? "Đã sử dụng"
+                                      : item.status === "3"
+                                      ? "Hủy bỏ"
+                                      : item.status === "4"
+                                      ? "Xóa bỏ"
+                                      : "Khóa"}
+                                  </Tag>
+                                </td>
+                                <td className="text-center">
+                                  <div class="flex">
+                                    <Tooltip title="Xem chi tiết">
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        className="flex-a-center "
+                                        onClick={() =>
+                                          this.renderModalInfo(item)
+                                        }
+                                      >
+                                        <AiOutlineInfoCircle
+                                          style={{ fontSize: "1.2rem" }}
+                                        />
+                                      </CButton>
+                                    </Tooltip>
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="info"
+                                      style={styles.mgl5}
+                                      size="md"
+                                      onClick={(e) =>
+                                        this.openEditVoucher(item)
+                                      }
+                                    >
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilPencil"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.remove(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
+                                    </CButton>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
                         : ""}
                     </tbody>
                   </table>
                   <div style={{ float: "right" }}>
-                <Pagination
-                  count={arrPagination.length}
-                  color="primary"
-                  onChange={(e, v) => {
-                    this.setState({
-                      data: arrPagination[v - 1],
-                      indexPage: v - 1,
-                    });
-                  }}
-                />
-              </div>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-              
             </Col>
           </Row>
 
@@ -1195,7 +1251,7 @@ class EndUser extends Component {
                 placeholder={"Tên đăng nhập"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("username", e.target.value)}
-              // rows="5"
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -1206,7 +1262,7 @@ class EndUser extends Component {
                 type={"email"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("email", e.target.value)}
-              // rows="5"
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -1216,7 +1272,7 @@ class EndUser extends Component {
                 placeholder={"Số điện thoại"}
                 // error={errors.title}
                 onChange={(e) => this.onChange("phone", e.target.value)}
-              // rows="5"
+                // rows="5"
               />
               <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Cấp độ:</CLabel>
@@ -1237,10 +1293,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                                ? "Chưa hẹn"
-                                : item.item === "2"
-                                  ? "Đã gặp"
-                                  : "Hoàn tất"}
+                              ? "Chưa hẹn"
+                              : item.item === "2"
+                              ? "Đã gặp"
+                              : "Hoàn tất"}
                           </option>
                         );
                       } else {
@@ -1249,10 +1305,10 @@ class EndUser extends Component {
                             {item.item === "0"
                               ? "Lên lịch"
                               : item.item === "1"
-                                ? "Chưa hẹn"
-                                : item.item === "2"
-                                  ? "Đã gặp"
-                                  : "Hoàn tất"}
+                              ? "Chưa hẹn"
+                              : item.item === "2"
+                              ? "Đã gặp"
+                              : "Hoàn tất"}
                           </option>
                         );
                       }
@@ -1416,7 +1472,6 @@ const styles = {
   searchInput: {
     width: "200px",
     display: "inline-block",
-
   },
   userActive: {
     color: "green",

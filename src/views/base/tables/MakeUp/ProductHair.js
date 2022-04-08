@@ -796,243 +796,454 @@ class ProductHair extends Component {
                         <CRow>
                           <CCol sm="12" lg="6">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
                           <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </CButton>
                           </CCol>
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => await this.toggleModal("new")}>Thêm</CButton>
+                        <CButton
+                          outline
+                          color="primary"
+                          style={styles.floatRight}
+                          size="sm"
+                          onClick={async (e) => await this.toggleModal("new")}
+                        >
+                          Thêm
+                        </CButton>
                       </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
-                <CardBody>
-                  {
-                    this.state.isLoadingTable == false ?
-                      <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
-                        <thead className="thead-light">
-                          <tr>
-                            <th className="text-center">STT.</th>
-                            <th className="text-center">Danh mục cấp 2</th>
-                            <th className="text-center">Thương hiệu</th>
-                            <th className="text-center">Tên sản phẩm</th>
-                            <th className="text-center">Giá</th>
-                            <th className="text-center">Màu</th>
-                            <th className="text-center">Đường dẫn</th>
-                            <th className="text-center">Ảnh</th>
-                            <th className="text-center">#</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
-                          {
-                            data != undefined ?
-                              data.map((item, i) => {
-                                return (
-                                  <tr key={i}>
-                                    <td className="text-center">{item.id + 1}</td>
-                                    <td className="text-center">{item.type_id == null ? "" : item.type_id.name}</td>
-                                    <td className="text-center">{item.brand_id == null ? "" : item.brand_id.name}</td>
-                                    <td className="text-center">{item.name}</td>
-                                    <td className="text-center">{item.price}</td>
-                                    <td className="text-center">
-                                      {item.color_id == null ? "" : item.color_id.hex}
-                                      <div style={{ backgroundColor: item.color_id == null ? "" : item.color_id.hex, width: '100%', height: '30px' }}> </div>
-                                    </td>
-                                    <td className="text-center">
-                                      <a
-                                        href={item.href}
-                                        target="_blank"
-                                      >{`Open web`}</a>
-                                    </td>
-                                    <td className="text-center" style={{ width: '10%' }}>
-                                      {
-                                        <img src={item.image_link == null ? item.image : `https://api-soida.applamdep.com/public/image_makeup/${item.image_link}`} width={"60px"} height={"60px"} />
+                <CardBody className="table__overflow">
+                  {this.state.isLoadingTable == false ? (
+                    <table
+                      ble
+                      className="table table-hover table-outline mb-0 d-none d-sm-table"
+                    >
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="text-center">STT.</th>
+                          <th className="text-center">Danh mục cấp 2</th>
+                          <th className="text-center">Thương hiệu</th>
+                          <th className="text-center">Tên sản phẩm</th>
+                          <th className="text-center">Giá</th>
+                          <th className="text-center">Màu</th>
+                          <th className="text-center">Đường dẫn</th>
+                          <th className="text-center">Ảnh</th>
+                          <th className="text-center">#</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td
+                          colSpan="10"
+                          hidden={this.state.hidden}
+                          className="text-center"
+                        >
+                          Không tìm thấy dữ liệu
+                        </td>
+                        {data != undefined
+                          ? data.map((item, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td className="text-center">{item.id + 1}</td>
+                                  <td className="text-center">
+                                    {item.type_id == null
+                                      ? ""
+                                      : item.type_id.name}
+                                  </td>
+                                  <td className="text-center">
+                                    {item.brand_id == null
+                                      ? ""
+                                      : item.brand_id.name}
+                                  </td>
+                                  <td className="text-center">{item.name}</td>
+                                  <td className="text-center">{item.price}</td>
+                                  <td className="text-center">
+                                    {item.color_id == null
+                                      ? ""
+                                      : item.color_id.hex}
+                                    <div
+                                      style={{
+                                        backgroundColor:
+                                          item.color_id == null
+                                            ? ""
+                                            : item.color_id.hex,
+                                        width: "100%",
+                                        height: "30px",
+                                      }}
+                                    >
+                                      {" "}
+                                    </div>
+                                  </td>
+                                  <td className="text-center">
+                                    <a
+                                      href={item.href}
+                                      target="_blank"
+                                    >{`Open web`}</a>
+                                  </td>
+                                  <td
+                                    className="text-center"
+                                    style={{ width: "10%" }}
+                                  >
+                                    {
+                                      <img
+                                        src={
+                                          item.image_link == null
+                                            ? item.image
+                                            : `https://api-soida.applamdep.com/public/image_makeup/${item.image_link}`
+                                        }
+                                        width={"60px"}
+                                        height={"60px"}
+                                      />
+                                    }
+                                  </td>
+                                  <td className="text-center">
+                                    <CButton
+                                      style={styles.mgl5}
+                                      outline
+                                      color="primary"
+                                      size="sm"
+                                      onClick={async (e) =>
+                                        await this.openUpdate(item)
                                       }
-                                    </td>
-                                    <td className="text-center">
-                                      <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
-                                        <CIcon name="cilPencil" />
-                                      </CButton>
-                                      <CButton outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>
-                                        <CIcon name="cilTrash" />
-                                      </CButton>
-                                    </td>
-                                  </tr>
-                                );
-                              }) : ""
-                          }
-                        </tbody>
-                      </table> :
-                      <div className="sweet-loading" style={{ height: 370 }}>
-                        <DotLoader css={override} size={50} color={"#123abc"} loading={this.state.isLoadingTable} speedMultiplier={1.5} />
-                      </div>
-                  }
+                                    >
+                                      <CIcon name="cilPencil" />
+                                    </CButton>
+                                    <CButton
+                                      outline
+                                      color="danger"
+                                      size="sm"
+                                      onClick={(e) => {
+                                        this.openDelete(item);
+                                      }}
+                                    >
+                                      <CIcon name="cilTrash" />
+                                    </CButton>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          : ""}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <div className="sweet-loading" style={{ height: 370 }}>
+                      <DotLoader
+                        css={override}
+                        size={50}
+                        color={"#123abc"}
+                        loading={this.state.isLoadingTable}
+                        speedMultiplier={1.5}
+                      />
+                    </div>
+                  )}
                 </CardBody>
               </Card>
-              <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={async (e, v) => {
-                  this.setState({ indexPage: v })
-                  await this.getDataPagination(this.state.limit * (v), v)
-                }} />
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={async (e, v) => {
+                    this.setState({ indexPage: v });
+                    await this.getDataPagination(this.state.limit * v, v);
+                  }}
+                />
               </div>
             </Col>
           </Row>
 
-          <Modal size="xl" isOpen={this.state.modalCom} className={this.props.className}>
-            {
-              this.state.action == "new" ? this.renderFormAdd() :
-                <div>
-                  <ModalHeader>Cập nhật</ModalHeader>
-                  <ModalBody>
-                    <TextFieldGroup
-                      field="name"
-                      label="Tên sản phẩm"
-                      value={this.state.name}
-                      placeholder={"Tên sản phẩm"}
-                      // error={errors.title}
-                      onChange={e => this.onChange("name", e.target.value)}
+          <Modal
+            size="xl"
+            isOpen={this.state.modalCom}
+            className={this.props.className}
+          >
+            {this.state.action == "new" ? (
+              this.renderFormAdd()
+            ) : (
+              <div>
+                <ModalHeader>Cập nhật</ModalHeader>
+                <ModalBody>
+                  <TextFieldGroup
+                    field="name"
+                    label="Tên sản phẩm"
+                    value={this.state.name}
+                    placeholder={"Tên sản phẩm"}
+                    // error={errors.title}
+                    onChange={(e) => this.onChange("name", e.target.value)}
                     // rows="5"
-                    />
+                  />
 
-                    <TextFieldGroup
-                      field="href"
-                      label="Đường dẫn"
-                      value={this.state.href}
-                      placeholder={"Đường dẫn"}
-                      // error={errors.title}
-                      onChange={e => this.onChange("href", e.target.value)}
+                  <TextFieldGroup
+                    field="href"
+                    label="Đường dẫn"
+                    value={this.state.href}
+                    placeholder={"Đường dẫn"}
+                    // error={errors.title}
+                    onChange={(e) => this.onChange("href", e.target.value)}
                     // rows="5"
-                    />
+                  />
 
-                    <TextFieldGroup
-                      field="image"
-                      label="Ảnh sản phẩm"
-                      type={"file"}
-                      // error={errors.title}
-                      onChange={e => { this.onChangeImage(e) }}
-                      onClick={(e) => { e.target.value = null; this.setState({ image_show: "" }) }}
+                  <TextFieldGroup
+                    field="image"
+                    label="Ảnh sản phẩm"
+                    type={"file"}
+                    // error={errors.title}
+                    onChange={(e) => {
+                      this.onChangeImage(e);
+                    }}
+                    onClick={(e) => {
+                      e.target.value = null;
+                      this.setState({ image_show: "" });
+                    }}
                     // rows="5"
+                  />
+                  {this.state.image == "" ? (
+                    ""
+                  ) : (
+                    <img
+                      width="250"
+                      height="300"
+                      src={
+                        this.state.image_show == ""
+                          ? `https://api-soida.applamdep.com/public/image_makeup/${this.state.image_link}`
+                          : this.state.image
+                      }
+                      style={{ marginBottom: 20 }}
                     />
-                    {
-                      this.state.image == "" ? "" :
-                        <img width="250" height="300" src={
-                          this.state.image_show == "" ? `https://api-soida.applamdep.com/public/image_makeup/${this.state.image_link}` : this.state.image
-                        } style={{ marginBottom: 20 }} />
-                    }
+                  )}
 
-                    <div style={{ width: "100%" }}>
-                      <CLabel>Thương hiệu:</CLabel>
-                      <CSelect onChange={async e => { this.setState({ brand_id: e.target.value }) }} custom size="sm" name="selectSm" id="SelectLm">
-                        {
-                          brands.map((item, i) => {
-                            if (item.name == brand_name) {
-                              return (
-                                <option selected key={i} value={item._id}>{item.name}</option>
-                              );
-                            } else {
-                              return (
-                                <option key={i} value={item._id}>{item.name}</option>
-                              );
-                            }
-                          })
+                  <div style={{ width: "100%" }}>
+                    <CLabel>Thương hiệu:</CLabel>
+                    <CSelect
+                      onChange={async (e) => {
+                        this.setState({ brand_id: e.target.value });
+                      }}
+                      custom
+                      size="sm"
+                      name="selectSm"
+                      id="SelectLm"
+                    >
+                      {brands.map((item, i) => {
+                        if (item.name == brand_name) {
+                          return (
+                            <option selected key={i} value={item._id}>
+                              {item.name}
+                            </option>
+                          );
+                        } else {
+                          return (
+                            <option key={i} value={item._id}>
+                              {item.name}
+                            </option>
+                          );
                         }
-                      </CSelect>
-                    </div>
+                      })}
+                    </CSelect>
+                  </div>
 
-                    <TextFieldGroup
-                      field="price"
-                      label="Giá sản phẩm"
-                      value={price}
-                      // error={errors.title}
-                      onChange={e => { this.onChange("price", e.target.value) }}
+                  <TextFieldGroup
+                    field="price"
+                    label="Giá sản phẩm"
+                    value={price}
+                    // error={errors.title}
+                    onChange={(e) => {
+                      this.onChange("price", e.target.value);
+                    }}
                     // rows="5"
-                    />
+                  />
 
-                    <CLabel>Danh mục 1:</CLabel>
-                    <div style={{ width: "100%" }}>
-                      <CSelect onChange={async e => {
-                        this.setState({ type_id: JSON.parse(e.target.value)._id, colorItemUpdate: JSON.parse(e.target.value).color_id });
-                      }} custom size="sm" name="selectSm" id="SelectLm">
-                        {
-                          types.map((item, i) => {
-                            if (item.type_id == this.state.type_id) {
-                              return (
-                                <option selected key={i} value={JSON.stringify(item)}>{item.name}</option>
-                              );
-                            } else {
-                              return (
-                                <option key={i} value={JSON.stringify(item)}>{item.name}</option>
-                              );
-                            }
-                          })
+                  <CLabel>Danh mục 1:</CLabel>
+                  <div style={{ width: "100%" }}>
+                    <CSelect
+                      onChange={async (e) => {
+                        this.setState({
+                          type_id: JSON.parse(e.target.value)._id,
+                          colorItemUpdate: JSON.parse(e.target.value).color_id,
+                        });
+                      }}
+                      custom
+                      size="sm"
+                      name="selectSm"
+                      id="SelectLm"
+                    >
+                      {types.map((item, i) => {
+                        if (item.type_id == this.state.type_id) {
+                          return (
+                            <option
+                              selected
+                              key={i}
+                              value={JSON.stringify(item)}
+                            >
+                              {item.name}
+                            </option>
+                          );
+                        } else {
+                          return (
+                            <option key={i} value={JSON.stringify(item)}>
+                              {item.name}
+                            </option>
+                          );
                         }
-                      </CSelect>
-                    </div>
-                    <div className="mt-2">
-                      <div className="text-center m-5">
-                        <CLabel><strong>Màu đã chọn: </strong></CLabel> {' '}
-                        {colorChooseUpdate}
-                        <div style={{ backgroundColor: colorChooseUpdate, width: '100%', height: '30px' }}> </div>
+                      })}
+                    </CSelect>
+                  </div>
+                  <div className="mt-2">
+                    <div className="text-center m-5">
+                      <CLabel>
+                        <strong>Màu đã chọn: </strong>
+                      </CLabel>{" "}
+                      {colorChooseUpdate}
+                      <div
+                        style={{
+                          backgroundColor: colorChooseUpdate,
+                          width: "100%",
+                          height: "30px",
+                        }}
+                      >
+                        {" "}
                       </div>
-                      <CCollapse show={collapse}>
-                        <CListGroup>
-                          <CListGroupItem style={{ backgroundColor: "#000000" }}>
-                            <Input style={{ width: '100%' }} onChange={(e) => {
-                              this.actionSearchColorUpdate(e.target.value, "keyColor");
-                            }} name="keyColor" value={keyColor} placeholder="Tìm kiếm" />
-                          </CListGroupItem>
-                          <div style={{ height: '200px', overflowY: 'scroll' }}>
-                            {
-                              colorItemUpdate.map((item, i) => {
-                                return (
-                                  <CListGroupItem style={{ cursor: 'pointer' }} key={i} onClick={() => {
-                                    this.setState({ color_id: item._id, colorChooseUpdate: item.hex })
-                                  }}>
-                                    <CRow>
-                                      <CCol lg="2">{item.hex}</CCol>
-                                      <CCol lg="10"><div style={{ backgroundColor: item.hex, width: '100%', height: 20 }}></div></CCol>
-                                    </CRow>
-                                  </CListGroupItem>
-                                );
-                              })
-                            }
-                          </div>
-                        </CListGroup>
-                      </CCollapse>
                     </div>
-                    <CButton
-                      color="primary"
-                      style={{ width: '100%' }}
-                      onClick={() => { this.setState({ collapse: !collapse }) }}
-                      className={'mb-1'}
-                    >{
-                        !collapse ? "Chọn màu" : "Đóng"
-                      }</CButton>
-
-                  </ModalBody>
-                  <ModalFooter>
-                    <CButton color="primary" onClick={e => this.updateProducts()} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-                    <CButton color="secondary" onClick={e => this.setState({ modalCom: !this.state.modalCom })}>Đóng</CButton>
-                  </ModalFooter>
-                </div>
-            }
+                    <CCollapse show={collapse}>
+                      <CListGroup>
+                        <CListGroupItem style={{ backgroundColor: "#000000" }}>
+                          <Input
+                            style={{ width: "100%" }}
+                            onChange={(e) => {
+                              this.actionSearchColorUpdate(
+                                e.target.value,
+                                "keyColor"
+                              );
+                            }}
+                            name="keyColor"
+                            value={keyColor}
+                            placeholder="Tìm kiếm"
+                          />
+                        </CListGroupItem>
+                        <div style={{ height: "200px", overflowY: "scroll" }}>
+                          {colorItemUpdate.map((item, i) => {
+                            return (
+                              <CListGroupItem
+                                style={{ cursor: "pointer" }}
+                                key={i}
+                                onClick={() => {
+                                  this.setState({
+                                    color_id: item._id,
+                                    colorChooseUpdate: item.hex,
+                                  });
+                                }}
+                              >
+                                <CRow>
+                                  <CCol lg="2">{item.hex}</CCol>
+                                  <CCol lg="10">
+                                    <div
+                                      style={{
+                                        backgroundColor: item.hex,
+                                        width: "100%",
+                                        height: 20,
+                                      }}
+                                    ></div>
+                                  </CCol>
+                                </CRow>
+                              </CListGroupItem>
+                            );
+                          })}
+                        </div>
+                      </CListGroup>
+                    </CCollapse>
+                  </div>
+                  <CButton
+                    color="primary"
+                    style={{ width: "100%" }}
+                    onClick={() => {
+                      this.setState({ collapse: !collapse });
+                    }}
+                    className={"mb-1"}
+                  >
+                    {!collapse ? "Chọn màu" : "Đóng"}
+                  </CButton>
+                </ModalBody>
+                <ModalFooter>
+                  <CButton
+                    color="primary"
+                    onClick={(e) => this.updateProducts()}
+                    disabled={this.state.isLoading}
+                  >
+                    Lưu
+                  </CButton>{" "}
+                  <CButton
+                    color="secondary"
+                    onClick={(e) =>
+                      this.setState({ modalCom: !this.state.modalCom })
+                    }
+                  >
+                    Đóng
+                  </CButton>
+                </ModalFooter>
+              </div>
+            )}
           </Modal>
 
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
               <label htmlFor="tag">{`Xác nhận xóa !!!`}</label>
             </ModalBody>
             <ModalFooter>
-              <CButton color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</CButton>
+              <CButton
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
             </ModalFooter>
           </Modal>
         </div>

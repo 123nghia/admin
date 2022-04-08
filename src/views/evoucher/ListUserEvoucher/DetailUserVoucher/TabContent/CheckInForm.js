@@ -90,7 +90,7 @@ function CheckInForm({ detailUserVoucher }) {
           Trạng thái:
           <Tag
             style={{ marginLeft: "1.85rem" }}
-            color={renderStatusColorTag(voucher[0].status)}
+            color={renderStatusColorTag(voucher[0]?.status)}
           >
             <Typography
               style={{ paddingTop: "0.3rem" }}
@@ -98,7 +98,7 @@ function CheckInForm({ detailUserVoucher }) {
               gutterBottom
               component="div"
             >
-              {renderStatusContent(voucher[0].status)}
+              {renderStatusContent(voucher[0]?.status)}
             </Typography>
           </Tag>
         </Typography>

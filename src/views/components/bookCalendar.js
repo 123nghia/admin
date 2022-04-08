@@ -619,54 +619,50 @@ class BrandSlider extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                <i className="fa fa-align-justify title_header"> Danh sách đặt lịch</i>
-                <CRow>
+                  <i className="fa fa-align-justify title_header">
+                    {" "}
+                    Danh sách đặt lịch
+                  </i>
+                  <CRow>
                     <CCol md={3} className="">
                       <div className="">
-
-
                         <p className="title_filter">Từ khóa</p>
                         <Input
-                              class="mr-2"
-                                style={styles.searchInput}
-                                onChange={(e) => {
-                                  this.setState({ key : e.target.value});
-                                }}
-                                name="key"
-                                value={key}
-                                placeholder="Từ khóa"
-                              />
-                        
+                          class="mr-2"
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ key: e.target.value });
+                          }}
+                          name="key"
+                          value={key}
+                          placeholder="Từ khóa"
+                        />
                       </div>
                     </CCol>
-                    </CRow>
-                    <div className="flex-end">
+                  </CRow>
+                  <div className="flex-end">
                     <CButton
-                        color="info"
-                        style={{  marginRight: '10px' }}
-                        size="md"
-                        className="btn-main"
-                        onClick={(e) =>this.onSearching()}
-                      >
-                        <BsSearch style={{ margin: "auto 6px auto 0" }} />
-                        <p style={{ margin: "auto 0" }}>Làm mới tìm kiếm</p>
-                      </CButton>
-                      <CButton
-                        color="info"
-                  
-                        size="md"
-                        className="btn-main"
-                        onClick={(e) => this.toggleModal("new")}
-                      >
-                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                      </CButton>
-
-                    </div>
-                
-                
+                      color="info"
+                      style={{ marginRight: "10px" }}
+                      size="md"
+                      className="btn-main"
+                      onClick={(e) => this.onSearching()}
+                    >
+                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Làm mới tìm kiếm</p>
+                    </CButton>
+                    <CButton
+                      color="info"
+                      size="md"
+                      className="btn-main"
+                      onClick={(e) => this.toggleModal("new")}
+                    >
+                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                    </CButton>
+                  </div>
                 </CardHeader>
-                <CardBody>
+                <CardBody className="table__overflow">
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table"
@@ -683,81 +679,73 @@ class BrandSlider extends Component {
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
-                    <tbody>                      
+                    <tbody>
                       {dataDatlich.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.fullName}</td>
-                                <td className="text-center">
-                                  {item.phoneNumber}
-                                </td>
+                        return (
+                          <tr key={i}>
+                            <td className="text-center">{i + 1}</td>
+                            <td className="text-center">{item.fullName}</td>
+                            <td className="text-center">{item.phoneNumber}</td>
 
+                            <td className="text-center">
+                              {new Date(item.booking_date)
+                                .toLocaleString()
+                                .replace(/,/g, "")
+                                .slice(8)}
+                            </td>
+                            <td className="text-center">
+                              {new Date(item.create_date).toLocaleString()}
+                            </td>
 
-                                <td className="text-center">
+                            <td className="text-center">
+                              {item.status === "0"
+                                ? "Đang đặt lịch"
+                                : item.status === "1"
+                                ? "Đã  gặp"
+                                : item.status === "2"
+                                ? "Hẹn gặp lại"
+                                : "Không gặp"}
+                            </td>
 
-                      
-                              {   (new Date(item.booking_date)).toLocaleString().replace(/,/g, '').slice(8) }
-                            
-                                
-                                </td>
-                                <td className="text-center">
-                                
-                                
-                                {  (new Date(item.create_date)).toLocaleString()}
-                                
-                              </td>
-
-                                <td className="text-center">
-                                {item.status === "0"
-                              ? "Đang đặt lịch"
-                              : item.status === "1" 
-                              ? "Đã  gặp" : item.status ==="2" 
-                              ? "Hẹn gặp lại" : 
-                              "Không gặp"}
-                                </td>
-
-                                <td className="text-center">
-                                <div className="flex-center">
-                                 
-                                   
-                             
-
-                                 <CButton
-                                   shape="rounded-pill"
-                                   variant="ghost"
-                                   color="info"
-                                   style={styles.mgl5}
-                                   className="mr-1"
-                                   size="md"
-                                   onClick={async (e) => await this.openUpdate(item)}
-                                 >
-                                   <FiEdit3
-                                     style={styles.icon}
-                                     name="cilPencil"
-                                     className="icon"
-
-                                   />
-                                 </CButton>{" "}
-                                 <CButton
-                                   shape="rounded-pill"
-                                   variant="ghost"
-                                   color="danger"
-                                   style={styles.mgl5}
-                                   onClick={(e) => { this.openDelete(item) }}
-                                 >
-                                   <BsTrash
-                                     style={styles.icon}
-                                     className="icon"
-                                     name="cilTrash"
-                                   />
-                                 </CButton>
-                               </div>
-                                </td>
-                              </tr>
-                            );
-                          })
-                        }
+                            <td className="text-center">
+                              <div className="flex-center">
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  className="mr-1"
+                                  size="md"
+                                  onClick={async (e) =>
+                                    await this.openUpdate(item)
+                                  }
+                                >
+                                  <FiEdit3
+                                    style={styles.icon}
+                                    name="cilPencil"
+                                    className="icon"
+                                  />
+                                </CButton>{" "}
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="danger"
+                                  style={styles.mgl5}
+                                  onClick={(e) => {
+                                    this.openDelete(item);
+                                  }}
+                                >
+                                  <BsTrash
+                                    style={styles.icon}
+                                    className="icon"
+                                    name="cilTrash"
+                                  />
+                                </CButton>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </CardBody>
@@ -818,7 +806,7 @@ class BrandSlider extends Component {
                 // rows="5"
               />
               <TextFieldGroup
-              type="date"
+                type="date"
                 field="dateThamChieu"
                 label="Ngày đặt hẹn"
                 value={this.state.dateThamChieu}
@@ -827,8 +815,8 @@ class BrandSlider extends Component {
                 onChange={(e) => this.onChange("dateThamChieu", e.target.value)}
                 // rows="5"
               />
- <TextFieldGroup
-              type="time"
+              <TextFieldGroup
+                type="time"
                 field="timetext"
                 label="Giờ đặt hẹn"
                 value={this.state.timetext}
@@ -837,7 +825,7 @@ class BrandSlider extends Component {
                 onChange={(e) => this.onChange("timetext", e.target.value)}
                 // rows="5"
               />
-               <div style={{ width: "100%" }} className="mt-3">
+              <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
@@ -855,21 +843,23 @@ class BrandSlider extends Component {
                           <option selected key={i} value={item.item}>
                             {item.item === "0"
                               ? "Đang đặt lịch"
-                              : item.item === "1" 
-                              ? "Đã  gặp" : item.item ==="2" 
-                              ? "Hẹn gặp lại" : 
-                              "Không gặp"}
+                              : item.item === "1"
+                              ? "Đã  gặp"
+                              : item.item === "2"
+                              ? "Hẹn gặp lại"
+                              : "Không gặp"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                          {item.item === "0"
+                            {item.item === "0"
                               ? "Đang đặt lịch"
-                              : item.item === "1" 
-                              ? "Đã  gặp" : item.item ==="2" 
-                              ? "Hẹn gặp lại" : 
-                              "Không gặp"}
+                              : item.item === "1"
+                              ? "Đã  gặp"
+                              : item.item === "2"
+                              ? "Hẹn gặp lại"
+                              : "Không gặp"}
                           </option>
                         );
                       }

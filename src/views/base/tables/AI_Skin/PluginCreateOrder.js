@@ -397,7 +397,7 @@ class PluginCreateOrder extends Component {
           <CardHeader>
             <i className="fa fa-align-justify"> Quản lý đơn hàng</i>
           </CardHeader>
-          <CardBody>
+          <CardBody className="table__overflow">
             <div style={styles.tags}>
               <CRow>
                 <CCol sm="12" lg="12">
@@ -419,49 +419,81 @@ class PluginCreateOrder extends Component {
 
                 <CCol sm="12" lg="12">
                   <CLabel>Định danh</CLabel>
-                  <Input onChange={(e) => { this.setState({ currentSlug: e.target.value }) }} value={currentSlug} />
+                  <Input
+                    onChange={(e) => {
+                      this.setState({ currentSlug: e.target.value });
+                    }}
+                    value={currentSlug}
+                  />
                 </CCol>
 
                 <CCol sm="12" lg="12">
                   <div>
-                    <label style={styles.flexLabel} htmlFor="tag">Chọn gói sản phẩm:    </label>
-                    <CSelect style={styles.flexOption} onChange={async e => { this.setState({ Package_Id: e.target.value, disableNext: false }); await this.getPackageName(e.target.value) }}>
+                    <label style={styles.flexLabel} htmlFor="tag">
+                      Chọn gói sản phẩm:{" "}
+                    </label>
+                    <CSelect
+                      style={styles.flexOption}
+                      onChange={async (e) => {
+                        this.setState({
+                          Package_Id: e.target.value,
+                          disableNext: false,
+                        });
+                        await this.getPackageName(e.target.value);
+                      }}
+                    >
                       <option value={this.state.Package_Id}>-----</option>
-                      {
-                        dataPackage.map((item, i) => {
-                          return (
-                            <option value={item._id}>{`${item.Name} (${item.Value} ${this.convertUnitToDate(item.Unit)})`}</option>
-                          );
-                        })
-                      }
+                      {dataPackage.map((item, i) => {
+                        return (
+                          <option value={item._id}>{`${item.Name} (${
+                            item.Value
+                          } ${this.convertUnitToDate(item.Unit)})`}</option>
+                        );
+                      })}
                     </CSelect>
                   </div>
                 </CCol>
 
-
                 <CCol sm="12" lg="12">
-                  <label style={styles.flexLabel} htmlFor="tag">Chọn các tính năng cho gói:    </label>
-                  {
-                    this.renderSelect()
-                  }
+                  <label style={styles.flexLabel} htmlFor="tag">
+                    Chọn các tính năng cho gói:{" "}
+                  </label>
+                  {this.renderSelect()}
                 </CCol>
 
                 <CCol sm="12" lg="12">
-                  <label style={{ marginTop: 10 }} htmlFor="tag">Số lượng tính năng: {this.state.arrayChooseFeature.length == 0 ? JSON.parse(localStorage.getItem('arrFeature')).length : this.state.arrayChooseFeature.length}    </label>
+                  <label style={{ marginTop: 10 }} htmlFor="tag">
+                    Số lượng tính năng:{" "}
+                    {this.state.arrayChooseFeature.length == 0
+                      ? JSON.parse(localStorage.getItem("arrFeature")).length
+                      : this.state.arrayChooseFeature.length}{" "}
+                  </label>
                 </CCol>
 
                 <CCol sm="12" lg="12">
                   <CRow>
+                    <CCol sm="12" lg="6"></CCol>
                     <CCol sm="12" lg="6">
-                    </CCol>
-                    <CCol sm="12" lg="6">
-                      <CButton disabled={this.state.disableNext} outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
-                        await this.onNext(Company_Id, Package_Id, arrayChooseFeature);
-                      }}>Tiếp tục</CButton>
+                      <CButton
+                        disabled={this.state.disableNext}
+                        outline
+                        color="primary"
+                        style={styles.floatRight}
+                        size="sm"
+                        onClick={async (e) => {
+                          await this.onNext(
+                            Company_Id,
+                            Package_Id,
+                            arrayChooseFeature
+                          );
+                        }}
+                      >
+                        Tiếp tục
+                      </CButton>
                     </CCol>
                   </CRow>
                 </CCol>
-                {arrFeature.length != 0 ?
+                {arrFeature.length != 0 ? (
                   <CCol sm="12" lg="12">
                     <CRow>
                       <CCol sm="12" lg="12">
@@ -474,45 +506,74 @@ class PluginCreateOrder extends Component {
                         <strong>Tên Gói: {package_name}</strong>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <strong>Thời gian kích hoạt dự kiến: {(new Date(Date.now())).toLocaleDateString()}</strong>
+                        <strong>
+                          Thời gian kích hoạt dự kiến:{" "}
+                          {new Date(Date.now()).toLocaleDateString()}
+                        </strong>
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <strong>Thời gian hết hạn dự kiến: {new Date(this.getCurrentMonth(package_unit, Number(package_key))).toLocaleDateString()}</strong>
+                        <strong>
+                          Thời gian hết hạn dự kiến:{" "}
+                          {new Date(
+                            this.getCurrentMonth(
+                              package_unit,
+                              Number(package_key)
+                            )
+                          ).toLocaleDateString()}
+                        </strong>
                       </CCol>
 
                       <CCol sm="12" lg="12">
-                        {
-                          this.renderTable(arrFeature, company_name, package_name, package_time)
-                        }
+                        {this.renderTable(
+                          arrFeature,
+                          company_name,
+                          package_name,
+                          package_time
+                        )}
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={async e => {
-                          await this.addOrderPlugin();
-                        }}>Tạo đơn hàng</CButton>
+                        <CButton
+                          outline
+                          color="primary"
+                          style={styles.floatRight}
+                          size="sm"
+                          onClick={async (e) => {
+                            await this.addOrderPlugin();
+                          }}
+                        >
+                          Tạo đơn hàng
+                        </CButton>
                       </CCol>
                     </CRow>
-                  </CCol> : ""
-
-                }
+                  </CCol>
+                ) : (
+                  ""
+                )}
               </CRow>
             </div>
           </CardBody>
         </Card>
 
-        <Modal isOpen={this.state.modalCom} >
+        <Modal isOpen={this.state.modalCom}>
           <ModalHeader>Danh sách phần cứng</ModalHeader>
 
-          <ModalBody>
-
-          </ModalBody>
+          <ModalBody></ModalBody>
           <ModalFooter>
-            <CButton color="primary" onClick={e => { this.setState({ arrHardWard: this.state.arrChooseHard }); }}>Lưu</CButton>{' '}
-            <CButton color="secondary" onClick={e => this.toggleModal("new")}>Close</CButton>
+            <CButton
+              color="primary"
+              onClick={(e) => {
+                this.setState({ arrHardWard: this.state.arrChooseHard });
+              }}
+            >
+              Lưu
+            </CButton>{" "}
+            <CButton color="secondary" onClick={(e) => this.toggleModal("new")}>
+              Close
+            </CButton>
           </ModalFooter>
         </Modal>
-      </div >
-
-    )
+      </div>
+    );
 
   }
 }

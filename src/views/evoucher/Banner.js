@@ -494,8 +494,7 @@ class EndUser extends Component {
               <div className="mt-3"></div>
               <label>Tên chiến dịch</label>
               <Select
-              defaultValue={dataCampaign ? dataCampaign[0].name : ""}
-
+                defaultValue={dataCampaign ? dataCampaign[0].name : ""}
                 className="select_company"
                 showSearch
                 placeholder="Chọn tên công ty"
@@ -513,10 +512,9 @@ class EndUser extends Component {
               >
                 {dataCampaign
                   ? dataCampaign.map((item, i) => {
-                    if(i===0){
-                      return <Option value={item.name}>{item.name}</Option>;
-
-                    }
+                      if (i === 0) {
+                        return <Option value={item.name}>{item.name}</Option>;
+                      }
                     })
                   : null}
               </Select>
@@ -586,17 +584,13 @@ class EndUser extends Component {
                           <option selected key={i} value={item.item}>
                             {item.item === "1"
                               ? "Hoạt động"
-                              
                               : "Không hoạt động"}
                           </option>
                         );
                       } else {
                         return (
                           <option key={i} value={item.item}>
-                            {item.item == "1"
-                              ? "Hoạt động"
-                             
-                              : "Không hoạt động"}
+                            {item.item == "1" ? "Hoạt động" : "Không hoạt động"}
                           </option>
                         );
                       }
@@ -635,9 +629,8 @@ class EndUser extends Component {
                     Quản lý Banner
                   </i>
                   <div className="flex-end ">
-                  <CButton
+                    <CButton
                       color="info"
-                     
                       size="md"
                       className="btn-main"
                       onClick={() => this.openVoucher()}
@@ -645,13 +638,9 @@ class EndUser extends Component {
                       <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
-                   
-                   
                   </div>
                 </CardHeader>
-                <CardBody>
-               
-                  
+                <CardBody className="table__overflow">
                   <table
                     ble
                     className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -667,7 +656,7 @@ class EndUser extends Component {
                         <th className="text-center">Mô tả</th>
 
                         <th className="text-center">Link tham chiếu</th>
-                        
+
                         <th className="text-center">trạng thái</th>
 
                         <th className="text-center"></th>
@@ -689,7 +678,10 @@ class EndUser extends Component {
                                 <td className="text-center">{item.name}</td>
 
                                 <td className="text-center">{item.title}</td>
-                                <td className="text-center" style={{ maxWidth: "230px"}}>
+                                <td
+                                  className="text-center"
+                                  style={{ maxWidth: "230px" }}
+                                >
                                   <img
                                     style={{ maxWidth: "230px" }}
                                     alt=""
@@ -700,25 +692,24 @@ class EndUser extends Component {
                                 <td className="text-center">
                                   {item.description}
                                 </td>
-                                <td className="text-center" style={{ maxWidth: "140px" }}>
+                                <td
+                                  className="text-center"
+                                  style={{ maxWidth: "140px" }}
+                                >
                                   <a target="_blank" href={item.link}>
                                     {item.link}
                                   </a>
                                 </td>
-                               
+
                                 <td className="text-center">
                                   <Tag
                                     className="ant-tag"
                                     color={
-                                      item.status === "1"
-                                        ? "#87d068"
-                                        
-                                        : "#f50"
+                                      item.status === "1" ? "#87d068" : "#f50"
                                     }
                                   >
                                     {item.status == "1"
                                       ? "Hoạt động"
-                                     
                                       : "Không hoạt động"}
                                   </Tag>
                                 </td>
@@ -759,20 +750,19 @@ class EndUser extends Component {
                     </tbody>
                   </table>
                   <div style={{ float: "right" }}>
-                <Pagination
-                  count={arrPagination.length}
-                  color="primary"
-                  onChange={(e, v) => {
-                    this.setState({
-                      data: arrPagination[v - 1],
-                      indexPage: v - 1,
-                    });
-                  }}
-                />
-              </div>
+                    <Pagination
+                      count={arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
-             
             </Col>
           </Row>
 

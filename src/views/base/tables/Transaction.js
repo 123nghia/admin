@@ -413,16 +413,25 @@ class Transaction extends Component {
               <p style={styles.danger}>{this.state.deleted}</p>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"> Danh sách giao dich (Page: {this.state.indexPage + 1})</i>
+                  <i className="fa fa-align-justify">
+                    {" "}
+                    Danh sách giao dich (Page: {this.state.indexPage + 1})
+                  </i>
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
                         <CRow>
                           <CCol sm="12" lg="4">
                             <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
+                              <Input
+                                style={styles.searchInput}
+                                onChange={(e) => {
+                                  this.actionSearch(e, "key");
+                                }}
+                                name="key"
+                                value={key}
+                                placeholder="Từ khóa"
+                              />
                             </div>
                           </CCol>
                           {/* <CCol sm="6" lg="2">
@@ -431,30 +440,40 @@ class Transaction extends Component {
                             }} value={keyDateCreate} placeholder="Create Date" />
                           </CCol> */}
                           <CCol sm="12" lg="4">
-                            <CSelect style={styles.flexOption} onChange={e => {
-
-                              this.actionSearch(e, "keyStatus");
-
-                            }} custom>
-                              {
-                                ['ACTIVE', 'DISABLE'].map((item, i) => {
-                                  return (
-                                    <option value={item}>{item}</option>
-                                  );
-                                })
-                              }
+                            <CSelect
+                              style={styles.flexOption}
+                              onChange={(e) => {
+                                this.actionSearch(e, "keyStatus");
+                              }}
+                              custom
+                            >
+                              {["ACTIVE", "DISABLE"].map((item, i) => {
+                                return <option value={item}>{item}</option>;
+                              })}
                             </CSelect>
                           </CCol>
                           <CCol sm="12" lg="4">
-                            <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</Button>
+                            <Button
+                              color="primary"
+                              style={{ width: "100%", marginTop: 5 }}
+                              size="sm"
+                              onClick={(e) => {
+                                this.resetSearch();
+                              }}
+                            >
+                              Làm mới tìm kiếm
+                            </Button>
                           </CCol>
                         </CRow>
                       </CCol>
                     </CRow>
                   </div>
                 </CardHeader>
-                <CardBody>
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -467,21 +486,38 @@ class Transaction extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {
-                        data != undefined ?
-                          data.map((item, i) => {
+                      {data != undefined
+                        ? data.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Com_Name}</td>
                                 <td className="text-center">
-                                  {(new Date(item.Create_At)).toLocaleDateString() + ' ' + (new Date(item.Create_At)).toLocaleTimeString()}
+                                  {new Date(
+                                    item.Create_At
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.Create_At
+                                    ).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
-                                  {(new Date(item.Active_Date)).toLocaleDateString() + ' ' + (new Date(item.Active_Date)).toLocaleTimeString()}
+                                  {new Date(
+                                    item.Active_Date
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.Active_Date
+                                    ).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
-                                  {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
+                                  {new Date(
+                                    item.End_Date
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.End_Date
+                                    ).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -490,44 +526,78 @@ class Transaction extends Component {
                                 </td>
                                 <td className="text-center">
                                   {/* <Button outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >Cập nhật</Button>{' '} */}
-                                  <Button outline color="primary" size="sm" onClick={async (e) => { await this.getOrderDetail(item._id, item.Company_Id) }} >Chi tiết</Button>
+                                  <Button
+                                    outline
+                                    color="primary"
+                                    size="sm"
+                                    onClick={async (e) => {
+                                      await this.getOrderDetail(
+                                        item._id,
+                                        item.Company_Id
+                                      );
+                                    }}
+                                  >
+                                    Chi tiết
+                                  </Button>
                                   {/* <Button outline color="danger" size="sm" onClick={(e) => { this.openDelete(item) }}>Xoá</Button> */}
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
-
                 </CardBody>
                 <CardFooter>
-                  {
-                    arrPagination.length == 1 ? "" :
-                      <div style={{ float: 'right', marginRight: '10px', padding: '10px' }}>
-                        <tr style={styles.row}>
-                          {
-                            arrPagination.map((item, i) => {
-                              return (
-                                <td>
-                                  <Button style={styles.pagination} color={i == indexPage ? 'primary' : 'danger'} onClick={e => { this.setState({ data: arrPagination[i], indexPage: i }) }}>{i + 1}</Button>
-                                </td>
-                              );
-                            })
-                          }
-                        </tr>
-                      </div>
-                  }
+                  {arrPagination.length == 1 ? (
+                    ""
+                  ) : (
+                    <div
+                      style={{
+                        float: "right",
+                        marginRight: "10px",
+                        padding: "10px",
+                      }}
+                    >
+                      <tr style={styles.row}>
+                        {arrPagination.map((item, i) => {
+                          return (
+                            <td>
+                              <Button
+                                style={styles.pagination}
+                                color={i == indexPage ? "primary" : "danger"}
+                                onClick={(e) => {
+                                  this.setState({
+                                    data: arrPagination[i],
+                                    indexPage: i,
+                                  });
+                                }}
+                              >
+                                {i + 1}
+                              </Button>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    </div>
+                  )}
                 </CardFooter>
               </Card>
 
-
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"> Chi tiết giao dịch của {this.state.currenCom} (Mã công ty: {this.state.currenCom_ID}) (Page: {this.state.indexPage + 1})</i>
+                  <i className="fa fa-align-justify">
+                    {" "}
+                    Chi tiết giao dịch của {this.state.currenCom} (Mã công ty:{" "}
+                    {this.state.currenCom_ID}) (Page: {this.state.indexPage + 1}
+                    )
+                  </i>
                 </CardHeader>
-                <CardBody>
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <CardBody className="table__overflow">
+                  <table
+                    ble
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                  >
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -539,19 +609,34 @@ class Transaction extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {
-                        dataOrderDetail != undefined ?
-                          dataOrderDetail.map((item, i) => {
+                      {dataOrderDetail != undefined
+                        ? dataOrderDetail.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.Transaction_ID}</td>
-                                <td className="text-center">{item.HardWard_ID}</td>
                                 <td className="text-center">
-                                  {(new Date(item.Active_Date)).toLocaleDateString() + ' ' + (new Date(item.Active_Date)).toLocaleTimeString()}
+                                  {item.Transaction_ID}
                                 </td>
                                 <td className="text-center">
-                                  {(new Date(item.End_Date)).toLocaleDateString() + ' ' + (new Date(item.End_Date)).toLocaleTimeString()}
+                                  {item.HardWard_ID}
+                                </td>
+                                <td className="text-center">
+                                  {new Date(
+                                    item.Active_Date
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.Active_Date
+                                    ).toLocaleTimeString()}
+                                </td>
+                                <td className="text-center">
+                                  {new Date(
+                                    item.End_Date
+                                  ).toLocaleDateString() +
+                                    " " +
+                                    new Date(
+                                      item.End_Date
+                                    ).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">
                                   <CBadge color={this.getBadge(item.Status)}>
@@ -560,55 +645,111 @@ class Transaction extends Component {
                                 </td>
                               </tr>
                             );
-                          }) : ""
-                      }
+                          })
+                        : ""}
                     </tbody>
                   </table>
-
                 </CardBody>
               </Card>
-
             </Col>
           </Row>
 
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
-            <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
+            <ModalHeader>
+              {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
+            </ModalHeader>
             <ModalBody>
-              {
-                action == 'new' ? "" : <div>
-                  <label style={styles.flexLabel} htmlFor="tag">Trạng thái    </label>
-                  <select style={styles.flexOption} name="Status" onChange={e => this.onChange("Status", e.target.value)}>
-                    <option value={this.state.Status}>{this.state.Status == '' ? ` - - - - - - - - - - ` : this.state.Status}</option>
-                    {
-                      ['SPENDING', 'COMPLETE'].map((item, i) => {
-                        return (
-                          <option value={item}>{item}</option>
-                        );
-                      })
-                    }
+              {action == "new" ? (
+                ""
+              ) : (
+                <div>
+                  <label style={styles.flexLabel} htmlFor="tag">
+                    Trạng thái{" "}
+                  </label>
+                  <select
+                    style={styles.flexOption}
+                    name="Status"
+                    onChange={(e) => this.onChange("Status", e.target.value)}
+                  >
+                    <option value={this.state.Status}>
+                      {this.state.Status == ""
+                        ? ` - - - - - - - - - - `
+                        : this.state.Status}
+                    </option>
+                    {["SPENDING", "COMPLETE"].map((item, i) => {
+                      return <option value={item}>{item}</option>;
+                    })}
                   </select>
                 </div>
+              )}
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                color="primary"
+                onClick={(e) => {
+                  this.state.action === "new"
+                    ? this.addCompany()
+                    : this.updateOrder();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) => this.toggleModal("new")}
+              >
+                Đóng
+              </Button>
+            </ModalFooter>
+          </Modal>
+
+          <Modal
+            isOpen={this.state.modalDelete}
+            toggle={(e) =>
+              this.setState({
+                modalDelete: !this.state.modalDelete,
+                delete: null,
+              })
+            }
+            className={this.props.className}
+          >
+            <ModalHeader
+              toggle={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
               }
-
-            </ModalBody>
-
-            <ModalFooter>
-              <Button color="primary" onClick={e => { this.state.action === 'new' ? this.addCompany() : this.updateOrder() }} disabled={this.state.isLoading}>Lưu</Button>{' '}
-              <Button color="secondary" onClick={e => this.toggleModal("new")}>Đóng</Button>
-            </ModalFooter>
-          </Modal>
-
-          <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })} className={this.props.className}>
-            <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>{`Xoá`}</ModalHeader>
+            >{`Xoá`}</ModalHeader>
             <ModalBody>
-              <label htmlFor="tag">{`Do you want to delete user "${this.state.delete ? this.state.delete.Email : ''}" ?`}</label>
+              <label htmlFor="tag">{`Do you want to delete user "${
+                this.state.delete ? this.state.delete.Email : ""
+              }" ?`}</label>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={e => this.delete()} disabled={this.state.isLoading}>Xoá</Button>{' '}
-              <Button color="secondary" onClick={e => this.setState({ modalDelete: !this.state.modalDelete, delete: null })}>Đóng</Button>
+              <Button
+                color="primary"
+                onClick={(e) => this.delete()}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </Button>{" "}
+              <Button
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </Button>
             </ModalFooter>
           </Modal>
-        </div >
+        </div>
       );
     }
     return (
