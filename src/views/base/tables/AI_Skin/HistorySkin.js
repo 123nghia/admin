@@ -206,7 +206,7 @@ class HistorySkin extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.Name}</td>
                               <td className="text-center">{item.Phone}</td>
 
                               <td className="text-center">
