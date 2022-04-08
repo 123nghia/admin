@@ -160,10 +160,12 @@ const NotEnough = React.lazy(() => import("./views/Pages/NotEnough/NotEnough"));
 const AdminConfigWebsite = React.lazy(() =>
   import("././views/config/configWebAdmin")
 );
-const ManageSales = React.lazy(() => import("./views/evoucher/ManageSales"));
 
 const ManageSalesGroup = React.lazy(() =>
-  import("./views/evoucher/ManageSalesGroup")
+  import("./views/evoucher/ManageSalesGroup/index.js")
+);
+const ManageSales = React.lazy(() =>
+  import("./views/evoucher/ManageSales/index.js")
 );
 const ManageAccount = React.lazy(() =>
   import("./views/evoucher/ManageAccount")

@@ -289,7 +289,7 @@ const _navMangerSales = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách Nhóm Sales",
+        name: "Quản lý Nhóm Sales",
         to: "/manage-sales-group",
         icon: (
           <HiUserGroup
