@@ -396,10 +396,15 @@ class EndUser extends Component {
   }
 
   nextButton() {
-    this.setState({ 
+
+    this.setState({
+
       activetabkey: '2',
       changeTab: '2',
-   });
+    }, () => {
+      console.log(this.state.activetabkey)
+    });
+
   }
 
   render() {
@@ -449,8 +454,8 @@ class EndUser extends Component {
               {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-              <Tabs defaultActiveKey={activetabkey} onChange={(key) => this.callback(key)}>
-                <TabPane tab = "Thông tin" key="1" changeTab="1" activetabkey='1'>
+              <Tabs defaultActiveKey={this.state.activetabkey} onChange={(key) => this.callback(key)}>
+                <TabPane className="tab1" tab="Thông tin" key="1" changeTab="1">
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
                       field="Name"
@@ -566,7 +571,7 @@ class EndUser extends Component {
                     />
                   </div>
                 </TabPane>
-                <TabPane tab="Tài khoản" key="2" changeTab="2" activetabkey='2'>
+                <TabPane className="tab2" tab="Tài khoản" key="2" changeTab="2">
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
                       field="UserName"
