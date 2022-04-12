@@ -9,6 +9,13 @@ export default {
 
   COLLABORATOR_GET: "api/collaborator/getAll",
   COLLABORATOR_DETAIL_GET_CUSTOMER: "api/collaborator/getAllCustomerByid",
+  ADD_NEW_COLLABORATOR: "api/collaborator/create",
+
+  GET_ALL_MANAGER_SALE_GROUP: "api/saleGroup/getAllManager",
+  GET_ALL_SALE_GROUP: "api/saleGroup/getAll",
+  GET_SALE_GROUP_BY_ID: "api/saleGroup/GetById",
+  ADD_NEW_SALE_GROUP: "api/saleGroup/add",
+
   GET_ALL_CAMPAIGN_VER2: "api/manager/campaign/getAll",
   GET_DETAIL_CAMPAIGN: "api/campaign/getDetail",
   GET_DETAIL_CAMPAIGN_EVOUCHER: "api/evoucher/getByCampangId",

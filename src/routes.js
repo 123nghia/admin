@@ -1,4 +1,5 @@
 import React from "react";
+import DetailCollaborators from "./views/evoucher/ManageSales/DetailCollaborators";
 
 const Dashboard = React.lazy(() => import("./views/DashBoard/Dashboard"));
 const TableUser = React.lazy(() => import("./views/base/tables/TableUser"));
@@ -167,6 +168,9 @@ const ManageSalesGroup = React.lazy(() =>
 const ManageSales = React.lazy(() =>
   import("./views/evoucher/ManageSales/index.js")
 );
+// const DetailCollaborators = React.lazy(() =>
+//   import("./views/evoucher/ManageSales/DetailCollaborators/index.js")
+// );
 // const roleUser = localStorage.getItem('type');
 
 const DetailCampaign = React.lazy(() =>
@@ -216,6 +220,11 @@ const routes = [
     path: "/manage-sales",
     name: "ManageSales",
     component: roleUser === "0" ? ManageSales : NotEnough,
+  },
+  {
+    path: "/detail-collaborators",
+    name: "DetailCollaborators",
+    component: roleUser === "0" ? DetailCollaborators : NotEnough,
   },
   {
     path: "/manage-inventory",
