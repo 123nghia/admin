@@ -258,7 +258,7 @@ const _navMangerProviders = [
         className="c-sidebar-nav-icon"
       />
     ),
-    role: ["0", "1", "2"],
+    role: ["0"],
     badge: {
       color: "info",
       text: (
@@ -358,7 +358,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -421,7 +421,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -442,7 +442,7 @@ const _navMangerCampaigns = [
             customClasses="c-sidebar-nav-icon"
           />
         ),
-        role: ["2"],
+        role: ["0"],
       },
       {
         _tag: "CSidebarNavItem",
@@ -455,7 +455,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon"
           />
         ),
-        role: ["0", "1", "2"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (

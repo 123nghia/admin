@@ -159,6 +159,7 @@
   background-color: var(--main_web_admin);
   border: 1px solid white;
 }
+
 .table .thead-light .header__table--bottom > th {
   background-color: #fff;
   color: #4e6387;

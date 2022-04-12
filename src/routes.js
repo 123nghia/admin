@@ -30,6 +30,9 @@ const OrderTable = React.lazy(() => import("./views/base/tables/OrderTable"));
 const TransactionTable = React.lazy(() =>
   import("./views/base/tables/Transaction")
 );
+const DetailCollaborators = React.lazy(() =>
+  import("./views/evoucher/ManageSales/DetailCollaborators")
+);
 const HardWareManager = React.lazy(() =>
   import("./views/base/tables/HardWareManager")
 );
@@ -170,7 +173,7 @@ const ManageSales = React.lazy(() =>
 const ManageAccount = React.lazy(() =>
   import("./views/evoucher/ManageAccount")
 );
-// const roleUser = localStorage.getItem('type');
+
 
 const DetailCampaign = React.lazy(() =>
   import("./views/evoucher/ManagerCampaign/DetailCampaign/index.js")
@@ -178,9 +181,7 @@ const DetailCampaign = React.lazy(() =>
 const DetailProvider = React.lazy(() =>
 import("./views/evoucher/DetailProvider")
 );
-const DetailCollaborators = React.lazy(() =>
-import("./views/evoucher/DetailCollaborators")
-);
+
 const DetailInventory = React.lazy(() =>
   import("./views/evoucher/DetailInventory")
 );
@@ -222,6 +223,11 @@ const routes = [
     path: "/manage-sales",
     name: "ManageSales",
     component: roleUser === "0" ? ManageSales : NotEnough,
+  },
+  {
+    path: "/detail-collaborators",
+    name: "DetailCollaborators",
+    component: roleUser === "0" ? DetailCollaborators : NotEnough,
   },
   {
     path: "/manage-inventory",

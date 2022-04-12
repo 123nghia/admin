@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CIcon from "@coreui/icons-react";
-import { Tabs } from 'antd';
+import { Tabs } from "antd";
 import moment from "moment";
 import {
   Card,
@@ -99,7 +99,6 @@ class EndUser extends Component {
       Slug: "",
       introduction: "",
       changeTab: "1",
-      activetabkey: '1',
     };
   }
   onChangeImage = (e) => {
@@ -143,7 +142,7 @@ class EndUser extends Component {
       dataCompany: val,
     });
   }
-  GetDetailProvider() { }
+  GetDetailProvider() {}
 
   pagination(dataApi) {
     var i,
@@ -236,7 +235,7 @@ class EndUser extends Component {
         Status: Status,
         Brand: Brand,
         TypeId: TypeId,
-        Logo: Logo
+        Logo: Logo,
       })
       .then((res) => {
         console.log(res);
@@ -261,6 +260,9 @@ class EndUser extends Component {
   }
   openCreate() {
     this.setState({
+      changeTab: "1",
+    });
+    this.setState({
       action: "new",
       modalVoucher: true,
       UserName: "",
@@ -277,8 +279,8 @@ class EndUser extends Component {
   }
   async add() {
     this.setState({
-      changeTab: "1"
-    })
+      changeTab: "1",
+    });
     const {
       UserName,
       Email,
@@ -326,7 +328,7 @@ class EndUser extends Component {
             errorMessage: "",
           });
         } else {
-          alert('Thêm không thành công');
+          alert("Thêm không thành công");
           this.setState({ isLoading: false });
         }
         // if (res.data.status === 202) {
@@ -353,7 +355,7 @@ class EndUser extends Component {
       .delete(url, {
         data: {
           id: this.state.id,
-        }
+        },
       })
       .then((res) => {
         console.log(res);
@@ -396,25 +398,15 @@ class EndUser extends Component {
   }
 
   nextButton() {
-
     this.setState({
-
-      activetabkey: '2',
-      changeTab: '2',
-    }, () => {
-      console.log(this.state.activetabkey)
+      changeTab: "2",
     });
-
   }
 
   render() {
+    const { data, arrPagination, action } = this.state;
 
-    const {
-      data,
-      arrPagination,
-      action,
-      activetabkey,
-    } = this.state;
+    
  
     const dateArray = [this.state.from, this.state.to];
     const arrLevelType = [
@@ -442,7 +434,6 @@ class EndUser extends Component {
       },
     ];
 
-
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -454,7 +445,11 @@ class EndUser extends Component {
               {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-              <Tabs activeKey={this.state.changeTab} onChange={(key) => this.callback(key)}>
+           
+              <Tabs
+                activeKey={this.state.changeTab}
+                onChange={(key) => this.callback(key)}
+              >
                 <TabPane className="tab1" tab="Thông tin" key="1" changeTab="1">
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
@@ -578,7 +573,9 @@ class EndUser extends Component {
                       label="Tên đăng nhập:"
                       value={this.state.UserName}
                       placeholder={"Tên đăng nhập"}
-                      onChange={(e) => this.onChange("UserName", e.target.value)}
+                      onChange={(e) =>
+                        this.onChange("UserName", e.target.value)
+                      }
                     />
                   </div>
 
@@ -590,8 +587,9 @@ class EndUser extends Component {
                       type={"password"}
                       placeholder={"Mật khẩu"}
                       readOnly={action == "new" ? false : true}
-                      onChange={(e) => this.onChange("Password", e.target.value)}
-                    // rows="5"
+                      onChange={(e) =>
+                        this.onChange("Password", e.target.value)
+                      }
                     />
                   </div>
                   <div style={{ width: "100%" }} className="mt-3">
@@ -601,24 +599,34 @@ class EndUser extends Component {
                       value={this.state.Phone}
                       placeholder={"Số điện thoại"}
                       onChange={(e) => this.onChange("Phone", e.target.value)}
-                    // rows="5"
+                    />
+                  </div>
+
+                  <div style={{ width: "100%" }} className="mt-3">
+                    <TextFieldGroup
+                      field="Email"
+                      type="email"
+                      label="Email: "
+                      value={this.state.Email}
+                      placeholder={"Email"}
+                      onChange={(e) => this.onChange("Email", e.target.value)}
                     />
                   </div>
                 </TabPane>
               </Tabs>
             </ModalBody>
             <ModalFooter>
-              {this.state.changeTab === "1" ?
+              {this.state.changeTab === "1" ? (
                 <div>
                   <CButton
                     color="primary"
                     onClick={() => {
-                      this.nextButton()
+                      this.nextButton();
                     }}
                     disabled={this.state.isLoading}
                   >
                     Tiếp
-                  </CButton> {" "}
+                  </CButton>{" "}
                   <CButton
                     color="secondary"
                     onClick={(e) =>
@@ -626,8 +634,9 @@ class EndUser extends Component {
                     }
                   >
                     Đóng
-                  </CButton></div>
-                :
+                  </CButton>
+                </div>
+              ) : (
                 <div>
                   <CButton
                     color="primary"
@@ -647,7 +656,7 @@ class EndUser extends Component {
                     Đóng
                   </CButton>
                 </div>
-              }
+              )}
             </ModalFooter>
           </Modal>
 
@@ -663,7 +672,7 @@ class EndUser extends Component {
                   value={this.state.Name}
                   // error={errors.title}
                   onChange={(e) => this.setState({ Name: e.target.value })}
-                // rows="5"
+                  // rows="5"
                 />
               </div>
               <div style={{ width: "100%" }} className="mt-3">
@@ -673,7 +682,7 @@ class EndUser extends Component {
                   value={this.state.Brand}
                   // error={errors.title}
                   onChange={(e) => this.setState({ Brand: e.target.value })}
-                // rows="5"
+                  // rows="5"
                 />
               </div>
 
@@ -852,87 +861,87 @@ class EndUser extends Component {
                       >
                         Không tìm thấy dữ liệu
                       </td>
-                      {data != 'undefined' && data !== 'null' && data.length > 0
+                      {data != "undefined" && data !== "null" && data.length > 0
                         ? data.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.Brand}</td>
-                              <td className="text-center">
-                                {item.TypeId === "0" ? "Sản phẩm" : "Dịch vụ"}
-                              </td>
-                              <td className="text-center">{item.UserName}</td>
-                              <td className="text-center">
-                                {new Date(
-                                  item.Create_Date
-                                ).toLocaleDateString()}
-                              </td>
-                              <td className="text-center">
-                                <Tag
-                                  className="ant-tag"
-                                  color={
-                                    item.Status === "Actived"
-                                      ? "#87d068"
-                                      : "#f50"
-                                  }
-                                >
-                                  {item.Status === "Actived"
-                                    ? "Hoạt động"
-                                    : "Không hoạt động"}
-                                </Tag>
-                              </td>
-                              <td className="text-center">
-                                <div class="flex">
-                                  <Link
-                                    onClick={() => this.GetDetailProvider()}
-                                    to={"/detail-provider/" + item._id}
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{item.Name}</td>
+                                <td className="text-center">{item.Brand}</td>
+                                <td className="text-center">
+                                  {item.TypeId === "0" ? "Sản phẩm" : "Dịch vụ"}
+                                </td>
+                                <td className="text-center">{item.UserName}</td>
+                                <td className="text-center">
+                                  {new Date(
+                                    item.Create_Date
+                                  ).toLocaleDateString()}
+                                </td>
+                                <td className="text-center">
+                                  <Tag
+                                    className="ant-tag"
+                                    color={
+                                      item.Status === "Actived"
+                                        ? "#87d068"
+                                        : "#f50"
+                                    }
                                   >
+                                    {item.Status === "Actived"
+                                      ? "Hoạt động"
+                                      : "Không hoạt động"}
+                                  </Tag>
+                                </td>
+                                <td className="text-center">
+                                  <div class="flex">
+                                    <Link
+                                      onClick={() => this.GetDetailProvider()}
+                                      to={"/detail-provider/" + item._id}
+                                    >
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="sm"
+                                        className="flex-a-center "
+                                      >
+                                        <BsSearch className="mr-1" />
+                                        Chi tiết
+                                      </CButton>
+                                    </Link>
                                     <CButton
                                       shape="rounded-pill"
-                                      variant="outline"
+                                      variant="ghost"
                                       color="info"
                                       style={styles.mgl5}
-                                      size="sm"
-                                      className="flex-a-center "
+                                      size="md"
+                                      onClick={(e) => this.openUpdate(item)}
                                     >
-                                      <BsSearch className="mr-1" />
-                                      Chi tiết
+                                      <FiEdit3
+                                        style={styles.icon}
+                                        name="cilPencil"
+                                      />
+                                    </CButton>{" "}
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="ghost"
+                                      color="danger"
+                                      style={styles.mgl5}
+                                      onClick={(e) => {
+                                        this.openDelete(item);
+                                      }}
+                                    >
+                                      <BsTrash
+                                        style={styles.icon}
+                                        className="icon"
+                                        name="cilTrash"
+                                      />
                                     </CButton>
-                                  </Link>
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openUpdate(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="danger"
-                                    style={styles.mgl5}
-                                    onClick={(e) => {
-                                      this.openDelete(item);
-                                    }}
-                                  >
-                                    <BsTrash
-                                      style={styles.icon}
-                                      className="icon"
-                                      name="cilTrash"
-                                    />
-                                  </CButton>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
                         : ""}
                     </tbody>
                   </table>
@@ -955,12 +964,6 @@ class EndUser extends Component {
 
           <Modal
             isOpen={this.state.modalDelete}
-            // toggle={(e) =>
-            //   this.setState({
-            //     modalDelete: !this.state.modalDelete,
-            //     delete: null,
-            //   })
-            // }
             className={this.props.className}
           >
             <ModalHeader
