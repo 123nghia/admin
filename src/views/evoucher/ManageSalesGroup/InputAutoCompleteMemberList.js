@@ -78,7 +78,7 @@ export default function InputAutoCompleteMemberList({
       filterSelectedOptions
       multiple
       options={options?.map((option) => option?.username)}
-      defaultValue={["6245243be2b52317153c3923", "62456b216c2f6d73b70fe55a"]}
+      // defaultValue={["6245243be2b52317153c3923", "62456b216c2f6d73b70fe55a"]}
       renderInput={(params) => (
         <TextField
           {...params}
