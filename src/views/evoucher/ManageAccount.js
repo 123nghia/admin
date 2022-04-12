@@ -124,6 +124,7 @@ class EndUser extends Component {
   }
 
   handlePagination(dataApi) {
+  
     var i,
       j,
       temparray,

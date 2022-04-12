@@ -415,7 +415,7 @@ class EndUser extends Component {
       action,
       activetabkey,
     } = this.state;
-    console.log(activetabkey)
+ 
     const dateArray = [this.state.from, this.state.to];
     const arrLevelType = [
       {
@@ -454,7 +454,7 @@ class EndUser extends Component {
               {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-              <Tabs defaultActiveKey={this.state.activetabkey} onChange={(key) => this.callback(key)}>
+              <Tabs activeKey={this.state.changeTab} onChange={(key) => this.callback(key)}>
                 <TabPane className="tab1" tab="Thông tin" key="1" changeTab="1">
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup

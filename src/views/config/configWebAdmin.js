@@ -299,7 +299,9 @@ class Users extends Component {
               if (banner) {
                 this.setState({
                   image_banner1: this.state.banner.banner1,
-                  bannerSlide: this.state.banner.bannerSlide
+                  bannerSlide: this.state.banner.bannerSlide,
+                  bannerMainSlide: this.state.banner.bannerMainSlide
+
                 });
               };
               if (homepage) {
@@ -811,8 +813,9 @@ class Users extends Component {
       contentSlide: "",
     });
   }
-  openFormAddBanner() {
+  openFormAddBanner(value) {
     this.setState({
+      positionBannerActive: value,
       actionBanner: "new",
       modalBanner: true,
       image_banner2: "",
@@ -872,7 +875,14 @@ class Users extends Component {
       href: hrefBanner
     };
     let coppy = { ...dataConfigWeb };
-    coppy.value.banner.bannerSlide.push(ob);
+    console.log(this.state.positionBannerActive);
+    if(this.state.positionBannerActive === "1"){
+     
+
+      coppy.value.banner.bannerMainSlide.push(ob);
+    }else{
+      coppy.value.banner.bannerSlide.push(ob);
+    };
     this.setState(
       {
         dataConfigWeb: coppy,
@@ -894,11 +904,11 @@ class Users extends Component {
     );
   }
 
-  openFormEditBanner(item, i) {
+  openFormEditBanner(value,item, i) {
 
     this.setState({
       actionBanner: "edit",
-
+      positionBannerActive: value,
       modalBanner: true,
       image_banner2: item.image,
       contentBanner: item.content,
@@ -942,12 +952,18 @@ class Users extends Component {
       }
     );
   }
-  async deleteBanner(i) {
+  async deleteBanner(value,i) {
     const { dataConfigWeb } = this.state;
     let coppyData = {
       ...dataConfigWeb,
     };
-    coppyData.value.banner.bannerSlide.splice(i, 1);
+    if(value === "1"){
+    coppyData.value.banner.bannerMainSlide.splice(i, 1);
+      
+    }else{
+      coppyData.value.banner.bannerSlide.splice(i, 1);
+
+    }
     this.setState(
       {
         dataConfigWeb: coppyData,
@@ -1006,7 +1022,12 @@ class Users extends Component {
       href: hrefBanner
     };
     let coppy = { ...dataConfigWeb };
-    coppy.value.banner.bannerSlide[indexBannerEditor] = ob;
+    if(this.state.positionBannerActive === "1"){
+      coppy.value.banner.bannerMainSlide[indexBannerEditor] = ob;
+    }else{
+      coppy.value.banner.bannerSlide[indexBannerEditor] = ob;
+
+    }
 
     await this.setState(
       {
@@ -1217,27 +1238,91 @@ class Users extends Component {
                   </CButton>
                 </div>
                 <h1>Banner 1 </h1>
-                <TextFieldGroup
-                  field="image"
-                  label="Hình ảnh (1519px * 570px)"
-                  type={"file"}
-                  onChange={(e) => {
-                    this.onChangeImage(e, "image_banner1", "image_banner1_link", "image_banner1_show");
-                  }}
-                  onClick={(e) => {
-                    e.target.value = null;
-                    this.setState({ image_banner1_show: "" });
-                  }}
-                />
-                <div class="text-center">
-                  <img
-                    alt=""
+                <p>Hình ảnh (1519px * 570px)</p>
+                <div class="flex-end mt-3">
+                  <CButton
+                    color="info"
+                    style={{ marginBottom: "10px" }}
+                    size="md"
+                    className="btn-main"
+                    onClick={() => this.openFormAddBanner("1")}
+                  >
+                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                  </CButton>
 
-                    style={{ width: "400px" }}
-                    height="150"
-                    src={this.state.image_banner1}
-                  />
                 </div>
+                <table
+                  ble
+                  className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+                >
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      {/* <th className="text-center">Tên</th> */}
+                      <th className="text-center">Hình ảnh</th>
+                      <th className="text-center">Đường dẫn</th>
+                      <th className="text-center"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.bannerMainSlide
+                      ? this.state.bannerMainSlide.map((item, i) => {
+                        return (
+                          <tr key={i}>
+                            <td className="text-center">{i + 1}</td>
+                            <td className="text-center">
+                              <img
+                                
+                                style={{maxWidth:'300px'}}
+                             
+                                src={item.image}
+                                alt=""
+                              />
+                            </td>
+
+                            <td className="text-center">{item.href}</td>
+                            <td className="text-center">
+                              <div className="flex">
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="info"
+                                  style={styles.mgl5}
+                                  size="md"
+                                  onClick={() => this.openFormEditBanner("1",item, i)}
+                                >
+                                  <FiEdit3
+                                    style={styles.icon}
+                                    className="icon"
+
+                                    name="cilPencil"
+                                  />
+                                </CButton>{" "}
+                                <CButton
+                                  shape="rounded-pill"
+                                  variant="ghost"
+                                  color="danger"
+                                  style={styles.mgl5}
+                                  onClick={() => this.deleteBanner("1",i)}
+                                >
+                                  <BsTrash
+                                    style={styles.icon}
+                                    className="icon"
+
+                                    name="cilTrash"
+                                  />
+                                </CButton>
+                              </div>
+                            </td>
+
+                          </tr>
+                        );
+                      })
+                      : null}
+                  </tbody>
+                </table>
+               
                 <div class="mt-3">
                   <hr />
                 </div>
@@ -1249,7 +1334,7 @@ class Users extends Component {
                     style={{ marginBottom: "10px" }}
                     size="md"
                     className="btn-main"
-                    onClick={() => this.openFormAddBanner()}
+                    onClick={() => this.openFormAddBanner("2")}
                   >
                     <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                     <p style={{ margin: "auto 0" }}>Thêm mới</p>
@@ -1278,8 +1363,8 @@ class Users extends Component {
                             <td className="text-center">{i + 1}</td>
                             <td className="text-center">
                               <img
-                                width="300"
-                                height="77"
+                               style={{maxWidth:'300px'}}
+                               
                                 src={item.image}
                                 alt=""
                               />
@@ -1294,7 +1379,7 @@ class Users extends Component {
                                   color="info"
                                   style={styles.mgl5}
                                   size="md"
-                                  onClick={() => this.openFormEditBanner(item, i)}
+                                  onClick={() => this.openFormEditBanner("2",item, i)}
                                 >
                                   <FiEdit3
                                     style={styles.icon}
@@ -1308,7 +1393,7 @@ class Users extends Component {
                                   variant="ghost"
                                   color="danger"
                                   style={styles.mgl5}
-                                  onClick={() => this.deleteBanner(i)}
+                                  onClick={() => this.deleteBanner("2",i)}
                                 >
                                   <BsTrash
                                     style={styles.icon}

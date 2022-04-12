@@ -408,6 +408,7 @@ class ListUserEvoucher extends Component {
                 }
                 onSearch={this.onSearchSelect}
                 filterOption={(input, option) =>
+                  
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >=
                   0
                 }
@@ -446,7 +447,7 @@ class ListUserEvoucher extends Component {
                     className="text-center"
                     style={{ fontWeight: "bold", textTransform: "capitalize" }}
                   >
-                    {item.fullName.toLowerCase()}
+                    {item.fullName?.toLowerCase()}
                   </td>
                   <td className="text-center">{item.phoneNumber}</td>
                   <td className="text-center"> TP. Hồ Chí Minh</td>

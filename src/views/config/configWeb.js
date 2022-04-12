@@ -75,8 +75,6 @@ import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
 import { AiFillWechat } from "@react-icons/all-files/ai/AiFillWechat";
 import { IoIosColorPalette } from "@react-icons/all-files/io/IoIosColorPalette";
 
-
-
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 
@@ -1148,6 +1146,17 @@ class Users extends Component {
                     this.setState({ textAi: e.target.value });
                   }}
                 />
+                 {/* <label className="control-label">
+                  Tiêu đề khuyến mãi
+                </label>
+                <CTextarea
+                  name="titleSales"
+                  rows="8"
+                  value={this.state?.titleSales}
+                  onChange={(e) => {
+                    this.setState({ titleSales: e.target.value });
+                  }}
+                /> */}
               </div>
               <div id="tabcontent2" className="tabcontent">
               <div class="flex-end mt-3">
