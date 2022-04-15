@@ -185,6 +185,7 @@ class DetailCampaign extends Component {
   async getDetailCampaign(id) {
     await campaignApi.getDetailCampaign(id).then((res) => {
       let val = res.data?.data[0];
+      console.log(res);
       this.setState({
         detailCampaign: val,
       });

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Tabs } from "antd";
 import InfoProvider from "./TabContent/InfoProvider";
 import TableCampaignJoined from "./TabContent/ListCampaignJoined/TableCampaignJoined";
+import TabContentOverViewEvoucher from "./TabContent/Evoucher_Provider/TabContentOverViewEvoucher";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -119,7 +120,8 @@ class Users extends Component {
       statusModalUpdate: false,
       hidden: false,
       detailInfoProvider: null,
-      tableListCampaignJoined: null,
+      tableListCampaignJoined: [],
+      listOverviewEvoucher: null,
     };
   }
   pagination(dataApi) {
@@ -171,6 +173,52 @@ class Users extends Component {
     }
   }
 
+  async getOverviewEvoucherProvider(id) {
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.DETAIL_PROVIDER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .post(url, {
+        company_id: id,
+      })
+      .then((res) => {
+        let valEvoucher = res.data.data.voucherInformation;
+        console.log("valEvoucher", valEvoucher);
+        this.pagination(valEvoucher);
+
+        this.setState({ listOverviewEvoucher: valEvoucher }, () =>
+          console.log("list", this.state.listOverviewEvoucher)
+        );
+
+        let active = 0;
+        this.setState({ isLoading: false, totalActive: active });
+      });
+  }
+
+  async getInfoTableCampaign(id) {
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.DETAIL_PROVIDER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .post(url, {
+        company_id: id,
+      })
+      .then((res) => {
+        let valCampaign = res.data.data.listCampaign;
+        console.log("valCampaign", valCampaign);
+        this.pagination(valCampaign);
+
+        this.setState({ tableListCampaignJoined: valCampaign }, () =>
+          console.log("table", this.state.tableListCampaignJoined)
+        );
+
+        let active = 0;
+        this.setState({ isLoading: false, totalActive: active });
+      });
+  }
+
   async getInfoProvider(id) {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.DETAIL_PROVIDER;
@@ -182,33 +230,20 @@ class Users extends Component {
       })
       .then((res) => {
         let val = res.data.data.dataDetail;
-        console.log("val", val);
+        // console.log("val", val);
         this.pagination(val);
 
-        this.setState({ detailInfoProvider: val }, () =>
-          console.log("khbubh", this.state.detailInfoProvider)
-        );
+        this.setState({ detailInfoProvider: val });
 
         let active = 0;
         this.setState({ isLoading: false, totalActive: active });
       });
-    // .then((res) => {
-    //   let valCampaign = res.data.data.listCampaign[0];
-    //   console.log("valCampaign", valCampaign);
-    //   this.pagination(valCampaign);
-
-    //   this.setState({ tableListCampaignJoined: valCampaign }, () =>
-    //     console.log("table", this.state.tableListCampaignJoined[0])
-    //   );
-
-    //   let active = 0;
-    //   this.setState({ isLoading: false, totalActive: active });
-    // });
   }
 
   async componentDidMount() {
-    // this.getData();
     this.getInfoProvider(this.props.match.params.id);
+    this.getInfoTableCampaign(this.props.match.params.id);
+    this.getOverviewEvoucherProvider(this.props.match.params.id);
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -218,50 +253,6 @@ class Users extends Component {
       }
     }
   }
-
-  // getData = async () => {
-  //   const newComany_id = JSON.parse(this.state.company_id).company_id;
-  //   let idOutput = "-1";
-  //   if (newComany_id) {
-  //     idOutput = newComany_id;
-  //   }
-  //   this.setState({ isLoading: true });
-  //   const res = await axios({
-  //     baseURL: Constants.BASE_URL,
-  //     url: Constants.CONFIG_THEME_GET + "/" + idOutput,
-  //     method: "GET",
-  //     headers: this.state.token,
-  //   });
-  //   let val = res.data.data;
-
-  //   this.setState({
-  //     dataApi: val,
-  //     data: val,
-  //     currentPassword: val.Password,
-  //     isLoading: false,
-  //     current_slug:
-  //       val.Company_Id == null || val.Company_Id == undefined
-  //         ? null
-  //         : val.Company_Id.Slug,
-  //     companyID:
-  //       val.Company_Id == null || val.Company_Id == undefined
-  //         ? null
-  //         : val.Company_Id._id,
-
-  //     mainColor: val.mainColor,
-  //     sub_mainColor: val.sub_mainColor,
-  //     Phone: val.Phone,
-  //     Address: val.Address,
-  //     UserName: val.UserName,
-  //     Message_Code: val.Message_Code,
-  //     sub2_mainColor: val.sub2_mainColor,
-  //     button_color: val.button_color,
-  //     sucess_color: val.sucess_color,
-  //     error_color: val.error_color,
-  //     text_mainColor: val.text_mainColor,
-  //     isDisable: true,
-  //   });
-  // };
 
   getDetailProvider() {}
   callback(key) {
@@ -365,7 +356,7 @@ class Users extends Component {
                 ) : null}
               </div>
               <div id="tabcontent2" className="tabcontent">
-                {this.state.tableListCampaignJoined ? (
+                {this.state.tableListCampaignJoined !== undefined ? (
                   <TableCampaignJoined
                     tableListCampaignJoined={this.state.tableListCampaignJoined}
                   />
@@ -384,92 +375,11 @@ class Users extends Component {
                 </div>
               </div>
               <div id="tabcontent3" className="tabcontent ">
-                <div className="tabContentItem" style={styles.tabContentItem}>
-                  Số lượng voucher
-                  <a
-                    href=""
-                    className="btn-link"
-                    style={styles.btnLink}
-                    onClick={(e) =>
-                      this.setState({ modalVoucher: !this.state.modalVoucher })
-                    }
-                  >
-                    40
-                  </a>
-                  <span
-                    className="detail"
-                    style={styles.detail}
-                    onClick={(e) =>
-                      this.setState({ modalVoucher: !this.state.modalVoucher })
-                    }
-                  >
-                    Xem chi tiết
-                  </span>
-                </div>
-                <div className="tabContentItem" style={styles.tabContentItem}>
-                  Số lượng voucher phát
-                  <a
-                    href=""
-                    className="btn-link"
-                    style={styles.btnLink}
-                    onClick={(e) =>
-                      this.setState({
-                        modalVoucherSent: !this.state.modalVoucherSent,
-                      })
-                    }
-                  >
-                    40
-                  </a>
-                  <span
-                    className="detail"
-                    style={styles.detail}
-                    onClick={(e) =>
-                      this.setState({
-                        modalVoucherSent: !this.state.modalVoucherSent,
-                      })
-                    }
-                  >
-                    Xem chi tiết
-                  </span>
-                </div>
-                <div className="tabContentItem" style={styles.tabContentItem}>
-                  Tỉ lệ hoàn thành
-                  <a href="#" className="btn-link" style={styles.btnLink}>
-                    30
-                  </a>
-                </div>
-                <div className="tabContentItem" style={styles.tabContentItem}>
-                  Số lượng khách check in
-                  <a
-                    href=""
-                    className="btn-link"
-                    style={styles.btnLink}
-                    onClick={(e) =>
-                      this.setState({
-                        modalCusCheckIn: !this.state.modalCusCheckIn,
-                      })
-                    }
-                  >
-                    40
-                  </a>
-                  <span
-                    className="detail"
-                    style={styles.detail}
-                    onClick={(e) =>
-                      this.setState({
-                        modalCusCheckIn: !this.state.modalCusCheckIn,
-                      })
-                    }
-                  >
-                    Xem chi tiết
-                  </span>
-                </div>
-                <div className="tabContentItem" style={styles.tabContentItem}>
-                  Tỉ lệ khách check in
-                  <a href="#" className="btn-link" style={styles.btnLink}>
-                    30
-                  </a>
-                </div>
+                {this.state.listOverviewEvoucher ? (
+                  <TabContentOverViewEvoucher
+                    listOverviewEvoucher={this.state.listOverviewEvoucher}
+                  />
+                ) : null}
               </div>
             </div>
           </div>

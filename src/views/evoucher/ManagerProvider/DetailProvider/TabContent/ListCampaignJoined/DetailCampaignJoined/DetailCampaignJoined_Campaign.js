@@ -1,0 +1,1 @@
+function DetailCampaignJoined_Campaign() {}
