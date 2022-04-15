@@ -180,30 +180,30 @@ class Users extends Component {
       .post(url, {
         company_id: id,
       })
-      .then((res) => {
-        let val = res.data.data.dataDetail;
-        console.log("val", val);
-        this.pagination(val);
+      // .then((res) => {
+      //   let val = res.data.data.dataDetail;
+      //   console.log("val", val);
+      //   this.pagination(val);
 
-        this.setState({ detailInfoProvider: val }, () =>
-          console.log("khbubh", this.state.detailInfoProvider)
+      //   this.setState({ detailInfoProvider: val }, () =>
+      //     console.log("khbubh", this.state.detailInfoProvider)
+      //   );
+
+      //   let active = 0;
+      //   this.setState({ isLoading: false, totalActive: active });
+      // });
+      .then((res) => {
+        let valCampaign = res.data.data.listCampaign[0];
+        console.log("valCampaign", valCampaign);
+        this.pagination(valCampaign);
+
+        this.setState({ tableListCampaignJoined: valCampaign }, () =>
+          console.log("table", this.state.tableListCampaignJoined[0])
         );
 
         let active = 0;
         this.setState({ isLoading: false, totalActive: active });
       });
-    // .then((res) => {
-    //   let valCampaign = res.data.data.listCampaign[0];
-    //   console.log("valCampaign", valCampaign);
-    //   this.pagination(valCampaign);
-
-    //   this.setState({ tableListCampaignJoined: valCampaign }, () =>
-    //     console.log("table", this.state.tableListCampaignJoined[0])
-    //   );
-
-    //   let active = 0;
-    //   this.setState({ isLoading: false, totalActive: active });
-    // });
   }
 
   async componentDidMount() {

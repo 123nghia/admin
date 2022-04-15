@@ -4,7 +4,7 @@ import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { Card, Col, Row } from "antd";
 
 function TableCampaignJoined({ tableListCampaignJoined }) {
-  // console.log(tableListCampaignJoined);
+  console.log(tableListCampaignJoined);
   const titles = [
     "STT.",
     "Tên chiến dịch",
@@ -27,34 +27,34 @@ function TableCampaignJoined({ tableListCampaignJoined }) {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td className="text-center"></td>
-          <td className="text-center">
-            {tableListCampaignJoined && tableListCampaignJoined.name}
-          </td>
-          <td className="text-center"></td>
-          <td className="text-center"></td>
-          <td className="text-center" style={{ minWidth: "230px" }}>
-            <div className="flex">
-              <CButton
-                shape="rounded-pill"
-                variant="outline"
-                color="info"
-                style={{ marginLeft: "5px" }}
-                size="md"
-                className="flex-a-center"
-                onClick={(e) =>
-                  this.setState({
-                    modalDetailProvider: !this.state.modalDetailProvider,
-                  })
-                }
-              >
-                <BsSearch className="mr-1" />
-                Chi tiết
-              </CButton>
-            </div>
-          </td>
-        </tr>
+        {tableListCampaignJoined.map((item, i) => (
+          <tr key={i}>
+            <td className="text-center">{i + 1}</td>
+            <td className="text-center">{item.name}</td>
+            <td className="text-center">{item.name}</td>
+            <td className="text-center"></td>
+            <td className="text-center" style={{ minWidth: "230px" }}>
+              <div className="flex">
+                <CButton
+                  shape="rounded-pill"
+                  variant="outline"
+                  color="info"
+                  style={{ marginLeft: "5px" }}
+                  size="md"
+                  className="flex-a-center"
+                  onClick={(e) =>
+                    this.setState({
+                      modalDetailProvider: !this.state.modalDetailProvider,
+                    })
+                  }
+                >
+                  <BsSearch className="mr-1" />
+                  Chi tiết
+                </CButton>
+              </div>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>;
   };
