@@ -263,7 +263,11 @@ class EndUser extends Component {
         this.setState({ dataApi: val });
 
         let active = 0;
-
+        val.map((val) => {
+          if (val.Status == "Actived") {
+            active = active + 1;
+          }
+        });
         this.setState({ isLoading: false, totalActive: active });
       });
   }
@@ -805,7 +809,6 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
-
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Số điện thoại</p>
@@ -957,7 +960,6 @@ class EndUser extends Component {
                       </div>
                     </CCol>
                   </CRow>
-
                   <div className="flex-center-space mt-1">
                     <div class=" flex">
                       <CButton
@@ -1083,6 +1085,7 @@ class EndUser extends Component {
                       </td>
                       {data !== undefined
                         ? data.map((item, i) => {
+                            console.log(item);
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
@@ -1238,7 +1241,6 @@ class EndUser extends Component {
               </Card>
             </Col>
           </Row>
-
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>
               {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
@@ -1253,7 +1255,6 @@ class EndUser extends Component {
                 onChange={(e) => this.onChange("username", e.target.value)}
                 // rows="5"
               />
-
               <TextFieldGroup
                 field="name"
                 label="Email"
@@ -1264,7 +1265,6 @@ class EndUser extends Component {
                 onChange={(e) => this.onChange("email", e.target.value)}
                 // rows="5"
               />
-
               <TextFieldGroup
                 field="phone"
                 label="Số điện thoại"

@@ -339,4 +339,5 @@ export default {
   ADD_PROVIDER: "api/plugin-add-vendor",
   UPDATE_PROVIDER: "api/plugin-update-vendor",
   DELETE_PROVIDER: "api/plugin-delete-vendor",
+  DETAIL_PROVIDER: "api/get-detail-vendor",
 };

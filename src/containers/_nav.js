@@ -467,7 +467,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý eVoucher",
+        name: "Quản lý mã khuyến mãi",
         to: "/manage-voucher",
         icon: (
           <AiFillSetting
@@ -626,7 +626,6 @@ const _navMangerUser = [
       ),
     },
   },
- 
 ];
 
 const _navSkinCare = [

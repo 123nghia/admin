@@ -131,7 +131,7 @@ class ListUserEvoucher extends Component {
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .get(url, {
+      .get(url,{
         params: {
           company_id,
         },

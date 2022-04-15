@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import { Tabs } from "antd";
-
+import InfoProvider from "./TabContent/InfoProvider";
+import TableCampaignJoined from "./TabContent/ListCampaignJoined/TableCampaignJoined";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-
+import Constants from "../../../../contants/contants";
 import { Tag, Divider } from "antd";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import Pagination from "@material-ui/lab/Pagination";
+import { toast } from "react-toastify";
 import {
   Card,
   CardBody,
@@ -24,12 +23,13 @@ import {
   ModalBody,
   ModalFooter,
   Modal,
+  TabContent,
 } from "reactstrap";
 import Swal from "sweetalert2";
 import update from "react-addons-update";
 import PropTypes from "prop-types";
-import TextFieldGroup from "../Common/TextFieldGroup";
-import API_CONNECT from "../../functions/callAPI";
+import TextFieldGroup from "../../../Common/TextFieldGroup";
+import API_CONNECT from "../../../../functions/callAPI";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 
 import Tab from "@mui/material/Tab";
@@ -51,17 +51,9 @@ import Checkbox from "@mui/material/Checkbox";
 import CIcon from "@coreui/icons-react";
 import "moment-timezone";
 import "react-datepicker/dist/react-datepicker.css";
-import Constants from "../../contants/contants";
 import axios from "axios";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import logoMainnet from "../../assets/img/logo_head.png";
-import CircularProgress from "@mui/material/CircularProgress";
-import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
-import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 
@@ -79,76 +71,55 @@ class Users extends Component {
         {
           _id: "t1",
           name: "Thông tin NCC",
-          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />,
+          icon: (
+            <InfoIcon
+              style={{ width: "24px ", height: "24px", color: "#389bff" }}
+            />
+          ),
         },
         {
           _id: "t2",
           name: "Danh sách chiến dịch tham gia",
-          icon: <ListAltIcon style={{ width: "24px ", height: "24px " }} />,
+          icon: (
+            <ListAltIcon
+              style={{ width: "24px ", height: "24px ", color: "#389bff" }}
+            />
+          ),
         },
         {
           _id: "t3",
           name: "E-voucher",
           icon: (
-            <CardGiftcardIcon style={{ width: "24px ", height: "24px " }} />
+            <CardGiftcardIcon
+              style={{ width: "24px ", height: "24px ", color: "#389bff" }}
+            />
           ),
         },
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
-        : "-1",
-      colorWebCurrent: localStorage.getItem("colorpicker"),
+        : null,
       action: "new",
-      idUpdate: "",
-      checkFb: false,
-      checkGg: true,
-      // data: [],
-      updated: "",
       dataApi: [],
       delete: null,
       hidden: true,
       token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       role: localStorage.getItem("role"),
       type: localStorage.getItem("type"),
-
-      current_slug: "",
+      arrPagination: [],
       companyID: "",
       arrTotalPackage: [],
-      isChange: true,
-      isChangeSlug: true,
-      currentPassword: "",
       isLoading: false,
       isDisable: true,
       Email: "",
-      sub2_mainColor: "",
-      button_color: "",
-      sucess_color: "",
-      error_color: "",
-      text_mainColor: "",
-      updateLevel: "1",
-      arrPagination: [],
-
-      Message_Code: "",
-      sub_mainColor: "",
       modal: false,
       modalVoucherSent: false,
       modalVoucher: false,
       modalDetailProvider: false,
-
       statusModalUpdate: false,
-
-      dataConfigWeb: null,
-      idUpdateCurrent: null,
-      loadingSaveLogo: false,
-      htmlFuncWeb: null,
-
-      openHomeItem: false,
       hidden: false,
-
-      modalSlide: false,
-      actionSlide: "new",
-      actionBanner: "new",
-      modalBanner: false,
+      detailInfoProvider: null,
+      tableListCampaignJoined: null,
     };
   }
   pagination(dataApi) {
@@ -177,15 +148,6 @@ class Users extends Component {
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
 
-  ChangeColorWeb = () => {
-    const colorInput = document.getElementById("colorpicker");
-    if (colorInput) {
-      colorInput.addEventListener("input", (e) => {
-        // document.body.style.setProperty("--main_web_admin", e.target.value);
-        localStorage.setItem("colorpicker", e.target.value);
-      });
-    }
-  };
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
@@ -208,313 +170,45 @@ class Users extends Component {
       }
     }
   }
-  onChangeImage(e, value, valueLink, valueShow) {
-    let files = e.target.files;
-    let reader = new FileReader();
-    this.setState({ [valueLink]: files[0] });
-    reader.readAsDataURL(files[0]);
-    reader.onload = (e) => {
-      this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
-    };
-  }
-  async getDataConfigWeb() {
+
+  async getInfoProvider(id) {
     var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/getAll";
-    const newComany_id = this.state.company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
+    let baseUrlCallApi = Constants.DETAIL_PROVIDER;
+
+    let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .get(url, {
-        params: {
-          key: "webinfo",
-          company_id: Output_newComany_id,
-        },
+      .post(url, {
+        company_id: id,
       })
       .then((res) => {
-        if (res.data.data.length > 0) {
-          let dataConfig = res.data.data[0];
+        let val = res.data.data.dataDetail;
+        console.log("val", val);
+        this.pagination(val);
 
-          let valueConfig = JSON.parse(dataConfig.Value);
+        this.setState({ detailInfoProvider: val }, () =>
+          console.log("khbubh", this.state.detailInfoProvider)
+        );
 
-          this.setState(
-            {
-              dataConfigWeb: valueConfig,
-              idUpdate: dataConfig._id,
-              chats: valueConfig.value.chats,
-              logos: valueConfig.value.logos,
-              seoInfo: valueConfig.value.seoInfo,
-              homepage: valueConfig.value.homepage,
-              slideShow: valueConfig.value.slideShow,
-              mxh: valueConfig.value.mxh,
-              statusConfig: valueConfig.value.statusConfig,
-              configData: valueConfig.value.statusConfig,
-            },
-            () => {
-              const { homepage, seoInfo, logos, chats, configData, mxh } =
-                this.state;
-              if (homepage) {
-                this.setState({
-                  textAi: this.state.homepage.textAi,
-                  titlePen1: this.state.homepage.title1,
-                  titlePen2: this.state.homepage.title2,
-                  sologan: this.state.homepage.sologan,
-                  introduce: this.state.homepage.introduction,
-
-                  image1: this.state.homepage.image1,
-                  image1_show: this.state.homepage.image1,
-                  image1_link: this.state.homepage.image1,
-
-                  image3_link: this.state.homepage.image3,
-                  image3: this.state.homepage.image3,
-                  image3_show: this.state.homepage.image3,
-
-                  image2_link: this.state.homepage.image2,
-                  image2: this.state.homepage.image2,
-                  image2_show: this.state.homepage.image2,
-                });
-              }
-              if (seoInfo) {
-                this.setState({
-                  titleSeo: this.state.seoInfo.title,
-                  titleSeo2: this.state.seoInfo.titleSEO,
-                  descSeo: this.state.seoInfo.description,
-                  imgLayout: this.state.seoInfo.imageShare,
-                  imgLayout_show: this.state.seoInfo.imageShare,
-                  imgLayout_link: this.state.seoInfo.imageShare,
-
-                  keywordSeo: this.state.seoInfo.key,
-                  authorSeo: this.state.seoInfo.author,
-                });
-              }
-              if (logos) {
-                this.setState({
-                  hrefLogoHeader: valueConfig.value.logos.header.href,
-                  hrefLogoFooter: valueConfig.value.logos.footer.href,
-                  image: valueConfig.value.logos.header.logo,
-                  imgLogoFooter: valueConfig.value.logos.footer.logo,
-                });
-              }
-              if (chats) {
-                this.setState({
-                  codeChat: this.state.chats.tawk,
-                  codeMess: this.state.chats.mess,
-                });
-              }
-              if (mxh) {
-                this.setState({
-                  keyAppFb: this.state.mxh.facebook.appid,
-                  PassFb: this.state.mxh.facebook.password,
-                  hrefFb: this.state.mxh.facebook.href,
-
-                  keyAppZalo: this.state.mxh.zalo.appid,
-                  PassZalo: this.state.mxh.zalo.password,
-                  hrefZalo: this.state.mxh.zalo.href,
-
-                  keyAppGg: this.state.mxh.google.appid,
-                  PassGg: this.state.mxh.google.password,
-                  hrefGg: this.state.mxh.google.href,
-                });
-              }
-            }
-          );
-        } else {
-          let templateDataConfigWeb = {
-            key: "webinfo",
-            value: {
-              logos: {
-                footer: {
-                  logo: "",
-                  href: "",
-                },
-                header: {
-                  logo: "",
-                  href: "",
-                },
-              },
-              chats: {
-                tawk: "",
-              },
-
-              slideShow: [],
-              statusConfig: [],
-
-              homepage: {},
-              seoInfo: {},
-
-              mxh: {
-                facebook: {
-                  appid: "",
-                  password: "",
-                  href: "",
-                },
-                google: {
-                  appid: "",
-                  password: "",
-                  href: "",
-                },
-                zalo: {
-                  appid: "",
-                  password: "",
-                  href: "",
-                },
-              },
-            },
-          };
-
-          this.setState(
-            {
-              dataConfigWeb: templateDataConfigWeb,
-            },
-            () => {
-              this.addDataConfig();
-            }
-          );
-        }
+        let active = 0;
+        this.setState({ isLoading: false, totalActive: active });
       });
+    // .then((res) => {
+    //   let valCampaign = res.data.data.listCampaign[0];
+    //   console.log("valCampaign", valCampaign);
+    //   this.pagination(valCampaign);
+
+    //   this.setState({ tableListCampaignJoined: valCampaign }, () =>
+    //     console.log("table", this.state.tableListCampaignJoined[0])
+    //   );
+
+    //   let active = 0;
+    //   this.setState({ isLoading: false, totalActive: active });
+    // });
   }
-  async addDataConfig() {
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/add";
-    axios
-      .post(url, {
-        dataType: "1",
-        company_id: Output_newComany_id,
-        key: "webinfo",
-        value: JSON.stringify(this.state.dataConfigWeb),
-        type: "system",
-      })
-      .then((res) => {});
-  }
-  async getFooter() {
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.GET_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = this.state.company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    axios
-      .get(url, {
-        params: {
-          company_id: Output_newComany_id,
-        },
-      })
-      .then((res) => {
-        this.setState({
-          dataFooter: res.data.data,
-        });
-      });
-  }
-  async deleteFooter(item) {
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.DELETE_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    await axios
-      .post(url, {
-        id: item._id,
-      })
-      .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Xóa thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-        this.getFooter();
-      });
-  }
-  async updateFooter() {
-    const { slugFooter, updateLink, contentFooter, updateTitle } = this.state;
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.UPDATE_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    await axios
-      .post(url, {
-        id: this.state.idFooterEditor,
-        title: updateTitle,
-        content: contentFooter,
-        slug: slugFooter,
-        link: updateLink,
-        company_id: Output_newComany_id,
-      })
-      .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Cập nhật thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-        this.setState({
-          statusModalUpdate: false,
-        });
-        this.getFooter();
-      });
-  }
-  async addFooter() {
-    const { slugFooter, updateLink, contentFooter, updateTitle } = this.state;
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.ADD_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    await axios
-      .post(url, {
-        title: updateTitle,
-        content: contentFooter,
-        slug: slugFooter,
-        link: updateLink,
-        company_id: Output_newComany_id,
-      })
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Thêm mới thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-        this.setState({
-          statusModalUpdate: false,
-        });
-        this.getFooter();
-      });
-  }
+
   async componentDidMount() {
-    await this.getFooter();
-    this.getDataConfigWeb();
-    this.getData();
+    // this.getData();
+    this.getInfoProvider(this.props.match.params.id);
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -525,63 +219,49 @@ class Users extends Component {
     }
   }
 
-  async onUpdate() {
-    const { dataConfigWeb } = this.state;
+  // getData = async () => {
+  //   const newComany_id = JSON.parse(this.state.company_id).company_id;
+  //   let idOutput = "-1";
+  //   if (newComany_id) {
+  //     idOutput = newComany_id;
+  //   }
+  //   this.setState({ isLoading: true });
+  //   const res = await axios({
+  //     baseURL: Constants.BASE_URL,
+  //     url: Constants.CONFIG_THEME_GET + "/" + idOutput,
+  //     method: "GET",
+  //     headers: this.state.token,
+  //   });
+  //   let val = res.data.data;
 
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/update";
-    await axios.post(url, {
-      value: JSON.stringify(dataConfigWeb),
-      dataType: "1",
-      type: "system",
-      company_id: newComany_id,
-      id: this.state.idUpdate,
-    });
-  }
-  getData = async () => {
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let idOutput = "-1";
-    if (newComany_id) {
-      idOutput = newComany_id;
-    }
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.CONFIG_THEME_GET + "/" + idOutput,
-      method: "GET",
-      headers: this.state.token,
-    });
-    let val = res.data.data;
+  //   this.setState({
+  //     dataApi: val,
+  //     data: val,
+  //     currentPassword: val.Password,
+  //     isLoading: false,
+  //     current_slug:
+  //       val.Company_Id == null || val.Company_Id == undefined
+  //         ? null
+  //         : val.Company_Id.Slug,
+  //     companyID:
+  //       val.Company_Id == null || val.Company_Id == undefined
+  //         ? null
+  //         : val.Company_Id._id,
 
-    this.setState({
-      dataApi: val,
-      data: val,
-      currentPassword: val.Password,
-      isLoading: false,
-      current_slug:
-        val.Company_Id == null || val.Company_Id == undefined
-          ? null
-          : val.Company_Id.Slug,
-      companyID:
-        val.Company_Id == null || val.Company_Id == undefined
-          ? null
-          : val.Company_Id._id,
-
-      mainColor: val.mainColor,
-      sub_mainColor: val.sub_mainColor,
-      Phone: val.Phone,
-      Address: val.Address,
-      UserName: val.UserName,
-      Message_Code: val.Message_Code,
-      sub2_mainColor: val.sub2_mainColor,
-      button_color: val.button_color,
-      sucess_color: val.sucess_color,
-      error_color: val.error_color,
-      text_mainColor: val.text_mainColor,
-      isDisable: true,
-    });
-  };
+  //     mainColor: val.mainColor,
+  //     sub_mainColor: val.sub_mainColor,
+  //     Phone: val.Phone,
+  //     Address: val.Address,
+  //     UserName: val.UserName,
+  //     Message_Code: val.Message_Code,
+  //     sub2_mainColor: val.sub2_mainColor,
+  //     button_color: val.button_color,
+  //     sucess_color: val.sucess_color,
+  //     error_color: val.error_color,
+  //     text_mainColor: val.text_mainColor,
+  //     isDisable: true,
+  //   });
+  // };
 
   getDetailProvider() {}
   callback(key) {
@@ -609,7 +289,7 @@ class Users extends Component {
       },
     ];
 
-    const { arrPagination, detailProvider } = this.state;
+    const { arrPagination } = this.state;
 
     const data = [
       {
@@ -678,88 +358,18 @@ class Users extends Component {
             </div>
             <div className="tabcontents">
               <div id="tabcontent1" className="tabcontent defaultOpen">
-                <div className="tabContentItem" style={styles.tabContentItem}>
-                  <p className="modal-label">
-                    Tên công ty:
-                    <span className="modal-detail">{detailProvider}</span>
-                  </p>
-                  <p className="modal-label">
-                    Tên thương hiệu: <span className="modal-detail"></span>
-                  </p>
-                  <p className="modal-label">
-                    Địa chỉ: <span className="modal-detail"></span>
-                  </p>
-                  <p className="modal-label">
-                    Email: <span className="modal-detail"></span>
-                  </p>
-                  <p className="modal-label">
-                    Số điện thoại: <span className="modal-detail"></span>
-                  </p>
-                  <p className="modal-label">
-                    Slug: <span className="modal-detail"></span>
-                  </p>
-                  <p className="modal-label">
-                    Website: <span className="modal-detail"></span>
-                  </p>
-                  <p className="modal-label">
-                    Logo: <span className="modal-detail"></span>
-                  </p>
-                </div>
+                {this.state.detailInfoProvider ? (
+                  <InfoProvider
+                    detailInfoProvider={this.state.detailInfoProvider}
+                  />
+                ) : null}
               </div>
-              <div id="tabcontent2" className="tabcontent ">
-                <table
-                  ble
-                  className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
-                >
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">STT.</th>
-                      <th className="text-center">Tên chiến dịch</th>
-                      <th className="text-center">Trạng thái</th>
-                      <th className="text-center">Số lượng voucher</th>
-                      <th className="text-center"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
-                    {data !== undefined
-                      ? data.map((item, i) => {
-                          return (
-                            <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
-                              <td className="text-center"></td>
-                              <td className="text-center"></td>
-                              <td className="text-center"></td>
-                              <td
-                                className="text-center"
-                                style={{ minWidth: "230px" }}
-                              >
-                                <div className="flex">
-                                  <CButton
-                                    shape="rounded-pill"
-                                    variant="outline"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    className="flex-a-center"
-                                    onClick={(e) =>
-                                      this.setState({
-                                        modalDetailProvider:
-                                          !this.state.modalDetailProvider,
-                                      })
-                                    }
-                                  >
-                                    <BsSearch className="mr-1" />
-                                    Chi tiết
-                                  </CButton>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })
-                      : ""}
-                  </tbody>
-                </table>
+              <div id="tabcontent2" className="tabcontent">
+                {this.state.tableListCampaignJoined ? (
+                  <TableCampaignJoined
+                    tableListCampaignJoined={this.state.tableListCampaignJoined}
+                  />
+                ) : null}
                 <div style={{ float: "right" }}>
                   <Pagination
                     count={arrPagination.length}
@@ -890,7 +500,6 @@ class Users extends Component {
                   {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
                   {data !== undefined
                     ? data.map((item, i) => {
-                        console.log(item);
                         return (
                           <tr key={i}>
                             <td className="text-center">{i + 1}</td>
@@ -937,37 +546,7 @@ class Users extends Component {
           >
             <ModalHeader>Danh sách voucher đã phát</ModalHeader>
             <ModalBody>
-              <table
-                ble
-                className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
-              >
-                <thead className="thead-light">
-                  <tr>
-                    <th className="text-center">STT.</th>
-                    <th className="text-center">Mã voucher</th>
-                    <th className="text-center">Mã chiến dịch</th>
-                    <th className="text-center">Nội dung</th>
-                    <th className="text-center">Trạng thái</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
-                  {data !== undefined
-                    ? data.map((item, i) => {
-                        console.log(item);
-                        return (
-                          <tr key={i}>
-                            <td className="text-center">{i + 1}</td>
-                            <td className="text-center">{item.VoucherCode}</td>
-                            <td className="text-center">{item.CampaignCode}</td>
-                            <td className="text-center">{item.Content}</td>
-                            <td className="text-center">{item.Status}</td>
-                          </tr>
-                        );
-                      })
-                    : ""}
-                </tbody>
-              </table>
+              <TableCampaignJoined />
               <div style={{ float: "right" }}>
                 <Pagination
                   count={arrPagination.length}
@@ -1019,7 +598,6 @@ class Users extends Component {
                   {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
                   {data !== undefined
                     ? data.map((item, i) => {
-                        console.log(item);
                         return (
                           <tr key={i}>
                             <td className="text-center">{i + 1}</td>

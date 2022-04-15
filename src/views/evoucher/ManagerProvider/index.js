@@ -27,11 +27,11 @@ import {
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { Link } from "react-router-dom";
-import API_CONNECT from "../../functions/callAPI";
+// import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
 import "moment-timezone";
-import Constants from "../../contants/contants";
-import TextFieldGroup from "../Common/TextFieldGroup";
+import Constants from "../../../contants/contants";
+import TextFieldGroup from "../../Common/TextFieldGroup";
 import axios from "axios";
 import md5 from "md5";
 import { css } from "@emotion/react";
@@ -63,12 +63,7 @@ class EndUser extends Component {
       actionPopupVoucher: "new",
       modalVoucherEditing: false,
       key: "",
-      dataVoucher: [],
-      arrPaginationVoucher: [],
-      indexPageVoucher: 0,
       totalActive: 0,
-      modalCom: false,
-      updated: "",
       dataApi: [],
       hidden: false,
       action: "new",
@@ -120,7 +115,6 @@ class EndUser extends Component {
   };
   async componentDidMount() {
     this.getData();
-    this.getDataCompany();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -130,18 +124,7 @@ class EndUser extends Component {
       }
     }
   }
-  async getDataCompany() {
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.PLUGIN_LIST_COMPANY,
-      method: "POST",
-    });
-    let val = res.data.data;
-    this.setState({
-      dataCompany: val,
-    });
-  }
+
   GetDetailProvider() {}
 
   pagination(dataApi) {
@@ -406,8 +389,6 @@ class EndUser extends Component {
   render() {
     const { data, arrPagination, action } = this.state;
 
-    
- 
     const dateArray = [this.state.from, this.state.to];
     const arrLevelType = [
       {
@@ -445,7 +426,6 @@ class EndUser extends Component {
               {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-           
               <Tabs
                 activeKey={this.state.changeTab}
                 onChange={(key) => this.callback(key)}

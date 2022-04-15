@@ -1231,6 +1231,7 @@ class Users extends Component {
                   </CButton>
 
                 </div>
+                <div className="table__overflow">
                 <table
                   ble
                   className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
@@ -1252,9 +1253,7 @@ class Users extends Component {
                             <td className="text-center">{i + 1}</td>
                             <td className="text-center">
                               <img
-                                
                                 style={{maxWidth:'300px'}}
-                             
                                 src={item.image}
                                 alt=""
                               />
@@ -1301,8 +1300,9 @@ class Users extends Component {
                       : null}
                   </tbody>
                 </table>
+                </div>
                
-                <div class="mt-3">
+                <div className="mt-3">
                   <hr />
                 </div>
               </div>
