@@ -1,4 +1,5 @@
 export default {
+  BASE_URL1: "https://api.deal24h.vn/",
   BASE_URL: "https://api.deal24h.vn/",
   // BASE_URL: "http://192.168.1.15:3018/",
 
