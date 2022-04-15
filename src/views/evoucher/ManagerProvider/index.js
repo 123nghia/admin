@@ -228,9 +228,6 @@ class EndUser extends Component {
           showConfirmButton: false,
           timer: 700,
         });
-        // this.setState({
-        //   modalEdit: false,
-        // });
 
         if (res.data.is_success == true) {
           this.getData();
