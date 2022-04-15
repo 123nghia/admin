@@ -1,6 +1,6 @@
 export default {
   BASE_URL: "https://api.deal24h.vn/",
-  // BASE_URL: "http://192.168.1.15:3018/",
+  // BASE_URL: "http://192.168.1.3:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
 
@@ -341,4 +341,5 @@ export default {
   ADD_PROVIDER: "api/plugin-add-vendor",
   UPDATE_PROVIDER: "api/plugin-update-vendor",
   DELETE_PROVIDER: "api/plugin-delete-vendor",
+  DETAIL_PROVIDER: "api/get-detail-vendor",
 };

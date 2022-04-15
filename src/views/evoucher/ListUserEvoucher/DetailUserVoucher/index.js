@@ -101,6 +101,7 @@ class DetailVoucher extends Component {
     })
       .then((res) => {
         let val = res.data.data[0];
+        console.log(val);
         this.setState({
           detailUserVoucher: val,
           isLoading: false,
@@ -233,9 +234,11 @@ class DetailVoucher extends Component {
             </div>
             <div className="tabcontents" style={{ minHeight: "50vh" }}>
               <div id="tabcontent1" className="tabcontent defaultOpen">
-                <EvoucherInfoTable
-                  detailUserVoucher={this.state?.detailUserVoucher}
-                />
+                <div className="table__overflow">
+                  <EvoucherInfoTable
+                    detailUserVoucher={this.state?.detailUserVoucher}
+                  />
+                </div>
               </div>
 
               <div id="tabcontent2" className="tabcontent">

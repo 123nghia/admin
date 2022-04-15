@@ -17,7 +17,7 @@ function EvoucherInfoTable({ detailUserVoucher }) {
   const headingList = [
     "STT.",
     "Mã voucher",
-    "Thương hiệu cung cấp",
+    "Nhà cung cấp",
     "Nội dung",
     "Trạng thái",
     "Lịch sử soi da",
