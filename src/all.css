@@ -516,9 +516,6 @@
   gap: 20px;
 }
 
-/* .card-body {
-  overflow-x: scroll;
-} */
 .table__overflow {
   overflow-x: scroll;
 }
