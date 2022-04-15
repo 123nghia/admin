@@ -292,12 +292,10 @@ class User extends Component {
     const headerList = [
       "STT.",
       "Tên nhóm",
-      "STT nhóm",
       "Quản Lý Nhóm",
       "SĐT",
       "Email",
       "Ghi chú",
-      "Tháng Báo Cáo",
       "Số Evoucher/Tháng",
       "Số Khách Checkin/Tháng",
       "Tỷ lệ Khách Checkin",
@@ -315,15 +313,14 @@ class User extends Component {
           <th colspan="5" className="text-center">
             Thông tin Doanh Số
           </th>
-          <th colspan="2" className="text-center"></th>
+          
         </tr>
         <tr className="header__table--bottom">
           {headerList.map((header, idx) => (
             <th
               className={`text-center ${
                 (header === "Tên nhóm" ||
-                  header === "Tháng Báo Cáo" ||
-                  header === "Người tạo") &&
+                  header === "Số Khách Checkin/Tháng") &&
                 "border-left"
               }`}
             >
@@ -348,7 +345,7 @@ class User extends Component {
                     <span className="text-secondary">Chưa có thông tin!!</span>
                   )}
                 </td>
-                <td className="text-center">001</td>
+                
                 <td className="text-center">
                   {item?.leadId || (
                     <span className="text-secondary">Chưa có thông tin!!</span>
@@ -369,10 +366,10 @@ class User extends Component {
                     <span className="text-secondary">Chưa có thông tin!!</span>
                   )}
                 </td>
-                <td className="text-center  border-left">{`Tháng ${new Date().getMonth()}`}</td>
-                <td className="text-center">1000</td>
-                <td className="text-center">12</td>
-                <td className="text-center">12%</td>
+                
+                <td className="text-center ">1000</td>
+                <td className="text-center border-left">12</td>
+                <td className="text-center ">12%</td>
                 <td className="text-center">
                   {/* <CButton
                     outline
