@@ -29,7 +29,7 @@ function ModalDetailProvider({ closeModal }) {
         },
       })
       .then((res) => {
-        setvalDetailCampaign(res.data.data);
+        setvalDetailCampaign(res.data.data[0]);
       });
   }, []);
 
@@ -68,52 +68,61 @@ function ModalDetailProvider({ closeModal }) {
           <Tabs activeKey={key} onChange={handleChangeTab}>
             <TabPane className="tab1" tab="Chiến dịch" key="1">
               <div className="tabContentItem" style={styles.tabContentItem}>
-                {valDetailCampaign.map((val, idx) => (
-                  <div key={idx}>
-                    <p className="modal-label">
-                      Trạng thái chiến dịch:{" "}
-                      <span className="modal-detail">
-                        {
-                          <Tag
-                            className="ant-tag"
-                            color={val.status === "1" ? "#87d068" : "#f50"}
-                          >
-                            {val.status === "1"
-                              ? "Hoạt động"
-                              : "Không hoạt động"}
-                          </Tag>
+                <p className="modal-label">
+                  Trạng thái chiến dịch:{" "}
+                  <span className="modal-detail">
+                    {
+                      <Tag
+                        className="ant-tag"
+                        color={
+                          valDetailCampaign.status === "1" ? "#87d068" : "#f50"
                         }
-                      </span>
-                    </p>
-                    <p className="modal-label">
-                      Tên chiến dịch:{" "}
-                      <span className="modal-detail">{val.name}</span>
-                    </p>
-                    <p className="modal-label">
-                      Nội dung chiến dịch:{" "}
-                      <span className="modal-detail">{val.description}</span>
-                    </p>
-                    <p className="modal-label">
-                      Ngày bắt đầu sale:{" "}
-                      <span className="modal-detail">
-                        {new Date(val.from).toLocaleDateString()}
-                      </span>
-                    </p>
-                    <p className="modal-label">
-                      Ngày kết thúc sale:{" "}
-                      <span className="modal-detail">
-                        {new Date(val.to).toLocaleDateString()}
-                      </span>
-                    </p>
-                    <p className="modal-label">
-                      Ngày kết thúc chiến dịch:{" "}
-                      <span className="modal-detail">{val.saleEndDate}</span>
-                    </p>
-                    <p className="modal-label">
-                      Ghi chú: <span className="modal-detail">{val.noted}</span>
-                    </p>
-                  </div>
-                ))}
+                      >
+                        {valDetailCampaign.status === "1"
+                          ? "Hoạt động"
+                          : "Không hoạt động"}
+                      </Tag>
+                    }
+                  </span>
+                </p>
+                <p className="modal-label">
+                  Tên chiến dịch:{" "}
+                  <span className="modal-detail">
+                    {valDetailCampaign ? valDetailCampaign.name : null}
+                  </span>
+                </p>
+                <p className="modal-label">
+                  Nội dung chiến dịch:{" "}
+                  <span className="modal-detail">
+                    {valDetailCampaign ? valDetailCampaign.description : null}
+                  </span>
+                </p>
+                <p className="modal-label">
+                  Ngày bắt đầu sale:{" "}
+                  <span className="modal-detail">
+                    {new Date(valDetailCampaign.from).toLocaleDateString()}
+                  </span>
+                </p>
+                <p className="modal-label">
+                  Ngày kết thúc sale:{" "}
+                  <span className="modal-detail">
+                    {new Date(valDetailCampaign.to).toLocaleDateString()}
+                  </span>
+                </p>
+                <p className="modal-label">
+                  Ngày kết thúc chiến dịch:{" "}
+                  <span className="modal-detail">
+                    {new Date(
+                      valDetailCampaign.saleEndDate
+                    ).toLocaleDateString()}
+                  </span>
+                </p>
+                <p className="modal-label">
+                  Ghi chú:{" "}
+                  <span className="modal-detail">
+                    {valDetailCampaign ? valDetailCampaign.noted : null}
+                  </span>
+                </p>
               </div>
             </TabPane>
             <TabPane className="tab2" tab="E-voucher" key="2">

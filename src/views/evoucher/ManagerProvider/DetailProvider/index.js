@@ -505,7 +505,13 @@ class Users extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
+                  <td
+                    colSpan="9"
+                    hidden={this.state.hidden}
+                    className="text-center"
+                  >
+                    Không tìm thấy dữ liệu
+                  </td>
                   {data !== undefined
                     ? data.map((item, i) => {
                         return (

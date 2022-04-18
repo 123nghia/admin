@@ -30,7 +30,7 @@ function TableCampaignJoined({ tableListCampaignJoined }) {
 
       <table
         ble
-        className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+        className="table table-hover mb-0 d-none d-sm-table table_dash table-bordered"
       >
         <thead className="thead-light">
           <tr>
