@@ -181,6 +181,10 @@ const DetailProvider = React.lazy(() =>
   import("./views/evoucher/ManagerProvider/DetailProvider/index.js")
 );
 
+const ModalDetailProvider = React.lazy(() =>
+  import("./views/evoucher/ManagerProvider/Modal/Modal_DetailProvider.js")
+);
+
 const DetailInventory = React.lazy(() =>
   import("./views/evoucher/DetailInventory")
 );
@@ -256,6 +260,12 @@ const routes = [
     path: "/detail-provider/:id",
     name: "DetailProvider",
     component: DetailProvider,
+  },
+
+  {
+    path: "/modal-detail-provider/:id",
+    name: "ModalDetailProvider",
+    component: ModalDetailProvider,
   },
 
   {

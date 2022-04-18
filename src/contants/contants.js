@@ -1,7 +1,7 @@
 export default {
   // BASE_URL1: "https://api.deal24h.vn/",
-  // BASE_URL: "https://api.deal24h.vn/",
-  BASE_URL: "http://192.168.1.3:3018/",
+  BASE_URL: "https://api.deal24h.vn/",
+  // BASE_URL: "http://192.168.1.3:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
 
@@ -343,4 +343,5 @@ export default {
   UPDATE_PROVIDER: "api/plugin-update-vendor",
   DELETE_PROVIDER: "api/plugin-delete-vendor",
   DETAIL_PROVIDER: "api/get-detail-vendor",
+  DETAIL_GET_OVERVIEW: "api/campaign/getOverview",
 };
