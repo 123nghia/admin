@@ -29,7 +29,7 @@ function ModalDetailProvider(props) {
         },
       })
       .then((res) => {
-        setvalDetailCampaign(res.data.data);
+        setvalDetailCampaign(res.data?.data);
       });
   }, []);
 
@@ -40,7 +40,7 @@ function ModalDetailProvider(props) {
     axios
       .get(url, {
         params: {
-          id: '621c2ec17abc0b6b4349d4e5',
+          id: props.id,
         },
       })
       .then((res) => {
