@@ -9,7 +9,7 @@ import { Tabs } from "antd";
 import { Tag } from "antd";
 
 const { TabPane } = Tabs;
-function ModalDetailProvider({ closeModal }) {
+function ModalDetailProvider(props) {
   const [key, setKey] = useState("1");
   const [valDetailCampaign, setvalDetailCampaign] = useState([]);
   const [valOverviewEvoucherProvider, setvalOverviewEvoucherProvider] =
@@ -25,7 +25,7 @@ function ModalDetailProvider({ closeModal }) {
     axios
       .get(url, {
         params: {
-          id: id,
+          id: props.id,
         },
       })
       .then((res) => {
@@ -40,16 +40,17 @@ function ModalDetailProvider({ closeModal }) {
     axios
       .get(url, {
         params: {
-          id: id,
+          id: '621c2ec17abc0b6b4349d4e5',
         },
       })
       .then((res) => {
-        setvalOverviewEvoucherProvider(res.data.data[0].campaignOverview[0]);
+        console.log('res',res)
+        setvalOverviewEvoucherProvider(res.data?.data[0]?.campaignOverview[0]);
       });
   }, []);
 
   const closeModal2 = () => {
-    closeModal();
+    props.closeModal();
   };
 
   function handleChangeTab(key) {
@@ -176,7 +177,7 @@ function ModalDetailProvider({ closeModal }) {
             </div>
           ) : (
             <div>
-              <CButton color="secondary" onClick={() => closeModal2()}>
+              <CButton color="secondary" onClick={closeModal2}>
                 Đóng
               </CButton>
             </div>

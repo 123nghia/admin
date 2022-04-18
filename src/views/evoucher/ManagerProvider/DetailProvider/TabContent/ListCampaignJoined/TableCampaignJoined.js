@@ -16,16 +16,23 @@ function TableCampaignJoined({ tableListCampaignJoined }) {
   ];
 
   const [statusModal, setStatusModal] = React.useState(false);
+  const [idModal, setIdModal] = React.useState("");
 
   const GetDetailCampaignOfProvider = () => {};
 
   const closeModalDetailProvider = () => {
     setStatusModal(false);
   };
+
+  const viewDetailProvider=(id)=>{
+    GetDetailCampaignOfProvider();
+    setIdModal(id);
+    setStatusModal(true);
+  }
   return (
     <>
       {statusModal ? (
-        <ModalDetailProvider closeModal={closeModalDetailProvider} />
+        <ModalDetailProvider id={idModal} closeModal={closeModalDetailProvider} />
       ) : null}
 
       <table
@@ -59,10 +66,7 @@ function TableCampaignJoined({ tableListCampaignJoined }) {
               <td className="text-center">{item.quantity}</td>
               <td className="text-center" style={{ minWidth: "230px" }}>
                 <div className="flex">
-                  <Link
-                    onClick={GetDetailCampaignOfProvider}
-                    to={"/modal-detail-provider/" + item._id}
-                  >
+                
                     <CButton
                       shape="rounded-pill"
                       variant="outline"
@@ -70,12 +74,12 @@ function TableCampaignJoined({ tableListCampaignJoined }) {
                       style={{ marginLeft: "5px" }}
                       size="md"
                       className="flex-a-center"
-                      onClick={() => setStatusModal(true)}
+                      onClick={()=>viewDetailProvider(item._id)}
                     >
                       <BsSearch className="mr-1" />
                       Chi tiết
                     </CButton>
-                  </Link>
+               
                 </div>
               </td>
             </tr>
