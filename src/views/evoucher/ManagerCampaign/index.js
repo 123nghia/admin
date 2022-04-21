@@ -1426,7 +1426,7 @@ class EndUser extends Component {
                 <CardBody className="table__overflow">
                   <table
                     ble
-                    className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    className="mt-3 table table-hover mb-0 d-none d-sm-table"
                   >
                     <thead className="thead-light">
                       <tr>
@@ -1459,7 +1459,9 @@ class EndUser extends Component {
                         ? data.map((item, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center table-row-first">
+                                  {i + 1}
+                                </td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">
                                   {item.vendor && item.vendor?.[0]
@@ -1525,7 +1527,7 @@ class EndUser extends Component {
                                 </td> */}
 
                                 <td
-                                  className="text-center"
+                                  className="text-center table-row-last"
                                   style={{ minWidth: "230px" }}
                                 >
                                   <div className="flex">

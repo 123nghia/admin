@@ -99,6 +99,10 @@ const PluginSubSaleTable = React.lazy(() =>
 const EndUserPlugin = React.lazy(() =>
   import("./views/base/tables/User/EndUser")
 );
+
+const DetailEndUser = React.lazy(() =>
+  import("./views/base/tables/User/DetailEndUser/DetailEndUser.js")
+);
 // config skin AI
 
 const configSkinDisplay = React.lazy(() =>
@@ -183,6 +187,10 @@ const DetailProvider = React.lazy(() =>
   import("./views/evoucher/ManagerProvider/DetailProvider/index.js")
 );
 
+const ModalDetailProvider = React.lazy(() =>
+  import("./views/evoucher/ManagerProvider/Modal/Modal_DetailProvider.js")
+);
+
 const DetailInventory = React.lazy(() =>
   import("./views/evoucher/DetailInventory")
 );
@@ -264,6 +272,12 @@ const routes = [
     path: "/detail-provider/:id",
     name: "DetailProvider",
     component: DetailProvider,
+  },
+
+  {
+    path: "/detail-users/:id",
+    name: "DetailEndUser",
+    component: DetailEndUser,
   },
 
   {

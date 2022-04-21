@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import CIcon from "@coreui/icons-react";
-import { Link } from "react-router-dom";
-import { DatePicker } from "antd";
 import {
   Card,
   CardBody,
@@ -15,6 +13,7 @@ import {
   Modal,
 } from "reactstrap";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
@@ -31,13 +30,19 @@ import axios from "axios";
 import md5 from "md5";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
+import { Link } from "react-router-dom";
+import { Chip, IconButton, Tooltip } from "@mui/material";
+
+import *  as   parameter from  "./parameter";
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
 
-const dateFormat = "DD-MM-YYYY";
-class EndUser extends Component {
+class CustomeSearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,7 +69,6 @@ class EndUser extends Component {
       isLoading: false,
     };
   }
-
   async componentDidMount() {
     const { type } = this.state;
 
@@ -106,7 +110,7 @@ class EndUser extends Component {
 
   getData = async () => {
     this.setState({ isLoading: true });
-    await axios({
+    const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_END_USER,
       method: "POST",
@@ -208,8 +212,6 @@ class EndUser extends Component {
       }
     );
   }
-
-  GetDetailUser() {}
 
   onChange(key, val) {
     this.setState({ [key]: val });
@@ -323,7 +325,7 @@ class EndUser extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Danh sách tài khoản người dùng
+                    Danh sách người dùng
                   </i>
                   <CRow>
                     <CCol md={3} className="mt">
@@ -359,98 +361,6 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Ngày cập nhật</p>
-                        <div style={{ width: "200px" }}>
-                          <DatePicker
-                            style={styles.dateForm}
-                            onChange={(e, dateString) => {
-                              let copy = dateString.split("-");
-                              let newData = ``;
-                              copy.forEach((item, index) => {
-                                if (index === 0) {
-                                  newData += item;
-                                } else {
-                                  newData += `/${item}`;
-                                }
-                              });
-                              this.setState({ to: newData });
-                            }}
-                            format={dateFormat}
-                          />
-                        </div>
-                      </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Ngày tạo</p>
-                        <div style={{ width: "200px" }}>
-                          <DatePicker
-                            style={styles.dateForm}
-                            onChange={(e, dateString) => {
-                              let copy = dateString.split("-");
-                              let newData = ``;
-                              copy.forEach((item, index) => {
-                                if (index === 0) {
-                                  newData += item;
-                                } else {
-                                  newData += `/${item}`;
-                                }
-                              });
-                              this.setState({ to: newData });
-                            }}
-                            format={dateFormat}
-                          />
-                        </div>
-                      </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Ngày bắt đầu</p>
-                        <div style={{ width: "200px" }}>
-                          <DatePicker
-                            style={styles.dateForm}
-                            onChange={(e, dateString) => {
-                              let copy = dateString.split("-");
-                              let newData = ``;
-                              copy.forEach((item, index) => {
-                                if (index === 0) {
-                                  newData += item;
-                                } else {
-                                  newData += `/${item}`;
-                                }
-                              });
-                              this.setState({ to: newData });
-                            }}
-                            format={dateFormat}
-                          />
-                        </div>
-                      </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Ngày kết thúc</p>
-                        <div style={{ width: "200px" }}>
-                          <DatePicker
-                            style={styles.dateForm}
-                            onChange={(e, dateString) => {
-                              let copy = dateString.split("-");
-                              let newData = ``;
-                              copy.forEach((item, index) => {
-                                if (index === 0) {
-                                  newData += item;
-                                } else {
-                                  newData += `/${item}`;
-                                }
-                              });
-                              this.setState({ to: newData });
-                            }}
-                            format={dateFormat}
-                          />
-                        </div>
-                      </div>
-                    </CCol>
                   </CRow>
                   <div className="flex-end">
                     <CButton
@@ -470,24 +380,15 @@ class EndUser extends Component {
                 <CardBody className="table__overflow">
                   <table
                     ble
-                    className="table table-hover mb-0 d-none d-sm-table"
+                    className="table table-hover table-outline mb-0 d-none d-sm-table"
                   >
                     <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        <th className="text-center">Loại tài khoản</th>
-
-                        <th className="text-center">Tên khách hàng</th>
-
-                        <th className="text-center">Số điện thoại</th>
-                        <th className="text-center">Email</th>
-
-                        <th className="text-center">Địa chỉ</th>
-
-                        <th className="text-center">Ngày đăng ký</th>
-
-                        <th className="text-center">#</th>
-                      </tr>
+                          <tr>
+                              {   parameter.columnHeading.map((title) => (
+                                        <th className="text-center">{title}</th>
+                                  ))
+                              }
+                          </tr>
                     </thead>
                     <tbody>
                       <td
@@ -501,25 +402,8 @@ class EndUser extends Component {
                         ? data.map((item, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-center table-row-first">
-                                  {i + 1}
-                                </td>
-                                <td className="text-center">
-                                  {item.type === "0" ? (
-                                    ""
-                                  ) : item.type === "1" ? (
-                                    <BsFacebook
-                                      style={{
-                                        fontSize: "2.3rem",
-                                        color: "#1877f2",
-                                      }}
-                                    />
-                                  ) : (
-                                    <FcGoogle style={{ fontSize: "2.3rem" }} />
-                                  )}
-                                </td>
-
-                                <td className="text-center">{item.name}</td>
+                                <td className="text-center">{i + 1}</td>
+                                 <td className="text-center">{item.name}</td>
 
                                 <td className="text-center">{item.phone}</td>
                                 <td className="text-center">{item.email}</td>
@@ -537,24 +421,9 @@ class EndUser extends Component {
                                       item.create_date
                                     ).toLocaleTimeString()}
                                 </td>
-                                <td className="text-center table-row-last">
+                              
+                                <td className="text-center">
                                   <div className="flex-center">
-                                    <Link
-                                      onClick={() => this.GetDetailUser()}
-                                      to={"/detail-users/" + item._id}
-                                    >
-                                      <CButton
-                                        shape="rounded-pill"
-                                        variant="outline"
-                                        color="info"
-                                        style={styles.mgl5}
-                                        size="sm"
-                                        className="flex-a-center "
-                                      >
-                                        <BsSearch className="mr-1" />
-                                        Chi tiết
-                                      </CButton>
-                                    </Link>
                                     <CButton
                                       shape="rounded-pill"
                                       variant="ghost"
@@ -589,6 +458,16 @@ class EndUser extends Component {
                                     </CButton>
                                   </div>
                                 </td>
+
+                              <td className="text-center">
+                              <Link to={`/thong-tin-khach-hang/${item._id}`}>
+                                        <Tooltip title="Xem chi tiết">
+                                        <IconButton size="small">
+                                        <LaunchOutlinedIcon sx={{ color: "#3C93E3" }} />
+                                        </IconButton>
+                                        </Tooltip>
+                                        </Link>
+                              </td>
                               </tr>
                             );
                           })
@@ -815,4 +694,4 @@ const styles = {
   },
 };
 
-export default EndUser;
+export default CustomeSearch;

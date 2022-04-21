@@ -126,7 +126,6 @@ class Users extends Component {
   }
   pagination(dataApi) {
     console.log(dataApi);
-
     var i,
       j,
       temparray,
@@ -505,7 +504,13 @@ class Users extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
+                  <td
+                    colSpan="9"
+                    hidden={this.state.hidden}
+                    className="text-center"
+                  >
+                    Không tìm thấy dữ liệu
+                  </td>
                   {data !== undefined
                     ? data.map((item, i) => {
                         return (
@@ -541,89 +546,6 @@ class Users extends Component {
                 onClick={(e) =>
                   this.setState({
                     modalCusCheckIn: !this.state.modalCusCheckIn,
-                  })
-                }
-              >
-                Đóng
-              </Button>
-            </ModalFooter>
-          </Modal>
-          <Modal
-            isOpen={this.state.modalDetailProvider}
-            className={this.props.className}
-            size="l"
-          >
-            <ModalHeader>Chi tiết</ModalHeader>
-            <ModalBody>
-              <Tabs
-                activeKey={this.state.changeTab}
-                onChange={(key) => this.callback(key)}
-              >
-                <TabPane
-                  className="tab1"
-                  tab="Chiến dịch"
-                  key="1"
-                  changeTab="1"
-                >
-                  <div className="tabContentItem" style={styles.tabContentItem}>
-                    <p className="modal-label">
-                      Trạng thái chiến dịch:{" "}
-                      <span className="modal-detail">
-                        <Tag></Tag>
-                      </span>
-                    </p>
-                    <p className="modal-label">
-                      Tên chiến dịch: <span className="modal-detail"></span>
-                    </p>
-                    <p className="modal-label">
-                      Nội dung chiến dịch:{" "}
-                      <span className="modal-detail"></span>
-                    </p>
-                    <p className="modal-label">
-                      Ngày bắt đầu sale: <span className="modal-detail"></span>
-                    </p>
-                    <p className="modal-label">
-                      Ngày kết thúc sale: <span className="modal-detail"></span>
-                    </p>
-                    <p className="modal-label">
-                      Ngày kết thúc chiến dịch:{" "}
-                      <span className="modal-detail"></span>
-                    </p>
-                    <p className="modal-label">
-                      Ghi chú: <span className="modal-detail"></span>
-                    </p>
-                  </div>
-                </TabPane>
-                <TabPane className="tab2" tab="E-voucher" key="2" changeTab="2">
-                  <div className="tabContentItem" style={styles.tabContentItem}>
-                    <p className="modal-label">
-                      Số lượng voucher: <span className="modal-detail"></span>
-                    </p>
-                    <p className="modal-label">
-                      Số lượng voucher phát:{" "}
-                      <span className="modal-detail">hiiii</span>
-                    </p>
-                    <p className="modal-label">
-                      Tỉ lệ hoàn thành: <span className="modal-detail"></span>
-                    </p>
-                    <p className="modal-label">
-                      Số lượng khách check in:{" "}
-                      <span className="modal-detail"></span>
-                    </p>
-                    <p className="modal-label">
-                      Tỉ lệ khách check in:{" "}
-                      <span className="modal-detail"></span>
-                    </p>
-                  </div>
-                </TabPane>
-              </Tabs>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="secondary"
-                onClick={(e) =>
-                  this.setState({
-                    modalDetailProvider: !this.state.modalDetailProvider,
                   })
                 }
               >
