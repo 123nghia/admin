@@ -1,11 +1,16 @@
 export default {
   // BASE_URL1: "https://api.deal24h.vn/",
   BASE_URL: "https://api.deal24h.vn/",
-  // BASE_URL: "http://192.168.1.3:3018/",
+  // BASE_URL: "http://192.168.1.10:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
   BASE_URL_CURRENT: "http://localhost:3019/",
+
+  GET_PARTNER : "api/partner-list-company",
+  ADD_PARTNER : "api/plugin-add-partner",
+  UPDATE_PARTNER : "api/plugin-update-partner",
+  DELETE_PARTNER : "api/plugin-delete-partner",
 
   COLLABORATOR_GET: "api/collaborator/getAll",
   COLLABORATOR_DETAIL_GET_CUSTOMER: "api/collaborator/getAllCustomerByid",

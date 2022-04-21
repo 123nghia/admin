@@ -269,6 +269,35 @@ const _navMangerProviders = [
     },
   },
 ];
+const _navMangerPartner = [
+  //   {
+  //     _tag: "CSidebarNavTitle",
+  //     _children: ["Quản lý nhà cung cấp"],
+  //     role: ["0", "1", "2", "5"],
+  //   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Quản Lý Đối Tác",
+    to: "/manage-partner",
+    icon: (
+      <AiFillSetting
+        style={css}
+        content={freeSet.cilTruck}
+        className="c-sidebar-nav-icon"
+      />
+    ),
+    role: ["0"],
+    badge: {
+      color: "info",
+      text: (
+        <CTooltip placement={"right"} content={content.none}>
+          <CIcon content={freeSet.cilInfo} />
+        </CTooltip>
+      ),
+    },
+  },
+];
+
 
 const _navMangerSales = [
   //   {
@@ -877,6 +906,7 @@ const _navLogOut = [
 export default [
   _navOverview,
   _navMangerProviders,
+  _navMangerPartner,
   _navMangerSales,
   _navMangerCampaigns,
   _navMangerUser,
