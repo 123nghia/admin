@@ -177,7 +177,9 @@ const ManageSales = React.lazy(() =>
 const ManageAccount = React.lazy(() =>
   import("./views/evoucher/ManageAccount")
 );
-
+const ManagePartner = React.lazy(() =>
+  import("./views/evoucher/ManageCollaborators/ManageCollaborators")
+);
 const DetailCampaign = React.lazy(() =>
   import("./views/evoucher/ManagerCampaign/DetailCampaign/index.js")
 );
@@ -229,6 +231,12 @@ const routes = [
     name: "ManageSales",
     component: roleUser === "0" ? ManageSales : NotEnough,
   },
+  {
+    path: "/manage-partner",
+    name: "ManagePartner",
+    component: ManagePartner
+  },
+  
   {
     path: "/detail-collaborators",
     name: "DetailCollaborators",
