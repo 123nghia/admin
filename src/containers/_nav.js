@@ -518,27 +518,27 @@ const _navMangerUser = [
     ),
     role: ["0", "1", "2"],
     _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Danh sách người dùng",
-        to: "/customer",
-        icon: (
-          <CIcon
-            style={css}
-            content={freeSet.cilUserPlus}
-            customClasses="c-sidebar-nav-icon"
-          />
-        ),
-        role: ["0"],
-        badge: {
-          color: "info",
-          text: (
-            <CTooltip placement={"right"} content={content.customer}>
-              <CIcon content={freeSet.cilInfo} />
-            </CTooltip>
-          ),
-        },
-      },
+      // {
+      //   _tag: "CSidebarNavItem",
+      //   name: "Danh sách người dùng",
+      //   to: "/customer",
+      //   icon: (
+      //     <CIcon
+      //       style={css}
+      //       content={freeSet.cilUserPlus}
+      //       customClasses="c-sidebar-nav-icon"
+      //     />
+      //   ),
+      //   role: ["0"],
+      //   badge: {
+      //     color: "info",
+      //     text: (
+      //       <CTooltip placement={"right"} content={content.customer}>
+      //         <CIcon content={freeSet.cilInfo} />
+      //       </CTooltip>
+      //     ),
+      //   },
+      // },
 
       {
         _tag: "CSidebarNavItem",

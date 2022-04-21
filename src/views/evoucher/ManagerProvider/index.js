@@ -816,7 +816,7 @@ class EndUser extends Component {
                 <CardBody className="table__overflow">
                   <table
                     ble
-                    className="mt-3 table table-hover mb-0 d-none d-sm-table table_dash table-bordered"
+                    className="mt-3 table table-hover mb-0 d-none d-sm-table"
                   >
                     <thead className="thead-light">
                       <tr>
@@ -842,7 +842,9 @@ class EndUser extends Component {
                         ? data.map((item, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center table-row-first">
+                                  {i + 1}
+                                </td>
                                 <td className="text-center">{item.Name}</td>
                                 <td className="text-center">{item.Brand}</td>
                                 <td className="text-center">
@@ -868,7 +870,7 @@ class EndUser extends Component {
                                       : "Không hoạt động"}
                                   </Tag>
                                 </td>
-                                <td className="text-center">
+                                <td className="text-center table-row-last">
                                   <div class="flex">
                                     <Link
                                       onClick={() => this.GetDetailProvider()}

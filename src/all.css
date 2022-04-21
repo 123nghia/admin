@@ -229,13 +229,13 @@
 }
 .tabcontents {
   background-color: #ffff;
-  padding: 26px;
+  padding: 20px;
   transition: all 1s;
   float: left;
   /* padding: 0px 12px; */
   border: 1px solid #ccc;
   border-bottom: none;
-  width: 75%;
+  width: 80%;
 
   border-left: none;
   min-height: 625px;
@@ -521,4 +521,12 @@
 }
 .modal-label {
   font-size: 16px;
+}
+
+.table-row-first {
+  border-left: 1px solid #d8dbe0;
+}
+
+.table-row-last {
+  border-right: 1px solid #d8dbe0;
 }

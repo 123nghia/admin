@@ -99,6 +99,10 @@ const PluginSubSaleTable = React.lazy(() =>
 const EndUserPlugin = React.lazy(() =>
   import("./views/base/tables/User/EndUser")
 );
+
+const DetailEndUser = React.lazy(() =>
+  import("./views/base/tables/User/DetailEndUser/DetailEndUser.js")
+);
 // config skin AI
 
 const configSkinDisplay = React.lazy(() =>
@@ -263,9 +267,9 @@ const routes = [
   },
 
   {
-    path: "/modal-detail-provider/:id",
-    name: "ModalDetailProvider",
-    component: ModalDetailProvider,
+    path: "/detail-users/:id",
+    name: "DetailEndUser",
+    component: DetailEndUser,
   },
 
   {

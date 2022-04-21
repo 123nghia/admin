@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import CIcon from "@coreui/icons-react";
+import { Link } from "react-router-dom";
+import { DatePicker } from "antd";
 import {
   Card,
   CardBody,
@@ -13,7 +15,6 @@ import {
   Modal,
 } from "reactstrap";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
-
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
@@ -35,6 +36,7 @@ const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
 
+const dateFormat = "DD-MM-YYYY";
 class EndUser extends Component {
   constructor(props) {
     super(props);
@@ -62,6 +64,7 @@ class EndUser extends Component {
       isLoading: false,
     };
   }
+
   async componentDidMount() {
     const { type } = this.state;
 
@@ -103,7 +106,7 @@ class EndUser extends Component {
 
   getData = async () => {
     this.setState({ isLoading: true });
-    const res = await axios({
+    await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_END_USER,
       method: "POST",
@@ -205,6 +208,8 @@ class EndUser extends Component {
       }
     );
   }
+
+  GetDetailUser() {}
 
   onChange(key, val) {
     this.setState({ [key]: val });
@@ -354,6 +359,98 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
+                    <CCol md={3} className="mt">
+                      <div className="">
+                        <p className="title_filter">Ngày cập nhật</p>
+                        <div style={{ width: "200px" }}>
+                          <DatePicker
+                            style={styles.dateForm}
+                            onChange={(e, dateString) => {
+                              let copy = dateString.split("-");
+                              let newData = ``;
+                              copy.forEach((item, index) => {
+                                if (index === 0) {
+                                  newData += item;
+                                } else {
+                                  newData += `/${item}`;
+                                }
+                              });
+                              this.setState({ to: newData });
+                            }}
+                            format={dateFormat}
+                          />
+                        </div>
+                      </div>
+                    </CCol>
+                    <CCol md={3} className="mt">
+                      <div className="">
+                        <p className="title_filter">Ngày tạo</p>
+                        <div style={{ width: "200px" }}>
+                          <DatePicker
+                            style={styles.dateForm}
+                            onChange={(e, dateString) => {
+                              let copy = dateString.split("-");
+                              let newData = ``;
+                              copy.forEach((item, index) => {
+                                if (index === 0) {
+                                  newData += item;
+                                } else {
+                                  newData += `/${item}`;
+                                }
+                              });
+                              this.setState({ to: newData });
+                            }}
+                            format={dateFormat}
+                          />
+                        </div>
+                      </div>
+                    </CCol>
+                    <CCol md={3} className="mt">
+                      <div className="">
+                        <p className="title_filter">Ngày bắt đầu</p>
+                        <div style={{ width: "200px" }}>
+                          <DatePicker
+                            style={styles.dateForm}
+                            onChange={(e, dateString) => {
+                              let copy = dateString.split("-");
+                              let newData = ``;
+                              copy.forEach((item, index) => {
+                                if (index === 0) {
+                                  newData += item;
+                                } else {
+                                  newData += `/${item}`;
+                                }
+                              });
+                              this.setState({ to: newData });
+                            }}
+                            format={dateFormat}
+                          />
+                        </div>
+                      </div>
+                    </CCol>
+                    <CCol md={3} className="mt">
+                      <div className="">
+                        <p className="title_filter">Ngày kết thúc</p>
+                        <div style={{ width: "200px" }}>
+                          <DatePicker
+                            style={styles.dateForm}
+                            onChange={(e, dateString) => {
+                              let copy = dateString.split("-");
+                              let newData = ``;
+                              copy.forEach((item, index) => {
+                                if (index === 0) {
+                                  newData += item;
+                                } else {
+                                  newData += `/${item}`;
+                                }
+                              });
+                              this.setState({ to: newData });
+                            }}
+                            format={dateFormat}
+                          />
+                        </div>
+                      </div>
+                    </CCol>
                   </CRow>
                   <div className="flex-end">
                     <CButton
@@ -373,7 +470,7 @@ class EndUser extends Component {
                 <CardBody className="table__overflow">
                   <table
                     ble
-                    className="table table-hover table-outline mb-0 d-none d-sm-table"
+                    className="table table-hover mb-0 d-none d-sm-table"
                   >
                     <thead className="thead-light">
                       <tr>
@@ -404,7 +501,9 @@ class EndUser extends Component {
                         ? data.map((item, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center table-row-first">
+                                  {i + 1}
+                                </td>
                                 <td className="text-center">
                                   {item.type === "0" ? (
                                     ""
@@ -438,8 +537,24 @@ class EndUser extends Component {
                                       item.create_date
                                     ).toLocaleTimeString()}
                                 </td>
-                                <td className="text-center">
+                                <td className="text-center table-row-last">
                                   <div className="flex-center">
+                                    <Link
+                                      onClick={() => this.GetDetailUser()}
+                                      to={"/detail-users/" + item._id}
+                                    >
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="sm"
+                                        className="flex-a-center "
+                                      >
+                                        <BsSearch className="mr-1" />
+                                        Chi tiết
+                                      </CButton>
+                                    </Link>
                                     <CButton
                                       shape="rounded-pill"
                                       variant="ghost"
