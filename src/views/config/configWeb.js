@@ -84,6 +84,8 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      centerFooterLeft : true,
+      centerFooterRight : true,
       tabNameConfig: [
         {
           _id: "1",
@@ -297,9 +299,19 @@ class Users extends Component {
               mxh: valueConfig.value.mxh,
               statusConfig: valueConfig.value.statusConfig,
               configData: valueConfig.value.statusConfig,
+              footer : valueConfig.value.footer,
             },
             () => {
-              const { homepage, seoInfo, logos, chats, configData, mxh } = this.state;
+              const { homepage, seoInfo, logos, chats, configData, mxh , footer} = this.state;
+              if (footer) {
+                this.setState({
+                  footerLeft: this.state.footer.footerLeft,
+                  footerRight: this.state.footer.footerRight,
+                  centerFooterRight: this.state.footer.centerFooterRight,
+                  centerFooterLeft: this.state.footer.centerFooterLeft,
+                })
+              }     
+        
               if (homepage) {
                 this.setState({
                   textAi: this.state.homepage.textAi,
@@ -684,6 +696,15 @@ class Users extends Component {
         dataConfigWeb: coppyData,
       });
     }
+    if (change === "footer") {
+      coppyData.value.footer.footerLeft = this.state.footerLeft;
+      coppyData.value.footer.footerRight = this.state.footerRight;
+      coppyData.value.footer.centerFooterRight = this.state.centerFooterRight;
+      coppyData.value.footer.centerFooterLeft = this.state.centerFooterLeft;
+      this.setState({
+        dataConfigWeb: coppyData,
+      });
+    }
     if (change === "logos") {
 
 
@@ -988,18 +1009,6 @@ class Users extends Component {
     }
   }
   render() {
-    const arrLevel = [
-      {
-        item: "1",
-      },
-      {
-        item: "2",
-      },
-      {
-        item: "3",
-      },
-    ];
-
     const {
       contentSlide,
 
@@ -1640,96 +1649,95 @@ class Users extends Component {
                 </div>
               </div>
               <div id="tabcontent7" className="tabcontent">
-                <div class="flex-end">
-                  <CButton
-                    color="info"
-                    style={{ marginBottom: "10px" }}
-                    size="md"
-                    className="btn-main"
-                    onClick={this.openFormAddFooter}
-                  >
-                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                    <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                  </CButton>
-
-                </div>
-                <table
-                  ble
-                  className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-                >
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">STT.</th>
-                      <th className="text-center">Tiêu đề</th>
-                      <th className="text-center">Nội dung</th>
-
-                      <th className="text-center">Link tham chiếu</th>
-
-
-
-                      <th className="text-center">#</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <td
-                      colSpan="10"
-                      hidden={this.state.hidden}
-                      className="text-center"
+                <div class="text-center">
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => this.SaveAllConfigWeb("footer")}
                     >
-                      Không tìm thấy dữ liệu
-                    </td>
+                      Lưu thay đổi
+                    </Button>
+                  </div>
+                  <div className="config_footer_box">
+                      <h1>Tiêu đề trái</h1>
+                      <div className="flex-a-center">
+                      <p style={{marginRight:'10px'}}>Căn giữa</p>
+                        <div className="">
+                        <FormGroup>
+                            <FormControlLabel onChange={e=>{
+                              this.setState({
+                                centerFooterLeft : !this.state.centerFooterLeft
+                              })
+                            }} checked={this.state.centerFooterLeft} control={<Switch defaultChecked />} label="" />               
+                        </FormGroup>
+                        </div>
+                      </div>
+                                 
+                      <CKEditor
+                        editor={ ClassicEditor }
+                        data={this.state.footerLeft}
+                        onReady={ editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log( 'Editor is ready to use!', editor );
+                        } }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.setState({
+                              footerLeft : data
+                            })
+                        } }
+                        onBlur={ ( event, editor ) => {
+                            console.log( 'Blur.', editor );
+                        } }
+                        onFocus={ ( event, editor ) => {
+                            console.log( 'Focus.', editor );
+                        } }
+                    />
+                  </div>
+                  <div className="config_footer_box">
+                    <h1>Tiêu đề phải</h1>
+                    
+                      <div className="flex-a-center">
+                      <p style={{marginRight:'10px'}}>Căn giữa</p>
+                     
+                      <div className="">
+                      <FormGroup>
+                          <FormControlLabel onChange={e=>{
+                            console.log(this.state.centerFooterRight)
+                            this.setState({
+                              centerFooterRight : !this.state.centerFooterRight
+                            })
+                          }} checked={this.state.centerFooterRight} control={<Switch defaultChecked />} label="" />
+                      
+                      </FormGroup>
+                      
+                      </div>
+                      </div>
 
-                    {dataFooter
-                      ? dataFooter.map((item, i) => {
-                        return (
-                          <tr key={i}>
-                            <td className="text-center">{i + 1}</td>
+                    
 
-                            <td className="text-center">{item.title}</td>
-                            <td className="text-center">{item.content}</td>
-                            <td className="text-center">{item.href}</td>
-
-
-                            <td className="">
-                              <div className="flex">
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="ghost"
-                                  color="info"
-                                  style={styles.mgl5}
-                                  size="md"
-                                  onClick={() => this.openFormEditFooter(item)}
-                                >
-                                  <FiEdit3
-                                    style={styles.icon}
-                                    className="icon"
-
-                                    name="cilPencil"
-                                  />
-                                </CButton>{" "}
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="ghost"
-                                  color="danger"
-                                  style={styles.mgl5}
-                                  onClick={() => this.deleteFooter(item)}
-                                >
-                                  <BsTrash
-                                    style={styles.icon}
-                                    className="icon"
-
-                                    name="cilTrash"
-                                  />
-                                </CButton>
-                              </div>
-
-                            </td>
-                          </tr>
-                        );
-                      })
-                      : null}
-                  </tbody>
-                </table>
+                      <CKEditor
+                        editor={ ClassicEditor }
+                        data={this.state.footerRight}
+                        onReady={ editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log( 'Editor is ready to use!', editor );
+                        } }
+                        onChange={ ( event, editor ) => {
+                          const data = editor.getData();
+                          this.setState({
+                            footerRight : data
+                          })
+                        } }
+                        onBlur={ ( event, editor ) => {
+                            console.log( 'Blur.', editor );
+                        } }
+                        onFocus={ ( event, editor ) => {
+                            console.log( 'Focus.', editor );
+                        } }
+                    />
+                  </div>
+               
               </div>
               <div id="tabcontent8" className="tabcontent">
                 <div class="flex-end">
