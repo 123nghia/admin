@@ -530,3 +530,8 @@
 .table-row-last {
   border-right: 1px solid #d8dbe0;
 }
+.config_footer_box{
+  border: 1px solid #ccc;
+  padding : 8px;
+  margin-top: 20px;
+}
