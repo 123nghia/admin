@@ -313,6 +313,24 @@ class EndUser extends Component {
     }
   }
 
+  async postImage(link) {
+    var newImage = "";
+    if (link && link !== "") {
+      const form = new FormData();
+
+      form.append("image", link);
+
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+        (res) => {}
+      );
+
+      newImage = link.name;
+      return newImage;
+    } else {
+      return newImage;
+    }
+  }
+
   render() {
     const { data, arrPagination, key } = this.state;
     if (!this.state.isLoading) {
