@@ -84,52 +84,54 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      centerFooterLeft : true,
+      centerFooterRight : true,
       tabNameConfig: [
         {
-          _id: "t1",
+          _id: "1",
           name: "Thông tin trang chủ",
           icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />
         },
         {
-          _id: "t2",
+          _id: "2",
           name: "Slider",
-          icon: <svg  style={{ width: "24px ", height: "24px " }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-slides-fill" viewBox="0 0 16 16">
-          <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z"/>
-          <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z"/>
-            </svg>
+          icon: <svg style={{ width: "24px ", height: "24px " }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-slides-fill" viewBox="0 0 16 16">
+            <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
+            <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
+          </svg>
         },
         {
-          _id: "t3",
+          _id: "3",
           name: "Cấu hình SEO",
           icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
         },
         {
-          _id: "t4",
+          _id: "4",
           name: "Logos",
           icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />
         },
         {
-          _id: "t5",
+          _id: "5",
           name: "Mã Chat",
           icon: <AiFillWechat style={{ width: "24px ", height: "24px " }} />
         },
         {
-          _id: "t6",
+          _id: "6",
           name: "Cấu hình mạng xã hội",
           icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />
         },
         {
-          _id: "t7",
+          _id: "7",
           name: "Thông tin footer",
           icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />
         },
         {
-          _id: "t8",
+          _id: "8",
           name: "Quản lý màu sắc",
           icon: <IoIosColorPalette style={{ width: "24px ", height: "24px " }} />
         },
         {
-          _id: "t9",
+          _id: "9",
           name: "Quản lý Cache",
           icon: <LockResetIcon style={{ width: "24px ", height: "24px " }} />
         },
@@ -217,17 +219,23 @@ class Users extends Component {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
     tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tabcontent.length; i++) {
-      if (i === id) {
-        tablinks[i].classList.add("tabcontent-left-active");
-        tabcontent[i].classList.add("defaultOpen");
-        tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
+    const { tabNameConfig } = this.state;
+    for (i = 0; i < tabNameConfig.length; i++) {
+      if (tabNameConfig[i]._id === id) {
+          tablinks[i].classList.add("tabcontent-left-active");
       } else {
-        tabcontent[i].classList.remove("defaultOpen");
-        tablinks[i].classList.remove("tabcontent-left-active");
-        tabcontent[i].style.animation = "none";
-      }
-    }
+          tablinks[i].classList.remove("tabcontent-left-active");  
+      };
+    };
+    for (i = 0; i < tabcontent.length; i++) {
+      if (tabcontent[i].id.replace("tabcontent","") === id) {
+          tabcontent[i].classList.add("defaultOpen");
+          tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
+      } else {
+          tabcontent[i].classList.remove("defaultOpen");
+          tabcontent[i].style.animation = "none";    
+      };
+    };
   }
   onChangeImage(e, value, valueLink, valueShow) {
     let files = e.target.files;
@@ -239,7 +247,7 @@ class Users extends Component {
     };
   }
   async componentDidMount() {
-    
+
 
     await this.getFooter();
     this.getDataConfigWeb();
@@ -277,7 +285,7 @@ class Users extends Component {
           let dataConfig = res.data.data[0];
 
           let valueConfig = JSON.parse(dataConfig.Value);
-          console.log("webinfo",valueConfig)
+          console.log("webinfo", valueConfig)
 
           this.setState(
             {
@@ -291,9 +299,19 @@ class Users extends Component {
               mxh: valueConfig.value.mxh,
               statusConfig: valueConfig.value.statusConfig,
               configData: valueConfig.value.statusConfig,
+              footer : valueConfig.value.footer,
             },
             () => {
-              const { homepage, seoInfo, logos, chats, configData, mxh } = this.state;
+              const { homepage, seoInfo, logos, chats, configData, mxh , footer} = this.state;
+              if (footer) {
+                this.setState({
+                  footerLeft: this.state.footer.footerLeft,
+                  footerRight: this.state.footer.footerRight,
+                  centerFooterRight: this.state.footer.centerFooterRight,
+                  centerFooterLeft: this.state.footer.centerFooterLeft,
+                })
+              }     
+        
               if (homepage) {
                 this.setState({
                   textAi: this.state.homepage.textAi,
@@ -301,6 +319,14 @@ class Users extends Component {
                   titlePen2: this.state.homepage.title2,
                   sologan: this.state.homepage.sologan,
                   introduce: this.state.homepage.introduction,
+                  titlePhoto: this.state.homepage.titlePhoto,
+                  titleButtonPhoto: this.state.homepage.titleButtonPhoto,
+                  titleButtonChoose: this.state.homepage.titleButtonChoose,
+                  buttonSuggestLogin1: this.state.homepage.buttonSuggestLogin1,
+                  buttonSuggestLogin2: this.state.homepage.buttonSuggestLogin2,
+                  titleStep2: this.state.homepage.titleStep2,
+                  titleStep1: this.state.homepage.titleStep1,
+                  titleStep3: this.state.homepage.titleStep3,
 
                   image1: this.state.homepage.image1,
                   image1_show: this.state.homepage.image1,
@@ -313,6 +339,10 @@ class Users extends Component {
                   image2_link: this.state.homepage.image2,
                   image2: this.state.homepage.image2,
                   image2_show: this.state.homepage.image2,
+                  imagePhoto: this.state.homepage.imagePhoto,
+                  imagePhoto_link: this.state.homepage.imagePhoto,
+                  imagePhoto_show: this.state.homepage.imagePhoto,
+
                 });
               }
               if (seoInfo) {
@@ -625,16 +655,25 @@ class Users extends Component {
       coppyData.value.tawk = this.state.codeChat;
     }
     if (change === "homepage") {
+      coppyData.value.homepage.titleButtonPhoto = this.state.titleButtonPhoto;
+      coppyData.value.homepage.titleButtonChoose = this.state.titleButtonChoose;
+      coppyData.value.homepage.buttonSuggestLogin1 = this.state.buttonSuggestLogin1;
+      coppyData.value.homepage.buttonSuggestLogin2 = this.state.buttonSuggestLogin2;
+      coppyData.value.homepage.titleStep1 = this.state.titleStep1;
+      coppyData.value.homepage.titleStep2 = this.state.titleStep2;
+      coppyData.value.homepage.titleStep3 = this.state.titleStep3;
+      coppyData.value.homepage.titlePhoto = this.state.titlePhoto;
+
       coppyData.value.homepage.title1 = this.state.titlePen1;
       coppyData.value.homepage.title2 = this.state.titlePen2;
       coppyData.value.homepage.textAi = this.state.textAi;
       coppyData.value.homepage.sologan = sologan;
       coppyData.value.homepage.introduction = introduce;
-      let newImage1 = await this.postImage(image1_link);
+      let imgLink = await this.postImage(this.state.imagePhoto_link);
       let newImage2 = await this.postImage(image2_link);
       let newImage3 = await this.postImage(image3_link);
-      if (newImage1) {
-        coppyData.value.homepage.image1 = `${Constants.BASE_URL}image_brand/${newImage1}`;
+      if (imgLink) {
+        coppyData.value.homepage.imagePhoto = `${Constants.BASE_URL}image_brand/${imgLink}`;
       }
       if (newImage2) {
         coppyData.value.homepage.image2 = `${Constants.BASE_URL}image_brand/${newImage2}`;
@@ -653,6 +692,15 @@ class Users extends Component {
       if (newImage4) {
         coppyData.value.seoInfo.imageShare = `${Constants.BASE_URL}image_brand/${newImage4}`;
       }
+      this.setState({
+        dataConfigWeb: coppyData,
+      });
+    }
+    if (change === "footer") {
+      coppyData.value.footer.footerLeft = this.state.footerLeft;
+      coppyData.value.footer.footerRight = this.state.footerRight;
+      coppyData.value.footer.centerFooterRight = this.state.centerFooterRight;
+      coppyData.value.footer.centerFooterLeft = this.state.centerFooterLeft;
       this.setState({
         dataConfigWeb: coppyData,
       });
@@ -926,7 +974,7 @@ class Users extends Component {
       return;
     }
 
-    const newComany_id =this.state.company_id;
+    const newComany_id = this.state.company_id;
 
     const body = {
       isHash: false,
@@ -961,18 +1009,6 @@ class Users extends Component {
     }
   }
   render() {
-    const arrLevel = [
-      {
-        item: "1",
-      },
-      {
-        item: "2",
-      },
-      {
-        item: "3",
-      },
-    ];
-
     const {
       contentSlide,
 
@@ -1008,7 +1044,7 @@ class Users extends Component {
                       <ListItemButton
                         key={item._id}
                         className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
-                        onClick={() => this.ToggleViewConfigWeb(i)}
+                        onClick={() => this.ToggleViewConfigWeb(item._id)}
                         sx={{ pl: 4 }}
                       >
                         <ListItemIcon>
@@ -1068,98 +1104,105 @@ class Users extends Component {
                     this.setState({ introduce: e.target.value });
                   }}
                 />
-                
+
 
                 <TextFieldGroup
                   field="image1"
-                  label="Hình ảnh startup 1: (170px * 170px)"
+                  label="Hình ảnh hướng dẫn chụp ảnh (400px * 400px):"
                   type={"file"}
                   className="mt-5"
                   onChange={(e) => {
-                    this.onChangeImage(e, "image1", "image1_link", "image1_show");
+                    this.onChangeImage(e, "imagePhoto", "imagePhoto_link", "imagePhoto_show");
                   }}
                   onClick={(e) => {
                     e.target.value = null;
-                    this.setState({ image1_show: "" });
+                    this.setState({ imagePhoto_show: "" });
                   }}
                 />
                 <div class="text-center mb-5">
                   <img
                     alt=""
-                    style={{ width: "140px", marginBottom: 20 }}
+                    style={{ width: "200px", marginBottom: 20 }}
                     height="auto"
-                    src={this.state?.image1}
+                    src={this.state?.imagePhoto}
                   />
                 </div>
-
                 <TextFieldGroup
-                  field="image2"
-                  label="Hình ảnh startup 2: (280px * 280px)"
-                  type={"file"}
-                  className="mt-5"
+                  field="titlePhoto"
+                  label="Tiêu đề hình ảnh hướng dẫn chụp ảnh:"
+                  value={this.state?.titlePhoto}
+                  placeholder={""}
                   onChange={(e) => {
-                    this.onChangeImage(e, "image2", "image2_link", "image2_show");
-                  }}
-                  onClick={(e) => {
-                    e.target.value = null;
-                    this.setState({ image2_show: "" });
+                    this.setState({ titlePhoto: e.target.value });
                   }}
                 />
-                <div class="text-center mb-5">
-                  <img
-                    alt=""
-                    style={{ width: "140px", marginBottom: 20 }}
-                    height="auto"
-                    src={this.state?.image2}
-                  />
-                </div>
-
                 <TextFieldGroup
-                  field="image3"
-                  label="Hình ảnh startup 3: (170px * 170px)"
-                  type={"file"}
-                  className="mt-5"
+                  field="titleButtonPhoto"
+                  label="Tiêu đề nút chụp ảnh:"
+                  value={this.state?.titleButtonPhoto}
+                  placeholder={""}
                   onChange={(e) => {
-                    this.onChangeImage(e, "image3", "image3_link", "image3_show");
-                  }}
-                  onClick={(e) => {
-                    e.target.value = null;
-                    this.setState({ image3_show: "" });
+                    this.setState({ titleButtonPhoto: e.target.value });
                   }}
                 />
-                <div class="text-center mb-5">
-                  <img
-                    alt=""
-                    style={{ width: "140px", marginBottom: 20 }}
-                    height="auto"
-                    src={this.state?.image3}
-                  />
-                </div>
-                <label className="control-label">
-                  Text AI:(Không thay đổi cú pháp - chỉ thay đổi nội dung)
-                </label>
-                <CTextarea
-                  name="textAi"
-                  rows="8"
-                  value={this.state?.textAi}
+                <TextFieldGroup
+                  field="titleButtonChoose"
+                  label="Tiêu đề nút chọn ảnh:"
+                  value={this.state?.titleButtonChoose}
+                  placeholder={""}
                   onChange={(e) => {
-                    this.setState({ textAi: e.target.value });
+                    this.setState({ titleButtonChoose: e.target.value });
                   }}
                 />
-                 {/* <label className="control-label">
-                  Tiêu đề khuyến mãi
-                </label>
-                <CTextarea
-                  name="titleSales"
-                  rows="8"
-                  value={this.state?.titleSales}
+                <TextFieldGroup
+                  field="buttonSuggestLogin1"
+                  label="Tiêu đề nút gợi ý đăng nhập - 1:"
+                  value={this.state?.buttonSuggestLogin1}
+                  placeholder={""}
                   onChange={(e) => {
-                    this.setState({ titleSales: e.target.value });
+                    this.setState({ buttonSuggestLogin1: e.target.value });
                   }}
-                /> */}
+                />
+                <TextFieldGroup
+                  field="buttonSuggestLogin2"
+                  label="Tiêu đề nút gợi ý đăng nhập - 2:"
+                  value={this.state?.buttonSuggestLogin2}
+                  placeholder={""}
+                  onChange={(e) => {
+                    this.setState({ buttonSuggestLogin2: e.target.value });
+                  }}
+                />
+                <TextFieldGroup
+                  field="titleStep1"
+                  label="Tiều đề : Bước 1 - Chụp ảnh:"
+                  value={this.state?.titleStep1}
+                  placeholder={""}
+                  onChange={(e) => {
+                    this.setState({ titleStep1: e.target.value });
+                  }}
+                />
+                <TextFieldGroup
+                  field="titleStep2"
+                  label="Tiều đề : Bước 2 - Đã chụp - tải ảnh:"
+                  value={this.state?.titleStep2}
+                  placeholder={""}
+                  onChange={(e) => {
+                    this.setState({ titleStep2: e.target.value });
+                  }}
+                />
+                <TextFieldGroup
+                  field="titleStep3"
+                  label="Tiều đề : Bước 3 - Kết quả:"
+                  value={this.state?.titleStep3}
+                  placeholder={""}
+                  onChange={(e) => {
+                    this.setState({ titleStep3: e.target.value });
+                  }}
+                />
               </div>
+
               <div id="tabcontent2" className="tabcontent">
-              <div class="flex-end mt-3">
+                <div class="flex-end mt-3">
                   <CButton
                     color="info"
                     style={{ marginBottom: "10px" }}
@@ -1172,7 +1215,7 @@ class Users extends Component {
                   </CButton>
 
                 </div>
-                
+
                 <table
                   ble
                   className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
@@ -1207,7 +1250,7 @@ class Users extends Component {
                                 {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
                               </td> */}
                             <td className="">
-                            <div className="flex">
+                              <div className="flex">
                                 <CButton
                                   shape="rounded-pill"
                                   variant="ghost"
@@ -1238,7 +1281,7 @@ class Users extends Component {
                                   />
                                 </CButton>
                               </div>
-                             
+
                             </td>
                           </tr>
                         );
@@ -1606,96 +1649,95 @@ class Users extends Component {
                 </div>
               </div>
               <div id="tabcontent7" className="tabcontent">
-                <div class="flex-end">
-                <CButton
-                    color="info"
-                    style={{ marginBottom: "10px" }}
-                    size="md"
-                    className="btn-main"
-                    onClick={this.openFormAddFooter} 
-                  >
-                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                    <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                  </CButton>
-                 
-                </div>
-                <table
-                  ble
-                  className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-                >
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">STT.</th>
-                      <th className="text-center">Tiêu đề</th>
-                      <th className="text-center">Nội dung</th>
-
-                      <th className="text-center">Link tham chiếu</th>
-
-
-
-                      <th className="text-center">#</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <td
-                      colSpan="10"
-                      hidden={this.state.hidden}
-                      className="text-center"
+                <div class="text-center">
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => this.SaveAllConfigWeb("footer")}
                     >
-                      Không tìm thấy dữ liệu
-                    </td>
+                      Lưu thay đổi
+                    </Button>
+                  </div>
+                  <div className="config_footer_box">
+                      <h1>Tiêu đề trái</h1>
+                      <div className="flex-a-center">
+                      <p style={{marginRight:'10px'}}>Căn giữa</p>
+                        <div className="">
+                        <FormGroup>
+                            <FormControlLabel onChange={e=>{
+                              this.setState({
+                                centerFooterLeft : !this.state.centerFooterLeft
+                              })
+                            }} checked={this.state.centerFooterLeft} control={<Switch defaultChecked />} label="" />               
+                        </FormGroup>
+                        </div>
+                      </div>
+                                 
+                      <CKEditor
+                        editor={ ClassicEditor }
+                        data={this.state.footerLeft}
+                        onReady={ editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log( 'Editor is ready to use!', editor );
+                        } }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.setState({
+                              footerLeft : data
+                            })
+                        } }
+                        onBlur={ ( event, editor ) => {
+                            console.log( 'Blur.', editor );
+                        } }
+                        onFocus={ ( event, editor ) => {
+                            console.log( 'Focus.', editor );
+                        } }
+                    />
+                  </div>
+                  <div className="config_footer_box">
+                    <h1>Tiêu đề phải</h1>
+                    
+                      <div className="flex-a-center">
+                      <p style={{marginRight:'10px'}}>Căn giữa</p>
+                     
+                      <div className="">
+                      <FormGroup>
+                          <FormControlLabel onChange={e=>{
+                            console.log(this.state.centerFooterRight)
+                            this.setState({
+                              centerFooterRight : !this.state.centerFooterRight
+                            })
+                          }} checked={this.state.centerFooterRight} control={<Switch defaultChecked />} label="" />
+                      
+                      </FormGroup>
+                      
+                      </div>
+                      </div>
 
-                    {dataFooter
-                      ? dataFooter.map((item, i) => {
-                        return (
-                          <tr key={i}>
-                            <td className="text-center">{i + 1}</td>
+                    
 
-                            <td className="text-center">{item.title}</td>
-                            <td className="text-center">{item.content}</td>
-                            <td className="text-center">{item.href}</td>
-
-
-                            <td className="">
-                            <div className="flex">
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="ghost"
-                                  color="info"
-                                  style={styles.mgl5}
-                                  size="md"
-                                  onClick={() => this.openFormEditFooter(item)}
-                                >
-                                  <FiEdit3
-                                    style={styles.icon}
-                                    className="icon"
-
-                                    name="cilPencil"
-                                  />
-                                </CButton>{" "}
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="ghost"
-                                  color="danger"
-                                  style={styles.mgl5}
-                                  onClick={() => this.deleteFooter(item)}
-                                >
-                                  <BsTrash
-                                    style={styles.icon}
-                                    className="icon"
-
-                                    name="cilTrash"
-                                  />
-                                </CButton>
-                              </div>
-                            
-                            </td>
-                          </tr>
-                        );
-                      })
-                      : null}
-                  </tbody>
-                </table>
+                      <CKEditor
+                        editor={ ClassicEditor }
+                        data={this.state.footerRight}
+                        onReady={ editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log( 'Editor is ready to use!', editor );
+                        } }
+                        onChange={ ( event, editor ) => {
+                          const data = editor.getData();
+                          this.setState({
+                            footerRight : data
+                          })
+                        } }
+                        onBlur={ ( event, editor ) => {
+                            console.log( 'Blur.', editor );
+                        } }
+                        onFocus={ ( event, editor ) => {
+                            console.log( 'Focus.', editor );
+                        } }
+                    />
+                  </div>
+               
               </div>
               <div id="tabcontent8" className="tabcontent">
                 <div class="flex-end">
@@ -1709,7 +1751,7 @@ class Users extends Component {
                         this.setState({ isDisable: !isDisable });
                       }}
                     >
-                      <CIcon name="cil-pencil" style={{marginRight:'6px'}} /> Cập nhật
+                      <CIcon name="cil-pencil" style={{ marginRight: '6px' }} /> Cập nhật
                     </CButton>
                   ) : (
                     <CButton
@@ -1721,7 +1763,7 @@ class Users extends Component {
                         this.updateCompany(e);
                       }}
                     >
-                      <CIcon name="cil-pencil" style={{marginRight:'6px'}} /> Xác nhận cập nhật
+                      <CIcon name="cil-pencil" style={{ marginRight: '6px' }} /> Xác nhận cập nhật
                     </CButton>
                   )}
                 </div>
