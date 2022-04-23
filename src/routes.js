@@ -160,7 +160,15 @@ const ManageInventory = React.lazy(() =>
 const ManageVoucher = React.lazy(() =>
   import("./views/evoucher/ManageVoucher")
 );
-const BannerSales = React.lazy(() => import("./views/evoucher/Banner"));
+const BannerSales = React.lazy(() =>
+  import("./views/evoucher/ManageBanner/Banner")
+);
+const BannerLastestOffers = React.lazy(() =>
+  import("./views/evoucher/ManageBanner/Banner_LatestOffers")
+);
+const BannerPromotion = React.lazy(() =>
+  import("./views/evoucher/ManageBanner/Banner_Promotion")
+);
 const Statistics = React.lazy(() => import("./views/evoucher/Chart"));
 const Translation = React.lazy(() => import("./views/evoucher/Translation"));
 const NotEnough = React.lazy(() => import("./views/Pages/NotEnough/NotEnough"));
@@ -218,6 +226,16 @@ const routes = [
     name: "BannerSales",
     component: roleUser === "0" ? BannerSales : NotEnough,
   },
+  {
+    path: "/banner-lastestoffers",
+    name: "BannerLastestOffers",
+    component: roleUser === "0" ? BannerLastestOffers : NotEnough,
+  },
+  {
+    path: "/banner-promotion",
+    name: "BannerPromotion",
+    component: roleUser === "0" ? BannerPromotion : NotEnough,
+  },
   { path: "/evoucher-statistics", name: "Statistics", component: Statistics },
   { path: "/manage-voucher", name: "ManageVoucher", component: ManageVoucher },
   {
@@ -234,9 +252,9 @@ const routes = [
   {
     path: "/manage-partner",
     name: "ManagePartner",
-    component: ManagePartner
+    component: ManagePartner,
   },
-  
+
   {
     path: "/detail-collaborators",
     name: "DetailCollaborators",

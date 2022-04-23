@@ -19,11 +19,11 @@ import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { CButton, CTextarea, CLabel, CSelect, CRow, CCol } from "@coreui/react";
 
-import API_CONNECT from "../../functions/callAPI";
+import API_CONNECT from "../../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
 import "moment-timezone";
-import Constants from "../../contants/contants";
-import TextFieldGroup from "../Common/TextFieldGroup";
+import Constants from "../../../contants/contants";
+import TextFieldGroup from "../../Common/TextFieldGroup";
 import axios from "axios";
 import md5 from "md5";
 import { css } from "@emotion/react";
@@ -72,6 +72,7 @@ class EndUser extends Component {
       isLoading: false,
       idCurrentUpdate: null,
       levelNormal: "0",
+      typeBanner: "1",
     };
   }
   changeLevel = (e) => {
@@ -90,9 +91,8 @@ class EndUser extends Component {
     };
   }
   async componentDidMount() {
-  
-    if(this.state.type !== '0'){
-      window.location.href = "/"
+    if (this.state.type !== "0") {
+      window.location.href = "/";
     }
     const { type } = this.state;
 
@@ -160,6 +160,7 @@ class EndUser extends Component {
         params: {
           company_id,
           status: null,
+          type: this.state.typeBanner,
         },
       })
       .then((res) => {
@@ -247,6 +248,7 @@ class EndUser extends Component {
       image: "",
       relCode: "",
       link: "",
+      type: "1",
     });
   }
   openEditVoucher(item) {
@@ -294,11 +296,11 @@ class EndUser extends Component {
     if (image_link) {
       if (image_link.name) {
         img = `${Constants.BASE_URL}image_brand/${image_link.name}`;
-      }else{
-        img = image
+      } else {
+        img = image;
       }
     }
-    console.log(img)
+    console.log(img);
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_BANNER_SALES;
 
@@ -342,6 +344,7 @@ class EndUser extends Component {
       company_id,
       link,
       image_link,
+      type,
     } = this.state;
     const form3 = new FormData();
     form3.append("image", image_link);
@@ -372,6 +375,7 @@ class EndUser extends Component {
         company_id,
         image: img,
         relcode: relCode,
+        type: type,
       })
       .then((res) => {
         Swal.fire({
@@ -462,7 +466,6 @@ class EndUser extends Component {
       {
         item: "2",
       },
-     
     ];
     if (!this.state.isLoading) {
       return (
@@ -489,6 +492,14 @@ class EndUser extends Component {
                 value={this.state.title}
                 // error={errors.title}
                 onChange={(e) => this.setState({ title: e.target.value })}
+                // rows="5"
+              />
+              <TextFieldGroup
+                field="type"
+                label="Loại Banner"
+                value={this.state.type}
+                // error={errors.title}
+                // onChange={(e) => this.setState({ type: e.target.value })}
                 // rows="5"
               />
               <div className="mt-3"></div>
@@ -626,7 +637,7 @@ class EndUser extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Quản lý Banner
+                    Banner Ưu đãi Mới nhất
                   </i>
                   <div className="flex-end ">
                     <CButton
@@ -999,7 +1010,6 @@ const styles = {
   searchInput: {
     width: "200px",
     display: "inline-block",
-
   },
   userActive: {
     color: "green",
