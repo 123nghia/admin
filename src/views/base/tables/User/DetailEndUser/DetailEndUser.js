@@ -149,10 +149,13 @@ function DetailEndUser() {
         },
       })
       .then((res) => {
-        setListVendor(res.data.data.listVendor);
+        setListVendor((listVendor) => [
+          ...listVendor,
+          res.data.data.listVendor[0]?.vendor,
+        ]);
         console.log(res.data.data.listVendor);
         console.log("12312312313221312312", res);
-        pagination(res.data.data.listVendor[0]?.vendor);
+        pagination(res.data.data?.listVendor[0]?.vendor);
       });
   }, []);
 

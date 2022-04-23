@@ -298,7 +298,6 @@ const _navMangerPartner = [
   },
 ];
 
-
 const _navMangerSales = [
   //   {
   //     _tag: "CSidebarNavTitle",
@@ -430,6 +429,48 @@ const _navMangerCampaigns = [
           />
         ),
         role: ["0", "1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý Banner Ưu đãi",
+        to: "/banner-lastestoffers",
+        icon: (
+          <BsImageFill
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Quản lý Banner Khuyến mãi",
+        to: "/banner-promotion",
+        icon: (
+          <BsImageFill
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon"
+          />
+        ),
+        role: ["0"],
         badge: {
           color: "info",
           text: (
