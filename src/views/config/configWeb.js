@@ -119,8 +119,18 @@ class Users extends Component {
           icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
         },
         {
+          _id: "12",
+          name: "Popup",
+          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+        },
+        {
           _id: "11",
           name: "Voucher",
+          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "13",
+          name: "Aia",
           icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
         },
         {
@@ -316,20 +326,46 @@ class Users extends Component {
               banner : valueConfig.value.banner,
               button : valueConfig.value.button,
               voucher : valueConfig.value.voucher,
+              form : valueConfig.value.form,
+              aia : valueConfig.value.aia,
+
                           },
             () => {
-              const { homepage, seoInfo, logos, chats, configData, mxh , footer, banner, button, voucher} = this.state;
-
+              const { homepage, seoInfo, logos, chats, configData, mxh , footer, banner, button, voucher, form, aia} = this.state;
+              if(aia){
+                this.setState({
+                  titleGetVoucherAia: this.state.aia.titleGetVoucherAia,
+                  titleListCam: this.state.aia.titleListCam,
+                  titleSuggestFormLoginGetVoucher : this.state.aia.titleSuggestFormLoginGetVoucher,
+                  titleFormGetVoucherAfterLoginFormSuggest : this.state.aia.titleFormGetVoucherAfterLoginFormSuggest,
+                })       
+              }
+              if(form){
+                this.setState({
+                  titleLogin: this.state.form.titleLogin,
+                  btn_login: this.state.form.btn_login,
+                  titleUpdate : this.state.form.titleUpdate,
+                  btn_update : this.state.form.btn_update,
+                })       
+              }
               if(button){
                 this.setState({
                   btn_soida: this.state.button.btn_soida,
                   btn_get_voucher: this.state.button.btn_get_voucher,
                   btn_get_voucher2 : this.state.button.btn_get_voucher2,
+                  btn_register_get_voucher: this.state.voucher.btn_register_get_voucher,
+
                 })       
               }
               if(voucher){
+                
                 this.setState({
+                  sendSMS: this.state.voucher.sendSMS,
+                  registerGetVoucher: this.state.voucher.registerGetVoucher,
+                  loginWatchVoucher : this.state.voucher.loginWatchVoucher,
                   receiveVoucher: this.state.voucher.receiveVoucher,
+                  textSales: this.state.voucher.textSales,
+                  receiveVoucherSuccess : this.state.voucher.receiveVoucherSuccess,
                 })  
               }
               if (banner) {
@@ -357,7 +393,10 @@ class Users extends Component {
         
               if (homepage) {
                 this.setState({
-                  
+                  loginViewResult1 : this.state.homepage.loginViewResult1,
+                  loginViewResult2 : this.state.homepage.loginViewResult2,
+                  loginViewResult3 : this.state.homepage.loginViewResult3,
+                  loginViewResult4 : this.state.homepage.loginViewResult4,
                   textResultDepthSkin : this.state.homepage.textResultDepthSkin,
                   titleResultDepthSkin : this.state.homepage.titleResultDepthSkin,
                   textResultSkin : this.state.homepage.textResult,
@@ -682,6 +721,9 @@ class Users extends Component {
     let coppyData = {
       ...dataConfigWeb,
     };
+
+    
+   
     if (change === "mxh") {
       // coppyData.value.statusConfig = this.state.configData;
       coppyData.value.mxh.facebook.appid = this.state.keyAppFb;
@@ -707,19 +749,51 @@ class Users extends Component {
       if(!coppyData.value.voucher){
         coppyData.value.voucher = {}
       }
+      coppyData.value.voucher.sendSMS = this.state.sendSMS;
+      coppyData.value.voucher.registerGetVoucher = this.state.registerGetVoucher;
+      coppyData.value.voucher.loginWatchVoucher = this.state.loginWatchVoucher;
       coppyData.value.voucher.receiveVoucher = this.state.receiveVoucher;
+      coppyData.value.voucher.textSales = this.state.textSales;
+      coppyData.value.voucher.receiveVoucherSuccess = this.state.receiveVoucherSuccess;
     }
     if (change === "button") {
       if(!coppyData.value.button){
         coppyData.value.button = {}
+        
       }
+      coppyData.value.button.btn_register_get_voucher = this.state.btn_register_get_voucher;
       coppyData.value.button.btn_soida = this.state.btn_soida;
       coppyData.value.button.btn_get_voucher = this.state.btn_get_voucher;
       coppyData.value.button.btn_get_voucher2 = this.state.btn_get_voucher2;
 
     }
+    if (change === "aia") {
+      if(!coppyData.value.aia){
+        coppyData.value.aia = {}
+        
+      }
+      coppyData.value.aia.titleListCam = this.state.titleListCam;
+      coppyData.value.aia.titleGetVoucherAia = this.state.titleGetVoucherAia;
+      coppyData.value.aia.titleSuggestFormLoginGetVoucher = this.state.titleSuggestFormLoginGetVoucher;
+      coppyData.value.aia.titleFormGetVoucherAfterLoginFormSuggest = this.state.titleFormGetVoucherAfterLoginFormSuggest;
+    }
+    
+    if (change === "form") {
+      if(!coppyData.value.form){
+        coppyData.value.form = {}
+      }
+      coppyData.value.form.btn_update = this.state.btn_update;
+      coppyData.value.form.titleUpdate = this.state.titleUpdate;
+
+      coppyData.value.form.btn_login = this.state.btn_login;
+      coppyData.value.form.titleLogin = this.state.titleLogin;
+    }
     if (change === "homepage") {
       
+      coppyData.value.homepage.loginViewResult1 = this.state.loginViewResult1;
+      coppyData.value.homepage.loginViewResult2 = this.state.loginViewResult2;
+      coppyData.value.homepage.loginViewResult3 = this.state.loginViewResult3;
+      coppyData.value.homepage.loginViewResult4 = this.state.loginViewResult4;
       coppyData.value.homepage.titleResultDepthSkin = this.state.titleResultDepthSkin;
       coppyData.value.homepage.textResultDepthSkin = this.state.textResultDepthSkin;
       coppyData.value.homepage.titleResult = this.state.titleResultSkin;
@@ -1436,6 +1510,59 @@ class Users extends Component {
                    
                   </div>      
                </div> 
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/dang-nhap-xem-ket-qua.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
+                  field="loginViewResult1"
+                  label="Gợi ý đăng nhập: Vị trí 1:"
+                  value={this.state?.loginViewResult1}
+                  placeholder={"Vui lòng"}
+                  onChange={(e) => {
+                    this.setState({ loginViewResult1: e.target.value });
+                  }}
+                />
+                   
+                  </div>    
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
+                  field="loginViewResult2"
+                  label="Gợi ý đăng nhập: Vị trí 2:"
+                  value={this.state?.loginViewResult2}
+                  placeholder={"Để nhận ngay"}
+                  onChange={(e) => {
+                    this.setState({ loginViewResult2: e.target.value });
+                  }}
+                />
+                   
+                  </div>   
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
+                  field="loginViewResult3"
+                label="Gợi ý đăng nhập: Vị trí 3:"
+                  value={this.state?.loginViewResult3}
+                  placeholder={"E-voucher"}
+                  onChange={(e) => {
+                    this.setState({ loginViewResult3: e.target.value });
+                  }}
+                />
+                   
+                  </div>    
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
+                  field="loginViewResult4"
+                  label="Gợi ý đăng nhập: Vị trí 4:"
+                  value={this.state?.loginViewResult4}
+                  placeholder={"giảm giá 1.000.000 VND"}
+                  onChange={(e) => {
+                    this.setState({ loginViewResult4: e.target.value });
+                  }}
+                />
+                   
+                  </div>  
+               </div> 
               </div>
               <div id="tabcontent10" className="tabcontent">
                 <div class="text-center">
@@ -1481,6 +1608,22 @@ class Users extends Component {
                </div>
                <div class="flex-a-center config-box-border">
                   <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/dang-ky-nhan-voucher-nut.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="btn_register_get_voucher"
+                    label="Nhận Voucher"
+                    value={this.state?.btn_register_get_voucher}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ btn_register_get_voucher: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
                     <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/get-voucher2.png" alt="img" />
                   </div>
                   <div style={{ width : '100%' }}>
@@ -1495,6 +1638,159 @@ class Users extends Component {
                   />           
                   </div>      
                </div>
+              </div>
+              <div id="tabcontent12" className="tabcontent">
+                <div class="text-center">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => this.SaveAllConfigWeb("form")}
+                  >
+                    Lưu thay đổi
+                  </Button>
+                </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-dang-nhap.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="titleLogin"
+                    label="Tiêu đề: Form đăng nhập"
+                    value={this.state?.titleLogin}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ titleLogin: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/nut-dang-nhap.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="btn_login"
+                    label="Tiêu đề: Nút đăng nhập"
+                    value={this.state?.btn_login}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ btn_login: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-cap-nhap.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="titleUpdate"
+                    label="Tiêu đề: Form cập nhập"
+                    value={this.state?.titleUpdate}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ titleUpdate: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/nut-cap-nhap.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="btn_update"
+                    label="Tiêu đề: Nút cập nhập"
+                    value={this.state?.btn_update}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ btn_update: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               
+              </div>
+              <div id="tabcontent13" className="tabcontent">
+                <div class="text-center">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => this.SaveAllConfigWeb("aia")}
+                  >
+                    Lưu thay đổi
+                  </Button>
+                </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/da-dang-nhap-nhan-voucher-aia.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="titleGetVoucherAia"
+                    label="Tiêu đề: Form đã đăng nhập - nhận voucher"
+                    value={this.state?.titleGetVoucherAia}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ titleGetVoucherAia: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/danh-sach-thuong-hieu.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="titleListCam"
+                    label="Tiêu đề: Danh sách thương hiệu"
+                    value={this.state?.titleListCam}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ titleListCam: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/goi-y-dang-nhap-nhan-voucher-aia.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="titleSuggestFormLoginGetVoucher"
+                    label="Tiêu đề: Form gợi ý đăng nhập nhận voucher"
+                    value={this.state?.titleSuggestFormLoginGetVoucher}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ titleSuggestFormLoginGetVoucher: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-sau-khi-dang-nhap-nhan-voucher-aia.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="titleFormGetVoucherAfterLoginFormSuggest"
+                    label="Tiêu đề: Sau khi đăng nhập form gợi ý đăng nhập nhận voucher"
+                    value={this.state?.titleFormGetVoucherAfterLoginFormSuggest}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ titleFormGetVoucherAfterLoginFormSuggest: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+
+               
               </div>
               <div id="tabcontent11" className="tabcontent">
                 <div class="text-center">
@@ -1518,6 +1814,86 @@ class Users extends Component {
                     placeholder={""}
                     onChange={(e) => {
                       this.setState({ receiveVoucher: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/text-sales.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="textSales"
+                    label="Tiêu đề: Khuyến mãi"
+                    value={this.state?.textSales}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ textSales: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/get-voucher-success.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="receiveVoucherSuccess"
+                    label="Tiêu đề: Nhận voucher thành công"
+                    value={this.state?.receiveVoucherSuccess}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ receiveVoucherSuccess: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/dang-nhap-xem-voucher.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="loginWatchVoucher"
+                    label="Tiêu đề: Đăng nhập xem voucher"
+                    value={this.state?.loginWatchVoucher}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ loginWatchVoucher: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/dang-ky-nhan-voucher.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="registerGetVoucher"
+                    label="Tiêu đề: Đăng ký nhận voucher"
+                    value={this.state?.registerGetVoucher}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ registerGetVoucher: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/gui-sms.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="sendSMS"
+                    label="Tiêu đề: Gửi SMS"
+                    value={this.state?.sendSMS}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ sendSMS: e.target.value });
                     }}
                   />           
                   </div>      
