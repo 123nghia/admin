@@ -106,6 +106,24 @@ class Users extends Component {
           icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
         },
         {
+          _id: "9",
+          name: "Banner",
+          icon: <svg style={{ width: "24px ", height: "24px " }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-slides-fill" viewBox="0 0 16 16">
+          <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
+          <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
+        </svg>
+        },
+        {
+          _id: "10",
+          name: "Nút",
+          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+        },
+        {
+          _id: "11",
+          name: "Voucher",
+          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+        },
+        {
           _id: "4",
           name: "Logos",
           icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />
@@ -129,12 +147,7 @@ class Users extends Component {
           _id: "8",
           name: "Quản lý màu sắc",
           icon: <IoIosColorPalette style={{ width: "24px ", height: "24px " }} />
-        },
-        {
-          _id: "9",
-          name: "Quản lý Cache",
-          icon: <LockResetIcon style={{ width: "24px ", height: "24px " }} />
-        },
+        }
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
@@ -300,9 +313,39 @@ class Users extends Component {
               statusConfig: valueConfig.value.statusConfig,
               configData: valueConfig.value.statusConfig,
               footer : valueConfig.value.footer,
-            },
+              banner : valueConfig.value.banner,
+              button : valueConfig.value.button,
+              voucher : valueConfig.value.voucher,
+                          },
             () => {
-              const { homepage, seoInfo, logos, chats, configData, mxh , footer} = this.state;
+              const { homepage, seoInfo, logos, chats, configData, mxh , footer, banner, button, voucher} = this.state;
+
+              if(button){
+                this.setState({
+                  btn_soida: this.state.button.btn_soida,
+                  btn_get_voucher: this.state.button.btn_get_voucher,
+                  btn_get_voucher2 : this.state.button.btn_get_voucher2,
+                })       
+              }
+              if(voucher){
+                this.setState({
+                  receiveVoucher: this.state.voucher.receiveVoucher,
+                })  
+              }
+              if (banner) {
+                this.setState({
+                  hrefImageBannerMobile: this.state.banner.hrefImageBannerMobile,
+                  hrefImageBannerDesktop: this.state.banner.hrefImageBannerDesktop,
+
+                  imageBannerDesktop: this.state.banner.imageBannerDesktop,
+                  imageBannerDesktop_link: this.state.banner.imageBannerDesktop,
+                  imageBannerDesktop_show : this.state.banner.imageBannerDesktop,
+
+                  imageBannerMobile: this.state.banner.imageBannerMobile,
+                  imageBannerMobile_link: this.state.banner.imageBannerMobile,
+                  imageBannerMobile_show : this.state.banner.imageBannerMobile,
+                })
+              }   
               if (footer) {
                 this.setState({
                   footerLeft: this.state.footer.footerLeft,
@@ -314,6 +357,11 @@ class Users extends Component {
         
               if (homepage) {
                 this.setState({
+                  
+                  textResultDepthSkin : this.state.homepage.textResultDepthSkin,
+                  titleResultDepthSkin : this.state.homepage.titleResultDepthSkin,
+                  textResultSkin : this.state.homepage.textResult,
+                  titleResultSkin : this.state.homepage.titleResult,
                   textAi: this.state.homepage.textAi,
                   titlePen1: this.state.homepage.title1,
                   titlePen2: this.state.homepage.title2,
@@ -327,15 +375,12 @@ class Users extends Component {
                   titleStep2: this.state.homepage.titleStep2,
                   titleStep1: this.state.homepage.titleStep1,
                   titleStep3: this.state.homepage.titleStep3,
-
                   image1: this.state.homepage.image1,
                   image1_show: this.state.homepage.image1,
                   image1_link: this.state.homepage.image1,
-
                   image3_link: this.state.homepage.image3,
                   image3: this.state.homepage.image3,
                   image3_show: this.state.homepage.image3,
-
                   image2_link: this.state.homepage.image2,
                   image2: this.state.homepage.image2,
                   image2_show: this.state.homepage.image2,
@@ -353,6 +398,10 @@ class Users extends Component {
                   imgLayout: this.state.seoInfo.imageShare,
                   imgLayout_show: this.state.seoInfo.imageShare,
                   imgLayout_link: this.state.seoInfo.imageShare,
+
+                  imageShareSeo : this.state.seoInfo.imageShareSeo,
+                  imageShareSeo_link : this.state.seoInfo.imageShareSeo,
+                  imageShareSeo_show : this.state.seoInfo.imageShareSeo,
 
                   keywordSeo: this.state.seoInfo.key,
                   authorSeo: this.state.seoInfo.author,
@@ -654,7 +703,28 @@ class Users extends Component {
       coppyData.value.chatMess = this.state.codeMess;
       coppyData.value.tawk = this.state.codeChat;
     }
+    if (change === "voucher") {
+      if(!coppyData.value.voucher){
+        coppyData.value.voucher = {}
+      }
+      coppyData.value.voucher.receiveVoucher = this.state.receiveVoucher;
+    }
+    if (change === "button") {
+      if(!coppyData.value.button){
+        coppyData.value.button = {}
+      }
+      coppyData.value.button.btn_soida = this.state.btn_soida;
+      coppyData.value.button.btn_get_voucher = this.state.btn_get_voucher;
+      coppyData.value.button.btn_get_voucher2 = this.state.btn_get_voucher2;
+
+    }
     if (change === "homepage") {
+      
+      coppyData.value.homepage.titleResultDepthSkin = this.state.titleResultDepthSkin;
+      coppyData.value.homepage.textResultDepthSkin = this.state.textResultDepthSkin;
+      coppyData.value.homepage.titleResult = this.state.titleResultSkin;
+      coppyData.value.homepage.textResult = this.state.textResultSkin;
+
       coppyData.value.homepage.titleButtonPhoto = this.state.titleButtonPhoto;
       coppyData.value.homepage.titleButtonChoose = this.state.titleButtonChoose;
       coppyData.value.homepage.buttonSuggestLogin1 = this.state.buttonSuggestLogin1;
@@ -683,6 +753,7 @@ class Users extends Component {
       }
     }
     if (change === "seoInfo") {
+      
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
       coppyData.value.seoInfo.description = descSeo;
@@ -690,13 +761,20 @@ class Users extends Component {
       coppyData.value.seoInfo.key = keywordSeo;
       let newImage4 = await this.postImage(imgLayout_link);
       if (newImage4) {
-        coppyData.value.seoInfo.imageShare = `${Constants.BASE_URL}image_brand/${newImage4}`;
+        coppyData.value.seoInfo.favicon = `${Constants.BASE_URL}image_brand/${newImage4}`;
+      }
+      let imageShare = await this.postImage(this.state.imageShareSeo_link);
+      if (imageShare) {
+        coppyData.value.seoInfo.imageShareSeo = `${Constants.BASE_URL}image_brand/${imageShare}`;
       }
       this.setState({
         dataConfigWeb: coppyData,
       });
     }
     if (change === "footer") {
+      if(!coppyData.value.footer){
+        coppyData.value.footer = {};
+      }
       coppyData.value.footer.footerLeft = this.state.footerLeft;
       coppyData.value.footer.footerRight = this.state.footerRight;
       coppyData.value.footer.centerFooterRight = this.state.centerFooterRight;
@@ -723,6 +801,28 @@ class Users extends Component {
         dataConfigWeb: coppyData,
       });
     }
+    if (change === "banner") {
+      if(!coppyData.value.banner){
+        coppyData.value.banner = {};
+      }
+
+      let newImage = await this.postImage(this.state.imageBannerDesktop_link);
+      if (newImage) {
+        coppyData.value.banner.imageBannerDesktop = `${Constants.BASE_URL}image_brand/${newImage}`;
+      }
+      let newImage2 = await this.postImage(this.state.imageBannerMobile_link);
+      if (newImage2) {
+        coppyData.value.banner.imageBannerMobile = `${Constants.BASE_URL}image_brand/${newImage2}`;
+      }
+
+      coppyData.value.banner.hrefImageBannerDesktop = this.state.hrefImageBannerDesktop;
+      coppyData.value.banner.hrefImageBannerMobile = this.state.hrefImageBannerMobile;
+
+      this.setState({
+        dataConfigWeb: coppyData,
+      });
+    }
+    
     await axios
       .post(url, {
         value: JSON.stringify(coppyData),
@@ -1105,47 +1205,73 @@ class Users extends Component {
                   }}
                 />
 
-
-                <TextFieldGroup
-                  field="image1"
-                  label="Hình ảnh hướng dẫn chụp ảnh (400px * 400px):"
-                  type={"file"}
-                  className="mt-5"
-                  onChange={(e) => {
-                    this.onChangeImage(e, "imagePhoto", "imagePhoto_link", "imagePhoto_show");
-                  }}
-                  onClick={(e) => {
-                    e.target.value = null;
-                    this.setState({ imagePhoto_show: "" });
-                  }}
-                />
-                <div class="text-center mb-5">
-                  <img
-                    alt=""
-                    style={{ width: "200px", marginBottom: 20 }}
-                    height="auto"
-                    src={this.state?.imagePhoto}
-                  />
-                </div>
-                <TextFieldGroup
-                  field="titlePhoto"
-                  label="Tiêu đề hình ảnh hướng dẫn chụp ảnh:"
-                  value={this.state?.titlePhoto}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titlePhoto: e.target.value });
-                  }}
-                />
-                <TextFieldGroup
-                  field="titleButtonPhoto"
-                  label="Tiêu đề nút chụp ảnh:"
-                  value={this.state?.titleButtonPhoto}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleButtonPhoto: e.target.value });
-                  }}
-                />
-                <TextFieldGroup
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/huong-dan-chup-anh.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                      <TextFieldGroup
+                      field="image1"
+                      label="Hình ảnh hướng dẫn chụp ảnh (400px * 400px):"
+                      type={"file"}
+                      className="mt-5"
+                      onChange={(e) => {
+                        this.onChangeImage(e, "imagePhoto", "imagePhoto_link", "imagePhoto_show");
+                      }}
+                      onClick={(e) => {
+                        e.target.value = null;
+                        this.setState({ imagePhoto_show: "" });
+                      }}
+                    />
+                    <div class="text-center mb-5">
+                      <img
+                        alt=""
+                        style={{ width: "200px", marginBottom: 20 }}
+                        height="auto"
+                        src={this.state?.imagePhoto}
+                      />
+                    </div>
+                  </div>      
+               </div>
+                <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '300px' , marginRight:'10px'}} src="/assets/image/tieu-de-huong-dan-chup-anh.png" alt="img" />
+                  </div>
+                      <div style={{ width : '100%' }}>
+                      <TextFieldGroup
+                      field="titlePhoto"
+                      label="Tiêu đề hình ảnh hướng dẫn chụp ảnh:"
+                      value={this.state?.titlePhoto}
+                      placeholder={""}
+                      onChange={(e) => {
+                        this.setState({ titlePhoto: e.target.value });
+                      }}
+                    />
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-nut-chup-anh.png" alt="img" />
+                  </div>
+                      <div style={{ width : '100%' }}>
+                      <TextFieldGroup
+                      field="titleButtonPhoto"
+                      label="Tiêu đề nút chụp ảnh:"
+                      value={this.state?.titleButtonPhoto}
+                      placeholder={""}
+                      onChange={(e) => {
+                        this.setState({ titleButtonPhoto: e.target.value });
+                      }}
+                    />
+                   
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-huong-dan-chon-anh.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                      <TextFieldGroup
                   field="titleButtonChoose"
                   label="Tiêu đề nút chọn ảnh:"
                   value={this.state?.titleButtonChoose}
@@ -1154,7 +1280,15 @@ class Users extends Component {
                     this.setState({ titleButtonChoose: e.target.value });
                   }}
                 />
-                <TextFieldGroup
+                   
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-goi-y-dang-nhap-1.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
                   field="buttonSuggestLogin1"
                   label="Tiêu đề nút gợi ý đăng nhập - 1:"
                   value={this.state?.buttonSuggestLogin1}
@@ -1163,7 +1297,15 @@ class Users extends Component {
                     this.setState({ buttonSuggestLogin1: e.target.value });
                   }}
                 />
-                <TextFieldGroup
+                   
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-goi-y-dang-nhap-2.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
                   field="buttonSuggestLogin2"
                   label="Tiêu đề nút gợi ý đăng nhập - 2:"
                   value={this.state?.buttonSuggestLogin2}
@@ -1172,7 +1314,15 @@ class Users extends Component {
                     this.setState({ buttonSuggestLogin2: e.target.value });
                   }}
                 />
-                <TextFieldGroup
+                   
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/chup-anh-buoc-1.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
                   field="titleStep1"
                   label="Tiều đề : Bước 1 - Chụp ảnh:"
                   value={this.state?.titleStep1}
@@ -1181,7 +1331,15 @@ class Users extends Component {
                     this.setState({ titleStep1: e.target.value });
                   }}
                 />
-                <TextFieldGroup
+                   
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/chup-anh-buoc-2.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
                   field="titleStep2"
                   label="Tiều đề : Bước 2 - Đã chụp - tải ảnh:"
                   value={this.state?.titleStep2}
@@ -1190,7 +1348,15 @@ class Users extends Component {
                     this.setState({ titleStep2: e.target.value });
                   }}
                 />
-                <TextFieldGroup
+                   
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/chup-anh-buoc-3.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
                   field="titleStep3"
                   label="Tiều đề : Bước 3 - Kết quả:"
                   value={this.state?.titleStep3}
@@ -1199,6 +1365,164 @@ class Users extends Component {
                     this.setState({ titleStep3: e.target.value });
                   }}
                 />
+                   
+                  </div>      
+               </div> 
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/ket-qua-tong-quan.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
+                  field="titleResultSkin"
+                  label="Tiều đề : Kết quả soi da:"
+                  value={this.state?.titleResultSkin}
+                  placeholder={""}
+                  onChange={(e) => {
+                    this.setState({ titleResultSkin: e.target.value });
+                  }}
+                />
+                   
+                  </div>      
+               </div>  
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/ket-qua-tong-quan-2.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
+                  field="textResultSkin"
+                  label="Tiêu đề phụ : Kết quả soi da:"
+                  value={this.state?.textResultSkin}
+                  placeholder={""}
+                  onChange={(e) => {
+                    this.setState({ textResultSkin: e.target.value });
+                  }}
+                />
+                   
+                  </div>      
+               </div>    
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/ket-qua-chuyen-sau.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
+                  field="titleResultDepthSkin"
+                  label="Tiều đề : Kết quả chuyên sâu:"
+                  value={this.state?.titleResultDepthSkin}
+                  placeholder={""}
+                  onChange={(e) => {
+                    this.setState({ titleResultDepthSkin: e.target.value });
+                  }}
+                />
+                   
+                  </div>      
+               </div>  
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/ket-qua-chuyen-sau2.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                  <TextFieldGroup
+                  field="textResultDepthSkin"
+                  label="Tiêu đề phụ : Kết quả chuyên sâu:"
+                  value={this.state?.textResultDepthSkin}
+                  placeholder={""}
+                  onChange={(e) => {
+                    this.setState({ textResultDepthSkin: e.target.value });
+                  }}
+                />
+                   
+                  </div>      
+               </div> 
+              </div>
+              <div id="tabcontent10" className="tabcontent">
+                <div class="text-center">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => this.SaveAllConfigWeb("button")}
+                  >
+                    Lưu thay đổi
+                  </Button>
+                </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/phan-tich-soi-da.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="btn_soida"
+                    label="Phân tích tình trạng da"
+                    value={this.state?.btn_soida}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ btn_soida: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/get-voucher.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="btn_get_voucher"
+                    label="Nhận Voucher"
+                    value={this.state?.btn_get_voucher}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ btn_get_voucher: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/get-voucher2.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="btn_get_voucher2"
+                    label="Nhận quà Voucher"
+                    value={this.state?.btn_get_voucher2}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ btn_get_voucher2: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+              </div>
+              <div id="tabcontent11" className="tabcontent">
+                <div class="text-center">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => this.SaveAllConfigWeb("voucher")}
+                  >
+                    Lưu thay đổi
+                  </Button>
+                </div>
+               <div class="flex-a-center config-box-border">
+                  <div>
+                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/receive-voucher.png" alt="img" />
+                  </div>
+                  <div style={{ width : '100%' }}>
+                    <TextFieldGroup
+                    field="receiveVoucher"
+                    label="Tiêu đề: Thông báo nhận voucher"
+                    value={this.state?.receiveVoucher}
+                    placeholder={""}
+                    onChange={(e) => {
+                      this.setState({ receiveVoucher: e.target.value });
+                    }}
+                  />           
+                  </div>      
+               </div>
+              
               </div>
 
               <div id="tabcontent2" className="tabcontent">
@@ -1319,6 +1643,27 @@ class Users extends Component {
                     this.setState({ titleSeo2: e.target.value });
                   }}
                 />
+                 <TextFieldGroup
+                  field="image1"
+                  label="Hình ảnh share (***px * ***px):"
+                  type={"file"}
+                  className="mt-5"
+                  onChange={(e) => {
+                    this.onChangeImage(e, "imageShareSeo", "imageShareSeo_link", "imageShareSeo_show");
+                  }}
+                  onClick={(e) => {
+                    e.target.value = null;
+                    this.setState({ imageShareSeo_show: "" });
+                  }}
+                />
+                <div class="text-center mb-5">
+                  <img
+                    alt=""
+                    style={{ width: "200px", marginBottom: 20 }}
+                    height="auto"
+                    src={this.state?.imageShareSeo}
+                  />
+                </div>
                 <TextFieldGroup
                   field="keywordSeo"
                   label="Từ khóa:"
@@ -1787,23 +2132,91 @@ class Users extends Component {
                   readOnly={isDisable}
                 />
               </div>
-              <div id="tabcontent9" className="tabcontent ">
-                <div className="text-center">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    style={{
-                      paddingRight: "20px",
-                      paddingLeft: "20px",
-                      fontSize: "20px",
+              <div id="tabcontent9" className="tabcontent">
+              <div class="text-center">
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => this.SaveAllConfigWeb("banner")}
+                    >
+                      Lưu thay đổi
+                    </Button>
+                  </div>
+              <div class="mt-3">
+                  <h1>Banner Desktop</h1>
+                  <TextFieldGroup
+                    field="image"
+                    label="Hình ảnh"
+                    type={"file"}
+                    onChange={(e) => {
+                      this.onChangeImage(e, "imageBannerDesktop", "imageBannerDesktop_link", "imageBannerDesktop_show");
                     }}
-                    size="md"
-                    onClick={() => this.resetCache()}
-                  >
-                    Reset Cache
-                  </Button>
+                    onClick={(e) => {
+                      e.target.value = null;
+                      this.setState({ imageBannerDesktop_show: "" });
+                    }}
+                  />
+                  <div class="text-center">
+                    <img
+                      alt=""
+                      style={{ width: "400px" }}
+                      height="auto"
+                      src={this.state.imageBannerDesktop}
+                    />
+                  </div>
+                  <TextFieldGroup
+                    field="hrefImageBannerDesktop"
+                    label="Đường dẫn"
+                    value={this.state.hrefImageBannerDesktop}
+                    placeholder=""
+                    type={"text"}
+                    className="mt-3"
+                    onChange={(e) => {
+                      this.setState({
+                        hrefImageBannerDesktop: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <hr/>
+                <div class="mt-3">
+                  <h1>Banner Mobile</h1>
+                  <TextFieldGroup
+                    field="image"
+                    label="Hình ảnh"
+                    type={"file"}
+                    onChange={(e) => {
+                      this.onChangeImage(e, "imageBannerMobile", "imageBannerMobile_link", "imageBannerMobile_show");
+                    }}
+                    onClick={(e) => {
+                      e.target.value = null;
+                      this.setState({ imageBannerMobile_show: "" });
+                    }}
+                  />
+                  <div class="text-center">
+                    <img
+                      alt=""
+                      style={{ width: "400px" }}
+                      height="auto"
+                      src={this.state.imageBannerMobile}
+                    />
+                  </div>
+                  <TextFieldGroup
+                    field="hrefImageBannerMobile"
+                    label="Đường dẫn"
+                    value={this.state.hrefImageBannerMobile}
+                    placeholder=""
+                    type={"text"}
+                    className="mt-3"
+                    onChange={(e) => {
+                      this.setState({
+                        hrefImageBannerMobile: e.target.value,
+                      });
+                    }}
+                  />
                 </div>
               </div>
+            
             </div>
           </div>
           <Modal
