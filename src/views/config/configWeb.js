@@ -1,22 +1,13 @@
 import React, { Component } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import ListSubheader from "@mui/material/ListSubheader";
+
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import SendIcon from "@mui/icons-material/Send";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
-import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
-
 import {
   Card,
   CardBody,
@@ -31,26 +22,20 @@ import {
   Modal,
 } from "reactstrap";
 import Swal from "sweetalert2";
-import update from "react-addons-update";
-import PropTypes from "prop-types";
+
 import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import API_CONNECT from "../../../src/functions/callAPI";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import InfoIcon from "@mui/icons-material/Info";
 import PermDataSettingIcon from "@mui/icons-material/PermDataSetting";
-import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
 import {
   CLabel,
   CRow,
   CCol,
   CSelect,
   CButton,
-  CTooltip,
+
   CTextarea,
 } from "@coreui/react";
 import Checkbox from "@mui/material/Checkbox";
@@ -64,16 +49,17 @@ import DotLoader from "react-spinners/DotLoader";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import logoMainnet from "../../assets/img/logo_head.png";
-import CircularProgress from "@mui/material/CircularProgress";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
-import LockResetIcon from "@mui/icons-material/LockReset";
-import { MdAdd } from "@react-icons/all-files/md/MdAdd";
 import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
 import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
 import { AiFillWechat } from "@react-icons/all-files/ai/AiFillWechat";
 import { IoIosColorPalette } from "@react-icons/all-files/io/IoIosColorPalette";
+// import { BsFillMenuButtonWideFill } from "@react-icons/all-files/bs/BsFillMenuButtonWideFill";
+import { BsFillMenuButtonWideFill } from 'react-icons/bs';
+import { MdOutlineModeComment } from 'react-icons/md';
+import {  AiOutlineFundView } from "react-icons/ai";
+import { BiWorld } from 'react-icons/bi';
+import Chats from './configWeb/Chats';
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -86,6 +72,7 @@ class Users extends Component {
     this.state = {
       centerFooterLeft : true,
       centerFooterRight : true,
+      configData : [],
       tabNameConfig: [
         {
           _id: "1",
@@ -116,22 +103,22 @@ class Users extends Component {
         {
           _id: "10",
           name: "Nút",
-          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <BsFillMenuButtonWideFill style={{ width: "24px ", height: "24px " }} />
         },
         {
           _id: "12",
           name: "Popup",
-          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <MdOutlineModeComment style={{ width: "24px ", height: "24px " }} />
         },
         {
           _id: "11",
           name: "Voucher",
-          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <AiOutlineFundView style={{ width: "24px ", height: "24px " }} />
         },
         {
           _id: "13",
           name: "Aia",
-          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <BiWorld style={{ width: "24px ", height: "24px " }} />
         },
         {
           _id: "4",
@@ -164,6 +151,7 @@ class Users extends Component {
         : null,
 
       action: "new",
+      codeChat : "",
       idUpdate: "",
       checkFb: false,
       checkGg: true,
@@ -175,7 +163,6 @@ class Users extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       role: localStorage.getItem("role"),
       type: localStorage.getItem("type"),
-
       current_slug: "",
       companyID: "",
       arrTotalPackage: [],
@@ -191,52 +178,23 @@ class Users extends Component {
       error_color: "",
       text_mainColor: "",
       updateLevel: "1",
-
       Message_Code: "",
       sub_mainColor: "",
-
       statusModalUpdate: false,
-
       dataConfigWeb: null,
       idUpdateCurrent: null,
       loadingSaveLogo: false,
       htmlFuncWeb: null,
-
       openHomeItem: false,
-
       modalSlide: false,
       actionSlide: "new",
-
-      configData: [
-        {
-          label: "Trạng thái Facebook",
-          value: true,
-          key: "fb",
-          pass: "",
-          code: "",
-        },
-        {
-          label: "Trạng thái Google",
-          value: true,
-          key: "gg",
-          pass: "",
-          code: "",
-        },
-        {
-          label: "Trạng thái Zalo",
-          value: true,
-          key: "gg",
-          pass: "",
-          code: "",
-        },
-      ],
     };
   }
-  changeLevel = (e) => {
-    e.preventDefault();
+
+  setStateName(name,value){
     this.setState({
-      updateLevel: e.target.value,
-    });
+      [name]: value
+    })
   };
   ToggleViewConfigWeb(id) {
     var i, tabcontent, tablinks;
@@ -270,11 +228,9 @@ class Users extends Component {
     };
   }
   async componentDidMount() {
-
-
     await this.getFooter();
-    this.getDataConfigWeb();
-    this.getData();
+    await this.getDataConfigWeb();
+    await this.getData();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -353,7 +309,7 @@ class Users extends Component {
                   btn_soida: this.state.button.btn_soida,
                   btn_get_voucher: this.state.button.btn_get_voucher,
                   btn_get_voucher2 : this.state.button.btn_get_voucher2,
-                  btn_register_get_voucher: this.state.voucher.btn_register_get_voucher,
+                  btn_register_get_voucher: this.state.button.btn_register_get_voucher,
 
                 })       
               }
@@ -580,32 +536,7 @@ class Users extends Component {
 
       });
   }
-  async deleteFooter(item) {
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.DELETE_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = this.state.company_id
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    await axios
-      .post(url, {
-        id: item._id,
 
-      })
-      .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Xóa thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-        this.getFooter();
-      });
-  }
   async updateFooter() {
     const { slugFooter, updateLink, contentFooter, updateTitle } = this.state;
     var baseUrlapi = Constants.BASE_URL;
@@ -695,21 +626,17 @@ class Users extends Component {
   async SaveAllConfigWeb(change) {
     const {
       dataConfigWeb,
-
       introduce,
       sologan,
-
       titleSeo,
       titleSeo2,
       descSeo,
       authorSeo,
       keywordSeo,
-
       imgLayout_link,
       image1_link,
       image2_link,
       image3_link,
-
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
@@ -722,9 +649,10 @@ class Users extends Component {
       ...dataConfigWeb,
     };
 
-    
-   
     if (change === "mxh") {
+      if(!coppyData.value.mxh){
+        coppyData.value.mxh = {}
+      }
       // coppyData.value.statusConfig = this.state.configData;
       coppyData.value.mxh.facebook.appid = this.state.keyAppFb;
       coppyData.value.mxh.facebook.password = this.state.PassFb;
@@ -737,8 +665,6 @@ class Users extends Component {
       coppyData.value.mxh.zalo.appid = this.state.keyAppZalo;
       coppyData.value.mxh.zalo.password = this.state.PassZalo;
       coppyData.value.mxh.zalo.href = this.state.hrefZalo;
-
-
     }
     if (change === "chats") {
 
@@ -789,7 +715,9 @@ class Users extends Component {
       coppyData.value.form.titleLogin = this.state.titleLogin;
     }
     if (change === "homepage") {
-      
+      if(!coppyData.value.homepage){
+        coppyData.value.homepage = {}
+      }
       coppyData.value.homepage.loginViewResult1 = this.state.loginViewResult1;
       coppyData.value.homepage.loginViewResult2 = this.state.loginViewResult2;
       coppyData.value.homepage.loginViewResult3 = this.state.loginViewResult3;
@@ -798,7 +726,6 @@ class Users extends Component {
       coppyData.value.homepage.textResultDepthSkin = this.state.textResultDepthSkin;
       coppyData.value.homepage.titleResult = this.state.titleResultSkin;
       coppyData.value.homepage.textResult = this.state.textResultSkin;
-
       coppyData.value.homepage.titleButtonPhoto = this.state.titleButtonPhoto;
       coppyData.value.homepage.titleButtonChoose = this.state.titleButtonChoose;
       coppyData.value.homepage.buttonSuggestLogin1 = this.state.buttonSuggestLogin1;
@@ -807,7 +734,6 @@ class Users extends Component {
       coppyData.value.homepage.titleStep2 = this.state.titleStep2;
       coppyData.value.homepage.titleStep3 = this.state.titleStep3;
       coppyData.value.homepage.titlePhoto = this.state.titlePhoto;
-
       coppyData.value.homepage.title1 = this.state.titlePen1;
       coppyData.value.homepage.title2 = this.state.titlePen2;
       coppyData.value.homepage.textAi = this.state.textAi;
@@ -827,7 +753,9 @@ class Users extends Component {
       }
     }
     if (change === "seoInfo") {
-      
+      if(!coppyData.value.seoInfo){
+        coppyData.value.seoInfo = {}
+      }
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
       coppyData.value.seoInfo.description = descSeo;
@@ -858,8 +786,9 @@ class Users extends Component {
       });
     }
     if (change === "logos") {
-
-
+      if(!coppyData.value.logos){
+        coppyData.value.logos = {};
+      }
       let newImage = await this.postImage(this.state.image_link);
       if (newImage) {
         coppyData.value.logos.header.logo = `${Constants.BASE_URL}image_brand/${newImage}`;
@@ -870,7 +799,6 @@ class Users extends Component {
       }
       coppyData.value.logos.footer.href = this.state.hrefLogoFooter;
       coppyData.value.logos.header.href = this.state.hrefLogoHeader;
-
       this.setState({
         dataConfigWeb: coppyData,
       });
@@ -879,7 +807,6 @@ class Users extends Component {
       if(!coppyData.value.banner){
         coppyData.value.banner = {};
       }
-
       let newImage = await this.postImage(this.state.imageBannerDesktop_link);
       if (newImage) {
         coppyData.value.banner.imageBannerDesktop = `${Constants.BASE_URL}image_brand/${newImage}`;
@@ -895,8 +822,7 @@ class Users extends Component {
       this.setState({
         dataConfigWeb: coppyData,
       });
-    }
-    
+    }  
     await axios
       .post(url, {
         value: JSON.stringify(coppyData),
@@ -969,29 +895,6 @@ class Users extends Component {
       isDisable: true,
     });
   };
-  openFormAddFooter = () => {
-    this.setState({
-      action: "new",
-      contentFooter: "",
-      updateLevel: "1",
-      statusModalUpdate: true,
-      updateLink: "",
-      updateTitle: "",
-      slugFooter: "",
-    });
-  };
-  async openFormEditFooter(item, i) {
-    this.setState({
-      action: "edit",
-      updateLevel: item.Level,
-      slugFooter: item.slug,
-      idFooterEditor: item._id,
-      updateTitle: item.title,
-      contentFooter: item.content,
-      statusModalUpdate: true,
-      updateLink: item.link,
-    });
-  }
   closeFormEdit = () => {
     this.setState({ statusModalUpdate: false });
   };
@@ -1106,26 +1009,6 @@ class Users extends Component {
       }
     );
   }
-  async resetCache() {
-    let url = "https://soida.pensilia.com/api/clear_cache";
-    await axios.get(url, {}).then((res) => {
-      if (res.data.success === "success") {
-        Swal.fire({
-          icon: "success",
-          title: "Clear cache thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Xảy ra lỗi trong quá trình xử lý",
-          showConfirmButton: false,
-          timer: 700,
-        });
-      }
-    });
-  }
   async updateCompany(e) {
     e.preventDefault();
     const {
@@ -1182,20 +1065,19 @@ class Users extends Component {
 
     }
   }
+  setStateByName=(name, value)=>{
+    this.setState({ [name]: value });
+  }
   render() {
     const {
       contentSlide,
-
       slideShow,
-
       titleSeo,
       descSeo,
       keywordSeo,
-
       authorSeo,
       titleSeo2,
       dataFooter,
-
       isDisable,
 
       mainColor,
@@ -1210,7 +1092,6 @@ class Users extends Component {
                 sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
-
               >
                 {
                   this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i) => {
@@ -1541,7 +1422,7 @@ class Users extends Component {
                   <div style={{ width : '100%' }}>
                   <TextFieldGroup
                   field="loginViewResult3"
-                label="Gợi ý đăng nhập: Vị trí 3:"
+                  label="Gợi ý đăng nhập: Vị trí 3:"
                   value={this.state?.loginViewResult3}
                   placeholder={"E-voucher"}
                   onChange={(e) => {
@@ -2188,48 +2069,11 @@ class Users extends Component {
 
               </div>
               <div id="tabcontent5" className="tabcontent ">
-                <div class="text-center">
-                  <CButton
-                    onClick={() => this.SaveAllConfigWeb("chats")}
-                    style={styles.mgl5}
-                    outline
-                    color="success"
-                    size="md"
-                  >
-                    {/* <CIcon name="cilPencil" /> */}
-                    Lưu thay đổi
-                  </CButton>
-                </div>
-                <div className="text-center">
-                  <div className="mt-3">
-                    <p>Mã chat tawk (nếu có) :</p>
-                  </div>
-
-                  <textarea
-
-                    name="codeChat"
-                    value={this.state.codeChat}
-                    onChange={(e) => this.setState({ codeChat: e.target.value })}
-                    class="mt-3"
-                    cols="60"
-                    rows="8"
-                  ></textarea>
-                </div>
-                <div class="text-center">
-                  <div className="mt-3">
-                    <p>Mã chat message (nhắn tin với khách hàng) :</p>
-                  </div>
-
-                  <textarea
-
-                    name="codeMess"
-                    value={this.state.codeMess}
-                    onChange={(e) => this.setState({ codeMess: e.target.value })}
-                    class="mt-3"
-                    cols="60"
-                    rows="8"
-                  ></textarea>
-                </div>
+                <Chats
+                setStateByName={this.setStateByName}
+                codeChat={this.state.codeChat}
+                codeMess={this.state.codeMess}
+                />
               </div>
               <div id="tabcontent6" className="tabcontent">
                 <div class="text-center">
