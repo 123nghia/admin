@@ -3,17 +3,10 @@ import { Button } from "reactstrap";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 
 export default class TabHome extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      titlePen1: "",
-    };
-  }
-  setStateName(name, e) {
-    this.setState({
-      [name]: e.target.value,
-    });
-  }
+  
+  setStateByName = (name, value) => {
+    this.props.setStateByName(name, value);
+  };
   SaveAllConfigWeb(value) {
     this.props.SaveAllConfigWeb(value);
   }

@@ -60,6 +60,11 @@ import { MdOutlineModeComment } from 'react-icons/md';
 import {  AiOutlineFundView } from "react-icons/ai";
 import { BiWorld } from 'react-icons/bi';
 import Chats from './configWeb/Chats';
+import BannerAia from './configWeb/BannerAia';
+import Logo from './configWeb/Logo';
+import SlideShow from './configWeb/SlideShow';
+import Mxh from './configWeb/Mxh';
+import Footer from "./configWeb/Footer";
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -218,7 +223,7 @@ class Users extends Component {
       };
     };
   }
-  onChangeImage(e, value, valueLink, valueShow) {
+  onChangeImage=(e, value, valueLink, valueShow) =>{
     let files = e.target.files;
     let reader = new FileReader();
     this.setState({ [valueLink]: files[0] });
@@ -623,7 +628,7 @@ class Users extends Component {
       return newImage;
     }
   }
-  async SaveAllConfigWeb(change) {
+  SaveAllConfigWeb= async(change)=>{
     const {
       dataConfigWeb,
       introduce,
@@ -898,7 +903,7 @@ class Users extends Component {
   closeFormEdit = () => {
     this.setState({ statusModalUpdate: false });
   };
-  openFormAddSlide() {
+  openFormAddSlide=()=>{
     this.setState({
       actionSlide: "new",
       modalSlide: true,
@@ -943,7 +948,7 @@ class Users extends Component {
       }
     );
   }
-  openFormEditSlide(item, i) {
+  openFormEditSlide=(item, i)=> {
 
     this.setState({
       actionSlide: "edit",
@@ -956,7 +961,7 @@ class Users extends Component {
       indexSlideUpdate: i,
     });
   }
-  async deleteSlide(i) {
+   deleteSlide=async(i)=> {
     const { dataConfigWeb } = this.state;
     let coppyData = {
       ...dataConfigWeb,
@@ -1783,93 +1788,15 @@ class Users extends Component {
               </div>
 
               <div id="tabcontent2" className="tabcontent">
-                <div class="flex-end mt-3">
-                  <CButton
-                    color="info"
-                    style={{ marginBottom: "10px" }}
-                    size="md"
-                    className="btn-main"
-                    onClick={() => this.openFormAddSlide()}
-                  >
-                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                    <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                  </CButton>
-
-                </div>
-
-                <table
-                  ble
-                  className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
-                >
-                  <thead className="thead-light">
-                    <tr>
-                      <th className="text-center">STT.</th>
-                      {/* <th className="text-center">Tên</th> */}
-                      <th className="text-center">Hình ảnh</th>
-                      <th className="text-center">Mô tả</th>
-
-                      <th className="text-center">#</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {slideShow
-                      ? slideShow.map((item, i) => {
-                        return (
-                          <tr key={i}>
-                            <td className="text-center">{i + 1}</td>
-                            <td className="text-center">
-                              <img
-                                width="150"
-                                height="150"
-                                src={item.image}
-                                alt=""
-                              />
-                            </td>
-
-                            <td className="text-center">{item.content}</td>
-                            {/* <td className="text-center">
-                                {Number(item.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} đ
-                              </td> */}
-                            <td className="">
-                              <div className="flex">
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="ghost"
-                                  color="info"
-                                  style={styles.mgl5}
-                                  size="md"
-                                  onClick={() => this.openFormEditSlide(item, i)}
-                                >
-                                  <FiEdit3
-                                    style={styles.icon}
-                                    className="icon"
-
-                                    name="cilPencil"
-                                  />
-                                </CButton>{" "}
-                                <CButton
-                                  shape="rounded-pill"
-                                  variant="ghost"
-                                  color="danger"
-                                  style={styles.mgl5}
-                                  onClick={() => this.deleteSlide(i)}
-                                >
-                                  <BsTrash
-                                    style={styles.icon}
-                                    className="icon"
-
-                                    name="cilTrash"
-                                  />
-                                </CButton>
-                              </div>
-
-                            </td>
-                          </tr>
-                        );
-                      })
-                      : null}
-                  </tbody>
-                </table>
+                <SlideShow 
+                 SaveAllConfigWeb={this.SaveAllConfigWeb}
+                 setStateByName={this.setStateByName}
+                 onChangeImage={this.onChangeImage}
+                 openFormEditSlide={this.openFormEditSlide}
+                 deleteSlide={this.deleteSlide}
+                 openFormAddSlide={this.openFormAddSlide}
+                 slideShow={this.state.slideShow}
+                />
               </div>
               <div id="tabcontent3" className="tabcontent">
                 <div className="text-center">
@@ -1975,334 +1902,51 @@ class Users extends Component {
                 </div>
               </div>
               <div id="tabcontent4" className="tabcontent ">
-                <div class="text-center">
-                  <CButton
-                    onClick={() => this.SaveAllConfigWeb("logos")}
-                    style={styles.mgl5}
-                    outline
-                    color="success"
-                    size="md"
-                  >
-                    {/* <CIcon name="cilPencil" /> */}
-                    Lưu thay đổi
-                  </CButton>
-                </div>
-                <div className="mt-3"></div>
-                <div class="mt-3">
-                  <h1>Header</h1>
-                  <TextFieldGroup
-                    field="image"
-                    label="Logo :(Tỷ lệ 2:1)"
-                    type={"file"}
-                    onChange={(e) => {
-                      this.onChangeImage(e, "image", "image_link", "image_show");
-                    }}
-                    onClick={(e) => {
-                      e.target.value = null;
-                      this.setState({ image_show: "" });
-                    }}
-                  />
-                  <div class="text-center">
-                    <img
-                      alt=""
-                      style={{ width: "140px" }}
-                      height="auto"
-                      src={this.state.image}
-                    />
-                  </div>
-                  <TextFieldGroup
-                    field="hrefLogoHeader"
-                    label="Đường dẫn"
-                    value={this.state.hrefLogoHeader}
-                    placeholder=""
-                    type={"text"}
-                    className="mt-3"
-                    // value={this.state.image}
-                    onChange={(e) => {
-                      this.setState({
-                        hrefLogoHeader: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <hr />
-                <h1>Footer</h1>
-                <TextFieldGroup
-                  field="logoFooter"
-                  label="Logo :(Tỷ lệ 2:1)"
-                  type={"file"}
-                  className="mt-5"
-                  onChange={(e) => {
-                    this.onChangeImage(
-                      e,
-                      "imgLogoFooter",
-                      "imgLogoFooter_link",
-                      "imgLogoFooter_show"
-                    );
-                  }}
-                  onClick={(e) => {
-                    e.target.value = null;
-                    this.setState({ imgLogoFooter_show: "" });
-                  }}
-                />
-                <div className="text-center">
-                  <img
-                    alt=""
-                    style={{ width: "200px", marginBottom: 20 }}
-                    src={this.state.imgLogoFooter}
-                  />
-                </div>
-                <TextFieldGroup
-                  field="hrefLogoHeader"
-                  label="Đường dẫn"
-                  value={this.state.hrefLogoFooter}
-                  placeholder=""
-                  type={"text"}
-                  className="mt-3"
-                  // value={this.state.image}
-                  onChange={(e) => {
-                    this.setState({
-                      hrefLogoFooter: e.target.value,
-                    });
-                  }}
-                />
+               <Logo 
+               SaveAllConfigWeb={this.SaveAllConfigWeb}
+               setStateByName={this.setStateByName}
+               onChangeImage={this.onChangeImage}
+               image={this.state.image}
+               hrefLogoHeader={this.state.hrefLogoHeader}
+               imgLogoFooter={this.state.imgLogoFooter}
+               hrefLogoFooter={this.state.hrefLogoFooter}
+               />
 
               </div>
               <div id="tabcontent5" className="tabcontent ">
                 <Chats
+                SaveAllConfigWeb={this.SaveAllConfigWeb}
                 setStateByName={this.setStateByName}
                 codeChat={this.state.codeChat}
                 codeMess={this.state.codeMess}
                 />
               </div>
               <div id="tabcontent6" className="tabcontent">
-                <div class="text-center">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => this.SaveAllConfigWeb("mxh")}
-                  >
-                    Lưu thay đổi
-                  </Button>
-                </div>
-                <div class="mt-3"></div>
-                {this.state.configData.map((product, i) => {
-                  return (
-                    <div class="configData_item">
-                      <div class="">
-                        <strong>{product.label}</strong>
-                      </div>
-                      <div class="">
-                        <FormGroup>
-                          <FormControlLabel
-                            onChange={(e) => {
-                              let x = [...this.state.configData];
-                              x[i].value = !x[i].value;
-                              this.setState({
-                                configData: x,
-                              });
-                            }}
-                            checked={product.value}
-                            control={<Switch defaultChecked />}
-                            label=""
-                          />
-                        </FormGroup>
-                        <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-                <div class="text-center">
-                  <p>Facebook</p>
-                </div>
-                <div class="col-md-12 mt-3">
-                  <div>
-                    <TextFieldGroup
-                      field=""
-                      label="Mã ứng dụng"
-                      value={this.state.keyAppFb}
-                      onChange={(e) => {
-                        this.setState({ keyAppFb: e.target.value });
-                      }}
-                    />
+              <Mxh 
+                 SaveAllConfigWeb={this.SaveAllConfigWeb}
+                 configData={this.state.configData}
+                 setStateByName={this.setStateByName}
+                 keyAppFb={this.state.keyAppFb}
+                 PassFb={this.state.PassFb}
+                 hrefFb={this.state.hrefFb}
+                 keyAppGg={this.state.keyAppGg}
+                 PassGg={this.state.PassGg}
+                 hrefGg={this.state.hrefGg}
+                 keyAppZalo={this.state.keyAppZalo}
+                 PassZalo={this.state.PassZalo}
+                 hrefZalo={this.state.hrefZalo}
 
-                    <TextFieldGroup
-                      field=""
-                      label="Mật khẩu"
-                      value={this.state.PassFb}
-                      onChange={(e) => {
-                        this.setState({ PassFb: e.target.value });
-                      }}
-                    />
-                    <TextFieldGroup
-                      field=""
-                      label="Đường dẫn"
-                      value={this.state.hrefFb}
-                      onChange={(e) => {
-                        this.setState({ hrefFb: e.target.value });
-                      }}
-                    />
-                  </div>
-                </div>
-                <div class="text-center">
-                  <p>Google</p>
-                </div>
-                <div class="col-md-12 mt-3">
-                  <div>
-                    <TextFieldGroup
-                      field=""
-                      label="Mã ứng dụng"
-                      value={this.state.keyAppGg}
-                      placeholder={"Mã app"}
-                      onChange={(e) => {
-                        this.setState({ keyAppGg: e.target.value });
-                      }}
-                    />
-
-                    <TextFieldGroup
-                      field=""
-                      label="Mật khẩu"
-                      value={this.state.PassGg}
-                      placeholder={"Mật khẩu"}
-                      onChange={(e) => {
-                        this.setState({ PassGg: e.target.value });
-                      }}
-                    />
-                    <TextFieldGroup
-                      field=""
-                      label="Đường dẫn"
-                      value={this.state.hrefGg}
-                      onChange={(e) => {
-                        this.setState({ hrefGg: e.target.value });
-                      }}
-                    />
-                  </div>
-                </div>
-                <div class="text-center">
-                  <p>Zalo</p>
-                </div>
-                <div class="col-md-12 mt-3">
-                  <div>
-                    <TextFieldGroup
-                      field=""
-                      label="Mã ứng dụng"
-                      value={this.state.keyAppZalo}
-                      placeholder={"Mã app"}
-                      onChange={(e) => {
-                        this.setState({ keyAppZalo: e.target.value });
-                      }}
-                    />
-
-                    <TextFieldGroup
-                      field=""
-                      label="Mật khẩu"
-                      value={this.state.PassZalo}
-                      placeholder={"Mật khẩu"}
-                      onChange={(e) => {
-                        this.setState({ PassZalo: e.target.value });
-                      }}
-                    />
-                    <TextFieldGroup
-                      field=""
-                      label="Đường dẫn"
-                      value={this.state.hrefZalo}
-                      onChange={(e) => {
-                        this.setState({ hrefZalo: e.target.value });
-                      }}
-                    />
-                  </div>
-                </div>
+                />
               </div>
               <div id="tabcontent7" className="tabcontent">
-                <div class="text-center">
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={() => this.SaveAllConfigWeb("footer")}
-                    >
-                      Lưu thay đổi
-                    </Button>
-                  </div>
-                  <div className="config_footer_box">
-                      <h1>Tiêu đề trái</h1>
-                      <div className="flex-a-center">
-                      <p style={{marginRight:'10px'}}>Căn giữa</p>
-                        <div className="">
-                        <FormGroup>
-                            <FormControlLabel onChange={e=>{
-                              this.setState({
-                                centerFooterLeft : !this.state.centerFooterLeft
-                              })
-                            }} checked={this.state.centerFooterLeft} control={<Switch defaultChecked />} label="" />               
-                        </FormGroup>
-                        </div>
-                      </div>
-                                 
-                      <CKEditor
-                        editor={ ClassicEditor }
-                        data={this.state.footerLeft}
-                        onReady={ editor => {
-                            // You can store the "editor" and use when it is needed.
-                            console.log( 'Editor is ready to use!', editor );
-                        } }
-                        onChange={ ( event, editor ) => {
-                            const data = editor.getData();
-                            this.setState({
-                              footerLeft : data
-                            })
-                        } }
-                        onBlur={ ( event, editor ) => {
-                            console.log( 'Blur.', editor );
-                        } }
-                        onFocus={ ( event, editor ) => {
-                            console.log( 'Focus.', editor );
-                        } }
-                    />
-                  </div>
-                  <div className="config_footer_box">
-                    <h1>Tiêu đề phải</h1>
-                    
-                      <div className="flex-a-center">
-                      <p style={{marginRight:'10px'}}>Căn giữa</p>
-                     
-                      <div className="">
-                      <FormGroup>
-                          <FormControlLabel onChange={e=>{
-                            console.log(this.state.centerFooterRight)
-                            this.setState({
-                              centerFooterRight : !this.state.centerFooterRight
-                            })
-                          }} checked={this.state.centerFooterRight} control={<Switch defaultChecked />} label="" />
-                      
-                      </FormGroup>
-                      
-                      </div>
-                      </div>
-
-                    
-
-                      <CKEditor
-                        editor={ ClassicEditor }
-                        data={this.state.footerRight}
-                        onReady={ editor => {
-                            // You can store the "editor" and use when it is needed.
-                            console.log( 'Editor is ready to use!', editor );
-                        } }
-                        onChange={ ( event, editor ) => {
-                          const data = editor.getData();
-                          this.setState({
-                            footerRight : data
-                          })
-                        } }
-                        onBlur={ ( event, editor ) => {
-                            console.log( 'Blur.', editor );
-                        } }
-                        onFocus={ ( event, editor ) => {
-                            console.log( 'Focus.', editor );
-                        } }
-                    />
-                  </div>
-               
+                <Footer
+                SaveAllConfigWeb={this.SaveAllConfigWeb}
+                setStateByName={this.setStateByName}
+                centerFooterLeft={this.state.centerFooterLeft}
+                footerLeft={this.state.footerLeft}
+                centerFooterRight={this.state.centerFooterRight}
+                footerRight={this.state.footerRight}
+                />       
               </div>
               <div id="tabcontent8" className="tabcontent">
                 <div class="flex-end">
@@ -2353,88 +1997,15 @@ class Users extends Component {
                 />
               </div>
               <div id="tabcontent9" className="tabcontent">
-              <div class="text-center">
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={() => this.SaveAllConfigWeb("banner")}
-                    >
-                      Lưu thay đổi
-                    </Button>
-                  </div>
-              <div class="mt-3">
-                  <h1>Banner Desktop</h1>
-                  <TextFieldGroup
-                    field="image"
-                    label="Hình ảnh"
-                    type={"file"}
-                    onChange={(e) => {
-                      this.onChangeImage(e, "imageBannerDesktop", "imageBannerDesktop_link", "imageBannerDesktop_show");
-                    }}
-                    onClick={(e) => {
-                      e.target.value = null;
-                      this.setState({ imageBannerDesktop_show: "" });
-                    }}
+                  <BannerAia
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  onChangeImage={this.onChangeImage}
+                  imageBannerDesktop={this.state.imageBannerDesktop}
+                  hrefImageBannerDesktop={this.state.hrefImageBannerDesktop}
+                  imageBannerMobile={this.state.imageBannerMobile}
+                  hrefImageBannerMobile={this.state.hrefImageBannerMobile}
                   />
-                  <div class="text-center">
-                    <img
-                      alt=""
-                      style={{ width: "400px" }}
-                      height="auto"
-                      src={this.state.imageBannerDesktop}
-                    />
-                  </div>
-                  <TextFieldGroup
-                    field="hrefImageBannerDesktop"
-                    label="Đường dẫn"
-                    value={this.state.hrefImageBannerDesktop}
-                    placeholder=""
-                    type={"text"}
-                    className="mt-3"
-                    onChange={(e) => {
-                      this.setState({
-                        hrefImageBannerDesktop: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <hr/>
-                <div class="mt-3">
-                  <h1>Banner Mobile</h1>
-                  <TextFieldGroup
-                    field="image"
-                    label="Hình ảnh"
-                    type={"file"}
-                    onChange={(e) => {
-                      this.onChangeImage(e, "imageBannerMobile", "imageBannerMobile_link", "imageBannerMobile_show");
-                    }}
-                    onClick={(e) => {
-                      e.target.value = null;
-                      this.setState({ imageBannerMobile_show: "" });
-                    }}
-                  />
-                  <div class="text-center">
-                    <img
-                      alt=""
-                      style={{ width: "400px" }}
-                      height="auto"
-                      src={this.state.imageBannerMobile}
-                    />
-                  </div>
-                  <TextFieldGroup
-                    field="hrefImageBannerMobile"
-                    label="Đường dẫn"
-                    value={this.state.hrefImageBannerMobile}
-                    placeholder=""
-                    type={"text"}
-                    className="mt-3"
-                    onChange={(e) => {
-                      this.setState({
-                        hrefImageBannerMobile: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
               </div>
             
             </div>

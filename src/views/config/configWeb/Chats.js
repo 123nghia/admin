@@ -5,6 +5,9 @@ export default class Chats extends Component {
   setStateByName = (name, value) => {
     this.props.setStateByName(name, value);
   };
+  SaveAllConfigWeb(value) {
+    this.props.SaveAllConfigWeb(value);
+}
   render() {
     return (
       <>
