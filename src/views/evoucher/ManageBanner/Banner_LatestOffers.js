@@ -94,7 +94,6 @@ class EndUser extends Component {
     if (this.state.type !== "0") {
       window.location.href = "/";
     }
-    const { type } = this.state;
 
     this.getData();
     this.getDataCampaign();
@@ -265,6 +264,7 @@ class EndUser extends Component {
       image: item.image,
       image_link: item.image,
       image_show: item.image,
+      type: "1",
 
       relCode: item.relcode,
     });
@@ -282,6 +282,7 @@ class EndUser extends Component {
       relCode,
       company_id,
       image_link,
+      type,
     } = this.state;
 
     const form3 = new FormData();
@@ -316,6 +317,7 @@ class EndUser extends Component {
         embedded: embedded,
         company_id,
         image: img,
+        type,
         relcode: relCode,
       })
       .then((res) => {

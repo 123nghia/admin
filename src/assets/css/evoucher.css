@@ -52,15 +52,18 @@
 /* ============================Manager Provider============================= */
 .tabInfo-header{
     display:flex;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     padding: 10px;
 }
 
 .tabInfo-header__logo {
     width:150px;
-    height:150px;
     border: 1px solid #cccccc40;
     background-color: #fff;
+}
+
+.tabInfo-header__logo img {
+   width: 100%;
 }
 
 .tabInfo-header__name {
@@ -76,6 +79,17 @@
     justify-content: space-between;
     justify-items: center;
     flex-wrap: nowrap;
+    margin-top: 20px;
+}
+
+.tabInfo-body__contact--center {
+    padding: 30px;
+    border-radius: 20px;
+    background: #0014ff14;
+}
+
+.tabInfo-body--center {
+    justify-content: center !important;
 }
 
 .tabInfo-body__contact-title {
@@ -138,3 +152,103 @@
     font-size: 13px;
     font-weight: 600;   
 }
+
+/* ==================================Sale group================================ */
+.statistical {
+    border-radius: 6px;
+    height:200px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.statistical--total-voucher {
+    border: 1px solid #46b546b8;
+}
+
+.statistical--total-customer {
+    border: 1px solid #0089ff6e;
+}
+
+.statistical--percent-customer {
+    border: 1px solid #ff8100a3;
+}
+
+.statistical__header {
+    padding: 10px;
+    min-height: 65px;
+    font-weight:600;
+    color: #fff;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.statistical__header--total-voucher {
+    background-color: #46b546b8;
+}
+
+.statistical__header--total-customer {
+    background-color:#0089ff6e;
+}
+
+.statistical__header--percent-customer {
+    background-color: #ff8100a3;
+}
+
+.statistical__body {
+    padding: 40px 20px;
+    font-size: 30px;
+}
+
+.statistical__body--total-voucher {
+    color: #46b546b8;
+}
+
+.statistical__body--total-customer {
+    color:#0089ff6e;
+}
+
+.statistical__body--percent-customer {
+    color: #ff8100a3;
+}
+
+.total-member {
+    font-size: 20px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.total-member__title {
+    display: inline;
+}
+
+.total-member span {
+    margin-left: 10px;
+    border-radius: 50%;
+    background: #3770199e;
+    color: #fff;
+    padding: 7px;
+}
+
+.tabInfo-header__name--group-sale {
+    margin: 0 0 20px 10px;
+    padding: 15px;
+}
+
+.total-campaign--group-sale {
+    color: #747474;
+    border-radius: 12px;
+    background: #3d627c1c;
+    padding: 20px;
+    margin: 0 10px;
+}
+
+.leader-group-sale {
+    padding: 0 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #696c63b5;
+}
+
+
+

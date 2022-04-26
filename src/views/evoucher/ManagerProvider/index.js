@@ -27,6 +27,8 @@ import {
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { Link } from "react-router-dom";
+import API_CONNECT from "../../../../src/functions/callAPI";
+
 // import API_CONNECT from "../../functions/callAPI";
 import Pagination from "@material-ui/lab/Pagination";
 import "moment-timezone";
@@ -96,10 +98,32 @@ class EndUser extends Component {
       changeTab: "1",
     };
   }
-  onChangeImage = (e) => {
-    const file = e.target.files[0];
-    file.preview = URL.createObjectURL(file);
-  };
+  onChangeImage(e, value, valueLink, valueShow) {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ [valueLink]: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
+    };
+  }
+  async postImage(link) {
+    var newImage = "";
+    if (link && link !== "") {
+      const form = new FormData();
+
+      form.append("image", link);
+
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+        (res) => {}
+      );
+
+      newImage = link.name;
+      return newImage;
+    } else {
+      return newImage;
+    }
+  }
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
@@ -210,6 +234,11 @@ class EndUser extends Component {
 
     let url = baseUrlapi + baseUrlCallApi;
     this.setState({ isLoading: true });
+    let imgOutput = "";
+    let imgLink = await this.postImage(this.state.Logo_link);
+    if (imgLink) {
+      imgOutput = imgLink;
+    }
     await axios
       .post(url, {
         Name: Name,
@@ -218,7 +247,7 @@ class EndUser extends Component {
         Status: Status,
         Brand: Brand,
         TypeId: TypeId,
-        Logo: Logo,
+        Logo: imgOutput,
       })
       .then((res) => {
         console.log(res);
@@ -277,13 +306,18 @@ class EndUser extends Component {
     let baseUrlCallApi = Constants.ADD_PROVIDER;
     let url = baseUrlapi + baseUrlCallApi;
     this.setState({ isLoading: true });
+    let imgOutput = "";
+    let imgLink = await this.postImage(this.state.Logo_link);
+    if (imgLink) {
+      imgOutput = `${Constants.BASE_URL}image_brand/${imgLink}`;
+    }
     await axios
       .post(url, {
         userName: UserName,
         email: Email,
         brand: Brand,
         typeId: TypeId,
-        logo: Logo,
+        logo: imgOutput,
         phone: Phone,
         slug: Slug,
         introduction: introduction,
@@ -383,34 +417,33 @@ class EndUser extends Component {
     });
   }
 
+  arrLevelType = [
+    {
+      item: "0",
+    },
+    {
+      item: "1",
+    },
+  ];
+  arrLevel = [
+    {
+      item: "1",
+    },
+    {
+      item: "2",
+    },
+  ];
+  arrLevelFilter = [
+    {
+      item: "0",
+    },
+    {
+      item: "1",
+    },
+  ];
+
   render() {
     const { data, arrPagination, action } = this.state;
-
-    const dateArray = [this.state.from, this.state.to];
-    const arrLevelType = [
-      {
-        item: "0",
-      },
-      {
-        item: "1",
-      },
-    ];
-    const arrLevel = [
-      {
-        item: "1",
-      },
-      {
-        item: "2",
-      },
-    ];
-    const arrLevelFilter = [
-      {
-        item: "0",
-      },
-      {
-        item: "1",
-      },
-    ];
 
     if (!this.state.isLoading) {
       return (
@@ -448,7 +481,7 @@ class EndUser extends Component {
 
                   <div style={{ width: "100%" }} className="mt-3">
                     <CLabel>Loại hình:</CLabel>
-                    {arrLevelType != undefined ? (
+                    {this.arrLevelType != undefined ? (
                       <CSelect
                         onChange={async (e) => {
                           this.changeLevelType(e);
@@ -458,7 +491,7 @@ class EndUser extends Component {
                         name="status"
                         id="SelectLm"
                       >
-                        {arrLevelType.map((item, i) => {
+                        {this.arrLevelType.map((item, i) => {
                           if (item.item === this.state.type) {
                             return (
                               <option selected key={i} value={item.item}>
@@ -493,14 +526,21 @@ class EndUser extends Component {
                       type={"file"}
                       className="mt-5"
                       onChange={(e) => {
-                        this.onChangeImage(e);
+                        this.onChangeImage(e, "Logo", "Logo_link", "Logo_show");
                       }}
                     />
+                    <div className="text-center">
+                      <img
+                        alt=""
+                        style={{ width: "200px", marginBottom: 20 }}
+                        src={this.state.Logo}
+                      />
+                    </div>
                   </div>
 
                   <div style={{ width: "100%" }} className="mt-3">
                     <CLabel>Trạng thái:</CLabel>
-                    {arrLevel != undefined ? (
+                    {this.arrLevel != undefined ? (
                       <CSelect
                         onChange={async (e) => {
                           this.changeLevel(e);
@@ -510,7 +550,7 @@ class EndUser extends Component {
                         name="status"
                         id="SelectLm"
                       >
-                        {arrLevel.map((item, i) => {
+                        {this.arrLevel.map((item, i) => {
                           if (item.item === this.state.status) {
                             return (
                               <option selected key={i} value={item.item}>
@@ -657,10 +697,57 @@ class EndUser extends Component {
                   field="Brand"
                   label="Tên thương hiệu"
                   value={this.state.Brand}
-                  // error={errors.title}
                   onChange={(e) => this.setState({ Brand: e.target.value })}
-                  // rows="5"
                 />
+              </div>
+              <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Loại hình:</CLabel>
+                {this.arrLevelType != undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.changeLevelType(e);
+                    }}
+                    custom
+                    size="sm"
+                    name="status"
+                    id="SelectLm"
+                  >
+                    {this.arrLevelType.map((item, i) => {
+                      if (item.item === this.state.TypeId) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "0" ? "Sản phẩm" : "Dịch vụ"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                            {item.item === "0" ? "Sản phẩm" : "Dịch vụ"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
+
+              <div style={{ width: "100%" }} className="mt-3">
+                <TextFieldGroup
+                  field="image"
+                  label="Logo:"
+                  type={"file"}
+                  className="mt-5"
+                  onChange={(e) => {
+                    this.onChangeImage(e, "Logo", "Logo_link", "Logo_show");
+                  }}
+                />
+                <div className="text-center">
+                  <img
+                    alt=""
+                    style={{ width: "200px", marginBottom: 20 }}
+                    src={this.state.Logo}
+                  />
+                </div>
               </div>
 
               {/* <TextFieldGroup
@@ -705,7 +792,7 @@ class EndUser extends Component {
                       <div className="">
                         <p className="title_filter">Trạng thái chiến dịch</p>
                         <div style={{ width: "200px" }} className="">
-                          {arrLevel !== undefined ? (
+                          {this.arrLevel !== undefined ? (
                             <CSelect
                               onChange={async (e) => {
                                 this.changeLevelValue(e, "levelFilter");
@@ -715,7 +802,7 @@ class EndUser extends Component {
                               name="levelFilter"
                               id="SelectLm"
                             >
-                              {arrLevelFilter.map((item, i) => {
+                              {this.arrLevelFilter.map((item, i) => {
                                 if (item.item === this.state.levelFilter) {
                                   return (
                                     <option selected key={i} value={item.item}>

@@ -48,9 +48,11 @@ function InfoEndUser(propsInfoUser) {
           </h3>
         </div>
       </div>
-      <div className="tabInfo-body">
-        <div className="tabInfo-body__contact">
-          <h5 className="tabInfo-body__contact-title">Thông tin liên hệ</h5>
+      <div className="tabInfo-body tabInfo-body--center">
+        <div className="tabInfo-body__contact tabInfo-body__contact--center">
+          <h5 className="tabInfo-body__contact-title text-center">
+            Thông tin liên hệ
+          </h5>
           <ul className="tabInfo-body__contact-list">
             <li className="tabInfo-body__contact-item">
               <FmdGoodSharpIcon />

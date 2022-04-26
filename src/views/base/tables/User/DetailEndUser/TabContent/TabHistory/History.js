@@ -6,12 +6,12 @@ import IframeModal from "../../../../../../components/Iframe";
 import Constants from "../../../../../../../contants/contants";
 
 function History(props) {
-  console.log();
+  console.log(props.propsHistory);
   const [toggleHistory, setToggleHistory] = useState(false);
   const [idHistory, setIdHistory] = useState("");
   const titles = ["STT.", "Ngày soi", ""];
-  const [test, setTest] = useState("0");
-  const [data, setData] = React.useState([]);
+  // const [test, setTest] = useState("0");
+  // const [data, setData] = React.useState([]);
   // const array = ["1", ",2"];
 
   const viewDetailModalHistory = (id) => {
@@ -22,17 +22,17 @@ function History(props) {
   const closeModal = () => {
     setToggleHistory(false);
   };
-  React.useEffect(() => {
-    setTest("1");
-    props.testHistory(test);
-  });
+  // React.useEffect(() => {
+  //   setTest("1");
+  //   props.testHistory(test);
+  // });
   // React.useEffect(() => {
   //   setData((data) => [...data, array]);
   //   console.log("arraydata", data);
   // }, []);
   return (
     <>
-      {data
+      {/* {data
         ? data.map((item) => {
             return (
               <div>
@@ -40,7 +40,7 @@ function History(props) {
               </div>
             );
           })
-        : null}
+        : null} */}
       <table ble className="table table-hover mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>
@@ -52,8 +52,8 @@ function History(props) {
           </tr>
         </thead>
         <tbody>
-          {props.propsHistory.data
-            ? props.propsHistory.data.map((item, i) => (
+          {props.propsHistory[0]?.data
+            ? props.propsHistory[0]?.data.map((item, i) => (
                 <tr>
                   <td className="text-center">{i + 1}</td>
                   <td className="text-center">

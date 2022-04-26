@@ -22,72 +22,77 @@ import TabInfoVoucherUser from "./TabContent/TabInfoVoucherUser";
 
 const roleLogin = localStorage.getItem("type");
 console.log("role", roleLogin);
-
+const tabNameConfig = [
+  {
+    id: "1",
+    name: "Thông tin về người dùng",
+    icon: (
+      <InfoIcon style={{ width: "24px ", height: "24px", color: "#389bff" }} />
+    ),
+  },
+  {
+    id: "2",
+    name: "Danh sách chiến dịch tham gia",
+    icon: (
+      <ListAltIcon
+        style={{ width: "24px ", height: "24px ", color: "#389bff" }}
+      />
+    ),
+  },
+  {
+    id: "3",
+    name: "Lịch sử soi da",
+    icon: (
+      <HistoryToggleOffRoundedIcon
+        style={{ width: "24px ", height: "24px ", color: "#389bff" }}
+      />
+    ),
+  },
+  {
+    id: "4",
+    name: "NCC thành viên hệ thống",
+    icon: (
+      <CardMembershipOutlinedIcon
+        style={{ width: "24px ", height: "24px ", color: "#389bff" }}
+      />
+    ),
+  },
+  {
+    id: "5",
+    name: "Thông tin về voucher",
+    icon: (
+      <HiOutlineTicket
+        style={{ width: "24px ", height: "24px ", color: "#389bff" }}
+      />
+    ),
+  },
+];
 function ToggleViewConfigWeb(id) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
   tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tabNameConfig.length; i++) {
+    if (tabNameConfig[i].id === id) {
+      if (tablinks[i]) {
+        tablinks[i].classList.add("tabcontent-left-active");
+      }
+    } else {
+      if (tablinks[i]) {
+        tablinks[i].classList.remove("tabcontent-left-active");
+      }
+    }
+  }
   for (i = 0; i < tabcontent.length; i++) {
-    if (i === id) {
-      tablinks[i].classList.add("tabcontent-left-active");
+    if (tabcontent[i].id.replace("tabcontent", "") === id) {
       tabcontent[i].classList.add("defaultOpen");
       tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
     } else {
       tabcontent[i].classList.remove("defaultOpen");
-      tablinks[i].classList.remove("tabcontent-left-active");
       tabcontent[i].style.animation = "none";
     }
   }
 }
 function DetailEndUser() {
-  const tabNameConfig = [
-    {
-      id: "1",
-      name: "Thông tin về người dùng",
-      icon: (
-        <InfoIcon
-          style={{ width: "24px ", height: "24px", color: "#389bff" }}
-        />
-      ),
-    },
-    {
-      id: "2",
-      name: "Danh sách chiến dịch tham gia",
-      icon: (
-        <ListAltIcon
-          style={{ width: "24px ", height: "24px ", color: "#389bff" }}
-        />
-      ),
-    },
-    {
-      id: "3",
-      name: "Lịch sử soi da",
-      icon: (
-        <HistoryToggleOffRoundedIcon
-          style={{ width: "24px ", height: "24px ", color: "#389bff" }}
-        />
-      ),
-    },
-    {
-      id: "4",
-      name: "NCC thành viên hệ thống",
-      icon: (
-        <CardMembershipOutlinedIcon
-          style={{ width: "24px ", height: "24px ", color: "#389bff" }}
-        />
-      ),
-    },
-    {
-      id: "5",
-      name: "Thông tin về voucher",
-      icon: (
-        <HiOutlineTicket
-          style={{ width: "24px ", height: "24px ", color: "#389bff" }}
-        />
-      ),
-    },
-  ];
-
   const [infoUser, setInfoUser] = React.useState([]);
   const [listVendor, setListVendor] = React.useState([]);
   const [infoVoucher, setInfoVoucher] = React.useState([]);
@@ -170,7 +175,7 @@ function DetailEndUser() {
         },
       })
       .then((res) => {
-        setInfoVoucher(res.data.data);
+        setInfoVoucher((infoVoucher) => [...infoVoucher, res.data?.data]);
         console.log(res);
       });
   }, []);
@@ -180,7 +185,7 @@ function DetailEndUser() {
     const baseUrlCallApi = Constants.LIST_HISTORY_SKIN1;
     const url = baseUrlapi + baseUrlCallApi;
     axios.post(url, {}).then((res) => {
-      setHistory(res.data.data);
+      setHistory((history) => [...history, res.data?.data]);
       console.log(res);
     });
   }, []);
@@ -205,26 +210,30 @@ function DetailEndUser() {
             aria-labelledby="nested-list-subheader"
           >
             {tabNameConfig.map((item, i) => {
-              return (
-                <ListItemButton
-                  key={item.id}
-                  className={
-                    i === 0 ? "tablinks tabcontent-left-active" : "tablinks"
-                  }
-                  onClick={() => ToggleViewConfigWeb(i)}
-                  sx={{ pl: 4 }}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText
-                    className="tabcontent-left"
-                    style={{
-                      fontSize: "14px !important",
-                      color: "rgb(52, 71, 103)",
-                    }}
-                    primary={item.name}
-                  />
-                </ListItemButton>
-              );
+              if (item.id === "4" && roleLogin !== "0") {
+                return null;
+              } else {
+                return (
+                  <ListItemButton
+                    key={item.id}
+                    className={
+                      i === 0 ? "tablinks tabcontent-left-active" : "tablinks"
+                    }
+                    onClick={() => ToggleViewConfigWeb(item.id)}
+                    sx={{ pl: 4 }}
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText
+                      className="tabcontent-left"
+                      style={{
+                        fontSize: "14px !important",
+                        color: "rgb(52, 71, 103)",
+                      }}
+                      primary={item.name}
+                    />
+                  </ListItemButton>
+                );
+              }
             })}
           </List>
         </div>
@@ -242,22 +251,24 @@ function DetailEndUser() {
               <History testHistory={setTest} propsHistory={history} />
             ) : null}
           </div>
-
-          <div id="tabcontent4" className="tabcontent">
-            {listVendor && listVendor ? (
-              <ProviderUserSystem data={data} />
-            ) : null}
-            <div style={{ float: "right" }}>
-              <Pagination
-                count={arrPagination.length}
-                color="primary"
-                onChange={(e, v) => {
-                  setData((data) => [...data, arrPagination[v - 1]]);
-                  setIndexPage(v - 1);
-                }}
-              />
+          {roleLogin === "0" ? (
+            <div id="tabcontent4" className="tabcontent">
+              {listVendor && listVendor ? (
+                <ProviderUserSystem data={data} />
+              ) : null}
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    setData((data) => [...data, arrPagination[v - 1]]);
+                    setIndexPage(v - 1);
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          ) : null}
+
           <div id="tabcontent5" className="tabcontent">
             {infoVoucher && infoVoucher ? (
               <TabInfoVoucherUser propsVoucher={infoVoucher} />

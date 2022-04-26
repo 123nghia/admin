@@ -315,7 +315,7 @@ export default {
   DELETE_CONTACT_CUSTOMER: "/api/delete-contact-customers",
   UPDATE_CONTACT_STATUS: "/api/update-contact-status",
 
-  LIST_SALE_GROUP: "/api/saleGroup/getAll",
+  LIST_SALE_GROUP: "api/saleGroup/getAll",
   ADD_SALE_GROUP: "/api/saleGroup/add",
   UPDATE_SALE_GROUP: "/api/saleGroup/update",
   DELETE_SALE_GROUP: "/api/saleGroup/delete",
