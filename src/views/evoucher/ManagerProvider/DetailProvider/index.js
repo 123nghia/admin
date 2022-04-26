@@ -267,18 +267,6 @@ class Users extends Component {
   }
 
   render() {
-    const arrLevel = [
-      {
-        item: "1",
-      },
-      {
-        item: "2",
-      },
-      {
-        item: "3",
-      },
-    ];
-
     const { arrPagination } = this.state;
 
     const data = [

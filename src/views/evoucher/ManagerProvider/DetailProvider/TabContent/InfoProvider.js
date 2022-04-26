@@ -20,7 +20,9 @@ function InfoProvider({ detailInfoProvider }) {
   return (
     <div className="tabContentItem" style={styles.tabContentItem}>
       <div className="tabInfo-header">
-        <div className="tabInfo-header__logo">{/* <img src={logo} /> */}</div>
+        <div className="tabInfo-header__logo">
+          <img src={logo} />
+        </div>
         <div className="tabInfo-header__title">
           <h3 className="tabInfo-header__name">
             {vendorName ? vendorName : "Chưa có thông tin"}

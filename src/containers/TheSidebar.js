@@ -52,8 +52,7 @@ const TheSidebar = () => {
           let dataConfig = res.data.data[0];
 
           let valueConfig = JSON.parse(dataConfig.Value);
-          console.log(valueConfig);
-          setLogo(valueConfig.value.logos.webAdmin.logo);
+          setLogo(valueConfig?.value?.logos?.webAdmin?.logo);
         }
       });
   }

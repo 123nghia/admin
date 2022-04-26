@@ -1,8 +1,8 @@
 import { Tag } from "antd";
 import Chip from "@mui/material/Chip";
 
-function TabInfoVoucherUser(propsVoucher) {
-  console.log(propsVoucher);
+function TabInfoVoucherUser(props) {
+  console.log(props.propsVoucher[0]);
   const titles = [
     "STT.",
     "Mã voucher",
@@ -46,8 +46,8 @@ function TabInfoVoucherUser(propsVoucher) {
           </tr>
         </thead>
         <tbody>
-          {propsVoucher.propsVoucher
-            ? propsVoucher.propsVoucher.map((item, i) => (
+          {props.propsVoucher[0]
+            ? props.propsVoucher[0].map((item, i) => (
                 <tr key={i}>
                   <td className="text-center">{i + 1}</td>
                   <td className="text-center">

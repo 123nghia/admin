@@ -263,6 +263,7 @@ class EndUser extends Component {
       image_show: item.image,
 
       relCode: item.relcode,
+      type: "2",
     });
   }
   async update() {
@@ -276,6 +277,7 @@ class EndUser extends Component {
       relCode,
       company_id,
       image_link,
+      type,
     } = this.state;
 
     const form3 = new FormData();
@@ -309,6 +311,7 @@ class EndUser extends Component {
         company_id,
         image: img,
         relcode: relCode,
+        type,
       })
       .then((res) => {
         Swal.fire({

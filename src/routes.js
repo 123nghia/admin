@@ -176,8 +176,15 @@ const AdminConfigWebsite = React.lazy(() =>
   import("././views/config/configWebAdmin")
 );
 
+//Manager Sale Group
 const ManageSalesGroup = React.lazy(() =>
-  import("./views/evoucher/ManageSalesGroup/index.js")
+  import("./views/evoucher/ManageSalesGroup/ManagerSaleGroupIndex.js")
+);
+
+const DetailManagerSaleGroup = React.lazy(() =>
+  import(
+    "./views/evoucher/ManageSalesGroup/DetailManagerSaleGroup/DetailManagerSaleGroupIndex.js"
+  )
 );
 const ManageSales = React.lazy(() =>
   import("./views/evoucher/ManageSales/index.js")
@@ -296,6 +303,12 @@ const routes = [
     path: "/detail-users/:id",
     name: "DetailEndUser",
     component: DetailEndUser,
+  },
+
+  {
+    path: "/detail-manager-sale-group/:id",
+    name: "DetailManagerSaleGroup",
+    component: DetailManagerSaleGroup,
   },
 
   {
