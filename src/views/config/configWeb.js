@@ -65,6 +65,14 @@ import Logo from './configWeb/Logo';
 import SlideShow from './configWeb/SlideShow';
 import Mxh from './configWeb/Mxh';
 import Footer from "./configWeb/Footer";
+import Voucher from "./configWeb/Voucher";
+import Aia from "./configWeb/Aia";
+import Form from "./configWeb/Form";
+import Seo from "./configWeb/Seo";
+import ButtonConfig from "./configWeb/Button";
+import ChangeColor from "./configWeb/Color";
+import Homepage from "./configWeb/Homepage";
+
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -321,6 +329,7 @@ class Users extends Component {
               if(voucher){
                 
                 this.setState({
+                  imageFormVoucher : this.state.voucher.imageFormVoucher,
                   sendSMS: this.state.voucher.sendSMS,
                   registerGetVoucher: this.state.voucher.registerGetVoucher,
                   loginWatchVoucher : this.state.voucher.loginWatchVoucher,
@@ -686,6 +695,10 @@ class Users extends Component {
       coppyData.value.voucher.receiveVoucher = this.state.receiveVoucher;
       coppyData.value.voucher.textSales = this.state.textSales;
       coppyData.value.voucher.receiveVoucherSuccess = this.state.receiveVoucherSuccess;
+      let newImage = await this.postImage(this.state.imageFormVoucher_link);
+      if (newImage) {
+        coppyData.value.voucher.imageFormVoucher = `${Constants.BASE_URL}image_brand/${newImage}`;
+      } 
     }
     if (change === "button") {
       if(!coppyData.value.button){
@@ -1119,674 +1132,80 @@ class Users extends Component {
             </div>
             <div className="tabcontents">
               <div id="tabcontent1" className="tabcontent defaultOpen">
-                <div class="text-center">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => this.SaveAllConfigWeb("homepage")}
-                  >
-                    Lưu thay đổi
-                  </Button>
-                </div>
-                <TextFieldGroup
-                  field="titlePen1"
-                  label="Heading 1:"
-                  value={this.state?.titlePen1}
-                  onChange={(e) => {
-                    this.setState({ titlePen1: e.target.value });
-                  }}
+                <Homepage 
+                 SaveAllConfigWeb={this.SaveAllConfigWeb}
+                 setStateByName={this.setStateByName}
+                 onChangeImage={this.onChangeImage}
+                 titlePen1={this.state.titlePen1}
+                 titlePen2={this.state.titlePen2}
+                 sologan={this.state.sologan}
+                 introduce={this.state.introduce}
+                 imagePhoto={this.state.imagePhoto}
+                 titlePhoto={this.state.titlePhoto}
+                 titleButtonPhoto={this.state.titleButtonPhoto}
+                 titleButtonChoose={this.state.titleButtonChoose}
+                 buttonSuggestLogin1={this.state.buttonSuggestLogin1}
+                 buttonSuggestLogin2={this.state.buttonSuggestLogin2}
+                 titleStep1={this.state.titleStep1}
+                 titleStep2={this.state.titleStep2}
+                 titleStep3={this.state.titleStep3}
+                 titleResultSkin={this.state.titleResultSkin}
+                 textResultSkin={this.state.textResultSkin}
+                 titleResultDepthSkin={this.state.titleResultDepthSkin}
+                 textResultDepthSkin={this.state.textResultDepthSkin}
+                 loginViewResult1={this.state.loginViewResult1}
+                 loginViewResult2={this.state.loginViewResult2}
+                 loginViewResult3={this.state.loginViewResult3}
+                 loginViewResult4={this.state.loginViewResult4}
                 />
-                <TextFieldGroup
-                  field="titlePen2"
-                  label="Heading 2: "
-                  value={this.state?.titlePen2}
-                  onChange={(e) => {
-                    this.setState({ titlePen2: e.target.value });
-                  }}
-                />
-
-                <TextFieldGroup
-                  field="sologan"
-                  label="Sologan:"
-                  value={this.state?.sologan}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ sologan: e.target.value });
-                  }}
-                />
-
-                <TextFieldGroup
-                  field="introduce"
-                  label="Giới thiệu:"
-                  value={this.state?.introduce}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ introduce: e.target.value });
-                  }}
-                />
-
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/huong-dan-chup-anh.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                      <TextFieldGroup
-                      field="image1"
-                      label="Hình ảnh hướng dẫn chụp ảnh (400px * 400px):"
-                      type={"file"}
-                      className="mt-5"
-                      onChange={(e) => {
-                        this.onChangeImage(e, "imagePhoto", "imagePhoto_link", "imagePhoto_show");
-                      }}
-                      onClick={(e) => {
-                        e.target.value = null;
-                        this.setState({ imagePhoto_show: "" });
-                      }}
-                    />
-                    <div class="text-center mb-5">
-                      <img
-                        alt=""
-                        style={{ width: "200px", marginBottom: 20 }}
-                        height="auto"
-                        src={this.state?.imagePhoto}
-                      />
-                    </div>
-                  </div>      
-               </div>
-                <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '300px' , marginRight:'10px'}} src="/assets/image/tieu-de-huong-dan-chup-anh.png" alt="img" />
-                  </div>
-                      <div style={{ width : '100%' }}>
-                      <TextFieldGroup
-                      field="titlePhoto"
-                      label="Tiêu đề hình ảnh hướng dẫn chụp ảnh:"
-                      value={this.state?.titlePhoto}
-                      placeholder={""}
-                      onChange={(e) => {
-                        this.setState({ titlePhoto: e.target.value });
-                      }}
-                    />
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-nut-chup-anh.png" alt="img" />
-                  </div>
-                      <div style={{ width : '100%' }}>
-                      <TextFieldGroup
-                      field="titleButtonPhoto"
-                      label="Tiêu đề nút chụp ảnh:"
-                      value={this.state?.titleButtonPhoto}
-                      placeholder={""}
-                      onChange={(e) => {
-                        this.setState({ titleButtonPhoto: e.target.value });
-                      }}
-                    />
-                   
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-huong-dan-chon-anh.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                      <TextFieldGroup
-                  field="titleButtonChoose"
-                  label="Tiêu đề nút chọn ảnh:"
-                  value={this.state?.titleButtonChoose}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleButtonChoose: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-goi-y-dang-nhap-1.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="buttonSuggestLogin1"
-                  label="Tiêu đề nút gợi ý đăng nhập - 1:"
-                  value={this.state?.buttonSuggestLogin1}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ buttonSuggestLogin1: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-goi-y-dang-nhap-2.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="buttonSuggestLogin2"
-                  label="Tiêu đề nút gợi ý đăng nhập - 2:"
-                  value={this.state?.buttonSuggestLogin2}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ buttonSuggestLogin2: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/chup-anh-buoc-1.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="titleStep1"
-                  label="Tiều đề : Bước 1 - Chụp ảnh:"
-                  value={this.state?.titleStep1}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleStep1: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/chup-anh-buoc-2.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="titleStep2"
-                  label="Tiều đề : Bước 2 - Đã chụp - tải ảnh:"
-                  value={this.state?.titleStep2}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleStep2: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/chup-anh-buoc-3.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="titleStep3"
-                  label="Tiều đề : Bước 3 - Kết quả:"
-                  value={this.state?.titleStep3}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleStep3: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div> 
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/ket-qua-tong-quan.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="titleResultSkin"
-                  label="Tiều đề : Kết quả soi da:"
-                  value={this.state?.titleResultSkin}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleResultSkin: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div>  
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/ket-qua-tong-quan-2.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="textResultSkin"
-                  label="Tiêu đề phụ : Kết quả soi da:"
-                  value={this.state?.textResultSkin}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ textResultSkin: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div>    
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/ket-qua-chuyen-sau.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="titleResultDepthSkin"
-                  label="Tiều đề : Kết quả chuyên sâu:"
-                  value={this.state?.titleResultDepthSkin}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleResultDepthSkin: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div>  
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/ket-qua-chuyen-sau2.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="textResultDepthSkin"
-                  label="Tiêu đề phụ : Kết quả chuyên sâu:"
-                  value={this.state?.textResultDepthSkin}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ textResultDepthSkin: e.target.value });
-                  }}
-                />
-                   
-                  </div>      
-               </div> 
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/dang-nhap-xem-ket-qua.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="loginViewResult1"
-                  label="Gợi ý đăng nhập: Vị trí 1:"
-                  value={this.state?.loginViewResult1}
-                  placeholder={"Vui lòng"}
-                  onChange={(e) => {
-                    this.setState({ loginViewResult1: e.target.value });
-                  }}
-                />
-                   
-                  </div>    
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="loginViewResult2"
-                  label="Gợi ý đăng nhập: Vị trí 2:"
-                  value={this.state?.loginViewResult2}
-                  placeholder={"Để nhận ngay"}
-                  onChange={(e) => {
-                    this.setState({ loginViewResult2: e.target.value });
-                  }}
-                />
-                   
-                  </div>   
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="loginViewResult3"
-                  label="Gợi ý đăng nhập: Vị trí 3:"
-                  value={this.state?.loginViewResult3}
-                  placeholder={"E-voucher"}
-                  onChange={(e) => {
-                    this.setState({ loginViewResult3: e.target.value });
-                  }}
-                />
-                   
-                  </div>    
-                  <div style={{ width : '100%' }}>
-                  <TextFieldGroup
-                  field="loginViewResult4"
-                  label="Gợi ý đăng nhập: Vị trí 4:"
-                  value={this.state?.loginViewResult4}
-                  placeholder={"giảm giá 1.000.000 VND"}
-                  onChange={(e) => {
-                    this.setState({ loginViewResult4: e.target.value });
-                  }}
-                />
-                   
-                  </div>  
-               </div> 
               </div>
               <div id="tabcontent10" className="tabcontent">
-                <div class="text-center">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => this.SaveAllConfigWeb("button")}
-                  >
-                    Lưu thay đổi
-                  </Button>
-                </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/phan-tich-soi-da.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="btn_soida"
-                    label="Phân tích tình trạng da"
-                    value={this.state?.btn_soida}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ btn_soida: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/get-voucher.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="btn_get_voucher"
-                    label="Nhận Voucher"
-                    value={this.state?.btn_get_voucher}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ btn_get_voucher: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/dang-ky-nhan-voucher-nut.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="btn_register_get_voucher"
-                    label="Nhận Voucher"
-                    value={this.state?.btn_register_get_voucher}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ btn_register_get_voucher: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/get-voucher2.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="btn_get_voucher2"
-                    label="Nhận quà Voucher"
-                    value={this.state?.btn_get_voucher2}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ btn_get_voucher2: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
+              <ButtonConfig
+                SaveAllConfigWeb={this.SaveAllConfigWeb}
+                setStateByName={this.setStateByName}
+                btn_soida={this.state.btn_soida}
+                btn_get_voucher={this.state.btn_get_voucher}
+                btn_register_get_voucher={this.state.btn_register_get_voucher}
+                btn_get_voucher2={this.state.btn_get_voucher2}
+                />
               </div>
               <div id="tabcontent12" className="tabcontent">
-                <div class="text-center">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => this.SaveAllConfigWeb("form")}
-                  >
-                    Lưu thay đổi
-                  </Button>
-                </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-dang-nhap.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="titleLogin"
-                    label="Tiêu đề: Form đăng nhập"
-                    value={this.state?.titleLogin}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ titleLogin: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/nut-dang-nhap.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="btn_login"
-                    label="Tiêu đề: Nút đăng nhập"
-                    value={this.state?.btn_login}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ btn_login: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-cap-nhap.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="titleUpdate"
-                    label="Tiêu đề: Form cập nhập"
-                    value={this.state?.titleUpdate}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ titleUpdate: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/nut-cap-nhap.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="btn_update"
-                    label="Tiêu đề: Nút cập nhập"
-                    value={this.state?.btn_update}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ btn_update: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
+                <Form
+                SaveAllConfigWeb={this.SaveAllConfigWeb}
+                setStateByName={this.setStateByName}
+                btn_login={this.state.btn_login}
+                titleUpdate={this.state.titleUpdate}
+                titleLogin={this.state.titleLogin}
+                btn_update={this.state.btn_update}
+                />
                
               </div>
               <div id="tabcontent13" className="tabcontent">
-                <div class="text-center">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => this.SaveAllConfigWeb("aia")}
-                  >
-                    Lưu thay đổi
-                  </Button>
-                </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/da-dang-nhap-nhan-voucher-aia.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="titleGetVoucherAia"
-                    label="Tiêu đề: Form đã đăng nhập - nhận voucher"
-                    value={this.state?.titleGetVoucherAia}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ titleGetVoucherAia: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/danh-sach-thuong-hieu.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="titleListCam"
-                    label="Tiêu đề: Danh sách thương hiệu"
-                    value={this.state?.titleListCam}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ titleListCam: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/goi-y-dang-nhap-nhan-voucher-aia.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="titleSuggestFormLoginGetVoucher"
-                    label="Tiêu đề: Form gợi ý đăng nhập nhận voucher"
-                    value={this.state?.titleSuggestFormLoginGetVoucher}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ titleSuggestFormLoginGetVoucher: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/tieu-de-sau-khi-dang-nhap-nhan-voucher-aia.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="titleFormGetVoucherAfterLoginFormSuggest"
-                    label="Tiêu đề: Sau khi đăng nhập form gợi ý đăng nhập nhận voucher"
-                    value={this.state?.titleFormGetVoucherAfterLoginFormSuggest}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ titleFormGetVoucherAfterLoginFormSuggest: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-
-               
+                <Aia
+                SaveAllConfigWeb={this.SaveAllConfigWeb}
+                setStateByName={this.setStateByName}
+                titleGetVoucherAia={this.state.titleGetVoucherAia}
+                titleListCam={this.state.titleListCam}
+                titleSuggestFormLoginGetVoucher={this.state.titleSuggestFormLoginGetVoucher}
+                titleFormGetVoucherAfterLoginFormSuggest={this.state.titleFormGetVoucherAfterLoginFormSuggest}
+                />
+     
               </div>
               <div id="tabcontent11" className="tabcontent">
-                <div class="text-center">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => this.SaveAllConfigWeb("voucher")}
-                  >
-                    Lưu thay đổi
-                  </Button>
-                </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/receive-voucher.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="receiveVoucher"
-                    label="Tiêu đề: Thông báo nhận voucher"
-                    value={this.state?.receiveVoucher}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ receiveVoucher: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/text-sales.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="textSales"
-                    label="Tiêu đề: Khuyến mãi"
-                    value={this.state?.textSales}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ textSales: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/get-voucher-success.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="receiveVoucherSuccess"
-                    label="Tiêu đề: Nhận voucher thành công"
-                    value={this.state?.receiveVoucherSuccess}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ receiveVoucherSuccess: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/dang-nhap-xem-voucher.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="loginWatchVoucher"
-                    label="Tiêu đề: Đăng nhập xem voucher"
-                    value={this.state?.loginWatchVoucher}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ loginWatchVoucher: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/dang-ky-nhan-voucher.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="registerGetVoucher"
-                    label="Tiêu đề: Đăng ký nhận voucher"
-                    value={this.state?.registerGetVoucher}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ registerGetVoucher: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-               <div class="flex-a-center config-box-border">
-                  <div>
-                    <img style={{ maxWidth : '150px' , marginRight:'10px'}} src="/assets/image/gui-sms.png" alt="img" />
-                  </div>
-                  <div style={{ width : '100%' }}>
-                    <TextFieldGroup
-                    field="sendSMS"
-                    label="Tiêu đề: Gửi SMS"
-                    value={this.state?.sendSMS}
-                    placeholder={""}
-                    onChange={(e) => {
-                      this.setState({ sendSMS: e.target.value });
-                    }}
-                  />           
-                  </div>      
-               </div>
-              
-              </div>
+                <Voucher
+                SaveAllConfigWeb={this.SaveAllConfigWeb}
+                setStateByName={this.setStateByName}
+                onChangeImage={this.onChangeImage}
 
+                receiveVoucher={this.state.receiveVoucher}
+                textSales={this.state.textSales}
+                receiveVoucherSuccess={this.state.receiveVoucherSuccess}
+                loginWatchVoucher={this.state.loginWatchVoucher}
+                registerGetVoucher={this.state.registerGetVoucher}
+                sendSMS={this.state.sendSMS}
+                imageFormVoucher={this.state.imageFormVoucher}
+                />             
+              </div>
               <div id="tabcontent2" className="tabcontent">
                 <SlideShow 
                  SaveAllConfigWeb={this.SaveAllConfigWeb}
@@ -1799,107 +1218,18 @@ class Users extends Component {
                 />
               </div>
               <div id="tabcontent3" className="tabcontent">
-                <div className="text-center">
-                  {" "}
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => this.SaveAllConfigWeb("seoInfo")}
-                  >
-                    Lưu thay đổi
-                  </Button>
-                </div>
-                <TextFieldGroup
-                  field="titleSeo"
-                  label="Tiêu đề:"
-                  value={titleSeo}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleSeo: e.target.value });
-                  }}
+                <Seo
+                SaveAllConfigWeb={this.SaveAllConfigWeb}
+                setStateByName={this.setStateByName}
+                onChangeImage={this.onChangeImage}
+                titleSeo={this.state.titleSeo}
+                titleSeo2={this.state.titleSeo2}
+                imageShareSeo={this.state.imageShareSeo}
+                keywordSeo={this.state.keywordSeo}
+                descSeo={this.state.descSeo}
+                authorSeo={this.state.authorSeo}
+                imgLayout={this.state.imgLayout}
                 />
-                <TextFieldGroup
-                  field="titleSeo2"
-                  label="Tiêu đề 2:"
-                  value={titleSeo2}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ titleSeo2: e.target.value });
-                  }}
-                />
-                 <TextFieldGroup
-                  field="image1"
-                  label="Hình ảnh share (***px * ***px):"
-                  type={"file"}
-                  className="mt-5"
-                  onChange={(e) => {
-                    this.onChangeImage(e, "imageShareSeo", "imageShareSeo_link", "imageShareSeo_show");
-                  }}
-                  onClick={(e) => {
-                    e.target.value = null;
-                    this.setState({ imageShareSeo_show: "" });
-                  }}
-                />
-                <div class="text-center mb-5">
-                  <img
-                    alt=""
-                    style={{ width: "200px", marginBottom: 20 }}
-                    height="auto"
-                    src={this.state?.imageShareSeo}
-                  />
-                </div>
-                <TextFieldGroup
-                  field="keywordSeo"
-                  label="Từ khóa:"
-                  value={keywordSeo}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ keywordSeo: e.target.value });
-                  }}
-                />
-                <label className="control-label">Mô tả:</label>
-                <CTextarea
-                  name="descSeo"
-                  rows="4"
-                  value={descSeo}
-                  onChange={(e) => {
-                    this.setState({ descSeo: e.target.value });
-                  }}
-                />
-                <TextFieldGroup
-                  field="authorSeo"
-                  label="Tác giả:"
-                  value={authorSeo}
-                  placeholder={""}
-                  onChange={(e) => {
-                    this.setState({ authorSeo: e.target.value });
-                  }}
-                />
-                <TextFieldGroup
-                  field="imgLayout"
-                  label="Hình ảnh favicon: (20px * 20px)"
-                  type={"file"}
-                  className="mt-5"
-                  onChange={(e) => {
-                    this.onChangeImage(
-                      e,
-                      "imgLayout",
-                      "imgLayout_link",
-                      "imgLayout_show"
-                    );
-                  }}
-                  onClick={(e) => {
-                    e.target.value = null;
-                    this.setState({ imgLayout_show: "" });
-                  }}
-                />
-                <div className="text-center">
-                  <img
-                    alt=""
-                    style={{ width: "140px", marginBottom: 20 }}
-                    src={this.state.imgLayout}
-                  />
-                </div>
               </div>
               <div id="tabcontent4" className="tabcontent ">
                <Logo 
@@ -1949,52 +1279,13 @@ class Users extends Component {
                 />       
               </div>
               <div id="tabcontent8" className="tabcontent">
-                <div class="flex-end">
-                  {isDisable ? (
-                    <CButton
-                      outline
-                      color="info"
-                      size="md"
-                      className="btn-main"
-                      onClick={async (e) => {
-                        this.setState({ isDisable: !isDisable });
-                      }}
-                    >
-                      <CIcon name="cil-pencil" style={{ marginRight: '6px' }} /> Cập nhật
-                    </CButton>
-                  ) : (
-                    <CButton
-                      outline
-                      color="info"
-                      size="md"
-                      className="btn-main"
-                      onClick={async (e) => {
-                        this.updateCompany(e);
-                      }}
-                    >
-                      <CIcon name="cil-pencil" style={{ marginRight: '6px' }} /> Xác nhận cập nhật
-                    </CButton>
-                  )}
-                </div>
-
-                <CLabel>Màu chủ đạo</CLabel>
-                <Input
-                  style={styles.searchInput}
-                  onChange={(e) => {
-                    this.setState({ mainColor: e.target.value });
-                  }}
-                  value={mainColor}
-                  readOnly={isDisable}
-                />
-                <CLabel>Màu chủ đạo 2</CLabel>
-                <Input
-                  style={styles.searchInput}
-                  onChange={(e) => {
-                    this.setState({ button_color: e.target.value });
-                  }}
-                  value={this.state.button_color}
-                  readOnly={isDisable}
-                />
+                  <ChangeColor
+                  setStateByName={this.setStateByName}
+                  updateCompany={this.updateCompany}
+                  isDisable={this.state.isDisable}
+                  mainColor={this.state.mainColor}
+                  button_color={this.state.button_color}
+                  />
               </div>
               <div id="tabcontent9" className="tabcontent">
                   <BannerAia
