@@ -170,7 +170,7 @@ const BannerPromotion = React.lazy(() =>
   import("./views/evoucher/ManageBanner/Banner_Promotion")
 );
 const Statistics = React.lazy(() => import("./views/evoucher/Chart"));
-const Translation = React.lazy(() => import("./views/evoucher/Translation"));
+
 const NotEnough = React.lazy(() => import("./views/Pages/NotEnough/NotEnough"));
 const AdminConfigWebsite = React.lazy(() =>
   import("././views/config/configWebAdmin")
@@ -202,13 +202,20 @@ const DetailProvider = React.lazy(() =>
   import("./views/evoucher/ManagerProvider/DetailProvider/index.js")
 );
 
-const ModalDetailProvider = React.lazy(() =>
-  import("./views/evoucher/ManagerProvider/Modal/Modal_DetailProvider.js")
-);
-
 const DetailInventory = React.lazy(() =>
   import("./views/evoucher/DetailInventory")
 );
+// evoucher - log
+const Iplog = React.lazy(() =>
+  import("./views/evoucher/Log/Iplog/index.js")
+);
+const Smslog = React.lazy(() =>
+  import("./views/evoucher/Log/Sms/index.js")
+);
+const ND = React.lazy(() =>
+  import("./views/evoucher/Log/Campaign/ND.js")
+);
+
 
 const roleUser = localStorage.getItem("type");
 
@@ -216,73 +223,33 @@ const routes = [
   { path: "/", exact: true, name: "Home" },
 
   // evoucher
-  { path: "/list-evoucher", name: "ListEvoucher", component: ListEvoucher },
+  {
+    path: "/general-statistics",
+    name: "General Statistics",
+    component: GeneralStatistics,
+  },
+  // evoucher - log
+  {
+    path: "/log-ip",
+    name: "Iplog",
+    component: roleUser === "0" ? Iplog : NotEnough,
+  },
+  {
+    path: "/log-sms",
+    name: "Smslog",
+    component: roleUser === "0" ? Smslog : NotEnough,
+  },
+  {
+    path: "/log-ngocdung",
+    name: "ND",
+    component: roleUser === "0" ? ND : NotEnough,
+  },
+  // evoucher - details
   {
     path: "/detail-evoucher/:id",
     name: "DetailVoucher",
     component: DetailVoucher,
   },
-  {
-    path: "/list-user-evoucher",
-    name: "ListUserEvoucher",
-    component: ListUserEvoucher,
-  },
-  { path: "/list-campaign", name: "ListCampaign", component: ListCampaign },
-  {
-    path: "/banner-sales",
-    name: "BannerSales",
-    component: roleUser === "0" ? BannerSales : NotEnough,
-  },
-  {
-    path: "/banner-lastestoffers",
-    name: "BannerLastestOffers",
-    component: roleUser === "0" ? BannerLastestOffers : NotEnough,
-  },
-  {
-    path: "/banner-promotion",
-    name: "BannerPromotion",
-    component: roleUser === "0" ? BannerPromotion : NotEnough,
-  },
-  { path: "/evoucher-statistics", name: "Statistics", component: Statistics },
-  { path: "/manage-voucher", name: "ManageVoucher", component: ManageVoucher },
-  {
-    path: "/manage-campaign",
-    name: "ManageCampaign",
-    component: ManageCampaign,
-    // component: roleUser === "0" ? ManageCampaign : NotEnough,
-  },
-  {
-    path: "/manage-sales",
-    name: "ManageSales",
-    component: roleUser === "0" ? ManageSales : NotEnough,
-  },
-  {
-    path: "/manage-partner",
-    name: "ManagePartner",
-    component: ManagePartner,
-  },
-
-  {
-    path: "/detail-collaborators",
-    name: "DetailCollaborators",
-    component: roleUser === "0" ? DetailCollaborators : NotEnough,
-  },
-  {
-    path: "/manage-inventory",
-    name: "ManageInventory",
-    component: ManageInventory,
-  },
-  {
-    path: "/manage-sales-group",
-    name: "ManageSalesGroup",
-    component: roleUser === "0" ? ManageSalesGroup : NotEnough,
-  },
-  {
-    path: "/manage-account",
-    name: "ManageAccount",
-    component: ManageAccount,
-  },
-
   {
     path: "/detail-inventory/:id",
     name: "DetailInventory",
@@ -304,6 +271,86 @@ const routes = [
     name: "DetailEndUser",
     component: DetailEndUser,
   },
+  {
+    path: "/detail-collaborators",
+    name: "DetailCollaborators",
+    component: roleUser === "0" ? DetailCollaborators : NotEnough,
+  },
+  // evoucher - list
+  { path: "/list-evoucher", name: "ListEvoucher", component: ListEvoucher },
+  { path: "/list-campaign", name: "ListCampaign", component: ListCampaign },
+  {
+    path: "/list-user-evoucher",
+    name: "ListUserEvoucher",
+    component: ListUserEvoucher,
+  },
+  { path: "/evoucher-statistics", name: "Statistics", component: Statistics },
+
+  // evoucher - banner
+  {
+    path: "/banner-sales",
+    name: "BannerSales",
+    component: roleUser === "0" ? BannerSales : NotEnough,
+  },
+  {
+    path: "/banner-lastestoffers",
+    name: "BannerLastestOffers",
+    component: roleUser === "0" ? BannerLastestOffers : NotEnough,
+  },
+  {
+    path: "/banner-promotion",
+    name: "BannerPromotion",
+    component: roleUser === "0" ? BannerPromotion : NotEnough,
+  },
+  // evoucher - manage
+  { path: "/manage-voucher", name: "ManageVoucher", component: ManageVoucher },
+  {
+    path: "/manage-campaign",
+    name: "ManageCampaign",
+    component: ManageCampaign,
+  },
+  {
+    path: "/manage-sales",
+    name: "ManageSales",
+    component: roleUser === "0" ? ManageSales : NotEnough,
+  },
+  {
+    path: "/manage-partner",
+    name: "ManagePartner",
+    component: ManagePartner,
+  },
+
+  {
+    path: "/manage-inventory",
+    name: "ManageInventory",
+    component: ManageInventory,
+  },
+  {
+    path: "/manage-sales-group",
+    name: "ManageSalesGroup",
+    component: roleUser === "0" ? ManageSalesGroup : NotEnough,
+  },
+  {
+    path: "/manage-account",
+    name: "ManageAccount",
+    component: ManageAccount,
+  },
+  {
+    path: "/manage-provider",
+    name: "Manage Provider",
+    component: ManageProvider,
+  },
+  {
+    path: "/customer_manager",
+    name: "Customer Manager",
+    component: roleUser === "0" ? PluginCustomer : NotEnough,
+  },
+  // cau hinh web
+  {
+    path: "/cau-hinh-trang-web",
+    name: "configWeb",
+    component: roleUser !== "0" ? configWeb : NotEnough,
+  },
 
   {
     path: "/detail-manager-sale-group/:id",
@@ -317,6 +364,7 @@ const routes = [
     component: roleUser === "0" ? AdminConfigWebsite : NotEnough,
   },
 
+  // layout web
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
   { path: "/users", name: "Users", component: TableUser },
   { path: "/company", name: "Company", component: TableCompany },
@@ -337,36 +385,74 @@ const routes = [
   { path: "/transaction", name: "Transaction", component: TransactionTable },
   { path: "/hardwaremanager", name: "HardWare", component: HardWareManager },
   { path: "/profile", name: "Profile", component: Profile },
+  { path: "/dashboard", name: "Dashboard", component: Dashboard },
+  { path: "/users", name: "Users", component: TableUser },
+  { path: "/company", name: "Company", component: TableCompany },
+  { path: "/key", name: "Key", component: TableKey },
+  { path: "/key_order", name: "Key", component: TableKeyOrder },
+  { path: "/pakage_sale", name: "Sale", component: TablePakageSale },
+  { path: "/pakage_sale_log", name: "SaleLog", component: TablePakageSaleLog },
+  { path: "/type_key", name: "TypeKey", component: TableTypeKey },
+  { path: "/role", name: "Role", component: TableRole },
+  { path: "/link", name: "Key", component: TableLink },
+  { path: "/history", name: "HistorySkin", component: HistorySkinUser },
+  { path: "/sales", name: "ShopManager", component: ListSale },
+  { path: "/shopmanager", name: "ShopManager", component: ListShopManager },
+  { path: "/customers", name: "Customers", component: ListCustomer },
+  { path: "/hardware", name: "HardWares", component: HardWare },
+  { path: "/orders", name: "Orders", component: Order },
+  { path: "/order_table", name: "Order Table", component: OrderTable },
+  { path: "/transaction", name: "Transaction", component: TransactionTable },
+  { path: "/hardwaremanager", name: "HardWare", component: HardWareManager },
+  { path: "/profile", name: "Profile", component: Profile },
+  { path: "/spending_order", name: "SPENDING", component: SPENDING },
+  { path: "/role_manager", name: "Role Manager", component: RoleManager },
+  { path: "/plugin_manager", name: "Plugin Manager", component: PluginManager },
   {
-    path: "/book-calendar",
-    name: "BookCalendar",
-    component: roleUser !== "0" ? BookCalendar : NotEnough,
+    path: "/plugin_create_order",
+    name: "Create Order",
+    component: PluginCreateOrder,
   },
 
-  { path: "/dashboard", name: "Dashboard", component: Dashboard },
-  { path: "/users", name: "Users", component: TableUser },
-  { path: "/company", name: "Company", component: TableCompany },
-  { path: "/key", name: "Key", component: TableKey },
-  { path: "/key_order", name: "Key", component: TableKeyOrder },
-  { path: "/pakage_sale", name: "Sale", component: TablePakageSale },
-  { path: "/pakage_sale_log", name: "SaleLog", component: TablePakageSaleLog },
-  { path: "/type_key", name: "TypeKey", component: TableTypeKey },
-  { path: "/role", name: "Role", component: TableRole },
-  { path: "/link", name: "Key", component: TableLink },
-  { path: "/history", name: "HistorySkin", component: HistorySkinUser },
-  { path: "/sales", name: "ShopManager", component: ListSale },
-  { path: "/shopmanager", name: "ShopManager", component: ListShopManager },
-  { path: "/customers", name: "Customers", component: ListCustomer },
-  { path: "/hardware", name: "HardWares", component: HardWare },
-  { path: "/orders", name: "Orders", component: Order },
-  { path: "/order_table", name: "Order Table", component: OrderTable },
-  { path: "/transaction", name: "Transaction", component: TransactionTable },
-  { path: "/hardwaremanager", name: "HardWare", component: HardWareManager },
-  { path: "/profile", name: "Profile", component: Profile },
+  { path: "/saleAdmin", name: "SALE", component: PluginUserTable },
+  { path: "/reward_info", name: "REWARD_INFO", component: RewardInfomation },
   {
-    path: "/book-calendar",
-    name: "BookCalendar",
-    component: roleUser !== "0" ? BookCalendar : NotEnough,
+    path: "/feature_customer",
+    name: "REWARD_INFO",
+    component: ListFeatureOfCustomer,
+  },
+
+  // skin - care
+  { path: "/banner", name: "Banner User", component: Banner },
+  {
+    path: "/quan-ly-banner",
+    name: "BannerSlider",
+    component: roleUser === "0" ? BrandSlider : NotEnough,
+  },
+  { path: "/cus_request", name: "REWARD_INFO", component: CusRequest },
+  { path: "/customer", name: "Customer Manager", component: CustomerManager },
+  { path: "/historyskin", name: "History Skin", component: HistorySkin },
+  { path: "/update_package", name: "UpdatePackage", component: UpdatePackage },
+  { path: "/brand_skin", name: "Brand Skin", component: BrandPlugin },
+  {
+    path: "/subsale",
+    name: "Sub Sale",
+    component: roleUser !== "0" ? NotEnough : PluginSubSaleTable,
+  },
+  {
+    path: "/skin/config",
+    name: "confgSkinDisplay",
+    component: configSkinDisplay,
+  },
+  {
+    path: "/skin/configContent",
+    name: "configContent",
+    component: configContent,
+  },
+  {
+    path: "/skin/configOverView",
+    name: "configOverView",
+    component: configOverView,
   },
 
   { path: "/spending_order", name: "SPENDING", component: SPENDING },
@@ -407,7 +493,6 @@ const routes = [
   { path: "/historyskin", name: "History Skin", component: HistorySkin },
   { path: "/update_package", name: "UpdatePackage", component: UpdatePackage },
   { path: "/brand_skin", name: "Brand Skin", component: BrandPlugin },
-
   {
     path: "/subsale",
     name: "Sub Sale",
@@ -428,65 +513,11 @@ const routes = [
     name: "configOverView",
     component: configOverView,
   },
-  {
-    path: "/cau-hinh-trang-web",
-    name: "configWeb",
-    component: roleUser !== "0" ? configWeb : NotEnough,
-  },
+  
   {
     path: "/general-statistics",
     name: "General Statistics",
     component: GeneralStatistics,
-  },
-  { path: "/dashboard", name: "Dashboard", component: Dashboard },
-  { path: "/users", name: "Users", component: TableUser },
-  { path: "/company", name: "Company", component: TableCompany },
-  { path: "/key", name: "Key", component: TableKey },
-  { path: "/key_order", name: "Key", component: TableKeyOrder },
-  { path: "/pakage_sale", name: "Sale", component: TablePakageSale },
-  { path: "/pakage_sale_log", name: "SaleLog", component: TablePakageSaleLog },
-  { path: "/type_key", name: "TypeKey", component: TableTypeKey },
-  { path: "/role", name: "Role", component: TableRole },
-  { path: "/link", name: "Key", component: TableLink },
-  { path: "/history", name: "HistorySkin", component: HistorySkinUser },
-  { path: "/sales", name: "ShopManager", component: ListSale },
-  { path: "/shopmanager", name: "ShopManager", component: ListShopManager },
-  { path: "/customers", name: "Customers", component: ListCustomer },
-  { path: "/hardware", name: "HardWares", component: HardWare },
-  { path: "/orders", name: "Orders", component: Order },
-  { path: "/order_table", name: "Order Table", component: OrderTable },
-  { path: "/transaction", name: "Transaction", component: TransactionTable },
-  { path: "/hardwaremanager", name: "HardWare", component: HardWareManager },
-  { path: "/profile", name: "Profile", component: Profile },
-  {
-    path: "/book-calendar",
-    name: "BookCalendar",
-    component: roleUser !== "0" ? BookCalendar : NotEnough,
-  },
-
-  { path: "/spending_order", name: "SPENDING", component: SPENDING },
-  { path: "/role_manager", name: "Role Manager", component: RoleManager },
-  { path: "/plugin_manager", name: "Plugin Manager", component: PluginManager },
-  {
-    path: "/customer_manager",
-    name: "Customer Manager",
-    component: roleUser === "0" ? PluginCustomer : NotEnough,
-  },
-  {
-    path: "/plugin_create_order",
-    name: "Create Order",
-    component: PluginCreateOrder,
-  },
-
-  {
-    path: "/yeu-cau-ho-tro",
-    name: "Request Suport",
-    component: RequestSupport,
-  },
-  {
-    path: "/manage-provider",
-    name: "Manage Provider",
-    component: ManageProvider,
   },
 
   { path: "/saleAdmin", name: "SALE", component: PluginUserTable },
@@ -507,87 +538,6 @@ const routes = [
     path: "/subsale",
     name: "Sub Sale",
     component: roleUser !== "0" ? NotEnough : PluginSubSaleTable,
-  },
-  {
-    path: "/skin/config",
-    name: "confgSkinDisplay",
-    component: configSkinDisplay,
-  },
-  {
-    path: "/skin/configContent",
-    name: "configContent",
-    component: configContent,
-  },
-  {
-    path: "/skin/configOverView",
-    name: "configOverView",
-    component: configOverView,
-  },
-  {
-    path: "/cau-hinh-trang-web",
-    name: "configWeb",
-    component: roleUser !== "0" ? configWeb : NotEnough,
-  },
-  {
-    path: "/general-statistics",
-    name: "General Statistics",
-    component: GeneralStatistics,
-  },
-
-  {
-    path: "/yeu-cau-ho-tro",
-    name: "Request Suport",
-    component: RequestSupport,
-  },
-  {
-    path: "/manage-provider",
-    name: "Manage Provider",
-    component: ManageProvider,
-  },
-
-  { path: "/saleAdmin", name: "SALE", component: PluginUserTable },
-  { path: "/reward_info", name: "REWARD_INFO", component: RewardInfomation },
-  {
-    path: "/feature_customer",
-    name: "REWARD_INFO",
-    component: ListFeatureOfCustomer,
-  },
-  { path: "/cus_request", name: "REWARD_INFO", component: CusRequest },
-
-  { path: "/customer", name: "Customer Manager", component: CustomerManager },
-  { path: "/historyskin", name: "History Skin", component: HistorySkin },
-  { path: "/update_package", name: "UpdatePackage", component: UpdatePackage },
-  { path: "/brand_skin", name: "Brand Skin", component: BrandPlugin },
-
-  {
-    path: "/subsale",
-    name: "Sub Sale",
-    component: roleUser !== "0" ? NotEnough : PluginSubSaleTable,
-  },
-  {
-    path: "/skin/config",
-    name: "confgSkinDisplay",
-    component: configSkinDisplay,
-  },
-  {
-    path: "/skin/configContent",
-    name: "configContent",
-    component: configContent,
-  },
-  {
-    path: "/skin/configOverView",
-    name: "configOverView",
-    component: configOverView,
-  },
-  {
-    path: "/cau-hinh-trang-web",
-    name: "configWeb",
-    component: roleUser !== "0" ? configWeb : NotEnough,
-  },
-  {
-    path: "/general-statistics",
-    name: "General Statistics",
-    component: GeneralStatistics,
   },
 
   //admin product
@@ -599,15 +549,6 @@ const routes = [
 
   //User
   { path: "/end_user", name: "End User", component: EndUserPlugin },
-
-  { path: "/banner", name: "Banner User", component: Banner },
-
-  {
-    path: "/quan-ly-banner",
-    name: "BannerSlider",
-    component: roleUser === "0" ? BrandSlider : NotEnough,
-  },
-
   { path: "/config-theme", name: "Config themes", component: ConfigTheme },
 
   //Admin MakeUp

@@ -6,6 +6,7 @@ import Switch from "@mui/material/Switch";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
+
 export default class Footer extends Component {
   SaveAllConfigWeb(value) {
     this.props.SaveAllConfigWeb(value);

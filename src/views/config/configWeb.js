@@ -1,69 +1,37 @@
 import React, { Component } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
-import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Row,
-  Button,
-  Input,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Modal,
-} from "reactstrap";
+import { ModalHeader, ModalBody, ModalFooter, Modal } from "reactstrap";
 import Swal from "sweetalert2";
-
 import TextFieldGroup from "../../views/Common/TextFieldGroup";
 import API_CONNECT from "../../../src/functions/callAPI";
-import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
-
 import InfoIcon from "@mui/icons-material/Info";
 import PermDataSettingIcon from "@mui/icons-material/PermDataSetting";
-import {
-  CLabel,
-  CRow,
-  CCol,
-  CSelect,
-  CButton,
-
-  CTextarea,
-} from "@coreui/react";
-import Checkbox from "@mui/material/Checkbox";
-import CIcon from "@coreui/icons-react";
+import { CButton } from "@coreui/react";
 import "moment-timezone";
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "./../../contants/contants";
 import axios from "axios";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
 import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
 import { AiFillWechat } from "@react-icons/all-files/ai/AiFillWechat";
 import { IoIosColorPalette } from "@react-icons/all-files/io/IoIosColorPalette";
-// import { BsFillMenuButtonWideFill } from "@react-icons/all-files/bs/BsFillMenuButtonWideFill";
-import { BsFillMenuButtonWideFill } from 'react-icons/bs';
-import { MdOutlineModeComment } from 'react-icons/md';
-import {  AiOutlineFundView } from "react-icons/ai";
-import { BiWorld } from 'react-icons/bi';
-import Chats from './configWeb/Chats';
-import BannerAia from './configWeb/BannerAia';
-import Logo from './configWeb/Logo';
-import SlideShow from './configWeb/SlideShow';
-import Mxh from './configWeb/Mxh';
+import { BsFillMenuButtonWideFill } from "react-icons/bs";
+import { MdOutlineModeComment } from "react-icons/md";
+import { AiOutlineFundView } from "react-icons/ai";
+import { BiWorld } from "react-icons/bi";
+import Chats from "./configWeb/Chats";
+import BannerAia from "./configWeb/BannerAia";
+import Logo from "./configWeb/Logo";
+import SlideShow from "./configWeb/SlideShow";
+import Mxh from "./configWeb/Mxh";
 import Footer from "./configWeb/Footer";
 import Voucher from "./configWeb/Voucher";
 import Aia from "./configWeb/Aia";
@@ -73,98 +41,129 @@ import ButtonConfig from "./configWeb/Button";
 import ChangeColor from "./configWeb/Color";
 import Homepage from "./configWeb/Homepage";
 
-
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
-class Users extends Component {
+class ConfigWeb extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      centerFooterLeft : true,
-      centerFooterRight : true,
-      configData : [],
+      centerFooterLeft: true,
+      centerFooterRight: true,
+      configData: [],
       tabNameConfig: [
         {
           _id: "1",
           name: "Thông tin trang chủ",
-          icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />
+          icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "2",
           name: "Slider",
-          icon: <svg style={{ width: "24px ", height: "24px " }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-slides-fill" viewBox="0 0 16 16">
-            <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
-            <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
-          </svg>
+          icon: (
+            <svg
+              style={{ width: "24px ", height: "24px " }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-file-slides-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
+              <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
+            </svg>
+          ),
         },
         {
           _id: "3",
           name: "Cấu hình SEO",
-          icon: <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <PermDataSettingIcon style={{ width: "24px ", height: "24px " }} />
+          ),
         },
         {
           _id: "9",
           name: "Banner",
-          icon: <svg style={{ width: "24px ", height: "24px " }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-slides-fill" viewBox="0 0 16 16">
-          <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
-          <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
-        </svg>
+          icon: (
+            <svg
+              style={{ width: "24px ", height: "24px " }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-file-slides-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
+              <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
+            </svg>
+          ),
         },
         {
           _id: "10",
           name: "Nút",
-          icon: <BsFillMenuButtonWideFill style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <BsFillMenuButtonWideFill
+              style={{ width: "24px ", height: "24px " }}
+            />
+          ),
         },
         {
           _id: "12",
           name: "Popup",
-          icon: <MdOutlineModeComment style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <MdOutlineModeComment style={{ width: "24px ", height: "24px " }} />
+          ),
         },
         {
           _id: "11",
           name: "Voucher",
-          icon: <AiOutlineFundView style={{ width: "24px ", height: "24px " }} />
+          icon: (
+            <AiOutlineFundView style={{ width: "24px ", height: "24px " }} />
+          ),
         },
         {
           _id: "13",
           name: "Aia",
-          icon: <BiWorld style={{ width: "24px ", height: "24px " }} />
+          icon: <BiWorld style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "4",
           name: "Logos",
-          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />
+          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "5",
           name: "Mã Chat",
-          icon: <AiFillWechat style={{ width: "24px ", height: "24px " }} />
+          icon: <AiFillWechat style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "6",
           name: "Cấu hình mạng xã hội",
-          icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "7",
           name: "Thông tin footer",
-          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />
+          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "8",
           name: "Quản lý màu sắc",
-          icon: <IoIosColorPalette style={{ width: "24px ", height: "24px " }} />
-        }
+          icon: (
+            <IoIosColorPalette style={{ width: "24px ", height: "24px " }} />
+          ),
+        },
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
         : null,
 
       action: "new",
-      codeChat : "",
+      codeChat: "",
       idUpdate: "",
       checkFb: false,
       checkGg: true,
@@ -185,14 +184,9 @@ class Users extends Component {
       isLoading: false,
       isDisable: true,
       Email: "",
-      sub2_mainColor: "",
-      button_color: "",
-      sucess_color: "",
-      error_color: "",
-      text_mainColor: "",
+
       updateLevel: "1",
-      Message_Code: "",
-      sub_mainColor: "",
+
       statusModalUpdate: false,
       dataConfigWeb: null,
       idUpdateCurrent: null,
@@ -204,11 +198,6 @@ class Users extends Component {
     };
   }
 
-  setStateName(name,value){
-    this.setState({
-      [name]: value
-    })
-  };
   ToggleViewConfigWeb(id) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -216,22 +205,22 @@ class Users extends Component {
     const { tabNameConfig } = this.state;
     for (i = 0; i < tabNameConfig.length; i++) {
       if (tabNameConfig[i]._id === id) {
-          tablinks[i].classList.add("tabcontent-left-active");
+        tablinks[i].classList.add("tabcontent-left-active");
       } else {
-          tablinks[i].classList.remove("tabcontent-left-active");  
-      };
-    };
+        tablinks[i].classList.remove("tabcontent-left-active");
+      }
+    }
     for (i = 0; i < tabcontent.length; i++) {
-      if (tabcontent[i].id.replace("tabcontent","") === id) {
-          tabcontent[i].classList.add("defaultOpen");
-          tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
+      if (tabcontent[i].id.replace("tabcontent", "") === id) {
+        tabcontent[i].classList.add("defaultOpen");
+        tabcontent[i].style.animation = "hideOpa 1s ease-in-out";
       } else {
-          tabcontent[i].classList.remove("defaultOpen");
-          tabcontent[i].style.animation = "none";    
-      };
-    };
+        tabcontent[i].classList.remove("defaultOpen");
+        tabcontent[i].style.animation = "none";
+      }
+    }
   }
-  onChangeImage=(e, value, valueLink, valueShow) =>{
+  onChangeImage = (e, value, valueLink, valueShow) => {
     let files = e.target.files;
     let reader = new FileReader();
     this.setState({ [valueLink]: files[0] });
@@ -239,7 +228,7 @@ class Users extends Component {
     reader.onload = (e) => {
       this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
     };
-  }
+  };
   async componentDidMount() {
     await this.getFooter();
     await this.getDataConfigWeb();
@@ -257,7 +246,7 @@ class Users extends Component {
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll";
-    const newComany_id = this.state.company_id
+    const newComany_id = this.state.company_id;
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -272,12 +261,11 @@ class Users extends Component {
         },
       })
       .then((res) => {
-
         if (res.data.data.length > 0) {
           let dataConfig = res.data.data[0];
 
           let valueConfig = JSON.parse(dataConfig.Value);
-          console.log("webinfo", valueConfig)
+          console.log("webinfo", valueConfig);
 
           this.setState(
             {
@@ -291,86 +279,104 @@ class Users extends Component {
               mxh: valueConfig.value.mxh,
               statusConfig: valueConfig.value.statusConfig,
               configData: valueConfig.value.statusConfig,
-              footer : valueConfig.value.footer,
-              banner : valueConfig.value.banner,
-              button : valueConfig.value.button,
-              voucher : valueConfig.value.voucher,
-              form : valueConfig.value.form,
-              aia : valueConfig.value.aia,
-
-                          },
+              footer: valueConfig.value.footer,
+              banner: valueConfig.value.banner,
+              button: valueConfig.value.button,
+              voucher: valueConfig.value.voucher,
+              form: valueConfig.value.form,
+              aia: valueConfig.value.aia,
+            },
             () => {
-              const { homepage, seoInfo, logos, chats, configData, mxh , footer, banner, button, voucher, form, aia} = this.state;
-              if(aia){
+              const {
+                homepage,
+                seoInfo,
+                logos,
+                chats,
+                configData,
+                mxh,
+                footer,
+                banner,
+                button,
+                voucher,
+                form,
+                aia,
+              } = this.state;
+              if (aia) {
                 this.setState({
                   titleGetVoucherAia: this.state.aia.titleGetVoucherAia,
                   titleListCam: this.state.aia.titleListCam,
-                  titleSuggestFormLoginGetVoucher : this.state.aia.titleSuggestFormLoginGetVoucher,
-                  titleFormGetVoucherAfterLoginFormSuggest : this.state.aia.titleFormGetVoucherAfterLoginFormSuggest,
-                })       
+                  titleSuggestFormLoginGetVoucher:
+                    this.state.aia.titleSuggestFormLoginGetVoucher,
+                  titleFormGetVoucherAfterLoginFormSuggest:
+                    this.state.aia.titleFormGetVoucherAfterLoginFormSuggest,
+                });
               }
-              if(form){
+              if (form) {
                 this.setState({
                   titleLogin: this.state.form.titleLogin,
                   btn_login: this.state.form.btn_login,
-                  titleUpdate : this.state.form.titleUpdate,
-                  btn_update : this.state.form.btn_update,
-                })       
+                  titleUpdate: this.state.form.titleUpdate,
+                  btn_update: this.state.form.btn_update,
+                });
               }
-              if(button){
+              if (button) {
                 this.setState({
                   btn_soida: this.state.button.btn_soida,
                   btn_get_voucher: this.state.button.btn_get_voucher,
-                  btn_get_voucher2 : this.state.button.btn_get_voucher2,
-                  btn_register_get_voucher: this.state.button.btn_register_get_voucher,
-
-                })       
+                  btn_get_voucher2: this.state.button.btn_get_voucher2,
+                  btn_register_get_voucher:
+                    this.state.button.btn_register_get_voucher,
+                });
               }
-              if(voucher){
-                
+              if (voucher) {
                 this.setState({
-                  imageFormVoucher : this.state.voucher.imageFormVoucher,
+                  infoVoucher: this.state.voucher.infoVoucher,
+                  imageFormVoucher: this.state.voucher.imageFormVoucher,
                   sendSMS: this.state.voucher.sendSMS,
                   registerGetVoucher: this.state.voucher.registerGetVoucher,
-                  loginWatchVoucher : this.state.voucher.loginWatchVoucher,
+                  loginWatchVoucher: this.state.voucher.loginWatchVoucher,
                   receiveVoucher: this.state.voucher.receiveVoucher,
                   textSales: this.state.voucher.textSales,
-                  receiveVoucherSuccess : this.state.voucher.receiveVoucherSuccess,
-                })  
+                  receiveVoucherSuccess:
+                    this.state.voucher.receiveVoucherSuccess,
+                });
               }
               if (banner) {
                 this.setState({
-                  hrefImageBannerMobile: this.state.banner.hrefImageBannerMobile,
-                  hrefImageBannerDesktop: this.state.banner.hrefImageBannerDesktop,
+                  hrefImageBannerMobile:
+                    this.state.banner.hrefImageBannerMobile,
+                  hrefImageBannerDesktop:
+                    this.state.banner.hrefImageBannerDesktop,
 
                   imageBannerDesktop: this.state.banner.imageBannerDesktop,
                   imageBannerDesktop_link: this.state.banner.imageBannerDesktop,
-                  imageBannerDesktop_show : this.state.banner.imageBannerDesktop,
+                  imageBannerDesktop_show: this.state.banner.imageBannerDesktop,
 
                   imageBannerMobile: this.state.banner.imageBannerMobile,
                   imageBannerMobile_link: this.state.banner.imageBannerMobile,
-                  imageBannerMobile_show : this.state.banner.imageBannerMobile,
-                })
-              }   
+                  imageBannerMobile_show: this.state.banner.imageBannerMobile,
+                });
+              }
               if (footer) {
                 this.setState({
                   footerLeft: this.state.footer.footerLeft,
                   footerRight: this.state.footer.footerRight,
                   centerFooterRight: this.state.footer.centerFooterRight,
                   centerFooterLeft: this.state.footer.centerFooterLeft,
-                })
-              }     
-        
+                });
+              }
+
               if (homepage) {
                 this.setState({
-                  loginViewResult1 : this.state.homepage.loginViewResult1,
-                  loginViewResult2 : this.state.homepage.loginViewResult2,
-                  loginViewResult3 : this.state.homepage.loginViewResult3,
-                  loginViewResult4 : this.state.homepage.loginViewResult4,
-                  textResultDepthSkin : this.state.homepage.textResultDepthSkin,
-                  titleResultDepthSkin : this.state.homepage.titleResultDepthSkin,
-                  textResultSkin : this.state.homepage.textResult,
-                  titleResultSkin : this.state.homepage.titleResult,
+                  loginViewResult1: this.state.homepage.loginViewResult1,
+                  loginViewResult2: this.state.homepage.loginViewResult2,
+                  loginViewResult3: this.state.homepage.loginViewResult3,
+                  loginViewResult4: this.state.homepage.loginViewResult4,
+                  textResultDepthSkin: this.state.homepage.textResultDepthSkin,
+                  titleResultDepthSkin:
+                    this.state.homepage.titleResultDepthSkin,
+                  textResultSkin: this.state.homepage.textResult,
+                  titleResultSkin: this.state.homepage.titleResult,
                   textAi: this.state.homepage.textAi,
                   titlePen1: this.state.homepage.title1,
                   titlePen2: this.state.homepage.title2,
@@ -396,7 +402,6 @@ class Users extends Component {
                   imagePhoto: this.state.homepage.imagePhoto,
                   imagePhoto_link: this.state.homepage.imagePhoto,
                   imagePhoto_show: this.state.homepage.imagePhoto,
-
                 });
               }
               if (seoInfo) {
@@ -408,9 +413,9 @@ class Users extends Component {
                   imgLayout_show: this.state.seoInfo.imageShare,
                   imgLayout_link: this.state.seoInfo.imageShare,
 
-                  imageShareSeo : this.state.seoInfo.imageShareSeo,
-                  imageShareSeo_link : this.state.seoInfo.imageShareSeo,
-                  imageShareSeo_show : this.state.seoInfo.imageShareSeo,
+                  imageShareSeo: this.state.seoInfo.imageShareSeo,
+                  imageShareSeo_link: this.state.seoInfo.imageShareSeo,
+                  imageShareSeo_show: this.state.seoInfo.imageShareSeo,
 
                   keywordSeo: this.state.seoInfo.key,
                   authorSeo: this.state.seoInfo.author,
@@ -427,8 +432,8 @@ class Users extends Component {
               if (chats) {
                 this.setState({
                   codeChat: this.state.chats.tawk,
-                  codeMess: this.state.chats.mess
-                })
+                  codeMess: this.state.chats.mess,
+                });
               }
               if (mxh) {
                 this.setState({
@@ -443,8 +448,7 @@ class Users extends Component {
                   keyAppGg: this.state.mxh.google.appid,
                   PassGg: this.state.mxh.google.password,
                   hrefGg: this.state.mxh.google.href,
-                })
-
+                });
               }
             }
           );
@@ -489,7 +493,6 @@ class Users extends Component {
                   href: "",
                 },
               },
-
             },
           };
 
@@ -522,9 +525,7 @@ class Users extends Component {
         value: JSON.stringify(this.state.dataConfigWeb),
         type: "system",
       })
-      .then((res) => {
-
-      });
+      .then((res) => {});
   }
   async getFooter() {
     var baseUrlapi = Constants.BASE_URL;
@@ -547,7 +548,6 @@ class Users extends Component {
         this.setState({
           dataFooter: res.data.data,
         });
-
       });
   }
 
@@ -556,7 +556,7 @@ class Users extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.UPDATE_FOOTER;
     let url = baseUrlapi + urlCall;
-    const newComany_id = this.state.company_id
+    const newComany_id = this.state.company_id;
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -580,8 +580,8 @@ class Users extends Component {
           timer: 700,
         });
         this.setState({
-          statusModalUpdate: false
-        })
+          statusModalUpdate: false,
+        });
         this.getFooter();
       });
   }
@@ -590,7 +590,7 @@ class Users extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.ADD_FOOTER;
     let url = baseUrlapi + urlCall;
-    const newComany_id = this.state.company_id
+    const newComany_id = this.state.company_id;
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
@@ -613,8 +613,8 @@ class Users extends Component {
           timer: 700,
         });
         this.setState({
-          statusModalUpdate: false
-        })
+          statusModalUpdate: false,
+        });
         this.getFooter();
       });
   }
@@ -626,9 +626,7 @@ class Users extends Component {
       form.append("image", link);
 
       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
-        (res) => {
-
-        }
+        (res) => {}
       );
 
       newImage = link.name;
@@ -637,7 +635,7 @@ class Users extends Component {
       return newImage;
     }
   }
-  SaveAllConfigWeb= async(change)=>{
+  SaveAllConfigWeb = async (change) => {
     const {
       dataConfigWeb,
       introduce,
@@ -664,8 +662,8 @@ class Users extends Component {
     };
 
     if (change === "mxh") {
-      if(!coppyData.value.mxh){
-        coppyData.value.mxh = {}
+      if (!coppyData.value.mxh) {
+        coppyData.value.mxh = {};
       }
       // coppyData.value.statusConfig = this.state.configData;
       coppyData.value.mxh.facebook.appid = this.state.keyAppFb;
@@ -681,50 +679,53 @@ class Users extends Component {
       coppyData.value.mxh.zalo.href = this.state.hrefZalo;
     }
     if (change === "chats") {
-
       coppyData.value.chatMess = this.state.codeMess;
       coppyData.value.tawk = this.state.codeChat;
     }
     if (change === "voucher") {
-      if(!coppyData.value.voucher){
-        coppyData.value.voucher = {}
+      if (!coppyData.value.voucher) {
+        coppyData.value.voucher = {};
       }
       coppyData.value.voucher.sendSMS = this.state.sendSMS;
-      coppyData.value.voucher.registerGetVoucher = this.state.registerGetVoucher;
+      coppyData.value.voucher.registerGetVoucher =
+        this.state.registerGetVoucher;
+      
+      coppyData.value.voucher.infoVoucher = this.state.infoVoucher;
       coppyData.value.voucher.loginWatchVoucher = this.state.loginWatchVoucher;
       coppyData.value.voucher.receiveVoucher = this.state.receiveVoucher;
       coppyData.value.voucher.textSales = this.state.textSales;
-      coppyData.value.voucher.receiveVoucherSuccess = this.state.receiveVoucherSuccess;
+      coppyData.value.voucher.receiveVoucherSuccess =
+        this.state.receiveVoucherSuccess;
       let newImage = await this.postImage(this.state.imageFormVoucher_link);
       if (newImage) {
         coppyData.value.voucher.imageFormVoucher = `${Constants.BASE_URL}image_brand/${newImage}`;
-      } 
+      }
     }
     if (change === "button") {
-      if(!coppyData.value.button){
-        coppyData.value.button = {}
-        
+      if (!coppyData.value.button) {
+        coppyData.value.button = {};
       }
-      coppyData.value.button.btn_register_get_voucher = this.state.btn_register_get_voucher;
+      coppyData.value.button.btn_register_get_voucher =
+        this.state.btn_register_get_voucher;
       coppyData.value.button.btn_soida = this.state.btn_soida;
       coppyData.value.button.btn_get_voucher = this.state.btn_get_voucher;
       coppyData.value.button.btn_get_voucher2 = this.state.btn_get_voucher2;
-
     }
     if (change === "aia") {
-      if(!coppyData.value.aia){
-        coppyData.value.aia = {}
-        
+      if (!coppyData.value.aia) {
+        coppyData.value.aia = {};
       }
       coppyData.value.aia.titleListCam = this.state.titleListCam;
       coppyData.value.aia.titleGetVoucherAia = this.state.titleGetVoucherAia;
-      coppyData.value.aia.titleSuggestFormLoginGetVoucher = this.state.titleSuggestFormLoginGetVoucher;
-      coppyData.value.aia.titleFormGetVoucherAfterLoginFormSuggest = this.state.titleFormGetVoucherAfterLoginFormSuggest;
+      coppyData.value.aia.titleSuggestFormLoginGetVoucher =
+        this.state.titleSuggestFormLoginGetVoucher;
+      coppyData.value.aia.titleFormGetVoucherAfterLoginFormSuggest =
+        this.state.titleFormGetVoucherAfterLoginFormSuggest;
     }
-    
+
     if (change === "form") {
-      if(!coppyData.value.form){
-        coppyData.value.form = {}
+      if (!coppyData.value.form) {
+        coppyData.value.form = {};
       }
       coppyData.value.form.btn_update = this.state.btn_update;
       coppyData.value.form.titleUpdate = this.state.titleUpdate;
@@ -733,21 +734,25 @@ class Users extends Component {
       coppyData.value.form.titleLogin = this.state.titleLogin;
     }
     if (change === "homepage") {
-      if(!coppyData.value.homepage){
-        coppyData.value.homepage = {}
+      if (!coppyData.value.homepage) {
+        coppyData.value.homepage = {};
       }
       coppyData.value.homepage.loginViewResult1 = this.state.loginViewResult1;
       coppyData.value.homepage.loginViewResult2 = this.state.loginViewResult2;
       coppyData.value.homepage.loginViewResult3 = this.state.loginViewResult3;
       coppyData.value.homepage.loginViewResult4 = this.state.loginViewResult4;
-      coppyData.value.homepage.titleResultDepthSkin = this.state.titleResultDepthSkin;
-      coppyData.value.homepage.textResultDepthSkin = this.state.textResultDepthSkin;
+      coppyData.value.homepage.titleResultDepthSkin =
+        this.state.titleResultDepthSkin;
+      coppyData.value.homepage.textResultDepthSkin =
+        this.state.textResultDepthSkin;
       coppyData.value.homepage.titleResult = this.state.titleResultSkin;
       coppyData.value.homepage.textResult = this.state.textResultSkin;
       coppyData.value.homepage.titleButtonPhoto = this.state.titleButtonPhoto;
       coppyData.value.homepage.titleButtonChoose = this.state.titleButtonChoose;
-      coppyData.value.homepage.buttonSuggestLogin1 = this.state.buttonSuggestLogin1;
-      coppyData.value.homepage.buttonSuggestLogin2 = this.state.buttonSuggestLogin2;
+      coppyData.value.homepage.buttonSuggestLogin1 =
+        this.state.buttonSuggestLogin1;
+      coppyData.value.homepage.buttonSuggestLogin2 =
+        this.state.buttonSuggestLogin2;
       coppyData.value.homepage.titleStep1 = this.state.titleStep1;
       coppyData.value.homepage.titleStep2 = this.state.titleStep2;
       coppyData.value.homepage.titleStep3 = this.state.titleStep3;
@@ -771,8 +776,8 @@ class Users extends Component {
       }
     }
     if (change === "seoInfo") {
-      if(!coppyData.value.seoInfo){
-        coppyData.value.seoInfo = {}
+      if (!coppyData.value.seoInfo) {
+        coppyData.value.seoInfo = {};
       }
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
@@ -792,7 +797,7 @@ class Users extends Component {
       });
     }
     if (change === "footer") {
-      if(!coppyData.value.footer){
+      if (!coppyData.value.footer) {
         coppyData.value.footer = {};
       }
       coppyData.value.footer.footerLeft = this.state.footerLeft;
@@ -804,7 +809,7 @@ class Users extends Component {
       });
     }
     if (change === "logos") {
-      if(!coppyData.value.logos){
+      if (!coppyData.value.logos) {
         coppyData.value.logos = {};
       }
       let newImage = await this.postImage(this.state.image_link);
@@ -822,7 +827,7 @@ class Users extends Component {
       });
     }
     if (change === "banner") {
-      if(!coppyData.value.banner){
+      if (!coppyData.value.banner) {
         coppyData.value.banner = {};
       }
       let newImage = await this.postImage(this.state.imageBannerDesktop_link);
@@ -834,13 +839,15 @@ class Users extends Component {
         coppyData.value.banner.imageBannerMobile = `${Constants.BASE_URL}image_brand/${newImage2}`;
       }
 
-      coppyData.value.banner.hrefImageBannerDesktop = this.state.hrefImageBannerDesktop;
-      coppyData.value.banner.hrefImageBannerMobile = this.state.hrefImageBannerMobile;
+      coppyData.value.banner.hrefImageBannerDesktop =
+        this.state.hrefImageBannerDesktop;
+      coppyData.value.banner.hrefImageBannerMobile =
+        this.state.hrefImageBannerMobile;
 
       this.setState({
         dataConfigWeb: coppyData,
       });
-    }  
+    }
     await axios
       .post(url, {
         value: JSON.stringify(coppyData),
@@ -858,11 +865,11 @@ class Users extends Component {
         });
         this.getDataConfigWeb();
       });
-  }
+  };
   async onUpdate() {
     const { dataConfigWeb } = this.state;
 
-    const newComany_id = this.state.company_id
+    const newComany_id = this.state.company_id;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/update";
     await axios.post(url, {
@@ -916,7 +923,7 @@ class Users extends Component {
   closeFormEdit = () => {
     this.setState({ statusModalUpdate: false });
   };
-  openFormAddSlide=()=>{
+  openFormAddSlide = () => {
     this.setState({
       actionSlide: "new",
       modalSlide: true,
@@ -925,7 +932,7 @@ class Users extends Component {
       imageSlide_show: "",
       contentSlide: "",
     });
-  }
+  };
   async saveAddSlide() {
     const { contentSlide, dataConfigWeb, imageSlide_link } = this.state;
     let newImage = await this.postImage(imageSlide_link);
@@ -961,8 +968,7 @@ class Users extends Component {
       }
     );
   }
-  openFormEditSlide=(item, i)=> {
-
+  openFormEditSlide = (item, i) => {
     this.setState({
       actionSlide: "edit",
 
@@ -973,8 +979,8 @@ class Users extends Component {
       contentSlide: item.content,
       indexSlideUpdate: i,
     });
-  }
-   deleteSlide=async(i)=> {
+  };
+  deleteSlide = async (i) => {
     const { dataConfigWeb } = this.state;
     let coppyData = {
       ...dataConfigWeb,
@@ -996,7 +1002,7 @@ class Users extends Component {
         });
       }
     );
-  }
+  };
   async saveEditSlide() {
     const { imageSlide, contentSlide, dataConfigWeb, indexSlideUpdate } =
       this.state;
@@ -1080,215 +1086,215 @@ class Users extends Component {
       await this.getData();
     } else {
       alert(res.data.message);
-
     }
   }
-  setStateByName=(name, value)=>{
+  setStateByName = (name, value) => {
     this.setState({ [name]: value });
-  }
+  };
   render() {
-    const {
-      contentSlide,
-      slideShow,
-      titleSeo,
-      descSeo,
-      keywordSeo,
-      authorSeo,
-      titleSeo2,
-      dataFooter,
-      isDisable,
-
-      mainColor,
-    } = this.state;
+    const { contentSlide } = this.state;
 
     if (!this.state.isLoading) {
       return (
-        <div className="animated fadeIn" >
+        <div className="animated fadeIn">
           <div className="flex-tabs">
             <div class="tab">
               <List
-                sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
+                }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
               >
-                {
-                  this.state.tabNameConfig ? this.state.tabNameConfig.map((item, i) => {
-                    return (
-                      <ListItemButton
-                        key={item._id}
-                        className={i === 0 ? " tablinks tabcontent-left-active" : " tablinks"}
-                        onClick={() => this.ToggleViewConfigWeb(item._id)}
-                        sx={{ pl: 4 }}
-                      >
-                        <ListItemIcon>
-                          {item.icon}
-                        </ListItemIcon>
-                        <ListItemText className="tabcontent-left" style={{ fontSize: "14px !important", color: "rgb(52, 71, 103)" }} primary={item.name} />
-                      </ListItemButton>
-                    );
-                  }) : null
-                }
+                {this.state.tabNameConfig
+                  ? this.state.tabNameConfig.map((item, i) => {
+                      return (
+                        <ListItemButton
+                          key={item._id}
+                          className={
+                            i === 0
+                              ? " tablinks tabcontent-left-active"
+                              : " tablinks"
+                          }
+                          onClick={() => this.ToggleViewConfigWeb(item._id)}
+                          sx={{ pl: 4 }}
+                        >
+                          <ListItemIcon>{item.icon}</ListItemIcon>
+                          <ListItemText
+                            className="tabcontent-left"
+                            style={{
+                              fontSize: "14px !important",
+                              color: "rgb(52, 71, 103)",
+                            }}
+                            primary={item.name}
+                          />
+                        </ListItemButton>
+                      );
+                    })
+                  : null}
               </List>
             </div>
             <div className="tabcontents">
               <div id="tabcontent1" className="tabcontent defaultOpen">
-                <Homepage 
-                 SaveAllConfigWeb={this.SaveAllConfigWeb}
-                 setStateByName={this.setStateByName}
-                 onChangeImage={this.onChangeImage}
-                 titlePen1={this.state.titlePen1}
-                 titlePen2={this.state.titlePen2}
-                 sologan={this.state.sologan}
-                 introduce={this.state.introduce}
-                 imagePhoto={this.state.imagePhoto}
-                 titlePhoto={this.state.titlePhoto}
-                 titleButtonPhoto={this.state.titleButtonPhoto}
-                 titleButtonChoose={this.state.titleButtonChoose}
-                 buttonSuggestLogin1={this.state.buttonSuggestLogin1}
-                 buttonSuggestLogin2={this.state.buttonSuggestLogin2}
-                 titleStep1={this.state.titleStep1}
-                 titleStep2={this.state.titleStep2}
-                 titleStep3={this.state.titleStep3}
-                 titleResultSkin={this.state.titleResultSkin}
-                 textResultSkin={this.state.textResultSkin}
-                 titleResultDepthSkin={this.state.titleResultDepthSkin}
-                 textResultDepthSkin={this.state.textResultDepthSkin}
-                 loginViewResult1={this.state.loginViewResult1}
-                 loginViewResult2={this.state.loginViewResult2}
-                 loginViewResult3={this.state.loginViewResult3}
-                 loginViewResult4={this.state.loginViewResult4}
+                <Homepage
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  onChangeImage={this.onChangeImage}
+                  titlePen1={this.state.titlePen1}
+                  titlePen2={this.state.titlePen2}
+                  sologan={this.state.sologan}
+                  introduce={this.state.introduce}
+                  imagePhoto={this.state.imagePhoto}
+                  titlePhoto={this.state.titlePhoto}
+                  titleButtonPhoto={this.state.titleButtonPhoto}
+                  titleButtonChoose={this.state.titleButtonChoose}
+                  buttonSuggestLogin1={this.state.buttonSuggestLogin1}
+                  buttonSuggestLogin2={this.state.buttonSuggestLogin2}
+                  titleStep1={this.state.titleStep1}
+                  titleStep2={this.state.titleStep2}
+                  titleStep3={this.state.titleStep3}
+                  titleResultSkin={this.state.titleResultSkin}
+                  textResultSkin={this.state.textResultSkin}
+                  titleResultDepthSkin={this.state.titleResultDepthSkin}
+                  textResultDepthSkin={this.state.textResultDepthSkin}
+                  loginViewResult1={this.state.loginViewResult1}
+                  loginViewResult2={this.state.loginViewResult2}
+                  loginViewResult3={this.state.loginViewResult3}
+                  loginViewResult4={this.state.loginViewResult4}
                 />
               </div>
               <div id="tabcontent10" className="tabcontent">
-              <ButtonConfig
-                SaveAllConfigWeb={this.SaveAllConfigWeb}
-                setStateByName={this.setStateByName}
-                btn_soida={this.state.btn_soida}
-                btn_get_voucher={this.state.btn_get_voucher}
-                btn_register_get_voucher={this.state.btn_register_get_voucher}
-                btn_get_voucher2={this.state.btn_get_voucher2}
+                <ButtonConfig
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  btn_soida={this.state.btn_soida}
+                  btn_get_voucher={this.state.btn_get_voucher}
+                  btn_register_get_voucher={this.state.btn_register_get_voucher}
+                  btn_get_voucher2={this.state.btn_get_voucher2}
                 />
               </div>
               <div id="tabcontent12" className="tabcontent">
                 <Form
-                SaveAllConfigWeb={this.SaveAllConfigWeb}
-                setStateByName={this.setStateByName}
-                btn_login={this.state.btn_login}
-                titleUpdate={this.state.titleUpdate}
-                titleLogin={this.state.titleLogin}
-                btn_update={this.state.btn_update}
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  btn_login={this.state.btn_login}
+                  titleUpdate={this.state.titleUpdate}
+                  titleLogin={this.state.titleLogin}
+                  btn_update={this.state.btn_update}
                 />
-               
               </div>
               <div id="tabcontent13" className="tabcontent">
                 <Aia
-                SaveAllConfigWeb={this.SaveAllConfigWeb}
-                setStateByName={this.setStateByName}
-                titleGetVoucherAia={this.state.titleGetVoucherAia}
-                titleListCam={this.state.titleListCam}
-                titleSuggestFormLoginGetVoucher={this.state.titleSuggestFormLoginGetVoucher}
-                titleFormGetVoucherAfterLoginFormSuggest={this.state.titleFormGetVoucherAfterLoginFormSuggest}
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  titleGetVoucherAia={this.state.titleGetVoucherAia}
+                  titleListCam={this.state.titleListCam}
+                  titleSuggestFormLoginGetVoucher={
+                    this.state.titleSuggestFormLoginGetVoucher
+                  }
+                  titleFormGetVoucherAfterLoginFormSuggest={
+                    this.state.titleFormGetVoucherAfterLoginFormSuggest
+                  }
                 />
-     
               </div>
               <div id="tabcontent11" className="tabcontent">
                 <Voucher
-                SaveAllConfigWeb={this.SaveAllConfigWeb}
-                setStateByName={this.setStateByName}
-                onChangeImage={this.onChangeImage}
-
-                receiveVoucher={this.state.receiveVoucher}
-                textSales={this.state.textSales}
-                receiveVoucherSuccess={this.state.receiveVoucherSuccess}
-                loginWatchVoucher={this.state.loginWatchVoucher}
-                registerGetVoucher={this.state.registerGetVoucher}
-                sendSMS={this.state.sendSMS}
-                imageFormVoucher={this.state.imageFormVoucher}
-                />             
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  onChangeImage={this.onChangeImage}
+                  receiveVoucher={this.state.receiveVoucher}
+                  textSales={this.state.textSales}
+                  receiveVoucherSuccess={this.state.receiveVoucherSuccess}
+                  loginWatchVoucher={this.state.loginWatchVoucher}
+                  registerGetVoucher={this.state.registerGetVoucher}
+                  sendSMS={this.state.sendSMS}
+                  imageFormVoucher={this.state.imageFormVoucher}
+                  infoVoucher={this.state.infoVoucher}
+                />
               </div>
               <div id="tabcontent2" className="tabcontent">
-                <SlideShow 
-                 SaveAllConfigWeb={this.SaveAllConfigWeb}
-                 setStateByName={this.setStateByName}
-                 onChangeImage={this.onChangeImage}
-                 openFormEditSlide={this.openFormEditSlide}
-                 deleteSlide={this.deleteSlide}
-                 openFormAddSlide={this.openFormAddSlide}
-                 slideShow={this.state.slideShow}
+                <SlideShow
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  onChangeImage={this.onChangeImage}
+                  openFormEditSlide={this.openFormEditSlide}
+                  deleteSlide={this.deleteSlide}
+                  openFormAddSlide={this.openFormAddSlide}
+                  slideShow={this.state.slideShow}
                 />
               </div>
               <div id="tabcontent3" className="tabcontent">
                 <Seo
-                SaveAllConfigWeb={this.SaveAllConfigWeb}
-                setStateByName={this.setStateByName}
-                onChangeImage={this.onChangeImage}
-                titleSeo={this.state.titleSeo}
-                titleSeo2={this.state.titleSeo2}
-                imageShareSeo={this.state.imageShareSeo}
-                keywordSeo={this.state.keywordSeo}
-                descSeo={this.state.descSeo}
-                authorSeo={this.state.authorSeo}
-                imgLayout={this.state.imgLayout}
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  onChangeImage={this.onChangeImage}
+                  titleSeo={this.state.titleSeo}
+                  titleSeo2={this.state.titleSeo2}
+                  imageShareSeo={this.state.imageShareSeo}
+                  keywordSeo={this.state.keywordSeo}
+                  descSeo={this.state.descSeo}
+                  authorSeo={this.state.authorSeo}
+                  imgLayout={this.state.imgLayout}
                 />
               </div>
               <div id="tabcontent4" className="tabcontent ">
-               <Logo 
-               SaveAllConfigWeb={this.SaveAllConfigWeb}
-               setStateByName={this.setStateByName}
-               onChangeImage={this.onChangeImage}
-               image={this.state.image}
-               hrefLogoHeader={this.state.hrefLogoHeader}
-               imgLogoFooter={this.state.imgLogoFooter}
-               hrefLogoFooter={this.state.hrefLogoFooter}
-               />
-
+                <Logo
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  onChangeImage={this.onChangeImage}
+                  image={this.state.image}
+                  hrefLogoHeader={this.state.hrefLogoHeader}
+                  imgLogoFooter={this.state.imgLogoFooter}
+                  hrefLogoFooter={this.state.hrefLogoFooter}
+                />
               </div>
               <div id="tabcontent5" className="tabcontent ">
                 <Chats
-                SaveAllConfigWeb={this.SaveAllConfigWeb}
-                setStateByName={this.setStateByName}
-                codeChat={this.state.codeChat}
-                codeMess={this.state.codeMess}
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  codeChat={this.state.codeChat}
+                  codeMess={this.state.codeMess}
                 />
               </div>
               <div id="tabcontent6" className="tabcontent">
-              <Mxh 
-                 SaveAllConfigWeb={this.SaveAllConfigWeb}
-                 configData={this.state.configData}
-                 setStateByName={this.setStateByName}
-                 keyAppFb={this.state.keyAppFb}
-                 PassFb={this.state.PassFb}
-                 hrefFb={this.state.hrefFb}
-                 keyAppGg={this.state.keyAppGg}
-                 PassGg={this.state.PassGg}
-                 hrefGg={this.state.hrefGg}
-                 keyAppZalo={this.state.keyAppZalo}
-                 PassZalo={this.state.PassZalo}
-                 hrefZalo={this.state.hrefZalo}
-
+                <Mxh
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  configData={this.state.configData}
+                  setStateByName={this.setStateByName}
+                  keyAppFb={this.state.keyAppFb}
+                  PassFb={this.state.PassFb}
+                  hrefFb={this.state.hrefFb}
+                  keyAppGg={this.state.keyAppGg}
+                  PassGg={this.state.PassGg}
+                  hrefGg={this.state.hrefGg}
+                  keyAppZalo={this.state.keyAppZalo}
+                  PassZalo={this.state.PassZalo}
+                  hrefZalo={this.state.hrefZalo}
                 />
               </div>
               <div id="tabcontent7" className="tabcontent">
                 <Footer
-                SaveAllConfigWeb={this.SaveAllConfigWeb}
-                setStateByName={this.setStateByName}
-                centerFooterLeft={this.state.centerFooterLeft}
-                footerLeft={this.state.footerLeft}
-                centerFooterRight={this.state.centerFooterRight}
-                footerRight={this.state.footerRight}
-                />       
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  centerFooterLeft={this.state.centerFooterLeft}
+                  footerLeft={this.state.footerLeft}
+                  centerFooterRight={this.state.centerFooterRight}
+                  footerRight={this.state.footerRight}
+                />
               </div>
               <div id="tabcontent8" className="tabcontent">
-                  <ChangeColor
+                <ChangeColor
                   setStateByName={this.setStateByName}
                   updateCompany={this.updateCompany}
                   isDisable={this.state.isDisable}
                   mainColor={this.state.mainColor}
                   button_color={this.state.button_color}
-                  />
+                />
               </div>
               <div id="tabcontent9" className="tabcontent">
-                  <BannerAia
+                <BannerAia
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
                   onChangeImage={this.onChangeImage}
@@ -1296,9 +1302,8 @@ class Users extends Component {
                   hrefImageBannerDesktop={this.state.hrefImageBannerDesktop}
                   imageBannerMobile={this.state.imageBannerMobile}
                   hrefImageBannerMobile={this.state.hrefImageBannerMobile}
-                  />
+                />
               </div>
-            
             </div>
           </div>
           <Modal
@@ -1326,15 +1331,14 @@ class Users extends Component {
                 data={this.state.contentFooter}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
-
                 }}
                 onChange={(event, editor) => {
                   const data = editor.getData();
 
                   this.setState({ contentFooter: data });
                 }}
-                onBlur={(event, editor) => { }}
-                onFocus={(event, editor) => { }}
+                onBlur={(event, editor) => {}}
+                onFocus={(event, editor) => {}}
               />
               <TextFieldGroup
                 field="updateLink"
@@ -1469,96 +1473,4 @@ const override = css`
   border-color: red;
 `;
 
-const styles = {
-  datePicker: {
-    marginBottom: 20,
-  },
-  wa10: {
-    width: "5%",
-    float: "left",
-    height: "80px",
-  },
-  pagination: {
-    marginRight: "5px",
-  },
-  flexLabel: {
-    width: 100,
-  },
-  flexOption: {
-    width: 200,
-    margin: "1px",
-  },
-  a: {
-    textDecoration: "none",
-  },
-  floatRight: {
-    float: "right",
-    marginTop: "3px",
-  },
-  spinner: {
-    width: "30px",
-  },
-  center: {
-    textAlign: "center",
-  },
-  tbody: {
-    height: "380px",
-    overflowY: "auto",
-  },
-  wh12: {
-    width: "10%",
-    float: "left",
-    height: "80px",
-  },
-  wh15: {
-    width: "15%",
-    float: "left",
-    height: "80px",
-  },
-  w5: {
-    width: "12%",
-    float: "left",
-    height: "80px",
-  },
-  row: {
-    float: "left",
-    width: "100%",
-  },
-  success: {
-    color: "green",
-  },
-  danger: {
-    color: "red",
-  },
-  mgl5: {
-    marginLeft: "5px",
-  },
-  tags: {
-    float: "right",
-    marginRight: "5px",
-  },
-  searchInput: {
-    width: "100%",
-    display: "inline-block",
-    margin: "1px",
-  },
-  userActive: {
-    color: "green",
-  },
-  userPending: {
-    color: "red",
-  },
-  nagemonNameCol: {
-    width: "328px",
-  },
-  image: {
-    width: "100px",
-    height: "100px",
-    borderRadius: "99999px",
-  },
-};
-
-export default Users;
-
-
-
+export default ConfigWeb;

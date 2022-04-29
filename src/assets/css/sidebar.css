@@ -126,6 +126,9 @@
 .c-sidebar-nav-icon {
   color: #39f !important;
 }
+.c-sidebar-nav-icon-child{
+  margin-left:-40px !important;
+}
 .c-sidebar .c-sidebar-nav-dropdown.c-show {
   background: #fff;
 }
