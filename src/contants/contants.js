@@ -1,15 +1,23 @@
 export default {
-  // BASE_URL1: "https://api.deal24h.vn/",
   BASE_URL: "https://api.deal24h.vn/",
-  // BASE_URL: "http://192.168.1.16:3018/",
+  // BASE_URL: "http://192.168.1.18:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
   BASE_URL_CURRENT: "https://id.deal24h.vn/",
 
+  GET_NDLOG: "api/ngocdungLog/get-all",
+  CHANGE_STATUS: "api/ngocdungLog/checkStatus",
+  GET_DETAIL_NDLOG: "api/ngocdungLog/get-by-id",
+  DELETE_NDLOG: "api/ngocdungLog/delete",
+
   GET_IPLOG: "api/iplog/get-all",
   GET_DETAIL_IPLOG: "api/iplog/get-by-id",
   DELETE_IPLOG: "api/iplog/delete",
+
+  GET_SMSLOG: "api/smsLog/get-all",
+  GET_DETAIL_SMSLOG: "api/smsLog/get-by-id",
+  DELETE_SMSLOG: "api/smsLog/delete",
 
   GET_PARTNER: "api/partner-list-company",
   ADD_PARTNER: "api/plugin-add-partner",

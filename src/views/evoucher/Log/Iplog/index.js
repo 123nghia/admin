@@ -154,8 +154,8 @@ class IpLog extends Component {
         "slug":  this.state.slug,
         "introduction":  this.state.introduction,
         "brand" : this.state.branch,
-         "password":  this.state.password,
-         "userName" : this.state.userName
+        "password":  this.state.password,
+        "userName" : this.state.userName
       })
       .then(async(res) => {
         Swal.fire({
@@ -182,8 +182,8 @@ class IpLog extends Component {
         "slug":  this.state.slug,
         "introduction":  this.state.introduction,
         "brand" : this.state.branch,
-         "password":  this.state.password,
-         "userName" : this.state.userName,   
+        "password":  this.state.password,
+        "userName" : this.state.userName,   
       })
       .then(async (res) => {
         Swal.fire({
@@ -203,7 +203,7 @@ class IpLog extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .post(url, {
+      .delete(url, {
         id: item._id,
       })
       .then((res) => {
@@ -215,6 +215,62 @@ class IpLog extends Component {
         });
         this.getData();
       });
+  }
+  async viewDetail(item) {
+    let dataDetail = "";
+    let baseUrlCallApi = Constants.GET_DETAIL_IPLOG;
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          id : item._id
+        }
+      })
+      .then((res) => {
+        dataDetail = res.data.data.bodyRequest;
+    });
+    
+    let innerModalDetail = (
+      <Modal
+      isOpen={true}
+      className={this.props.className}
+    >
+      <ModalHeader>
+        Thông tin Body Request
+      </ModalHeader>
+      <ModalBody className="info_voucher">
+        <p>
+           Tên người dùng: <span>{dataDetail.FullName}</span>
+        </p>
+        <p>
+           Số điện thoại: <span>{dataDetail.FullName}</span>
+        </p>
+        <p>
+           Địa chỉ: <span>{dataDetail.Address}</span>
+        </p>
+        <p>
+           Dịch vụ - text: <span>{dataDetail.service_text}</span>
+        </p>
+        <p>
+           GuideID: <span>{item.guildId}</span>
+        </p>
+      </ModalBody>
+      <ModalFooter>
+        <CButton
+          color="secondary"
+          onClick={(e) =>
+            this.setState({ modalDetail : null })
+          }
+        >
+          Đóng
+        </CButton>
+      </ModalFooter>
+    </Modal> 
+    );
+    this.setState({
+      modalDetail : innerModalDetail
+    });
   }
   render() {
     const {
@@ -350,21 +406,7 @@ class IpLog extends Component {
                     Ip Log
                   </i>
                   <CRow>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Mã Voucher</p>
-                        <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ codeVoucher: e.target.value });
-                          }}
-                          name="codeVoucher"
-                          value={this.state.codeVoucher}
-                          placeholder="Mã voucher"
-                        />
-                      </div>
-                    </CCol>
-
+                   
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Số điện thoại</p>
@@ -486,21 +528,7 @@ class IpLog extends Component {
                               </td>                          
                               <td className="text-center">
                                 <div className="flex-a-center">
-                                  <Link to={"/log-ip-" + item._id}>                             
-                                  <CButton
-                                        shape="rounded-pill"
-                                        variant="outline"
-                                        color="info"
-                                        style={{marginRight:'10px'}}
-                                        size="md"
-                                        className="flex-a-center "
-                                        
-                                      >
-                                        <BsSearch
-                                          style={{ fontSize: "1.2rem" }}
-                                        />
-                                  </CButton>
-                                  </Link>
+                                 
                                   <CButton
                                     shape="rounded-pill"
                                     variant="ghost"
