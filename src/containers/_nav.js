@@ -7,7 +7,7 @@ import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill
 import { BsImageFill } from "@react-icons/all-files/bs/BsImageFill";
 import { CgWebsite } from "@react-icons/all-files/cg/CgWebsite";
 import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
-import { GiNotebook } from 'react-icons/gi';
+import { GiNotebook } from "react-icons/gi";
 
 import React from "react";
 
@@ -242,7 +242,7 @@ const _navOverview = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý bên thứ 3",
+    name: "Quản lý Khách hàng",
     role: ["0"],
     icon: (
       <CIcon
@@ -304,7 +304,6 @@ const _navMangerProviders = [
   //     _children: ["Quản lý nhà cung cấp"],
   //     role: ["0", "1", "2", "5"],
   //   },
-  
 ];
 const _navMangerPartner = [
   //   {
@@ -312,7 +311,6 @@ const _navMangerPartner = [
   //     _children: ["Quản lý nhà cung cấp"],
   //     role: ["0", "1", "2", "5"],
   //   },
- 
 ];
 
 const _navMangerSales = [
@@ -383,7 +381,7 @@ const _navMangerSales = [
 const _navMangerCampaigns = [
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý chiến dịch",
+    name: "Quản lý Chiến dịch",
     icon: (
       <CIcon
         style={css}
@@ -394,7 +392,7 @@ const _navMangerCampaigns = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý chiến dịch",
+        name: "Quản lý Chiến dịch",
         to: "/manage-campaign",
         icon: (
           <AiFillSetting
@@ -415,7 +413,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách chiến dịch tham gia",
+        name: "Danh sách Chiến dịch tham gia",
         to: "/list-campaign",
         icon: (
           <BsCardChecklist
@@ -436,7 +434,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách người dùng Voucher",
+        name: "Danh sách Người dùng Voucher",
         to: "/list-user-evoucher",
         icon: (
           <HiUserGroup
@@ -554,7 +552,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý mã khuyến mãi",
+        name: "Quản lý Mã khuyến mãi",
         to: "/manage-voucher",
         icon: (
           <AiFillSetting
@@ -589,7 +587,7 @@ const _navMangerCampaigns = [
 const _navMangerUser = [
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý người dùng",
+    name: "Quản lý Người dùng",
 
     icon: (
       <CIcon
@@ -602,7 +600,7 @@ const _navMangerUser = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý tài khoản",
+        name: "Quản lý Tài khoản",
         to: "/manage-account",
         icon: (
           <HiUserGroup
@@ -623,7 +621,7 @@ const _navMangerUser = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách tài khoản người dùng",
+        name: "Danh sách Tài khoản người dùng",
         to: "/end_user",
         icon: (
           <CIcon
@@ -644,7 +642,7 @@ const _navMangerUser = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Lịch sử soi da",
+        name: "Lịch sử Soi da",
         to: "/historyskin",
         icon: (
           <CIcon
@@ -698,7 +696,7 @@ const _navMangerUser = [
             </CTooltip>
           ),
         },
-      },    
+      },
       {
         _tag: "CSidebarNavItem",
         name: "IP Log",
@@ -719,7 +717,7 @@ const _navMangerUser = [
             </CTooltip>
           ),
         },
-      },    
+      },
       {
         _tag: "CSidebarNavItem",
         name: "NGOCDUNG Log",
@@ -740,10 +738,10 @@ const _navMangerUser = [
             </CTooltip>
           ),
         },
-      },    
+      },
     ],
   },
-  
+
   {
     _tag: "CSidebarNavItem",
     name: "Thống kê",
