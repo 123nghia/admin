@@ -203,7 +203,7 @@ class IpLog extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .post(url, {
+      .delete(url, {
         id: item._id,
       })
       .then((res) => {
