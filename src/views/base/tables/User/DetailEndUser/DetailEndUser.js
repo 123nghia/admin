@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Constants from "../../../../../contants/contants";
 import axios from "axios";
 
-import InfoIcon from "@mui/icons-material/Info";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { HiOutlineTicket } from "react-icons/hi";
 import List from "@mui/material/List";
@@ -12,7 +12,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import HistoryToggleOffRoundedIcon from "@mui/icons-material/HistoryToggleOffRounded";
 import CardMembershipOutlinedIcon from "@mui/icons-material/CardMembershipOutlined";
-import Pagination from "@mui/material/Pagination";
 
 import InfoEndUser from "./TabContent/InfoEndUser";
 import TableCampaignJoinedUser from "./TabContent/TableCampaignJoined_User";
@@ -27,7 +26,9 @@ const tabNameConfig = [
     id: "1",
     name: "Thông tin về người dùng",
     icon: (
-      <InfoIcon style={{ width: "24px ", height: "24px", color: "#389bff" }} />
+      <InfoOutlinedIcon
+        style={{ width: "24px ", height: "24px", color: "#389bff" }}
+      />
     ),
   },
   {
@@ -97,36 +98,12 @@ function DetailEndUser() {
   const [listVendor, setListVendor] = React.useState([]);
   const [infoVoucher, setInfoVoucher] = React.useState([]);
   const [history, setHistory] = React.useState([]);
-  const [arrPagination, setArrPagination] = React.useState([]);
-  const [hidden, setHidden] = React.useState(false);
-  const [data, setData] = React.useState([]);
-  const [indexPage, setIndexPage] = React.useState(0);
+  const [dataListVendor, setDataListVendor] = React.useState([]);
+  const [dataInfoVoucher, setDataInfoVoucher] = React.useState([]);
+
   const { id } = useParams();
   const [testGlobal, setTestGlobal] = React.useState(0);
 
-  function pagination(dataApi) {
-    console.log("dataApi", dataApi);
-    var i,
-      j,
-      temparray,
-      chunk = 8;
-    var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-
-    if (arrTotal.length == 0) {
-      setHidden(hidden);
-    } else {
-      setHidden(!hidden);
-    }
-
-    setArrPagination((arrPagination) => [...arrPagination, arrTotal]);
-    setData((data) => [...data, arrTotal[0]]);
-    console.log("arrTotal[0]", arrTotal);
-  }
-
   React.useEffect(() => {
     const baseUrlapi = Constants.BASE_URL;
     const baseUrlCallApi = Constants.DETAIL_USER_GET_INFO;
@@ -138,29 +115,9 @@ function DetailEndUser() {
         },
       })
       .then((res) => {
-        setInfoUser((infoUser) => [...infoUser, res.data?.data]);
-        console.log(res.data?.data);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    const baseUrlapi = Constants.BASE_URL;
-    const baseUrlCallApi = Constants.DETAIL_USER_GET_INFO;
-    const url = baseUrlapi + baseUrlCallApi;
-    axios
-      .get(url, {
-        params: {
-          id: id,
-        },
-      })
-      .then((res) => {
-        setListVendor((listVendor) => [
-          ...listVendor,
-          res.data.data.listVendor[0]?.vendor,
-        ]);
-        console.log(res.data.data.listVendor);
-        console.log("12312312313221312312", res);
-        pagination(res.data.data?.listVendor[0]?.vendor);
+        setInfoUser([res.data?.data]);
+        setListVendor([...res.data.data.listVendor[0]?.vendor]);
+        setDataListVendor([...res.data.data.listVendor[0]?.vendor]);
       });
   }, []);
 
@@ -175,7 +132,8 @@ function DetailEndUser() {
         },
       })
       .then((res) => {
-        setInfoVoucher((infoVoucher) => [...infoVoucher, res.data?.data]);
+        setDataInfoVoucher([...res.data.data]);
+        setInfoVoucher([...res.data.data]);
         console.log(res);
       });
   }, []);
@@ -185,7 +143,7 @@ function DetailEndUser() {
     const baseUrlCallApi = Constants.LIST_HISTORY_SKIN1;
     const url = baseUrlapi + baseUrlCallApi;
     axios.post(url, {}).then((res) => {
-      setHistory((history) => [...history, res.data?.data]);
+      setHistory([res.data?.data]);
       console.log(res);
     });
   }, []);
@@ -254,24 +212,14 @@ function DetailEndUser() {
           {roleLogin === "0" ? (
             <div id="tabcontent4" className="tabcontent">
               {listVendor && listVendor ? (
-                <ProviderUserSystem data={data} />
+                <ProviderUserSystem dataApi={dataListVendor} />
               ) : null}
-              <div style={{ float: "right" }}>
-                <Pagination
-                  count={arrPagination.length}
-                  color="primary"
-                  onChange={(e, v) => {
-                    setData((data) => [...data, arrPagination[v - 1]]);
-                    setIndexPage(v - 1);
-                  }}
-                />
-              </div>
             </div>
           ) : null}
 
           <div id="tabcontent5" className="tabcontent">
             {infoVoucher && infoVoucher ? (
-              <TabInfoVoucherUser propsVoucher={infoVoucher} />
+              <TabInfoVoucherUser dataApi={dataInfoVoucher} />
             ) : null}
           </div>
         </div>

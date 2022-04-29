@@ -1,37 +1,216 @@
 import React from "react";
 import Constants from "../../../contants/contants";
 import axios from "axios";
+import Swal from "sweetalert2";
 
-import TableInManagerSaleGroup from "./TableInManagerSaleGroupIndex";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { CButton } from "@coreui/react";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import Pagination from "@mui/material/Pagination";
 
-import ModalAddUpdateSaleGroup from "./ModalAddUpdateSaleGroup";
+import TableInManagerSaleGroup from "./TableInManagerSaleGroupIndex";
+import ModalAddUpdateSaleGroup from "./ModalHandleForm/ModalAddUpdateSaleGroup";
+import ModalDelSaleGroup from "./ModalHandleForm/ModalDelSaleGroup";
 
 function ManagerSaleGroupIndex() {
   const [showGroup, setShowGroup] = React.useState([]);
   const [statusModal, setStatusModal] = React.useState(false);
   const [actionModal, setActionModal] = React.useState("new");
+  const [inputChange, setInputChange] = React.useState({
+    title: "",
+    isManager: "1",
+    description: "",
+    saleIds: "",
+    leadId: "",
+  });
+  const [idCurrent, setIdCurrent] = React.useState("0");
+  const [statusModalDelete, setStatusModalDelete] = React.useState(false);
+  const [arrPagination, setArrPagination] = React.useState([]);
+  const [hidden, setHidden] = React.useState(false);
+  const [dataPagination, setDataPagination] = React.useState([]);
+  const [indexPage, setIndexPage] = React.useState(0);
 
+  //Pagination
+  function pagination(dataApi) {
+    console.log("dataApi", dataApi);
+    var i,
+      j,
+      temparray,
+      chunk = 8;
+    var arrTotal = [];
+    for (i = 0, j = dataApi.length; i < j; i += chunk) {
+      temparray = dataApi.slice(i, i + chunk);
+      arrTotal.push(temparray);
+    }
+
+    if (arrTotal.length == 0) {
+      setHidden(hidden);
+    } else {
+      setHidden(!hidden);
+    }
+
+    setArrPagination([...arrTotal]);
+    setDataPagination([...arrTotal[0]]);
+    console.log("arrTotal[0]", arrTotal);
+  }
+
+  //Show modal add new group
   const viewAddGroupSale = () => {
-    setStatusModal(true);
+    setStatusModal(!statusModal);
     setActionModal("new");
+    setInputChange({ ...inputChange });
   };
 
+  //Show modal update group sale
+  const showModalUpdateGroup = () => {
+    setStatusModal(!statusModal);
+    setActionModal("update");
+  };
+
+  //Show modal delete group sale
+  const showModalDeleteGroup = () => {
+    setStatusModalDelete(!statusModalDelete);
+  };
+  //button close add
   const closeModalViewAdd = () => {
     setStatusModal(false);
   };
 
-  React.useEffect(() => {
+  //button close delete
+  const closeModalDelete = () => {
+    setStatusModalDelete(false);
+  };
+
+  //Get All Group Sales
+  const getAllGroupSale = async () => {
     const baseUrlapi = Constants.BASE_URL;
     const baseUrlCallApi = Constants.LIST_SALE_GROUP;
     const url = baseUrlapi + baseUrlCallApi;
-    axios.post(url, {}).then((res) => {
-      setShowGroup((showGroup) => [...showGroup, res.data?.data[0]]);
-      console.log(res);
+    await axios.post(url, {}).then((res) => {
+      setShowGroup([...res.data?.data]);
+      // console.log("res", res);
+      pagination([...res.data?.data]);
     });
+  };
+
+  React.useEffect(() => {
+    getAllGroupSale();
   }, []);
+
+  //function add new group sale
+  const handleAddGroupSale = () => {
+    const baseUrlapi = Constants.BASE_URL;
+    const baseUrlCallApi = Constants.ADD_SALE_GROUP;
+    const url = baseUrlapi + baseUrlCallApi;
+    axios
+      .post(url, inputChange)
+      .then((res) => {
+        if (res.status !== 200) {
+          Swal.fire({
+            icon: "error",
+            title: res.data.message,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+          return;
+        }
+        Swal.fire({
+          icon: "success",
+          title: res.data.message,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        setStatusModal(false);
+        getAllGroupSale();
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: err.data.message,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      });
+  };
+
+  //value in form add input
+  const setInput = (name, value) => {
+    setInputChange({
+      ...inputChange,
+      [name]: value,
+    });
+    console.log(inputChange);
+  };
+
+  //value in form update input
+  const setUpdateInput = (value) => {
+    setInputChange(value);
+    console.log("update", inputChange);
+  };
+
+  const setIdOfFormUpdate = (id) => {
+    setIdCurrent(id);
+  };
+
+  //function update group sale
+  const handleUpdateGroupSale = async () => {
+    const baseUrlapi = Constants.BASE_URL;
+    const baseUrlCallApi = Constants.UPDATE_SALE_GROUP;
+    const url = baseUrlapi + baseUrlCallApi;
+    let copyData = { ...inputChange };
+    copyData.id = idCurrent;
+    await axios
+      .post(url, copyData)
+      .then((res) => {
+        if (res.status !== 200) {
+          Swal.fire({
+            icon: "error",
+            title: res.data.message,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+          return;
+        }
+        Swal.fire({
+          icon: "success",
+          title: res.data.message,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        setStatusModal(false);
+        getAllGroupSale();
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: err.data.message,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      });
+  };
+
+  //function delete group sale
+  const handleDelGroupSale = async () => {
+    const baseUrlCallApi = Constants.DELETE_SALE_GROUP;
+
+    const baseUrlapi = Constants.BASE_URL;
+    const url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .post(url, {
+        id: idCurrent,
+      })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Xóa thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+        setStatusModalDelete(false);
+        getAllGroupSale();
+      });
+  };
 
   return (
     <>
@@ -39,8 +218,21 @@ function ManagerSaleGroupIndex() {
         <ModalAddUpdateSaleGroup
           actionModal={actionModal}
           closeModal={closeModalViewAdd}
+          inputChange={inputChange}
+          handleAddGroupSale={handleAddGroupSale}
+          setInput={setInput}
+          setUpdateInput={setUpdateInput}
+          handleUpdateGroupSale={handleUpdateGroupSale}
         />
       ) : null}
+
+      {statusModalDelete ? (
+        <ModalDelSaleGroup
+          closeModal={closeModalDelete}
+          handleDelGroupSale={handleDelGroupSale}
+        />
+      ) : null}
+
       <Row>
         <Col>
           <Card>
@@ -65,7 +257,24 @@ function ManagerSaleGroupIndex() {
                   <p style={{ margin: "auto 0" }}>Tạo nhóm</p>
                 </CButton>
               </div>
-              <TableInManagerSaleGroup propsSaleGroup={showGroup} />
+              <TableInManagerSaleGroup
+                propsSaleGroup={showGroup}
+                setUpdateInput={setUpdateInput}
+                showModalUpdateGroup={showModalUpdateGroup}
+                setIdOfFormUpdate={setIdOfFormUpdate}
+                showModalDeleteGroup={showModalDeleteGroup}
+                dataPagination={dataPagination}
+              />
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    setDataPagination([...arrPagination[v - 1]]);
+                    setIndexPage(v - 1);
+                  }}
+                />
+              </div>
             </CardBody>
           </Card>
         </Col>

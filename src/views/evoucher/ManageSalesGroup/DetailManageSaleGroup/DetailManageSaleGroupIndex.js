@@ -71,6 +71,19 @@ function ToggleViewConfigWeb(id) {
 }
 
 function DetailManagerSaleGroup() {
+  //Call API TabContent
+  const getAllMembers = async () => {
+    const baseUrlapi = Constants.BASE_URL;
+    const baseUrlCallApi = Constants.LIST_SALE_GROUP;
+    const url = baseUrlapi + baseUrlCallApi;
+    await axios.post(url, {}).then((res) => {
+      // setShowGroup([...res.data?.data]);
+    });
+  };
+
+  React.useEffect(() => {
+    getAllMembers();
+  }, []);
   return (
     <div className="animated fadeIn">
       <div className="flex-tabs">

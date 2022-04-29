@@ -1,12 +1,22 @@
+import React from "react";
 import { ModalHeader, ModalBody, ModalFooter, Modal } from "reactstrap";
 import { CButton } from "@coreui/react";
 import { TextField, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 function ModalAddUpdateSaleGroup(props) {
+  console.log("123", props.inputChange);
+  console.log("123", props);
+  const { inputChange } = props;
+
   const closeModal = () => {
     props.closeModal();
   };
+
+  const setInput = (name, value) => {
+    props.setInput(name, value);
+  };
+
   return (
     <Modal isOpen={true} size="l">
       <ModalHeader>
@@ -16,9 +26,9 @@ function ModalAddUpdateSaleGroup(props) {
         <Typography
           variant="subtitle1"
           component="h2"
-          style={{ margin: "0.6rem 0 0.6rem 0" }}
+          style={{ margin: "0.6rem 0 0.3rem 0" }}
         >
-          Tên nhóm: <span style={{ color: "red" }}>(*)</span>
+          Tên nhóm
         </Typography>
         <TextField
           id="outlined-basic"
@@ -26,19 +36,19 @@ function ModalAddUpdateSaleGroup(props) {
           variant="outlined"
           fullWidth
           size="small"
-          name="name"
-          //   onChange={(e) => {
-          //     this.handleOnChangeValue(e, "name");
-          //   }}
-          //   value={}
+          name="title"
+          value={inputChange?.title}
+          onChange={(e) => {
+            setInput("title", e.target.value);
+          }}
         />
         <div className="mt-3">
           <Typography
             variant="subtitle1"
             component="h2"
-            style={{ margin: "0.6rem 0 0.6rem 0" }}
+            style={{ margin: "0.6rem 0 0.3rem 0" }}
           >
-            Nội dung: <span style={{ color: "red" }}>(*)</span>
+            Nội dung
           </Typography>
           <TextareaAutosize
             aria-label="minimum height"
@@ -51,12 +61,26 @@ function ModalAddUpdateSaleGroup(props) {
               borderColor: "#ccc",
               borderRadius: "3px",
             }}
+            onChange={(e) => {
+              setInput("description", e.target.value);
+            }}
+            name="description"
+            value={inputChange?.description}
           />
         </div>
       </ModalBody>
       <ModalFooter>
         <div>
-          <CButton color="primary">Lưu</CButton>{" "}
+          <CButton
+            color="primary"
+            onClick={
+              props.actionModal === "new"
+                ? props.handleAddGroupSale
+                : props.handleUpdateGroupSale
+            }
+          >
+            Lưu
+          </CButton>{" "}
           <CButton color="secondary" onClick={closeModal}>
             Đóng
           </CButton>

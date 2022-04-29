@@ -13,9 +13,9 @@ function ModalUpdateMemberOfGroup(props) {
         <Typography
           variant="subtitle1"
           component="h2"
-          style={{ margin: "0.6rem 0 0.6rem 0" }}
+          style={{ margin: "0.6rem 0 0.3rem 0" }}
         >
-          Họ và tên: <span style={{ color: "red" }}>(*)</span>
+          Họ và tên
         </Typography>
         <TextField
           id="outlined-basic"
@@ -33,9 +33,9 @@ function ModalUpdateMemberOfGroup(props) {
           <Typography
             variant="subtitle1"
             component="h2"
-            style={{ margin: "0.6rem 0 0.6rem 0" }}
+            style={{ margin: "0.6rem 0 0.3rem 0" }}
           >
-            Số điện thoại: <span style={{ color: "red" }}>(*)</span>
+            Số điện thoại
           </Typography>
           <TextField
             id="outlined-basic"

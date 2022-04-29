@@ -23,12 +23,12 @@ function TableCampaignJoinedUser() {
         </thead>
         <tbody>
           <tr>
-            <td className="text-center table-row-first">{}</td>
             <td className="text-center">{}</td>
             <td className="text-center">{}</td>
             <td className="text-center">{}</td>
             <td className="text-center">{}</td>
-            <td className="text-center table-row-last">
+            <td className="text-center">{}</td>
+            <td className="text-center">
               {
                 // <Tag
                 //   className="ant-tag"

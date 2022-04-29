@@ -1,8 +1,43 @@
+import React from "react";
 import { Tag } from "antd";
 import Chip from "@mui/material/Chip";
+import Pagination from "@mui/material/Pagination";
 
 function TabInfoVoucherUser(props) {
-  console.log(props.propsVoucher[0]);
+  const [arrPagination, setArrPagination] = React.useState([]);
+  const [hidden, setHidden] = React.useState(false);
+  const [data, setData] = React.useState([]);
+  const [indexPage, setIndexPage] = React.useState(0);
+  const { dataApi } = props;
+
+  console.log(dataApi);
+  React.useEffect(() => {
+    pagination(dataApi);
+  }, [dataApi]);
+
+  const pagination = (dataApi) => {
+    var i,
+      j,
+      temparray,
+      chunk = 5;
+    var arrTotal = [];
+    if (dataApi && dataApi.length > 0) {
+      for (i = 0, j = dataApi.length; i < j; i += chunk) {
+        temparray = dataApi.slice(i, i + chunk);
+        arrTotal.push(temparray);
+      }
+
+      if (arrTotal.length == 0) {
+        setHidden(hidden);
+      } else {
+        setHidden(!hidden);
+      }
+
+      setArrPagination([...arrTotal]);
+      setData([...arrTotal[0]]);
+    }
+  };
+
   const titles = [
     "STT.",
     "Mã voucher",
@@ -34,7 +69,7 @@ function TabInfoVoucherUser(props) {
     return statusContentMap[status] || "Chưa xác nhận";
   };
   return (
-    <>
+    <div className="table__overflow">
       <table ble className="table table-hover mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>
@@ -46,8 +81,8 @@ function TabInfoVoucherUser(props) {
           </tr>
         </thead>
         <tbody>
-          {props.propsVoucher[0]
-            ? props.propsVoucher[0].map((item, i) => (
+          {data && data.length !== 0
+            ? data.map((item, i) => (
                 <tr key={i}>
                   <td className="text-center">{i + 1}</td>
                   <td className="text-center">
@@ -74,7 +109,17 @@ function TabInfoVoucherUser(props) {
             : ""}
         </tbody>
       </table>
-    </>
+      <div style={{ float: "right" }}>
+        <Pagination
+          count={arrPagination.length}
+          color="primary"
+          onChange={(e, v) => {
+            setData([...arrPagination[v - 1]]);
+            setIndexPage(v - 1);
+          }}
+        />
+      </div>
+    </div>
   );
 }
 

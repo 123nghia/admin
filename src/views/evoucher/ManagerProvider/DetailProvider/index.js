@@ -36,7 +36,7 @@ import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import InfoIcon from "@mui/icons-material/Info";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import PermDataSettingIcon from "@mui/icons-material/PermDataSetting";
 import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
 import {
@@ -73,7 +73,7 @@ class Users extends Component {
           _id: "t1",
           name: "Thông tin NCC",
           icon: (
-            <InfoIcon
+            <InfoOutlinedIcon
               style={{ width: "24px ", height: "24px", color: "#389bff" }}
             />
           ),
