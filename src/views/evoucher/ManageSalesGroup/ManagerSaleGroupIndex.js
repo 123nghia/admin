@@ -82,11 +82,11 @@ function ManagerSaleGroupIndex() {
   };
 
   //Get All Group Sales
-  const getAllGroupSale = () => {
+  const getAllGroupSale = async () => {
     const baseUrlapi = Constants.BASE_URL;
     const baseUrlCallApi = Constants.LIST_SALE_GROUP;
     const url = baseUrlapi + baseUrlCallApi;
-    axios.post(url, {}).then((res) => {
+    await axios.post(url, {}).then((res) => {
       setShowGroup([...res.data?.data]);
       // console.log("res", res);
       pagination([...res.data?.data]);
@@ -225,12 +225,14 @@ function ManagerSaleGroupIndex() {
           handleUpdateGroupSale={handleUpdateGroupSale}
         />
       ) : null}
+
       {statusModalDelete ? (
         <ModalDelSaleGroup
           closeModal={closeModalDelete}
           handleDelGroupSale={handleDelGroupSale}
         />
       ) : null}
+
       <Row>
         <Col>
           <Card>
