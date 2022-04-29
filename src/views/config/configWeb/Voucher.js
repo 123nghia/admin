@@ -1,7 +1,8 @@
 import { Component } from "react";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import { Button } from "reactstrap";
-
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default class Voucher extends Component {
   SaveAllConfigWeb(value) {
     this.props.SaveAllConfigWeb(value);
@@ -9,9 +10,9 @@ export default class Voucher extends Component {
   setStateByName = (name, value) => {
     this.props.setStateByName(name, value);
   };
-  onChangeImage=(e, name, name_link, name_show) =>{
+  onChangeImage = (e, name, name_link, name_show) => {
     this.props.onChangeImage(e, name, name_link, name_show);
-  }
+  };
   render() {
     return (
       <>
@@ -23,6 +24,33 @@ export default class Voucher extends Component {
           >
             Lưu thay đổi
           </Button>
+        </div>
+        <div class="flex-a-center config-box-border">
+          <div>
+            <img
+              style={{ maxWidth: "150px", marginRight: "10px" }}
+              src="/assets/image/thong-tin-voucher.png"
+              alt="img"
+            />
+          </div>
+          <div style={{ width: "100%" }}>
+            <h1>Nội dung thông tin voucher</h1>
+            <CKEditor
+              editor={ClassicEditor}
+              data={this.props.infoVoucher}
+              onReady={(editor) => {
+                // You can store the "editor" and use when it is needed.
+              }}
+              style={{ height: "300px" }}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+
+                this.setStateByName("infoVoucher", data);
+              }}
+              onBlur={(event, editor) => {}}
+              onFocus={(event, editor) => {}}
+            />
+          </div>
         </div>
         <div class="flex-a-center config-box-border">
           <div>

@@ -7,6 +7,10 @@ export default {
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
   BASE_URL_CURRENT: "https://id.deal24h.vn/",
 
+  GET_IPLOG: "api/iplog/get-all",
+  GET_DETAIL_IPLOG: "api/iplog/get-by-id",
+  DELETE_IPLOG: "api/iplog/delete",
+
   GET_PARTNER: "api/partner-list-company",
   ADD_PARTNER: "api/plugin-add-partner",
   UPDATE_PARTNER: "api/plugin-update-partner",
