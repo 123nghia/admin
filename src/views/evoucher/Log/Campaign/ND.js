@@ -26,6 +26,8 @@ import {
 import Swal from "sweetalert2";
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
+import { AiOutlineReload } from 'react-icons/ai';
+
 const { Option } = Select;
 const dateFormat = "DD-MM-YYYY";
 let headers = new Headers();
@@ -33,7 +35,7 @@ const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
 
-class NDlog extends Component {
+class SMSlog extends Component {
   state = {
     data : [],
     totalActive: 0,
@@ -47,47 +49,51 @@ class NDlog extends Component {
     idCurrentUpdate: null,
     th : [
       'STT',
-      'Họ và tên',
+      'Tên',
       'Số điện thoại',
-      'Mã voucher',
-      'Mã giao dịch',
-      'Ngày tạo',
+      'Slug',
+      'Địa chỉ',
+      'Mã Voucher',
+      'Trạng thái',
+
+      'Body Request',
       '',
     ],
   
   };
   async componentDidMount() {
     await this.getData();
-  }
+  };
 
   pagination(dataApi) {
     var i, j, temparray, chunk = 5;
     var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-
-    if (arrTotal.length == 0) {
-      this.setState({
-        hidden: false
-      })
-    } else {
-      this.setState({
-        hidden: true
-      })
-    }
-
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
-  }
+      if(dataApi.length > 0){
+        for (i = 0, j = dataApi.length; i < j; i += chunk) {
+          temparray = dataApi.slice(i, i + chunk);
+          arrTotal.push(temparray);
+        }
+        if (arrTotal.length == 0) {
+          this.setState({
+            hidden: false
+          });
+        } else {
+          this.setState({
+            hidden: true
+          })
+        }
+        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    };
+  };
 
   onChange(key, val) {
     this.setState({ [key]: val });
-  }
+  };
+
   onSearch() {
     this.onGetCampaignList(this.state.key);
-  }
- 
+  };
+
   async postImage(link) {
     var newImage = "";
     if (link && link !== "") {
@@ -100,16 +106,17 @@ class NDlog extends Component {
 
         }
       );
-
       newImage = link.name;
       return newImage;
     } else {
       return newImage;
-    }
-  }
+    };
+  };
+
   getData = async () => {
+
     let baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.UPDATE_PARTNER;
+    let baseUrlCallApi = Constants.GET_NDLOG;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .get(url)
@@ -126,19 +133,22 @@ class NDlog extends Component {
         });
         this.setState({ isLoading: false, totalActive: active });
       });
-  }
+  };
+
   openAdd = () => {
     this.setState({
       modal : true,
       action  : "new"
     })
-  }
+  };
+
   openUpdate = (item) => {
     this.setState({
       modal : true,
       action  : "edit"
     })
-  }
+  };
+
   async update() {
     let baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_PARTNER;
@@ -152,8 +162,8 @@ class NDlog extends Component {
         "slug":  this.state.slug,
         "introduction":  this.state.introduction,
         "brand" : this.state.branch,
-         "password":  this.state.password,
-         "userName" : this.state.userName
+        "password":  this.state.password,
+        "userName" : this.state.userName
       })
       .then(async(res) => {
         Swal.fire({
@@ -167,7 +177,8 @@ class NDlog extends Component {
         });
         await this.getData();
       });
-  }
+  };
+
   async add() {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_PARTNER;
@@ -180,8 +191,8 @@ class NDlog extends Component {
         "slug":  this.state.slug,
         "introduction":  this.state.introduction,
         "brand" : this.state.branch,
-         "password":  this.state.password,
-         "userName" : this.state.userName,   
+        "password":  this.state.password,
+        "userName" : this.state.userName,   
       })
       .then(async (res) => {
         Swal.fire({
@@ -197,11 +208,11 @@ class NDlog extends Component {
       });
   }
   async delete(item) {
-    let baseUrlCallApi = Constants.DELETE_PARTNER;
+    let baseUrlCallApi = Constants.DELETE_NDLOG;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .post(url, {
+      .delete(url, {
         id: item._id,
       })
       .then((res) => {
@@ -214,6 +225,82 @@ class NDlog extends Component {
         this.getData();
       });
   }
+  async viewDetail(item) {
+    let dataDetail = "";
+    let baseUrlCallApi = Constants.GET_DETAIL_NDLOG;
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          id : item._id
+        }
+      })
+      .then((res) => {
+        dataDetail = res.data.data.bodyRequest;
+    });
+    
+    let innerModalDetail = (
+      <Modal
+      isOpen={true}
+      className={this.props.className}
+    >
+      <ModalHeader>
+        Thông tin Body Request
+      </ModalHeader>
+      <ModalBody className="info_voucher">
+        <p>
+           Tên người dùng: <span>{dataDetail.FullName}</span>
+        </p>
+        <p>
+           Số điện thoại: <span>{dataDetail.FullName}</span>
+        </p>
+        <p>
+           Địa chỉ: <span>{dataDetail.Address}</span>
+        </p>
+        <p>
+           Dịch vụ - text: <span>{dataDetail.service_text}</span>
+        </p>
+        <p>
+           GuideID: <span>{item.guildId}</span>
+        </p>
+      </ModalBody>
+      <ModalFooter>
+        <CButton
+          color="secondary"
+          onClick={(e) =>
+            this.setState({ modalDetail : null })
+          }
+        >
+          Đóng
+        </CButton>
+      </ModalFooter>
+    </Modal> 
+    );
+    this.setState({
+      modalDetail : innerModalDetail
+    });
+  }
+  async changeStatus(id) {
+    let baseUrlCallApi = Constants.CHANGE_STATUS;
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          id : id
+        }
+      })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Cập nhật trạng thái thành công",
+          showConfirmButton: false,
+          timer: 1200,
+        });
+        this.getData();
+    });
+  }
   render() {
     const {
       data,
@@ -222,6 +309,9 @@ class NDlog extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
+          {
+            this.state.modalDetail
+          }
           <Modal
             isOpen={this.state.modal}
             className={this.props.className}
@@ -346,24 +436,23 @@ class NDlog extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    NGOCDUNG Log
+                    NGỌC DUNG Log
                   </i>
                   <CRow>
-                    <CCol md={3} className="mt">
+                  <CCol md={3} className="mt">
                       <div className="">
-                        <p className="title_filter">Mã Voucher</p>
+                        <p className="title_filter">Tên người dùng</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
-                            this.setState({ codeVoucher: e.target.value });
+                            this.setState({ number: e.target.value });
                           }}
-                          name="codeVoucher"
-                          value={this.state.codeVoucher}
-                          placeholder="Mã voucher"
+                          name="number"
+                          value={this.state.number}
+                          placeholder=""
                         />
                       </div>
                     </CCol>
-
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Số điện thoại</p>
@@ -375,10 +464,26 @@ class NDlog extends Component {
                           type="number"
                           name="phoneFilter"
                           value={this.state.phoneFilter}
-                          placeholder="Số điện thoại"
+                          placeholder=""
                         />
                       </div>
                     </CCol>
+                    <CCol md={3} className="mt">
+                      <div className="">
+                        <p className="title_filter">Mã Voucher</p>
+                        <Input
+                          style={styles.searchInput}
+                          onChange={(e) => {
+                            this.setState({ number: e.target.value });
+                          }}
+                          name="number"
+                          value={this.state.number}
+                          placeholder=""
+                        />
+                      </div>
+                    </CCol>
+
+                    
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Tỉnh/Thành</p>
@@ -416,7 +521,7 @@ class NDlog extends Component {
                     
                   </CRow>
 
-                  <div className="flex-end">
+                  <div className="flex-end mt-2">
                     <CButton
                       color="info"
                       style={{ marginRight: "10px" }}
@@ -426,7 +531,7 @@ class NDlog extends Component {
                         this.onSearch();
                       }}
                     >
-                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                      <BsSearch style={{ margin: "auto 6px auto 0"}} />
                       <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                     </CButton>
                     <CButton
@@ -471,43 +576,62 @@ class NDlog extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.bodyRequest.FullName}</td>
+                              <td className="text-center">{item.phoneNumber}</td>
+                              <td className="text-center">{item.slug}</td>
                               <td className="text-center">
-                                {item.password}
+                                {item.bodyRequest.Address}
                               </td>
                               <td className="text-center">
-                                {item.Email}
+                                {item.voucherCode}
+                            
                               </td>
                               <td className="text-center">
-                                {item.Phone}
+                                <div className="flex">
+                                  <div  style={{margin : 'auto'}}>
+                                  {item.status}
+
+                                  </div>
+                                  <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={{marginRight:'10px'}}
+                                        size="md"
+                                        className="flex-a-center "
+                                        onClick={()=>this.changeStatus(item._id)}
+                                      >
+                                        <AiOutlineReload
+                                         style={{ margin: "auto 6px auto 0" }} 
+                                        />
+                                        <p style={{ margin: "auto 0 auto 0" }} >Thay đổi</p>
+                                  </CButton>
+                                        
+                              
+                                </div>
+                              
                               </td>
+                              
                               <td className="text-center">
-                                {item.Slug}
+                                <div className="flex-center">
+                                <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={{marginRight:'10px', height : "46px"}}
+                                        size="md"
+                                        className="flex-a-center "
+                                        onClick={()=>this.viewDetail(item)}
+                                      >
+                                        <BsSearch
+                                         style={{ margin: "auto 6px auto 0" }} 
+                                        />
+                                        <p style={{ margin: "auto 0 auto 0" }} >Chi tiết</p>
+                                  </CButton> 
+                                </div>                            
                               </td>
-                              <td className="text-center">
-                                {item.introduction}
-                              </td>
-                              <td className="text-center">
-                                {item.Brand}
-                              </td>
-                              <td className="text-center">
-                                <img style={{maxHeight:'140px'}} src={item.Logo} alt="" />
-                              </td>  
-                              <td className="text-center">
-                              <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openUpdate(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
+                              <td className="text-center">   
+                                                  
                                   <CButton
                                     shape="rounded-pill"
                                     variant="ghost"
@@ -585,4 +709,4 @@ const styles = {
   },
 };
 
-export default NDlog;
+export default SMSlog;

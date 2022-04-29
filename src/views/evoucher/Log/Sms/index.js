@@ -49,46 +49,49 @@ class SMSlog extends Component {
       'STT',
       'Số điện thoại',
       'Slug',
-      'Template',
+      'Trạng thái',
       'Mã Voucher',
+      'Ngày tạo',
+
       'Body Request',
-      'Tỉnh/Thành',
+      
       '',
     ],
   
   };
   async componentDidMount() {
     await this.getData();
-  }
+  };
 
   pagination(dataApi) {
     var i, j, temparray, chunk = 5;
     var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-
-    if (arrTotal.length == 0) {
-      this.setState({
-        hidden: false
-      })
-    } else {
-      this.setState({
-        hidden: true
-      })
-    }
-
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
-  }
+      if(dataApi.length > 0){
+        for (i = 0, j = dataApi.length; i < j; i += chunk) {
+          temparray = dataApi.slice(i, i + chunk);
+          arrTotal.push(temparray);
+        }
+        if (arrTotal.length == 0) {
+          this.setState({
+            hidden: false
+          });
+        } else {
+          this.setState({
+            hidden: true
+          })
+        }
+        this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    };
+  };
 
   onChange(key, val) {
     this.setState({ [key]: val });
-  }
+  };
+
   onSearch() {
     this.onGetCampaignList(this.state.key);
-  }
- 
+  };
+
   async postImage(link) {
     var newImage = "";
     if (link && link !== "") {
@@ -101,16 +104,16 @@ class SMSlog extends Component {
 
         }
       );
-
       newImage = link.name;
       return newImage;
     } else {
       return newImage;
-    }
-  }
+    };
+  };
+
   getData = async () => {
     let baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.UPDATE_PARTNER;
+    let baseUrlCallApi = Constants.GET_SMSLOG;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .get(url)
@@ -127,19 +130,22 @@ class SMSlog extends Component {
         });
         this.setState({ isLoading: false, totalActive: active });
       });
-  }
+  };
+
   openAdd = () => {
     this.setState({
       modal : true,
       action  : "new"
     })
-  }
+  };
+
   openUpdate = (item) => {
     this.setState({
       modal : true,
       action  : "edit"
     })
-  }
+  };
+
   async update() {
     let baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_PARTNER;
@@ -168,7 +174,8 @@ class SMSlog extends Component {
         });
         await this.getData();
       });
-  }
+  };
+
   async add() {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_PARTNER;
@@ -181,8 +188,8 @@ class SMSlog extends Component {
         "slug":  this.state.slug,
         "introduction":  this.state.introduction,
         "brand" : this.state.branch,
-         "password":  this.state.password,
-         "userName" : this.state.userName,   
+        "password":  this.state.password,
+        "userName" : this.state.userName,   
       })
       .then(async (res) => {
         Swal.fire({
@@ -198,11 +205,11 @@ class SMSlog extends Component {
       });
   }
   async delete(item) {
-    let baseUrlCallApi = Constants.DELETE_PARTNER;
+    let baseUrlCallApi = Constants.DELETE_SMSLOG;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .post(url, {
+      .delete(url, {
         id: item._id,
       })
       .then((res) => {
@@ -215,6 +222,65 @@ class SMSlog extends Component {
         this.getData();
       });
   }
+  async viewDetail(item) {
+    let dataDetail = "";
+    let baseUrlCallApi = Constants.GET_DETAIL_SMSLOG;
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          id : item._id
+        }
+      })
+      .then((res) => {
+        dataDetail = res.data.data.bodyRequest;
+    });
+    
+    let innerModalDetail = (
+      <Modal
+      isOpen={true}
+      className={this.props.className}
+    >
+      <ModalHeader>
+        Thông tin Body Request
+      </ModalHeader>
+      <ModalBody className="info_voucher">
+        <p>
+           Tên người dùng: <span>{dataDetail.loginName}</span>
+        </p>
+        <p>
+           Số điện thoại: <span>{dataDetail.phoneNumber}</span>
+        </p>
+        <p>
+           Template: <span>{item.template}</span>
+        </p>
+        <p>
+           Trạng thái: <span>{item.status}</span>
+        </p>
+        <p>
+           Slug: <span>{item.slug}</span>
+        </p>
+        <p>
+          Voucher Code: <span>{item.voucherCode}</span>
+        </p>
+      </ModalBody>
+      <ModalFooter>
+        <CButton
+          color="secondary"
+          onClick={(e) =>
+            this.setState({ modalDetail : null })
+          }
+        >
+          Đóng
+        </CButton>
+      </ModalFooter>
+    </Modal> 
+    );
+    this.setState({
+      modalDetail : innerModalDetail
+    });
+  }
   render() {
     const {
       data,
@@ -223,6 +289,7 @@ class SMSlog extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
+          {this.state.modalDetail}
           <Modal
             isOpen={this.state.modal}
             className={this.props.className}
@@ -352,15 +419,15 @@ class SMSlog extends Component {
                   <CRow>
                     <CCol md={3} className="mt">
                       <div className="">
-                        <p className="title_filter">Mã Voucher</p>
+                        <p className="title_filter">Tên người dùng</p>
                         <Input
                           style={styles.searchInput}
                           onChange={(e) => {
-                            this.setState({ number: e.target.value });
+                            this.setState({ name: e.target.value });
                           }}
-                          name="number"
-                          value={this.state.number}
-                          placeholder="Số điện thoại"
+                          name="name"
+                          value={this.state.name}
+                          placeholder=""
                         />
                       </div>
                     </CCol>
@@ -382,7 +449,7 @@ class SMSlog extends Component {
                     </CCol>
                     <CCol md={3} className="mt">
                       <div className="">
-                        <p className="title_filter">Tỉnh/Thành</p>
+                        <p className="title_filter">Mã voucher</p>
                         <div style={{ width: "200px" }}>
                           <Select
                             className="select_seo"
@@ -472,43 +539,40 @@ class SMSlog extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{item.phoneNumber}</td>
+                              <td className="text-center">{item.slug}</td>
                               <td className="text-center">
-                                {item.password}
+                                {item.status}
                               </td>
                               <td className="text-center">
-                                {item.Email}
+                                {item.voucherCode}
                               </td>
                               <td className="text-center">
-                                {item.Phone}
+                                {new Date(item.create_at).toLocaleDateString()}
+
                               </td>
                               <td className="text-center">
-                                {item.Slug}
+
+
+                              <div className="flex-center">
+                                <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={{marginRight:'10px'}}
+                                        size="md"
+                                        className="flex-a-center "
+                                        onClick={()=>this.viewDetail(item)}
+                                      >
+                                        <BsSearch
+                                         style={{ margin: "auto 6px auto 0" }} 
+                                        />
+                                        <p style={{ margin: "auto auto 0" }} >Chi tiết</p>
+                                  </CButton> 
+                                </div>         
                               </td>
                               <td className="text-center">
-                                {item.introduction}
-                              </td>
-                              <td className="text-center">
-                                {item.Brand}
-                              </td>
-                              <td className="text-center">
-                                <img style={{maxHeight:'140px'}} src={item.Logo} alt="" />
-                              </td>  
-                              <td className="text-center">
-                              <CButton
-                                    shape="rounded-pill"
-                                    variant="ghost"
-                                    color="info"
-                                    style={styles.mgl5}
-                                    size="md"
-                                    onClick={(e) => this.openUpdate(item)}
-                                  >
-                                    <FiEdit3
-                                      style={styles.icon}
-                                      name="cilPencil"
-                                    />
-                                  </CButton>{" "}
+                          
                                   <CButton
                                     shape="rounded-pill"
                                     variant="ghost"
