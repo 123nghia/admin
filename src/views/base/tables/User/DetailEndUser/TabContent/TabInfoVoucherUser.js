@@ -2,7 +2,7 @@ import { Tag } from "antd";
 import Chip from "@mui/material/Chip";
 
 function TabInfoVoucherUser(props) {
-  console.log(props.propsVoucher[0]);
+  console.log(props.data);
   const titles = [
     "STT.",
     "Mã voucher",
@@ -34,7 +34,7 @@ function TabInfoVoucherUser(props) {
     return statusContentMap[status] || "Chưa xác nhận";
   };
   return (
-    <>
+    <div className="table__overflow">
       <table ble className="table table-hover mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>
@@ -46,8 +46,8 @@ function TabInfoVoucherUser(props) {
           </tr>
         </thead>
         <tbody>
-          {props.propsVoucher[0]
-            ? props.propsVoucher[0].map((item, i) => (
+          {props.data
+            ? props.data.map((item, i) => (
                 <tr key={i}>
                   <td className="text-center">{i + 1}</td>
                   <td className="text-center">
@@ -74,7 +74,7 @@ function TabInfoVoucherUser(props) {
             : ""}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
 

@@ -183,7 +183,7 @@ const ManageSalesGroup = React.lazy(() =>
 
 const DetailManagerSaleGroup = React.lazy(() =>
   import(
-    "./views/evoucher/ManageSalesGroup/DetailManagerSaleGroup/DetailManagerSaleGroupIndex.js"
+    "./views/evoucher/ManageSalesGroup/DetailManageSaleGroup/DetailManageSaleGroupIndex.js"
   )
 );
 const ManageSales = React.lazy(() =>

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Constants from "../../../../../contants/contants";
 import axios from "axios";
 
-import InfoIcon from "@mui/icons-material/Info";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { HiOutlineTicket } from "react-icons/hi";
 import List from "@mui/material/List";
@@ -27,7 +27,9 @@ const tabNameConfig = [
     id: "1",
     name: "Thông tin về người dùng",
     icon: (
-      <InfoIcon style={{ width: "24px ", height: "24px", color: "#389bff" }} />
+      <InfoOutlinedIcon
+        style={{ width: "24px ", height: "24px", color: "#389bff" }}
+      />
     ),
   },
   {
@@ -122,9 +124,9 @@ function DetailEndUser() {
       setHidden(!hidden);
     }
 
-    setArrPagination((arrPagination) => [...arrPagination, arrTotal]);
-    setData((data) => [...data, arrTotal[0]]);
-    console.log("arrTotal[0]", arrTotal);
+    setArrPagination([...arrTotal]);
+    setData([...arrTotal[0]]);
+    console.log("arrTotal[0]", arrTotal[0]);
   }
 
   React.useEffect(() => {
@@ -138,7 +140,7 @@ function DetailEndUser() {
         },
       })
       .then((res) => {
-        setInfoUser((infoUser) => [...infoUser, res.data?.data]);
+        setInfoUser([res.data?.data]);
         console.log(res.data?.data);
       });
   }, []);
@@ -154,13 +156,9 @@ function DetailEndUser() {
         },
       })
       .then((res) => {
-        setListVendor((listVendor) => [
-          ...listVendor,
-          res.data.data.listVendor[0]?.vendor,
-        ]);
-        console.log(res.data.data.listVendor);
-        console.log("12312312313221312312", res);
-        pagination(res.data.data?.listVendor[0]?.vendor);
+        setListVendor([...res.data.data.listVendor[0]?.vendor]);
+        pagination([...res.data.data?.listVendor[0]?.vendor]);
+        console.log("pagi", res.data.data?.listVendor[0]?.vendor);
       });
   }, []);
 
@@ -175,7 +173,8 @@ function DetailEndUser() {
         },
       })
       .then((res) => {
-        setInfoVoucher((infoVoucher) => [...infoVoucher, res.data?.data]);
+        setInfoVoucher([...res.data.data]);
+        pagination([...res.data.data]);
         console.log(res);
       });
   }, []);
@@ -185,7 +184,7 @@ function DetailEndUser() {
     const baseUrlCallApi = Constants.LIST_HISTORY_SKIN1;
     const url = baseUrlapi + baseUrlCallApi;
     axios.post(url, {}).then((res) => {
-      setHistory((history) => [...history, res.data?.data]);
+      setHistory([res.data?.data]);
       console.log(res);
     });
   }, []);
@@ -261,7 +260,7 @@ function DetailEndUser() {
                   count={arrPagination.length}
                   color="primary"
                   onChange={(e, v) => {
-                    setData((data) => [...data, arrPagination[v - 1]]);
+                    setData([...arrPagination[v - 1]]);
                     setIndexPage(v - 1);
                   }}
                 />
@@ -271,8 +270,18 @@ function DetailEndUser() {
 
           <div id="tabcontent5" className="tabcontent">
             {infoVoucher && infoVoucher ? (
-              <TabInfoVoucherUser propsVoucher={infoVoucher} />
+              <TabInfoVoucherUser data={data} />
             ) : null}
+            <div style={{ float: "right" }}>
+              <Pagination
+                count={arrPagination.length}
+                color="primary"
+                onChange={(e, v) => {
+                  setData([...arrPagination[v - 1]]);
+                  setIndexPage(v - 1);
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

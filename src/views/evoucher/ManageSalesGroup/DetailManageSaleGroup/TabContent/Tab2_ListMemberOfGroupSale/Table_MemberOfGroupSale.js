@@ -7,7 +7,7 @@ import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { Input } from "antd";
 
 import ModalViewGroupSale from "./Detail_MemberOfGroupSale";
-import ModalUpdateMemberOfGroup from "../Tab2_ListMemberOfGroupSale/ModalUpdateMemberOfGroup";
+import ModalUpdateMemberOfGroup from "./ModalUpdateMemberOfGroup";
 
 const { Search } = Input;
 

@@ -19,7 +19,6 @@ export default {
   GET_ALL_MANAGER_SALE_GROUP: "api/saleGroup/getAllManager",
   GET_ALL_SALE_GROUP: "api/saleGroup/getAll",
   GET_SALE_GROUP_BY_ID: "api/saleGroup/GetById",
-  ADD_NEW_SALE_GROUP: "api/saleGroup/add",
 
   GET_ALL_CAMPAIGN_VER2: "api/manager/campaign/getAll",
   GET_DETAIL_CAMPAIGN: "api/campaign/getDetail",
@@ -316,9 +315,9 @@ export default {
   UPDATE_CONTACT_STATUS: "/api/update-contact-status",
 
   LIST_SALE_GROUP: "api/saleGroup/getAll",
-  ADD_SALE_GROUP: "/api/saleGroup/add",
-  UPDATE_SALE_GROUP: "/api/saleGroup/update",
-  DELETE_SALE_GROUP: "/api/saleGroup/delete",
+  ADD_SALE_GROUP: "api/saleGroup/add",
+  UPDATE_SALE_GROUP: "api/saleGroup/update",
+  DELETE_SALE_GROUP: "api/saleGroup/delete",
   GET_ALL_SALE: "api/getAllSale",
 
   ADD_ROLE_SUBADMIN: "/api/add-role-subadmin",

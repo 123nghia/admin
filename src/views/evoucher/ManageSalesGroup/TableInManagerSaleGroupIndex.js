@@ -6,12 +6,8 @@ import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { CButton } from "@coreui/react";
 
-import ModalAddUpdateSaleGroup from "./ModalAddUpdateSaleGroup";
-
 function TableInManagerSaleGroup(props) {
-  console.log(props.propsSaleGroup);
-  const [statusModal, setStatusModal] = React.useState(false);
-  const [actionModal, setActionModal] = React.useState("new");
+  console.log(props.dataPagination);
 
   const titles = [
     "STT.",
@@ -24,23 +20,25 @@ function TableInManagerSaleGroup(props) {
     "#",
   ];
 
-  const viewUpdateGroupSale = () => {
-    setActionModal("update");
-    setStatusModal(true);
+  const viewUpdateGroupSale = (item) => {
+    props.showModalUpdateGroup();
+    props.setUpdateInput({
+      title: item.title,
+      isManager: "1",
+      description: item.description,
+      saleIds: "",
+      leadId: "",
+    });
+    props.setIdOfFormUpdate(item._id);
   };
 
-  const closeModalViewAdd = () => {
-    setStatusModal(false);
+  const openFormDelete = (item) => {
+    props.showModalDeleteGroup();
+    props.setIdOfFormUpdate(item._id);
   };
 
   return (
     <>
-      {statusModal ? (
-        <ModalAddUpdateSaleGroup
-          actionModal={actionModal}
-          closeModal={closeModalViewAdd}
-        />
-      ) : null}
       <table ble className="table table-hover mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>
@@ -52,8 +50,8 @@ function TableInManagerSaleGroup(props) {
           </tr>
         </thead>
         <tbody>
-          {props.propsSaleGroup
-            ? props.propsSaleGroup.map((item, i) => {
+          {props.dataPagination
+            ? props.dataPagination.map((item, i) => {
                 return (
                   <tr key={i}>
                     <td className="text-center">{i + 1}</td>
@@ -84,7 +82,7 @@ function TableInManagerSaleGroup(props) {
                           color="info"
                           style={styles.mgl5}
                           size="md"
-                          onClick={(e) => viewUpdateGroupSale()}
+                          onClick={(e) => viewUpdateGroupSale(item)}
                         >
                           <FiEdit3 style={styles.icon} name="cilPencil" />
                         </CButton>{" "}
@@ -94,7 +92,7 @@ function TableInManagerSaleGroup(props) {
                           color="danger"
                           style={styles.mgl5}
                           onClick={(e) => {
-                            // this.openDelete(item);
+                            openFormDelete(item);
                           }}
                         >
                           <BsTrash

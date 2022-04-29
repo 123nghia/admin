@@ -1,5 +1,5 @@
 function ProviderUserSystem(props) {
-  console.log("propsProvider", props.data[0]);
+  // console.log("propsProvider", props.data[0]);
   console.log("propsProvider", props.data);
 
   const titles = ["STT.", "Tên NCC", "Ngày đăng ký", "Lượt soi da gần nhất"];
@@ -17,8 +17,8 @@ function ProviderUserSystem(props) {
           </tr>
         </thead>
         <tbody>
-          {props.data[0]
-            ? props.data[0].map((item, i) => (
+          {props.data
+            ? props.data.map((item, i) => (
                 <tr>
                   <td className="text-center">{i + 1}</td>
                   <td className="text-center">{item.Name}</td>
