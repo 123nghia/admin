@@ -193,7 +193,6 @@ function ManagerSaleGroupIndex() {
   //function delete group sale
   const handleDelGroupSale = async () => {
     const baseUrlCallApi = Constants.DELETE_SALE_GROUP;
-
     const baseUrlapi = Constants.BASE_URL;
     const url = baseUrlapi + baseUrlCallApi;
     await axios

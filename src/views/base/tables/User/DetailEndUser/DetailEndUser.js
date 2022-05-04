@@ -95,7 +95,6 @@ function ToggleViewConfigWeb(id) {
 }
 function DetailEndUser() {
   const [infoUser, setInfoUser] = React.useState([]);
-  const [listVendor, setListVendor] = React.useState([]);
   const [infoVoucher, setInfoVoucher] = React.useState([]);
   const [history, setHistory] = React.useState([]);
   const [dataListVendor, setDataListVendor] = React.useState([]);
@@ -116,7 +115,6 @@ function DetailEndUser() {
       })
       .then((res) => {
         setInfoUser([res.data?.data]);
-        setListVendor([...res.data.data.listVendor[0]?.vendor]);
         setDataListVendor([...res.data.data.listVendor[0]?.vendor]);
       });
   }, []);
@@ -211,7 +209,7 @@ function DetailEndUser() {
           </div>
           {roleLogin === "0" ? (
             <div id="tabcontent4" className="tabcontent">
-              {listVendor && listVendor ? (
+              {dataListVendor && dataListVendor ? (
                 <ProviderUserSystem dataApi={dataListVendor} />
               ) : null}
             </div>

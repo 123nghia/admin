@@ -3,9 +3,10 @@ import React from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 
-function InfoGroupSale() {
+function InfoGroupSale(props) {
+  console.log(props.infoMember.data);
+
   return (
     <div className="tabContentItem" style={styles.tabContentItem}>
       <div className="tabInfo-header">
@@ -16,13 +17,25 @@ function InfoGroupSale() {
         </div>
         <div className="tabInfo-header__title">
           <h3 className="tabInfo-header__name tabInfo-header__name--group-sale">
-            Tên nhóm
+            {props.infoMember.data?.title
+              ? props.infoMember.data?.title
+              : "Chưa có thông tin"}
           </h3>
         </div>
       </div>
-      <p className="leader-group-sale">Trưởng nhóm: Nguyễn Văn A</p>
+      <p className="leader-group-sale">
+        Trưởng nhóm:{" "}
+        {props.infoMember.overview?.fullName
+          ? props.infoMember.overview?.fullName
+          : "Chưa có thông tin"}
+      </p>
       <h5 className="total-member text-center total-campaign--group-sale">
-        Tổng chiến dịch tham gia: <span>100</span>
+        Tổng chiến dịch tham gia:{" "}
+        <span>
+          {props.infoMember.overview?.campangCount
+            ? props.infoMember.overview?.campangCount
+            : "Chưa có thông tin"}
+        </span>
       </h5>
       <div className="tabInfo-body">
         <div className="tabInfo-body__contact">
@@ -30,11 +43,15 @@ function InfoGroupSale() {
           <ul className="tabInfo-body__contact-list">
             <li className="tabInfo-body__contact-item">
               <EmailIcon />
-              <p className="tabInfo-body__contact-item-content"></p>
+              <p className="tabInfo-body__contact-item-content">
+                Chưa có thông tin
+              </p>
             </li>
             <li className="tabInfo-body__contact-item">
               <ContactPhoneIcon />
-              <p className="tabInfo-body__contact-item-content"></p>
+              <p className="tabInfo-body__contact-item-content">
+                Chưa có thông tin
+              </p>
             </li>
           </ul>
         </div>

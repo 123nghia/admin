@@ -28,10 +28,6 @@ export default {
   COLLABORATOR_DETAIL_GET_CUSTOMER: "api/collaborator/getAllCustomerByid",
   ADD_NEW_COLLABORATOR: "api/collaborator/create",
 
-  GET_ALL_MANAGER_SALE_GROUP: "api/saleGroup/getAllManager",
-  GET_ALL_SALE_GROUP: "api/saleGroup/getAll",
-  GET_SALE_GROUP_BY_ID: "api/saleGroup/GetById",
-
   GET_ALL_CAMPAIGN_VER2: "api/manager/campaign/getAll",
   GET_DETAIL_CAMPAIGN: "api/campaign/getDetail",
   GET_DETAIL_CAMPAIGN_EVOUCHER: "api/evoucher/getByCampangId",
@@ -330,7 +326,11 @@ export default {
   ADD_SALE_GROUP: "api/saleGroup/add",
   UPDATE_SALE_GROUP: "api/saleGroup/update",
   DELETE_SALE_GROUP: "api/saleGroup/delete",
+  DETAIL_LIST_ALL_MEMBER_GROUP: "api/saleGroup/getAllMember",
+  DETAIL_GET_INFO_MEMBER_GROUP: "api/saleGroup/getInformation",
+
   GET_ALL_SALE: "api/getAllSale",
+  GET_SALE_GROUP_BY_ID: "api/saleGroup/GetById",
 
   ADD_ROLE_SUBADMIN: "/api/add-role-subadmin",
   GET_ROLE_SUBADMIN: "/api/get-role-subadmin-by-id",
