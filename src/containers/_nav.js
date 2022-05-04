@@ -7,12 +7,9 @@ import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill
 import { BsImageFill } from "@react-icons/all-files/bs/BsImageFill";
 import { CgWebsite } from "@react-icons/all-files/cg/CgWebsite";
 import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
-<<<<<<< HEAD
 import { GiNotebook } from "react-icons/gi";
-=======
-import { GiNotebook } from 'react-icons/gi';
-import { SiDialogflow } from 'react-icons/si';
->>>>>>> 6f89fce7c6eadee138b1da53f7cc592d91d72716
+
+import { SiDialogflow } from "react-icons/si";
 
 import React from "react";
 
@@ -259,7 +256,7 @@ const _navOverview = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý nhà cung cấp",
+        name: "Quản lý Nhà cung cấp",
         to: "/manage-provider",
         icon: (
           <AiFillSetting
@@ -280,7 +277,7 @@ const _navOverview = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý đối tác",
+        name: "Quản lý Đối tác",
         to: "/manage-partner",
         icon: (
           <AiFillSetting
@@ -326,7 +323,7 @@ const _navMangerSales = [
   //   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý sales",
+    name: "Quản lý Sales",
     icon: (
       <CIcon
         style={css}
@@ -337,7 +334,7 @@ const _navMangerSales = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý nhóm sales",
+        name: "Quản lý Nhóm sales",
         to: "/manage-sales-group",
         icon: (
           <HiUserGroup
@@ -439,11 +436,8 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-<<<<<<< HEAD
+
         name: "Danh sách Người dùng Voucher",
-=======
-        name: "Danh sách người dùng voucher",
->>>>>>> 6f89fce7c6eadee138b1da53f7cc592d91d72716
         to: "/list-user-evoucher",
         icon: (
           <HiUserGroup
