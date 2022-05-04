@@ -254,7 +254,7 @@ const _navOverview = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý nhà cung cấp",
+        name: "Quản lý Nhà cung cấp",
         to: "/manage-provider",
         icon: (
           <AiFillSetting
@@ -275,7 +275,7 @@ const _navOverview = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý đối tác",
+        name: "Quản lý Đối tác",
         to: "/manage-partner",
         icon: (
           <AiFillSetting
@@ -321,7 +321,7 @@ const _navMangerSales = [
   //   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý sales",
+    name: "Quản lý Sales",
     icon: (
       <CIcon
         style={css}
@@ -332,7 +332,7 @@ const _navMangerSales = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý nhóm sales",
+        name: "Quản lý Nhóm sales",
         to: "/manage-sales-group",
         icon: (
           <HiUserGroup
