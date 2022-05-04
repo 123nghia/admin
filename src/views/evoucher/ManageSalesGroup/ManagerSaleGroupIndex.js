@@ -44,21 +44,27 @@ function ManagerSaleGroupIndex() {
     }
 
     if (arrTotal.length == 0) {
-      setHidden(hidden);
+      setHidden(false);
     } else {
-      setHidden(!hidden);
+      setHidden(true);
     }
 
     setArrPagination([...arrTotal]);
-    setDataPagination([...arrTotal[0]]);
-    console.log("arrTotal[0]", arrTotal);
+    setDataPagination([...arrTotal[indexPage]]);
+    console.log("arrTotal[0]", arrTotal[0]);
   }
 
   //Show modal add new group
   const viewAddGroupSale = () => {
     setStatusModal(!statusModal);
     setActionModal("new");
-    setInputChange({ ...inputChange });
+    setInputChange({
+      title: "",
+      isManager: "1",
+      description: "",
+      saleIds: "",
+      leadId: "",
+    });
   };
 
   //Show modal update group sale
@@ -88,7 +94,6 @@ function ManagerSaleGroupIndex() {
     const url = baseUrlapi + baseUrlCallApi;
     await axios.post(url, {}).then((res) => {
       setShowGroup([...res.data?.data]);
-      // console.log("res", res);
       pagination([...res.data?.data]);
     });
   };

@@ -34,7 +34,7 @@ function TabInfoVoucherUser(props) {
       }
 
       setArrPagination([...arrTotal]);
-      setData([...arrTotal[0]]);
+      setData([...arrTotal[indexPage]]);
     }
   };
 

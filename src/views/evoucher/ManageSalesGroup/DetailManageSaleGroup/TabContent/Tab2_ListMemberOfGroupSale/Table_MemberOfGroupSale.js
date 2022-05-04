@@ -188,7 +188,7 @@ function MemberOfGroupSale(props) {
                   color="primary"
                   onChange={(e, v) => {
                     setData([...arrPagination[v - 1]]);
-                    setIndexPage(v - 1);
+                    setIndexPage(v);
                   }}
                 />
               </div>
