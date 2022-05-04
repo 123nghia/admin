@@ -26,6 +26,7 @@ import {
 import Swal from "sweetalert2";
 import Constants from "../../../../contants/contants";
 import TextFieldGroup from "../../../Common/TextFieldGroup";
+
 const { Option } = Select;
 const dateFormat = "DD-MM-YYYY";
 let headers = new Headers();
@@ -52,9 +53,7 @@ class SMSlog extends Component {
       'Trạng thái',
       'Mã Voucher',
       'Ngày tạo',
-
       'Body Request',
-      
       '',
     ],
   

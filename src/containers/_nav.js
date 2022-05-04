@@ -7,7 +7,12 @@ import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill
 import { BsImageFill } from "@react-icons/all-files/bs/BsImageFill";
 import { CgWebsite } from "@react-icons/all-files/cg/CgWebsite";
 import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
+<<<<<<< HEAD
 import { GiNotebook } from "react-icons/gi";
+=======
+import { GiNotebook } from 'react-icons/gi';
+import { SiDialogflow } from 'react-icons/si';
+>>>>>>> 6f89fce7c6eadee138b1da53f7cc592d91d72716
 
 import React from "react";
 
@@ -119,7 +124,7 @@ const _navOverview = [
       },
       {
         _tag: "CSidebarNavDropdown",
-        name: "Quản lý Loại tài khoản",
+        name: "Quản lý loại tài khoản",
         role: ["0", "1"],
         icon: (
           <CIcon
@@ -163,7 +168,7 @@ const _navOverview = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Cấu hình Web",
+        name: "Cấu hình web",
         to: "/cau-hinh-trang-web",
         icon: (
           <CgWebsite
@@ -176,7 +181,7 @@ const _navOverview = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Cấu hình Web-Admin",
+        name: "Cấu hình web-admin",
         to: "/admin-config-web",
         icon: (
           <CgWebsite
@@ -254,7 +259,7 @@ const _navOverview = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Quản Lý Nhà Cung Cấp",
+        name: "Quản lý nhà cung cấp",
         to: "/manage-provider",
         icon: (
           <AiFillSetting
@@ -275,7 +280,7 @@ const _navOverview = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản Lý Đối Tác",
+        name: "Quản lý đối tác",
         to: "/manage-partner",
         icon: (
           <AiFillSetting
@@ -321,7 +326,7 @@ const _navMangerSales = [
   //   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý Sales",
+    name: "Quản lý sales",
     icon: (
       <CIcon
         style={css}
@@ -332,7 +337,7 @@ const _navMangerSales = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý Nhóm Sales",
+        name: "Quản lý nhóm sales",
         to: "/manage-sales-group",
         icon: (
           <HiUserGroup
@@ -353,7 +358,7 @@ const _navMangerSales = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý Cộng tác viên",
+        name: "Quản lý cộng tác viên",
         to: "/manage-sales",
         icon: (
           <HiUserGroup
@@ -434,7 +439,11 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
+<<<<<<< HEAD
         name: "Danh sách Người dùng Voucher",
+=======
+        name: "Danh sách người dùng voucher",
+>>>>>>> 6f89fce7c6eadee138b1da53f7cc592d91d72716
         to: "/list-user-evoucher",
         icon: (
           <HiUserGroup
@@ -455,7 +464,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý Banner Ưu đãi",
+        name: "Quản lý banner ưu đãi",
         to: "/banner-lastestoffers",
         icon: (
           <BsImageFill
@@ -476,7 +485,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý Banner Khuyến mãi",
+        name: "Quản lý banner khuyến mãi",
         to: "/banner-promotion",
         icon: (
           <BsImageFill
@@ -497,7 +506,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý Banner Trang chủ",
+        name: "Quản lý banner trang chủ",
         to: "/banner-sales",
         icon: (
           <BsImageFill
@@ -518,7 +527,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách Banner",
+        name: "Danh sách banner",
         to: "/quan-ly-banner",
         icon: (
           <CIcon
@@ -531,7 +540,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý Tồn kho eVoucher",
+        name: "Quản lý tồn kho eVoucher",
         to: "/manage-inventory",
         icon: (
           <AiFillSetting
@@ -665,10 +674,10 @@ const _navMangerUser = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Màn hình Log",
+    name: "Màn hình log",
 
     icon: (
-      <GiNotebook
+      <SiDialogflow
         style={css}
         content={freeSet.cilList}
         className="c-sidebar-nav-icon"
@@ -678,10 +687,10 @@ const _navMangerUser = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "SMS Log",
+        name: "SMS log",
         to: "/log-sms",
         icon: (
-          <GiNotebook
+          <SiDialogflow
             style={css}
             content={freeSet.cilUserPlus}
             className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
@@ -699,10 +708,10 @@ const _navMangerUser = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "IP Log",
+        name: "IP log",
         to: "/log-ip",
         icon: (
-          <GiNotebook
+          <SiDialogflow
             style={css}
             content={freeSet.cilUserPlus}
             className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
@@ -720,10 +729,10 @@ const _navMangerUser = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "NGOCDUNG Log",
+        name: "NGOCDUNG log",
         to: "/log-ngocdung",
         icon: (
-          <GiNotebook
+          <SiDialogflow
             style={css}
             content={freeSet.cilUserPlus}
             className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
@@ -773,7 +782,7 @@ const _navSkinCare = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý Giao Diện Soi Da",
+    name: "Quản lý giao diện soi da",
     icon: (
       <CIcon
         style={css}
