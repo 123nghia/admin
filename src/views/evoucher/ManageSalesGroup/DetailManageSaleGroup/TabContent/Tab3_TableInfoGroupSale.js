@@ -3,7 +3,6 @@ import React from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 
 function InfoGroupSale() {
   return (
