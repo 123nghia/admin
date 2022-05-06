@@ -1397,6 +1397,7 @@ class EndUser extends Component {
                         </div>
                       </div>
                     </CCol>
+                    
                   </CRow>
 
                   <div className="flex-end">

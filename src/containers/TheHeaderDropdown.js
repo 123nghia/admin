@@ -34,11 +34,11 @@ const TheHeaderDropdown = () => {
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownItem>
-          <CIcon name="cil-lock-locked" className="mfe-2" />
-          <NavLink onClick={() => {
+        <CDropdownItem onClick={() => {
             window.location.href = '#/login'
-          }}>Logout</NavLink>
+          }}> 
+          <CIcon name="cil-lock-locked" className="mfe-2" />
+          <NavLink >Logout</NavLink>
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

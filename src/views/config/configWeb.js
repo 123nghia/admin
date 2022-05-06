@@ -330,6 +330,10 @@ class ConfigWeb extends Component {
               }
               if (voucher) {
                 this.setState({
+                  voucherEndow: this.state.voucher.voucherEndow,
+                  voucherExpiry: this.state.voucher.voucherExpiry,
+                  voucherSupplier: this.state.voucher.voucherSupplier,
+                  voucherCondition: this.state.voucher.voucherCondition,
                   infoVoucher: this.state.voucher.infoVoucher,
                   imageFormVoucher: this.state.voucher.imageFormVoucher,
                   sendSMS: this.state.voucher.sendSMS,
@@ -664,16 +668,14 @@ class ConfigWeb extends Component {
     if (change === "mxh") {
       if (!coppyData.value.mxh) {
         coppyData.value.mxh = {};
-      }
+      };
       // coppyData.value.statusConfig = this.state.configData;
       coppyData.value.mxh.facebook.appid = this.state.keyAppFb;
       coppyData.value.mxh.facebook.password = this.state.PassFb;
       coppyData.value.mxh.facebook.href = this.state.hrefFb;
-
       coppyData.value.mxh.google.appid = this.state.keyAppGg;
       coppyData.value.mxh.google.password = this.state.PassGg;
       coppyData.value.mxh.google.href = this.state.hrefGg;
-
       coppyData.value.mxh.zalo.appid = this.state.keyAppZalo;
       coppyData.value.mxh.zalo.password = this.state.PassZalo;
       coppyData.value.mxh.zalo.href = this.state.hrefZalo;
@@ -686,6 +688,12 @@ class ConfigWeb extends Component {
       if (!coppyData.value.voucher) {
         coppyData.value.voucher = {};
       }
+
+    coppyData.value.voucher.voucherEndow = this.state.voucherEndow;
+    coppyData.value.voucher.voucherExpiry = this.state.voucherExpiry;
+    coppyData.value.voucher.voucherSupplier = this.state.voucherSupplier;
+    coppyData.value.voucher.voucherCondition = this.state.voucherCondition;
+
       coppyData.value.voucher.sendSMS = this.state.sendSMS;
       coppyData.value.voucher.registerGetVoucher =
         this.state.registerGetVoucher;
@@ -1212,6 +1220,10 @@ class ConfigWeb extends Component {
                   sendSMS={this.state.sendSMS}
                   imageFormVoucher={this.state.imageFormVoucher}
                   infoVoucher={this.state.infoVoucher}
+                  voucherEndow={this.state.voucherEndow}
+                  voucherExpiry={this.state.voucherExpiry}
+                  voucherSupplier={this.state.voucherSupplier}
+                  voucherCondition={this.state.voucherCondition}
                 />
               </div>
               <div id="tabcontent2" className="tabcontent">

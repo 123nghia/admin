@@ -26,6 +26,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { freeSet } from "@coreui/icons";
 import { Box } from "@mui/system";
 import truncateString from "src/utils/truncateString";
+import campaignApi from "src/apis/managerCampaignApi";
 
 const { Option } = Select;
 
@@ -69,7 +70,7 @@ class ListUserEvoucher extends Component {
   async componentDidMount() {
     this.getDataSeo();
     this.getData();
-
+    this.onGetCampaignList();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url === window.location.hash) {
@@ -78,6 +79,19 @@ class ListUserEvoucher extends Component {
         }
       }
     }
+  }
+  async onGetCampaignList() {
+    await campaignApi
+      .fecthAllCampaignList()
+      .then((res) => {
+        let campaignList = res.data.data;
+        campaignList.push({
+          name : "Không có",
+        })
+        this.setState({ dataCampaign : campaignList });
+
+      })
+      .catch((err) => console.log(err));
   }
 
   OpenFileExcel = () => {
@@ -289,6 +303,8 @@ class ListUserEvoucher extends Component {
 
       "Trạng thái",
       "Ngày nhận",
+      "Nhà cung cấp",
+
       "Lịch sử soi da",
       "Sale theo dõi",
       "Ghi chú mới nhất",
@@ -422,6 +438,36 @@ class ListUserEvoucher extends Component {
             </div>
           </div>
         </CCol>
+        <CCol md={3} className="mt">
+          <div className="">
+            <p className="title_filter">Danh sách chiến dịch</p>
+            <div style={{ width: "200px" }}>
+              <Select
+                className="select_seo"
+                showSearch
+                placeholder="Lọc theo chiến dịch"
+                optionFilterProp="children"
+                onChange={(value) =>
+                  this.setState({
+                    idDataCampaign: value,
+                  })
+                }
+                onSearch={this.onSearchSelect}
+                filterOption={(input, option) =>
+                  
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {this.state.dataCampaign
+                  ? this.state.dataCampaign.map((item, i) => {
+                      return <Option value={item._id}>{item.name}</Option>;
+                    })
+                  : null}
+              </Select>
+            </div>
+          </div>
+        </CCol>
       </CRow>
     );
 
@@ -482,6 +528,8 @@ class ListUserEvoucher extends Component {
                     </Tag>
                   </td>
                   <td className="text-center">{formatDate(item.create_at)}</td>
+                  <td className="text-center">{item.slug}</td>
+
                   <td className="text-center">
                     {item?.historyId ? (
                       <CButton

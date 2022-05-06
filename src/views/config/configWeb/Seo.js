@@ -45,6 +45,25 @@ export default class Seo extends Component {
           }}
         />
         <TextFieldGroup
+          field="sologan"
+          label="Sologan:"
+          value={this.props.sologan}
+          placeholder={""}
+          onChange={(e) => {
+            this.setStateByName( "sologan", e.target.value );
+          }}
+        />
+
+        <TextFieldGroup
+          field="introduce"
+          label="Giới thiệu:"
+          value={this.props.introduce}
+          placeholder={""}
+          onChange={(e) => {
+            this.setStateByName( "introduce", e.target.value );
+          }}
+        />
+        <TextFieldGroup
           field="image1"
           label="Hình ảnh share (***px * ***px):"
           type={"file"}

@@ -1,6 +1,17 @@
 import { Component } from "react";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import { Button } from "reactstrap";
+import {
+  CButton,
+  CLabel,
+  CTextarea,
+  CSelect,
+  CRow,
+  CCol,
+  CListGroup,
+  CListGroupItem,
+} from "@coreui/react";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 
 export default class HomePage extends Component {
   SaveAllConfigWeb(value) {
@@ -9,9 +20,9 @@ export default class HomePage extends Component {
   setStateByName = (name, value) => {
     this.props.setStateByName(name, value);
   };
-  onChangeImage=(e, name, name_link, name_show) =>{
+  onChangeImage = (e, name, name_link, name_show) => {
     this.props.onChangeImage(e, name, name_link, name_show);
-    }
+  };
   render() {
     return (
       <>
@@ -24,81 +35,45 @@ export default class HomePage extends Component {
             Lưu thay đổi
           </Button>
         </div>
-        <TextFieldGroup
-          field="titlePen1"
-          label="Heading 1:"
-          value={this.props.titlePen1}
-          onChange={(e) => {
-            this.setStateByName("titlePen1", e.target.value );
-          }}
-        />
-        <TextFieldGroup
-          field="titlePen2"
-          label="Heading 2: "
-          value={this.props.titlePen2}
-          onChange={(e) => {
-            this.setStateByName( "titlePen2", e.target.value );
-          }}
-        />
 
-        <TextFieldGroup
-          field="sologan"
-          label="Sologan:"
-          value={this.props.sologan}
-          placeholder={""}
-          onChange={(e) => {
-            this.setStateByName( "sologan", e.target.value );
-          }}
-        />
-
-        <TextFieldGroup
-          field="introduce"
-          label="Giới thiệu:"
-          value={this.props.introduce}
-          placeholder={""}
-          onChange={(e) => {
-            this.setStateByName( "introduce", e.target.value );
-          }}
-        />
-
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/huong-dan-chup-anh.png"
-              alt="img"
-            />
+        <div class="config-web__border-img">
+          <div className="">
+            <h1>Hình ảnh hướng dẫn chụp ảnh</h1>
           </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="image1"
-              label="Hình ảnh hướng dẫn chụp ảnh (400px * 400px):"
-              type={"file"}
-              className="mt-5"
-              onChange={(e) => {
+          <div className="relative">
+            <img
+              className="config-web__img-homepage"
+              style={{ width: "100%", height: "auto" }}
+              src="/assets/image/homepage_edit2.png"
+              alt="voucher"
+            />
+            <img
+              alt=""
+              className="img--guide-photo"
+              style={{
+              
+              }}
+              height="auto"
+              src={this.props.imagePhoto}
+            />
+            <div className="field__editor field__editor-homepage--guide-photo">
+              <input type="file" onChange={(e) => {
                 this.onChangeImage(
                   e,
                   "imagePhoto",
                   "imagePhoto_link",
                   "imagePhoto_show"
                 );
-              }}
-              onClick={(e) => {
-                e.target.value = null;
-                this.setStateByName( "imagePhoto_show", "" );
-              }}
-            />
-            <div class="text-center mb-5">
-              <img
-                alt=""
-                style={{ width: "200px", marginBottom: 20 }}
-                height="auto"
-                src={this.props.imagePhoto}
-              />
+              }} />
+                <CButton
+                  shape="rounded-pill" size="md">
+                <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
+              </CButton>
+              <p>Thay đổi hình ảnh</p>
             </div>
           </div>
         </div>
-        <div class="flex-a-center config-box-border">
+        {/* <div class="flex-a-center config-box-border">
           <div>
             <img
               style={{ maxWidth: "300px", marginRight: "10px" }}
@@ -113,51 +88,11 @@ export default class HomePage extends Component {
               value={this.props.titlePhoto}
               placeholder={""}
               onChange={(e) => {
-                this.setStateByName( "titlePhoto", e.target.value );
+                this.setStateByName("titlePhoto", e.target.value);
               }}
             />
           </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/tieu-de-nut-chup-anh.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleButtonPhoto"
-              label="Tiêu đề nút chụp ảnh:"
-              value={this.props.titleButtonPhoto}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleButtonPhoto", e.target.value );
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/tieu-de-huong-dan-chon-anh.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleButtonChoose"
-              label="Tiêu đề nút chọn ảnh:"
-              value={this.props.titleButtonChoose}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleButtonChoose", e.target.value );
-              }}
-            />
-          </div>
-        </div>
+        </div> */}
         <div class="flex-a-center config-box-border">
           <div>
             <img
@@ -173,7 +108,7 @@ export default class HomePage extends Component {
               value={this.props.buttonSuggestLogin1}
               placeholder={""}
               onChange={(e) => {
-                this.setStateByName( "buttonSuggestLogin1", e.target.value );
+                this.setStateByName("buttonSuggestLogin1", e.target.value);
               }}
             />
           </div>
@@ -193,147 +128,7 @@ export default class HomePage extends Component {
               value={this.props.buttonSuggestLogin2}
               placeholder={""}
               onChange={(e) => {
-                this.setStateByName( "buttonSuggestLogin2", e.target.value );
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/chup-anh-buoc-1.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleStep1"
-              label="Tiều đề : Bước 1 - Chụp ảnh:"
-              value={this.props.titleStep1}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleStep1", e.target.value );
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/chup-anh-buoc-2.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleStep2"
-              label="Tiều đề : Bước 2 - Đã chụp - tải ảnh:"
-              value={this.props.titleStep2}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleStep2", e.target.value );
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/chup-anh-buoc-3.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleStep3"
-              label="Tiều đề : Bước 3 - Kết quả:"
-              value={this.props.titleStep3}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleStep3",e.target.value );
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/ket-qua-tong-quan.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleResultSkin"
-              label="Tiều đề : Kết quả soi da:"
-              value={this.props.titleResultSkin}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleResultSkin", e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/ket-qua-tong-quan-2.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="textResultSkin"
-              label="Tiêu đề phụ : Kết quả soi da:"
-              value={this.props.textResultSkin}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("textResultSkin", e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/ket-qua-chuyen-sau.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleResultDepthSkin"
-              label="Tiều đề : Kết quả chuyên sâu:"
-              value={this.props.titleResultDepthSkin}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleResultDepthSkin", e.target.value );
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/ket-qua-chuyen-sau2.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="textResultDepthSkin"
-              label="Tiêu đề phụ : Kết quả chuyên sâu:"
-              value={this.props.textResultDepthSkin}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "textResultDepthSkin", e.target.value );
+                this.setStateByName("buttonSuggestLogin2", e.target.value);
               }}
             />
           </div>
@@ -353,7 +148,7 @@ export default class HomePage extends Component {
               value={this.props.loginViewResult1}
               placeholder={"Vui lòng"}
               onChange={(e) => {
-                this.setStateByName( "loginViewResult1", e.target.value );
+                this.setStateByName("loginViewResult1", e.target.value);
               }}
             />
           </div>
@@ -364,7 +159,7 @@ export default class HomePage extends Component {
               value={this.props.loginViewResult2}
               placeholder={"Để nhận ngay"}
               onChange={(e) => {
-                this.setStateByName( "loginViewResult2", e.target.value );
+                this.setStateByName("loginViewResult2", e.target.value);
               }}
             />
           </div>
@@ -375,7 +170,7 @@ export default class HomePage extends Component {
               value={this.props.loginViewResult3}
               placeholder={"E-voucher"}
               onChange={(e) => {
-                this.setStateByName( "loginViewResult3", e.target.value );
+                this.setStateByName("loginViewResult3", e.target.value);
               }}
             />
           </div>
@@ -386,7 +181,7 @@ export default class HomePage extends Component {
               value={this.props.loginViewResult4}
               placeholder={"giảm giá 1.000.000 VND"}
               onChange={(e) => {
-                this.setStateByName("loginViewResult4",e.target.value );
+                this.setStateByName("loginViewResult4", e.target.value);
               }}
             />
           </div>
@@ -395,3 +190,11 @@ export default class HomePage extends Component {
     );
   }
 }
+
+const styles = {
+  icon: {
+    fontSize: "16px",
+    height: "20px",
+    width: "20px",
+  },
+};
