@@ -98,3 +98,43 @@
   z-index: 20;
   opacity: 0;
 }
+.field__editor-button--get-voucher {
+  height: 75px !important;
+  top: 575px;
+  left: 44px;
+}
+.field__editor-button--get-voucher input{
+  min-width: 450px !important;
+}
+.field__editor-button--register-get-voucher{
+  height: 93px !important;
+  top: 525px;
+  left: 43px;
+}
+.field__editor-button--register-get-voucher input{
+  min-width: 450px !important;
+}
+.field__editor-form--title-get-voucher{
+  height: 93px !important;
+  top: 53px;
+  left: 43px;
+}
+.field__editor-form--title-get-voucher input{
+  min-width: 600px !important;
+}
+.field__editor-form--text-sales{
+  height: 40px !important;
+  top: 156px;
+  left: 43px;
+}
+.field__editor-form--text-sales input{
+  min-width: 450px !important;
+}
+.field__editor-form--title-login-view-voucher{
+  height: 75px !important;
+  top: 225px;
+  left: 46px;
+}
+.field__editor-form--title-login-view-voucher input{
+  min-width: 620px !important;
+}

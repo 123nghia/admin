@@ -166,41 +166,11 @@ export default class Voucher extends Component {
           <div>
             <img
               style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/receive-voucher.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="receiveVoucher"
-              label="Tiêu đề: Thông báo nhận voucher"
-              value={this.props?.receiveVoucher}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("receiveVoucher", e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
               src="/assets/image/text-sales.png"
               alt="img"
             />
           </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="textSales"
-              label="Tiêu đề: Khuyến mãi"
-              value={this.props?.textSales}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("textSales", e.target.value);
-              }}
-            />
-          </div>
+  
         </div>
         <div class="flex-a-center config-box-border">
           <div>
@@ -231,15 +201,7 @@ export default class Voucher extends Component {
             />
           </div>
           <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="loginWatchVoucher"
-              label="Tiêu đề: Đăng nhập xem voucher"
-              value={this.props?.loginWatchVoucher}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("loginWatchVoucher", e.target.value);
-              }}
-            />
+            
           </div>
         </div>
         <div class="flex-a-center config-box-border">
