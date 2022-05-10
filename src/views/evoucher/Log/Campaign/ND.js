@@ -59,6 +59,7 @@ class SMSlog extends Component {
       "Mã Voucher",
       "Trạng thái",
       "Thay đổi trạng thái",
+      "Quận/Huyện",
       "Body Request",
       "",
     ],
@@ -629,7 +630,9 @@ class SMSlog extends Component {
                                     <AiOutlineReload />
                                   </CButton>
                                 </td>
-
+                                <td className="text-center">
+                                    Tp.Hồ Chí Minh
+                                </td>
                                 <td className="text-center">
                                   <div className="flex-center">
                                     <CButton
@@ -653,6 +656,7 @@ class SMSlog extends Component {
                                     </CButton>
                                   </div>
                                 </td>
+                               
                                 <td className="text-center">
                                   <CButton
                                     shape="rounded-pill"

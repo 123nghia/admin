@@ -129,7 +129,7 @@ export default class Voucher extends Component {
           <div>
             <img
               style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/form-voucher.png"
+              src="/assets/image/hinh-anh-voucher.png"
               alt="img"
             />
           </div>
@@ -162,17 +162,7 @@ export default class Voucher extends Component {
             </div>
           </div>
         </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/text-sales.png"
-              alt="img"
-            />
-          </div>
-  
-        </div>
-        <div class="flex-a-center config-box-border">
+        {/* <div class="flex-a-center config-box-border">
           <div>
             <img
               style={{ maxWidth: "150px", marginRight: "10px" }}
@@ -213,7 +203,7 @@ export default class Voucher extends Component {
               }}
             />
           </div>
-        </div>
+        </div> */}
       </>
     );
   }

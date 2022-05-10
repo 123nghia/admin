@@ -3,8 +3,8 @@ import Constants from "../../../contants/contants";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import { CButton } from "@coreui/react";
+import { Card, CardBody, CardHeader, Col, Row, Input } from "reactstrap";
+import { CButton, CCol, CRow } from "@coreui/react";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import Pagination from "@mui/material/Pagination";
 
@@ -243,6 +243,38 @@ function ManagerSaleGroupIndex() {
               <i className="fa fa-align-justify title_header">
                 Quản lý nhóm sale
               </i>
+              <CRow>
+                <CCol md={3} className="mt">
+                  <div className="">
+                    <p className="title_filter">Tên nhóm</p>
+                    <Input
+                      style={styles.searchInput}
+                      name="number"
+                      placeholder=""
+                    />
+                  </div>
+                </CCol>
+                <CCol md={3} className="mt">
+                  <div className="">
+                    <p className="title_filter">Người quản lý</p>
+                    <Input
+                      style={styles.searchInput}
+                      name="number"
+                      placeholder=""
+                    />
+                  </div>
+                </CCol>
+                <CCol md={3} className="mt">
+                  <div className="">
+                    <p className="title_filter">Số điện thoại</p>
+                    <Input
+                      style={styles.searchInput}
+                      name="number"
+                      placeholder=""
+                    />
+                  </div>
+                </CCol>
+              </CRow>
             </CardHeader>
             <CardBody className="table__overflow">
               <div class="flex-center">
@@ -286,3 +318,18 @@ function ManagerSaleGroupIndex() {
   );
 }
 export default ManagerSaleGroupIndex;
+
+const styles = {
+  pagination: {
+    marginRight: "5px",
+  },
+  icon: {
+    fontSize: "16px",
+    height: "20px",
+    width: "20px",
+  },
+  searchInput: {
+    width: "200px",
+    display: "inline-block",
+  },
+};
