@@ -381,7 +381,7 @@ class BrandPlugin extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Danh sách thương hiệu
+                    Danh sách thương hiệu 1
                   </i>
 
                   <CRow>

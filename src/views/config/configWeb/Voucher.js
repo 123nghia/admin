@@ -3,6 +3,18 @@ import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import { Button } from "reactstrap";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import {
+  CButton,
+  CLabel,
+  CTextarea,
+  CSelect,
+  CRow,
+  CCol,
+  CListGroup,
+  CListGroupItem,
+} from "@coreui/react";
+import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
+
 export default class Voucher extends Component {
   SaveAllConfigWeb(value) {
     this.props.SaveAllConfigWeb(value);
@@ -25,32 +37,93 @@ export default class Voucher extends Component {
             Lưu thay đổi
           </Button>
         </div>
-        <div class="flex-a-center config-box-border">
-          <div>
+        <div class="config-web__border-img">
+          <div className="">
+            <h1>Popup Thông Tin Voucher</h1>
+          </div>
+          <div className="relative">
             <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/thong-tin-voucher.png"
-              alt="img"
+              className="config-web__img-homepage"
+              style={{ width: "100%", height: "auto" }}
+              src="/assets/image/popup-thong-tin-voucher.png"
+              alt="voucher"
             />
+          <div className="field__editor field__editor-voucher--endow">
+            <TextFieldGroup
+                field="voucherEndow"
+                label=""
+                value={this.props?.voucherEndow}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setStateByName("voucherEndow", e.target.value);
+                }}
+              />
+              <CButton
+                shape="rounded-pill" color="info" size="md">
+              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
+            </CButton>
           </div>
-          <div style={{ width: "100%" }}>
-            <h1>Nội dung thông tin voucher</h1>
-            <CKEditor
-              editor={ClassicEditor}
-              data={this.props.infoVoucher}
-              onReady={(editor) => {
-                // You can store the "editor" and use when it is needed.
-              }}
-              style={{ height: "300px" }}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-
-                this.setStateByName("infoVoucher", data);
-              }}
-              onBlur={(event, editor) => {}}
-              onFocus={(event, editor) => {}}
-            />
+          <div className="field__editor field__editor-voucher--expiry">
+            <TextFieldGroup
+                field="voucherExpiry"
+                label=""
+                value={this.props?.voucherExpiry}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setStateByName("voucherExpiry", e.target.value);
+                }}
+              />
+              <CButton
+                shape="rounded-pill" color="info" size="md">
+              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
+            </CButton>
           </div>
+          <div className="field__editor field__editor-voucher--supplier">
+            <TextFieldGroup
+                field="voucherSupplier"
+                label=""
+                value={this.props?.voucherSupplier}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setStateByName("voucherSupplier", e.target.value);
+                }}
+              />
+              <CButton
+                shape="rounded-pill" color="info" size="md">
+              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
+            </CButton>
+          </div>
+          <div className="field__editor field__editor-voucher--condition">
+            <TextFieldGroup
+                field="voucherCondition"
+                label=""
+                value={this.props?.voucherCondition}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setStateByName("voucherCondition", e.target.value);
+                }}
+              />
+              <CButton
+                shape="rounded-pill" color="info" size="md">
+              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
+            </CButton>
+          </div>
+          <div className="field__editor field__editor-voucher--sendSMS">
+            <TextFieldGroup
+                field="sendSMS"
+                label=""
+                value={this.props?.sendSMS}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setStateByName("sendSMS", e.target.value);
+                }}
+              />
+              <CButton
+                shape="rounded-pill" color="info" size="md">
+              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
+            </CButton>
+          </div>
+          </div>         
         </div>
         <div class="flex-a-center config-box-border">
           <div>
@@ -93,41 +166,11 @@ export default class Voucher extends Component {
           <div>
             <img
               style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/receive-voucher.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="receiveVoucher"
-              label="Tiêu đề: Thông báo nhận voucher"
-              value={this.props?.receiveVoucher}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("receiveVoucher", e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
               src="/assets/image/text-sales.png"
               alt="img"
             />
           </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="textSales"
-              label="Tiêu đề: Khuyến mãi"
-              value={this.props?.textSales}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("textSales", e.target.value);
-              }}
-            />
-          </div>
+  
         </div>
         <div class="flex-a-center config-box-border">
           <div>
@@ -158,15 +201,7 @@ export default class Voucher extends Component {
             />
           </div>
           <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="loginWatchVoucher"
-              label="Tiêu đề: Đăng nhập xem voucher"
-              value={this.props?.loginWatchVoucher}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("loginWatchVoucher", e.target.value);
-              }}
-            />
+            
           </div>
         </div>
         <div class="flex-a-center config-box-border">
@@ -213,3 +248,11 @@ export default class Voucher extends Component {
     );
   }
 }
+
+const styles = {
+  icon: {
+    fontSize: "16px",
+    height: "20px",
+    width: "20px",
+  },
+};

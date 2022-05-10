@@ -60,24 +60,6 @@ class ConfigWeb extends Component {
           icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />,
         },
         {
-          _id: "2",
-          name: "Slider",
-          icon: (
-            <svg
-              style={{ width: "24px ", height: "24px " }}
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-file-slides-fill"
-              viewBox="0 0 16 16"
-            >
-              <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
-              <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
-            </svg>
-          ),
-        },
-        {
           _id: "3",
           name: "Cấu hình SEO",
           icon: (
@@ -317,6 +299,12 @@ class ConfigWeb extends Component {
                   btn_login: this.state.form.btn_login,
                   titleUpdate: this.state.form.titleUpdate,
                   btn_update: this.state.form.btn_update,
+                  registerGetVoucher: this.state.form.receiveVoucher,
+                  loginWatchVoucher: this.state.form.loginWatchVoucher,
+                  receiveVoucher: this.state.form.receiveVoucher,
+                  textSales: this.state.form.textSales,
+                  receiveVoucherSuccess:
+                    this.state.form.receiveVoucherSuccess,
                 });
               }
               if (button) {
@@ -330,15 +318,14 @@ class ConfigWeb extends Component {
               }
               if (voucher) {
                 this.setState({
+                  voucherEndow: this.state.voucher.voucherEndow,
+                  voucherExpiry: this.state.voucher.voucherExpiry,
+                  voucherSupplier: this.state.voucher.voucherSupplier,
+                  voucherCondition: this.state.voucher.voucherCondition,
                   infoVoucher: this.state.voucher.infoVoucher,
                   imageFormVoucher: this.state.voucher.imageFormVoucher,
                   sendSMS: this.state.voucher.sendSMS,
-                  registerGetVoucher: this.state.voucher.registerGetVoucher,
-                  loginWatchVoucher: this.state.voucher.loginWatchVoucher,
-                  receiveVoucher: this.state.voucher.receiveVoucher,
-                  textSales: this.state.voucher.textSales,
-                  receiveVoucherSuccess:
-                    this.state.voucher.receiveVoucherSuccess,
+           
                 });
               }
               if (banner) {
@@ -664,16 +651,14 @@ class ConfigWeb extends Component {
     if (change === "mxh") {
       if (!coppyData.value.mxh) {
         coppyData.value.mxh = {};
-      }
+      };
       // coppyData.value.statusConfig = this.state.configData;
       coppyData.value.mxh.facebook.appid = this.state.keyAppFb;
       coppyData.value.mxh.facebook.password = this.state.PassFb;
       coppyData.value.mxh.facebook.href = this.state.hrefFb;
-
       coppyData.value.mxh.google.appid = this.state.keyAppGg;
       coppyData.value.mxh.google.password = this.state.PassGg;
       coppyData.value.mxh.google.href = this.state.hrefGg;
-
       coppyData.value.mxh.zalo.appid = this.state.keyAppZalo;
       coppyData.value.mxh.zalo.password = this.state.PassZalo;
       coppyData.value.mxh.zalo.href = this.state.hrefZalo;
@@ -686,6 +671,12 @@ class ConfigWeb extends Component {
       if (!coppyData.value.voucher) {
         coppyData.value.voucher = {};
       }
+
+    coppyData.value.voucher.voucherEndow = this.state.voucherEndow;
+    coppyData.value.voucher.voucherExpiry = this.state.voucherExpiry;
+    coppyData.value.voucher.voucherSupplier = this.state.voucherSupplier;
+    coppyData.value.voucher.voucherCondition = this.state.voucherCondition;
+
       coppyData.value.voucher.sendSMS = this.state.sendSMS;
       coppyData.value.voucher.registerGetVoucher =
         this.state.registerGetVoucher;
@@ -727,6 +718,12 @@ class ConfigWeb extends Component {
       if (!coppyData.value.form) {
         coppyData.value.form = {};
       }
+      
+      coppyData.value.form.receiveVoucher = this.state.receiveVoucher;
+      coppyData.value.form.textSales = this.state.textSales;
+      coppyData.value.form.loginWatchVoucher = this.state.loginWatchVoucher;
+
+      
       coppyData.value.form.btn_update = this.state.btn_update;
       coppyData.value.form.titleUpdate = this.state.titleUpdate;
 
@@ -1177,6 +1174,10 @@ class ConfigWeb extends Component {
               </div>
               <div id="tabcontent12" className="tabcontent">
                 <Form
+                textSales={this.state.textSales}
+                receiveVoucherSuccess={this.state.receiveVoucherSuccess}
+                loginWatchVoucher={this.state.loginWatchVoucher}
+                registerGetVoucher={this.state.registerGetVoucher}
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
                   btn_login={this.state.btn_login}
@@ -1212,6 +1213,10 @@ class ConfigWeb extends Component {
                   sendSMS={this.state.sendSMS}
                   imageFormVoucher={this.state.imageFormVoucher}
                   infoVoucher={this.state.infoVoucher}
+                  voucherEndow={this.state.voucherEndow}
+                  voucherExpiry={this.state.voucherExpiry}
+                  voucherSupplier={this.state.voucherSupplier}
+                  voucherCondition={this.state.voucherCondition}
                 />
               </div>
               <div id="tabcontent2" className="tabcontent">
@@ -1246,7 +1251,7 @@ class ConfigWeb extends Component {
                   onChangeImage={this.onChangeImage}
                   image={this.state.image}
                   hrefLogoHeader={this.state.hrefLogoHeader}
-                  imgLogoFooter={this.state.imgLogoFooter}
+                  imgLogoFooter={this.state.imgLogoFooter}  
                   hrefLogoFooter={this.state.hrefLogoFooter}
                 />
               </div>
