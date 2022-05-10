@@ -124,7 +124,7 @@ export default class Voucher extends Component {
                 }}
               />
             </div>
-            <div className="field__editor field__editor-button--register-get-voucher">
+            <div className="field__editor field__editor-button--title-register-get-voucher">
 
             <TextFieldGroup
               field="registerGetVoucher"
