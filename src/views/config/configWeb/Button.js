@@ -124,6 +124,19 @@ export default class Voucher extends Component {
                 }}
               />
             </div>
+            <div className="field__editor field__editor-button--register-get-voucher">
+
+            <TextFieldGroup
+              field="registerGetVoucher"
+              label=""
+              value={this.props?.registerGetVoucher}
+              placeholder={""}
+              onChange={(e) => {
+                this.setStateByName("registerGetVoucher", e.target.value);
+              }}
+            />
+            </div>
+
           </div>
         </div>
         <div class="flex-a-center config-box-border">

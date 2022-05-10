@@ -52,7 +52,7 @@ class IpLog extends Component {
       'Số điện thoại',
       'Ip',
       'Tỉnh/Thành',
-      'Mã voicher',
+      'Mã voucher',
       'Gitcode',
       'Quận/Huyện',
       'Ngày tạo',

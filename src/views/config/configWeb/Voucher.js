@@ -192,38 +192,8 @@ export default class Voucher extends Component {
             />
           </div>
         </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/dang-nhap-xem-voucher.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/dang-ky-nhan-voucher.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="registerGetVoucher"
-              label="Tiêu đề: Đăng ký nhận voucher"
-              value={this.props?.registerGetVoucher}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("registerGetVoucher", e.target.value);
-              }}
-            />
-          </div>
-        </div>
+ 
+     
         <div class="flex-a-center config-box-border">
           <div>
             <img

@@ -303,8 +303,11 @@ class ConfigWeb extends Component {
                   loginWatchVoucher: this.state.form.loginWatchVoucher,
                   receiveVoucher: this.state.form.receiveVoucher,
                   textSales: this.state.form.textSales,
+                  registerGetVoucher: this.state.form.registerGetVoucher,
+
                   receiveVoucherSuccess:
                     this.state.form.receiveVoucherSuccess,
+                    
                 });
               }
               if (button) {
@@ -719,6 +722,8 @@ class ConfigWeb extends Component {
         coppyData.value.form = {};
       }
       
+      coppyData.value.form.registerGetVoucher = this.state.registerGetVoucher;
+
       coppyData.value.form.receiveVoucher = this.state.registerGetVoucher;
       coppyData.value.form.textSales = this.state.textSales;
       coppyData.value.form.loginWatchVoucher = this.state.loginWatchVoucher;
