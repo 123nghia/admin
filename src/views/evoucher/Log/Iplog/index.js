@@ -53,6 +53,8 @@ class IpLog extends Component {
       'Ip',
       'Tỉnh/Thành',
       'Mã voicher',
+      'Gitcode',
+      'Quận/Huyện',
       'Ngày tạo',
       '',
     ],
@@ -521,6 +523,12 @@ class IpLog extends Component {
                               </td>
                               <td className="text-center">
                                 {item.voucherCode}
+                              </td>
+                              <td className="text-center">
+                             
+                              </td>
+                              <td className="text-center">
+                                
                               </td>
                               <td className="text-center">
                                 {new Date(item.create_at).toLocaleDateString()}

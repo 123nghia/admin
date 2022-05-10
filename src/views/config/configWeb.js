@@ -719,7 +719,7 @@ class ConfigWeb extends Component {
         coppyData.value.form = {};
       }
       
-      coppyData.value.form.receiveVoucher = this.state.receiveVoucher;
+      coppyData.value.form.receiveVoucher = this.state.registerGetVoucher;
       coppyData.value.form.textSales = this.state.textSales;
       coppyData.value.form.loginWatchVoucher = this.state.loginWatchVoucher;
 
@@ -1164,6 +1164,10 @@ class ConfigWeb extends Component {
               </div>
               <div id="tabcontent10" className="tabcontent">
                 <ButtonConfig
+                 textSales={this.state.textSales}
+                 receiveVoucherSuccess={this.state.receiveVoucherSuccess}
+                 loginWatchVoucher={this.state.loginWatchVoucher}
+                 registerGetVoucher={this.state.registerGetVoucher}
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
                   btn_soida={this.state.btn_soida}

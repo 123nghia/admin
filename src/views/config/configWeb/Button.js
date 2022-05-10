@@ -65,12 +65,12 @@ export default class Voucher extends Component {
 
             <div className="field__editor field__editor-form--title-get-voucher">
               <TextFieldGroup
-                field="receiveVoucher"
+                field="registerGetVoucher"
                 label=""
-                value={this.props?.receiveVoucher}
+                value={this.props?.registerGetVoucher}
                 placeholder={""}
                 onChange={(e) => {
-                  this.setStateByName("receiveVoucher", e.target.value);
+                  this.setStateByName("registerGetVoucher", e.target.value);
                 }}
               />
             </div>
