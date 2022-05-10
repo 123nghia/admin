@@ -12,7 +12,7 @@ import React, { Component } from "react";
 import DotLoader from "react-spinners/DotLoader";
 import API_CONNECT from "../../../../../src/functions/callAPI";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardBody,
@@ -37,7 +37,7 @@ headers.append("Content-Type", "application/json");
 
 class IpLog extends Component {
   state = {
-    data : [],
+    data: [],
     totalActive: 0,
     dataApi: [],
     hidden: false,
@@ -58,14 +58,16 @@ class IpLog extends Component {
       'Ngày tạo',
       '',
     ],
-  
   };
   async componentDidMount() {
     await this.getData();
   }
 
   pagination(dataApi) {
-    var i, j, temparray, chunk = 8;
+    var i,
+      j,
+      temparray,
+      chunk = 8;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -74,13 +76,13 @@ class IpLog extends Component {
 
     if (arrTotal.length == 0) {
       this.setState({
-        hidden: false
-      })
+        hidden: false,
+      });
     } else {
       this.setState({
-        hidden: true
-      })
-    };
+        hidden: true,
+      });
+    }
     this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
   }
 
@@ -90,7 +92,7 @@ class IpLog extends Component {
   onSearch() {
     this.onGetCampaignList(this.state.key);
   }
- 
+
   async postImage(link) {
     var newImage = "";
     if (link && link !== "") {
@@ -99,9 +101,7 @@ class IpLog extends Component {
       form.append("image", link);
 
       await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
-        (res) => {
-
-        }
+        (res) => {}
       );
 
       newImage = link.name;
@@ -114,52 +114,50 @@ class IpLog extends Component {
     let baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_IPLOG;
     let url = baseUrlapi + baseUrlCallApi;
-    await axios
-      .get(url)
-      .then(async(res) => {
-        let val = res.data.data;
-        this.pagination(val);
-        this.setState({ dataApi: val });
+    await axios.get(url).then(async (res) => {
+      let val = res.data.data;
+      this.pagination(val);
+      this.setState({ dataApi: val });
 
-        let active = 0;
-        val.map((val) => {
-          if (val.Status == "Actived") {
-            active = active + 1;
-          }
-        });
-        this.setState({ isLoading: false, totalActive: active });
+      let active = 0;
+      val.map((val) => {
+        if (val.Status == "Actived") {
+          active = active + 1;
+        }
       });
-  }
+      this.setState({ isLoading: false, totalActive: active });
+    });
+  };
 
   openAdd = () => {
     this.setState({
-      modal : true,
-      action  : "new"
-    })
-  }
+      modal: true,
+      action: "new",
+    });
+  };
   openUpdate = (item) => {
     this.setState({
-      modal : true,
-      action  : "edit"
-    })
-  }
+      modal: true,
+      action: "edit",
+    });
+  };
   async update() {
     let baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_PARTNER;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .post(url, {
-        id : this.state.idEditPartner,
-        "name" : this.state.name,
-        "email" : this.state.email,
-        "phone" :  this.state.phone,
-        "slug":  this.state.slug,
-        "introduction":  this.state.introduction,
-        "brand" : this.state.branch,
-        "password":  this.state.password,
-        "userName" : this.state.userName
+        id: this.state.idEditPartner,
+        name: this.state.name,
+        email: this.state.email,
+        phone: this.state.phone,
+        slug: this.state.slug,
+        introduction: this.state.introduction,
+        brand: this.state.branch,
+        password: this.state.password,
+        userName: this.state.userName,
       })
-      .then(async(res) => {
+      .then(async (res) => {
         Swal.fire({
           icon: "success",
           title: "Cập nhật hoàn tất",
@@ -178,14 +176,14 @@ class IpLog extends Component {
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .post(url, {
-        "name" : this.state.name,
-        "email" : this.state.email,
-        "phone" :  this.state.phone,
-        "slug":  this.state.slug,
-        "introduction":  this.state.introduction,
-        "brand" : this.state.branch,
-        "password":  this.state.password,
-        "userName" : this.state.userName,   
+        name: this.state.name,
+        email: this.state.email,
+        phone: this.state.phone,
+        slug: this.state.slug,
+        introduction: this.state.introduction,
+        brand: this.state.branch,
+        password: this.state.password,
+        userName: this.state.userName,
       })
       .then(async (res) => {
         Swal.fire({
@@ -226,77 +224,64 @@ class IpLog extends Component {
     await axios
       .get(url, {
         params: {
-          id : item._id
-        }
+          id: item._id,
+        },
       })
       .then((res) => {
         dataDetail = res.data.data.bodyRequest;
-    });
-    
+      });
+
     let innerModalDetail = (
-      <Modal
-      isOpen={true}
-      className={this.props.className}
-    >
-      <ModalHeader>
-        Thông tin Body Request
-      </ModalHeader>
-      <ModalBody className="info_voucher">
-        <p>
-           Tên người dùng: <span>{dataDetail.FullName}</span>
-        </p>
-        <p>
-           Số điện thoại: <span>{dataDetail.FullName}</span>
-        </p>
-        <p>
-           Địa chỉ: <span>{dataDetail.Address}</span>
-        </p>
-        <p>
-           Dịch vụ - text: <span>{dataDetail.service_text}</span>
-        </p>
-        <p>
-           GuideID: <span>{item.guildId}</span>
-        </p>
-      </ModalBody>
-      <ModalFooter>
-        <CButton
-          color="secondary"
-          onClick={(e) =>
-            this.setState({ modalDetail : null })
-          }
-        >
-          Đóng
-        </CButton>
-      </ModalFooter>
-    </Modal> 
+      <Modal isOpen={true} className={this.props.className}>
+        <ModalHeader>Thông tin Body Request</ModalHeader>
+        <ModalBody className="info_voucher">
+          <p>
+            Tên người dùng: <span>{dataDetail.FullName}</span>
+          </p>
+          <p>
+            Số điện thoại: <span>{dataDetail.FullName}</span>
+          </p>
+          <p>
+            Địa chỉ: <span>{dataDetail.Address}</span>
+          </p>
+          <p>
+            Dịch vụ - text: <span>{dataDetail.service_text}</span>
+          </p>
+          <p>
+            GuideID: <span>{item.guildId}</span>
+          </p>
+        </ModalBody>
+        <ModalFooter>
+          <CButton
+            color="secondary"
+            onClick={(e) => this.setState({ modalDetail: null })}
+          >
+            Đóng
+          </CButton>
+        </ModalFooter>
+      </Modal>
     );
     this.setState({
-      modalDetail : innerModalDetail
+      modalDetail: innerModalDetail,
     });
   }
   render() {
-    const {
-      data,
-      arrPagination,
-    } = this.state;
+    const { data, arrPagination } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          <Modal
-            isOpen={this.state.modal}
-            className={this.props.className}
-          >
+          <Modal isOpen={this.state.modal} className={this.props.className}>
             <ModalHeader>
               {this.state.action === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-            <TextFieldGroup
+              <TextFieldGroup
                 field="userName"
                 label="Tên Đăng nhập"
                 value={this.state.userName}
                 // error={errors.title}
                 onChange={(e) => this.setState({ userName: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
               <TextFieldGroup
                 field="password"
@@ -304,7 +289,7 @@ class IpLog extends Component {
                 value={this.state.password}
                 // error={errors.title}
                 onChange={(e) => this.setState({ password: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
               <TextFieldGroup
                 field="name"
@@ -312,7 +297,7 @@ class IpLog extends Component {
                 value={this.state.name}
                 // error={errors.title}
                 onChange={(e) => this.setState({ name: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
               <TextFieldGroup
                 field="email"
@@ -320,7 +305,7 @@ class IpLog extends Component {
                 value={this.state.email}
                 // error={errors.title}
                 onChange={(e) => this.setState({ email: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
 
               <TextFieldGroup
@@ -329,7 +314,7 @@ class IpLog extends Component {
                 value={this.state.phone}
                 // error={errors.title}
                 onChange={(e) => this.setState({ phone: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
               <TextFieldGroup
                 field="slug"
@@ -337,15 +322,17 @@ class IpLog extends Component {
                 value={this.state.slug}
                 // error={errors.title}
                 onChange={(e) => this.setState({ slug: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
               <TextFieldGroup
                 field="introduction"
                 label="Giới thiệu"
                 value={this.state.introduction}
                 // error={errors.title}
-                onChange={(e) => this.setState({ introduction: e.target.value })}
-              // rows="5"
+                onChange={(e) =>
+                  this.setState({ introduction: e.target.value })
+                }
+                // rows="5"
               />
               <TextFieldGroup
                 field="branch"
@@ -353,20 +340,25 @@ class IpLog extends Component {
                 value={this.state.branch}
                 // error={errors.title}
                 onChange={(e) => this.setState({ branch: e.target.value })}
-              // rows="5"
+                // rows="5"
               />
-                <div className="mt-3"></div>
+              <div className="mt-3"></div>
               <TextFieldGroup
                 field="imageLogo"
                 label="Logo"
                 type={"file"}
                 className="mt-5"
                 onChange={(e) => {
-                  this.onChangeImage(e,'imageLogo','imageLogo_link','imageLogo_show');
+                  this.onChangeImage(
+                    e,
+                    "imageLogo",
+                    "imageLogo_link",
+                    "imageLogo_show"
+                  );
                 }}
                 onClick={(e) => {
                   e.target.value = null;
-                  this.setState({ imageLogo : "" });
+                  this.setState({ imageLogo: "" });
                 }}
               />
               <div class="text-center">
@@ -382,9 +374,7 @@ class IpLog extends Component {
               <CButton
                 color="primary"
                 onClick={(e) => {
-                  this.state.action === "new"
-                    ? this.add()
-                    : this.update();
+                  this.state.action === "new" ? this.add() : this.update();
                 }}
                 disabled={this.state.isLoading}
               >
@@ -392,23 +382,18 @@ class IpLog extends Component {
               </CButton>{" "}
               <CButton
                 color="secondary"
-                onClick={(e) =>
-                  this.setState({ modal: !this.state.modal })
-                }
+                onClick={(e) => this.setState({ modal: !this.state.modal })}
               >
                 Đóng
               </CButton>
             </ModalFooter>
-          </Modal>    
+          </Modal>
           <Row>
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify title_header">
-                    Ip Log
-                  </i>
+                  <i className="fa fa-align-justify title_header">Ip Log</i>
                   <CRow>
-                   
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Số điện thoại</p>
@@ -447,18 +432,17 @@ class IpLog extends Component {
                           >
                             {this.state.dataSales
                               ? this.state.dataSales.map((item, i) => {
-                                return (
-                                  <Option value={item._id}>
-                                    {item.Name}
-                                  </Option>
-                                );
-                              })
+                                  return (
+                                    <Option value={item._id}>
+                                      {item.Name}
+                                    </Option>
+                                  );
+                                })
                               : null}
                           </Select>
                         </div>
                       </div>
                     </CCol>
-                    
                   </CRow>
 
                   <div className="flex-end">
@@ -492,15 +476,13 @@ class IpLog extends Component {
                   >
                     <thead className="thead-light">
                       <tr>
-                       {
-                         this.state.th.map((item, i) => {
-                           return (
-                             <th key={i} className="text-center">
-                               {item}
-                             </th>
-                           );
-                         })
-                       }
+                        {this.state.th.map((item, i) => {
+                          return (
+                            <th key={i} className="text-center">
+                              {item}
+                            </th>
+                          );
+                        })}
                       </tr>
                     </thead>
                     <tbody>
@@ -553,11 +535,10 @@ class IpLog extends Component {
                                     />
                                   </CButton>
                                   </div>
-                              </td>
-                             
-                            </tr>
-                          );
-                        })
+                                </td>
+                              </tr>
+                            );
+                          })
                         : ""}
                     </tbody>
                   </table>

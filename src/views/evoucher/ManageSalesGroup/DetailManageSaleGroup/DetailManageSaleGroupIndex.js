@@ -70,19 +70,45 @@ function ToggleViewConfigWeb(id) {
   }
 }
 
-function DetailManagerSaleGroup() {
-  //Call API TabContent
-  const getAllMembers = async () => {
-    const baseUrlapi = Constants.BASE_URL;
-    const baseUrlCallApi = Constants.LIST_SALE_GROUP;
-    const url = baseUrlapi + baseUrlCallApi;
-    await axios.post(url, {}).then((res) => {
-      // setShowGroup([...res.data?.data]);
-    });
-  };
+function DetailManagerSaleGroup(props) {
+  const [dataMember, setDataMember] = React.useState([]);
+  const [infoMember, setInfoMember] = React.useState({});
 
+  //Call API TabContent
+  //Tab 2
   React.useEffect(() => {
-    getAllMembers();
+    const baseUrlapi = Constants.BASE_URL;
+    const baseUrlCallApi = Constants.DETAIL_LIST_ALL_MEMBER_GROUP;
+    const url = baseUrlapi + baseUrlCallApi;
+    axios
+      .get(url, {
+        params: {
+          id: props.match.params.id,
+        },
+      })
+      .then((res) => {
+        console.log("dataMember", res);
+        if (res.is_success) {
+          setDataMember([...res.data.data]);
+        }
+      });
+  }, []);
+
+  //Tab 3
+  React.useEffect(() => {
+    const baseUrlapi = Constants.BASE_URL;
+    const baseUrlCallApi = Constants.DETAIL_GET_INFO_MEMBER_GROUP;
+    const url = baseUrlapi + baseUrlCallApi;
+    axios
+      .get(url, {
+        params: {
+          id: props.match.params.id,
+        },
+      })
+      .then((res) => {
+        console.log("infoMember", res.data.data);
+        setInfoMember((infoMember) => ({ ...infoMember, ...res.data.data }));
+      });
   }, []);
   return (
     <div className="animated fadeIn">
@@ -126,10 +152,10 @@ function DetailManagerSaleGroup() {
             <StatisticalSaleGroup />
           </div>
           <div id="tabcontent2" className="tabcontent">
-            <MemberOfGroupSale />
+            <MemberOfGroupSale dataMember={dataMember} />
           </div>
           <div id="tabcontent3" className="tabcontent">
-            <InfoGroupSale />
+            <InfoGroupSale infoMember={infoMember} />
           </div>
         </div>
       </div>

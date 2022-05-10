@@ -7,8 +7,6 @@ import { BsFillBarChartFill } from "@react-icons/all-files/bs/BsFillBarChartFill
 import { BsImageFill } from "@react-icons/all-files/bs/BsImageFill";
 import { CgWebsite } from "@react-icons/all-files/cg/CgWebsite";
 import { HiUserGroup } from "@react-icons/all-files/hi/HiUserGroup";
-import { GiNotebook } from "react-icons/gi";
-
 import { SiDialogflow } from "react-icons/si";
 
 import React from "react";
@@ -41,7 +39,7 @@ const content = {
   reward_customer: "Danh sách nhận quà của người dùng đã đến sử dụng dịch vụ",
   reward_type: "Danh sách các loại khuyến mãi",
   update_package: "Nâng cấp gói",
-  contact: "Danh sach liên hệ",
+  contact: "Danh sách liên hệ",
   none: "...",
 };
 
@@ -355,7 +353,7 @@ const _navMangerSales = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý cộng tác viên",
+        name: "Quản lý Cộng tác viên",
         to: "/manage-sales",
         icon: (
           <HiUserGroup
@@ -436,7 +434,6 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-
         name: "Danh sách Người dùng Voucher",
         to: "/list-user-evoucher",
         icon: (
@@ -458,7 +455,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý banner ưu đãi",
+        name: "Quản lý Banner Ưu đãi",
         to: "/banner-lastestoffers",
         icon: (
           <BsImageFill
@@ -479,7 +476,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý banner khuyến mãi",
+        name: "Quản lý Banner Khuyến mãi",
         to: "/banner-promotion",
         icon: (
           <BsImageFill
@@ -500,7 +497,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý banner trang chủ",
+        name: "Quản lý Banner Trang chủ",
         to: "/banner-sales",
         icon: (
           <BsImageFill
@@ -521,7 +518,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Danh sách banner",
+        name: "Danh sách Banner",
         to: "/quan-ly-banner",
         icon: (
           <CIcon
@@ -534,7 +531,7 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Quản lý tồn kho eVoucher",
+        name: "Quản lý Tồn kho eVoucher",
         to: "/manage-inventory",
         icon: (
           <AiFillSetting
@@ -668,7 +665,7 @@ const _navMangerUser = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Màn hình log",
+    name: "Màn hình Log",
 
     icon: (
       <SiDialogflow
@@ -723,7 +720,7 @@ const _navMangerUser = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "NGOCDUNG log",
+        name: "Ngọc Dung Spa Log",
         to: "/log-ngocdung",
         icon: (
           <SiDialogflow
@@ -776,7 +773,7 @@ const _navSkinCare = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Quản lý giao diện soi da",
+    name: "Quản lý Giao diện Soi da",
     icon: (
       <CIcon
         style={css}
@@ -978,6 +975,19 @@ const _navSkinCare = [
         },
       },
     ],
+    role: ["0", "1", "2"],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Quản lý Key",
+    to: "/manage-key",
+    icon: (
+      <CIcon
+        style={css}
+        content={freeSet.cilList}
+        customClasses="c-sidebar-nav-icon"
+      />
+    ),
     role: ["0", "1", "2"],
   },
 ];

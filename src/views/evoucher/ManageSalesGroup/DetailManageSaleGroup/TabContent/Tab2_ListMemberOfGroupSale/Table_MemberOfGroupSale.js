@@ -5,6 +5,7 @@ import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { CButton } from "@coreui/react";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { Input } from "antd";
+import Pagination from "@mui/material/Pagination";
 
 import ModalViewGroupSale from "./Detail_MemberOfGroupSale";
 import ModalUpdateMemberOfGroup from "./ModalUpdateMemberOfGroup";
@@ -13,9 +14,42 @@ const { Search } = Input;
 
 const onSearch = (value) => console.log(value);
 
-function MemberOfGroupSale() {
+function MemberOfGroupSale(props) {
   const [statusModal, setStatusModal] = React.useState(false);
   const [statusModalUpdate, setStatusModalUpdate] = React.useState(false);
+  const [arrPagination, setArrPagination] = React.useState([]);
+  const [hidden, setHidden] = React.useState(false);
+  const [data, setData] = React.useState([]);
+  const [indexPage, setIndexPage] = React.useState(0);
+  const { dataMember } = props;
+
+  console.log(dataMember);
+  React.useEffect(() => {
+    pagination(dataMember);
+  }, [dataMember]);
+
+  const pagination = (dataApi) => {
+    var i,
+      j,
+      temparray,
+      chunk = 5;
+    var arrTotal = [];
+    if (dataApi && dataApi.length > 0) {
+      for (i = 0, j = dataApi.length; i < j; i += chunk) {
+        temparray = dataApi.slice(i, i + chunk);
+        arrTotal.push(temparray);
+      }
+
+      if (arrTotal.length == 0) {
+        setHidden(hidden);
+      } else {
+        setHidden(!hidden);
+      }
+
+      setArrPagination([...arrTotal]);
+      setData([...arrTotal[0]]);
+    }
+  };
 
   const closeModalDetailSaleGroup = () => {
     setStatusModal(false);
@@ -44,6 +78,7 @@ function MemberOfGroupSale() {
       {statusModalUpdate ? (
         <ModalUpdateMemberOfGroup closeModalUpdate={closeModalUpdate} />
       ) : null}
+
       <Row>
         <Col>
           <Card>
@@ -84,55 +119,79 @@ function MemberOfGroupSale() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="text-center">1</td>
-                    <td className="text-center">Chưa có thông tin</td>
-                    <td className="text-center">Chưa có thông tin</td>
-                    <td className="text-center">Chưa có thông tin</td>
-                    <td className="text-center">
-                      <div class="flex">
-                        <CButton
-                          shape="rounded-pill"
-                          variant="outline"
-                          color="info"
-                          style={styles.mgl5}
-                          size="sm"
-                          className="flex-a-center"
-                          onClick={() => viewDetailSaleGroup()}
-                        >
-                          <BsSearch className="mr-1" />
-                          Chi tiết
-                        </CButton>
-                        <CButton
-                          shape="rounded-pill"
-                          variant="ghost"
-                          color="info"
-                          style={styles.mgl5}
-                          size="md"
-                          onClick={() => viewUpdateMemberOfGroup()}
-                        >
-                          <FiEdit3 style={styles.icon} name="cilPencil" />
-                        </CButton>{" "}
-                        <CButton
-                          shape="rounded-pill"
-                          variant="ghost"
-                          color="danger"
-                          style={styles.mgl5}
-                          onClick={(e) => {
-                            // this.openDelete(item);
-                          }}
-                        >
-                          <BsTrash
-                            style={styles.icon}
-                            className="icon"
-                            name="cilTrash"
-                          />
-                        </CButton>
-                      </div>
-                    </td>
-                  </tr>
+                  {data && data.length !== 0
+                    ? data.map((item, i) => (
+                        <tr key={i}>
+                          <td className="text-center">{i + 1}</td>
+                          <td className="text-center">
+                            {item.username
+                              ? item.username
+                              : "Chưa có thông tin"}
+                          </td>
+                          <td className="text-center">
+                            {item.phone ? item.phone : "Chưa có thông tin"}
+                          </td>
+                          <td className="text-center">
+                            {item.create_date
+                              ? new Date(item.create_date).toLocaleDateString()
+                              : "Chưa có thông tin"}
+                          </td>
+                          <td className="text-center">
+                            <div class="flex">
+                              <CButton
+                                shape="rounded-pill"
+                                variant="outline"
+                                color="info"
+                                style={styles.mgl5}
+                                size="sm"
+                                className="flex-a-center"
+                                onClick={() => viewDetailSaleGroup()}
+                              >
+                                <BsSearch className="mr-1" />
+                                Chi tiết
+                              </CButton>
+                              <CButton
+                                shape="rounded-pill"
+                                variant="ghost"
+                                color="info"
+                                style={styles.mgl5}
+                                size="md"
+                                onClick={() => viewUpdateMemberOfGroup()}
+                              >
+                                <FiEdit3 style={styles.icon} name="cilPencil" />
+                              </CButton>{" "}
+                              <CButton
+                                shape="rounded-pill"
+                                variant="ghost"
+                                color="danger"
+                                style={styles.mgl5}
+                                onClick={(e) => {
+                                  // this.openDelete(item);
+                                }}
+                              >
+                                <BsTrash
+                                  style={styles.icon}
+                                  className="icon"
+                                  name="cilTrash"
+                                />
+                              </CButton>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    : null}
                 </tbody>
               </table>
+              <div style={{ float: "right" }}>
+                <Pagination
+                  count={arrPagination.length}
+                  color="primary"
+                  onChange={(e, v) => {
+                    setData([...arrPagination[v - 1]]);
+                    setIndexPage(v);
+                  }}
+                />
+              </div>
             </CardBody>
           </Card>
         </Col>
