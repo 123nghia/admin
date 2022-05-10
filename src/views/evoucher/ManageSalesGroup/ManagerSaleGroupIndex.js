@@ -51,7 +51,6 @@ function ManagerSaleGroupIndex() {
 
     setArrPagination([...arrTotal]);
     setDataPagination([...arrTotal[indexPage]]);
-    console.log("arrTotal[0]", arrTotal[0]);
   }
 
   //Show modal add new group

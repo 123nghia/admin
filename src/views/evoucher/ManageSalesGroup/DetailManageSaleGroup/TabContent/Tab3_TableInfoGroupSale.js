@@ -5,7 +5,7 @@ import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 
 function InfoGroupSale(props) {
-  console.log(props.infoMember.data);
+  // console.log(props.infoMember.data);
 
   return (
     <div className="tabContentItem" style={styles.tabContentItem}>

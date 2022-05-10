@@ -206,16 +206,13 @@ const DetailInventory = React.lazy(() =>
   import("./views/evoucher/DetailInventory")
 );
 // evoucher - log
-const Iplog = React.lazy(() =>
-  import("./views/evoucher/Log/Iplog/index.js")
-);
-const Smslog = React.lazy(() =>
-  import("./views/evoucher/Log/Sms/index.js")
-);
-const ND = React.lazy(() =>
-  import("./views/evoucher/Log/Campaign/ND.js")
-);
+const Iplog = React.lazy(() => import("./views/evoucher/Log/Iplog/index.js"));
+const Smslog = React.lazy(() => import("./views/evoucher/Log/Sms/index.js"));
+const ND = React.lazy(() => import("./views/evoucher/Log/Campaign/ND.js"));
 
+const ManageKey = React.lazy(() =>
+  import("./views/base/tables/ManageKey/index.js")
+);
 
 const roleUser = localStorage.getItem("type");
 
@@ -513,7 +510,7 @@ const routes = [
     name: "configOverView",
     component: configOverView,
   },
-  
+
   {
     path: "/general-statistics",
     name: "General Statistics",
@@ -566,5 +563,12 @@ const routes = [
   { path: "/items/3", name: "K4", component: TypeOne },
   { path: "/items/4", name: "K5", component: TypeOne },
   { path: "/items/5", name: "K6", component: TypeOne },
+
+  //Manage Key
+  {
+    path: "/manage-key",
+    name: "Manage Key",
+    component: ManageKey,
+  },
 ];
 export default routes;
