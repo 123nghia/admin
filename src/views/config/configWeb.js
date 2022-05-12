@@ -127,11 +127,7 @@ class ConfigWeb extends Component {
           name: "Cấu hình mạng xã hội",
           icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />,
         },
-        {
-          _id: "7",
-          name: "Thông tin footer",
-          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />,
-        },
+    
         {
           _id: "8",
           name: "Quản lý màu sắc",
@@ -305,8 +301,6 @@ class ConfigWeb extends Component {
                   textSales: this.state.form.textSales,
                   registerGetVoucher: this.state.form.registerGetVoucher,
                   title_get_voucher: this.state.form.title_get_voucher,
-
-                  
                   receiveVoucherSuccess:
                     this.state.form.receiveVoucherSuccess,
                     
@@ -1297,7 +1291,7 @@ class ConfigWeb extends Component {
                   hrefZalo={this.state.hrefZalo}
                 />
               </div>
-              <div id="tabcontent7" className="tabcontent">
+              {/* <div id="tabcontent7" className="tabcontent">
                 <Footer
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
@@ -1306,7 +1300,7 @@ class ConfigWeb extends Component {
                   centerFooterRight={this.state.centerFooterRight}
                   footerRight={this.state.footerRight}
                 />
-              </div>
+              </div> */}
               <div id="tabcontent8" className="tabcontent">
                 <ChangeColor
                   setStateByName={this.setStateByName}

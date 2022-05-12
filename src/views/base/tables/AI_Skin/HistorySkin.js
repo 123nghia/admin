@@ -48,7 +48,7 @@ class HistorySkin extends Component {
       activePage: 1,
       numPage: 1,
       itemsCount: 0,
-      itemPerPage: 7,
+      itemPerPage: 50,
       hidden: false,
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -112,16 +112,18 @@ class HistorySkin extends Component {
     console.log(this.state.statusVoucher);
     console.log(this.state.idDataSales);
   
-    await this.getData_ByCondition(this.state.idDataSales);
+    await this.getData(this.state.idDataSales);
   }
   getData = async (key) => {
-    
     const { activePage, itemPerPage } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN,
       data: {
+        roleType: this.state.type,
+        saleId : key,
+        userId: JSON.parse(this.state.user).sale_id,
         page: activePage,
         limit: itemPerPage
       },
@@ -174,8 +176,9 @@ class HistorySkin extends Component {
       url: Constants.LIST_HISTORY_SKIN_BY_CONDITION,
       method: 'POST',
       data: {
-        saleId : key,
         roleType: this.state.type,
+
+        saleId : key,
         userId: JSON.parse(this.state.user).sale_id,
         page: activePage,
         limit: itemPerPage
@@ -430,8 +433,8 @@ class HistorySkin extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.Phone}</td>
+                              <td className="text-center">{item.Name === "xx" ? "Chưa đăng nhập" : item.Name}</td>
+                              <td className="text-center">{item.Phone === "xxx" ? "Chưa đăng nhập" : item.Phone}</td>
 
                               <td className="text-center">
                                 <img

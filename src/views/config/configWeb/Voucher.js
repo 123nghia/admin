@@ -128,7 +128,7 @@ export default class Voucher extends Component {
         <div class="flex-a-center config-box-border">
           <div>
             <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
+              style={{ maxWidth: "300px", marginRight: "10px" }}
               src="/assets/image/hinh-anh-voucher.png"
               alt="img"
             />
