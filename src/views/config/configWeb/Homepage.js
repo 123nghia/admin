@@ -134,13 +134,15 @@ export default class HomePage extends Component {
           </div>
         </div>
         <div class="flex-a-center config-box-border">
+        <div>
           <div>
             <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
+              style={{ maxWidth: "100%", marginRight: "10px" }}
               src="/assets/image/dang-nhap-xem-ket-qua.png"
               alt="img"
             />
           </div>
+          <div className="flex">
           <div style={{ width: "100%" }}>
             <TextFieldGroup
               field="loginViewResult1"
@@ -185,7 +187,10 @@ export default class HomePage extends Component {
               }}
             />
           </div>
+          </div>
         </div>
+        </div>
+
       </>
     );
   }

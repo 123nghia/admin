@@ -784,7 +784,7 @@ class EndUser extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Quản lý nhà cung cấp
+                    Quản lý nhà cung cấp 
                   </i>
 
                   <CRow>

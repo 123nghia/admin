@@ -56,7 +56,7 @@ class ConfigWeb extends Component {
       tabNameConfig: [
         {
           _id: "1",
-          name: "Thông tin trang chủ",
+          name: "Trang soi da - Trang kết quả",
           icon: <AiOutlineHome style={{ width: "24px ", height: "24px " }} />,
         },
         {
@@ -303,8 +303,13 @@ class ConfigWeb extends Component {
                   loginWatchVoucher: this.state.form.loginWatchVoucher,
                   receiveVoucher: this.state.form.receiveVoucher,
                   textSales: this.state.form.textSales,
+                  registerGetVoucher: this.state.form.registerGetVoucher,
+                  title_get_voucher: this.state.form.title_get_voucher,
+
+                  
                   receiveVoucherSuccess:
                     this.state.form.receiveVoucherSuccess,
+                    
                 });
               }
               if (button) {
@@ -719,7 +724,10 @@ class ConfigWeb extends Component {
         coppyData.value.form = {};
       }
       
-      coppyData.value.form.receiveVoucher = this.state.receiveVoucher;
+      coppyData.value.form.title_get_voucher = this.state.title_get_voucher;
+      coppyData.value.form.registerGetVoucher = this.state.registerGetVoucher;
+
+      coppyData.value.form.receiveVoucher = this.state.registerGetVoucher;
       coppyData.value.form.textSales = this.state.textSales;
       coppyData.value.form.loginWatchVoucher = this.state.loginWatchVoucher;
 
@@ -1164,6 +1172,11 @@ class ConfigWeb extends Component {
               </div>
               <div id="tabcontent10" className="tabcontent">
                 <ButtonConfig
+                title_get_voucher={this.state.title_get_voucher}
+                 textSales={this.state.textSales}
+                 receiveVoucherSuccess={this.state.receiveVoucherSuccess}
+                 loginWatchVoucher={this.state.loginWatchVoucher}
+                 registerGetVoucher={this.state.registerGetVoucher}
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
                   btn_soida={this.state.btn_soida}
@@ -1174,16 +1187,21 @@ class ConfigWeb extends Component {
               </div>
               <div id="tabcontent12" className="tabcontent">
                 <Form
-                textSales={this.state.textSales}
-                receiveVoucherSuccess={this.state.receiveVoucherSuccess}
-                loginWatchVoucher={this.state.loginWatchVoucher}
-                registerGetVoucher={this.state.registerGetVoucher}
+              title_get_voucher={this.state.title_get_voucher}
+              textSales={this.state.textSales}
+              receiveVoucherSuccess={this.state.receiveVoucherSuccess}
+              loginWatchVoucher={this.state.loginWatchVoucher}
+              registerGetVoucher={this.state.registerGetVoucher}
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
                   btn_login={this.state.btn_login}
                   titleUpdate={this.state.titleUpdate}
                   titleLogin={this.state.titleLogin}
                   btn_update={this.state.btn_update}
+                  btn_soida={this.state.btn_soida}
+                  btn_get_voucher={this.state.btn_get_voucher}
+                  btn_register_get_voucher={this.state.btn_register_get_voucher}
+                  btn_get_voucher2={this.state.btn_get_voucher2}
                 />
               </div>
               <div id="tabcontent13" className="tabcontent">

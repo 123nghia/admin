@@ -47,14 +47,16 @@ class IpLog extends Component {
     indexPage: 0,
     isLoading: false,
     idCurrentUpdate: null,
-    th: [
-      "STT",
-      "Số điện thoại",
-      "Ip",
-      "Tỉnh/Thành",
-      "Mã voucher",
-      "Ngày tạo",
-      "",
+    th : [
+      'STT',
+      'Số điện thoại',
+      'Ip',
+      'Tỉnh/Thành',
+      'Mã voucher',
+      'Gitcode',
+      'Quận/Huyện',
+      'Ngày tạo',
+      '',
     ],
   };
   async componentDidMount() {
@@ -493,39 +495,45 @@ class IpLog extends Component {
                       </td>
                       {data !== undefined
                         ? data.map((item, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
-                                <td className="text-center">
-                                  {item.phoneNumber}
-                                </td>
-                                <td className="text-center">{item.ip}</td>
-                                <td className="text-center">{item.regional}</td>
-                                <td className="text-center">
-                                  {item.voucherCode}
-                                </td>
-                                <td className="text-center">
-                                  {new Date(
-                                    item.create_at
-                                  ).toLocaleDateString()}
-                                </td>
-                                <td className="text-center">
-                                  <div className="flex-a-center">
-                                    <CButton
-                                      shape="rounded-pill"
-                                      variant="ghost"
-                                      color="danger"
-                                      style={styles.mgl5}
-                                      onClick={(e) => {
-                                        this.delete(item);
-                                      }}
-                                    >
-                                      <BsTrash
-                                        style={styles.icon}
-                                        className="icon"
-                                        name="cilTrash"
-                                      />
-                                    </CButton>
+                          return (
+                            <tr key={i}>
+                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{item.phoneNumber}</td>
+                              <td className="text-center">{item.ip}</td>
+                              <td className="text-center">
+                                {item.regional}
+                              </td>
+                              <td className="text-center">
+                                {item.voucherCode}
+                              </td>
+                              <td className="text-center">
+                             
+                              </td>
+                              <td className="text-center">
+                                Tp.Hồ Chí Minh
+                              </td>
+                              <td className="text-center">
+                                {new Date(item.create_at).toLocaleDateString()}
+                           
+                              </td>                          
+                              <td className="text-center">
+                                <div className="flex-a-center">
+                                 
+                                  <CButton
+                                    shape="rounded-pill"
+                                    variant="ghost"
+                                    color="danger"
+                                    style={styles.mgl5}
+                                    onClick={(e) => {
+                                      this.delete(item);
+                                    }}
+                                  >
+                                    <BsTrash
+                                      style={styles.icon}
+                                      className="icon"
+                                      name="cilTrash"
+                                    />
+                                  </CButton>
                                   </div>
                                 </td>
                               </tr>

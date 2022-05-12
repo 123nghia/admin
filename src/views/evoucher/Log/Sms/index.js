@@ -56,6 +56,7 @@ class SMSlog extends Component {
       "Trạng thái",
       "Mã Voucher",
       "Ngày tạo",
+      "Quận/Huyện",
       "Body Request",
       "",
     ],
@@ -603,6 +604,9 @@ class SMSlog extends Component {
                                   ).toLocaleDateString()}
                                 </td>
                                 <td className="text-center">
+                                  Tp.Hồ Chí Minh
+                                 </td>
+                                <td className="text-center">
                                   <div className="flex-center">
                                     <CButton
                                       shape="rounded-pill"
@@ -622,6 +626,7 @@ class SMSlog extends Component {
                                     </CButton>
                                   </div>
                                 </td>
+                               
                                 <td className="text-center">
                                   <CButton
                                     shape="rounded-pill"

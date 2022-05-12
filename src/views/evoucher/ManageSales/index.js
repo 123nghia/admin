@@ -1,4 +1,4 @@
-import { CButton } from "@coreui/react";
+
 import Pagination from "@material-ui/lab/Pagination";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -19,10 +19,13 @@ import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import "moment-timezone";
+import { CButton, CCol, CRow } from "@coreui/react";
+
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import {
   Card,
+  Row, Input,
   CardBody,
   CardHeader,
   Col,
@@ -30,7 +33,6 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Row,
 } from "reactstrap";
 import collaboratorsApi from "src/apis/manageCollaboratorsApi";
 import capitalizeFirstLetter from "src/utils/capitalizeFirstLetter";
@@ -445,7 +447,39 @@ class ManageSales extends Component {
                 <i className="fa fa-align-justify title_header">
                   Danh sách cộng tác viên
                 </i>
-
+                <CRow>
+                <CCol md={3} className="mt">
+                  <div className="">
+                    <p className="title_filter">Tên sales</p>
+                    <Input
+                      style={styles.searchInput}
+                      name="number"
+                      placeholder=""
+                    />
+                  </div>
+                </CCol>
+                <CCol md={3} className="mt">
+                  <div className="">
+                    <p className="title_filter">Số điện thoại</p>
+                    <Input
+                      style={styles.searchInput}
+                      name="number"
+                      placeholder=""
+                    />
+                  </div>
+                </CCol>
+                <CCol md={3} className="mt">
+                  <div className="">
+                    <p className="title_filter">Tên nhóm</p>
+                    <Input
+                      style={styles.searchInput}
+                      name="number"
+                      placeholder=""
+                    />
+                  </div>
+                </CCol>
+          
+              </CRow>
                 <div className="flex-center" style={{ marginTop: "1rem" }}>
                   {/* <CButton
                     color="info"

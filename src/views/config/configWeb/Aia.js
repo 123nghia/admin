@@ -21,7 +21,7 @@ export default class Voucher extends Component {
             Lưu thay đổi
           </Button>
         </div>
-        <div class="flex-a-center config-box-border">
+        {/* <div class="flex-a-center config-box-border">
           <div>
             <img
               style={{ maxWidth: "150px", marginRight: "10px" }}
@@ -40,8 +40,8 @@ export default class Voucher extends Component {
               }}
             />
           </div>
-        </div>
-        <div class="flex-a-center config-box-border">
+        </div> */}
+        {/* <div class="flex-a-center config-box-border">
           <div>
             <img
               style={{ maxWidth: "150px", marginRight: "10px" }}
@@ -60,11 +60,11 @@ export default class Voucher extends Component {
               }}
             />
           </div>
-        </div>
-        <div class="flex-a-center config-box-border">
+        </div> */}
+        {/* <div class="flex-a-center config-box-border">
           <div>
             <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
+              style={{ maxWidth: "350px", marginRight: "10px" }}
               src="/assets/image/goi-y-dang-nhap-nhan-voucher-aia.png"
               alt="img"
             />
@@ -82,8 +82,8 @@ export default class Voucher extends Component {
               }}
             />
           </div>
-        </div>
-        <div class="flex-a-center config-box-border">
+        </div> */}
+        {/* <div class="flex-a-center config-box-border">
           <div>
             <img
               style={{ maxWidth: "150px", marginRight: "10px" }}
@@ -104,7 +104,7 @@ export default class Voucher extends Component {
               }}
             />
           </div>
-        </div>
+        </div> */}
       </>
     );
   }

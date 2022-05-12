@@ -138,3 +138,12 @@
 .field__editor-form--title-login-view-voucher input{
   min-width: 620px !important;
 }
+.field__editor-button--title-register-get-voucher{
+  height: 90px !important;
+  top: 88px;
+  left: 46px;
+}
+.field__editor-button--title-register-get-voucher input{
+  min-width: 650px !important;
+
+}

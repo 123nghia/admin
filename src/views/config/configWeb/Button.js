@@ -16,7 +16,7 @@ export default class Voucher extends Component {
           <Button
             variant="contained"
             color="success"
-            onClick={() => this.SaveAllConfigWeb("form")}
+            onClick={() => this.SaveAllConfigWeb("button")}
           >
             Lưu thay đổi
           </Button>
@@ -41,96 +41,11 @@ export default class Voucher extends Component {
             />
           </div>
         </div> */}
-        <div class="config-web__border-img">
-          <div className="">
-            <h1>Form - Nhận voucher</h1>
-          </div>
-          <div className="relative">
-            <img
-              className="config-web__img-homepage"
-              style={{ width: "100%", height: "auto" }}
-              src="/assets/image/form-nhan-voucher.png"
-              alt="voucher"
-            />
-            <div className="field__editor field__editor-button--get-voucher">
-              <TextFieldGroup
-                field="btn_get_voucher"
-                value={this.props?.btn_get_voucher}
-                placeholder={""}
-                onChange={(e) => {
-                  this.setStateByName("btn_get_voucher", e.target.value);
-                }}
-              />
-            </div>
-
-            <div className="field__editor field__editor-form--title-get-voucher">
-              <TextFieldGroup
-                field="receiveVoucher"
-                label=""
-                value={this.props?.receiveVoucher}
-                placeholder={""}
-                onChange={(e) => {
-                  this.setStateByName("receiveVoucher", e.target.value);
-                }}
-              />
-            </div>
-            <div className="field__editor field__editor-form--text-sales">
-              <TextFieldGroup
-                field="textSales"
-                label=""
-                value={this.props?.textSales}
-                placeholder={""}
-                onChange={(e) => {
-                  this.setStateByName("textSales", e.target.value);
-                }}
-              />
-            </div>
-            <div className="field__editor field__editor-form--title-login-view-voucher">
-              <TextFieldGroup
-                field="loginWatchVoucher"
-                label=""
-                value={this.props?.loginWatchVoucher}
-                placeholder={""}
-                onChange={(e) => {
-                  this.setStateByName("loginWatchVoucher", e.target.value);
-                }}
-              />
-            </div>
-
-          </div>
-        </div>
-        <div class="config-web__border-img">
-          <div className="">
-            <h1>Form - Đăng ký nhận voucher</h1>
-          </div>
-          <div className="relative">
-            <img
-              className="config-web__img-homepage"
-              style={{ width: "100%", height: "auto" }}
-              src="/assets/image/form-dang-ky-nhan-voucher.png"
-              alt="voucher"
-            />
-            <div className="field__editor field__editor-button--register-get-voucher">
-              <TextFieldGroup
-                field="btn_register_get_voucher"
-                label=""
-                value={this.props?.btn_register_get_voucher}
-                placeholder={""}
-                onChange={(e) => {
-                  this.setStateByName(
-                    "btn_register_get_voucher",
-                    e.target.value
-                  );
-                }}
-              />
-            </div>
-          </div>
-        </div>
         <div class="flex-a-center config-box-border">
           <div>
             <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/get-voucher2.png"
+              style={{ maxWidth: "350px", marginRight: "10px" }}
+              src="/assets/image/nut-nhan-ngay-voucher.png"
               alt="img"
             />
           </div>
