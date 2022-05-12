@@ -937,7 +937,7 @@ class EndUser extends Component {
                                 <td className="text-center">
                                   {item.TypeId === "0" ? "Sản phẩm" : "Dịch vụ"}
                                 </td>
-                                <td className="text-center">{item.UserName}</td>
+                                <td className="text-center">Đang cập nhật</td>
                                 <td className="text-center">
                                   {new Date(
                                     item.Create_Date
