@@ -124,7 +124,7 @@ class Users extends Component {
   }
 
   pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
+    var i, j, temparray, chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -143,7 +143,7 @@ class Users extends Component {
   }
 
   pagination_all(dataApi) {
-    var i, j, temparray, chunk = 5;
+    var i, j, temparray, chunk = 50;
     let arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);

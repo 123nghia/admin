@@ -102,7 +102,7 @@ class EndUser extends Component {
   }
 
   pagination(dataApi) {
-    var i, j, temparray, chunk = 8;
+    var i, j, temparray, chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -149,7 +149,7 @@ class EndUser extends Component {
       });
   }
   paginationVoucher(dataApi) {
-    var i, j, temparray, chunk = 8;
+    var i, j, temparray, chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);

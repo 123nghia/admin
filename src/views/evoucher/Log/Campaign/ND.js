@@ -72,7 +72,7 @@ class SMSlog extends Component {
     var i,
       j,
       temparray,
-      chunk = 5;
+      chunk = 50;
     var arrTotal = [];
     if (dataApi.length > 0) {
       for (i = 0, j = dataApi.length; i < j; i += chunk) {

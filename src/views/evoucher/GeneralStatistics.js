@@ -182,7 +182,7 @@ class Users extends Component {
         var i,
             j,
             temparray,
-            chunk = 8;
+            chunk = 50;
         var arrTotal = [];
         for (i = 0, j = dataApi.length; i < j; i += chunk) {
             temparray = dataApi.slice(i, i + chunk);
@@ -573,7 +573,7 @@ class Users extends Component {
         });
     }
     getData = async () => {
-        const newComany_id = JSON.parse(this.state.company_id).company_id;
+        const newComany_id = this.state.company_id;
         let idOutput = "-1";
         if (newComany_id) {
             idOutput = newComany_id

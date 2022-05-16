@@ -5,6 +5,7 @@ import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { Component } from "react";
 import { CButton } from "@coreui/react";
 
+
 export default class SlideShow extends Component {
   SaveAllConfigWeb(value) {
     this.props.SaveAllConfigWeb(value);

@@ -85,7 +85,7 @@ export default class Seo extends Component {
           value={this.props.keywordSeo}
           placeholder={""}
           onChange={(e) => {
-            this.setStateByName( "keywordSeo", e.target.value );
+            this.setStateByName("keywordSeo", e.target.value );
           }}
         />
         <label className="control-label">Mô tả:</label>
@@ -94,7 +94,7 @@ export default class Seo extends Component {
           rows="4"
           value={this.props.descSeo}
           onChange={(e) => {
-            this.setStateByName( "descSeo",e.target.value );
+            this.setStateByName("descSeo",e.target.value );
           }}
         />
         <TextFieldGroup
@@ -103,7 +103,7 @@ export default class Seo extends Component {
           value={this.props.authorSeo}
           placeholder={""}
           onChange={(e) => {
-            this.setStateByName( "authorSeo", e.target.value);
+            this.setStateByName("authorSeo", e.target.value);
           }}
         />
         <TextFieldGroup
@@ -121,7 +121,7 @@ export default class Seo extends Component {
           }}
           onClick={(e) => {
             e.target.value = null;
-            this.setStateByName( "imgLayout_show", "" );
+            this.setStateByName("imgLayout_show", "" );
           }}
         />
         <div className="text-center">

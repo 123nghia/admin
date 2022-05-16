@@ -91,10 +91,9 @@ class HistorySkin extends Component {
     this.getDataSeo();
     if (this.state.type == '0') {
       this.getData()
-    } else {
-      this.getData_ByCondition()
+    }else {
+      // this.getData_ByCondition()
     }
-
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -121,15 +120,13 @@ class HistorySkin extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN,
       data: {
-        roleType: this.state.type,
-        saleId : key,
-        userId: JSON.parse(this.state.user).sale_id,
+       
         page: activePage,
         limit: itemPerPage
       },
       method: 'POST'
     });
-
+    console.log("call")
     let data = res.data.data;
     console.log("Data",data);
     this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });
@@ -162,7 +159,7 @@ class HistorySkin extends Component {
       if (type == '0' || type == '1') {
         this.getData()
       } else {
-        this.getData_ByCondition()
+        // this.getData_ByCondition()
       }
     });
   };
@@ -257,7 +254,7 @@ class HistorySkin extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-align-justify title_header">
-                  Lịch sử soi da
+                  Lịch sử soi da 1
                 </i>
 
                 <CRow>

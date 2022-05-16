@@ -14,8 +14,8 @@ export default class Color extends Component {
   setStateByName = (name, value) => {
     this.props.setStateByName(name, value);
   };
-  updateCompany= (e) => {
-    this.props.updateCompany(e);
+  updateColor= (e) => {
+    this.props.updateColor(e);
   };
   render() {
     return <>
@@ -39,7 +39,7 @@ export default class Color extends Component {
             size="md"
             className="btn-main"
             onClick={async (e) => {
-            this.updateCompany(e);
+            this.updateColor(e);
             }}
         >
             <CIcon name="cil-pencil" style={{ marginRight: '6px' }} /> Xác nhận cập nhật
