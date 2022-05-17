@@ -5,7 +5,7 @@ import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
-import { DatePicker, Select, Tag } from "antd";
+import { DatePicker, Select, Tag, Space, Spin } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import moment from "moment";
@@ -43,6 +43,7 @@ class EndUser extends Component {
       ? JSON.parse(localStorage.getItem("user")).company_id
       : null,
     data: [],
+    loadingCallApi : false,
     actionVoucherEditing: "new",
     modalPopupVoucher: false,
     modalVoucherEditing: false,
@@ -84,9 +85,12 @@ class EndUser extends Component {
   };
 
   async onGetCampaignList() {
+    this.setState({ loadingCallApi: true });
     await campaignApi
       .fecthAllCampaignList(this.state.idDataCompany)
       .then((res) => {
+    this.setState({ loadingCallApi: false });
+
         let campaignList = res.data.data;
         this.handlePagination(campaignList);
 
@@ -95,7 +99,9 @@ class EndUser extends Component {
         let active = 0;
         this.setState({ isLoading: false, totalActive: active });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+      this.setState({ loadingCallApi: false });
+       console.log(err)});
   }
 
   async onGetCompanyList() {
@@ -996,7 +1002,12 @@ class EndUser extends Component {
                   <p style={{ margin: "auto 0" }}>Thêm mới</p>
                 </CButton>
               </div>
-              <table
+              {
+                this.state.loadingCallApi ? <div className='text-center'>  
+                <Space size="middle">        
+                  <Spin size="large" />
+                </Space>
+              </div> : <table
                 ble
                 className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
               >
@@ -1120,6 +1131,8 @@ class EndUser extends Component {
                     : ""}
                 </tbody>
               </table>
+              }
+              
               <div style={{ float: "right" }}>
                 <Pagination
                   count={arrPaginationVoucher.length}

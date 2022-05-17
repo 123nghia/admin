@@ -6,7 +6,7 @@ import { BsDownload } from "@react-icons/all-files/bs/BsDownload";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
-import { DatePicker, Select, Tag } from "antd";
+import { DatePicker, Select, Tag, Space, Spin } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import "moment-timezone";
@@ -45,6 +45,7 @@ class ListUserEvoucher extends Component {
         ? JSON.parse(localStorage.getItem("user")).company_id
         : null,
       key: "",
+      loadingCallApi : false,
       totalActive: 0,
       dataApi: [],
       action: "new",
@@ -234,6 +235,9 @@ class ListUserEvoucher extends Component {
   }
 
   async getData(saleId, phoneNumber, status, voucherCode, from, to,idDataCompany) {
+    this.setState({
+      loadingCallApi : true,
+    })
     const { company_id } = this.state;
     let company_id_output = "";
     if(this.state.type !== "0"){
@@ -262,6 +266,9 @@ class ListUserEvoucher extends Component {
         },
       })
       .then((res) => {
+        this.setState({
+          loadingCallApi : false,
+        })
         let val = res.data.data;
         this.setState({ dataApi: val });
 
@@ -270,7 +277,11 @@ class ListUserEvoucher extends Component {
         this.setState({ isLoading: false, totalActive: active });
 
         console.log(res.data.data);
-      });
+      }).catch((err) => {
+        this.setState({
+          loadingCallApi : true,
+        })
+      })
   }
 
   onChange(key, val) {
@@ -731,8 +742,14 @@ class ListUserEvoucher extends Component {
 
                   <div className="name_excel" id="name_excel"></div>
                 </div>
-
-                {renderUserVoucherList()}
+              {
+                this.state.loadingCallApi ? <div className='text-center'>  
+                <Space size="middle">        
+                  <Spin size="large" />
+                </Space>
+              </div> : renderUserVoucherList()
+              }
+                
               </CardBody>
             </Card>
             <IframeModal

@@ -517,27 +517,27 @@ const _navMangerCampaigns = [
         },
       },
   
-      {
-        _tag: "CSidebarNavItem",
-        name: "Quản lý Tồn kho eVoucher",
-        to: "/manage-inventory",
-        icon: (
-          <AiFillSetting
-            style={css}
-            content={freeSet.cilUserPlus}
-            className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
-          />
-        ),
-        role: ["0"],
-        badge: {
-          color: "info",
-          text: (
-            <CTooltip placement={"right"} content={content.none}>
-              <CIcon content={freeSet.cilInfo} />
-            </CTooltip>
-          ),
-        },
-      },
+      // {
+      //   _tag: "CSidebarNavItem",
+      //   name: "Quản lý Tồn kho eVoucher",
+      //   to: "/manage-inventory",
+      //   icon: (
+      //     <AiFillSetting
+      //       style={css}
+      //       content={freeSet.cilUserPlus}
+      //       className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
+      //     />
+      //   ),
+      //   role: ["0"],
+      //   badge: {
+      //     color: "info",
+      //     text: (
+      //       <CTooltip placement={"right"} content={content.none}>
+      //         <CIcon content={freeSet.cilInfo} />
+      //       </CTooltip>
+      //     ),
+      //   },
+      // },
       {
         _tag: "CSidebarNavItem",
         name: "Quản lý Mã khuyến mãi",
