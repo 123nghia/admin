@@ -134,7 +134,7 @@ class EndUser extends Component {
   changeLevelType = (e) => {
     e.preventDefault();
     this.setState({
-      type: e.target.value,
+      TypeId: e.target.value,
     });
   };
   async componentDidMount() {
@@ -317,7 +317,7 @@ class EndUser extends Component {
         userName: UserName,
         email: Email,
         brand: Brand,
-        typeId: type,
+        typeId: TypeId,
         logo: imgOutput,
         phone: Phone,
         slug: Slug,
@@ -413,6 +413,7 @@ class EndUser extends Component {
   }
 
   nextButton() {
+
     this.setState({
       changeTab: "2",
     });
