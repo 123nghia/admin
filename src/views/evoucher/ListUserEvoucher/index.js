@@ -63,7 +63,7 @@ class ListUserEvoucher extends Component {
           Name: "Không có",
         },
       ],
-      levelFilter: "0",
+      levelFilter: "",
     };
   }
 
@@ -71,6 +71,7 @@ class ListUserEvoucher extends Component {
     this.getDataSeo();
     this.getData();
     this.onGetCampaignList();
+    this.getDataCompany();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url === window.location.hash) {
@@ -79,6 +80,29 @@ class ListUserEvoucher extends Component {
         }
       }
     }
+  }
+  async getDataCompany (){
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_ALL_COMPANY;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .post(url, {
+        // params: {
+        //   company_id,
+        //   keyword: key,
+        // },
+      })
+      .then((res) => {
+        let val = res.data.data;  
+        console.log(val.length)
+
+        val.push({
+          company_id: "",
+          Name : "Tất cả"
+        })  
+        console.log(val.length)
+        this.setState({ dataCompany : val });
+      });
   }
   async onGetCampaignList() {
     await campaignApi
@@ -174,7 +198,7 @@ class ListUserEvoucher extends Component {
   };
 
   async onSearch() {
-    const { from, to, idDataSales, phoneFilter, levelFilter, codeVoucher } =
+    const { from, to, idDataSales, phoneFilter, levelFilter, codeVoucher, idDataCompany } =
       this.state;
     await this.getData(
       idDataSales,
@@ -182,7 +206,8 @@ class ListUserEvoucher extends Component {
       levelFilter,
       codeVoucher,
       from,
-      to
+      to,
+      idDataCompany
     );
   }
 
@@ -208,9 +233,14 @@ class ListUserEvoucher extends Component {
       });
   }
 
-  async getData(saleId, phoneNumber, status, voucherCode, from, to) {
+  async getData(saleId, phoneNumber, status, voucherCode, from, to,idDataCompany) {
     const { company_id } = this.state;
-
+    let company_id_output = "";
+    if(this.state.type !== "0"){
+      company_id_output = this.state.company_id;
+    }else{
+      company_id_output = idDataCompany;
+    }
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_USER_EVOUCHER;
 
@@ -228,7 +258,7 @@ class ListUserEvoucher extends Component {
           voucherCode,
           roleType: this.state.type,
           userId: JSON.parse(this.state.user).sale_id,
-          company_id,
+          company_id : company_id_output,
         },
       })
       .then((res) => {
@@ -271,6 +301,9 @@ class ListUserEvoucher extends Component {
       {
         item: "2",
       },
+      {
+        item : ""
+      }
     ];
 
     const checkStatusUserVoucherColor = (status) => {
@@ -359,7 +392,7 @@ class ListUserEvoucher extends Component {
               >
                 {arrLevelFilter.map((item, i) => (
                   <option selected key={i} value={item.item}>
-                    {checkStatusUserVoucherContent(item.item)}
+                    {item.item === "A" ? 'Đã nhận voucher' : item.item === "0" ? 'Đã check-in' : item.item === "1" ? 'Hoàn thành' : item.item === "2" ? 'Hủy bỏ' : 'Tất cả'}
                   </option>
                 ))}
               </CSelect>
@@ -438,36 +471,41 @@ class ListUserEvoucher extends Component {
             </div>
           </div>
         </CCol>
-        <CCol md={3} className="mt">
-          <div className="">
-            <p className="title_filter">Danh sách chiến dịch</p>
-            <div style={{ width: "200px" }}>
-              <Select
-                className="select_seo"
-                showSearch
-                placeholder="Lọc theo chiến dịch"
-                optionFilterProp="children"
-                onChange={(value) =>
-                  this.setState({
-                    idDataCampaign: value,
-                  })
-                }
-                onSearch={this.onSearchSelect}
-                filterOption={(input, option) =>
-                  
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-              >
-                {this.state.dataCampaign
-                  ? this.state.dataCampaign.map((item, i) => {
-                      return <Option value={item._id}>{item.name}</Option>;
-                    })
-                  : null}
-              </Select>
-            </div>
-          </div>
-        </CCol>
+   
+       {
+         this.state.type !== "0" ? null :  <CCol md={3} className="mt">
+         <div className="">
+           <p className="title_filter">Nhà cung cấp</p>
+           <div style={{ width: "200px" }}>
+             <Select
+               className="select_seo"  
+               showSearch
+               placeholder="Lọc theo ncc"
+               optionFilterProp="children"
+               onChange={(value) =>
+                 this.setState({
+                   idDataCompany : value,
+                 })
+               }
+               onSearch={this.onSearchSelect}
+               filterOption={(input, option) =>
+                 option.children
+                   .toLowerCase()
+                   .indexOf(input.toLowerCase()) >= 0
+               }
+             >
+               {this.state.dataCompany
+                 ? this.state.dataCompany.map((item, i) => {
+                     return (
+                       <Option value={item._id}>{item.Name}</Option>
+                     );
+                   })
+                 : null}
+             </Select>
+           </div>
+         </div>
+       </CCol>
+       }
       </CRow>
     );
 

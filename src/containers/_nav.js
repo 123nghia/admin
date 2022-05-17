@@ -584,7 +584,7 @@ const _navMangerUser = [
         customClasses="c-sidebar-nav-icon"
       />
     ),
-    role: ["0"],
+    role: ["0","1","2"],
     _children: [
       {
         _tag: "CSidebarNavItem",
@@ -597,7 +597,7 @@ const _navMangerUser = [
             className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
           />
         ),
-        role: ["0", "1", "2"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -618,7 +618,7 @@ const _navMangerUser = [
             customClasses="c-sidebar-nav-icon c-sidebar-nav-icon-child"
           />
         ),
-        role: ["0", "1", "2"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -639,7 +639,7 @@ const _navMangerUser = [
             customClasses="c-sidebar-nav-icon c-sidebar-nav-icon-child"
           />
         ),
-        role: ["0"],
+        role: ["0","1","2"],
         badge: {
           color: "info",
           text: (

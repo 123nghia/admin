@@ -13,7 +13,7 @@ import "antd/dist/antd.css";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
-
+import { Spin } from 'antd';
 import {
   CButton,
   CLabel, CSelect, CRow, CCol
@@ -39,7 +39,7 @@ class HistorySkin extends Component {
     super(props);
     this.state = {
       company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
-
+      loadingCallApi : false,
       data: [],
       key: '',
       page: 1,
@@ -55,7 +55,6 @@ class HistorySkin extends Component {
       isLoading: false,
       type: localStorage.getItem('type'),
       user: localStorage.getItem("user"),
-
       toggleHistory: false,
       idHistory: "",
       dataSalesDefault : [{
@@ -88,12 +87,11 @@ class HistorySkin extends Component {
       });
   };
   async componentDidMount() {
-    this.getDataSeo();
-    if (this.state.type == '0') {
-      this.getData()
-    }else {
-      // this.getData_ByCondition()
-    }
+    await this.getData()
+    
+    await this.getDataSeo();
+    await this.getDataCompany();
+  
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -104,34 +102,50 @@ class HistorySkin extends Component {
     }
   }
   async onSearch() {
-    console.log(this.state.from);
-    console.log(this.state.to);
-    console.log(this.state.codeVoucher);
-    console.log(this.state.userVoucher);
-    console.log(this.state.statusVoucher);
-    console.log(this.state.idDataSales);
-  
-    await this.getData(this.state.idDataSales);
+    await this.getData(
+      this.state.idDataSales,
+      this.state.idDataCompany,
+      this.state.nameFilter,
+      this.state.numberFiler
+      );
   }
-  getData = async (key) => {
+  getData = async (key,idDataCompany,name,number) => {
+    this.setState({
+      loadingCallApi : true
+    });
+    let idDataCompanyOutput = "";
+    console.log(JSON.parse(this.state.user))
+    if(this.state.type !== '0'){
+      idDataCompanyOutput = JSON.parse(this.state.user).company_id;
+    }else{
+      idDataCompanyOutput = idDataCompany;
+    };
     const { activePage, itemPerPage } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN,
       data: {
-       
+        name,
+        phone : number,
+        roleType: this.state.type,
+        saleId : key,     
+        company_id : idDataCompanyOutput,
+        userId: JSON.parse(this.state.user).sale_id,
         page: activePage,
         limit: itemPerPage
       },
       method: 'POST'
     });
-    console.log("call")
+    this.setState({
+      loadingCallApi : false
+    });
+    if(res.data.is_success === false){
+      return;
+    }
     let data = res.data.data;
-    console.log("Data",data);
-    this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });
-    console.log(this.state.data)
-  }
+    this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });  
+  };
   async getDataSeo(){
     
     const { company_id } = this.state;
@@ -151,16 +165,31 @@ class HistorySkin extends Component {
         dataSales : this.state.dataSalesDefault.concat(val)
       })
     })
+  };
+  async getDataCompany(){
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_ALL_COMPANY;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .post(url, {
+        // params: {
+        //   company_id,
+        //   keyword: key,
+        // },
+      })
+      .then((res) => {
+        let val = res.data.data;      
+        this.setState({ dataCompany : val });
+      });
   }
   handlePageChange = async (pageNumber) => {
     const { type } = this.state;
     console.log(type)
     this.setState({ activePage: pageNumber }, () => {
-      if (type == '0' || type == '1') {
+     
+        console.log(this.state.activePage)
         this.getData()
-      } else {
-        // this.getData_ByCondition()
-      }
+      
     });
   };
 
@@ -186,7 +215,7 @@ class HistorySkin extends Component {
     let data = res.data.data
     console.log("Data 2",data);
     this.setState({ isLoading: false, itemsCount: data.total, dataApi: data.data, data: data.data });
-  }
+  };
 
   searchKey(key) {
     this.setState({ key: key })
@@ -254,7 +283,7 @@ class HistorySkin extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-align-justify title_header">
-                  Lịch sử soi da 1
+                  Lịch sử soi da 
                 </i>
 
                 <CRow>
@@ -264,10 +293,10 @@ class HistorySkin extends Component {
                       <Input
                         style={styles.searchInput}
                         onChange={(e) => {
-                          this.setState({ nameUser: e.target.value });
+                          this.setState({ nameFilter: e.target.value });
                         }}
-                        name="nameUser"
-                        value={this.state.nameUser}
+                        name="nameFilter"
+                        value={this.state.nameFilter}
                         placeholder="Tên"
                       />
                     </div>
@@ -279,11 +308,11 @@ class HistorySkin extends Component {
                       <Input
                         style={styles.searchInput}
                         onChange={(e) => {
-                          this.setState({ numberUser: e.target.value });
+                          this.setState({ numberFiler: e.target.value });
                         }}
                         type="number"
-                        name="numberUser"
-                        value={this.state.numberUser}
+                        name="numberFiler"
+                        value={this.state.numberFiler}
                         placeholder="Số điện thoại"
                       />
                     </div>
@@ -320,6 +349,41 @@ class HistorySkin extends Component {
                       </div>
                     </div>
                   </CCol>
+                  {
+                    this.state.type !== "0" ? null : <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Nhà cung cấp</p>
+                      <div style={{ width: "200px" }}>
+                        <Select
+                          className="select_seo"  
+                          showSearch
+                          placeholder="Lọc theo ncc"
+                          optionFilterProp="children"
+                          onChange={(value) =>
+                            this.setState({
+                              idDataCompany : value,
+                            })
+                          }
+                          onSearch={this.onSearchSelect}
+                          filterOption={(input, option) =>
+                            option.children
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          {this.state.dataCompany
+                            ? this.state.dataCompany.map((item, i) => {
+                                return (
+                                  <Option value={item._id}>{item.Name}</Option>
+                                );
+                              })
+                            : null}
+                        </Select>
+                      </div>
+                    </div>
+                  </CCol>
+                  }
+                  
                   <CCol md={3} className="mt">
                     <div className="">
                       <div className="">
@@ -397,7 +461,14 @@ class HistorySkin extends Component {
                 </div>
               </CardHeader>
               <CardBody className="table__overflow">
-                <table
+               {
+                 this.state.loadingCallApi ? 
+                 <div className='text-center'>  
+                  <Space size="middle">        
+                    <Spin size="large" />
+                  </Space>
+                </div>
+                  : <table
                   ble
                   className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table"
                 >
@@ -408,9 +479,8 @@ class HistorySkin extends Component {
                       <th className="text-center">Số điện thoại</th>
 
                       <th className="text-center">Hình ảnh</th>
-                      <th className="text-center">Mã voucher</th>
-                      <th className="text-center">Tên chiến dịch</th>
-
+                     
+                      <th className="text-center">Nhà cung cấp</th>
                       <th className="text-center">Kết quả</th>
                       {/* <th className="text-center">Công ty</th>
                       <th className="text-center">Sale</th> */}
@@ -425,7 +495,7 @@ class HistorySkin extends Component {
                     >
                       Không tìm thấy dữ liệu
                     </td>
-                    {data != undefined
+                    {data != undefined && data.length > 0 
                       ? data.map((item, i) => {
                           return (
                             <tr key={i}>
@@ -439,8 +509,8 @@ class HistorySkin extends Component {
                                   style={{ width: "100px", height: "83px" }}
                                 />
                               </td>
-                              <td className="text-center"></td>
-                              <td className="text-center"></td>
+                             
+                              <td className="text-center">{item.Company_Id?.Name}</td>
                               <td className="text-center">
                                 <CButton
                                   outline
@@ -469,6 +539,8 @@ class HistorySkin extends Component {
                       : ""}
                   </tbody>
                 </table>
+               }
+                
                 <div style={{ float: "right" }}>
                   <Pagination
                     count={Math.ceil(itemsCount / itemPerPage)}

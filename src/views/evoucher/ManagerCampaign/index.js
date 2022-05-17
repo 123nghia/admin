@@ -47,6 +47,7 @@ class EndUser extends Component {
     modalPopupVoucher: false,
     modalVoucherEditing: false,
     key: "",
+    idDataCompany  : "",
     dataVoucher: [],
     arrPaginationVoucher: [],
     indexPageVoucher: 0,
@@ -84,7 +85,7 @@ class EndUser extends Component {
 
   async onGetCampaignList() {
     await campaignApi
-      .fecthAllCampaignList()
+      .fecthAllCampaignList(this.state.idDataCompany)
       .then((res) => {
         let campaignList = res.data.data;
         this.handlePagination(campaignList);
@@ -104,6 +105,8 @@ class EndUser extends Component {
       url: Constants.PLUGIN_LIST_COMPANY,
       method: "POST",
     });
+    this.setState({ isLoading: false });
+
     let val = res.data.data;
     this.setState({
       dataCompany: val,
@@ -111,8 +114,9 @@ class EndUser extends Component {
   }
 
   async componentDidMount() {
-    this.onGetCampaignList();
+    await this.onGetCampaignList();
     this.onGetCompanyList();
+    await this.getDataCompany();
   }
 
   onChange(key, val) {
@@ -166,7 +170,29 @@ class EndUser extends Component {
 
     this.setState({ arrPaginationVoucher: arrTotal, dataVoucher: arrTotal[0] });
   }
+  async getDataCompany (){
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_ALL_COMPANY;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .post(url, {
+        // params: {
+        //   company_id,
+        //   keyword: key,
+        // },
+      })
+      .then((res) => {
+        let val = res.data.data;  
+        console.log(val.length)
 
+        val.push({
+          company_id: "",
+          Name : "Tất cả"
+        })  
+        console.log(val.length)
+        this.setState({ dataCompany : val });
+      });
+  }
   async getDataVoucher(id) {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_DETAIL_CAMPAIGN_EVOUCHER;
@@ -1350,6 +1376,38 @@ class EndUser extends Component {
                         </div>
                       </div>
                     </CCol>
+                    <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Nhà cung cấp</p>
+                      <div style={{ width: "200px" }}>
+                        <Select
+                          className="select_seo"  
+                          showSearch
+                          placeholder="Lọc theo ncc"
+                          optionFilterProp="children"
+                          onChange={(value) =>
+                            this.setState({
+                              idDataCompany : value,
+                            })
+                          }
+                          onSearch={this.onSearchSelect}
+                          filterOption={(input, option) =>
+                            option.children
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          {this.state.dataCompany
+                            ? this.state.dataCompany.map((item, i) => {
+                                return (
+                                  <Option value={item._id}>{item.Name}</Option>
+                                );
+                              })
+                            : null}
+                        </Select>
+                      </div>
+                    </div>
+                  </CCol>
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Từ ngày</p>
