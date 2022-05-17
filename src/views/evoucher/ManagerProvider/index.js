@@ -298,6 +298,7 @@ class EndUser extends Component {
       Logo,
       Phone,
       Slug,
+      type,
       introduction,
       Password,
       Name,
@@ -316,7 +317,7 @@ class EndUser extends Component {
         userName: UserName,
         email: Email,
         brand: Brand,
-        typeId: TypeId,
+        typeId: type,
         logo: imgOutput,
         phone: Phone,
         slug: Slug,
@@ -328,7 +329,7 @@ class EndUser extends Component {
         let val = res.data;
         this.pagination(val);
         this.setState({ data: val });
-        console.log(val);
+   
         Swal.fire({
           icon: "success",
           title: "Thêm thành công",

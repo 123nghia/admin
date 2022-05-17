@@ -408,6 +408,7 @@ class ConfigWeb extends Component {
               }
               if (logos) {
                 this.setState({
+                  classLogo : valueConfig.value.logos.classLogo,
                   hrefLogoHeader: valueConfig.value.logos.header.href,
                   hrefLogoFooter: valueConfig.value.logos.footer.href,
                   image: valueConfig.value.logos.header.logo,
@@ -810,6 +811,7 @@ class ConfigWeb extends Component {
       if (!coppyData.value.logos) {
         coppyData.value.logos = {};
       }
+      coppyData.value.logos.classLogo = this.state.classLogo;
       let newImage = await this.postImage(this.state.image_link);
       if (newImage) {
         coppyData.value.logos.header.logo = `${Constants.BASE_URL}image_brand/${newImage}`;
@@ -1264,6 +1266,7 @@ class ConfigWeb extends Component {
                   hrefLogoHeader={this.state.hrefLogoHeader}
                   imgLogoFooter={this.state.imgLogoFooter}  
                   hrefLogoFooter={this.state.hrefLogoFooter}
+                  classLogo={this.state.classLogo}
                 />
               </div>
               <div id="tabcontent5" className="tabcontent ">
