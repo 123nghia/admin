@@ -19,7 +19,7 @@ function InfoEndUser(propsInfoUser) {
           <PersonOutlineOutlinedIcon
             style={{ width: "100px", height: "100px", color: "#333332cc" }}
           />
-          <span className="tabInfo-status">
+          <span className="tabInfo-status" style={{ color: "#333" }}>
             <Tag
               color={
                 propsInfoUser.propsInfoUser[0]?.detailInformation?.status ===
