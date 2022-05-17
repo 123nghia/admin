@@ -36,41 +36,33 @@ export default class HomePage extends Component {
           </Button>
         </div>
 
-        <div class="config-web__border-img">
-          <div className="">
-            <h1>Hình ảnh hướng dẫn chụp ảnh</h1>
-          </div>
-          <div className="relative">
+        <div class="flex-a-center config-box-border">
+          <div>
             <img
-              className="config-web__img-homepage"
-              style={{ width: "100%", height: "auto" }}
+              style={{ maxWidth: "300px", marginRight: "10px" }}
               src="/assets/image/homepage_edit2.png"
-              alt="voucher"
+              alt="img"
             />
-            <img
-              alt=""
-              className="img--guide-photo"
-              style={{
-              
-              }}
-              height="auto"
-              src={this.props.imagePhoto}
-            />
-            <div className="field__editor field__editor-homepage--guide-photo">
-              <input type="file" onChange={(e) => {
+          </div>
+          <div style={{ width: "100%" }}>
+            <TextFieldGroup
+              field="image1"
+              label="Hình ảnh hướng dẫn chụp ảnh (400px * 400px):"
+              type={"file"}
+              className="mt-5"
+              onChange={(e) => {
                 this.onChangeImage(
                   e,
                   "imagePhoto",
                   "imagePhoto_link",
                   "imagePhoto_show"
                 );
-              }} />
-                <CButton
-                  shape="rounded-pill" size="md">
-                <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
-              </CButton>
-              <p>Thay đổi hình ảnh</p>
-            </div>
+              }}
+              onClick={(e) => {
+                e.target.value = null;
+                this.setState({ imagePhoto_show: "" });
+              }}
+            />
           </div>
         </div>
         {/* <div class="flex-a-center config-box-border">

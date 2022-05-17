@@ -21,76 +21,76 @@ export default class Voucher extends Component {
             Lưu thay đổi
           </Button>
         </div>
-        <div class="config-web__border-img">
-          <div className="">
-            <h1>Form - Nhận voucher</h1>
-          </div>
-          <div className="relative">
-            <img
-              className="config-web__img-homepage"
-              style={{ width: "100%", height: "auto" }}
+       
+        <div class="flex-a-center config-box-border">
+          <div>
+          <img        
+              style={{ width: "400px", height: "auto" }}
               src="/assets/image/form-nhan-voucher.png"
               alt="voucher"
             />
-            <div className="field__editor field__editor-button--get-voucher">
-              <TextFieldGroup
-                field="btn_get_voucher"
-                value={this.props?.btn_get_voucher}
-                placeholder={""}
-                onChange={(e) => {
-                  this.setStateByName("btn_get_voucher", e.target.value);
-                }}
-              />
-            </div>
-
-            <div className="field__editor field__editor-form--title-get-voucher">
+          </div>
+          <div style={{ width: "100%" }}>
               <TextFieldGroup
                 field="title_get_voucher"
-                label=""
+                label="Tiêu đề"
                 value={this.props?.title_get_voucher}
-                placeholder={""}
+                placeholder={"Chúc mừng bạn vừa..."}
                 onChange={(e) => {
                   this.setStateByName("title_get_voucher", e.target.value);
                 }}
               />
-            </div>
-            <div className="field__editor field__editor-form--text-sales">
+    
               <TextFieldGroup
                 field="textSales"
-                label=""
+                label="Tiêu đề trị giá"
                 value={this.props?.textSales}
-                placeholder={""}
+                placeholder={"Trị giá 1.000.000đ"}
                 onChange={(e) => {
                   this.setStateByName("textSales", e.target.value);
                 }}
               />
-            </div>
-            <div className="field__editor field__editor-form--title-login-view-voucher">
+
               <TextFieldGroup
                 field="loginWatchVoucher"
-                label=""
+                label="Nhập thông tin xem voucher"
                 value={this.props?.loginWatchVoucher}
-                placeholder={""}
+                placeholder={"Hãy nhập thông tin của bạn..."}
                 onChange={(e) => {
                   this.setStateByName("loginWatchVoucher", e.target.value);
                 }}
               />
-            </div>
-
+              <TextFieldGroup
+                field="btn_get_voucher"
+                value={this.props?.btn_get_voucher}
+                label="Nút nhận voucher"
+                placeholder={"Nhận ngay voucher"}
+                onChange={(e) => {
+                  this.setStateByName("btn_get_voucher", e.target.value);
+                }}
+              />
           </div>
         </div>
-        <div class="config-web__border-img">
-          <div className="">
-            <h1>Form - Đăng ký nhận voucher</h1>
-          </div>
-          <div className="relative">
-            <img
+
+        <div class="flex-a-center config-box-border">
+          <div>
+          <img
               className="config-web__img-homepage"
-              style={{ width: "100%", height: "auto" }}
+              style={{ width: "400px", height: "auto" }}
               src="/assets/image/form-dang-ky-nhan-voucher.png"
               alt="voucher"
             />
-            <div className="field__editor field__editor-button--register-get-voucher">
+          </div>
+          <div style={{ width: "100%" }}>
+            <TextFieldGroup
+              field="registerGetVoucher"
+              label=""
+              value={this.props?.registerGetVoucher}
+              placeholder={""}
+              onChange={(e) => {
+                this.setStateByName("registerGetVoucher", e.target.value);
+              }}
+            />
               <TextFieldGroup
                 field="btn_register_get_voucher"
                 label=""
@@ -103,19 +103,6 @@ export default class Voucher extends Component {
                   );
                 }}
               />
-            </div>
-            <div className="field__editor field__editor-button--title-register-get-voucher">
-
-            <TextFieldGroup
-              field="registerGetVoucher"
-              label=""
-              value={this.props?.registerGetVoucher}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("registerGetVoucher", e.target.value);
-              }}
-            />
-            </div>
 
           </div>
         </div>

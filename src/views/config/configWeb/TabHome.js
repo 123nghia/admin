@@ -82,14 +82,6 @@ export default class TabHome extends Component {
                 this.setState({ imagePhoto_show: "" });
               }}
             />
-            <div class="text-center mb-5">
-              <img
-                alt=""
-                style={{ width: "200px", marginBottom: 20 }}
-                height="auto"
-                src={this.state?.imagePhoto}
-              />
-            </div>
           </div>
         </div>
         <div class="flex-a-center config-box-border">

@@ -24,7 +24,7 @@ import Banner2 from "./configWebAdmin/Banner2";
 import Footer from "./configWebAdmin/Footer";
 import Logos from "./configWebAdmin/Logo";
 import GuideVoucher from "./configWebAdmin/GuideVoucher";
-
+import VoucherPartner from "./configWebAdmin/VoucherPartner";
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -35,6 +35,9 @@ class ConfigWebAdmin extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      bannerCampaign : [],
+      actionModalBannerCampaign : "new",
+      modalBannerCampaign : false,
       tabNameConfig: [
         {
           _id: "1",
@@ -80,6 +83,14 @@ class ConfigWebAdmin extends Component {
           _id: "5",
           name: "Hướng dẫn sử dụng voucher",
           icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />,
+        },
+        {
+          _id: "6",
+          name: "Danh sách thương hiệu",
+          icon: <svg style={{ width: "24px ", height: "24px " }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+          <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+          <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+        </svg>,
         },
         {
           _id: "4",
@@ -150,7 +161,7 @@ class ConfigWebAdmin extends Component {
       }
     }
   }
-  onChangeImage(e, value, valueLink, valueShow) {
+  onChangeImage = (e, value, valueLink, valueShow) => {
     let files = e.target.files;
     let reader = new FileReader();
     this.setState({ [valueLink]: files[0] });
@@ -158,7 +169,7 @@ class ConfigWebAdmin extends Component {
     reader.onload = (e) => {
       this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
     };
-  }
+  };
   async componentDidMount() {
     await this.getFooter();
     this.getDataConfigWeb();
@@ -210,6 +221,7 @@ class ConfigWebAdmin extends Component {
               configData: valueConfig.value.statusConfig,
               banner: valueConfig.value.banner,
               guideVoucher: valueConfig.value.guideVoucher,
+              bannerCampaign : valueConfig.value.bannerCampaign,
             },
             () => {
               const {
@@ -217,6 +229,7 @@ class ConfigWebAdmin extends Component {
                 seoInfo,
                 logos,
                 chats,
+                bannerCampaign,
                 configData,
                 mxh,
                 guideVoucher,
@@ -225,6 +238,11 @@ class ConfigWebAdmin extends Component {
               if(guideVoucher){
                 this.setState({
                   guideVoucher: this.state.guideVoucher
+                })
+              }
+              if(bannerCampaign){
+                this.setState({
+                  bannerCampaign: this.state.bannerCampaign
                 })
               }
               if (banner) {
@@ -497,6 +515,9 @@ class ConfigWebAdmin extends Component {
     if(change === "guideVoucher"){
       coppyData.value.guideVoucher = this.state.guideVoucher;
     }
+    if(change === "bannerCampaign"){
+      coppyData.value.bannerCampaign = this.state.bannerCampaign;
+    }
     if (change === "logoCompany") {
       let newImage1 = await this.postImage(this.state.imageLogoCompany_link);
       if (newImage1) {
@@ -753,7 +774,6 @@ class ConfigWebAdmin extends Component {
       href: hrefBanner,
     };
     let coppy = { ...dataConfigWeb };
-    console.log(this.state.positionBannerActive);
     if (this.state.positionBannerActive === "1") {
       coppy.value.banner.bannerMainSlide.push(ob);
     } else {
@@ -894,6 +914,134 @@ class ConfigWebAdmin extends Component {
   setStateByName = (name, value) => {
     this.setState({ [name]: value });
   };
+  openFormAddBannerCampaign = () => {
+    console.log("1")
+    this.setState({
+      nameBannerCampaign: "",
+      image_banner_campaign: "",
+      image_banner_campaign_link: "",
+      image_banner_campaign_show: "",
+      contentBannerCampaign: "",
+      hrefBannerCampaign: "",
+      outputBannerCampaign: "",
+      modalBannerCampaign : true,
+      actionModalBannerCampaign: "new"
+    })
+  }
+  openEditBannerCampaign = (item,i) => {
+    
+    this.setState({
+      indexBannerUpdate : i,
+      nameBannerCampaign: item.name,
+      image_banner_campaign: item.image,
+      image_banner_campaign_link: item.image,
+      image_banner_campaign_show: item.image,
+      contentBannerCampaign: item.content,
+      hrefBannerCampaign: item.link,
+      outputBannerCampaign: item.output,
+      modalBannerCampaign : true,
+      actionModalBannerCampaign: "edit"
+    })
+  }
+  deleteBannerCampaign = async (i) => {
+    const { dataConfigWeb } = this.state;
+    let coppyData = {
+      ...dataConfigWeb,
+    };
+    coppyData.value.bannerCampaign.splice(i, 1);
+    this.setState(
+      {
+        dataConfigWeb: coppyData,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Xóa thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.getDataConfigWeb();
+        });
+      }
+    );
+  }
+  saveAddBannerCampaign = async () => {
+    let newImage = await this.postImage(this.state.image_banner_campaign_link);
+    let imageOutput;
+    if (newImage) {
+      imageOutput = `${Constants.BASE_URL}image_brand/${newImage}`;
+    } else {
+      imageOutput = "";
+    }
+    let ob = {
+      image: imageOutput,
+      name : this.state.nameBannerCampaign,
+      content: this.state.contentBannerCampaign,
+      link: this.state.hrefBannerCampaign,
+      output : this.state.outputBannerCampaign,
+    };
+    let coppy = { ...this.state.dataConfigWeb };
+    if(!coppy.value.bannerCampaign){
+      coppy.value.bannerCampaign = []
+    }
+    coppy.value.bannerCampaign.push(ob);
+    this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Thêm mới thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.setState({
+            modalBannerCampaign: false,
+          });
+          this.getDataConfigWeb();
+        });
+      }
+    );
+  }
+  saveEditBannerCampaign = async () => {
+    let newImage = await this.postImage(this.state.image_banner_campaign_link);
+    let imageOutput = this.state.image_banner_campaign;
+    if (newImage) {
+      imageOutput = `${Constants.BASE_URL}image_brand/${newImage}`;
+    }
+      let ob = {
+        image: imageOutput,
+        name : this.state.nameBannerCampaign,
+        content: this.state.contentBannerCampaign,
+        link: this.state.hrefBannerCampaign,
+        output : this.state.outputBannerCampaign,
+      };
+    let coppy = { ...this.state.dataConfigWeb };
+
+    coppy.value.bannerCampaign[this.state.indexBannerUpdate] = ob;
+    await this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        Swal.fire({
+          icon: "success",
+          title: "Cập nhật thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+        this.setState({
+          modalBannerCampaign: false,
+        });
+        await this.onUpdate();
+
+        this.getDataConfigWeb();
+      }
+    );
+  }
   render() {
     const { contentSlide } = this.state;
     if (!this.state.isLoading) {
@@ -976,6 +1124,26 @@ class ConfigWebAdmin extends Component {
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
                   guideVoucher={this.state.guideVoucher}
+                />
+              </div>
+              <div id="tabcontent6" className="tabcontent ">
+                <VoucherPartner
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  bannerCampaign={this.state.bannerCampaign}
+                  modalBannerCampaign={this.state.modalBannerCampaign}
+                  actionModalBannerCampaign={this.state.actionModalBannerCampaign}
+                  nameBannerCampaign={this.state.nameBannerCampaign}
+                  image_banner_campaign={this.state.image_banner_campaign}
+                  contentBannerCampaign={this.state.contentBannerCampaign}
+                  hrefBannerCampaign={this.state.hrefBannerCampaign}
+                  outputBannerCampaign={this.state.outputBannerCampaign}
+                  setStateByName={this.setStateByName}
+                  openFormAddBannerCampaign={this.openFormAddBannerCampaign}
+                  openEditBannerCampaign={this.openEditBannerCampaign}
+                  deleteBannerCampaign={this.deleteBannerCampaign}
+                  saveAddBannerCampaign={this.saveAddBannerCampaign}
+                  saveEditBannerCampaign={this.saveEditBannerCampaign}
+                  onChangeImage={this.onChangeImage}
                 />
               </div>
               <div id="tabcontent4" className="tabcontent ">

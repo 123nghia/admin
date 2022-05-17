@@ -29,6 +29,21 @@ export default class Chats extends Component {
           </CButton>
         </div>
         <div className="mt-3"></div>
+        <h1>Class</h1>
+        <TextFieldGroup
+            field="classLogo"
+            label=""
+            value={this.props.classLogo}
+            placeholder=""
+            type={"text"}
+            className="mt-3"
+            // value={this.state.image}
+            onChange={(e) => {
+              this.setStateByName(
+                "classLogo", e.target.value
+              );
+            }}
+          />
         <div class="mt-3">
           <h1>Header</h1>
           <TextFieldGroup

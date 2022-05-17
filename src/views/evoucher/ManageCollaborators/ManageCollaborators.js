@@ -139,7 +139,7 @@ class EndUser extends Component {
 
   }
   pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
+    var i, j, temparray, chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -168,7 +168,7 @@ class EndUser extends Component {
     var i,
       j,
       temparray,
-      chunk = 8;
+      chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -192,7 +192,7 @@ class EndUser extends Component {
     var i,
       j,
       temparray,
-      chunk = 8;
+      chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -1437,7 +1437,7 @@ class EndUser extends Component {
                                 {item.Brand}
                               </td>
                               <td className="text-center">
-                                <img style={{maxHeight:'140px'}} src={item.Logo} alt="" />
+                                <img style={{maxHeight:'100px'}} src={item.Logo} alt="" />
                               </td>  
                               <td className="text-center">
                               <CButton

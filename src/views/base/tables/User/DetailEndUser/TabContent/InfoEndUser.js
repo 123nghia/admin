@@ -24,7 +24,7 @@ function InfoEndUser(propsInfoUser) {
               color={
                 propsInfoUser.propsInfoUser[0]?.detailInformation?.status ===
                 "A"
-                  ? "green"
+                  ? "default"
                   : "default"
               }
             >
@@ -33,11 +33,7 @@ function InfoEndUser(propsInfoUser) {
                 : "Không hoạt động"}
             </Tag>
           </span>
-          <span className="tabInfo-header__subtitle">
-            {propsInfoUser.propsInfoUser[0]?.detailInformation?.username
-              ? propsInfoUser.propsInfoUser[0]?.detailInformation?.username
-              : null}
-          </span>
+        
         </div>
 
         <div className="tabInfo-header__title">

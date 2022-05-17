@@ -1,4 +1,3 @@
-
 import Pagination from "@material-ui/lab/Pagination";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -12,6 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
@@ -20,12 +20,14 @@ import "antd/dist/antd.css";
 import axios from "axios";
 import "moment-timezone";
 import { CButton, CCol, CRow } from "@coreui/react";
-
+import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Radio from '@mui/material/Radio';
 import {
   Card,
-  Row, Input,
+  Row,
+  Input,
   CardBody,
   CardHeader,
   Col,
@@ -40,6 +42,7 @@ import DotLoading from "src/views/components/DotLoading";
 import IOSSwitch from "src/views/components/SwitchOption";
 import Swal from "sweetalert2";
 import Constants from "../../../contants/contants";
+import { BiExport } from "react-icons/bi";
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -48,6 +51,7 @@ headers.append("Content-Type", "application/json");
 
 class ManageSales extends Component {
   state = {
+    modalSelect: false,
     data: [],
     actionVoucherEditing: "new",
     modalVoucherEditing: false,
@@ -85,6 +89,7 @@ class ManageSales extends Component {
     introduction: "",
     showPassword: false,
     saleGroupList: [],
+    dataCampaign : [],
   };
 
   async getData(key) {
@@ -111,6 +116,7 @@ class ManageSales extends Component {
 
   async componentDidMount() {
     this.getData();
+    this.getCampaign();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url === window.location.hash) {
@@ -140,7 +146,7 @@ class ManageSales extends Component {
     var i,
       j,
       temparray,
-      chunk = 8;
+      chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -367,6 +373,17 @@ class ManageSales extends Component {
 
         <td className="text-center">
           <div className="flex">
+            <CButton
+              shape="rounded-pill"
+              variant="ghost"
+              color="info"
+              style={styles.mgl5}
+              size="md"
+              onClick={(e) => this.openSelectExport(collaborator)}
+            >
+              <BiExport style={styles.icon} name="cilPencil" />
+              Export
+            </CButton>
             <Link to={`/detail-collaborators/${collaborator?._id}`}>
               <CButton
                 shape="rounded-pill"
@@ -415,7 +432,29 @@ class ManageSales extends Component {
   handleGetSaleGroup = (saleGroup) => {
     saleGroup && this.setState({ saleGroup: saleGroup });
   };
+  openSelectExport = (collaborator) => {
+    this.setState({
+      modalSelect: true,
+    });
+  };
+  async getCampaign(key) {
+    const { company_id } = this.state;
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_ALL_CAMPAIGN_VER2;
 
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id: this.state.company_id,
+        },
+      })
+      .then((res) => {
+        let val = res.data.data;
+        this.setState({ dataCampaign: val },()=>{console.log(this.state.dataCampaign)});
+      
+      });
+  }
   render() {
     const {
       data,
@@ -448,40 +487,50 @@ class ManageSales extends Component {
                   Danh sách cộng tác viên
                 </i>
                 <CRow>
-                <CCol md={3} className="mt">
-                  <div className="">
-                    <p className="title_filter">Tên sales</p>
-                    <Input
-                      style={styles.searchInput}
-                      name="number"
-                      placeholder=""
-                    />
-                  </div>
-                </CCol>
-                <CCol md={3} className="mt">
-                  <div className="">
-                    <p className="title_filter">Số điện thoại</p>
-                    <Input
-                      style={styles.searchInput}
-                      name="number"
-                      placeholder=""
-                    />
-                  </div>
-                </CCol>
-                <CCol md={3} className="mt">
-                  <div className="">
-                    <p className="title_filter">Tên nhóm</p>
-                    <Input
-                      style={styles.searchInput}
-                      name="number"
-                      placeholder=""
-                    />
-                  </div>
-                </CCol>
-          
-              </CRow>
-                <div className="flex-center" style={{ marginTop: "1rem" }}>
-                  {/* <CButton
+                  <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Tên sales</p>
+                      <Input
+                        style={styles.searchInput}
+                        name="number"
+                        placeholder=""
+                      />
+                    </div>
+                  </CCol>
+                  <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Số điện thoại</p>
+                      <Input
+                        style={styles.searchInput}
+                        name="number"
+                        placeholder=""
+                      />
+                    </div>
+                  </CCol>
+                  <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Tên nhóm</p>
+                      <Input
+                        style={styles.searchInput}
+                        name="number"
+                        placeholder=""
+                      />
+                    </div>
+                  </CCol>
+                </CRow>
+                <div className="flex-end" style={{ marginTop: "1rem" }}>
+                
+                  <CButton
+                    color="info"
+                    size="md"
+                    className="btn-main"
+                    onClick={() => this.handleShowAddNewSales()}
+                    style={{ marginRight: "10px" }}
+                  >
+                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                  </CButton>
+                  <CButton
                     color="info"
                     style={{ marginRight: "10px" }}
                     size="md"
@@ -492,17 +541,9 @@ class ManageSales extends Component {
                   >
                     <BsSearch style={{ margin: "auto 6px auto 0" }} />
                     <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
-                  </CButton> */}
-                  <CButton
-                    color="info"
-                    size="md"
-                    className="btn-main"
-                    onClick={() => this.handleShowAddNewSales()}
-                  >
-                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                    <p style={{ margin: "auto 0" }}>Thêm mới</p>
                   </CButton>
                 </div>
+                
               </CardHeader>
               <CardBody className="table__overflow">
                 <table
@@ -542,9 +583,9 @@ class ManageSales extends Component {
             <Typography
               variant="subtitle1"
               component="h2"
-              style={{ margin: "0.6rem 0 0.6rem 0" }}
+              style={{ margin: "1rem 0 0 0" }}
             >
-              Họ tên: <span style={{ color: "red" }}>(*)</span>:
+              Họ tên
             </Typography>
             <TextField
               id="outlined-basic"
@@ -561,9 +602,9 @@ class ManageSales extends Component {
             <Typography
               variant="subtitle1"
               component="h2"
-              style={{ margin: "0.6rem 0 0.6rem 0" }}
+              style={{ margin: "1rem 0 0 0" }}
             >
-              Email: <span style={{ color: "red" }}>(*)</span>:
+              Email
             </Typography>
             <TextField
               id="outlined-basic"
@@ -580,9 +621,9 @@ class ManageSales extends Component {
             <Typography
               variant="subtitle1"
               component="h2"
-              style={{ margin: "0.6rem 0 0.6rem 0" }}
+              style={{ margin: "1rem 0 0 0" }}
             >
-              SĐT: <span style={{ color: "red" }}>(*)</span>:
+              SĐT (*)
             </Typography>
             <TextField
               id="outlined-basic"
@@ -600,9 +641,9 @@ class ManageSales extends Component {
             <Typography
               variant="subtitle1"
               component="h2"
-              style={{ margin: "0.6rem 0 0.6rem 0" }}
+              style={{ margin: "1rem 0 0 0" }}
             >
-              Địa chỉ:
+              Địa chỉ
             </Typography>
             <TextField
               id="outlined-basic"
@@ -618,9 +659,9 @@ class ManageSales extends Component {
             <Typography
               variant="subtitle1"
               component="h2"
-              style={{ margin: "1.2rem 0 0.6rem 0" }}
+              style={{ margin: "1.2rem 0 0 0" }}
             >
-              Mã giới thiệu:
+              Mã giới thiệu
             </Typography>
             <TextField
               id="outlined-basic"
@@ -636,9 +677,9 @@ class ManageSales extends Component {
             <Typography
               variant="subtitle1"
               component="h2"
-              style={{ margin: "0.6rem 0 0.6rem 0" }}
+              style={{ margin: "1rem 0 0 0" }}
             >
-              Tên tài khoản: <span style={{ color: "red" }}>(*)</span>:
+              Tên tài khoản (*)
             </Typography>
             <TextField
               id="outlined-basic"
@@ -654,9 +695,9 @@ class ManageSales extends Component {
             <Typography
               variant="subtitle1"
               component="h2"
-              style={{ margin: "0.6rem 0 0.6rem 0" }}
+              style={{ margin: "1rem 0 0 0" }}
             >
-              Mật khẩu: <span style={{ color: "red" }}>(*)</span>:
+              Mật khẩu (*)
             </Typography>
             <FormControl variant="outlined" fullWidth size="small">
               <InputLabel htmlFor="outlined-adornment-password">
@@ -691,7 +732,7 @@ class ManageSales extends Component {
               <Typography
                 variant="subtitle1"
                 component="h2"
-                style={{ margin: "0.6rem 0 0.6rem 0" }}
+                style={{ margin: "1rem 0 0 0" }}
               >
                 Quyền trưởng nhóm:
               </Typography>
@@ -774,6 +815,44 @@ class ManageSales extends Component {
           </ModalFooter>
         </Modal>
         {/* ------------------END MODAL DELETE COLLABORATOR------------------------- */}
+        <Modal isOpen={this.state.modalSelect} className={this.props.className}>
+          <ModalHeader>Xuất File</ModalHeader>
+          <ModalBody>      
+          <RadioGroup name="use-radio-group" defaultValue="first">
+            {
+              this.state.dataCampaign && this.state.dataCampaign.length > 0 ? this.state.dataCampaign.map((item, index) => {
+                return (
+                  <FormControlLabel value={item._id} onChange={(e)=>console.log(e,item._id)} control={<Radio />} label={item.name} />
+                )
+              }) : null
+            }
+          </RadioGroup>     
+
+          </ModalBody>
+          <ModalFooter>
+            <CButton
+              color="primary"
+              onClick={(e) => {
+                this.state.actionModalSelect === "new"
+                  ? this.addVoucher()
+                  : this.updateVoucher();
+              }}
+              disabled={this.state.isLoading}
+            >
+              Lưu
+            </CButton>{" "}
+            <CButton
+              color="secondary"
+              onClick={(e) =>
+                this.setState({
+                  modalSelect: !this.state.modalSelect,
+                })
+              }
+            >
+              Đóng
+            </CButton>
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }

@@ -37,98 +37,66 @@ export default class Voucher extends Component {
             Lưu thay đổi
           </Button>
         </div>
-        <div class="config-web__border-img">
-          <div className="">
-            <h1>Popup Thông Tin Voucher</h1>
-          </div>
-          <div className="relative">
-            <img
-              className="config-web__img-homepage"
-              style={{ width: "100%", height: "auto" }}
+        <div class="flex-a-center config-box-border">
+          <div>
+            <img         
+              style={{ width: '400px', height: "auto" }}
               src="/assets/image/popup-thong-tin-voucher.png"
               alt="voucher"
             />
-          <div className="field__editor field__editor-voucher--endow">
+          </div>
+          <div style={{ width: "100%" }}>
             <TextFieldGroup
                 field="voucherEndow"
-                label=""
+                label="Ưu đãi"
                 value={this.props?.voucherEndow}
-                placeholder={""}
+                placeholder={"1.000.000đ"}
                 onChange={(e) => {
                   this.setStateByName("voucherEndow", e.target.value);
                 }}
               />
-              <CButton
-                shape="rounded-pill" color="info" size="md">
-              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
-            </CButton>
-          </div>
-          <div className="field__editor field__editor-voucher--expiry">
-            <TextFieldGroup
+              <TextFieldGroup
                 field="voucherExpiry"
-                label=""
+                label="Hiệu lực"
                 value={this.props?.voucherExpiry}
-                placeholder={""}
+                placeholder={"30 ngày kể từ ngày nhận voucher"}
                 onChange={(e) => {
                   this.setStateByName("voucherExpiry", e.target.value);
                 }}
               />
-              <CButton
-                shape="rounded-pill" color="info" size="md">
-              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
-            </CButton>
-          </div>
-          <div className="field__editor field__editor-voucher--supplier">
-            <TextFieldGroup
+              <TextFieldGroup
                 field="voucherSupplier"
-                label=""
+                label="Nhà cung cấp"
                 value={this.props?.voucherSupplier}
-                placeholder={""}
+                placeholder={"Chưa có"}
                 onChange={(e) => {
                   this.setStateByName("voucherSupplier", e.target.value);
                 }}
               />
-              <CButton
-                shape="rounded-pill" color="info" size="md">
-              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
-            </CButton>
-          </div>
-          <div className="field__editor field__editor-voucher--condition">
-            <TextFieldGroup
+              <TextFieldGroup
                 field="voucherCondition"
-                label=""
+                label="Điều kiện"
                 value={this.props?.voucherCondition}
-                placeholder={""}
+                placeholder={"Sử dụng một lần"}
                 onChange={(e) => {
                   this.setStateByName("voucherCondition", e.target.value);
                 }}
               />
-              <CButton
-                shape="rounded-pill" color="info" size="md">
-              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
-            </CButton>
-          </div>
-          <div className="field__editor field__editor-voucher--sendSMS">
-            <TextFieldGroup
+               <TextFieldGroup
                 field="sendSMS"
-                label=""
+                label="Thông báo khách hàng"
                 value={this.props?.sendSMS}
-                placeholder={""}
+                placeholder={"Hãy lưu lại mã voucher, chúng..."}
                 onChange={(e) => {
                   this.setStateByName("sendSMS", e.target.value);
                 }}
               />
-              <CButton
-                shape="rounded-pill" color="info" size="md">
-              <FiEdit3 style={styles.icon} className="icon" name="cilPencil" />
-            </CButton>
           </div>
-          </div>         
         </div>
         <div class="flex-a-center config-box-border">
           <div>
             <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
+              style={{ maxWidth: "300px", marginRight: "10px" }}
               src="/assets/image/hinh-anh-voucher.png"
               alt="img"
             />

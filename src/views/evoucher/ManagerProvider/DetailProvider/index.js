@@ -129,7 +129,7 @@ class Users extends Component {
     var i,
       j,
       temparray,
-      chunk = 8;
+      chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);

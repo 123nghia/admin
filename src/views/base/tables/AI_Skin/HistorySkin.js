@@ -48,7 +48,7 @@ class HistorySkin extends Component {
       activePage: 1,
       numPage: 1,
       itemsCount: 0,
-      itemPerPage: 7,
+      itemPerPage: 50,
       hidden: false,
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -91,10 +91,9 @@ class HistorySkin extends Component {
     this.getDataSeo();
     if (this.state.type == '0') {
       this.getData()
-    } else {
-      this.getData_ByCondition()
+    }else {
+      // this.getData_ByCondition()
     }
-
     let arr = JSON.parse(localStorage.getItem('url'));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -112,22 +111,22 @@ class HistorySkin extends Component {
     console.log(this.state.statusVoucher);
     console.log(this.state.idDataSales);
   
-    await this.getData_ByCondition(this.state.idDataSales);
+    await this.getData(this.state.idDataSales);
   }
   getData = async (key) => {
-    
     const { activePage, itemPerPage } = this.state;
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN,
       data: {
+       
         page: activePage,
         limit: itemPerPage
       },
       method: 'POST'
     });
-
+    console.log("call")
     let data = res.data.data;
     console.log("Data",data);
     this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });
@@ -160,7 +159,7 @@ class HistorySkin extends Component {
       if (type == '0' || type == '1') {
         this.getData()
       } else {
-        this.getData_ByCondition()
+        // this.getData_ByCondition()
       }
     });
   };
@@ -174,8 +173,9 @@ class HistorySkin extends Component {
       url: Constants.LIST_HISTORY_SKIN_BY_CONDITION,
       method: 'POST',
       data: {
-        saleId : key,
         roleType: this.state.type,
+
+        saleId : key,
         userId: JSON.parse(this.state.user).sale_id,
         page: activePage,
         limit: itemPerPage
@@ -254,7 +254,7 @@ class HistorySkin extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-align-justify title_header">
-                  Lịch sử soi da
+                  Lịch sử soi da 1
                 </i>
 
                 <CRow>
@@ -430,8 +430,8 @@ class HistorySkin extends Component {
                           return (
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.Name}</td>
-                              <td className="text-center">{item.Phone}</td>
+                              <td className="text-center">{item.Name === "xx" ? "Chưa đăng nhập" : item.Name}</td>
+                              <td className="text-center">{item.Phone === "xxx" ? "Chưa đăng nhập" : item.Phone}</td>
 
                               <td className="text-center">
                                 <img

@@ -2,6 +2,7 @@ import React from "react";
 import Constants from "../../../contants/contants";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 
 import { Card, CardBody, CardHeader, Col, Row, Input } from "reactstrap";
 import { CButton, CCol, CRow } from "@coreui/react";
@@ -36,7 +37,7 @@ function ManagerSaleGroupIndex() {
     var i,
       j,
       temparray,
-      chunk = 8;
+      chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -277,11 +278,11 @@ function ManagerSaleGroupIndex() {
               </CRow>
             </CardHeader>
             <CardBody className="table__overflow">
-              <div class="flex-center">
+              <div className="flex-end mb-1">
                 <CButton
                   color="info"
                   style={{
-                    marginBottom: "20px",
+               
                     marginRight: "10px",
                   }}
                   size="md"
@@ -291,7 +292,20 @@ function ManagerSaleGroupIndex() {
                   <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
                   <p style={{ margin: "auto 0" }}>Tạo nhóm</p>
                 </CButton>
+                <CButton
+                  color="info"
+                  style={{ marginRight: "10px" }}
+                  size="md"
+                  
+                  onClick={(e) => {
+                    this.onSearch();
+                  }}
+                >
+                  <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                  <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                </CButton>
               </div>
+
               <TableInManagerSaleGroup
                 propsSaleGroup={showGroup}
                 setUpdateInput={setUpdateInput}

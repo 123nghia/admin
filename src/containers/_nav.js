@@ -228,7 +228,7 @@ const _navOverview = [
             customClasses="c-sidebar-nav-icon c-sidebar-nav-icon-child"
           />
         ),
-        role: ["0", "2"],
+        role: ["0"],
         badge: {
           color: "info",
           text: (
@@ -516,19 +516,7 @@ const _navMangerCampaigns = [
           ),
         },
       },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Danh sách Banner",
-        to: "/quan-ly-banner",
-        icon: (
-          <CIcon
-            style={css}
-            content={freeSet.cilList}
-            customClasses="c-sidebar-nav-icon c-sidebar-nav-icon-child"
-          />
-        ),
-        role: ["0"],
-      },
+  
       {
         _tag: "CSidebarNavItem",
         name: "Quản lý Tồn kho eVoucher",
@@ -596,7 +584,7 @@ const _navMangerUser = [
         customClasses="c-sidebar-nav-icon"
       />
     ),
-    role: ["0", "1", "2"],
+    role: ["0"],
     _children: [
       {
         _tag: "CSidebarNavItem",
@@ -753,7 +741,7 @@ const _navMangerUser = [
         className="c-sidebar-nav-icon"
       />
     ),
-    role: ["0", "1", "2"],
+    role: ["0"],
     badge: {
       color: "info",
       text: (

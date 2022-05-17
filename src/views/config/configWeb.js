@@ -127,11 +127,7 @@ class ConfigWeb extends Component {
           name: "Cấu hình mạng xã hội",
           icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />,
         },
-        {
-          _id: "7",
-          name: "Thông tin footer",
-          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />,
-        },
+    
         {
           _id: "8",
           name: "Quản lý màu sắc",
@@ -303,10 +299,8 @@ class ConfigWeb extends Component {
                   loginWatchVoucher: this.state.form.loginWatchVoucher,
                   receiveVoucher: this.state.form.receiveVoucher,
                   textSales: this.state.form.textSales,
-                  registerGetVoucher: this.state.form.registerGetVoucher,
+                  btn_register_get_voucher : this.state.form.btn_register_get_voucher,
                   title_get_voucher: this.state.form.title_get_voucher,
-
-                  
                   receiveVoucherSuccess:
                     this.state.form.receiveVoucherSuccess,
                     
@@ -329,8 +323,7 @@ class ConfigWeb extends Component {
                   voucherCondition: this.state.voucher.voucherCondition,
                   infoVoucher: this.state.voucher.infoVoucher,
                   imageFormVoucher: this.state.voucher.imageFormVoucher,
-                  sendSMS: this.state.voucher.sendSMS,
-           
+                  sendSMS: this.state.voucher.sendSMS,          
                 });
               }
               if (banner) {
@@ -415,6 +408,7 @@ class ConfigWeb extends Component {
               }
               if (logos) {
                 this.setState({
+                  classLogo : valueConfig.value.logos.classLogo,
                   hrefLogoHeader: valueConfig.value.logos.header.href,
                   hrefLogoFooter: valueConfig.value.logos.footer.href,
                   image: valueConfig.value.logos.header.logo,
@@ -726,7 +720,7 @@ class ConfigWeb extends Component {
       
       coppyData.value.form.title_get_voucher = this.state.title_get_voucher;
       coppyData.value.form.registerGetVoucher = this.state.registerGetVoucher;
-
+      coppyData.value.form.btn_register_get_voucher = this.state.btn_register_get_voucher;
       coppyData.value.form.receiveVoucher = this.state.registerGetVoucher;
       coppyData.value.form.textSales = this.state.textSales;
       coppyData.value.form.loginWatchVoucher = this.state.loginWatchVoucher;
@@ -791,7 +785,7 @@ class ConfigWeb extends Component {
       coppyData.value.seoInfo.key = keywordSeo;
       let newImage4 = await this.postImage(imgLayout_link);
       if (newImage4) {
-        coppyData.value.seoInfo.favicon = `${Constants.BASE_URL}image_brand/${newImage4}`;
+        coppyData.value.seoInfo.imageShare = `${Constants.BASE_URL}image_brand/${newImage4}`;
       }
       let imageShare = await this.postImage(this.state.imageShareSeo_link);
       if (imageShare) {
@@ -817,6 +811,7 @@ class ConfigWeb extends Component {
       if (!coppyData.value.logos) {
         coppyData.value.logos = {};
       }
+      coppyData.value.logos.classLogo = this.state.classLogo;
       let newImage = await this.postImage(this.state.image_link);
       if (newImage) {
         coppyData.value.logos.header.logo = `${Constants.BASE_URL}image_brand/${newImage}`;
@@ -1038,7 +1033,7 @@ class ConfigWeb extends Component {
       }
     );
   }
-  async updateCompany(e) {
+  updateColor = async(e)=> {
     e.preventDefault();
     const {
       mainColor,
@@ -1271,6 +1266,7 @@ class ConfigWeb extends Component {
                   hrefLogoHeader={this.state.hrefLogoHeader}
                   imgLogoFooter={this.state.imgLogoFooter}  
                   hrefLogoFooter={this.state.hrefLogoFooter}
+                  classLogo={this.state.classLogo}
                 />
               </div>
               <div id="tabcontent5" className="tabcontent ">
@@ -1297,7 +1293,7 @@ class ConfigWeb extends Component {
                   hrefZalo={this.state.hrefZalo}
                 />
               </div>
-              <div id="tabcontent7" className="tabcontent">
+              {/* <div id="tabcontent7" className="tabcontent">
                 <Footer
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
@@ -1306,11 +1302,11 @@ class ConfigWeb extends Component {
                   centerFooterRight={this.state.centerFooterRight}
                   footerRight={this.state.footerRight}
                 />
-              </div>
+              </div> */}
               <div id="tabcontent8" className="tabcontent">
                 <ChangeColor
                   setStateByName={this.setStateByName}
-                  updateCompany={this.updateCompany}
+                  updateColor={this.updateColor}
                   isDisable={this.state.isDisable}
                   mainColor={this.state.mainColor}
                   button_color={this.state.button_color}
