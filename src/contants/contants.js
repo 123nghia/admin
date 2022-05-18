@@ -1,6 +1,6 @@
 export default {
-  BASE_URL: "https://api.deal24h.vn/",
-  // BASE_URL: "http://192.168.1.5:3018/",
+  // BASE_URL: "https://api.deal24h.vn/",
+  BASE_URL: "http://192.168.1.5:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
@@ -64,6 +64,8 @@ export default {
   UPDATE_VOUCHER: "api/evoucher/update",
   DELETE_VOUCHER: "api/evoucher/delete",
 
+  
+  GET_USER_EVOUCHER_FOR_PARTNER: "api/partner/evoucher/list-customer-request",
   GET_USER_EVOUCHER: "api/evoucher/list-customer-request",
   ADD_USER_EVOUCHER: "api/evoucher/list-customer-request",
   UPDATE_USER_EVOUCHER: "api/evoucher/list-customer-request",

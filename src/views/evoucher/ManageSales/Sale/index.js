@@ -377,7 +377,7 @@ class ManageSales extends Component {
               <BiExport style={styles.icon} name="cilPencil" />
               Export
             </CButton>
-            <Link to={`/detail-collaborators/${collaborator?._id}`}>
+            <Link to={`/detail-pg/${collaborator?._id}`}>
               <CButton
                 shape="rounded-pill"
                 variant="outline"

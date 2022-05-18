@@ -53,6 +53,8 @@ class ListUserEvoucher extends Component {
       token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       type: localStorage.getItem("type"),
       user: localStorage.getItem("user"),
+      company_slug: JSON.parse(localStorage.getItem("user")).company_slug,
+      typePartner : JSON.parse(localStorage.getItem("user")).typePartner,
       isLoading: false,
       idHistory: "",
       toggleHistory: false,
@@ -246,15 +248,19 @@ class ListUserEvoucher extends Component {
       company_id_output = idDataCompany;
     }
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.GET_USER_EVOUCHER;
-
+    let baseUrlCallApi = null;
+    if(this.state.typePartner){
+      baseUrlCallApi = Constants.GET_USER_EVOUCHER_FOR_PARTNER;
+    }else{
+      baseUrlCallApi = Constants.GET_USER_EVOUCHER;
+    }
     let url = baseUrlapi + baseUrlCallApi;
 
-    // API search for user evoucher table
     await axios
       .get(url, {
         params: {
           saleId: saleId,
+          partner : this.state.company_slug,
           phoneNumber,
           from,
           to,

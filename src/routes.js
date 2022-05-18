@@ -207,6 +207,10 @@ const DetailProvider = React.lazy(() =>
 const DetailInventory = React.lazy(() =>
   import("./views/evoucher/DetailInventory")
 );
+
+const DetailPG = React.lazy(() =>
+  import("./views/evoucher/ManageSales/Sale/detail")
+);
 // evoucher - log
 const Iplog = React.lazy(() => import("./views/evoucher/Log/Iplog/index.js"));
 const Smslog = React.lazy(() => import("./views/evoucher/Log/Sms/index.js"));
@@ -244,10 +248,16 @@ const routes = [
     component: roleUser === "0" ? ND : NotEnough,
   },
   // evoucher - details
+  
   {
     path: "/detail-evoucher/:id",
     name: "DetailVoucher",
     component: DetailVoucher,
+  },
+  {
+    path: "/detail-pg/:id",
+    name: "DetailPG",
+    component: DetailPG,
   },
   {
     path: "/detail-inventory/:id",
