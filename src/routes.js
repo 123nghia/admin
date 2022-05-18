@@ -180,7 +180,9 @@ const AdminConfigWebsite = React.lazy(() =>
 const ManageSalesGroup = React.lazy(() =>
   import("./views/evoucher/ManageSalesGroup/ManagerSaleGroupIndex.js")
 );
-
+const ManagePj = React.lazy(() =>
+  import("./views/evoucher/ManageSales/Sale/index.js")
+);
 const DetailManagerSaleGroup = React.lazy(() =>
   import(
     "./views/evoucher/ManageSalesGroup/DetailManageSaleGroup/DetailManageSaleGroupIndex.js"
@@ -300,6 +302,7 @@ const routes = [
     component: roleUser === "0" ? BannerPromotion : NotEnough,
   },
   // evoucher - manage
+  { path: "/manage-pg", name: "ManagePj", component: ManagePj },
   { path: "/manage-voucher", name: "ManageVoucher", component: ManageVoucher },
   {
     path: "/manage-campaign",

@@ -497,6 +497,27 @@ const _navMangerCampaigns = [
       },
       {
         _tag: "CSidebarNavItem",
+        name: "Quản lý PG",
+        to: "/manage-pg",
+        icon: (
+          <AiFillSetting
+            style={css}
+            content={freeSet.cilUserPlus}
+            className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
+          />
+        ),
+        role: ["1", "2"],
+        badge: {
+          color: "info",
+          text: (
+            <CTooltip placement={"right"} content={content.none}>
+              <CIcon content={freeSet.cilInfo} />
+            </CTooltip>
+          ),
+        },
+      },
+      {
+        _tag: "CSidebarNavItem",
         name: "Quản lý Banner Trang chủ",
         to: "/banner-sales",
         icon: (

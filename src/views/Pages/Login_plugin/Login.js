@@ -93,6 +93,7 @@ class Login extends Component {
         localStorage.setItem(
           "user",
           JSON.stringify({
+            typePartner : token.typePartner,
             username: this.state.username,
             password: this.state.password,
             company_id: res.data.data.data.Company_Id,
