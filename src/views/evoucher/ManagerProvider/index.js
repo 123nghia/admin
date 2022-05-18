@@ -138,7 +138,7 @@ class EndUser extends Component {
     });
   };
   async componentDidMount() {
-    this.getData();
+    await this.getData();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].url == window.location.hash) {
@@ -193,10 +193,8 @@ class EndUser extends Component {
       })
       .then((res) => {
         let val = res.data.data;
-        // console.log(res)
         this.pagination(val);
         this.setState({ dataApi: val });
-
         let active = 0;
         val.map((val) => {
           if (val.Status == "Actived") {
@@ -214,6 +212,7 @@ class EndUser extends Component {
   async openUpdate(item) {
     this.setState({
       action: "edit",
+      idActionCurrent : item._id,
       modalEdit: true,
       Name: item.Name,
       Email: item.Email,
@@ -226,7 +225,7 @@ class EndUser extends Component {
     });
   }
   async update() {
-    const { Name, Brand, introduction, Status, TypeId, Email, Logo } =
+    const { Name, Brand, introduction, Status, TypeId, Email, Logo , idActionCurrent} =
       this.state;
 
     var baseUrlapi = Constants.BASE_URL;
@@ -248,6 +247,7 @@ class EndUser extends Component {
         Brand: Brand,
         TypeId: TypeId,
         Logo: imgOutput,
+        id : idActionCurrent
       })
       .then((res) => {
         console.log(res);
@@ -326,10 +326,6 @@ class EndUser extends Component {
         name: Name,
       })
       .then((res) => {
-        let val = res.data;
-        this.pagination(val);
-        this.setState({ data: val });
-   
         Swal.fire({
           icon: "success",
           title: "Thêm thành công",
@@ -337,21 +333,16 @@ class EndUser extends Component {
           timer: 700,
         });
         if (res.data.is_success == true) {
-          this.getData();
+          this.setState({ isLoading: false });
           this.setState({ modalVoucher: !this.state.modalVoucher });
           this.setState({
             errorMessage: "",
           });
+          this.getData();
         } else {
           alert("Thêm không thành công");
           this.setState({ isLoading: false });
-        }
-        // if (res.data.status === 202) {
-        //   this.setState({
-        //     errorMessage: res.message,
-        //   });
-        //   console.log(this.state.errorMessage);
-        // }
+        };
       });
   }
   openDelete = (item) => {

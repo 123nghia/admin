@@ -40,7 +40,7 @@ import Seo from "./configWeb/Seo";
 import ButtonConfig from "./configWeb/Button";
 import ChangeColor from "./configWeb/Color";
 import Homepage from "./configWeb/Homepage";
-
+import VoucherPartner from "./configWeb/VoucherPartner";
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 
@@ -50,6 +50,9 @@ class ConfigWeb extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      bannerCampaign : [],
+      actionModalBannerCampaign : "new",
+      modalBannerCampaign : false,
       centerFooterLeft: true,
       centerFooterRight: true,
       configData: [],
@@ -109,7 +112,7 @@ class ConfigWeb extends Component {
         },
         {
           _id: "13",
-          name: "Aia",
+          name: "Quản lý nhà cung cấp",
           icon: <BiWorld style={{ width: "24px ", height: "24px " }} />,
         },
         {
@@ -263,6 +266,8 @@ class ConfigWeb extends Component {
               voucher: valueConfig.value.voucher,
               form: valueConfig.value.form,
               aia: valueConfig.value.aia,
+              bannerCampaign : valueConfig.value.bannerCampaign,
+
             },
             () => {
               const {
@@ -278,6 +283,7 @@ class ConfigWeb extends Component {
                 voucher,
                 form,
                 aia,
+                bannerCampaign
               } = this.state;
               if (aia) {
                 this.setState({
@@ -341,6 +347,11 @@ class ConfigWeb extends Component {
                   imageBannerMobile_link: this.state.banner.imageBannerMobile,
                   imageBannerMobile_show: this.state.banner.imageBannerMobile,
                 });
+              }
+              if(bannerCampaign){
+                this.setState({
+                  bannerCampaign: this.state.bannerCampaign
+                })
               }
               if (footer) {
                 this.setState({
@@ -661,6 +672,9 @@ class ConfigWeb extends Component {
       coppyData.value.mxh.zalo.appid = this.state.keyAppZalo;
       coppyData.value.mxh.zalo.password = this.state.PassZalo;
       coppyData.value.mxh.zalo.href = this.state.hrefZalo;
+    }
+    if(change === "bannerCampaign"){
+      coppyData.value.bannerCampaign = this.state.bannerCampaign;
     }
     if (change === "chats") {
       coppyData.value.chatMess = this.state.codeMess;
@@ -1091,6 +1105,134 @@ class ConfigWeb extends Component {
   setStateByName = (name, value) => {
     this.setState({ [name]: value });
   };
+  openFormAddBannerCampaign = () => {
+    console.log("1")
+    this.setState({
+      nameBannerCampaign: "",
+      image_banner_campaign: "",
+      image_banner_campaign_link: "",
+      image_banner_campaign_show: "",
+      contentBannerCampaign: "",
+      hrefBannerCampaign: "",
+      outputBannerCampaign: "",
+      modalBannerCampaign : true,
+      actionModalBannerCampaign: "new"
+    })
+  }
+  openEditBannerCampaign = (item,i) => {
+    
+    this.setState({
+      indexBannerUpdate : i,
+      nameBannerCampaign: item.name,
+      image_banner_campaign: item.image,
+      image_banner_campaign_link: item.image,
+      image_banner_campaign_show: item.image,
+      contentBannerCampaign: item.content,
+      hrefBannerCampaign: item.link,
+      outputBannerCampaign: item.output,
+      modalBannerCampaign : true,
+      actionModalBannerCampaign: "edit"
+    })
+  }
+  deleteBannerCampaign = async (i) => {
+    const { dataConfigWeb } = this.state;
+    let coppyData = {
+      ...dataConfigWeb,
+    };
+    coppyData.value.bannerCampaign.splice(i, 1);
+    this.setState(
+      {
+        dataConfigWeb: coppyData,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Xóa thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.getDataConfigWeb();
+        });
+      }
+    );
+  }
+  saveAddBannerCampaign = async () => {
+    let newImage = await this.postImage(this.state.image_banner_campaign_link);
+    let imageOutput;
+    if (newImage) {
+      imageOutput = `${Constants.BASE_URL}image_brand/${newImage}`;
+    } else {
+      imageOutput = "";
+    }
+    let ob = {
+      image: imageOutput,
+      name : this.state.nameBannerCampaign,
+      content: this.state.contentBannerCampaign,
+      link: this.state.hrefBannerCampaign,
+      output : this.state.outputBannerCampaign,
+    };
+    let coppy = { ...this.state.dataConfigWeb };
+    if(!coppy.value.bannerCampaign){
+      coppy.value.bannerCampaign = []
+    }
+    coppy.value.bannerCampaign.push(ob);
+    this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Thêm mới thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.setState({
+            modalBannerCampaign: false,
+          });
+          this.getDataConfigWeb();
+        });
+      }
+    );
+  }
+  saveEditBannerCampaign = async () => {
+    let newImage = await this.postImage(this.state.image_banner_campaign_link);
+    let imageOutput = this.state.image_banner_campaign;
+    if (newImage) {
+      imageOutput = `${Constants.BASE_URL}image_brand/${newImage}`;
+    }
+      let ob = {
+        image: imageOutput,
+        name : this.state.nameBannerCampaign,
+        content: this.state.contentBannerCampaign,
+        link: this.state.hrefBannerCampaign,
+        output : this.state.outputBannerCampaign,
+      };
+    let coppy = { ...this.state.dataConfigWeb };
+
+    coppy.value.bannerCampaign[this.state.indexBannerUpdate] = ob;
+    await this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        Swal.fire({
+          icon: "success",
+          title: "Cập nhật thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+        this.setState({
+          modalBannerCampaign: false,
+        });
+        await this.onUpdate();
+
+        this.getDataConfigWeb();
+      }
+    );
+  }
   render() {
     const { contentSlide } = this.state;
 
@@ -1200,17 +1342,23 @@ class ConfigWeb extends Component {
                 />
               </div>
               <div id="tabcontent13" className="tabcontent">
-                <Aia
+              <VoucherPartner
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  bannerCampaign={this.state.bannerCampaign}
+                  modalBannerCampaign={this.state.modalBannerCampaign}
+                  actionModalBannerCampaign={this.state.actionModalBannerCampaign}
+                  nameBannerCampaign={this.state.nameBannerCampaign}
+                  image_banner_campaign={this.state.image_banner_campaign}
+                  contentBannerCampaign={this.state.contentBannerCampaign}
+                  hrefBannerCampaign={this.state.hrefBannerCampaign}
+                  outputBannerCampaign={this.state.outputBannerCampaign}
                   setStateByName={this.setStateByName}
-                  titleGetVoucherAia={this.state.titleGetVoucherAia}
-                  titleListCam={this.state.titleListCam}
-                  titleSuggestFormLoginGetVoucher={
-                    this.state.titleSuggestFormLoginGetVoucher
-                  }
-                  titleFormGetVoucherAfterLoginFormSuggest={
-                    this.state.titleFormGetVoucherAfterLoginFormSuggest
-                  }
+                  openFormAddBannerCampaign={this.openFormAddBannerCampaign}
+                  openEditBannerCampaign={this.openEditBannerCampaign}
+                  deleteBannerCampaign={this.deleteBannerCampaign}
+                  saveAddBannerCampaign={this.saveAddBannerCampaign}
+                  saveEditBannerCampaign={this.saveEditBannerCampaign}
+                  onChangeImage={this.onChangeImage}
                 />
               </div>
               <div id="tabcontent11" className="tabcontent">
