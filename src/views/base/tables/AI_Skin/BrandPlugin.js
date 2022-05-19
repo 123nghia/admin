@@ -9,6 +9,7 @@ import {
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 
 import {
   CButton,
@@ -126,7 +127,7 @@ class BrandPlugin extends Component {
 
     let active = 0
 
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ isLoading: false, totalActive: active , totalRecord : res_brand.data.totalRecord});
   }
 
   getData_Company = async () => {
@@ -144,7 +145,7 @@ class BrandPlugin extends Component {
 
     let active = 0
 
-    this.setState({ isLoading: false, totalActive: active });
+    this.setState({ isLoading: false, totalActive: active , totalRecord : res_brand.data.totalRecord});
   }
 
   searchKey() {
@@ -271,7 +272,28 @@ class BrandPlugin extends Component {
     })
   }
   
+  async ExportsFileExcel() {
+    const { company_id } = this.state;
 
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  }
   async updateBrand() {
     const { name, image, link, image_link } = this.state
 
@@ -381,7 +403,7 @@ class BrandPlugin extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Danh sách thương hiệu 1
+                    Danh sách thương hiệu
                   </i>
 
                   <CRow>
@@ -400,7 +422,21 @@ class BrandPlugin extends Component {
                       </div>
                     </CCol>
                   </CRow>
-                  <div className="flex-end">
+                  <div className="flex-center-space" style={{margin : '10px 0 0 0'}}>
+                    <div>
+                    <CButton
+                        color="success"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="flex-center"
+                        onClick={() => this.ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                    </div>
+                    <div className="flex">
                     <CButton
                       color="info"
                       style={{ marginRight: "10px" }}
@@ -423,8 +459,10 @@ class BrandPlugin extends Component {
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
                   </div>
+                  </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
+                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table"

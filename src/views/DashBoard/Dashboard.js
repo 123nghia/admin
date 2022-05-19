@@ -12,12 +12,14 @@ const Dashboard = () => {
   return (
     <>
       <WidgetsDropdown />
-      <CCard className="mb-4">
+      <CCard className="mb-4 mt-5">
         <CCardBody>
-              <h4 id="traffic" className="card-title mb-0">
+   
+            <h4 id="traffic" className="card-title mb-0">
                 Traffic
               </h4>
               <div className="small text-medium-emphasis">January - July 2021</div>
+           
         </CCardBody>
       </CCard>
     </>

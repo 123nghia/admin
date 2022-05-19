@@ -6,6 +6,8 @@ export default {
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
   BASE_URL_CURRENT: "https://id.deal24h.vn/",
 
+  GET_OVERVIEW : "api/dashboard/overview",
+
   GET_NDLOG: "api/ngocdungLog/get-all",
   CHANGE_STATUS: "api/ngocdungLog/checkStatus",
   GET_DETAIL_NDLOG: "api/ngocdungLog/get-by-id",

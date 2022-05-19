@@ -209,7 +209,7 @@ class DetailCampaign extends Component {
 
         let active = 0;
 
-        this.setState({ isLoading: false, totalActive: active });
+        this.setState({ isLoading: false, totalActive: active ,  totalRecord : res.data.totalRecord});
       });
   }
 
@@ -387,6 +387,7 @@ class DetailCampaign extends Component {
                 </table>
               </div>
               <div className="tabcontent">
+
                 <table className="table table-hover table-outline mb-0 d-none d-sm-table table_dash table-details-campaign">
                   <thead></thead>
                   <tbody>
@@ -476,6 +477,8 @@ class DetailCampaign extends Component {
                   <p style={{ margin: "auto 0" }}>Xuất File</p>
                 </CButton>
                 <a id="download_excel" download></a>
+              <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+
                 <div class="" style={{ width: "100%", overflowX: "scroll" }}>
                   <table
                     ble

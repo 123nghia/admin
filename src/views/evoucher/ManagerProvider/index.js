@@ -15,6 +15,8 @@ import {
   Modal,
 } from "reactstrap";
 import Swal from "sweetalert2";
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
+
 import {
   CButton,
   CLabel,
@@ -201,7 +203,7 @@ class EndUser extends Component {
             active = active + 1;
           }
         });
-        this.setState({ isLoading: false, totalActive: active });
+        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.totalRecord });
       });
   }
 
@@ -343,6 +345,28 @@ class EndUser extends Component {
           alert("Thêm không thành công");
           this.setState({ isLoading: false });
         };
+      });
+  }
+  async ExportsFileExcel() {
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
       });
   }
   openDelete = (item) => {
@@ -868,7 +892,22 @@ class EndUser extends Component {
                     </CCol>
                   </CRow>
 
-                  <div className="flex-end">
+                  <div className="flex-center-space">
+                    <div>
+                    <CButton
+                        color="success"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="flex-center"
+                        onClick={() => this.ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                    </div>
+                    <div className="flex">
+
                     <CButton
                       color="info"
                       style={{ marginBottom: "10px", marginRight: "10px" }}
@@ -892,9 +931,12 @@ class EndUser extends Component {
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
                   </div>
+                  </div>
+
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {data?.length}</h5>
+                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+
 
                   <table
                     ble

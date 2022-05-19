@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   CWidgetDropdown,
   CRow,
@@ -6,141 +6,141 @@ import {
   CDropdown,
   CDropdownMenu,
   CDropdownItem,
-  CDropdownToggle
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import ChartLineSimple from '../charts/ChartLineSimple'
-import ChartBarSimple from '../charts/ChartBarSimple'
+  CDropdownToggle,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import ChartLineSimple from "../charts/ChartLineSimple";
+import ChartBarSimple from "../charts/ChartBarSimple";
+import { CButton } from "@coreui/react";
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
+import Constants from "../../contants/contants";
+import axios from "axios";
+
+const listLineChart = [
+  {
+    name: "line1",
+    dataPoint: [65, 59, 84, 84, 51, 55, 40],
+  },
+  {
+    name: "line2",
+    dataPoint: [1, 18, 9, 17, 34, 22, 11],
+  },
+  {
+    name: "line3",
+    dataPoint: [78, 81, 80, 45, 34, 12, 40],
+  },
+  {
+    name: "line4",
+  },
+];
+
+const listBgWidget = [
+  {
+    name: "bg1",
+    background: "gradient-primary",
+  },
+  {
+    name: "bg2",
+    background: "twitter",
+  },
+  {
+    name: "bg3",
+    background: "gradient-warning",
+  },
+  {
+    name: "bg4",
+    background: "gradient-success",
+  },
+  {
+    name: "bg5",
+    background: "gradient-danger",
+  },
+];
 
 const WidgetsDropdown = () => {
+  const [data, setData] = React.useState([]);
+  React.useEffect(() => {
+    getData();
+  }, []);
+  const getData = async () => {
+    let baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.GET_OVERVIEW;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios.get(url).then(async (res) => {
+      let val = res.data.data;
+      setData(val);
+    });
+  };
+  function random_item(items) {
+    return items[Math.floor(Math.random() * items.length)];
+  }
   // render
   return (
     <CRow>
-      <CCol sm="6" lg="3">
-        <CWidgetDropdown
-          color="gradient-primary"
-          header="9.823"
-          text="Members online"
-          footerSlot={
-            <ChartLineSimple
-              pointed
-              className="c-chart-wrapper mt-3 mx-3"
-              style={{height: '70px'}}
-              dataPoints={[65, 59, 84, 84, 51, 55, 40]}
-              pointHoverBackgroundColor="primary"
-              label="Members"
-              labels="months"
-            />
-          }
-        >
-          <CDropdown>
-            <CDropdownToggle color="transparent">
-              <CIcon name="cil-settings"/>
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
-            </CDropdownMenu>
-          </CDropdown>
-        </CWidgetDropdown>
-      </CCol>
-
-      <CCol sm="6" lg="3">
-        <CWidgetDropdown
-          color="gradient-info"
-          header="9.823"
-          text="Members online"
-          footerSlot={
-            <ChartLineSimple
-              pointed
-              className="mt-3 mx-3"
-              style={{height: '70px'}}
-              dataPoints={[1, 18, 9, 17, 34, 22, 11]}
-              pointHoverBackgroundColor="info"
-              options={{ elements: { line: { tension: 0.00001 }}}}
-              label="Members"
-              labels="months"
-            />
-          }
-        >
-          <CDropdown>
-            <CDropdownToggle caret={false} color="transparent">
-              <CIcon name="cil-location-pin"/>
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
-            </CDropdownMenu>
-          </CDropdown>
-        </CWidgetDropdown>
-      </CCol>
-
-      <CCol sm="6" lg="3">
-        <CWidgetDropdown
-          color="gradient-warning"
-          header="9.823"
-          text="Members online"
-          footerSlot={
-            <ChartLineSimple
-              className="mt-3"
-              style={{height: '70px'}}
-              backgroundColor="rgba(255,255,255,.2)"
-              dataPoints={[78, 81, 80, 45, 34, 12, 40]}
-              options={{ elements: { line: { borderWidth: 2.5 }}}}
-              pointHoverBackgroundColor="warning"
-              label="Members"
-              labels="months"
-            />
-          }
-        >
-          <CDropdown>
-            <CDropdownToggle color="transparent">
-              <CIcon name="cil-settings"/>
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
-            </CDropdownMenu>
-          </CDropdown>
-        </CWidgetDropdown>
-      </CCol>
-
-      <CCol sm="6" lg="3">
-        <CWidgetDropdown
-          color="gradient-danger"
-          header="9.823"
-          text="Members online"
-          footerSlot={
-            <ChartBarSimple
-              className="mt-3 mx-3"
-              style={{height: '70px'}}
-              backgroundColor="rgb(250, 152, 152)"
-              label="Members"
-              labels="months"
-            />
-          }
-        >
-          <CDropdown>
-            <CDropdownToggle caret className="text-white" color="transparent">
-              <CIcon name="cil-settings"/>
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
-            </CDropdownMenu>
-          </CDropdown>
-        </CWidgetDropdown>
-      </CCol>
+      {data && data.length > 0
+        ? data.map((item, index) => {
+            return (
+              <CCol sm="6" lg="3" key={index}>
+                <div className="overview__border-widget">
+                  <CWidgetDropdown
+                    style={{ marginBottom: "1rem" }}
+                    color={random_item(listBgWidget).background}
+                    header={item.value}
+                    backgroundColor="rgb(250, 152, 152)"
+                    text={item.text}
+                    footerSlot={
+                      <ChartLineSimple
+                        pointed
+                        className="c-chart-wrapper mt-3 mx-3"
+                        style={{ height: "70px" }}
+                        dataPoints={random_item(listLineChart).dataPoint}
+                        pointHoverBackgroundColor="red"
+                        label={item.key}
+                        labels="months"
+                      />
+                    }
+                  >
+                    <CDropdown>
+                      <CDropdownToggle color="transparent">
+                        <CIcon name="cil-settings" />
+                      </CDropdownToggle>
+                      <CDropdownMenu
+                        className="pt-0 text-center"
+                        placement="bottom-end"
+                      >
+                        <CDropdownItem>
+                          <CButton
+                            shape="rounded-pill"
+                            color="info"
+                            style={{ textAlign: "center" }}
+                            size="md"
+                            onClick={(e) => {}}
+                          >
+                            <CIcon name="cil-magnifying-glass" />
+                          </CButton>
+                        </CDropdownItem>
+                        <CDropdownItem>
+                          <CButton
+                            color="success"
+                            style={{ height: "42px" }}
+                            size="md"
+                            className="flex-center"
+                            onClick={() => this.ExportsFileExcel()}
+                          >
+                            <FaFileExport />
+                          </CButton>
+                          <a id="download_excel" download></a>
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CWidgetDropdown>
+                </div>
+              </CCol>
+            );
+          })
+        : null}
     </CRow>
-  )
-}
+  );
+};
 
-export default WidgetsDropdown
+export default WidgetsDropdown;

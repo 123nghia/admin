@@ -9,6 +9,7 @@ import {
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 
 import {
   CLabel,
@@ -90,6 +91,28 @@ class SuggestItem extends Component {
       isLoadingTable: false,
       isSearch: false
     };
+  }
+  async ExportsFileExcel() {
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
   }
   async componentDidMount() {
     const { type } = this.state;
@@ -308,6 +331,9 @@ class SuggestItem extends Component {
     }
 
     this.pagination(totalItem, val);
+    this.setState({
+      totalRecord : res_suggest.data.totalRecord
+    })
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: arrB, arrOptionBrand: arrTempOptionBrand, isLoading: false });
   }
 
@@ -329,6 +355,9 @@ class SuggestItem extends Component {
 
     console.log(res_suggest.data)
     let val = res_suggest.data.dataRes;
+    this.setState({
+      totalRecord : res_suggest.data.totalRecord
+    })
     let totalItem = res_suggest.data.arrTotal;
 
     this.pagination(totalItem, val);
@@ -726,7 +755,21 @@ class SuggestItem extends Component {
                       </div>
                     </CCol>
                   </CRow>
-                  <div className="flex-end">
+                  <div className="flex-center-space" style={{margin : '10px 0 0 0'}}>
+                    <div>
+                    <CButton
+                        color="success"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="flex-center"
+                        onClick={() => this.ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                    </div>
+                    <div className="flex">
                     <CButton
                       color="info"
                       style={{ marginRight: "10px" }}
@@ -761,9 +804,12 @@ class SuggestItem extends Component {
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
                   </div>
+                  </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
                   {this.state.isLoadingTable == false ? (
+                    <div>
+                    <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
                     <table
                       ble
                       className="table table-hover table-outline mb-0 d-none d-sm-table"
@@ -885,6 +931,7 @@ class SuggestItem extends Component {
                           : ""}
                       </tbody>
                     </table>
+                    </div>
                   ) : (
                     <div className="sweet-loading" style={{ height: 370 }}>
                       <DotLoader

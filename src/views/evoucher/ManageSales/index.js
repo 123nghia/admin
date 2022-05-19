@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
@@ -110,7 +111,7 @@ class ManageSales extends Component {
         this.setState({ dataApi: val });
 
         let active = 0;
-        this.setState({ isLoading: false, totalActive: active });
+        this.setState({ isLoading: false, totalActive: active, totalRecord : res.data.totalRecord  });
       });
   }
 
@@ -455,6 +456,28 @@ class ManageSales extends Component {
       
       });
   }
+  async ExportsFileExcel() {
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  }
   render() {
     const {
       data,
@@ -518,8 +541,21 @@ class ManageSales extends Component {
                     </div>
                   </CCol>
                 </CRow>
-                <div className="flex-end" style={{ marginTop: "1rem" }}>
-                
+                <div className="flex-center-space" style={{margin: "10px 0 0 0"}}>
+                    <div>
+                    <CButton
+                        color="success"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="flex-center"
+                        onClick={() => this.ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                    </div>
+                    <div className="flex">
                   <CButton
                     color="info"
                     size="md"
@@ -543,10 +579,12 @@ class ManageSales extends Component {
                     <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                   </CButton>
                 </div>
+                </div>
                 
               </CardHeader>
               <CardBody className="table__overflow">
-              <h5>Tổng số: {data?.length}</h5>
+              <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+
                 <table
                   ble
                   className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"

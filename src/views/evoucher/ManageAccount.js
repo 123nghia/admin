@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import DotLoader from "react-spinners/DotLoader";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 import { Switch } from 'antd';
 
 import {
@@ -78,7 +79,28 @@ class EndUser extends Component {
     quantity: "0",
     noted: "",
   };
+  async ExportsFileExcel() {
+    const { company_id } = this.state;
 
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  }
   changeLevel = (e) => {
     e.preventDefault();
     this.setState({
@@ -1403,7 +1425,21 @@ class EndUser extends Component {
                     </CCol>
                   </CRow>
 
-                  <div className="flex-end">
+                  <div className="flex-center-space">
+                    <div>
+                    <CButton
+                        color="success"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="flex-center"
+                        onClick={() => this.ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                    </div>
+                    <div className="flex">
                     <CButton
                       color="info"
                       style={{ marginRight: "10px" }}
@@ -1426,9 +1462,11 @@ class EndUser extends Component {
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
                   </div>
+                  </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {data?.length}</h5>
+                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+
                   <table
                     ble
                     className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"

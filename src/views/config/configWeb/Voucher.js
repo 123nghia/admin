@@ -14,7 +14,9 @@ import {
   CListGroupItem,
 } from "@coreui/react";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
-
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 export default class Voucher extends Component {
   SaveAllConfigWeb(value) {
     this.props.SaveAllConfigWeb(value);
@@ -129,6 +131,22 @@ export default class Voucher extends Component {
               />
             </div>
           </div>
+        </div>
+        <div class="flex-a-center config-box-border">
+          <p style={{padding: '0', margin: 'auto 6px auto 0'}}>Tối ưu hóa trên màn hình điện thoại</p>
+        <FormGroup>
+                <FormControlLabel
+                  onChange={(e,v) => {
+                    this.setStateByName(
+                      "classImageVoucher" , v
+                    );
+                    console.log(e,v)
+                  }}
+                  checked={this.props.classImageVoucher}
+                  control={<Switch defaultChecked />}
+                  label=""
+                />
+              </FormGroup>
         </div>
         {/* <div class="flex-a-center config-box-border">
           <div>

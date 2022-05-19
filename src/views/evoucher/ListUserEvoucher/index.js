@@ -280,7 +280,7 @@ class ListUserEvoucher extends Component {
 
         let active = 0;
 
-        this.setState({ isLoading: false, totalActive: active });
+        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.totalRecord });
 
         console.log(res.data.data);
       }).catch((err) => {
@@ -528,8 +528,7 @@ class ListUserEvoucher extends Component {
 
     const renderUserVoucherList = () => (
       <div>
-        <h5>Tổng số: {dataApi?.length}</h5>
-     
+       <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>  
       <table
         ble
         className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -662,7 +661,7 @@ class ListUserEvoucher extends Component {
 
                 {renderRowSearch()}
 
-                <div className="flex-center-space mt-4">
+                <div className="flex-center-space">
                   <div class=" flex">
                     <CButton
                       color="success"

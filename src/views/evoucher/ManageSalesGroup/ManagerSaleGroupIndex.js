@@ -8,6 +8,7 @@ import { Card, CardBody, CardHeader, Col, Row, Input } from "reactstrap";
 import { CButton, CCol, CRow } from "@coreui/react";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import Pagination from "@mui/material/Pagination";
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 
 import TableInManagerSaleGroup from "./TableInManagerSaleGroupIndex";
 import ModalAddUpdateSaleGroup from "./ModalHandleForm/ModalAddUpdateSaleGroup";
@@ -30,6 +31,7 @@ function ManagerSaleGroupIndex() {
   const [hidden, setHidden] = React.useState(false);
   const [dataPagination, setDataPagination] = React.useState([]);
   const [indexPage, setIndexPage] = React.useState(0);
+  const [totalRecord, setTotalRecord] = React.useState(0);
 
   //Pagination
   function pagination(dataApi) {
@@ -95,6 +97,7 @@ function ManagerSaleGroupIndex() {
     await axios.post(url, {}).then((res) => {
       setShowGroup([...res.data?.data]);
       pagination([...res.data?.data]);
+      setTotalRecord(res.data?.totalRecord);
     });
   };
 
@@ -215,7 +218,25 @@ function ManagerSaleGroupIndex() {
         getAllGroupSale();
       });
   };
-
+  const ExportsFileExcel= async() =>{
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id : "",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  }
   return (
     <>
       {statusModal ? (
@@ -278,7 +299,22 @@ function ManagerSaleGroupIndex() {
               </CRow>
             </CardHeader>
             <CardBody className="table__overflow">
-              <div className="flex-end mb-1">
+            <div className="flex-center-space" style={{margin: "0 0 10px 0"}}>
+                    <div>
+                    <CButton
+                        color="success"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="flex-center"
+                        onClick={() => ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                    </div>
+                    <div className="flex">
+
                 <CButton
                   color="info"
                   style={{
@@ -305,7 +341,7 @@ function ManagerSaleGroupIndex() {
                   <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                 </CButton>
               </div>
-
+              </div>
               <TableInManagerSaleGroup
                 propsSaleGroup={showGroup}
                 setUpdateInput={setUpdateInput}
@@ -313,6 +349,7 @@ function ManagerSaleGroupIndex() {
                 setIdOfFormUpdate={setIdOfFormUpdate}
                 showModalDeleteGroup={showModalDeleteGroup}
                 dataPagination={dataPagination}
+                totalRecord={totalRecord}
               />
               <div style={{ float: "right" }}>
                 <Pagination

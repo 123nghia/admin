@@ -405,7 +405,7 @@ class User extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify">
-                    Quản lý tài khoản hệ thống
+                    Quản lý tài khoản hệ thống 
                   </i>
                   <div style={styles.tags}>
                     <CRow>
@@ -483,8 +483,7 @@ class User extends Component {
                   </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {data?.length}</h5>
-
+                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table"

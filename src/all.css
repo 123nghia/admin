@@ -533,3 +533,7 @@
 .relative{
   position: relative;
 }
+.overview__border-widget{
+  /* border: 1px solid #ccc; */
+  padding: 4px;
+}

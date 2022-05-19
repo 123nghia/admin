@@ -9,6 +9,8 @@ import {
   Input,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
+
 import CIcon from '@coreui/icons-react'
 import {
   CBadge,
@@ -120,7 +122,28 @@ class PluginCustomerManager extends Component {
 
     this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
   }
+  async ExportsFileExcel() {
+    const { company_id } = this.state;
 
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  }
   getData = async () => {
     this.setState({ isLoading: true });
     const res = await axios({
@@ -131,7 +154,7 @@ class PluginCustomerManager extends Component {
     let val = res.data.data;
     console.log("val",val)
     this.pagination(val);
-    this.setState({ dataApi: val, isLoading: false });
+    this.setState({ dataApi: val, isLoading: false, totalRecord : res.data.totalRecord });
   }
 
   getData_ByID = async () => {
@@ -522,7 +545,21 @@ class PluginCustomerManager extends Component {
                       </div>
                     </CCol>
                   </CRow>
-                  <div className="flex-end mt-4">
+                  <div className="flex-center-space" style={{margin: '10px 0 0 0'}}>
+                    <div>
+                    <CButton
+                        color="success"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="flex-center"
+                        onClick={() => this.ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                    </div>
+                    <div className="flex">
                     <CButton
                       color="info"
                       style={{ marginBottom: "10px", marginRight: "10px" }}
@@ -546,9 +583,11 @@ class PluginCustomerManager extends Component {
                       <p style={{ margin: "auto 0" }}>Thêm mới</p>
                     </CButton>
                   </div>
+                  </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {data?.length}</h5>
+                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+
 
                   <table
                     ble

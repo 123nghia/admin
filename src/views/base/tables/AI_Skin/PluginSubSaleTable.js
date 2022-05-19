@@ -16,6 +16,7 @@ import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 
 import { Select } from "antd";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
+import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 
 import {
   CBadge,
@@ -75,6 +76,7 @@ class User extends Component {
   async componentDidMount() {
     this.getData();
     this.getAllRole();
+    this.getDataCompany();
     let arr = JSON.parse(localStorage.getItem("url"));
 
     for (let i = 0; i < arr.length; i++) {
@@ -136,8 +138,9 @@ class User extends Component {
     );
 
     let val = res.data;
+    
     this.pagination(val);
-    this.setState({ dataApi: val });
+    this.setState({ dataApi: val , totalRecord : res.totalRecord});
 
     let active = 0;
 
@@ -464,21 +467,42 @@ class User extends Component {
       this.setState({ isLoading: false });
     }
   }
-
-  render() {
-    const { Option } = Select;
-    // const children = [];
-
-    const { data, key, action, arrPagination, arrRoleSubAdmin } = this.state;
-    const { classes } = this.props;
-
-    axios({
+  getDataCompany = async () => {
+    await axios({
       method: "POST",
       url: "https://api.deal24h.vn/api/plugin-list-company",
     }).then((res) => {
       console.log(res.data.data);
       this.setState({ brandList: res.data.data });
     });
+  }
+  async ExportsFileExcel() {
+    const { company_id } = this.state;
+
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+      });
+  }
+  render() {
+    const { Option } = Select;
+    // const children = [];
+    const { data, key, action, arrPagination, arrRoleSubAdmin } = this.state;
+    const { classes } = this.props;
 
     function handleChange(value) {
       console.log(`selected ${value}`);
@@ -494,7 +518,7 @@ class User extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Quản lý tài khoản hệ thống
+                    Quản lý tài khoản hệ thống 
                   </i>
                   <CRow>
                     <CCol md={4} className="mt-3">
@@ -528,7 +552,22 @@ class User extends Component {
                       </div>
                     </CCol>
                   </CRow>
-                  <div className="flex-end mt-4">
+                  
+                  <div className="flex-center-space" style={{margin: '10px 0 0 0'}}>
+                    <div>
+                    <CButton
+                        color="success"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="flex-center"
+                        onClick={() => this.ExportsFileExcel()}
+                      >
+                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Xuất File</p>
+                      </CButton>
+                      <a id="download_excel" download></a>
+                    </div>
+                    <div className="flex">
                     <CButton
                       color="info"
                       style={{ marginBottom: "10px", marginRight: "10px" }}
@@ -553,10 +592,11 @@ class User extends Component {
                         Thêm mới tài khoản Sale
                       </p>
                     </CButton>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {data?.length}</h5>
+                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
 
                   <table
                     ble

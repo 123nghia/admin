@@ -329,7 +329,8 @@ class ConfigWeb extends Component {
                   voucherCondition: this.state.voucher.voucherCondition,
                   infoVoucher: this.state.voucher.infoVoucher,
                   imageFormVoucher: this.state.voucher.imageFormVoucher,
-                  sendSMS: this.state.voucher.sendSMS,          
+                  sendSMS: this.state.voucher.sendSMS,     
+                  classImageVoucher: this.state.voucher.classImageVoucher,               
                 });
               }
               if (banner) {
@@ -684,6 +685,8 @@ class ConfigWeb extends Component {
       if (!coppyData.value.voucher) {
         coppyData.value.voucher = {};
       }
+      
+    coppyData.value.voucher.classImageVoucher = this.state.classImageVoucher;
 
     coppyData.value.voucher.voucherEndow = this.state.voucherEndow;
     coppyData.value.voucher.voucherExpiry = this.state.voucherExpiry;
@@ -1363,6 +1366,8 @@ class ConfigWeb extends Component {
               </div>
               <div id="tabcontent11" className="tabcontent">
                 <Voucher
+                  classImageVoucher={this.state.classImageVoucher}
+
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
                   onChangeImage={this.onChangeImage}
