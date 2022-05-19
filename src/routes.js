@@ -209,7 +209,7 @@ const DetailInventory = React.lazy(() =>
 );
 
 const DetailPG = React.lazy(() =>
-  import("./views/evoucher/ManageSales/Sale/detail")
+  import("./views/evoucher/ManageSales/Sale/Detai/index.js")
 );
 // evoucher - log
 const Iplog = React.lazy(() => import("./views/evoucher/Log/Iplog/index.js"));

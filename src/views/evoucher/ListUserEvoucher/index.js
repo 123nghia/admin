@@ -527,6 +527,9 @@ class ListUserEvoucher extends Component {
     );
 
     const renderUserVoucherList = () => (
+      <div>
+        <h5>Tổng số: {dataApi?.length}</h5>
+     
       <table
         ble
         className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -632,6 +635,7 @@ class ListUserEvoucher extends Component {
           )}
         </tbody>
       </table>
+      </div>
     );
 
     this.state.isLoading && (

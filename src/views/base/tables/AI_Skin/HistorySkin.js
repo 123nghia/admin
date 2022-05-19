@@ -468,7 +468,10 @@ class HistorySkin extends Component {
                     <Spin size="large" />
                   </Space>
                 </div>
-                  : <table
+                
+                  : <div>
+                    <h5>Tổng số: {data?.length}</h5>
+                    <table
                   ble
                   className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table"
                 >
@@ -539,6 +542,7 @@ class HistorySkin extends Component {
                       : ""}
                   </tbody>
                 </table>
+                  </div>
                }
                 
                 <div style={{ float: "right" }}>

@@ -39,6 +39,7 @@ function TableInManagerSaleGroup(props) {
 
   return (
     <>
+      <h5>Tổng số: {props.dataPagination?.length}</h5>
       <table ble className="table table-hover mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>

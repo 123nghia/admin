@@ -1059,6 +1059,7 @@ class EndUser extends Component {
 
                     <div className="name_excel" id="name_excel"></div>
                   </div>
+                  <h5>Tổng số: {data?.length}</h5>
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
