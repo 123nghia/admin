@@ -12,7 +12,7 @@ const Dashboard = () => {
   return (
     <>
       <WidgetsDropdown />
-      <CCard className="mb-4 mt-5">
+      {/* <CCard className="mb-4 mt-5">
         <CCardBody>
    
             <h4 id="traffic" className="card-title mb-0">
@@ -21,7 +21,7 @@ const Dashboard = () => {
               <div className="small text-medium-emphasis">January - July 2021</div>
            
         </CCardBody>
-      </CCard>
+      </CCard> */}
     </>
   )
 }

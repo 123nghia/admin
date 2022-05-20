@@ -751,27 +751,27 @@ const _navMangerUser = [
     ],
   },
 
-  {
-    _tag: "CSidebarNavItem",
-    name: "Thống kê",
-    to: "/evoucher-statistics",
-    icon: (
-      <BsFillBarChartFill
-        style={css}
-        content={freeSet.cilUserPlus}
-        className="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0"],
-    badge: {
-      color: "info",
-      text: (
-        <CTooltip placement={"right"} content={content.none}>
-          <CIcon content={freeSet.cilInfo} />
-        </CTooltip>
-      ),
-    },
-  },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Thống kê",
+  //   to: "/evoucher-statistics",
+  //   icon: (
+  //     <BsFillBarChartFill
+  //       style={css}
+  //       content={freeSet.cilUserPlus}
+  //       className="c-sidebar-nav-icon"
+  //     />
+  //   ),
+  //   role: ["0"],
+  //   badge: {
+  //     color: "info",
+  //     text: (
+  //       <CTooltip placement={"right"} content={content.none}>
+  //         <CIcon content={freeSet.cilInfo} />
+  //       </CTooltip>
+  //     ),
+  //   },
+  // },
 ];
 
 const _navSkinCare = [

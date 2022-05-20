@@ -535,5 +535,44 @@
 }
 .overview__border-widget{
   /* border: 1px solid #ccc; */
-  padding: 4px;
+  padding: 20px 20px 1px 20px;
+  border-radius: 4px;
+  width: 100%;
+  background: #FFF;
+}
+.overview__border-widget--icon{
+  cursor: pointer;
+  padding: 8px;
+  background: #edeff1;
+  border-radius: 4px;
+}
+.overview__border-widget .line{
+  cursor: pointer;
+}
+.overview__border-widget svg{
+  width: 24px;
+  height: 24px;
+}
+.overview__border-widget h6{
+  margin: 12px 0 0 0;
+  font-size: 16px;
+  color: #3c4b64;
+  font-weight: 400;
+
+}
+.overview__border-widget h4{
+  margin: 16px 0 0 0;
+  font-size: 36px;
+  color: var(--main_web_admin);
+  font-weight: 600;
+}
+.overview__border-widget .hr{
+  height: 1.6px;
+  width: 100%;
+  background-color: #c4c4c4;
+  border-radius: 2px;
+  margin: 12px 0 8px 0;
+}
+.overview__border-widget--footer{
+
 }
