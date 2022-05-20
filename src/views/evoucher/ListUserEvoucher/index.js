@@ -255,12 +255,18 @@ class ListUserEvoucher extends Component {
       baseUrlCallApi = Constants.GET_USER_EVOUCHER;
     }
     let url = baseUrlapi + baseUrlCallApi;
-
+    let outputPartnerId = "";
+    if(this.state.typePartner){
+      outputPartnerId = this.state.company_id;
+    }else{
+      outputPartnerId = null;
+    }
     await axios
       .get(url, {
         params: {
           saleId: saleId,
           partner : this.state.company_slug,
+          partnerID : outputPartnerId,  
           phoneNumber,
           from,
           to,
