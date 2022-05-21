@@ -74,7 +74,11 @@ const WidgetsDropdown = () => {
     let baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_OVERVIEW;
     let url = baseUrlapi + baseUrlCallApi;
-    await axios.get(url).then(async (res) => {
+    await axios.get(url,{
+      params : {
+        company_id
+      }
+    }).then(async (res) => {
       let val = res.data.data;
       setData(val);
     });

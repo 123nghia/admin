@@ -86,15 +86,9 @@ class Users extends Component {
             tabNameConfig: [
                 {
                     _id: "t1",
-                    name: "Chiến dịch",
+                    name: "Tổng quan",
                     icon: <EmojiFlagsIcon style={{ width: "24px ", height: "24px " }} />
                 },
-                {
-                    _id: "t2",
-                    name: "E-voucher",
-                    icon: <CardGiftcardIcon style={{ width: "24px ", height: "24px " }} />
-                },
-
             ],
             company_id: JSON.parse(localStorage.getItem("user")).company_id
                 ? JSON.parse(localStorage.getItem("user")).company_id
@@ -545,17 +539,9 @@ class Users extends Component {
             });
     }
     async componentDidMount() {
-        await this.getFooter();
-        this.getDataConfigWeb();
+       
         this.getData();
-        let arr = JSON.parse(localStorage.getItem("url"));
-        for (let i = 0; i < arr.length; i++) {
-            if ("#" + arr[i].to == window.location.hash) {
-                if (arr[i].hidden == true) {
-                    window.location.href = "#/";
-                }
-            }
-        }
+        
     }
 
     async onUpdate() {
@@ -575,45 +561,27 @@ class Users extends Component {
     getData = async () => {
         const newComany_id = this.state.company_id;
         let idOutput = "-1";
+        let baseUrlapi = Constants.BASE_URL;
+        let baseUrlCallApi = Constants.GET_OVERVIEW;
+        let url = baseUrlapi + baseUrlCallApi;
         if (newComany_id) {
             idOutput = newComany_id
         }
         this.setState({ isLoading: true });
-        const res = await axios({
-            baseURL: Constants.BASE_URL,
-            url: Constants.CONFIG_THEME_GET + "/" + idOutput,
-            method: "GET",
-            headers: this.state.token,
-        });
-        let val = res.data.data;
+        await axios.get(url,{
+            params : {
+              company_id : idOutput
+            }
+          }).then(async (res) => {
+            let val = res.data.data;
+            
+        this.setState({ isLoading: false , dataOverView : val});
+            
+          }).catch(err => {
+            console.log(err);
+        this.setState({ isLoading: false });
 
-        this.setState({
-            dataApi: val,
-            data: val,
-            currentPassword: val.Password,
-            isLoading: false,
-            current_slug:
-                val.Company_Id == null || val.Company_Id == undefined
-                    ? null
-                    : val.Company_Id.Slug,
-            companyID:
-                val.Company_Id == null || val.Company_Id == undefined
-                    ? null
-                    : val.Company_Id._id,
-
-            mainColor: val.mainColor,
-            sub_mainColor: val.sub_mainColor,
-            Phone: val.Phone,
-            Address: val.Address,
-            UserName: val.UserName,
-            Message_Code: val.Message_Code,
-            sub2_mainColor: val.sub2_mainColor,
-            button_color: val.button_color,
-            sucess_color: val.sucess_color,
-            error_color: val.error_color,
-            text_mainColor: val.text_mainColor,
-            isDisable: true,
-        });
+          });
     };
 
     openFormAddFooter = () => {
@@ -869,79 +837,13 @@ class Users extends Component {
             }
         );
     }
-
-    async resetCache() {
-        let url = "https://soida.pensilia.com/api/clear_cache";
-        await axios.get(url, {}).then((res) => {
-            if (res.data.success === "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "Clear cache thành công",
-                    showConfirmButton: false,
-                    timer: 700,
-                });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Xảy ra lỗi trong quá trình xử lý",
-                    showConfirmButton: false,
-                    timer: 700,
-                });
-            }
-        });
-    }
-    async updateCompany() {
-        const {
-            mainColor,
-            sub_mainColor,
-            button_color,
-            sucess_color,
-            error_color,
-            text_mainColor,
-            Phone,
-            sub2_mainColor,
-            Address,
-            UserName,
-            data,
-            Message_Code,
-        } = this.state;
-
-        if (mainColor == null || mainColor == "") {
-            alert("Vui lòng nhập đầy đủ trường !!!");
-            return;
-        }
-
-        const newComany_id = JSON.parse(this.state.company_id).company_id;
-
-        const body = {
-            isHash: false,
-
-            sub_mainColor: sub_mainColor,
-            mainColor: mainColor,
-            sub2_mainColor: sub2_mainColor,
-            company_id: newComany_id,
-            button_color: button_color,
-            sucess_color: sucess_color,
-            error_color: error_color,
-            text_mainColor: text_mainColor,
-        };
-        this.setState({ isLoading: true });
-        const res = await axios({
-            baseURL: Constants.BASE_URL,
-            url: Constants.CONFIG_THEME_UPDATE,
-            method: "POST",
-            data: body,
+    viewDetailOverView=(item)=> {
+        this.setState({
+            dataDetail : item,
+            modal : true,
         });
 
-        if (res.data.is_success == true) {
-            this.getData();
-        } else {
-            alert(res.data.message);
-            this.setState({ isLoading: false });
-        }
     }
-
-
     render() {
         const arrLevel = [
             {
@@ -957,6 +859,7 @@ class Users extends Component {
 
         const {
             arrPagination,
+            dataOverView
         } = this.state;
 
         const data = [
@@ -987,7 +890,6 @@ class Users extends Component {
                 <div className="animated fadeIn">
                     <div className="flex-tabs">
                         <div class="tab">
-
                             <List
                                 sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
                                 component="nav"
@@ -1012,143 +914,38 @@ class Users extends Component {
                                     }) : null
                                 }
                             </List>
-
                         </div>
                         <div className="tabcontents">
                             <div id="tabcontent1" className="tabcontent defaultOpen">
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng chiến dịch
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modal: !this.state.modal })}>30</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modal: !this.state.modal })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng voucher phát
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modalVoucherSent: !this.state.modalVoucherSent })}>40</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modalVoucherSent: !this.state.modalVoucherSent })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Tỉ lệ hoàn thành
-                                    <a href="#" className="btn-link" style={styles.btnLink}>30</a>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng khách check in
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modalCusCheckIn: !this.state.modalCusCheckIn })}>40</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modalCusCheckIn: !this.state.modalCusCheckIn })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Tỉ lệ khách check in
-                                    <a href="#" className="btn-link" style={styles.btnLink}>30</a>
-                                </div>
+                                {
+                                    dataOverView && dataOverView.length > 0 ? dataOverView.map((item, i) => {
+                                        return (
+                                            <div key={i} className="tabContentItem" style={styles.tabContentItem}>
+                                            {item.text}
+                                            <a href="" className="btn-link"
+                                                style={styles.btnLink}
+                                                onClick={() => this.viewDetailOverView(item)}>{item.value}</a>
+                                            <span className="detail"
+                                                style={styles.detail}
+                                                onClick={() => this.viewDetailOverView(item)}>Xem chi tiết</span>
+                                        </div>
+                                        )
+                                    }) : null
+                                }
                             </div>
-                            <div id="tabcontent2" className="tabcontent ">
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng voucher
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modalVoucher: !this.state.modalVoucher })}>40</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modalVoucher: !this.state.modalVoucher })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng voucher phát
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modalVoucherSent: !this.state.modalVoucherSent })}>40</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modalVoucherSent: !this.state.modalVoucherSent })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Tỉ lệ hoàn thành
-                                    <a href="#" className="btn-link" style={styles.btnLink}>30</a>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Số lượng khách check in
-                                    <a href="" className="btn-link"
-                                        style={styles.btnLink}
-                                        onClick={e => this.setState({ modalCusCheckIn: !this.state.modalCusCheckIn })}>40</a>
-                                    <span className="detail"
-                                        style={styles.detail}
-                                        onClick={e => this.setState({ modalCusCheckIn: !this.state.modalCusCheckIn })}>Xem chi tiết</span>
-                                </div>
-                                <div className="tabContentItem" style={styles.tabContentItem}>
-                                    Tỉ lệ khách check in
-                                    <a href="#" className="btn-link" style={styles.btnLink}>30</a>
-                                </div>
-                            </div>
+                         
                         </div>
                     </div>
 
-                    <Modal isOpen={this.state.modal} className={this.props.className} size="xl">
-                        <ModalHeader>Danh sách các chiến dịch</ModalHeader>
+                    <Modal isOpen={this.state.modal} className={this.props.className} size="md">
+                        <ModalHeader>Chi tiết</ModalHeader>
                         <ModalBody>
-                            <table
-                                ble
-                                className="table table-hover table-outline mb-0 d-none d-sm-table table_dash"
-                            >
-                                <thead className="thead-light">
-                                    <tr>
-                                        <th className="text-center">STT.</th>
-                                        <th className="text-center">Tên</th>
-                                        <th className="text-center">Nhà cung cấp</th>
-                                        <th className="text-center">Số lượng voucher</th>
-                                        <th className="text-center">Tỉ lệ check in</th>
-                                        <th className="text-center">Trạng thái</th>
-                                        <th className="text-center">Bắt đầu</th>
-                                        <th className="text-center">Kết thúc</th>
-                                        <th className="text-center">Ngày tạo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* <td colSpan="9" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td> */}
-                                    {
-                                        data !== undefined ?
-                                            data.map((item, i) => {
-                                                console.log(item)
-                                                return (
-                                                    <tr key={i}>
-                                                        <td className="text-center">{i + 1}</td>
-                                                        <td className="text-center">{item.Name}</td>
-                                                        <td className="text-center">{item.Provider}</td>
-                                                        <td className="text-center">{item.totalVoucher}</td>
-                                                        <td className="text-center">{item.CheckIn}</td>
-                                                        <td className="text-center">{item.Status}</td>
-                                                        <td className="text-center"> {new Date(item.from).toLocaleDateString()}</td>
-                                                        <td className="text-center">{new Date(item.to).toLocaleDateString()}</td>
-                                                        <td className="text-center">{new Date(
-                                                            item.create_at
-                                                        ).toLocaleDateString()}</td>
-                                                    </tr>
-                                                );
-                                            }) : ""
-                                    }
-                                </tbody>
-                            </table>
-                            <div style={{ float: "right" }}>
-                                <Pagination
-                                    count={arrPagination.length}
-                                    color="primary"
-                                    onChange={(e, v) => {
-                                        this.setState({
-                                            data: arrPagination[v - 1],
-                                            indexPage: v - 1,
-                                        });
-                                    }}
-                                />
-                            </div>
+                            {
+                                this.state.dataDetail ? <div>
+                                    <p>{this.state.dataDetail.text} : {this.state.dataDetail.value}</p> 
+                                </div> : null
+                            }
+                            
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={e => this.setState({ modal: !this.state.modal })}>Đóng</Button>
