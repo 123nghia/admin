@@ -775,9 +775,9 @@ class ConfigWebAdmin extends Component {
     };
     let coppy = { ...dataConfigWeb };
     if (this.state.positionBannerActive === "1") {
-      coppy.value.banner.bannerMainSlide.push(ob);
+      coppy.value.banner.bannerMainSlide.unshift(ob);
     } else {
-      coppy.value.banner.bannerSlide.push(ob);
+      coppy.value.banner.bannerSlide.unshift(ob);
     }
     this.setState(
       {

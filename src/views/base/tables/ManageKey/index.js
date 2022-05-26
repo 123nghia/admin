@@ -1,5 +1,5 @@
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import TableInManageKeyIndex from "./TableInManageKeyIndex";
+import TableInManageKeyIndex from "./ManageKeyIndex";
 
 function ManageKey() {
   return (

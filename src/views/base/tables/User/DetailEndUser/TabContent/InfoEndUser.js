@@ -24,7 +24,7 @@ function InfoEndUser(propsInfoUser) {
               color={
                 propsInfoUser.propsInfoUser[0]?.detailInformation?.status ===
                 "A"
-                  ? "default"
+                  ? "green"
                   : "default"
               }
             >

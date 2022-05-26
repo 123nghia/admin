@@ -87,7 +87,13 @@ class EndUser extends Component {
       status: e.target.value,
     });
   };
-
+  changeLevelValue = (e) => {
+    e.preventDefault();
+    this.setState({
+      status: e.target.value,
+    });
+  };
+  
   async onGetCampaignList() {
     await campaignApi
       .fecthAllCampaignList()
@@ -236,7 +242,7 @@ class EndUser extends Component {
       });
   }
   onSearch() {
-    this.onGetCampaignList(this.state.key);
+    this.getPartner(this.state.key);
   }
 
   async openUpdate(item) {
@@ -303,12 +309,8 @@ class EndUser extends Component {
          imageLogo: "",
          imageLogo_show: "",
          imageLogo_link: "",
-
          password:  "",
-         userName : "",
-
-
-         
+         userName : "",    
     });
   }
   openFormEdit(item) {
@@ -411,21 +413,23 @@ class EndUser extends Component {
         "brand" : this.state.branch,
          "logo": img,
          "password":  this.state.password,
-         "userName" : this.state.userName,
-        
-         
+         "userName" : this.state.userName,       
       })
       .then(async (res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Thêm thành công",
-          showConfirmButton: false,
-          timer: 1700,
-        });
-        this.setState({
-          modalVoucher: false,
-        });
-        await this.getPartner();
+        if(res.data.is_success){
+          Swal.fire({
+            icon: "success",
+            title: "Thêm thành công",
+            showConfirmButton: false,
+            timer: 1700,
+          });
+          this.setState({
+            modalVoucher: false,
+          });
+          await this.getPartner();
+        }else{
+          alert(res.data.message);
+        } 
       });
   }
   async delete(item) {

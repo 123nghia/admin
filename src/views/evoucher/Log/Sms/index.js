@@ -643,7 +643,7 @@ class SMSlog extends Component {
                                   ).toLocaleDateString()}
                                 </td>
                                 <td className="text-center">
-                                  Tp.Hồ Chí Minh
+                                  {/* Tp.Hồ Chí Minh */}
                                  </td>
                                 <td className="text-center">
                                   <div className="flex-center">

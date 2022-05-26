@@ -7,6 +7,7 @@ import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 import { DatePicker, Select, Tag, Space, Spin } from "antd";
+import Pagination from "@material-ui/lab/Pagination";
 import "antd/dist/antd.css";
 import axios from "axios";
 import "moment-timezone";
@@ -49,6 +50,7 @@ class ListUserEvoucher extends Component {
       totalActive: 0,
       dataApi: [],
       action: "new",
+      arrPagination : [],
       phone: "",
       token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       type: localStorage.getItem("type"),
@@ -56,6 +58,7 @@ class ListUserEvoucher extends Component {
       company_slug: JSON.parse(localStorage.getItem("user")).company_slug,
       typePartner : JSON.parse(localStorage.getItem("user")).typePartner,
       isLoading: false,
+      indexPage : 0,
       idHistory: "",
       toggleHistory: false,
       from: "",
@@ -235,7 +238,29 @@ class ListUserEvoucher extends Component {
         });
       });
   }
-
+  pagination(dataApi) {
+    var i,
+      j,
+      temparray,
+      chunk = 50;
+    var arrTotal = [];
+    if (dataApi.length > 0) {
+      for (i = 0, j = dataApi.length; i < j; i += chunk) {
+        temparray = dataApi.slice(i, i + chunk);
+        arrTotal.push(temparray);
+      }
+      if (arrTotal.length == 0) {
+        this.setState({
+          hidden: false,
+        });
+      } else {
+        this.setState({
+          hidden: true,
+        });
+      }
+      this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
+    }
+  }
   async getData(saleId, phoneNumber, status, voucherCode, from, to,idDataCompany) {
     this.setState({
       loadingCallApi : true,
@@ -283,7 +308,7 @@ class ListUserEvoucher extends Component {
         })
         let val = res.data.data;
         this.setState({ dataApi: val });
-
+        this.pagination(val);
         let active = 0;
 
         this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.totalRecord });
@@ -640,6 +665,18 @@ class ListUserEvoucher extends Component {
           )}
         </tbody>
       </table>
+      <div style={{ float: "right" }}>
+                    <Pagination
+                      count={this.state.arrPagination.length}
+                      color="primary"
+                      onChange={(e, v) => {
+                        this.setState({
+                          data: this.state.arrPagination[v - 1],
+                          indexPage: v - 1,
+                        });
+                      }}
+                    />
+                  </div>
       </div>
     );
 
@@ -762,8 +799,129 @@ class ListUserEvoucher extends Component {
                 <Space size="middle">        
                   <Spin size="large" />
                 </Space>
-              </div> : renderUserVoucherList()
-              }
+              </div> :
+              <div>
+              <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>  
+             <table
+               ble
+               className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
+             >
+               <thead className="thead-light">
+                 <tr>
+                   {headingList.map((title) => (
+                     <th className="text-center">{title}</th>
+                   ))}
+                 </tr>
+               </thead>
+               <tbody>
+                 {this.state.data && this.state.data.length > 0 ? (
+                   this.state.data.map((item, i) => {
+                     return (
+                       <tr key={i}>
+                         <td className="text-center">{i + 1}</td>
+                         <td
+                           className="text-center"
+                           style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                         >
+                           {item.fullName?.toLowerCase()}
+                         </td>
+                         <td className="text-center">{item.phoneNumber}</td>
+                         <td className="text-center"> TP. Hồ Chí Minh</td>
+                         <td className="text-center">
+                           {item.voucherCode && (
+                             <Box sx={{ display: "flex" }}>
+                               <Chip
+                                 label={item.voucherCode}
+                                 variant="outlined"
+                                 sx={{ backgroundColor: "#9fcfde", border: "none" }}
+                               />
+       
+                               <CopyToClipboard
+                                 text={item.voucherCode}
+                                 onCopy={() => {}}
+                               >
+                                 <Tooltip title="Copy">
+                                   <IconButton size="small">
+                                     <CIcon content={freeSet.cilCopy} />
+                                   </IconButton>
+                                 </Tooltip>
+                               </CopyToClipboard>
+                             </Box>
+                           )}
+                         </td>
+                         <td className="text-center">
+                           <Tag
+                             className="ant-tag"
+                             color={checkStatusUserVoucherColor(item.status)}
+                           >
+                             {checkStatusUserVoucherContent(item.status)}
+                           </Tag>
+                         </td>
+                         <td className="text-center">{formatDate(item.create_at)}</td>
+                         <td className="text-center">{item.slug}</td>
+       
+                         <td className="text-center">
+                           {item?.historyId ? (
+                             <CButton
+                               shape="rounded-pill"
+                               variant="outline"
+                               color="info"
+                               style={{ textAlign: "center" }}
+                               size="md"
+                               onClick={(e) => {
+                                 this.setState({
+                                   idHistory: item?.historyId,
+                                   toggleHistory: !toggleHistory,
+                                 });
+                               }}
+                             >
+                               <CIcon name="cil-magnifying-glass" />
+                             </CButton>
+                           ) : (
+                             <p>Chưa soi da</p>
+                           )}
+                         </td>
+                         <td className="text-center">{item.saleFollow}</td>
+                         <td className="text-center">
+                           <Chip
+                             icon={<AccessTimeIcon />}
+                             label={truncateString("Đã check in vào 10:30", 20)}
+                           />
+                         </td>
+                         <td className="text-center">
+                           <Link to={`/detail-evoucher/${item._id}`}>
+                             <Tooltip title="Xem chi tiết">
+                               <IconButton size="small">
+                                 <LaunchOutlinedIcon sx={{ color: "#3C93E3" }} />
+                               </IconButton>
+                             </Tooltip>
+                           </Link>
+                         </td>
+                       </tr>
+                     );
+                   })
+                 ) : (
+                   <td colSpan="10" className="text-center">
+                     Không tìm thấy dữ liệu
+                   </td>
+                 )}
+               </tbody>
+             </table>
+              <div style={{ float: "right" }}>
+                           <Pagination
+                             count={this.state.arrPagination.length}
+                             color="primary"
+                             onChange={(e, v) => {
+                               this.setState({
+                                 data: this.state.arrPagination[v - 1],
+                                 indexPage: v - 1,
+                               });
+                             }}
+                           />
+              </div>
+             </div>
+                 
+               }
                 
               </CardBody>
             </Card>

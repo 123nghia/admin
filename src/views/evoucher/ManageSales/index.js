@@ -314,10 +314,10 @@ class ManageSales extends Component {
       <>
         <tr className="header__table--span">
           <th className="text-center"></th>
-          <th colspan="4" className="text-center">
+          <th colspan="2" className="text-center">
             Thông tin Nhóm
           </th>
-          <th colspan="5" className="text-center">
+          <th colspan="7" className="text-center">
             Thông tin Doanh Số
           </th>
           <th className="text-center" colspan="3"></th>
@@ -326,10 +326,7 @@ class ManageSales extends Component {
           <th className="text-center ">STT.</th>
           <th className="text-center border-left">Tên Sales</th>
           <th className="text-center">SĐT</th>
-          <th className="text-center">Thuộc nhóm</th>
-          <th className="text-center">Tên Nhóm</th>
-          <th className="text-center border-left">Tháng Báo Cáo</th>
-          <th className="text-center">Số Evoucher/Tháng</th>
+          <th className="text-center border-left">Số Evoucher/Tháng</th>
           <th className="text-center">Số Khách Checkin/Tháng</th>
           <th className="text-center">Tỷ lệ Khách Checkin</th>
           <th className="text-center"></th>
@@ -357,18 +354,8 @@ class ManageSales extends Component {
           {capitalizeFirstLetter(collaborator?.name || collaborator?.username)}
         </td>
         <td className="text-center">{collaborator?.phone}</td>
-        <td className="text-center">
-          {collaborator?.saleGroup || (
-            <p className="text-secondary">Chưa thuộc nhóm nào!!</p>
-          )}
-        </td>
-        <td className="text-center">
-          {collaborator?.saleGroup || (
-            <p className="text-secondary">Chưa thuộc nhóm nào!!</p>
-          )}
-        </td>
-        <td className="text-center border-left">{`Tháng ${new Date().getMonth()}`}</td>
-        <td className="text-center">50</td>
+        
+        <td className="text-center border-left">50</td>
         <td className="text-center">12</td>
         <td className="text-center">12%</td>
 

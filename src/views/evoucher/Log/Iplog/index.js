@@ -552,7 +552,7 @@ class IpLog extends Component {
                              
                               </td>
                               <td className="text-center">
-                                Tp.Hồ Chí Minh
+                                {/* Tp.Hồ Chí Minh */}
                               </td>
                               <td className="text-center">
                                 {new Date(item.create_at).toLocaleDateString()}
