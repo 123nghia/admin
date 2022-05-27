@@ -41,6 +41,8 @@ import ButtonConfig from "./configWeb/Button";
 import ChangeColor from "./configWeb/Color";
 import Homepage from "./configWeb/Homepage";
 import VoucherPartner from "./configWeb/VoucherPartner";
+import { BiSlideshow } from 'react-icons/bi';
+
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 

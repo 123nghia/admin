@@ -14,7 +14,8 @@ import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 
 import {
   CBadge,
-  CButton
+  CButton,
+  CSelect
 } from '@coreui/react'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -465,8 +466,7 @@ class RoleManager extends Component {
                   <label style={styles.flexLabel} htmlFor="tag">
                     Trạng thái:
                   </label>
-                  <select
-                    style={styles.flexOption}
+                  <CSelect                   
                     name="Status"
                     onChange={(e) => this.onChange("Status", e.target.value)}
                   >
@@ -478,7 +478,7 @@ class RoleManager extends Component {
                     <option value={"Actived"}>Actived</option>
                     <option value={"Locked"}>Locked</option>
                     <option value={"Deactived"}>Deactived</option>
-                  </select>
+                  </CSelect>
                 </div>
               )}
             </ModalBody>

@@ -212,24 +212,27 @@ class EndUser extends Component {
   }
 
   async openUpdate(item) {
+  
     this.setState({
       action: "edit",
+      UserName : item.UserName,
       idActionCurrent : item._id,
       modalEdit: true,
       Name: item.Name,
       Email: item.Email,
       introduction: item.introduction,
-      Status: item.Status,
+      Status : item.Status,
       Brand: item.Brand,
       TypeId: item.TypeId,
+      Slug : item.Slug,
       Logo: item.Logo,
       id: item["_id"],
     });
   }
   async update() {
-    const { Name, Brand, introduction, Status, TypeId, Email, Logo , idActionCurrent} =
+    const { Name, Brand,Slug, introduction, Status, TypeId, Email,UserName, Logo , idActionCurrent} =
       this.state;
-
+ 
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_PROVIDER;
 
@@ -239,16 +242,20 @@ class EndUser extends Component {
     let imgLink = await this.postImage(this.state.Logo_link);
     if (imgLink) {
       imgOutput = imgLink;
+    }else{
+      imgOutput = Logo;
     }
     await axios
       .post(url, {
-        Name: Name,
+        slug : Slug,
+        UserName : UserName,
+        name: Name,
         Email: Email,
         introduction: introduction,
-        Status: Status,
-        Brand: Brand,
+        status: Status,
+        brand: Brand,
         TypeId: TypeId,
-        Logo: imgOutput,
+        logo: imgOutput,
         id : idActionCurrent
       })
       .then((res) => {

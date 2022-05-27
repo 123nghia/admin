@@ -25,6 +25,10 @@ import Footer from "./configWebAdmin/Footer";
 import Logos from "./configWebAdmin/Logo";
 import GuideVoucher from "./configWebAdmin/GuideVoucher";
 import VoucherPartner from "./configWebAdmin/VoucherPartner";
+import { BiSlideshow } from 'react-icons/bi';
+import { RiGuideLine } from 'react-icons/ri';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
+
 
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -42,35 +46,13 @@ class ConfigWebAdmin extends Component {
         {
           _id: "1",
           name: "Banner Slide Lớn",
-          icon: <svg
-          style={{ width: "24px ", height: "24px " }}
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-file-slides-fill"
-          viewBox="0 0 16 16"
-        >
-          <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
-          <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
-        </svg>,
+          icon: <BiSlideshow style={{ width: "24px ", height: "24px " }}/>,
         },
         {
           _id: "2",
           name: "Banner Slide Nhỏ",
           icon: (
-            <svg
-              style={{ width: "24px ", height: "24px " }}
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-file-slides-fill"
-              viewBox="0 0 16 16"
-            >
-              <path d="M7 7.78V5.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 7.778z" />
-              <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 .496.438l.5 4A.5.5 0 0 1 11.5 9h-3v2.016c.863.055 1.5.251 1.5.484 0 .276-.895.5-2 .5s-2-.224-2-.5c0-.233.637-.429 1.5-.484V9h-3a.5.5 0 0 1-.496-.562l.5-4A.5.5 0 0 1 5 4z" />
-            </svg>
+            <BiSlideshow style={{ width: "24px ", height: "24px " }}/>
           ),
         },
 
@@ -82,7 +64,7 @@ class ConfigWebAdmin extends Component {
         {
           _id: "5",
           name: "Hướng dẫn sử dụng voucher",
-          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />,
+          icon: <RiGuideLine style={{ width: "24px ", height: "24px " }} />,
         },
         {
           _id: "6",
@@ -95,7 +77,7 @@ class ConfigWebAdmin extends Component {
         {
           _id: "4",
           name: "Thông tin footer",
-          icon: <InfoIcon style={{ width: "24px ", height: "24px " }} />,
+          icon: <AiOutlineInfoCircle style={{ width: "24px ", height: "24px " }} />,
         },
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id

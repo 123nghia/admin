@@ -510,7 +510,7 @@ class HistorySkin extends Component {
                               <td className="text-center">
                                 <img
                                   src={item.Image}
-                                  style={{ width: "100px", height: "83px" }}
+                                  style={{ width: "100px", height: "83px", objectFit: "cover" , backgroundSize: "100% 100%"}}
                                 />
                               </td>
                              

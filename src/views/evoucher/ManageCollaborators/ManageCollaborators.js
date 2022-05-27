@@ -378,6 +378,7 @@ class EndUser extends Component {
         "introduction":  this.state.introduction,
         "brand" : this.state.branch,
          "logo": img,
+         "status" : 'Actived',
          "password":  this.state.password,
          "userName" : this.state.userName
       })
@@ -1481,7 +1482,7 @@ class EndUser extends Component {
                                 {item.Brand}
                               </td>
                               <td className="text-center">
-                                <img style={{maxHeight:'100px'}} src={item.Logo} alt="" />
+                                <img style={{maxHeight:'100px', maxWidth:'300px'}} src={item.Logo} alt="" />
                               </td>  
                               <td className="text-center">
                               <CButton

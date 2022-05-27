@@ -235,7 +235,7 @@
   /* padding: 0px 12px; */
   border: 1px solid #ccc;
   border-bottom: none;
-  width: 80%;
+  width: 75%;
 
   border-left: none;
   min-height: 625px;
@@ -575,3 +575,4 @@
 .overview__border-widget--footer{
 
 }
+
