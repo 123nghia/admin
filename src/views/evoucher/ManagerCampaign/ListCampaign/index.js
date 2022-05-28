@@ -238,6 +238,8 @@ class EndUser extends Component {
       });
   }
   onSearch() {
+    console.log(this.state.from)
+    console.log(this.state.to)
     this.onGetCampaignList(this.state.key);
   }
 

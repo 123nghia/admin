@@ -218,14 +218,14 @@ function ManagerSaleGroupIndex() {
         getAllGroupSale();
       });
   };
-  const ExportsFileExcel= async() =>{
+  const ExportsFileExcel = async () => {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .get(url, {
         params: {
-          company_id : "",
+          company_id: "",
         },
       })
       .then((res) => {
@@ -236,7 +236,7 @@ function ManagerSaleGroupIndex() {
         }
         a.click();
       });
-  }
+  };
   return (
     <>
       {statusModal ? (
@@ -299,48 +299,48 @@ function ManagerSaleGroupIndex() {
               </CRow>
             </CardHeader>
             <CardBody className="table__overflow">
-            <div className="flex-center-space" style={{margin: "0 0 10px 0"}}>
-                    <div>
-                    <CButton
-                        color="success"
-                        style={{ marginRight: "10px" }}
-                        size="md"
-                        className="flex-center"
-                        onClick={() => ExportsFileExcel()}
-                      >
-                        <FaFileExport style={{ margin: "auto 6px auto 0" }} />
-                        <p style={{ margin: "auto 0" }}>Xuất File</p>
-                      </CButton>
-                      <a id="download_excel" download></a>
-                    </div>
-                    <div className="flex">
-
-                <CButton
-                  color="info"
-                  style={{
-               
-                    marginRight: "10px",
-                  }}
-                  size="md"
-                  className="flex-center"
-                  onClick={(e) => viewAddGroupSale()}
-                >
-                  <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                  <p style={{ margin: "auto 0" }}>Tạo nhóm</p>
-                </CButton>
-                <CButton
-                  color="info"
-                  style={{ marginRight: "10px" }}
-                  size="md"
+              <div
+                className="flex-center-space"
+                style={{ margin: "0 0 10px 0" }}
+              >
+                <div>
+                  <CButton
+                    color="success"
+                    style={{ marginRight: "10px" }}
+                    size="md"
+                    className="flex-center"
+                    onClick={() => ExportsFileExcel()}
+                  >
+                    <FaFileExport style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Xuất File</p>
+                  </CButton>
+                  <a id="download_excel" download></a>
+                </div>
+                <div className="flex">
+                 
+                  <CButton
+                    color="info"
+                    style={{ marginRight: "10px" }}
+                    size="md"
+                    className="btn-main"
                   
-                  onClick={(e) => {
-                    this.onSearch();
-                  }}
-                >
-                  <BsSearch style={{ margin: "auto 6px auto 0" }} />
-                  <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
-                </CButton>
-              </div>
+                  >
+                    <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                  </CButton>
+                  <CButton
+                    color="info"
+                    style={{
+                      marginRight: "10px",
+                    }}
+                    size="md"
+                    className="flex-center btn-main"
+                    onClick={(e) => viewAddGroupSale()}
+                  >
+                    <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                    <p style={{ margin: "auto 0" }}>Tạo nhóm</p>
+                  </CButton>
+                </div>
               </div>
               <TableInManagerSaleGroup
                 propsSaleGroup={showGroup}

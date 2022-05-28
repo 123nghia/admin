@@ -747,12 +747,10 @@ class User extends Component {
                 field="Address"
                 label="Địa chỉ"
                 value={this.state.Address}
-                placeholder={"Địa chỉ"}
-                // error={errors.title}
+                placeholder={"Địa chỉ"}   
                 onChange={(e) => this.onChange("Address", e.target.value)}
-                // rows="5"
               />
-              <CLabel>Danh sách công ty</CLabel>
+              {/* <CLabel>Danh sách công ty</CLabel>
 
               <Select
                 mode="multiple"
@@ -766,7 +764,7 @@ class User extends Component {
                   this.state.brandList.map((opt) => (
                     <Option key={opt._id}>{opt.Name}</Option>
                   ))}
-              </Select>
+              </Select> */}
 
               {action == "new" ? (
                 ""
@@ -775,8 +773,8 @@ class User extends Component {
                   <label style={styles.flexLabel} htmlFor="tag">
                     Trạng thái:{" "}
                   </label>
-                  <select
-                    style={styles.flexOption}
+                  <CSelect
+                    
                     name="Status"
                     onChange={(e) => this.onChange("Status", e.target.value)}
                   >
@@ -788,7 +786,7 @@ class User extends Component {
                     <option value={"Actived"}>Actived</option>
                     <option value={"Locked"}>Locked</option>
                     <option value={"Deactived"}>Deactived</option>
-                  </select>
+                  </CSelect>
                 </div>
               )}
             </ModalBody>

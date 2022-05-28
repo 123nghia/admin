@@ -232,6 +232,7 @@ class ListUserEvoucher extends Component {
         },
       })
       .then((res) => {
+        console.log(res)
         var val = res.data.data;
         this.setState({
           dataSales: this.state.dataSalesDefault.concat(val),
@@ -448,6 +449,70 @@ class ListUserEvoucher extends Component {
           </div>
         </CCol>
         <CCol md={3} className="mt">
+          <div className="">
+            <p className="title_filter">Danh sách Sales</p>
+            <div style={{ width: "200px" }}>
+              <Select
+                className="select_seo"
+                showSearch
+                placeholder="Lọc theo Sales"
+                optionFilterProp="children"
+                onChange={(value) =>
+                  this.setState({
+                    idDataSales: value,
+                  })
+                }
+                onSearch={this.onSearchSelect}
+                filterOption={(input, option) =>
+                  
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {this.state.dataSales
+                  ? this.state.dataSales.map((item, i) => {
+                      return <Option value={item._id}>{item.Name}</Option>;
+                    })
+                  : null}
+              </Select>
+            </div>
+          </div>
+        </CCol>
+        {
+         this.state.type !== "0" ? null :  <CCol md={3} className="mt">
+         <div className="">
+           <p className="title_filter">Nhà cung cấp</p>
+           <div style={{ width: "200px" }}>
+             <Select
+               className="select_seo"  
+               showSearch
+               placeholder="Lọc theo ncc"
+               optionFilterProp="children"
+               onChange={(value) =>
+                 this.setState({
+                   idDataCompany : value,
+                 })
+               }
+               onSearch={this.onSearchSelect}
+               filterOption={(input, option) =>
+                 option.children
+                   .toLowerCase()
+                   .indexOf(input.toLowerCase()) >= 0
+               }
+             >
+               {this.state.dataCompany
+                 ? this.state.dataCompany.map((item, i) => {
+                     return (
+                       <Option value={item._id}>{item.Name}</Option>
+                     );
+                   })
+                 : null}
+             </Select>
+           </div>
+         </div>
+       </CCol>
+       }
+        <CCol md={3} className="mt">
           <p className="title_filter">Từ ngày</p>
           <div>
             <DatePicker
@@ -489,71 +554,9 @@ class ListUserEvoucher extends Component {
             />
           </div>
         </CCol>
-        <CCol md={3} className="mt">
-          <div className="">
-            <p className="title_filter">Danh sách Sales</p>
-            <div style={{ width: "200px" }}>
-              <Select
-                className="select_seo"
-                showSearch
-                placeholder="Lọc theo Sales"
-                optionFilterProp="children"
-                onChange={(value) =>
-                  this.setState({
-                    idDataSales: value,
-                  })
-                }
-                onSearch={this.onSearchSelect}
-                filterOption={(input, option) =>
-                  
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-              >
-                {this.state.dataSales
-                  ? this.state.dataSales.map((item, i) => {
-                      return <Option value={item._id}>{item.Name}</Option>;
-                    })
-                  : null}
-              </Select>
-            </div>
-          </div>
-        </CCol>
+        
    
-       {
-         this.state.type !== "0" ? null :  <CCol md={3} className="mt">
-         <div className="">
-           <p className="title_filter">Nhà cung cấp</p>
-           <div style={{ width: "200px" }}>
-             <Select
-               className="select_seo"  
-               showSearch
-               placeholder="Lọc theo ncc"
-               optionFilterProp="children"
-               onChange={(value) =>
-                 this.setState({
-                   idDataCompany : value,
-                 })
-               }
-               onSearch={this.onSearchSelect}
-               filterOption={(input, option) =>
-                 option.children
-                   .toLowerCase()
-                   .indexOf(input.toLowerCase()) >= 0
-               }
-             >
-               {this.state.dataCompany
-                 ? this.state.dataCompany.map((item, i) => {
-                     return (
-                       <Option value={item._id}>{item.Name}</Option>
-                     );
-                   })
-                 : null}
-             </Select>
-           </div>
-         </div>
-       </CCol>
-       }
+      
       </CRow>
     );
 

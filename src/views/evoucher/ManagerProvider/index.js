@@ -203,7 +203,11 @@ class EndUser extends Component {
             active = active + 1;
           }
         });
-        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.totalRecord });
+        this.setState({
+          isLoading: false,
+          totalActive: active,
+          totalRecord: res.data.totalRecord,
+        });
       });
   }
 
@@ -212,27 +216,36 @@ class EndUser extends Component {
   }
 
   async openUpdate(item) {
-  
     this.setState({
       action: "edit",
-      UserName : item.UserName,
-      idActionCurrent : item._id,
+      UserName: item.UserName,
+      idActionCurrent: item._id,
       modalEdit: true,
       Name: item.Name,
       Email: item.Email,
       introduction: item.introduction,
-      Status : item.Status,
+      Status: item.Status,
       Brand: item.Brand,
       TypeId: item.TypeId,
-      Slug : item.Slug,
+      Slug: item.Slug,
       Logo: item.Logo,
       id: item["_id"],
     });
   }
   async update() {
-    const { Name, Brand,Slug, introduction, Status, TypeId, Email,UserName, Logo , idActionCurrent} =
-      this.state;
- 
+    const {
+      Name,
+      Brand,
+      Slug,
+      introduction,
+      Status,
+      TypeId,
+      Email,
+      UserName,
+      Logo,
+      idActionCurrent,
+    } = this.state;
+
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.UPDATE_PROVIDER;
 
@@ -242,13 +255,13 @@ class EndUser extends Component {
     let imgLink = await this.postImage(this.state.Logo_link);
     if (imgLink) {
       imgOutput = imgLink;
-    }else{
+    } else {
       imgOutput = Logo;
     }
     await axios
       .post(url, {
-        slug : Slug,
-        UserName : UserName,
+        slug: Slug,
+        UserName: UserName,
         name: Name,
         Email: Email,
         introduction: introduction,
@@ -256,7 +269,7 @@ class EndUser extends Component {
         brand: Brand,
         TypeId: TypeId,
         logo: imgOutput,
-        id : idActionCurrent
+        id: idActionCurrent,
       })
       .then((res) => {
         console.log(res);
@@ -351,7 +364,7 @@ class EndUser extends Component {
         } else {
           alert("Thêm không thành công");
           this.setState({ isLoading: false });
-        };
+        }
       });
   }
   async ExportsFileExcel() {
@@ -435,7 +448,6 @@ class EndUser extends Component {
   }
 
   nextButton() {
-
     this.setState({
       changeTab: "2",
     });
@@ -808,10 +820,10 @@ class EndUser extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Quản lý nhà cung cấp 
+                    Quản lý nhà cung cấp
                   </i>
 
-                  <CRow>
+                  {/* <CRow>
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Trạng thái chiến dịch</p>
@@ -897,11 +909,11 @@ class EndUser extends Component {
                         </div>
                       </div>
                     </CCol>
-                  </CRow>
+                  </CRow> */}
 
                   <div className="flex-center-space">
                     <div>
-                    <CButton
+                      <CButton
                         color="success"
                         style={{ marginRight: "10px" }}
                         size="md"
@@ -914,36 +926,36 @@ class EndUser extends Component {
                       <a id="download_excel" download></a>
                     </div>
                     <div className="flex">
-
-                    <CButton
-                      color="info"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
-                      size="md"
-                      className="btn-main"
-                      onClick={(e) => {
-                        this.onSearch();
-                      }}
-                    >
-                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
-                    </CButton>
-                    <CButton
-                      color="info"
-                      style={{ marginBottom: "10px" }}
-                      size="md"
-                      className="btn-main"
-                      onClick={() => this.openCreate()}
-                    >
-                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                    </CButton>
+                      <CButton
+                        color="info"
+                        style={{ marginBottom: "10px", marginRight: "10px" }}
+                        size="md"
+                        className="btn-main"
+                        onClick={(e) => {
+                          this.onSearch();
+                        }}
+                      >
+                        <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                      </CButton>
+                      <CButton
+                        color="info"
+                        style={{ marginBottom: "10px" }}
+                        size="md"
+                        className="btn-main"
+                        onClick={() => this.openCreate()}
+                      >
+                        <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                      </CButton>
+                    </div>
                   </div>
-                  </div>
-
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
-
+                  <h5>
+                    Tổng số:{" "}
+                    {this.state.totalRecord ? this.state.totalRecord : ""}
+                  </h5>
 
                   <table
                     ble
@@ -1002,7 +1014,10 @@ class EndUser extends Component {
                                   </Tag>
                                 </td>
                                 <td className="text-center table-row-last">
-                                  <div class="flex">
+                                  <div
+                                    class="flex"
+                                    style={{ minWidth: "200px" }}
+                                  >
                                     <Link
                                       onClick={() => this.GetDetailProvider()}
                                       to={"/detail-provider/" + item._id}
@@ -1012,7 +1027,7 @@ class EndUser extends Component {
                                         variant="outline"
                                         color="info"
                                         style={styles.mgl5}
-                                        size="sm"
+                                        size="md"
                                         className="flex-a-center "
                                       >
                                         <BsSearch className="mr-1" />

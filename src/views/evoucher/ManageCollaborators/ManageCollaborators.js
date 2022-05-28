@@ -1228,21 +1228,6 @@ class EndUser extends Component {
                   <CRow>
                     <CCol md={3} className="mt">
                       <div className="">
-                        <p className="title_filter">Mã Voucher</p>
-                        <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ codeVoucher: e.target.value });
-                          }}
-                          name="codeVoucher"
-                          value={this.state.codeVoucher}
-                          placeholder="Mã voucher"
-                        />
-                      </div>
-                    </CCol>
-
-                    <CCol md={3} className="mt">
-                      <div className="">
                         <p className="title_filter">Số điện thoại</p>
                         <Input
                           style={styles.searchInput}
@@ -1256,137 +1241,9 @@ class EndUser extends Component {
                         />
                       </div>
                     </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Trạng thái</p>
-                        <div style={{ width: "200px" }} className="">
-                          {arrLevel !== undefined ? (
-                            <CSelect
-                              onChange={async (e) => {
-                                this.changeLevelValue(e, "levelFilter");
-                              }}
-                              custom
-                              size="md"
-                              name="levelFilter"
-                              id="SelectLm"
-                            >
-                              {arrLevelFilter.map((item, i) => {
-                                if (item.item === this.state.levelFilter) {
-                                  return (
-                                    <option selected key={i} value={item.item}>
-                                      {item.item === "0"
-                                        ? "Hoạt động"
-                                        : "Không hoạt động"}
-                                    </option>
-                                  );
-                                } else {
-                                  return (
-                                    <option key={i} value={item.item}>
-                                      {item.item === "0"
-                                        ? "Hoạt động"
-                                        : "Không hoạt động"}
-                                    </option>
-                                  );
-                                }
-                              })}
-                            </CSelect>
-                          ) : null}
-                        </div>
-                        {/* <Input
-                          style={styles.searchInput}
-                          onChange={(e) => {
-                            this.setState({ statusVoucher: e.target.value });
-                          }}
-                          name="statusVoucher"
-                          value={this.state.statusVoucher}
-                          placeholder="Trạng thái voucher"
-                        /> */}
-                      </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Danh sách Sales</p>
-                        <div style={{ width: "200px" }}>
-                          <Select
-                            className="select_seo"
-                            showSearch
-                            placeholder="Lọc theo Sales"
-                            optionFilterProp="children"
-                            onChange={(value) =>
-                              this.setState({
-                                idDataSales: value,
-                              })
-                            }
-                            onSearch={this.onSearchSelect}
-                            filterOption={(input, option) =>
-                              option.children
-                                .toLowerCase()
-                                .indexOf(input.toLowerCase()) >= 0
-                            }
-                          >
-                            {this.state.dataSales
-                              ? this.state.dataSales.map((item, i) => {
-                                return (
-                                  <Option value={item._id}>
-                                    {item.Name}
-                                  </Option>
-                                );
-                              })
-                              : null}
-                          </Select>
-                        </div>
-                      </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Từ ngày</p>
-
-                        <div style={{ width: "200px" }}>
-                          <DatePicker
-                            style={styles.dateForm}
-                            onChange={(e, dateString) => {
-                              let copy = dateString.split("-");
-                              let newData = ``;
-                              copy.forEach((item, index) => {
-                                if (index === 0) {
-                                  newData += item;
-                                } else {
-                                  newData += `/${item}`;
-                                }
-                              });
-                              this.setState({ from: newData });
-                            }}
-                            format={dateFormat}
-                          />
-                        </div>
-                      </div>
-                    </CCol>
-                    <CCol md={3} className="mt">
-                      <div className="">
-                        <p className="title_filter">Đến ngày</p>
-                        <div style={{ width: "200px" }}>
-                          <DatePicker
-                            style={styles.dateForm}
-                            onChange={(e, dateString) => {
-                              let copy = dateString.split("-");
-                              let newData = ``;
-                              copy.forEach((item, index) => {
-                                if (index === 0) {
-                                  newData += item;
-                                } else {
-                                  newData += `/${item}`;
-                                }
-                              });
-                              this.setState({ to: newData });
-                            }}
-                            format={dateFormat}
-                          />
-                        </div>
-                      </div>
-                    </CCol>
                   </CRow>
 
-                  <div className="flex-center-space">
+                  <div className="flex-center-space mt-2">
                     <div>
                     <CButton
                         color="success"
@@ -1437,7 +1294,7 @@ class EndUser extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên</th>
                         <th className="text-center">Tên đăng nhập</th>
-                        <th className="text-center">Mật khẩu</th>
+                 
                         <th className="text-center">Email</th>
                         <th className="text-center">SĐT</th>
                         <th className="text-center">Slug</th>
@@ -1463,9 +1320,7 @@ class EndUser extends Component {
                               <td className="text-center">{i + 1}</td>
                               <td className="text-center">{item.Name}</td>
                               <td className="text-center">{item.UserName}</td>
-                              <td className="text-center">
-                                {item.password}
-                              </td>
+                              
                               <td className="text-center">
                                 {item.Email}
                               </td>
@@ -1482,10 +1337,11 @@ class EndUser extends Component {
                                 {item.Brand}
                               </td>
                               <td className="text-center">
-                                <img style={{maxHeight:'100px', maxWidth:'300px'}} src={item.Logo} alt="" />
+                                <img style={{maxHeight:'60px', maxWidth:'300px'}} src={item.Logo} alt="" />
                               </td>  
-                              <td className="text-center">
-                              <CButton
+                              <td className="text-center" style={{minWidth : '100px'}}>
+                                <div className="flex">
+                                <CButton
                                     shape="rounded-pill"
                                     variant="ghost"
                                     color="info"
@@ -1497,7 +1353,7 @@ class EndUser extends Component {
                                       style={styles.icon}
                                       name="cilPencil"
                                     />
-                                  </CButton>{" "}
+                                  </CButton>
                                   <CButton
                                     shape="rounded-pill"
                                     variant="ghost"
@@ -1513,6 +1369,8 @@ class EndUser extends Component {
                                       name="cilTrash"
                                     />
                                   </CButton>
+                                </div>
+                           
                               </td>
                              
                             </tr>

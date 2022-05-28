@@ -653,7 +653,7 @@ class User extends Component {
                   <label style={styles.flexLabel} htmlFor="tag">
                     Trạng thái:{" "}
                   </label>
-                  <select
+                  <CSelect
                     style={styles.flexOption}
                     name="Status"
                     onChange={(e) => this.onChange("Status", e.target.value)}
@@ -666,7 +666,7 @@ class User extends Component {
                     <option value={"Actived"}>Actived</option>
                     <option value={"Locked"}>Locked</option>
                     <option value={"Deactived"}>Deactived</option>
-                  </select>
+                  </CSelect>
                 </div>
               )}
             </ModalBody>

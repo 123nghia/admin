@@ -62,14 +62,14 @@ function TableInManagerSaleGroup(props) {
                     <td className="text-center">Đang cập nhật</td>
                     <td className="text-center">Đang cập nhật</td>
                     <td className="text-center">
-                      <div class="flex">
+                      <div class="flex" style={{minWidth: '180px'}}>
                         <Link to={"/detail-manager-sale-group/" + item._id}>
                           <CButton
                             shape="rounded-pill"
                             variant="outline"
                             color="info"
                             style={styles.mgl5}
-                            size="sm"
+                            size="md"
                             className="flex-a-center "
                           >
                             <BsSearch className="mr-1" />

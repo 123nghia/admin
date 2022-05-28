@@ -244,6 +244,9 @@ class EndUser extends Component {
       });
   }
   onSearch() {
+    console.log(this.state.from)
+    console.log(this.state.to)
+
     this.onGetCampaignList(this.state.key);
   }
 
@@ -1595,18 +1598,20 @@ class EndUser extends Component {
                                         : item.CheckIn?.[0].totalVoucher}
                                     </p>
                                     <CButton
-                                      shape="rounded-pill"
-                                      variant="outline"
-                                      color="info"
-                                      style={styles.mgl5}
-                                      size="md"
-                                      className="flex-a-center "
-                                      onClick={(e) =>
-                                        this.openPopupVoucher(item)
-                                      }
-                                    >
-                                      <BsSearch className="mr-1" />
-                                    </CButton>
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        className="flex-a-center "
+                                        onClick={(e) =>
+                                          this.openPopupVoucher(item)
+                                        }
+                                      >
+                                        <BsSearch />
+                                       
+                                      </CButton>
+                                 
                                   </div>
                                 </td>
                                 <td className="text-center">

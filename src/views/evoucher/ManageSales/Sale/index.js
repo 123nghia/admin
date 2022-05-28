@@ -111,7 +111,7 @@ class ManageSales extends Component {
         this.setState({ dataApi: val });
 
         let active = 0;
-        this.setState({ isLoading: false, totalActive: active });
+        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.totalRecord  });
       });
   }
 
@@ -323,7 +323,7 @@ class ManageSales extends Component {
           <th colspan="2" className="text-center">
             Thông tin PG
           </th>
-          <th colspan="4" className="text-center">
+          <th colspan="3" className="text-center">
             Thông tin Doanh Số
           </th>
           <th className="text-center" colspan="3"></th>
@@ -335,8 +335,8 @@ class ManageSales extends Component {
           <th className="text-center border-left">Tổng số Evoucher</th>
           <th className="text-center">Tổng số khách CheckIn</th>
           <th className="text-center">Tỷ lệ Khách Checkin</th>
-          <th className="text-center"></th>
-          <th className="text-center border-left">Ghi chú</th>
+          <th className="text-center border-left"></th>
+          <th className="text-center">Ghi chú</th>
    
           <th className="text-center">Ngày tạo</th>
         </tr>
@@ -360,21 +360,21 @@ class ManageSales extends Component {
           {capitalizeFirstLetter(collaborator?.name || collaborator?.username)}
         </td>
         <td className="text-center">{collaborator?.phone}</td>
-        <td className="text-center border-left">50</td>
-        <td className="text-center">12</td>
-        <td className="text-center">12%</td>
+        <td className="text-center border-left">Chưa có thông số</td>
+        <td className="text-center">Chưa có thông số</td>
+        <td className="text-center">Chưa có thông số</td>
 
-        <td className="text-center">
-          <div className="flex">
+        <td className="text-center border-left">
+          <div className="flex" style={{minWidth: '300px'}}>
             <CButton
               shape="rounded-pill"
-              variant="ghost"
+              variant="outline"
               color="info"
               style={styles.mgl5}
               size="md"
               onClick={(e) => this.openSelectExport(collaborator)}
             >
-              <BiExport style={styles.icon} name="cilPencil" />
+              <BiExport style={styles.icon} className="mr-1" name="cilPencil" />
               Export
             </CButton>
             <Link to={`/detail-pg/${collaborator?._id}`}>
@@ -413,7 +413,7 @@ class ManageSales extends Component {
             </CButton>
           </div>
         </td>
-        <td className="text-center border-left">{collaborator?.noted}</td>
+        <td className="text-center">{collaborator?.noted ? collaborator?.noted : 'Không có'}</td>
   
         <td className="text-center">
           {collaborator?.create_date || new Date().toLocaleDateString("vi-VI")}
@@ -560,7 +560,7 @@ class ManageSales extends Component {
                 
               </CardHeader>
               <CardBody className="table__overflow">
-              <h5>Tổng số: {data?.length}</h5>
+              <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>  
                 <table
                   ble
                   className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -600,7 +600,7 @@ class ManageSales extends Component {
               component="h2"
               style={{ margin: "1rem 0 0 0" }}
             >
-              Họ tên
+              Họ tên 
             </Typography>
             <TextField
               id="outlined-basic"
@@ -817,7 +817,7 @@ class ManageSales extends Component {
               }}
               disabled={this.state.isLoading}
             >
-              Lưu
+              Xuất File
             </CButton>{" "}
             <CButton
               color="secondary"
