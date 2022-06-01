@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
+import QRCode from 'qrcode';
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
@@ -43,7 +43,10 @@ import IOSSwitch from "src/views/components/SwitchOption";
 import Swal from "sweetalert2";
 import Constants from "../../../../contants/contants";
 import { BiExport } from "react-icons/bi";
+import { Select } from "antd";
 
+import { MdOutlineQrCodeScanner } from 'react-icons/md';
+const { Option } = Select;
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
@@ -72,7 +75,7 @@ class ManageSales extends Component {
     token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     type: localStorage.getItem("type"),
     user: localStorage.getItem("user"),
-    typePartner : JSON.parse(localStorage.getItem("user")).typePartner ? JSON.parse(localStorage.getItem("user")).company_id : "",
+    typePartner : JSON.parse(localStorage.getItem("user")).typePartner ? JSON.parse(localStorage.getItem("user")).company_id : null,
     isLoading: false,
     idCurrentUpdate: null,
     levelNormal: "0",
@@ -247,6 +250,31 @@ class ManageSales extends Component {
         })
       );
   }
+  
+  exportQRCode=(item)=>{
+    this.setState({
+      modalQRCode: true,
+      itemRenderQRCode: item,
+      qrCode: ""
+    });
+    this.renderQRCode(item);
+    
+  };
+  renderQRCode=(item)=>{
+    const {itemRenderQRCode, user} = this.state;
+    const userParse = JSON.parse(user);
+    console.log(item);
+    QRCode.toDataURL(`https://deal24h.vn/${userParse.username}/${item.phone}`).then((data)=>{
+      this.setState({
+        qrCode : data
+      })
+    });
+  }
+  SelectCampaignRenderQR=(item)=>{
+    this.setState({
+      campaignRenderQRCode : item
+    })
+  }
 
   handleShowEditCollaborator({
     username,
@@ -365,7 +393,7 @@ class ManageSales extends Component {
         <td className="text-center">Chưa có thông số</td>
 
         <td className="text-center border-left">
-          <div className="flex" style={{minWidth: '300px'}}>
+          <div className="flex" style={{minWidth: '400px'}}>
             <CButton
               shape="rounded-pill"
               variant="outline"
@@ -410,6 +438,17 @@ class ManageSales extends Component {
               }}
             >
               <BsTrash style={styles.icon} className="icon" name="cilTrash" />
+            </CButton>
+            <CButton
+              shape="rounded-pill"
+              variant="outline"
+              color="info"
+              style={styles.mgl5}
+              size="md"
+              onClick={(e) => this.exportQRCode(collaborator)}
+            >
+              <MdOutlineQrCodeScanner style={styles.icon} className="mr-1" name="cilPencil" />
+              QRCode
             </CButton>
           </div>
         </td>
@@ -466,6 +505,14 @@ class ManageSales extends Component {
       })
       .then((res) => {
         let val = res.data.data;
+        val.unshift({
+          name : "Chưa có",
+          vendor : [
+            {
+              Slug : ""
+            }
+          ]
+        })
         this.setState({ dataCampaign: val },()=>{console.log(this.state.dataCampaign)});
       
       });
@@ -824,6 +871,38 @@ class ManageSales extends Component {
               onClick={(e) =>
                 this.setState({
                   modalSelect: !this.state.modalSelect,
+                })
+              }
+            >
+              Đóng
+            </CButton>
+          </ModalFooter>
+        </Modal>
+        <Modal isOpen={this.state.modalQRCode} className={this.props.className}>
+          <ModalHeader>Tạo mã QRCode</ModalHeader>
+          <ModalBody> 
+              <div className="">
+                <h6>Mã QRCode:</h6>
+                <div className="text-center">
+                  <img src={this.state.qrCode} />
+                </div>    
+              </div>
+          </ModalBody>
+          <ModalFooter>
+            <CButton
+              color="primary"
+              disabled={this.state.isLoading}
+              onClick={()=>{
+                alert("Tính năng đang cập nhật")
+              }}
+            >
+              Chia sẻ
+            </CButton>{" "}
+            <CButton
+              color="secondary"
+              onClick={(e) =>
+                this.setState({
+                  modalQRCode: !this.state.modalQRCode,
                 })
               }
             >

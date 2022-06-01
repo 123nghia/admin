@@ -573,6 +573,8 @@
   margin: 12px 0 8px 0;
 }
 .overview__border-widget--footer{
-
+  
 }
-
+.css-ahj2mt-MuiTypography-root {
+  margin: 0 0 0 12px;
+}

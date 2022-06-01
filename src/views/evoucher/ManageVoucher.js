@@ -48,7 +48,7 @@ import DotLoader from "react-spinners/DotLoader";
 import { Tag, Divider } from "antd";
 import { DatePicker, Space } from "antd";
 import "antd/dist/antd.css";
-import { Select } from "antd";
+
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -56,7 +56,7 @@ import { Box, Chip, IconButton, Tooltip } from "@mui/material";
 import CIcon from "@coreui/icons-react";
 import { freeSet } from "@coreui/icons";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-
+import { Select } from "antd";
 const { Option } = Select;
 const dateFormat = "DD-MM-YYYY";
 let headers = new Headers();
