@@ -92,7 +92,28 @@ class ManageSales extends Component {
     saleGroupList: [],
     dataCampaign : [],
   };
+  async remove(item){
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.COLLABORATOR_DELETE;
 
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .delete(url, {
+        data : {
+          id : item._id
+        }
+      })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Xóa thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+        this.getData();
+
+      });
+  }
   async getData(key) {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.COLLABORATOR_GET;
@@ -164,7 +185,7 @@ class ManageSales extends Component {
       });
     }
 
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
   }
 
   handleShowAddNewSales() {

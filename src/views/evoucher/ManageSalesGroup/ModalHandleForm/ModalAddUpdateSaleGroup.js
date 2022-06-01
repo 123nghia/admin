@@ -28,7 +28,7 @@ function ModalAddUpdateSaleGroup(props) {
           component="h2"
           style={{ margin: "0.6rem 0 0.3rem 0" }}
         >
-          Tên nhóm
+          Tên nhóm (*)
         </Typography>
         <TextField
           id="outlined-basic"
@@ -48,7 +48,7 @@ function ModalAddUpdateSaleGroup(props) {
             component="h2"
             style={{ margin: "0.6rem 0 0.3rem 0" }}
           >
-            Nội dung
+            Nội dung (*)
           </Typography>
           <TextareaAutosize
             aria-label="minimum height"

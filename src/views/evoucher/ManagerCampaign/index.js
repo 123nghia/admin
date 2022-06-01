@@ -332,7 +332,7 @@ class EndUser extends Component {
       actionVoucher: "edit",
       modalVoucher: true,
       idCurrentUpdate: item?._id,
-      quantity: item?.quatinity,
+      quantity: item?.quantity,
       name: item?.name,
       saleEndDate: new Date(item?.saleEndDate).toLocaleDateString(),
       from: new Date(item?.from).toLocaleDateString(),
@@ -405,7 +405,26 @@ class EndUser extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_CAMPAIGN;
     let url = baseUrlapi + baseUrlCallApi;
-
+    if(!this.state.idCompany || this.state.idCompany === ""){
+      alert("Vui lòng chọn nhà cung cấp");
+      return;
+    };
+    if(!this.state.from || this.state.from === ""){
+      alert("Vui lòng chọn ngày bắt đầu");
+      return;
+    };
+    if(!this.state.to || this.state.to === ""){
+      alert("Vui lòng chọn ngày kết thúc");
+      return;
+    };
+    if(!this.state.saleEndDate || this.state.saleEndDate === ""){
+      alert("Vui lòng chọn ngày kết thúc chiến dịch");
+      return;
+    };
+    if(!this.state.name || this.state.name === ""){
+      alert("Vui lòng nhập tên chiến dịch");
+      return;
+    };
     await axios
       .post(url, {
         quantity: quantity,
@@ -751,7 +770,7 @@ class EndUser extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="name"
-                label="Tên chiến dịch"
+                label="Tên chiến dịch (*)"
                 value={this.state.name}
                 // error={errors.title}
                 onChange={(e) => this.setState({ name: e.target.value })}
@@ -769,7 +788,7 @@ class EndUser extends Component {
 
               <TextFieldGroup
                 field="quantity"
-                label="Số lượng Voucher"
+                label="Số lượng Voucher (*)"
                 value={this.state.quantity}
                 // error={errors.title}
                 onChange={(e) => this.setState({ quantity: e.target.value })}
@@ -785,7 +804,7 @@ class EndUser extends Component {
                 onChange={(e) => this.setState({ from: e.target.value })}
                 // rows="5"
               /> */}
-              <label>Ngày bắt đầu</label>
+              <label>Ngày bắt đầu (*)</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -826,7 +845,7 @@ class EndUser extends Component {
               )}
 
               <div className="mt-3"></div>
-              <label>Ngày kết thúc</label>
+              <label>Ngày kết thúc (*)</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -866,7 +885,7 @@ class EndUser extends Component {
                 />
               )}
               <div className="mt-3"></div>
-              <label>Ngày kết thúc chiến dịch</label>
+              <label>Ngày kết thúc chiến dịch (*)</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -923,7 +942,7 @@ class EndUser extends Component {
                   this.setState({ noted: e.target.value });
                 }}
               />
-              <label className="control-label">Công ty - NCC:</label>
+              <label className="control-label">Công ty - NCC (*)</label>
               <div style={{ width: "100%" }}>
                 <Select
                   className="select_company"
@@ -951,7 +970,7 @@ class EndUser extends Component {
                 </Select>
               </div>
               <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Trạng thái:</CLabel>
+                <CLabel>Trạng thái (*)</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
                     onChange={async (e) => {
@@ -1330,7 +1349,7 @@ class EndUser extends Component {
                           onChange={(e) => {
                             this.setState({ phoneFilter: e.target.value });
                           }}
-                          type="number"
+                          type="text"
                           name="phoneFilter"
                           value={this.state.phoneFilter}
                           placeholder="Số điện thoại"
@@ -1593,9 +1612,7 @@ class EndUser extends Component {
                                       className="mr-2"
                                       style={{ margin: "auto" }}
                                     >
-                                      {item.CheckIn.length === 0
-                                        ? "Đang cập nhật"
-                                        : item.CheckIn?.[0].totalVoucher}
+                                      {item.quantity}
                                     </p>
                                     <CButton
                                         shape="rounded-pill"
@@ -1733,7 +1750,7 @@ class EndUser extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="name"
-                label="Tên chiến dịch"
+                label="Tên chiến dịch (*)"
                 value={this.state.name}
                 // error={errors.title}
                 onChange={(e) => this.setState({ name: e.target.value })}
@@ -1742,7 +1759,7 @@ class EndUser extends Component {
 
               <TextFieldGroup
                 field="voucher"
-                label="Số lượng Voucher"
+                label="Số lượng Voucher (*)"
                 value={this.state.voucher}
                 // error={errors.title}
                 onChange={(e) => this.setState({ voucher: e.target.value })}

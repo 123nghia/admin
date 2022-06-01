@@ -122,7 +122,7 @@ function ModalDetailProvider(props) {
                     Số lượng voucher phát:{" "}
                     <span className="modal-detail">
                       {valDetailCampaign && valDetailCampaign.campaignOverview
-                        ? valDetailCampaign.campaignOverview[0].countVoucher
+                        ? valDetailCampaign.campaignOverview[0]?.countVoucher
                         : null}
                     </span>
                   </p>
@@ -130,7 +130,7 @@ function ModalDetailProvider(props) {
                     Tỉ lệ hoàn thành:{" "}
                     <span className="modal-detail">
                       {valDetailCampaign && valDetailCampaign.campaignOverview
-                        ? valDetailCampaign.campaignOverview[0].rateCheckIn
+                        ? valDetailCampaign.campaignOverview[0]?.rateCheckIn
                         : null}
                     </span>
                   </p>
@@ -138,7 +138,7 @@ function ModalDetailProvider(props) {
                     Số lượng khách check in:{" "}
                     <span className="modal-detail">
                       {valDetailCampaign && valDetailCampaign.campaignOverview
-                        ? valDetailCampaign.campaignOverview[0].voucheredCount
+                        ? valDetailCampaign.campaignOverview[0]?.voucheredCount
                         : null}
                     </span>
                   </p>
@@ -146,7 +146,7 @@ function ModalDetailProvider(props) {
                     Tỉ lệ khách check in:{" "}
                     <span className="modal-detail">
                       {valDetailCampaign && valDetailCampaign.campaignOverview
-                        ? valDetailCampaign.campaignOverview[0].rateCheckIn
+                        ? valDetailCampaign.campaignOverview[0]?.rateCheckIn
                         : null}
                     </span>
                   </p>

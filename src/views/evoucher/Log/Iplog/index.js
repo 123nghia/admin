@@ -301,7 +301,7 @@ class IpLog extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="userName"
-                label="Tên Đăng nhập"
+                label="Tên Đăng nhập (*)"
                 value={this.state.userName}
                 // error={errors.title}
                 onChange={(e) => this.setState({ userName: e.target.value })}
@@ -309,7 +309,7 @@ class IpLog extends Component {
               />
               <TextFieldGroup
                 field="password"
-                label="Password"
+                label="Password (*)"
                 value={this.state.password}
                 // error={errors.title}
                 onChange={(e) => this.setState({ password: e.target.value })}
@@ -317,7 +317,7 @@ class IpLog extends Component {
               />
               <TextFieldGroup
                 field="name"
-                label="Tên đối tác"
+                label="Tên đối tác (*)"
                 value={this.state.name}
                 // error={errors.title}
                 onChange={(e) => this.setState({ name: e.target.value })}
@@ -334,7 +334,7 @@ class IpLog extends Component {
 
               <TextFieldGroup
                 field="phone"
-                label="Số điện thoại"
+                label="Số điện thoại (*)"
                 value={this.state.phone}
                 // error={errors.title}
                 onChange={(e) => this.setState({ phone: e.target.value })}
@@ -342,7 +342,7 @@ class IpLog extends Component {
               />
               <TextFieldGroup
                 field="slug"
-                label="Slug"
+                label="Slug (*)"
                 value={this.state.slug}
                 // error={errors.title}
                 onChange={(e) => this.setState({ slug: e.target.value })}
@@ -426,7 +426,7 @@ class IpLog extends Component {
                           onChange={(e) => {
                             this.setState({ phoneFilter: e.target.value });
                           }}
-                          type="number"
+                          type="text"
                           name="phoneFilter"
                           value={this.state.phoneFilter}
                           placeholder="Số điện thoại"

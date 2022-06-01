@@ -365,7 +365,7 @@ class IpLog extends Component {
                           onChange={(e) => {
                             this.setState({ phoneFilter: e.target.value });
                           }}
-                          type="number"
+                          type="text"
                           name="phoneFilter"
                           value={this.state.phoneFilter}
                           placeholder="Số điện thoại"

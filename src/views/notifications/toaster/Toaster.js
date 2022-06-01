@@ -91,7 +91,7 @@ const Toaster = () => {
                   <CFormGroup className="my-2">
                     <CLabel htmlFor="ccyear">Time to autohide</CLabel>
                     <CInput
-                      type="number"
+                      type="text"
                       value={autohideValue}
                       onChange={e => {
                         setAutohideValue(Number(e.target.value))

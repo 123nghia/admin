@@ -48,7 +48,7 @@ class EndUser extends Component {
     modalPopupVoucher: false,
     modalVoucherEditing: false,
     key: "",
-    idDataCompany  : "",
+    idDataCompany: "",
     dataVoucher: [],
     arrPaginationVoucher: [],
     indexPageVoucher: 0,
@@ -115,7 +115,11 @@ class EndUser extends Component {
         this.setState({ dataApi: campaignList });
 
         let active = 0;
-        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.totalRecord });
+        this.setState({
+          isLoading: false,
+          totalActive: active,
+          totalRecord: res.data.totalRecord,
+        });
       })
       .catch((err) => console.log(err));
   }
@@ -192,7 +196,7 @@ class EndUser extends Component {
 
     this.setState({ arrPaginationVoucher: arrTotal, dataVoucher: arrTotal[0] });
   }
-  async getDataCompany (){
+  async getDataCompany() {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_ALL_COMPANY;
     let url = baseUrlapi + baseUrlCallApi;
@@ -204,15 +208,15 @@ class EndUser extends Component {
         // },
       })
       .then((res) => {
-        let val = res.data.data;  
-        console.log(val.length)
+        let val = res.data.data;
+        console.log(val.length);
 
         val.push({
           company_id: "",
-          Name : "Tất cả"
-        })  
-        console.log(val.length)
-        this.setState({ dataCompany : val });
+          Name: "Tất cả",
+        });
+        console.log(val.length);
+        this.setState({ dataCompany: val });
       });
   }
   async getDataVoucher(id) {
@@ -238,8 +242,8 @@ class EndUser extends Component {
       });
   }
   onSearch() {
-    console.log(this.state.from)
-    console.log(this.state.to)
+    console.log(this.state.from);
+    console.log(this.state.to);
     this.onGetCampaignList(this.state.key);
   }
 
@@ -325,7 +329,7 @@ class EndUser extends Component {
       actionVoucher: "edit",
       modalVoucher: true,
       idCurrentUpdate: item?._id,
-      quantity: item?.quatinity,
+      quantity: item?.quantity,
       name: item?.name,
       saleEndDate: new Date(item?.saleEndDate).toLocaleDateString(),
       from: new Date(item?.from).toLocaleDateString(),
@@ -398,7 +402,26 @@ class EndUser extends Component {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.ADD_CAMPAIGN;
     let url = baseUrlapi + baseUrlCallApi;
-
+    if(!this.state.idCompany || this.state.idCompany === ""){
+      alert("Vui lòng chọn nhà cung cấp");
+      return;
+    };
+    if(!this.state.from || this.state.from === ""){
+      alert("Vui lòng chọn ngày bắt đầu");
+      return;
+    };
+    if(!this.state.to || this.state.to === ""){
+      alert("Vui lòng chọn ngày kết thúc");
+      return;
+    };
+    if(!this.state.saleEndDate || this.state.saleEndDate === ""){
+      alert("Vui lòng chọn ngày kết thúc chiến dịch");
+      return;
+    };
+    if(!this.state.name || this.state.name === ""){
+      alert("Vui lòng nhập tên chiến dịch");
+      return;
+    };
     await axios
       .post(url, {
         quantity: quantity,
@@ -744,7 +767,7 @@ class EndUser extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="name"
-                label="Tên chiến dịch"
+                label="Tên chiến dịch (*)"
                 value={this.state.name}
                 // error={errors.title}
                 onChange={(e) => this.setState({ name: e.target.value })}
@@ -762,7 +785,7 @@ class EndUser extends Component {
 
               <TextFieldGroup
                 field="quantity"
-                label="Số lượng Voucher"
+                label="Số lượng Voucher (*)"
                 value={this.state.quantity}
                 // error={errors.title}
                 onChange={(e) => this.setState({ quantity: e.target.value })}
@@ -778,7 +801,7 @@ class EndUser extends Component {
                 onChange={(e) => this.setState({ from: e.target.value })}
                 // rows="5"
               /> */}
-              <label>Ngày bắt đầu</label>
+              <label>Ngày bắt đầu (*)</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -819,7 +842,7 @@ class EndUser extends Component {
               )}
 
               <div className="mt-3"></div>
-              <label>Ngày kết thúc</label>
+              <label>Ngày kết thúc (*)</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -859,7 +882,7 @@ class EndUser extends Component {
                 />
               )}
               <div className="mt-3"></div>
-              <label>Ngày kết thúc chiến dịch</label>
+              <label>Ngày kết thúc chiến dịch (*)</label>
               {this.state.actionVoucher !== "new" ? (
                 <DatePicker
                   onChange={(e, dateString) => {
@@ -916,7 +939,7 @@ class EndUser extends Component {
                   this.setState({ noted: e.target.value });
                 }}
               />
-              <label className="control-label">Công ty - NCC:</label>
+              <label className="control-label">Công ty - NCC (*)</label>
               <div style={{ width: "100%" }}>
                 <Select
                   className="select_company"
@@ -944,7 +967,7 @@ class EndUser extends Component {
                 </Select>
               </div>
               <div style={{ width: "100%" }} className="mt-3">
-                <CLabel>Trạng thái:</CLabel>
+                <CLabel>Trạng thái (*)</CLabel>
                 {arrLevel != undefined ? (
                   <CSelect
                     onChange={async (e) => {
@@ -1312,7 +1335,7 @@ class EndUser extends Component {
                           onChange={(e) => {
                             this.setState({ phoneFilter: e.target.value });
                           }}
-                          type="number"
+                          type="text"
                           name="phoneFilter"
                           value={this.state.phoneFilter}
                           placeholder="Số điện thoại"
@@ -1401,37 +1424,39 @@ class EndUser extends Component {
                       </div>
                     </CCol>
                     <CCol md={3} className="mt">
-                    <div className="">
-                      <p className="title_filter">Nhà cung cấp</p>
-                      <div style={{ width: "200px" }}>
-                        <Select
-                          className="select_seo"  
-                          showSearch
-                          placeholder="Lọc theo ncc"
-                          optionFilterProp="children"
-                          onChange={(value) =>
-                            this.setState({
-                              idDataCompany : value,
-                            })
-                          }
-                          onSearch={this.onSearchSelect}
-                          filterOption={(input, option) =>
-                            option.children
-                              .toLowerCase()
-                              .indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          {this.state.dataCompany
-                            ? this.state.dataCompany.map((item, i) => {
-                                return (
-                                  <Option value={item._id}>{item.Name}</Option>
-                                );
+                      <div className="">
+                        <p className="title_filter">Nhà cung cấp</p>
+                        <div style={{ width: "200px" }}>
+                          <Select
+                            className="select_seo"
+                            showSearch
+                            placeholder="Lọc theo ncc"
+                            optionFilterProp="children"
+                            onChange={(value) =>
+                              this.setState({
+                                idDataCompany: value,
                               })
-                            : null}
-                        </Select>
+                            }
+                            onSearch={this.onSearchSelect}
+                            filterOption={(input, option) =>
+                              option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                            }
+                          >
+                            {this.state.dataCompany
+                              ? this.state.dataCompany.map((item, i) => {
+                                  return (
+                                    <Option value={item._id}>
+                                      {item.Name}
+                                    </Option>
+                                  );
+                                })
+                              : null}
+                          </Select>
+                        </div>
                       </div>
-                    </div>
-                  </CCol>
+                    </CCol>
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Từ ngày</p>
@@ -1479,12 +1504,11 @@ class EndUser extends Component {
                         </div>
                       </div>
                     </CCol>
-                    
                   </CRow>
 
                   <div className="flex-center-space">
                     <div>
-                    <CButton
+                      <CButton
                         color="success"
                         style={{ marginRight: "10px" }}
                         size="md"
@@ -1497,35 +1521,37 @@ class EndUser extends Component {
                       <a id="download_excel" download></a>
                     </div>
                     <div className="flex">
-                    <CButton
-                      color="info"
-                      style={{ marginRight: "10px" }}
-                      size="md"
-                      className="btn-main"
-                      onClick={(e) => {
-                        this.onSearch();
-                      }}
-                    >
-                      <BsSearch style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
-                    </CButton>
-                    {
-                          this.state.type !== "0" ? null : 
-                    <CButton
-                      color="info"
-                      size="md"
-                      className="btn-main"
-                      onClick={() => this.openVoucher()}
-                    >
-                      <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
-                      <p style={{ margin: "auto 0" }}>Thêm mới</p>
-                    </CButton>
-                    }
-                  </div>
+                      <CButton
+                        color="info"
+                        style={{ marginRight: "10px" }}
+                        size="md"
+                        className="btn-main"
+                        onClick={(e) => {
+                          this.onSearch();
+                        }}
+                      >
+                        <BsSearch style={{ margin: "auto 6px auto 0" }} />
+                        <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
+                      </CButton>
+                      {this.state.type !== "0" ? null : (
+                        <CButton
+                          color="info"
+                          size="md"
+                          className="btn-main"
+                          onClick={() => this.openVoucher()}
+                        >
+                          <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
+                          <p style={{ margin: "auto 0" }}>Thêm mới</p>
+                        </CButton>
+                      )}
+                    </div>
                   </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+                  <h5>
+                    Tổng số:{" "}
+                    {this.state.totalRecord ? this.state.totalRecord : ""}
+                  </h5>
 
                   <table
                     ble
@@ -1547,9 +1573,9 @@ class EndUser extends Component {
 
                         {/* <th classNamưe="text-center">Mô tả</th> */}
 
-                        {
-                          this.state.type !== "0" ? null : <th className="text-center"></th>
-                        }
+                        {this.state.type !== "0" ? null : (
+                          <th className="text-center"></th>
+                        )}
                       </tr>
                     </thead>
                     <tbody>
@@ -1579,26 +1605,23 @@ class EndUser extends Component {
                                       className="mr-2"
                                       style={{ margin: "auto" }}
                                     >
-                                      {item.CheckIn.length === 0
-                                        ? "Đang cập nhật"
-                                        : item.CheckIn?.[0].totalVoucher}
+                                      {item.quantity}
                                     </p>
-                                    {
-                          this.state.type !== "0" ? null : <CButton
-                          shape="rounded-pill"
-                          variant="outline"
-                          color="info"
-                          style={styles.mgl5}
-                          size="md"
-                          className="flex-a-center "
-                          onClick={(e) =>
-                            this.openPopupVoucher(item)
-                          }
-                        >
-                          <BsSearch className="mr-1" />
-                        </CButton>
-                        }
-                                    
+                                    {this.state.type !== "0" ? null : (
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="outline"
+                                        color="info"
+                                        style={styles.mgl5}
+                                        size="md"
+                                        className="flex-a-center "
+                                        onClick={(e) =>
+                                          this.openPopupVoucher(item)
+                                        }
+                                      >
+                                        <BsSearch className="mr-1" />
+                                      </CButton>
+                                    )}
                                   </div>
                                 </td>
                                 <td className="text-center">
@@ -1634,64 +1657,64 @@ class EndUser extends Component {
                                   {item.description}
                                 </td> */}
 
-                                {
-                                  this.state.type !== "0" ? null : <td
-                                  className="text-center table-row-last"
-                                  style={{ minWidth: "230px" }}
-                                >
-                                  <div className="flex">
-                                    <Link
-                                      onClick={() => this.GetDetailCampaign()}
-                                      to={"/detail-campaign/" + item._id}
-                                    >
+                                {this.state.type !== "0" ? null : (
+                                  <td
+                                    className="text-center table-row-last"
+                                    style={{ minWidth: "230px" }}
+                                  >
+                                    <div className="flex">
+                                      <Link
+                                        onClick={() => this.GetDetailCampaign()}
+                                        to={"/detail-campaign/" + item._id}
+                                      >
+                                        <CButton
+                                          shape="rounded-pill"
+                                          variant="outline"
+                                          color="info"
+                                          style={styles.mgl5}
+                                          size="md"
+                                          className="flex-a-center "
+                                          // onClick={(e) =>
+                                          //   this.viewDetailCampaign(item._id)
+                                          // }
+                                        >
+                                          <BsSearch className="mr-1" />
+                                          Chi tiết
+                                        </CButton>
+                                      </Link>
                                       <CButton
                                         shape="rounded-pill"
-                                        variant="outline"
+                                        variant="ghost"
                                         color="info"
                                         style={styles.mgl5}
                                         size="md"
-                                        className="flex-a-center "
-                                        // onClick={(e) =>
-                                        //   this.viewDetailCampaign(item._id)
-                                        // }
+                                        onClick={(e) =>
+                                          this.openEditVoucher(item)
+                                        }
                                       >
-                                        <BsSearch className="mr-1" />
-                                        Chi tiết
+                                        <FiEdit3
+                                          style={styles.icon}
+                                          name="cilPencil"
+                                        />
+                                      </CButton>{" "}
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="ghost"
+                                        color="danger"
+                                        style={styles.mgl5}
+                                        onClick={(e) => {
+                                          this.remove(item);
+                                        }}
+                                      >
+                                        <BsTrash
+                                          style={styles.icon}
+                                          className="icon"
+                                          name="cilTrash"
+                                        />
                                       </CButton>
-                                    </Link>
-                                    <CButton
-                                      shape="rounded-pill"
-                                      variant="ghost"
-                                      color="info"
-                                      style={styles.mgl5}
-                                      size="md"
-                                      onClick={(e) =>
-                                        this.openEditVoucher(item)
-                                      }
-                                    >
-                                      <FiEdit3
-                                        style={styles.icon}
-                                        name="cilPencil"
-                                      />
-                                    </CButton>{" "}
-                                    <CButton
-                                      shape="rounded-pill"
-                                      variant="ghost"
-                                      color="danger"
-                                      style={styles.mgl5}
-                                      onClick={(e) => {
-                                        this.remove(item);
-                                      }}
-                                    >
-                                      <BsTrash
-                                        style={styles.icon}
-                                        className="icon"
-                                        name="cilTrash"
-                                      />
-                                    </CButton>
-                                  </div>
-                                </td>
-                                }
+                                    </div>
+                                  </td>
+                                )}
                               </tr>
                             );
                           })
@@ -1722,7 +1745,7 @@ class EndUser extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="name"
-                label="Tên chiến dịch"
+                label="Tên chiến dịch (*)"
                 value={this.state.name}
                 // error={errors.title}
                 onChange={(e) => this.setState({ name: e.target.value })}
@@ -1731,7 +1754,7 @@ class EndUser extends Component {
 
               <TextFieldGroup
                 field="voucher"
-                label="Số lượng Voucher"
+                label="Số lượng Voucher (*)"
                 value={this.state.voucher}
                 // error={errors.title}
                 onChange={(e) => this.setState({ voucher: e.target.value })}

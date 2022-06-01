@@ -605,7 +605,7 @@ class EndUser extends Component {
                                         variant="outline"
                                         color="info"
                                         style={styles.mgl5}
-                                        size="sm"
+                                        size="md"
                                         className="flex-a-center "
                                       >
                                         <BsSearch className="mr-1" />

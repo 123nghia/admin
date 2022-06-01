@@ -654,14 +654,14 @@ class EndUser extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="codeVoucher"
-                label="Mã voucher"
+                label="Mã voucher (*)"
                 value={this.state.codeVoucher}
                 // error={errors.title}
                 onChange={(e) => this.setState({ codeVoucher: e.target.value })}
                 // rows="5"
               />
               <div class="mt-3"></div>
-              <label className="mr-3">Tên chiến dịch</label>
+              <label className="mr-3">Tên chiến dịch (*)</label>
               <Select
                 defaultValue={
                   this.state.dataCampaign && this.state.dataCampaign?.[0]
@@ -817,7 +817,7 @@ class EndUser extends Component {
                           onChange={(e) => {
                             this.setState({ phoneFilter: e.target.value });
                           }}
-                          type="number"
+                          type="text"
                           name="phoneFilter"
                           value={this.state.phoneFilter}
                           placeholder="Số điện thoại"

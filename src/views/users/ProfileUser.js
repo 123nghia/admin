@@ -288,7 +288,7 @@ class Users extends Component {
                       <CRow>
                         <CCol sm="12" lg="12">
                           <div>
-                            <CLabel>Tên</CLabel>
+                            <CLabel>Tên (*)</CLabel>
                             <Input
                               style={styles.searchInput}
                               onChange={(e) => {
@@ -313,7 +313,7 @@ class Users extends Component {
                         </CCol>
 
                         <CCol sm="12" lg="12">
-                          <CLabel>Số điện thoại</CLabel>
+                          <CLabel>Số điện thoại (*)</CLabel>
                           <Input
                             style={styles.searchInput}
                             value={Phone}
@@ -395,7 +395,7 @@ class Users extends Component {
 
                         <CCol sm="12" lg="12">
                           <div>
-                            <CLabel>Tên đăng nhập</CLabel>
+                            <CLabel>Tên đăng nhập (*)</CLabel>
                             <Input
                               style={styles.searchInput}
                               value={UserName}
@@ -408,7 +408,7 @@ class Users extends Component {
                         </CCol>
 
                         <CCol sm="12" lg="12">
-                          <CLabel>Mật khẩu</CLabel>
+                          <CLabel>Mật khẩu (*)</CLabel>
                           <CRow>
                             <CCol sm="9" lg="9">
                               <Input

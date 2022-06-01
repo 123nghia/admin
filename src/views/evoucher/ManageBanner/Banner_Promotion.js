@@ -488,7 +488,7 @@ class EndUser extends Component {
                   // rows="5"
                 />
               </div>
-              <label>Tên chiến dịch</label>
+              <label>Tên chiến dịch (*)</label>
               <Select
                 defaultValue={dataCampaign ? dataCampaign[0].name : ""}
                 className="select_company"

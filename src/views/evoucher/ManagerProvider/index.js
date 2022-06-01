@@ -270,6 +270,7 @@ class EndUser extends Component {
         TypeId: TypeId,
         logo: imgOutput,
         id: idActionCurrent,
+
       })
       .then((res) => {
         console.log(res);
@@ -333,7 +334,7 @@ class EndUser extends Component {
     let imgLink = await this.postImage(this.state.Logo_link);
     if (imgLink) {
       imgOutput = `${Constants.BASE_URL}image_brand/${imgLink}`;
-    }
+    };
     await axios
       .post(url, {
         userName: UserName,
@@ -500,7 +501,7 @@ class EndUser extends Component {
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
                       field="Name"
-                      label="Tên công ty:"
+                      label="Tên công ty (*)"
                       value={this.state.Name}
                       onChange={(e) => this.setState({ Name: e.target.value })}
                     />
@@ -509,14 +510,14 @@ class EndUser extends Component {
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
                       field="Brand"
-                      label="Tên thương hiệu:"
+                      label="Tên thương hiệu (*)"
                       value={this.state.Brand}
                       onChange={(e) => this.setState({ Brand: e.target.value })}
                     />
                   </div>
 
                   <div style={{ width: "100%" }} className="mt-3">
-                    <CLabel>Loại hình:</CLabel>
+                    <CLabel>Loại hình (*)</CLabel>
                     {this.arrLevelType != undefined ? (
                       <CSelect
                         onChange={async (e) => {
@@ -549,7 +550,7 @@ class EndUser extends Component {
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
                       field=""
-                      label="Định danh hệ thống:"
+                      label="Định danh hệ thống (*)"
                       value={this.state.Slug}
                       onChange={(e) => this.setState({ Slug: e.target.value })}
                     />
@@ -623,7 +624,7 @@ class EndUser extends Component {
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
                       field="UserName"
-                      label="Tên đăng nhập:"
+                      label="Tên đăng nhập (*)"
                       value={this.state.UserName}
                       placeholder={"Tên đăng nhập"}
                       onChange={(e) =>
@@ -635,7 +636,7 @@ class EndUser extends Component {
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
                       field="Password"
-                      label="Mật khẩu:"
+                      label="Mật khẩu (*)"
                       value={this.state.Password}
                       type={"password"}
                       placeholder={"Mật khẩu"}
@@ -648,7 +649,7 @@ class EndUser extends Component {
                   <div style={{ width: "100%" }} className="mt-3">
                     <TextFieldGroup
                       field="Phone"
-                      label="Số điện thoại: "
+                      label="Số điện thoại (*)"
                       value={this.state.Phone}
                       placeholder={"Số điện thoại"}
                       onChange={(e) => this.onChange("Phone", e.target.value)}

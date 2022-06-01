@@ -310,7 +310,7 @@ class HistorySkin extends Component {
                         onChange={(e) => {
                           this.setState({ numberFiler: e.target.value });
                         }}
-                        type="number"
+                        type="text"
                         name="numberFiler"
                         value={this.state.numberFiler}
                         placeholder="Số điện thoại"
