@@ -107,7 +107,7 @@ class EndUser extends Component {
   }
   async onGetCampaignList() {
     await campaignApi
-      .fecthAllCampaignList(this.state.idDataCompany)
+      .fecthAllCampaignList(this.state.company_id)
       .then((res) => {
         let campaignList = res.data.data;
         this.handlePagination(campaignList);
@@ -1308,7 +1308,7 @@ class EndUser extends Component {
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Quản lý chiến dịch
+                    Danh sách chiến dịch
                   </i>
 
                   <CRow>
