@@ -259,6 +259,7 @@ class ListUserEvoucher extends Component {
           hidden: true,
         });
       }
+    
       this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
     }
   }
@@ -311,6 +312,7 @@ class ListUserEvoucher extends Component {
        
         let val = res.data.data;
         this.setState({ dataApi: val });
+        console.log('res',res);
         this.pagination(val);
         let active = 0;
         
@@ -886,7 +888,9 @@ class ListUserEvoucher extends Component {
                              <p>Chưa soi da</p>
                            )}
                          </td>
-                         <td className="text-center">{item.saleFollow}</td>
+                         <td className="text-center">{item.saleFollow && item.saleFollow.length !== 0 && typeof(item.saleFollow) === 'array' ? item.saleFollow?.map((item)=>{
+                            return item
+                         }) : null}</td>
                          <td className="text-center">
                            <Chip
                              icon={<AccessTimeIcon />}
