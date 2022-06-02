@@ -96,6 +96,7 @@ class EndUser extends Component {
       idCurrentUpdate: null,
       levelNormal: "0",
       statusExcel: false,
+      typePartner : JSON.parse(localStorage.getItem("user")).typePartner
     };
   }
 
@@ -785,7 +786,8 @@ class EndUser extends Component {
             </ModalFooter>
           </Modal>
           {this.state.modalInfo}
-          <Row>
+          {
+            this.state.typePartner ? <h1 className="text-center">Không đủ quyền truy cập</h1> : <Row>
             <Col>
               <Card>
                 <CardHeader>
@@ -1242,6 +1244,8 @@ class EndUser extends Component {
               </Card>
             </Col>
           </Row>
+          }
+          
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>
               {this.state.action == "new" ? `Tạo mới` : `Cập nhật`}

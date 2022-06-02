@@ -18,7 +18,7 @@ import {HiOutlineUserGroup} from "react-icons/hi";
 import {GrGroup} from "react-icons/gr";
 import {FiUsers} from "react-icons/fi";
 
-
+const typePartner = JSON.parse(localStorage.getItem("user")).typePartner;
 
 const css = {};
 const content = {
@@ -467,19 +467,21 @@ const _navMangerCampaigns = [
         
       },  
       {
-        _tag: "CSidebarNavItem",
-        name: "Quản lý Mã khuyến mãi",
-        to: "/manage-voucher",
-        icon: (
-          <AiOutlineSetting
-            style={css}
+
+          _tag: "CSidebarNavItem",
+          name: "Quản lý Mã khuyến mãi",
+          to: "/manage-voucher",
+          icon: (
+            <AiOutlineSetting
+              style={css}         
+              className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
+            />
+          ),
+          role: ["0", "1", "2"],
           
-            className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
-          />
-        ),
-        role: ["0", "1", "2"],
-        
-      },
+
+      }
+      
     ],
     badge: {
       color: "info",
