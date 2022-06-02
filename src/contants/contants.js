@@ -1,6 +1,6 @@
 export default {
-  // BASE_URL: "https://api.deal24h.vn/",
-  BASE_URL: "http://192.168.1.8:3018/",
+  BASE_URL: "https://api.deal24h.vn/",
+  // BASE_URL: "http://192.168.1.8:3018/",
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",

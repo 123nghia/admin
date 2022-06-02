@@ -388,9 +388,9 @@ class ManageSales extends Component {
           {capitalizeFirstLetter(collaborator?.name || collaborator?.username)}
         </td>
         <td className="text-center">{collaborator?.phone}</td>
-        <td className="text-center border-left">Chưa có thông số</td>
-        <td className="text-center">Chưa có thông số</td>
-        <td className="text-center">Chưa có thông số</td>
+        <td className="text-center border-left">{collaborator.CampaignOverviewSale[0]?.countVoucher}</td>
+        <td className="text-center">{collaborator.CampaignOverviewSale[0]?.totalVoucher}</td>
+        <td className="text-center">{collaborator.CampaignOverviewSale[0]?.rateCheckIn}</td>
 
         <td className="text-center border-left">
           <div className="flex" style={{minWidth: '400px'}}>
