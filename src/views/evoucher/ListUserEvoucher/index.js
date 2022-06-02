@@ -307,12 +307,14 @@ class ListUserEvoucher extends Component {
         this.setState({
           loadingCallApi : false,
         })
+
+       
         let val = res.data.data;
         this.setState({ dataApi: val });
         this.pagination(val);
         let active = 0;
-
-        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.totalRecord });
+        
+        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.total });
 
         console.log(res.data.data);
       }).catch((err) => {

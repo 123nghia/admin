@@ -110,15 +110,17 @@ class EndUser extends Component {
       .fecthAllCampaignList(this.state.company_id)
       .then((res) => {
         let campaignList = res.data.data;
+        console.log(res);
         this.handlePagination(campaignList);
 
         this.setState({ dataApi: campaignList });
+        console.log(res);
 
         let active = 0;
         this.setState({
           isLoading: false,
           totalActive: active,
-          totalRecord: res.data.totalRecord,
+          totalRecord: res.data.total,
         });
       })
       .catch((err) => console.log(err));
