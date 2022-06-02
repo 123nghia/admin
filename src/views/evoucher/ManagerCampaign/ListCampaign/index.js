@@ -120,7 +120,7 @@ class EndUser extends Component {
         this.setState({
           isLoading: false,
           totalActive: active,
-          totalRecord: res.data.total,
+          total: res.data.total,
         });
       })
       .catch((err) => console.log(err));
@@ -1552,7 +1552,7 @@ class EndUser extends Component {
                 <CardBody className="table__overflow">
                   <h5>
                     Tổng số:{" "}
-                    {this.state.totalRecord ? this.state.totalRecord : ""}
+                    {this.state.total ? this.state.total : ""}
                   </h5>
 
                   <table

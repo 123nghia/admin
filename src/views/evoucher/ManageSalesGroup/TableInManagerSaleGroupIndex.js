@@ -38,7 +38,7 @@ function TableInManagerSaleGroup(props) {
 
   return (
     <>
-      <h5>Tổng số: {props.totalRecord ? props.totalRecord : ""}</h5>
+      <h5>Tổng số: {props.total ? props.total : ""}</h5>
       <table ble className="table table-hover mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>

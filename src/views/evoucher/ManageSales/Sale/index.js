@@ -114,7 +114,7 @@ class ManageSales extends Component {
         this.setState({ dataApi: val });
 
         let active = 0;
-        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.totalRecord  });
+        this.setState({ isLoading: false, totalActive: active , total : res.data.total  });
       });
   }
 
@@ -607,7 +607,7 @@ class ManageSales extends Component {
                 
               </CardHeader>
               <CardBody className="table__overflow">
-              <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>  
+              <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>  
                 <table
                   ble
                   className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"

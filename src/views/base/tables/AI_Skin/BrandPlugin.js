@@ -127,7 +127,7 @@ class BrandPlugin extends Component {
 
     let active = 0
 
-    this.setState({ isLoading: false, totalActive: active , totalRecord : res_brand.data.totalRecord});
+    this.setState({ isLoading: false, totalActive: active , total : res_brand.data.total});
   }
 
   getData_Company = async () => {
@@ -145,7 +145,7 @@ class BrandPlugin extends Component {
 
     let active = 0
 
-    this.setState({ isLoading: false, totalActive: active , totalRecord : res_brand.data.totalRecord});
+    this.setState({ isLoading: false, totalActive: active , total : res_brand.data.total});
   }
 
   searchKey() {
@@ -462,7 +462,7 @@ class BrandPlugin extends Component {
                   </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+                <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table"

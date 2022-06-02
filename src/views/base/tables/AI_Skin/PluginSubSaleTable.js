@@ -140,7 +140,7 @@ class User extends Component {
     let val = res.data;
     
     this.pagination(val);
-    this.setState({ dataApi: val , totalRecord : res.totalRecord});
+    this.setState({ dataApi: val , total : res.total});
 
     let active = 0;
 
@@ -596,7 +596,7 @@ class User extends Component {
                   </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+                <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
 
                   <table
                     ble

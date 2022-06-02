@@ -316,7 +316,7 @@ class ListUserEvoucher extends Component {
         this.pagination(val);
         let active = 0;
         
-        this.setState({ isLoading: false, totalActive: active , totalRecord : res.data.total });
+        this.setState({ isLoading: false, totalActive: active , total : res.data.total });
 
         console.log(res.data.data);
       }).catch((err) => {
@@ -566,7 +566,7 @@ class ListUserEvoucher extends Component {
 
     const renderUserVoucherList = () => (
       <div>
-       <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>  
+       <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>  
       <table
         ble
         className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -808,7 +808,7 @@ class ListUserEvoucher extends Component {
                 </Space>
               </div> :
               <div>
-              <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>  
+              <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>  
              <table
                ble
                className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"

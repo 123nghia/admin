@@ -144,7 +144,7 @@ class HistorySkin extends Component {
       return;
     }
     let data = res.data.data;
-    this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total , totalRecord : res.data.totalRecord  });  
+    this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total , total : res.data.total  });  
   };
   async getDataSeo(){
     
@@ -470,7 +470,7 @@ class HistorySkin extends Component {
                 </div>
                 
                   : <div>
-                                   <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+                                   <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
 
                     <table
                   ble

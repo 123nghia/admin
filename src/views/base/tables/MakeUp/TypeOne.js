@@ -332,7 +332,7 @@ class SuggestItem extends Component {
 
     this.pagination(totalItem, val);
     this.setState({
-      totalRecord : res_suggest.data.totalRecord
+      total : res_suggest.data.total
     })
     this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], arrBrand: arrB, arrOptionBrand: arrTempOptionBrand, isLoading: false });
   }
@@ -356,7 +356,7 @@ class SuggestItem extends Component {
     console.log(res_suggest.data)
     let val = res_suggest.data.dataRes;
     this.setState({
-      totalRecord : res_suggest.data.totalRecord
+      total : res_suggest.data.total
     })
     let totalItem = res_suggest.data.arrTotal;
 
@@ -809,7 +809,7 @@ class SuggestItem extends Component {
                 <CardBody className="table__overflow">
                   {this.state.isLoadingTable == false ? (
                     <div>
-                    <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+                    <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
                     <table
                       ble
                       className="table table-hover table-outline mb-0 d-none d-sm-table"

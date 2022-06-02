@@ -119,7 +119,7 @@ class EndUser extends Component {
         this.setState({ dataApi: campaignList });
 
         let active = 0;
-        this.setState({ isLoading: false, totalActive: active  , totalRecord : res.data.totalRecord });
+        this.setState({ isLoading: false, totalActive: active  , total : res.data.total });
       })
       .catch((err) => {
       this.setState({ loadingCallApi: false });
@@ -1052,7 +1052,7 @@ class EndUser extends Component {
                   <Spin size="large" />
                 </Space>
               </div> : <div>
-              <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+              <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
 
               <table
                 ble
@@ -1559,7 +1559,7 @@ class EndUser extends Component {
                   </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+                <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
 
                   
                   <table

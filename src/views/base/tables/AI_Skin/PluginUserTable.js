@@ -483,7 +483,7 @@ class User extends Component {
                   </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+                <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
                   <table
                     ble
                     className="table table-hover table-outline mb-0 d-none d-sm-table"

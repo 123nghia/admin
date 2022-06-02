@@ -154,7 +154,7 @@ class PluginCustomerManager extends Component {
     let val = res.data.data;
     console.log("val",val)
     this.pagination(val);
-    this.setState({ dataApi: val, isLoading: false, totalRecord : res.data.totalRecord });
+    this.setState({ dataApi: val, isLoading: false, total : res.data.total });
   }
 
   getData_ByID = async () => {
@@ -586,7 +586,7 @@ class PluginCustomerManager extends Component {
                   </div>
                 </CardHeader>
                 <CardBody className="table__overflow">
-                <h5>Tổng số: {this.state.totalRecord ? this.state.totalRecord : ""}</h5>
+                <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
 
 
                   <table

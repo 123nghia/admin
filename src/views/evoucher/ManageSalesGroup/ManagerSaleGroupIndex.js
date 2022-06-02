@@ -31,7 +31,7 @@ function ManagerSaleGroupIndex() {
   const [hidden, setHidden] = React.useState(false);
   const [dataPagination, setDataPagination] = React.useState([]);
   const [indexPage, setIndexPage] = React.useState(0);
-  const [totalRecord, setTotalRecord] = React.useState(0);
+  const [total, settotal] = React.useState(0);
 
   //Pagination
   function pagination(dataApi) {
@@ -97,7 +97,7 @@ function ManagerSaleGroupIndex() {
     await axios.post(url, {}).then((res) => {
       setShowGroup([...res.data?.data]);
       pagination([...res.data?.data]);
-      setTotalRecord(res.data?.totalRecord);
+      settotal(res.data?.total);
     });
   };
 
@@ -349,7 +349,7 @@ function ManagerSaleGroupIndex() {
                 setIdOfFormUpdate={setIdOfFormUpdate}
                 showModalDeleteGroup={showModalDeleteGroup}
                 dataPagination={dataPagination}
-                totalRecord={totalRecord}
+                total={total}
               />
               <div style={{ float: "right" }}>
                 <Pagination
