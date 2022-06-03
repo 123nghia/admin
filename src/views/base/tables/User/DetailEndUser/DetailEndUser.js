@@ -140,7 +140,8 @@ function DetailEndUser() {
     const baseUrlapi = Constants.BASE_URL;
     const baseUrlCallApi = Constants.LIST_HISTORY_SKIN1;
     const url = baseUrlapi + baseUrlCallApi;
-    axios.post(url, {}).then((res) => {
+    axios.post(url, {
+    }).then((res) => {
       setHistory([res.data?.data]);
       console.log(res);
     });

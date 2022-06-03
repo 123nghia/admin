@@ -232,7 +232,10 @@ class ManageSales extends Component {
       saleGroup: null,
       tikitechCreate: true,
     };
-
+    if(!this.isVietnamesePhoneNumber(phone)){
+      alert('Vui lòng nhập số điện thoại hợp lệ');
+      return;
+    }
     collaboratorsApi
       .addNewCollaborator(collaboratorInfo)
       .then((res) => {
@@ -488,6 +491,9 @@ class ManageSales extends Component {
         a.click();
       });
   }
+  isVietnamesePhoneNumber(number) {
+    return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(number);
+  }
   render() {
     const {
       data,
@@ -679,6 +685,7 @@ class ManageSales extends Component {
               label="Nhập số điện thoại sale"
               variant="outlined"
               fullWidth
+              
               size="small"
               name="phone"
               onChange={(e) => {

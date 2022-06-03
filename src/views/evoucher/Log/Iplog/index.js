@@ -491,9 +491,7 @@ class IpLog extends Component {
                       style={{ marginRight: "10px" }}
                       size="md"
                       className="btn-main"
-                      onClick={(e) => {
-                        this.onSearch();
-                      }}
+                     
                     >
                       <BsSearch style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Tìm kiếm</p>

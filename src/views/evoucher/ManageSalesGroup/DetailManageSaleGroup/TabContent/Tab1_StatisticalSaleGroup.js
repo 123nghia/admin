@@ -49,9 +49,6 @@ function StatisticalSaleGroup() {
                 color="info"
                 size="md"
                 className="btn-main"
-                onClick={(e) => {
-                  this.onSearch();
-                }}
               >
                 <BsSearch style={{ margin: "auto 6px auto 0" }} />
               </CButton>

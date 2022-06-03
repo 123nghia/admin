@@ -1427,7 +1427,8 @@ class EndUser extends Component {
                         </div>
                       </div>
                     </CCol>
-                    <CCol md={3} className="mt">
+                    {
+                      this.state.company_id ? null : (<CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Nhà cung cấp</p>
                         <div style={{ width: "200px" }}>
@@ -1460,7 +1461,11 @@ class EndUser extends Component {
                           </Select>
                         </div>
                       </div>
-                    </CCol>
+                      </CCol>)
+                    
+                    }
+            
+                    
                     <CCol md={3} className="mt">
                       <div className="">
                         <p className="title_filter">Từ ngày</p>
