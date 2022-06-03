@@ -139,7 +139,7 @@ function CheckInForm({ detailUserVoucher }) {
           gutterBottom
           component="div"
         >
-          Điểm dịch vụ:
+          {/* Điểm dịch vụ:
           <Box
             sx={{ display: "flex", alignItems: "center", marginLeft: "1.5rem" }}
           >
@@ -163,10 +163,10 @@ function CheckInForm({ detailUserVoucher }) {
             {value !== null && (
               <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
             )}
-          </Box>
+          </Box> */}
         </Typography>
         <Typography
-          style={{ marginTop: "1.5rem" }}
+          style={{ marginTop: "0rem" }}
           variant="subtitle1"
           gutterBottom
           component="div"

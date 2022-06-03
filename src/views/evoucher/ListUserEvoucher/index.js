@@ -171,16 +171,17 @@ class ListUserEvoucher extends Component {
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.EXPORT_CUSTOMER;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
 
     let url = baseUrlapi + baseUrlCallApi;
     await axios
-      .get(url,{
+      .get(url, {
         params: {
           company_id,
         },
       })
       .then((res) => {
+        console.log(res);
         let a = document.getElementById("download_excel");
         if (a) {
           a.href = `${baseUrlapi}${res.data.data.url}`;
@@ -393,7 +394,6 @@ class ListUserEvoucher extends Component {
 
       "Lịch sử soi da",
       "Sale theo dõi",
-      "Ghi chú mới nhất",
       "",
     ];
 
@@ -647,12 +647,12 @@ class ListUserEvoucher extends Component {
                     )}
                   </td>
                   <td className="text-center">{item.saleFollow}</td>
-                  <td className="text-center">
+                  {/* <td className="text-center">
                     <Chip
                       icon={<AccessTimeIcon />}
-                      label={truncateString("Đã check in vào 10:30", 20)}
+                      label={truncateString("Chưa có", 20)}
                     />
-                  </td>
+                  </td> */}
                   <td className="text-center">
                     <Link to={`/detail-evoucher/${item._id}`}>
                       <Tooltip title="Xem chi tiết">
@@ -891,12 +891,12 @@ class ListUserEvoucher extends Component {
                          <td className="text-center">{item.saleFollow && item.saleFollow.length !== 0 && typeof(item.saleFollow) === 'array' ? item.saleFollow?.map((item)=>{
                             return item
                          }) : null}</td>
-                         <td className="text-center">
+                         {/* <td className="text-center">
                            <Chip
                              icon={<AccessTimeIcon />}
-                             label={truncateString("Đã check in vào 10:30", 20)}
+                             label={truncateString("Chưa có", 20)}
                            />
-                         </td>
+                         </td> */}
                          <td className="text-center">
                            <Link to={`/detail-evoucher/${item._id}`}>
                              <Tooltip title="Xem chi tiết">

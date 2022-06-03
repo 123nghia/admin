@@ -236,6 +236,7 @@ class DetailVoucher extends Component {
               <div id="tabcontent1" className="tabcontent defaultOpen">
                 <div className="table__overflow">
                   <EvoucherInfoTable
+                    slug={this.state.detailUserVoucher.slug}
                     detailUserVoucher={this.state?.detailUserVoucher}
                   />
                 </div>
@@ -256,7 +257,7 @@ class DetailVoucher extends Component {
                         alt={NotInfoSale}
                       />
                     </div>
-                    )
+                    
                   </div>
                   <div id="tabcontent4" className="tabcontent">
                     <NoteHistory

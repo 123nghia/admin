@@ -42,7 +42,7 @@ function CheckInForm({ detailUserVoucher }) {
   const renderStatusContent = (statusCode) => {
     const statusCodeMap = {
       0: "Đã nhận evoucher - có soi da",
-      1: "Đã nhận evoucher - không soi da",
+      1: "Đã nhận evoucher - có soi da",
       2: "Đã check-in",
     };
     return statusCodeMap[statusCode] || "Không xác định";
@@ -50,7 +50,7 @@ function CheckInForm({ detailUserVoucher }) {
   const renderStatusColorTag = (statusCode) => {
     const statusCodeMap = {
       0: "green",
-      1: "magenta",
+      1: "green",
       2: "cyan",
     };
     return statusCodeMap[statusCode] || "lime";
@@ -139,7 +139,7 @@ function CheckInForm({ detailUserVoucher }) {
           gutterBottom
           component="div"
         >
-          Điểm dịch vụ:
+          {/* Điểm dịch vụ:
           <Box
             sx={{ display: "flex", alignItems: "center", marginLeft: "1.5rem" }}
           >
@@ -163,10 +163,10 @@ function CheckInForm({ detailUserVoucher }) {
             {value !== null && (
               <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
             )}
-          </Box>
+          </Box> */}
         </Typography>
         <Typography
-          style={{ marginTop: "1.5rem" }}
+          style={{ marginTop: "0rem" }}
           variant="subtitle1"
           gutterBottom
           component="div"
@@ -200,7 +200,7 @@ function CheckInForm({ detailUserVoucher }) {
             {new Date(create_at).toLocaleString("vi-VI", { timeZone: "UTC" })}
           </span>
         </Typography>
-        <Typography
+        {/* <Typography
           style={{ marginTop: "1.3rem", display: "flex", alignItems: "center" }}
           variant="subtitle1"
           gutterBottom
@@ -212,7 +212,7 @@ function CheckInForm({ detailUserVoucher }) {
             icon={<AccessTimeIcon />}
             label="3 giờ trước"
           />
-        </Typography>
+        </Typography> */}
       </Box>
       {/* End - thông tin tham gia nhận voucher */}
     </Fragment>

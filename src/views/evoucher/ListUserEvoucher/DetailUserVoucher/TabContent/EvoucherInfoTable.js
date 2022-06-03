@@ -9,11 +9,14 @@ import Constants from "../../../../../contants/contants";
 import IframeModal from "../../../../components/Iframe";
 
 function EvoucherInfoTable({ detailUserVoucher }) {
-  const { voucherCode, voucher, branch, historyId, create_at } =
+  const { voucherCode, voucher, branch, historyId,slug, create_at } =
     detailUserVoucher;
   const [idHistory, setIdHistory] = useState("");
   const [toggleHistory, setToggleHistory] = useState(false);
-
+  React.useEffect(()=>{
+    console.log("2")
+    console.log("detailUserVoucher123",detailUserVoucher);
+  },[detailUserVoucher])
   const headingList = [
     "STT.",
     "Mã voucher",
@@ -66,15 +69,7 @@ function EvoucherInfoTable({ detailUserVoucher }) {
           <td className="text-center">1</td>
           <td className="text-center">{voucherCode}</td>
           <td className="text-center">
-            {branch.length !== 0 ? (
-              branch
-            ) : (
-              <img
-                src="https://seoulspa.vn/wp-content/uploads/2020/12/logo-spa-1.png"
-                alt="https://seoulspa.vn/wp-content/uploads/2020/12/logo-spa-1.png"
-                style={{ width: "50%" }}
-              />
-            )}
+            {slug}
           </td>
           <td className="text-center">{voucher[0]?.content}</td>
           <td className="text-center">
