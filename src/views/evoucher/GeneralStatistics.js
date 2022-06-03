@@ -922,7 +922,7 @@ class Users extends Component {
                                         return (
                                             <div key={i} className="tabContentItem" style={styles.tabContentItem}>
                                             {item.text}
-                                            <a href="" className="btn-link"
+                                            <a href="javascript:void(0)" className="btn-link"
                                                 style={styles.btnLink}
                                                 onClick={() => this.viewDetailOverView(item)}>{item.value}</a>
                                             <span className="detail"

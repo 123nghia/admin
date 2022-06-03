@@ -6,7 +6,7 @@ function TabContentOverViewEvoucher({ dataStatistic }) {
       <div className="tabContentItem" style={styles.tabContentItem}>
         Số lượng voucher phát
         <a
-          href=""
+          href="javascript:void(0)"
           className="btn-link"
           style={styles.btnLink}
           
@@ -26,7 +26,7 @@ function TabContentOverViewEvoucher({ dataStatistic }) {
       <div className="tabContentItem" style={styles.tabContentItem}>
         Số lượng khách check in
         <a
-          href=""
+          href="javascript:void(0)"
           className="btn-link"
           style={styles.btnLink}
        
@@ -47,7 +47,7 @@ function TabContentOverViewEvoucher({ dataStatistic }) {
       </div>
       <div className="tabContentItem" style={styles.tabContentItem}>
         Tỉ lệ khách check in
-        <a href="#" className="btn-link" style={styles.btnLink}>
+        <a href="javascript:void(0)" className="btn-link" style={styles.btnLink}>
           {dataStatistic?.rateCheckin}
         </a>
       </div>

@@ -56,12 +56,7 @@ function InfoProvider({ infoCustomer }) {
                 {username ? username : "Chưa có thông tin"}
               </p>
             </li>
-            <li className="tabInfo-body__contact-item">
-              PartnerID
-              <p className="tabInfo-body__contact-item-content">
-                {partnerID ? partnerID : "Chưa có thông tin"}
-              </p>
-            </li>
+      
           </ul>
         </div>
         <div className="tabInfo-body__contact ml-3">

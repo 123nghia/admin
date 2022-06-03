@@ -85,6 +85,8 @@ class EndUser extends Component {
     });
   };
   async ExportsFileExcel() {
+    alert("Tính năng chưa hỗ trợ"); return;
+    
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;

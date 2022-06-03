@@ -56,6 +56,7 @@ class ManageSales extends Component {
   state = {
     modalSelect: false,
     data: [],
+ 
     actionVoucherEditing: "new",
     modalVoucherEditing: false,
     key: "",
@@ -94,6 +95,29 @@ class ManageSales extends Component {
     showPassword: false,
     saleGroupList: [],
     dataCampaign : [],
+  };
+  async ExportsFileExcel() {
+    alert("Tính năng chưa hỗ trợ"); return;
+
+    var company_id =  JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          company_id,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+          a.click();
+        }
+      });
   };
   async getData(key) {
     var baseUrlapi = Constants.BASE_URL;
@@ -513,7 +537,7 @@ class ManageSales extends Component {
             }
           ]
         })
-        this.setState({ dataCampaign: val },()=>{console.log(this.state.dataCampaign)});
+        this.setState({ dataCampaign: val },()=>{console.log('datacam',this.state.dataCampaign)});
       
       });
   }
@@ -842,30 +866,45 @@ class ManageSales extends Component {
         {/* ------------------END MODAL DELETE COLLABORATOR------------------------- */}
         <Modal isOpen={this.state.modalSelect} className={this.props.className}>
           <ModalHeader>Xuất File</ModalHeader>
-          <ModalBody>      
-          <RadioGroup name="use-radio-group" defaultValue="first">
-            {
-              this.state.dataCampaign && this.state.dataCampaign.length > 0 ? this.state.dataCampaign.map((item, index) => {
-                return (
-                  <FormControlLabel value={item._id} onChange={(e)=>console.log(e,item._id)} control={<Radio />} label={item.name} />
-                )
-              }) : null
-            }
-          </RadioGroup>     
-
+          <ModalBody>    
+          <p>Chọn nhà cung cấp</p>    
+          <div style={{ width: "100%" }}>
+                <Select
+                  className="select_company"
+                  showSearch
+                  defaultValue={this.state.nameCompanyChoose}
+                  placeholder="Chọn"
+                  optionFilterProp="children"
+                  onChange={(value) =>
+                    this.setState({
+                      idCompany: value,
+                    })
+                  }
+                  onSearch={this.onSearchSelect}
+                  filterOption={(input, option) =>
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {this.state.dataCampaign
+                    ? this.state.dataCampaign.map((item, i) => {
+                        return <Option value={item._id}>{item.name}</Option>;
+                      })
+                    : null}
+                </Select>
+              </div>
           </ModalBody>
           <ModalFooter>
+            <a id="download_excel" download></a>
             <CButton
               color="primary"
-              onClick={(e) => {
-                this.state.actionModalSelect === "new"
-                  ? this.addVoucher()
-                  : this.updateVoucher();
-              }}
-              disabled={this.state.isLoading}
+              onClick={()=>this.ExportsFileExcel()}
             >
               Xuất File
+              
             </CButton>{" "}
+
             <CButton
               color="secondary"
               onClick={(e) =>

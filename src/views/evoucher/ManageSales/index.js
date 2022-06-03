@@ -381,7 +381,7 @@ class ManageSales extends Component {
         <td className="text-center">Chưa có thông tin</td>
 
         <td className="text-center border-left">
-          <div className="flex" style={{minWidth: '300px'}}>
+          <div className="flex" style={{minWidth: '220px'}}>
             <CButton
               shape="rounded-pill"
               variant="outline"
@@ -393,7 +393,7 @@ class ManageSales extends Component {
               <BiExport style={styles.icon} name="cilPencil" className="mr-1" />
               Export
             </CButton>
-            <Link to={`/detail-collaborators/${collaborator?._id}`}>
+            {/* <Link to={`/detail-collaborators/${collaborator?._id}`}>
               <CButton
                 shape="rounded-pill"
                 variant="outline"
@@ -405,7 +405,7 @@ class ManageSales extends Component {
                 <BsSearch className="mr-1" />
                 Chi tiết
               </CButton>
-            </Link>
+            </Link> */}
             <CButton
               shape="rounded-pill"
               variant="ghost"
@@ -465,6 +465,8 @@ class ManageSales extends Component {
       });
   }
   async ExportsFileExcel() {
+    alert("Tính năng chưa hỗ trợ"); return;
+
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;

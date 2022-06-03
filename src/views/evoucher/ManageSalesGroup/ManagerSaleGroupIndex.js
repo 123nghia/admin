@@ -219,6 +219,8 @@ function ManagerSaleGroupIndex() {
       });
   };
   const ExportsFileExcel = async () => {
+    alert("Tính năng chưa hỗ trợ"); return;
+    
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
     let url = baseUrlapi + baseUrlCallApi;

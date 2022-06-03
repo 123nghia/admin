@@ -143,6 +143,8 @@ class EndUser extends Component {
     });
   };
   async ExportsFileExcel() {
+    alert("Tính năng chưa hỗ trợ"); return;
+    
     const { company_id } = this.state;
 
     var baseUrlapi = Constants.BASE_URL;
@@ -1071,7 +1073,7 @@ class EndUser extends Component {
                         <th className="text-center">STT.</th>
 
                         <th className="text-center">Mã voucher</th>
-                        <th className="text-center">Mã chiến dịch</th>
+                        <th className="text-center">Tên chiến dịch</th>
                         <th className="text-center">Nội dung</th>
                         <th className="text-center">trạng thái</th>
 
