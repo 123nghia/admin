@@ -169,7 +169,18 @@ class ListUserEvoucher extends Component {
 
   async ExportsFileExcel() {
     const { company_id } = this.state;
-
+    let company_id_output = "";
+    if(this.state.type !== "0"){
+      company_id_output = this.state.company_id;
+    }else{
+      company_id_output = this.state.idDataCompany;
+    }
+    let outputPartnerId = "";
+    if(this.state.typePartner){
+      outputPartnerId = this.state.company_id;
+    }else{
+      outputPartnerId = null;
+    }
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
 
@@ -177,7 +188,18 @@ class ListUserEvoucher extends Component {
     await axios
       .get(url, {
         params: {
-          company_id,
+          saleId: this.state.saleId,
+          partner : this.state.company_slug,
+          partnerID : outputPartnerId,  
+          phoneNumber : this.state.phoneNumber,
+          from : this.state.from,
+          to : this.state.to,
+          status : this.state.status,
+          voucherCode : this.state.voucherCode,
+          roleType: this.state.type,
+          userId: JSON.parse(this.state.user).sale_id,
+          company_id : company_id_output,
+          
         },
       })
       .then((res) => {
