@@ -9,6 +9,7 @@ import {
   Row,
 } from 'reactstrap';
 import { DatePicker, Space, Spin } from "antd";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 
 import "antd/dist/antd.css";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
@@ -185,8 +186,7 @@ class HistorySkin extends Component {
       });
   }
   handlePageChange = async (pageNumber) => {
-    const { type } = this.state;
-    console.log(type)
+    const { type,activePage } = this.state;
     this.setState({ activePage: pageNumber }, () => {
      
         console.log(this.state.activePage)
@@ -491,6 +491,7 @@ class HistorySkin extends Component {
                       {/* <th className="text-center">Công ty</th>
                       <th className="text-center">Sale</th> */}
                       <th className="text-center">Ngày tạo</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -505,10 +506,9 @@ class HistorySkin extends Component {
                       ? data.map((item, i) => {
                           return (
                             <tr key={i}>
-                              <td className="text-center">{i + 1}</td>
+                              <td className="text-center">{this.state.activePage === 1 ? i + 1 : i + (this.state.activePage - 1)*50 + 1}</td>
                               <td className="text-center">{item.Name === "xx" ? "Chưa đăng nhập" : item.Name}</td>
                               <td className="text-center">{item.Phone === "xxx" ? "Chưa đăng nhập" : item.Phone}</td>
-
                               <td className="text-center">
                                 <img
                                   src={item.Image}
@@ -538,6 +538,17 @@ class HistorySkin extends Component {
                                 {new Date(
                                   item.Create_Date
                                 ).toLocaleDateString()}
+                              </td>
+                              <td className="text-center">
+                              <CButton
+                                shape="rounded-pill"
+                                variant="ghost"
+                                color="danger"
+                                style={styles.mgl5}
+                                
+                              >
+                                <BsTrash style={styles.icon} className="icon" name="cilTrash" />
+                              </CButton>
                               </td>
                             </tr>
                           );

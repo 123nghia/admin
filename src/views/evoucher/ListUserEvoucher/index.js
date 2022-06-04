@@ -713,7 +713,7 @@ class ListUserEvoucher extends Component {
 
                 <div className="flex-center-space">
                   <div class=" flex">
-                    <CButton
+                    {/* <CButton
                       color="success"
                       style={{ marginRight: "10px" }}
                       size="md"
@@ -733,7 +733,7 @@ class ListUserEvoucher extends Component {
                         <BsDownload style={{ margin: "auto 6px auto 0" }} />
                         <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
                       </CButton>
-                    </a>
+                    </a> */}
                     <CButton
                       color="success"
                       style={{ marginRight: "10px" }}
