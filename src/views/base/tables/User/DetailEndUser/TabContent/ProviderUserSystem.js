@@ -55,9 +55,9 @@ function ProviderUserSystem(props) {
             ? data.map((item, i) => (
                 <tr>
                   <td className="text-center">{i + 1}</td>
-                  <td className="text-center">{item.Name}</td>
+                  <td className="text-center">{item.vendor && item.vendor && item.vendor[0] ? item.vendor[0].Name : ""}</td>
                   <td className="text-center">
-                    {new Date(item?.Create_Date).toLocaleDateString()}
+                    {new Date(item?.create_date).toLocaleDateString()}
                   </td>
                   <td className="text-center">Đang cập nhật</td>
                 </tr>

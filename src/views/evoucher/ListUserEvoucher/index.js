@@ -9,7 +9,15 @@ import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 import { DatePicker, Select, Tag, Space, Spin } from "antd";
 import Pagination from "@material-ui/lab/Pagination";
 import "antd/dist/antd.css";
-import axios from "axios";
+import axios from "axios";import Iframes from 'react-iframe'
+import {
+  Button,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Modal,
+  TabContent,
+} from "reactstrap";
 import "moment-timezone";
 import React, { Component, Fragment } from "react";
 import { MdOpenInNew } from "react-icons/md";
@@ -129,7 +137,11 @@ class ListUserEvoucher extends Component {
       statusExcel: !this.state.statusExcel,
     });
   };
-
+  closeModalIframe = () => {
+    this.setState({
+      toggleHistory: false,
+    })
+  }
   readExcel = (file) => {
     var btnOuter = document.getElementById("button_outer"),
       name_excel = document.getElementById("name_excel");
@@ -343,7 +355,8 @@ class ListUserEvoucher extends Component {
         this.setState({ isLoading: false, totalActive: active , total : res.data.total });
 
         console.log(res.data.data);
-        // this.onFetchNoteList();
+        this.onFetchNoteList();
+
       }).catch((err) => {
         this.setState({
           loadingCallApi : true,
@@ -359,8 +372,12 @@ class ListUserEvoucher extends Component {
         method: "GET",
       });
       console.log('notelist',response);
-      for(var item in response){
-        
+      const { data } = response.data;
+      for(let item in data){
+        console.log(data[item])
+        if(data[item].noted === "Test"){
+          console.log("123",item)
+        }
       }
     } catch (error) {
       console.log("Failed to fetch note list: ", error);
@@ -976,11 +993,33 @@ class ListUserEvoucher extends Component {
                 
               </CardBody>
             </Card>
-            <IframeModal
-              toggleView={toggleHistory}
-              link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
-              closeModal={() => this.handleCloseModal()}
-            />
+            {
+          toggleHistory ? <Modal
+          isOpen={true}
+          size="xl"
+          toggle={this.closeModalIframe}
+        >
+          <ModalHeader closeButton toggle={this.closeModalIframe}>Chi tiết soi da</ModalHeader>
+          <ModalBody> 
+          <Iframes url={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
+                  width="100%"
+                  height="500px"
+                  display="initial"
+                  position="relative" />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="secondary"
+              onClick={(e) =>
+                this.closeModalIframe()
+              }
+            >
+              Đóng
+            </Button>
+          </ModalFooter>
+        </Modal> : null
+        }
+
           </Col>
         </Row>
       </div>

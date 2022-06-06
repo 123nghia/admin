@@ -116,6 +116,7 @@ function DetailEndUser() {
       .then((res) => {
         setInfoUser([res.data?.data]);
         setDataListVendor([...res.data.data.listVendor]);
+        getHistory(res.data?.data.detailInformation.phone)
       });
   }, []);
 
@@ -135,22 +136,19 @@ function DetailEndUser() {
         console.log(res);
       });
   }, []);
-
-  React.useEffect(() => {
+  const getHistory = (phone) => {
     const baseUrlapi = Constants.BASE_URL;
     const baseUrlCallApi = Constants.LIST_HISTORY_SKIN1;
     const url = baseUrlapi + baseUrlCallApi;
     axios.post(url, {
+      phoneUser : phone,
+      limit : 1000
     }).then((res) => {
       setHistory([res.data?.data]);
-      console.log(res);
     });
-  }, []);
+  }
   const setTest = (value) => {
     setTestGlobal(value);
-
-    console.log("testGlobal", testGlobal);
-    console.log("qweeqe", value);
   };
 
   return (

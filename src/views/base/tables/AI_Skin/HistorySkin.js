@@ -10,7 +10,16 @@ import {
 } from 'reactstrap';
 import { DatePicker, Space, Spin } from "antd";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import Iframes from 'react-iframe'
 
+import {
+  Button,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Modal,
+  TabContent,
+} from "reactstrap";
 import "antd/dist/antd.css";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
@@ -275,7 +284,11 @@ class HistorySkin extends Component {
       this.setState({ data: this.state.dataApi, totalActive: active })
     }
   }
-
+  closeModalIframe = ()=>{
+    this.setState({
+      toggleHistory : false
+    })
+  }
   onChange(key, val) {
     this.setState({ [key]: val })
   }
@@ -501,7 +514,7 @@ class HistorySkin extends Component {
                 
                   : <div>
                                    <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
-
+                <div>
                     <table
                   ble
                   className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table"
@@ -540,7 +553,7 @@ class HistorySkin extends Component {
                               <td className="text-center">
                                 <img
                                   src={item.Image}
-                                  style={{ width: "100px", height: "83px", objectFit: "cover" , backgroundSize: "100% 100%"}}
+                                  style={{ height: "100px", objectFit: "cover" , backgroundSize: "100% 100%"}}
                                 />
                               </td>
                              
@@ -568,7 +581,7 @@ class HistorySkin extends Component {
                                 ).toLocaleDateString()}
                               </td>
                               <td className="text-center">
-                              <CButton
+                              {/* <CButton
                                 shape="rounded-pill"
                                 variant="ghost"
                                 color="danger"
@@ -576,7 +589,7 @@ class HistorySkin extends Component {
                                 
                               >
                                 <BsTrash style={styles.icon} className="icon" name="cilTrash" />
-                              </CButton>
+                              </CButton> */}
                               </td>
                             </tr>
                           );
@@ -584,6 +597,7 @@ class HistorySkin extends Component {
                       : ""}
                   </tbody>
                 </table>
+                </div>
                   </div>
                }
                 
@@ -600,12 +614,33 @@ class HistorySkin extends Component {
             </Card>
           </Col>
         </Row>
+        {
+          toggleHistory ? <Modal
+          isOpen={true}
+          size="xl"
+          toggle={this.closeModalIframe}
+        >
+          <ModalHeader closeButton toggle={this.closeModalIframe}>Chi tiết soi da</ModalHeader>
+          <ModalBody> 
+          <Iframes url={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
+                  width="100%"
+                  height="500px"
+                  display="initial"
+                  position="relative" />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="secondary"
+              onClick={(e) =>
+                this.closeModalIframe()
+              }
+            >
+              Đóng
+            </Button>
+          </ModalFooter>
+        </Modal> : null
+        }
 
-        <IframeModal
-          toggleView={toggleHistory}
-          link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
-          closeModal={this.closeModal}
-        />
       </div>
     );
   }

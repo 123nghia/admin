@@ -7,7 +7,16 @@ import React, { useState } from "react";
 import formatDate from "src/utils/formatDate";
 import Constants from "../../../../../contants/contants";
 import IframeModal from "../../../../components/Iframe";
+import Iframes from 'react-iframe'
 
+import {
+  Button,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Modal,
+  TabContent,
+} from "reactstrap";
 function EvoucherInfoTable({ detailUserVoucher }) {
   const { voucherCode, voucher, branch, historyId,slug, create_at } =
     detailUserVoucher;
@@ -112,11 +121,32 @@ function EvoucherInfoTable({ detailUserVoucher }) {
       <Row>
         <Col>
           <Card>{renderUserVoucherList()}</Card>
-          <IframeModal
-            toggleView={toggleHistory}
-            link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
-            closeModal={closeModal}
-          />
+          {
+          toggleHistory ? <Modal
+          isOpen={true}
+          size="xl"
+          toggle={closeModal}
+        >
+          <ModalHeader closeButton toggle={closeModal}>Chi tiết soi da</ModalHeader>
+          <ModalBody> 
+          <Iframes url={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
+                  width="100%"
+                  height="500px"
+                  display="initial"
+                  position="relative" />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="secondary"
+              onClick={(e) =>
+                closeModal()
+              }
+            >
+              Đóng
+            </Button>
+          </ModalFooter>
+        </Modal> : null
+        }
         </Col>
       </Row>
     </div>

@@ -5,12 +5,21 @@ import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import IframeModal from "../../../../../../components/Iframe";
 import Constants from "../../../../../../../contants/contants";
 import Pagination from "@material-ui/lab/Pagination";
+import Iframes from 'react-iframe'
 
+import {
+  Button,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Modal,
+  TabContent,
+} from "reactstrap";
 function History(props) {
   console.log(props.propsHistory);
   const [toggleHistory, setToggleHistory] = useState(false);
   const [idHistory, setIdHistory] = useState("");
-  const titles = ["STT.", "Ngày soi", ""];
+  const titles = ["STT.", "Hình ảnh", "Ngày soi", "Nhà cung cấp",""];
   const [arrPagination, setArrPagination] = React.useState([]);
   const [hidden, setHidden] = React.useState(false);
   const [data, setData] = React.useState([]);
@@ -62,6 +71,7 @@ function History(props) {
             );
           })
         : null} */}
+      <div style={{overflowY : 'scroll', maxHeight: '550px'}}>
       <table ble className="table table-hover mb-0 d-none d-sm-table">
         <thead className="thead-light">
           <tr>
@@ -77,8 +87,12 @@ function History(props) {
             ? data.map((item, i) => (
                 <tr>
                   <td className="text-center">{i + 1}</td>
+                  <td className="text-center"><img src={item.Image} height="100" alt="" /></td>
                   <td className="text-center">
                     {new Date(item.Create_Date).toLocaleDateString()}
+                  </td>
+                  <td className="text-center">
+                    {item.Company_Id && item.Company_Id.Name ? item.Company_Id.Name : ""}
                   </td>
                   <td className="text-center" style={{ minWidth: "230px" }}>
                     <div className="flex">
@@ -101,6 +115,7 @@ function History(props) {
             : ""}
         </tbody>
       </table>
+      </div>
       <div style={{ float: "right" }}>
       <Pagination
           count={arrPagination.length}
@@ -111,11 +126,32 @@ function History(props) {
           }}
         />
               </div>
-      <IframeModal
-        toggleView={toggleHistory}
-        link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
-        closeModal={closeModal}
-      />
+      {
+          toggleHistory ? <Modal
+          isOpen={true}
+          size="xl"
+          toggle={closeModal}
+        >
+          <ModalHeader closeButton toggle={closeModal}>Chi tiết soi da</ModalHeader>
+          <ModalBody> 
+          <Iframes url={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
+                  width="100%"
+                  height="500px"
+                  display="initial"
+                  position="relative" />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="secondary"
+              onClick={(e) =>
+                closeModal()
+              }
+            >
+              Đóng
+            </Button>
+          </ModalFooter>
+        </Modal> : null
+        }
     </>
   );
 }

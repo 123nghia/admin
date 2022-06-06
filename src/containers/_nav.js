@@ -476,7 +476,7 @@ const _navMangerCampaigns = [
               className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
             />
           ),
-          role: ["0", "1", "2"],
+          role: ["1", "2"],
           
 
       }
@@ -879,19 +879,23 @@ const _navSkinCare = [
   //   ],
   //   role: ["0", "1", "2"],
   // },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Quản lý Key",
-    to: "/manage-key",
-    icon: (
-      <CIcon
-        style={css}
-        content={freeSet.cilList}
-        customClasses="c-sidebar-nav-icon"
-      />
-    ),
-    role: ["0"],
-  },
+
+
+
+  
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Quản lý Key",
+  //   to: "/manage-key",
+  //   icon: (
+  //     <CIcon
+  //       style={css}
+  //       content={freeSet.cilList}
+  //       customClasses="c-sidebar-nav-icon"
+  //     />
+  //   ),
+  //   role: ["0"],
+  // },
 ];
 
 const _navManagerStatistics = [

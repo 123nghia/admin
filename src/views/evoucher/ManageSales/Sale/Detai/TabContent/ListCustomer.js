@@ -11,18 +11,38 @@ import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { CButton, CCol, CRow } from "@coreui/react";
 import { BiExport } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Row,
+  Button,
+  Input,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Modal,
+  TabContent,
+} from "reactstrap";
 import Constants from "../../../../../../contants/contants";
 import IframeModal from "../../../../../../views/components/Iframe";
+import Iframes from 'react-iframe'
 import { DatePicker, Select, Tag, Space, Spin } from "antd";
-
+import {
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from '@coreui/react'
 function ListCustomer({ listCustomer }) {
   const [arrPagination, setArrPagination] = React.useState([]);
   const [data, setData] = React.useState([]);
   const [indexPage, setIndex] = React.useState(0);
   const [idHistory, setIdHistory] = React.useState("");
   const [toggleHistory, setToggleHistory] = React.useState(false);
-
+  const [showIframe, setShowIframe] = React.useState(false);
   React.useEffect(() => {
     pagination(listCustomer);
   }, [listCustomer]);
@@ -101,6 +121,8 @@ function ListCustomer({ listCustomer }) {
               onClick={(e) => {
                 setIdHistory(item.historyId);
                 setToggleHistory(true);
+                setShowIframe(true);
+                console.log("true")
               }}
             >
               <CIcon name="cil-magnifying-glass" />
@@ -120,11 +142,35 @@ function ListCustomer({ listCustomer }) {
   };
   return (
     <>
-      <IframeModal
-        toggleView={toggleHistory}
-        link={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
-        closeModal={() => handleCloseModal()}
-      />
+    {
+      toggleHistory ? 
+      <Modal
+            isOpen={true}
+            size="xl"
+            toggle={handleCloseModal}
+          >
+            <ModalHeader closeButton toggle={handleCloseModal}>Chi tiết soi da</ModalHeader>
+            <ModalBody> 
+            <Iframes url={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
+                    width="100%"
+                    height="500px"
+                    display="initial"
+                    position="relative" />
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="secondary"
+                onClick={(e) =>
+                  setToggleHistory(false)
+                }
+              >
+                Đóng
+              </Button>
+            </ModalFooter>
+          </Modal>
+    : null
+    }
+     
       <h5>Tổng số: {listCustomer.length}</h5>
       <div style={{ overflowX: "scroll" }}>
         <table className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash">
