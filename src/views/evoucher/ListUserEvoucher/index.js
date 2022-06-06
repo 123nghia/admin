@@ -75,7 +75,7 @@ class ListUserEvoucher extends Component {
 
   async componentDidMount() {
     this.getDataSeo();
-    this.getData();
+    await this.getData();
     this.onGetCampaignList();
     this.getDataCompany();
     let arr = JSON.parse(localStorage.getItem("url"));
@@ -176,6 +176,7 @@ class ListUserEvoucher extends Component {
       company_id_output = this.state.idDataCompany;
     }
     let outputPartnerId = "";
+    let partner = null;
     if(this.state.typePartner){
       outputPartnerId = this.state.company_id;
     }else{
@@ -342,13 +343,29 @@ class ListUserEvoucher extends Component {
         this.setState({ isLoading: false, totalActive: active , total : res.data.total });
 
         console.log(res.data.data);
+        // this.onFetchNoteList();
       }).catch((err) => {
         this.setState({
           loadingCallApi : true,
         })
       })
   }
-
+  onFetchNoteList = async () => {
+    const {company_id, dataApi} = this.state;
+    console.log("dataApi",dataApi);
+    try {
+      const response = await axios({
+        url: `https://api.deal24h.vn/api/evoucherNote/noted/getAll`,
+        method: "GET",
+      });
+      console.log('notelist',response);
+      for(var item in response){
+        
+      }
+    } catch (error) {
+      console.log("Failed to fetch note list: ", error);
+    }
+  };
   onChange(key, val) {
     this.setState({ [key]: val });
   }
@@ -756,7 +773,8 @@ class ListUserEvoucher extends Component {
                         <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
                       </CButton>
                     </a> */}
-                    <CButton
+                    {
+                      this.state.type == 0 ? null : <CButton
                       color="success"
                       style={{ marginRight: "10px" }}
                       size="md"
@@ -766,6 +784,8 @@ class ListUserEvoucher extends Component {
                       <FaFileExport style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Xuất File</p>
                     </CButton>
+                    }
+                    
                     <a id="download_excel" download></a>
                     <div></div>
                   </div>

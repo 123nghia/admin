@@ -966,26 +966,9 @@ class EndUser extends Component {
                   </CRow>
                   <div className="flex-center-space mt-1">
                     <div class=" flex">
-                      <CButton
-                        color="success"
-                        style={{ marginRight: "10px" }}
-                        size="md"
-                        className="flex-center"
-                        onClick={this.OpenFileExcel}
-                      >
-                        <FaFileImport style={{ margin: "auto 6px auto 0" }} />
-                        <p style={{ margin: "auto 0" }}>Import</p>
-                      </CButton>
+                    
                       <a href="/excel/template-import-voucher.xlsx" download>
-                        <CButton
-                          color="success"
-                          style={{ marginRight: "10px" }}
-                          size="md"
-                          className="flex-center"
-                        >
-                          <BsDownload style={{ margin: "auto 6px auto 0" }} />
-                          <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
-                        </CButton>
+                       
                       </a>
                       <CButton
                         color="success"

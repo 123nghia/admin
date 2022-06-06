@@ -43,6 +43,7 @@ class HistorySkin extends Component {
       loadingCallApi : false,
       data: [],
       key: '',
+      type: localStorage.getItem("type"),
       page: 1,
       limit: 20,
       totalActive: 0,
@@ -66,19 +67,42 @@ class HistorySkin extends Component {
     this.closeModal = this.closeModal.bind(this)
   }
   async ExportsFileExcel() {
-    alert("Tính năng chưa hỗ trợ"); return;
-
     const { company_id } = this.state;
-
+    let company_id_output = "";
+    if(this.state.type !== "0"){
+      company_id_output = this.state.company_id;
+    }else{
+      company_id_output = this.state.idDataCompany;
+    }
+    let outputPartnerId = "";
+    let partner = null;
+    if(this.state.typePartner){
+      outputPartnerId = this.state.company_id;
+    }else{
+      outputPartnerId = null;
+    }
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
+    let baseUrlCallApi = Constants.EXPORT_HISTORY;
 
     let url = baseUrlapi + baseUrlCallApi;
+    let idDataCompanyOutput = "";
+    console.log(JSON.parse(this.state.user))
+    if(this.state.type !== '0'){
+      idDataCompanyOutput = JSON.parse(this.state.user).company_id;
+    }else{
+      idDataCompanyOutput = this.state.idDataCompany;
+    };
     await axios
-      .get(url, {
-        params: {
-          company_id,
-        },
+      .post(url, {
+
+          name : this.state.nameFilter,
+          phone : this.state.numberFiler,
+          roleType: this.state.type,
+          saleId : this.state.idDataSales,     
+          company_id : idDataCompanyOutput,
+          userId: JSON.parse(this.state.user).sale_id,
+          limit: 1000
+
       })
       .then((res) => {
         console.log(res);
@@ -88,7 +112,7 @@ class HistorySkin extends Component {
         }
         a.click();
       });
-  };
+  }
   async componentDidMount() {
     await this.getData()
     
@@ -438,7 +462,8 @@ class HistorySkin extends Component {
 
                 <div className="flex-center-space mt-1">
                   <div>
-                    <CButton
+                    {
+                      this.state.type == 0 ? null : <CButton
                       color="success"
                       size="md"
                       className="flex-center"
@@ -447,6 +472,8 @@ class HistorySkin extends Component {
                       <FaFileExport style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Xuất File</p>
                     </CButton>
+                    }
+                    
                     <a id="download_excel" download></a>
                   </div>
                   <CButton

@@ -1,7 +1,10 @@
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import TableInManageKeyIndex from "./ManageKeyIndex";
-
+import React from "react";
 function ManageKey() {
+  React.useEffect(()=>{
+    
+  },[])
   return (
     <>
       <Row>

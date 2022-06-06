@@ -82,6 +82,7 @@ class ManageSales extends Component {
     levelNormal: "0",
     dataCompany: [],
     quantity: "0",
+    company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
 
     username: "",
     isManager: false,
@@ -124,11 +125,16 @@ class ManageSales extends Component {
     let baseUrlCallApi = Constants.COLLABORATOR_GET;
     let url = baseUrlapi + baseUrlCallApi;
     let user = JSON.parse(this.state.user);
+    let keyOutput = null;
+    if(key){
+      keyOutput = key;
+    }
     await axios
       .get(url, {
         params: {
-          keyword: key,
-          partnerID : this.state.typePartner
+          keyword: keyOutput,
+          partnerID : this.state.typePartner,
+          company_id : user.company_id
         },
       })
       .then((res) => {

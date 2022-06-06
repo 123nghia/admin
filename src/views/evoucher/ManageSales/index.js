@@ -445,6 +445,7 @@ class ManageSales extends Component {
     saleGroup && this.setState({ saleGroup: saleGroup });
   };
   openSelectExport = (collaborator) => {
+    alert("Tính năng chưa hỗ trợ"); return;
     this.setState({
       modalSelect: true,
     });
