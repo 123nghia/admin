@@ -44,7 +44,7 @@ function TabInfoVoucherUser(props) {
     "Tên khách hàng",
     "Tên NCC",
     "Tỉnh/Thành",
-    "Checkin",
+    // "Ghi chú",
     "Trạng thái",
   ];
 
@@ -93,9 +93,9 @@ function TabInfoVoucherUser(props) {
                     />
                   </td>
                   <td className="text-center">{item.fullName}</td>
-                  <td className="text-center">Chưa có thông tin</td>
-                  <td className="text-center">Chưa có thông tin</td>
-                  <td className="text-center">Chưa có thông tin</td>
+                  <td className="text-center">{item.slug ? item.slug : null}</td>
+                  <td className="text-center">{item.voucher && item.voucher[0] && item.voucher[0]?.region ? item.voucher[0]?.region : null}</td>
+                  {/* <td className="text-center">{item.note ? item.note : "Chưa có ghi chú"}</td> */}
                   <td className="text-center">
                     <Tag
                       className="ant-tag"

@@ -363,7 +363,7 @@ class ManageSales extends Component {
   };
 
   renderCollaboratorList = (collaboratorList) => {
-    if (!collaboratorList.length) {
+    if (!collaboratorList) {
       return (
         <td colSpan="13" className="text-center">
           <h5>Không tìm thấy thông tin Cộng tác viên!!!</h5>
