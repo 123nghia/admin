@@ -555,8 +555,7 @@ class HistorySkin extends Component {
                                   src={item.Image}
                                   style={{ height: "100px", objectFit: "cover" , backgroundSize: "100% 100%"}}
                                 />
-                              </td>
-                             
+                              </td>               
                               <td className="text-center">{item.Company_Id?.Name}</td>
                               <td className="text-center">
                                 <CButton

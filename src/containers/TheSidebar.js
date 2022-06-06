@@ -97,6 +97,9 @@ const TheSidebar = () => {
             if(roleCheck.includes("partner")){
               _child[y].hidden = false;
             }
+            if(roleCheck.includes("spa")){
+              _child[y].hidden = false;
+            }
           }
         }
       }

@@ -61,6 +61,7 @@ function EvoucherInfoTable({ detailUserVoucher }) {
 
   const renderUserVoucherList = () => (
     <table
+    style={{width:'100%'}}
       ble
       className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
     >
@@ -120,7 +121,11 @@ function EvoucherInfoTable({ detailUserVoucher }) {
     <div className="animated fadeIn">
       <Row>
         <Col>
-          <Card>{renderUserVoucherList()}</Card>
+          <Card >
+            <div style={{width:"100%"}}>
+            {renderUserVoucherList()}
+            </div>          
+          </Card>
           {
           toggleHistory ? <Modal
           isOpen={true}

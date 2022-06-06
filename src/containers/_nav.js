@@ -19,6 +19,7 @@ import {GrGroup} from "react-icons/gr";
 import {FiUsers} from "react-icons/fi";
 
 const typePartner = JSON.parse(localStorage.getItem("user")).typePartner;
+const type = JSON.parse(localStorage.getItem("type"));
 
 const css = {};
 const content = {
@@ -476,7 +477,7 @@ const _navMangerCampaigns = [
               className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
             />
           ),
-          role: ["1", "2"],
+          role: [typePartner === false && type !== 0 ? "spa" : ""],
           
 
       }

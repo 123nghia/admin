@@ -353,13 +353,13 @@ class Users extends Component {
                         </CCol> */}
 
                         <CCol sm="12" lg="12">
-                          <CLabel>Tên thương hiệu</CLabel>
+                          <CLabel>Slug</CLabel>
                           <CRow>
-                            <CCol sm="9" lg="9">
+                            <CCol sm="12" lg="12">
                               <div>
                                 <Input
                                   style={styles.searchInput}
-                                  readOnly={isChangeSlug}
+                                  readOnly={isDisable}
                                   onChange={(e) => {
                                     this.setState({
                                       current_slug: e.target.value,
@@ -369,27 +369,7 @@ class Users extends Component {
                                 />
                               </div>
                             </CCol>
-                            <CCol sm="3" lg="3">
-                              {isChangeSlug ? (
-                                <Button
-                                  color="primary"
-                                  onClick={(e) => {
-                                    this.setState({ isChangeSlug: false });
-                                  }}
-                                >
-                                  Thay đổi
-                                </Button>
-                              ) : (
-                                <Button
-                                  color="primary"
-                                  onClick={async (e) => {
-                                    await this.updateSlug();
-                                  }}
-                                >
-                                  Cập nhật
-                                </Button>
-                              )}
-                            </CCol>
+                            
                           </CRow>
                         </CCol>
 

@@ -970,7 +970,7 @@ class EndUser extends Component {
                       <a href="/excel/template-import-voucher.xlsx" download>
                        
                       </a>
-                      <CButton
+                      {/* <CButton
                         color="success"
                         style={{ marginRight: "10px" }}
                         size="md"
@@ -979,7 +979,7 @@ class EndUser extends Component {
                       >
                         <FaFileExport style={{ margin: "auto 6px auto 0" }} />
                         <p style={{ margin: "auto 0" }}>Xuất File</p>
-                      </CButton>
+                      </CButton> */}
                       <a id="download_excel" download></a>
                       <div></div>
                     </div>

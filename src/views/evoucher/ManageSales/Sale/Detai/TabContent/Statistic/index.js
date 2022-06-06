@@ -13,15 +13,7 @@ function TabContentOverViewEvoucher({ dataStatistic }) {
         >
           {dataStatistic?.voucherCounted}
         </a>
-        <span
-          className="detail"
-          style={styles.detail}
-          onClick={(e) =>
-            this.setState({ modalVoucher: !this.state.modalVoucher })
-          }
-        >
-          Xem chi tiết
-        </span>
+    
       </div>
       <div className="tabContentItem" style={styles.tabContentItem}>
         Số lượng khách check in
@@ -33,17 +25,7 @@ function TabContentOverViewEvoucher({ dataStatistic }) {
         >
           {dataStatistic?.voucherCheckin}
         </a>
-        <span
-          className="detail"
-          style={styles.detail}
-          onClick={(e) =>
-            this.setState({
-              modalCusCheckIn: !this.state.modalCusCheckIn,
-            })
-          }
-        >
-          Xem chi tiết
-        </span>
+ 
       </div>
       <div className="tabContentItem" style={styles.tabContentItem}>
         Tỉ lệ khách check in
