@@ -60,7 +60,6 @@ const content = {
   info_banner_sales : "Quản lý Banner khuyến mãi",
   info_banner_homepage : "Quản lý Banner trang chủ",
   info_code_voucher : "Quản lý Mã khuyến mãi",
-
 };
 
 const _navOverview = [
@@ -554,7 +553,7 @@ const _navMangerUser = [
             customClasses="c-sidebar-nav-icon c-sidebar-nav-icon-child"
           />
         ),
-        role: ["0","1","2"],
+        role: [typePartner ? "partner" : null],
         badge: {
           color: "info",
           text: (

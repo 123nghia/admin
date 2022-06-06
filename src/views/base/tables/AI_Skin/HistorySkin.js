@@ -172,6 +172,7 @@ class HistorySkin extends Component {
     }
     let data = res.data.data;
     this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total , total : res.data.total  });  
+    console.log("datafilterne",data);
   };
   async getDataSeo(){
     

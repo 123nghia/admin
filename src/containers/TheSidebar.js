@@ -89,10 +89,13 @@ const TheSidebar = () => {
         for (let y = 0; y < _child.length; y++) {
           var roleCheck = _child[y].role;
           if (roleCheck != undefined) {
-            if (roleCheck.includes(type)) {
+            if (roleCheck.includes(type)) {         
               _child[y].hidden = false;
             } else {
               _child[y].hidden = true;
+            }
+            if(roleCheck.includes("partner")){
+              _child[y].hidden = false;
             }
           }
         }

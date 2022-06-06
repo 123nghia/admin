@@ -115,7 +115,7 @@ function DetailEndUser() {
       })
       .then((res) => {
         setInfoUser([res.data?.data]);
-        setDataListVendor([...res.data.data.listVendor[0]?.vendor]);
+        setDataListVendor([...res.data.data.listVendor]);
       });
   }, []);
 
