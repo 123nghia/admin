@@ -485,7 +485,7 @@ class ManageSales extends Component {
         <td className="text-center">{collaborator?.noted ? collaborator?.noted : 'Không có'}</td>
   
         <td className="text-center">
-          {collaborator?.create_date || new Date().toLocaleDateString("vi-VI")}
+          {collaborator?.create_date || "Chưa có thông tin"}
         </td>
       </tr>
     ));

@@ -132,7 +132,7 @@ function ListCustomer({ listCustomer }) {
           )}
         </td>
         <td className="text-center">
-          {item?.create_date || new Date().toLocaleDateString("vi-VI")}
+          {item?.create_date || "Chưa có thông tin"}
         </td>
         {/* <td className="text-center">
          

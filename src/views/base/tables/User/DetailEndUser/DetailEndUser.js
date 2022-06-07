@@ -117,16 +117,17 @@ function DetailEndUser() {
         setInfoUser([res.data?.data]);
         setDataListVendor([...res.data.data.listVendor]);
         getHistory(res.data?.data.detailInformation.phone)
+        getVoucher(res.data?.data.detailInformation.phone)
       });
   }, []);
-
-  React.useEffect(() => {
+  const getVoucher=(phone)=>{
     const baseUrlapi = Constants.BASE_URL;
     const baseUrlCallApi = Constants.GET_USER_EVOUCHER;
     const url = baseUrlapi + baseUrlCallApi;
     axios
       .get(url, {
         params: {
+          phoneUser : phone,
           userId: id,
         },
       })
@@ -135,7 +136,7 @@ function DetailEndUser() {
         setInfoVoucher([...res.data.data]);
         console.log(res);
       });
-  }, []);
+  }
   const getHistory = (phone) => {
     const baseUrlapi = Constants.BASE_URL;
     const baseUrlCallApi = Constants.LIST_HISTORY_SKIN1;
@@ -216,7 +217,7 @@ function DetailEndUser() {
 
           <div id="tabcontent5" className="tabcontent">
             {infoVoucher && infoVoucher ? (
-              <TabInfoVoucherUser dataApi={dataInfoVoucher} />
+              <TabInfoVoucherUser infoUser={infoUser} dataApi={dataInfoVoucher} />
             ) : null}
           </div>
         </div>

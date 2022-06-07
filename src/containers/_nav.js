@@ -503,7 +503,7 @@ const _navMangerUser = [
     icon: (
       <AiOutlineInfoCircle className="c-sidebar-nav-icon" />
     ),
-    role: ["0","1","2"],
+    role: ["0","2",typePartner ? "partner" : ""],
     _children: [
       // {
       //   _tag: "CSidebarNavItem",

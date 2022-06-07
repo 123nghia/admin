@@ -187,7 +187,7 @@ function CheckInForm({ detailUserVoucher }) {
           gutterBottom
           component="div"
         >
-          Thông tin tham gia nhận Evoucher
+          Thông tin tham gia nhận Evoucher 
         </Typography>
         <Typography
           style={{ marginTop: "1.5rem" }}
@@ -197,6 +197,7 @@ function CheckInForm({ detailUserVoucher }) {
         >
           Thời gian Tham Gia:
           <span style={{ marginLeft: "1.5rem", fontWeight: "bold" }}>
+            {new Date(create_at).toLocaleTimeString() + 7}
             {new Date(create_at).toLocaleString("vi-VI", { timeZone: "UTC" })}
           </span>
         </Typography>
