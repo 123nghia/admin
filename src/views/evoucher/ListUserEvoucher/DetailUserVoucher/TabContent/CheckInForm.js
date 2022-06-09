@@ -171,7 +171,7 @@ function CheckInForm({ detailUserVoucher }) {
           gutterBottom
           component="div"
         >
-          Thời gian check-in:
+          Thời gian soi da:
           <span style={{ marginLeft: "1.5rem", fontWeight: "bold" }}>
           {new Date(create_at).toLocaleTimeString()} {" "}
             ngày {new Date(create_at).toLocaleDateString()}

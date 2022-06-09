@@ -445,7 +445,7 @@ class ListUserEvoucher extends Component {
       "Mã Voucher",
 
       "Trạng thái",
-      "Ngày nhận",
+      "Thời gian",
       "Nhà cung cấp",
 
       "Lịch sử soi da",
@@ -923,7 +923,10 @@ class ListUserEvoucher extends Component {
                              {checkStatusUserVoucherContent(item.status)}
                            </Tag>
                          </td>
-                         <td className="text-center">{formatDate(item.create_at)}</td>
+                         <td className="text-center">{
+                                    new Date(
+                                      item.create_at
+                                    ).toLocaleTimeString()} ngày {formatDate(item.create_at)}</td>
                          <td className="text-center">{item.slug}</td>
        
                          <td className="text-center">
