@@ -1165,6 +1165,7 @@ class ListUserEvoucher extends Component {
                       <Pagination
                         count={this.state.arrPagination.length}
                         color="primary"
+                        page={this.state.indexPage + 1}
                         onChange={(e, v) => {
                           console.log(e,v)  
                           this.setState({
