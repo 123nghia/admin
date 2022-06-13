@@ -754,6 +754,7 @@ class ConfigWebAdmin extends Component {
     } else {
       coppy.value.banner.bannerSlide.unshift(ob);
     }
+
     this.setState(
       {
         dataConfigWeb: coppy,

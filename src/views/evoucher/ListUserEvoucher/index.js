@@ -5,11 +5,14 @@ import { Chip, IconButton, Tooltip } from "@mui/material";
 import { BsDownload } from "@react-icons/all-files/bs/BsDownload";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
+import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
+import Swal from "sweetalert2";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 import { DatePicker, Select, Tag, Space, Spin } from "antd";
 import Pagination from "@material-ui/lab/Pagination";
 import "antd/dist/antd.css";
-import axios from "axios";import Iframes from 'react-iframe'
+import axios from "axios";
+import Iframes from "react-iframe";
 import {
   Button,
   ModalHeader,
@@ -54,19 +57,20 @@ class ListUserEvoucher extends Component {
         ? JSON.parse(localStorage.getItem("user")).company_id
         : null,
       key: "",
-      loadingCallApi : false,
+      loadingExport: false,
+      loadingCallApi: false,
       totalActive: 0,
       dataApi: [],
       action: "new",
-      arrPagination : [],
+      arrPagination: [],
       phone: "",
       token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       type: localStorage.getItem("type"),
       user: localStorage.getItem("user"),
       company_slug: JSON.parse(localStorage.getItem("user")).company_slug,
-      typePartner : JSON.parse(localStorage.getItem("user")).typePartner,
+      typePartner: JSON.parse(localStorage.getItem("user")).typePartner,
       isLoading: false,
-      indexPage : 0,
+      indexPage: 0,
       idHistory: "",
       toggleHistory: false,
       from: "",
@@ -82,6 +86,7 @@ class ListUserEvoucher extends Component {
   }
 
   async componentDidMount() {
+    
     this.getDataSeo();
     await this.getData();
     this.onGetCampaignList();
@@ -95,7 +100,28 @@ class ListUserEvoucher extends Component {
       }
     }
   }
-  async getDataCompany (){
+  async remove(idInput){
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.DELETE_USER_EVOUCHER_REQUEST;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .delete(url, {
+        data: {
+          id : idInput,
+        },
+      })
+      .then((res) => {
+        this.setState({ modalDelete: false });
+        Swal.fire({
+          icon: "success",
+          title: "Xóa thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+      this.getData();    
+      })
+  }
+  async getDataCompany() {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.GET_ALL_COMPANY;
     let url = baseUrlapi + baseUrlCallApi;
@@ -107,15 +133,15 @@ class ListUserEvoucher extends Component {
         // },
       })
       .then((res) => {
-        let val = res.data.data;  
-        console.log(val.length)
+        let val = res.data.data;
+        console.log(val.length);
 
         val.push({
           company_id: "",
-          Name : "Tất cả"
-        })  
-        console.log(val.length)
-        this.setState({ dataCompany : val });
+          Name: "Tất cả",
+        });
+        console.log(val.length);
+        this.setState({ dataCompany: val });
       });
   }
   async onGetCampaignList() {
@@ -124,10 +150,9 @@ class ListUserEvoucher extends Component {
       .then((res) => {
         let campaignList = res.data.data;
         campaignList.push({
-          name : "Không có",
-        })
-        this.setState({ dataCampaign : campaignList });
-
+          name: "Không có",
+        });
+        this.setState({ dataCampaign: campaignList });
       })
       .catch((err) => console.log(err));
   }
@@ -140,8 +165,8 @@ class ListUserEvoucher extends Component {
   closeModalIframe = () => {
     this.setState({
       toggleHistory: false,
-    })
-  }
+    });
+  };
   readExcel = (file) => {
     var btnOuter = document.getElementById("button_outer"),
       name_excel = document.getElementById("name_excel");
@@ -180,18 +205,21 @@ class ListUserEvoucher extends Component {
   };
 
   async ExportsFileExcel() {
+    this.setState({
+      loadingExport: true,
+    });
     const { company_id } = this.state;
     let company_id_output = "";
-    if(this.state.type !== "0"){
+    if (this.state.type !== "0") {
       company_id_output = this.state.company_id;
-    }else{
+    } else {
       company_id_output = this.state.idDataCompany;
     }
     let outputPartnerId = "";
     let partner = null;
-    if(this.state.typePartner){
+    if (this.state.typePartner) {
       outputPartnerId = this.state.company_id;
-    }else{
+    } else {
       outputPartnerId = null;
     }
     var baseUrlapi = Constants.BASE_URL;
@@ -202,17 +230,16 @@ class ListUserEvoucher extends Component {
       .get(url, {
         params: {
           saleId: this.state.saleId,
-          partner : this.state.company_slug,
-          partnerID : outputPartnerId,  
-          phoneNumber : this.state.phoneNumber,
-          from : this.state.from,
-          to : this.state.to,
-          status : this.state.status,
-          voucherCode : this.state.voucherCode,
+          partner: this.state.company_slug,
+          partnerID: outputPartnerId,
+          phoneNumber: this.state.phoneNumber,
+          from: this.state.from,
+          to: this.state.to,
+          status: this.state.status,
+          voucherCode: this.state.voucherCode,
           roleType: this.state.type,
           userId: JSON.parse(this.state.user).sale_id,
-          company_id : company_id_output,
-          
+          company_id: company_id_output,
         },
       })
       .then((res) => {
@@ -222,6 +249,59 @@ class ListUserEvoucher extends Component {
           a.href = `${baseUrlapi}${res.data.data.url}`;
         }
         a.click();
+        this.setState({
+          loadingExport: false,
+        });
+      });
+  }
+  async ExportsFileExcelAdmin() {
+    this.setState({
+      loadingExport: true,
+    });
+    const { company_id } = this.state;
+    let company_id_output = "";
+    if (this.state.type !== "0") {
+      company_id_output = this.state.company_id;
+    } else {
+      company_id_output = this.state.idDataCompany;
+    }
+    let outputPartnerId = null;
+    let partner = null;
+    if (this.state.typePartner) {
+      outputPartnerId = this.state.company_id;
+    } else {
+      outputPartnerId = null;
+    }
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER_ADMIN;
+
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .get(url, {
+        params: {
+          saleId: this.state.saleId,
+          partner: this.state.company_slug,
+          partnerID: outputPartnerId,
+          phoneNumber: this.state.phoneNumber,
+          from: this.state.from,
+          to: this.state.to,
+          status: this.state.status,
+          voucherCode: this.state.voucherCode,
+          roleType: this.state.type,
+          userId: JSON.parse(this.state.user).sale_id,
+          company_id: company_id_output,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let a = document.getElementById("download_excel");
+        if (a) {
+          a.href = `${baseUrlapi}${res.data.data.url}`;
+        }
+        a.click();
+        this.setState({
+          loadingExport: false,
+        });
       });
   }
 
@@ -240,8 +320,15 @@ class ListUserEvoucher extends Component {
   };
 
   async onSearch() {
-    const { from, to, idDataSales, phoneFilter, levelFilter, codeVoucher, idDataCompany } =
-      this.state;
+    const {
+      from,
+      to,
+      idDataSales,
+      phoneFilter,
+      levelFilter,
+      codeVoucher,
+      idDataCompany,
+    } = this.state;
     await this.getData(
       idDataSales,
       phoneFilter,
@@ -268,7 +355,7 @@ class ListUserEvoucher extends Component {
         },
       })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         var val = res.data.data;
         this.setState({
           dataSales: this.state.dataSalesDefault.concat(val),
@@ -295,41 +382,56 @@ class ListUserEvoucher extends Component {
           hidden: true,
         });
       }
-    
-      this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
+      console.log(this.state.indexPage);
+      this.setState({
+        arrPagination: arrTotal,
+        data: arrTotal[this.state.indexPage],
+      
+      },()=>{
+        console.log(this.state.indexPage);
+        console.log(this.state.arrPagination);
+      })
     }
   }
-  async getData(saleId, phoneNumber, status, voucherCode, from, to,idDataCompany) {
+  async getData(
+    saleId,
+    phoneNumber,
+    status,
+    voucherCode,
+    from,
+    to,
+    idDataCompany
+  ) {
     this.setState({
-      loadingCallApi : true,
-    })
+      loadingCallApi: true,
+    });
     const { company_id } = this.state;
     let company_id_output = "";
-    if(this.state.type !== "0"){
+    if (this.state.type !== "0") {
       company_id_output = this.state.company_id;
-    }else{
+    } else {
       company_id_output = idDataCompany;
     }
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = null;
-    if(this.state.typePartner){
+    if (this.state.typePartner) {
       baseUrlCallApi = Constants.GET_USER_EVOUCHER_FOR_PARTNER;
-    }else{
+    } else {
       baseUrlCallApi = Constants.GET_USER_EVOUCHER;
     }
     let url = baseUrlapi + baseUrlCallApi;
     let outputPartnerId = "";
-    if(this.state.typePartner){
+    if (this.state.typePartner) {
       outputPartnerId = this.state.company_id;
-    }else{
+    } else {
       outputPartnerId = null;
     }
     await axios
       .get(url, {
         params: {
           saleId: saleId,
-          partner : this.state.company_slug,
-          partnerID : outputPartnerId,  
+          partner: this.state.company_slug,
+          partnerID: outputPartnerId,
           phoneNumber,
           from,
           to,
@@ -337,46 +439,47 @@ class ListUserEvoucher extends Component {
           voucherCode,
           roleType: this.state.type,
           userId: JSON.parse(this.state.user).sale_id,
-          company_id : company_id_output,
+          company_id: company_id_output,
         },
       })
       .then((res) => {
         this.setState({
-          loadingCallApi : false,
-        })
+          loadingCallApi: false,
+        });
 
-       
         let val = res.data.data;
         this.setState({ dataApi: val });
-        console.log('res',res);
+        console.log("res", res);
         this.pagination(val);
         let active = 0;
-        
-        this.setState({ isLoading: false, totalActive: active , total : res.data.total });
+
+        this.setState({
+          isLoading: false,
+          totalActive: active,
+          total: res.data.total,
+        });
 
         console.log(res.data.data);
         this.onFetchNoteList();
-
-      }).catch((err) => {
-        this.setState({
-          loadingCallApi : true,
-        })
       })
+      .catch((err) => {
+        this.setState({
+          loadingCallApi: true,
+        });
+      });
   }
   onFetchNoteList = async () => {
-    const {company_id, dataApi} = this.state;
-    console.log("dataApi",dataApi);
+    const { company_id, dataApi } = this.state;
+    console.log("dataApi", dataApi);
     try {
       const response = await axios({
         url: `https://api.deal24h.vn/api/evoucherNote/noted/getAll`,
         method: "GET",
       });
-      console.log('notelist',response);
+      console.log("notelist", response);
       const { data } = response.data;
-      for(let item in data){
-        console.log(data[item])
-        if(data[item].noted === "Test"){
-          console.log("123",item)
+      for (let item in data) {
+        if (data[item].noted === "Test") {
         }
       }
     } catch (error) {
@@ -412,8 +515,8 @@ class ListUserEvoucher extends Component {
         item: "2",
       },
       {
-        item : ""
-      }
+        item: "",
+      },
     ];
 
     const checkStatusUserVoucherColor = (status) => {
@@ -501,7 +604,15 @@ class ListUserEvoucher extends Component {
               >
                 {arrLevelFilter.map((item, i) => (
                   <option selected key={i} value={item.item}>
-                    {item.item === "A" ? 'Đã nhận voucher' : item.item === "0" ? 'Đã check-in' : item.item === "1" ? 'Hoàn thành' : item.item === "2" ? 'Hủy bỏ' : 'Tất cả'}
+                    {item.item === "A"
+                      ? "Đã nhận voucher"
+                      : item.item === "0"
+                      ? "Đã check-in"
+                      : item.item === "1"
+                      ? "Hoàn thành"
+                      : item.item === "2"
+                      ? "Hủy bỏ"
+                      : "Tất cả"}
                   </option>
                 ))}
               </CSelect>
@@ -524,7 +635,6 @@ class ListUserEvoucher extends Component {
                 }
                 onSearch={this.onSearchSelect}
                 filterOption={(input, option) =>
-                  
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >=
                   0
                 }
@@ -538,40 +648,38 @@ class ListUserEvoucher extends Component {
             </div>
           </div>
         </CCol>
-        {
-         this.state.type !== "0" ? null :  <CCol md={3} className="mt">
-         <div className="">
-           <p className="title_filter">Nhà cung cấp</p>
-           <div style={{ width: "200px" }}>
-             <Select
-               className="select_seo"  
-               showSearch
-               placeholder="Lọc theo ncc"
-               optionFilterProp="children"
-               onChange={(value) =>
-                 this.setState({
-                   idDataCompany : value,
-                 })
-               }
-               onSearch={this.onSearchSelect}
-               filterOption={(input, option) =>
-                 option.children
-                   .toLowerCase()
-                   .indexOf(input.toLowerCase()) >= 0
-               }
-             >
-               {this.state.dataCompany
-                 ? this.state.dataCompany.map((item, i) => {
-                     return (
-                       <Option value={item._id}>{item.Name}</Option>
-                     );
-                   })
-                 : null}
-             </Select>
-           </div>
-         </div>
-       </CCol>
-       }
+        {this.state.type !== "0" ? null : (
+          <CCol md={3} className="mt">
+            <div className="">
+              <p className="title_filter">Nhà cung cấp</p>
+              <div style={{ width: "200px" }}>
+                <Select
+                  className="select_seo"
+                  showSearch
+                  placeholder="Lọc theo ncc"
+                  optionFilterProp="children"
+                  onChange={(value) =>
+                    this.setState({
+                      idDataCompany: value,
+                    })
+                  }
+                  onSearch={this.onSearchSelect}
+                  filterOption={(input, option) =>
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {this.state.dataCompany
+                    ? this.state.dataCompany.map((item, i) => {
+                        return <Option value={item._id}>{item.Name}</Option>;
+                      })
+                    : null}
+                </Select>
+              </div>
+            </div>
+          </CCol>
+        )}
         <CCol md={3} className="mt">
           <p className="title_filter">Từ ngày</p>
           <div>
@@ -614,132 +722,153 @@ class ListUserEvoucher extends Component {
             />
           </div>
         </CCol>
-        
-   
-      
       </CRow>
     );
 
     const renderUserVoucherList = () => (
       <div>
-       <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>  
-      <table
-        ble
-        className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
-      >
-        <thead className="thead-light">
-          <tr>
-            {headingList.map((title) => (
-              <th className="text-center">{title}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {dataApi ? (
-            dataApi.map((item, i) => {
-              return (
-                <tr key={i}>
-                  <td className="text-center">{i + 1}</td>
-                  <td
-                    className="text-center"
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    {item.fullName?.toLowerCase()}
-                  </td>
-                  <td className="text-center">{item.phoneNumber}</td>
-                  <td className="text-center"> TP. Hồ Chí Minh</td>
-                  <td className="text-center">
-                    {item.voucherCode && (
-                      <Box sx={{ display: "flex" }}>
-                        <Chip
-                          label={item.voucherCode}
-                          variant="outlined"
-                          sx={{ backgroundColor: "#9fcfde", border: "none" }}
-                        />
-
-                        <CopyToClipboard
-                          text={item.voucherCode}
-                          onCopy={() => {}}
-                        >
-                          <Tooltip title="Copy">
-                            <IconButton size="small">
-                              <CIcon content={freeSet.cilCopy} />
-                            </IconButton>
-                          </Tooltip>
-                        </CopyToClipboard>
-                      </Box>
-                    )}
-                  </td>
-                  <td className="text-center">
-                    <Tag
-                      className="ant-tag"
-                      color={checkStatusUserVoucherColor(item.status)}
+        <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
+        <table
+          ble
+          className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
+        >
+          <thead className="thead-light">
+            <tr>
+              {headingList.map((title) => (
+                <th className="text-center">{title}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {dataApi ? (
+              dataApi.map((item, i) => {
+                return (
+                  <tr key={i}>
+                    <td className="text-center">{i + 1}</td>
+                    <td
+                      className="text-center"
+                      style={{
+                        fontWeight: "bold",
+                        textTransform: "capitalize",
+                      }}
                     >
-                      {checkStatusUserVoucherContent(item.status)}
-                    </Tag>
-                  </td>
-                  <td className="text-center">{formatDate(item.create_at)}</td>
-                  <td className="text-center">{item.slug}</td>
+                      {item.fullName?.toLowerCase()}
+                    </td>
+                    <td className="text-center">{item.phoneNumber}</td>
+                    <td className="text-center"> TP. Hồ Chí Minh</td>
+                    <td className="text-center">
+                      {item.voucherCode && (
+                        <Box sx={{ display: "flex" }}>
+                          <Chip
+                            label={item.voucherCode}
+                            variant="outlined"
+                            sx={{ backgroundColor: "#9fcfde", border: "none" }}
+                          />
 
-                  <td className="text-center">
-                    {item?.historyId ? (
-                      <CButton
-                        shape="rounded-pill"
-                        variant="outline"
-                        color="info"
-                        style={{ textAlign: "center" }}
-                        size="md"
-                        onClick={(e) => {
-                          this.setState({
-                            idHistory: item?.historyId,
-                            toggleHistory: !toggleHistory,
-                          });
-                        }}
+                          <CopyToClipboard
+                            text={item.voucherCode}
+                            onCopy={() => {}}
+                          >
+                            <Tooltip title="Copy">
+                              <IconButton size="small">
+                                <CIcon content={freeSet.cilCopy} />
+                              </IconButton>
+                            </Tooltip>
+                          </CopyToClipboard>
+                        </Box>
+                      )}
+                    </td>
+                    <td className="text-center">
+                      <Tag
+                        className="ant-tag"
+                        color={checkStatusUserVoucherColor(item.status)}
                       >
-                        <CIcon name="cil-magnifying-glass" />
-                      </CButton>
-                    ) : (
-                      <p>Chưa soi da</p>
-                    )}
-                  </td>
-                  <td className="text-center">{item.saleFollow}</td>
-                  {/* <td className="text-center">
+                        {checkStatusUserVoucherContent(item.status)}
+                      </Tag>
+                    </td>
+                    <td className="text-center">
+                      {formatDate(item.create_at)}
+                    </td>
+                    <td className="text-center">{item.slug}</td>
+
+                    <td className="text-center">
+                      {item?.historyId ? (
+                        <CButton
+                          shape="rounded-pill"
+                          variant="outline"
+                          color="info"
+                          style={{ textAlign: "center" }}
+                          size="md"
+                          onClick={(e) => {
+                            this.setState({
+                              idHistory: item?.historyId,
+                              toggleHistory: !toggleHistory,
+                            });
+                          }}
+                        >
+                          <CIcon name="cil-magnifying-glass" />
+                        </CButton>
+                      ) : (
+                        <p>Chưa soi da</p>
+                      )}
+                    </td>
+                    <td className="text-center">{item.saleFollow}</td>
+                    {/* <td className="text-center">
                     <Chip
                       icon={<AccessTimeIcon />}
                       label={truncateString("Chưa có", 20)}
                     />
                   </td> */}
-                  <td className="text-center">
-                    <Link to={`/detail-evoucher/${item._id}`}>
-                      <Tooltip title="Xem chi tiết">
-                        <IconButton size="small">
-                          <LaunchOutlinedIcon sx={{ color: "#3C93E3" }} />
-                        </IconButton>
-                      </Tooltip>
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <td colSpan="10" className="text-center">
-              Không tìm thấy dữ liệu
-            </td>
-          )}
-        </tbody>
-      </table>
-      <div style={{ float: "right" }}>
-                    <Pagination
-                      count={this.state.arrPagination.length}
-                      color="primary"
-                      onChange={(e, v) => {
-                        this.setState({
-                          data: this.state.arrPagination[v - 1],
-                          indexPage: v - 1,
-                        });
-                      }}
-                    />
-                  </div>
+                    <td className="text-center">
+                      {this.state.type == "0" ? (
+                        <CButton
+                          shape="rounded-pill"
+                          variant="ghost"
+                          color="danger"
+                          style={styles.mgl5}
+                          onClick={(e) => {
+                            this.remove(item._id);
+                          }}
+                        >
+                          <BsTrash
+                            style={styles.icon}
+                            className="icon"
+                            name="cilTrash"
+                          />
+                        </CButton>
+                      ) : null}
+
+                      <Link to={`/detail-evoucher/${item._id}`}>
+                        <Tooltip title="Xem chi tiết">
+                          <IconButton size="small">
+                            <LaunchOutlinedIcon sx={{ color: "#3C93E3" }} />
+                          </IconButton>
+                        </Tooltip>
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <td colSpan="10" className="text-center">
+                Không tìm thấy dữ liệu
+              </td>
+            )}
+          </tbody>
+        </table>
+        <div style={{ float: "right" }}>
+          <Pagination
+            count={this.state.arrPagination.length}
+            color="primary"
+            onChange={(e, v) => {
+              console.log(e,v)  
+              this.setState({
+                data: this.state.arrPagination[v - 1],
+                indexPage: v - 1,
+              });
+            }}
+          />
+        </div>
       </div>
     );
 
@@ -790,19 +919,26 @@ class ListUserEvoucher extends Component {
                         <p style={{ margin: "auto 0" }}>Tải file mẫu</p>
                       </CButton>
                     </a> */}
-                    {
-                      this.state.type == 0 ? null : <CButton
+                    <CButton
                       color="success"
                       style={{ marginRight: "10px" }}
                       size="md"
                       className="flex-center"
-                      onClick={() => this.ExportsFileExcel()}
+                      onClick={() =>
+                        this.state.type == 0
+                          ? this.ExportsFileExcelAdmin()
+                          : this.ExportsFileExcel()
+                      }
                     >
                       <FaFileExport style={{ margin: "auto 6px auto 0" }} />
                       <p style={{ margin: "auto 0" }}>Xuất File</p>
                     </CButton>
-                    }
-                    
+                    {this.state.loadingExport ? (
+                      <div style={{ marginLeft: "20px" }}>
+                        <Spin tip="Đang xuất file..."></Spin>
+                      </div>
+                    ) : null}
+
                     <a id="download_excel" download></a>
                     <div></div>
                   </div>
@@ -860,169 +996,249 @@ class ListUserEvoucher extends Component {
 
                   <div className="name_excel" id="name_excel"></div>
                 </div>
-              {
-                this.state.loadingCallApi ? <div className='text-center'>  
-                <Space size="middle">        
-                  <Spin size="large" />
-                </Space>
-              </div> :
-              <div>
-              <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>  
-             <table
-               ble
-               className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
-             >
-               <thead className="thead-light">
-                 <tr>
-                   {headingList.map((title) => (
-                     <th className="text-center">{title}</th>
-                   ))}
-                 </tr>
-               </thead>
-               <tbody>
-                 {this.state.data && this.state.data.length > 0 ? (
-                   this.state.data.map((item, i) => {
-                     return (
-                       <tr key={i}>
-                         <td className="text-center">{i + 1}</td>
-                         <td
-                           className="text-center"
-                           style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                         >
-                           {item.fullName?.toLowerCase()}
-                         </td>
-                         <td className="text-center">{item.phoneNumber}</td>
-                         <td className="text-center"> TP. Hồ Chí Minh</td>
-                         <td className="text-center">
-                           {item.voucherCode && (
-                             <Box sx={{ display: "flex" }}>
-                               <Chip
-                                 label={item.voucherCode}
-                                 variant="outlined"
-                                 sx={{ backgroundColor: "#9fcfde", border: "none" }}
-                               />
-       
-                               <CopyToClipboard
-                                 text={item.voucherCode}
-                                 onCopy={() => {}}
-                               >
-                                 <Tooltip title="Copy">
-                                   <IconButton size="small">
-                                     <CIcon content={freeSet.cilCopy} />
-                                   </IconButton>
-                                 </Tooltip>
-                               </CopyToClipboard>
-                             </Box>
-                           )}
-                         </td>
-                         <td className="text-center">
-                           <Tag
-                             className="ant-tag"
-                             color={checkStatusUserVoucherColor(item.status)}
-                           >
-                             {checkStatusUserVoucherContent(item.status)}
-                           </Tag>
-                         </td>
-                         <td className="text-center">{
-                                    new Date(
-                                      item.create_at
-                                    ).toLocaleTimeString()} ngày {formatDate(item.create_at)}</td>
-                         <td className="text-center">{item.slug}</td>
-       
-                         <td className="text-center">
-                           {item?.historyId ? (
-                             <CButton
-                               shape="rounded-pill"
-                               variant="outline"
-                               color="info"
-                               style={{ textAlign: "center" }}
-                               size="md"
-                               onClick={(e) => {
-                                 this.setState({
-                                   idHistory: item?.historyId,
-                                   toggleHistory: !toggleHistory,
-                                 });
-                               }}
-                             >
-                               <CIcon name="cil-magnifying-glass" />
-                             </CButton>
-                           ) : (
-                             <p>Chưa soi da</p>
-                           )}
-                         </td>
-                         <td className="text-center">{item.saleFollow && item.saleFollow.length !== 0 && typeof(item.saleFollow) === 'array' ? item.saleFollow?.map((item)=>{
-                            return item
-                         }) : null}</td>
-                         {/* <td className="text-center">
+                {this.state.loadingCallApi ? (
+                  <div className="text-center">
+                    <Space size="middle">
+                      <Spin size="large" />
+                    </Space>
+                  </div>
+                ) : (
+                  <div>
+                    <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
+                    <table
+                      ble
+                      className="table mt-3 table-hover table-outline mb-0 d-none d-sm-table table_dash"
+                    >
+                      <thead className="thead-light">
+                        <tr>
+                          {headingList.map((title) => (
+                            <th className="text-center">{title}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.data && this.state.data.length > 0 ? (
+                          this.state.data.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-center">{i + 1}</td>
+                                <td
+                                  className="text-center"
+                                  style={{
+                                    fontWeight: "bold",
+                                    textTransform: "capitalize",
+                                  }}
+                                >
+                                  {item.fullName?.toLowerCase()}
+                                </td>
+                                <td className="text-center">
+                                  {item.phoneNumber}
+                                </td>
+                                <td className="text-center">
+                                  {" "}
+                                  TP. Hồ Chí Minh
+                                </td>
+                                <td className="text-center">
+                                  {item.voucherCode && (
+                                    <Box sx={{ display: "flex" }}>
+                                      <Chip
+                                        label={item.voucherCode}
+                                        variant="outlined"
+                                        sx={{
+                                          backgroundColor: "#9fcfde",
+                                          border: "none",
+                                        }}
+                                      />
+
+                                      <CopyToClipboard
+                                        text={item.voucherCode}
+                                        onCopy={() => {}}
+                                      >
+                                        <Tooltip title="Copy">
+                                          <IconButton size="small">
+                                            <CIcon content={freeSet.cilCopy} />
+                                          </IconButton>
+                                        </Tooltip>
+                                      </CopyToClipboard>
+                                    </Box>
+                                  )}
+                                </td>
+                                <td className="text-center">
+                                  <Tag
+                                    className="ant-tag"
+                                    color={checkStatusUserVoucherColor(
+                                      item.status
+                                    )}
+                                  >
+                                    {checkStatusUserVoucherContent(item.status)}
+                                  </Tag>
+                                </td>
+                                <td className="text-center">
+                                  {new Date(
+                                    item.create_at
+                                  ).toLocaleTimeString()}{" "}
+                                  ngày {formatDate(item.create_at)}
+                                </td>
+                                <td className="text-center">{item.slug}</td>
+
+                                <td className="text-center">
+                                  {item?.historyId ? (
+                                    <CButton
+                                      shape="rounded-pill"
+                                      variant="outline"
+                                      color="info"
+                                      style={{ textAlign: "center" }}
+                                      size="md"
+                                      onClick={(e) => {
+                                        this.setState({
+                                          idHistory: item?.historyId,
+                                          toggleHistory: !toggleHistory,
+                                        });
+                                      }}
+                                    >
+                                      <CIcon name="cil-magnifying-glass" />
+                                    </CButton>
+                                  ) : (
+                                    <p>Chưa soi da</p>
+                                  )}
+                                </td>
+                                <td className="text-center">
+                                  {item.saleFollow &&
+                                  item.saleFollow.length !== 0 &&
+                                  typeof item.saleFollow === "array"
+                                    ? item.saleFollow?.map((item) => {
+                                        return item;
+                                      })
+                                    : null}
+                                </td>
+                                {/* <td className="text-center">
                            <Chip
                              icon={<AccessTimeIcon />}
                              label={truncateString("Chưa có", 20)}
                            />
                          </td> */}
-                         <td className="text-center">
-                           <Link to={`/detail-evoucher/${item._id}`}>
-                             <Tooltip title="Xem chi tiết">
-                               <IconButton size="small">
-                                 <LaunchOutlinedIcon sx={{ color: "#3C93E3" }} />
-                               </IconButton>
-                             </Tooltip>
-                           </Link>
-                         </td>
-                       </tr>
-                     );
-                   })
-                 ) : (
-                   <td colSpan="10" className="text-center">
-                     Không tìm thấy dữ liệu
-                   </td>
-                 )}
-               </tbody>
-             </table>
-              <div style={{ float: "right" }}>
-                           <Pagination
-                             count={this.state.arrPagination.length}
-                             color="primary"
-                             onChange={(e, v) => {
-                               this.setState({
-                                 data: this.state.arrPagination[v - 1],
-                                 indexPage: v - 1,
-                               });
-                             }}
-                           />
-              </div>
-             </div>
-                 
-               }
-                
+                                <td className="text-center">
+                                  <div className="flex-a-center">
+                                    {this.state.type == "0" ? (
+                                      <CButton
+                                        shape="rounded-pill"
+                                        variant="ghost"
+                                        color="danger"
+                                        style={styles.mgl5}
+                                        onClick={(e) => {
+                                          this.setState({
+                                            idDelete: item._id,
+                                            modalDelete : true,
+                                          })
+                      
+                                        }}
+                                      >
+                                        <BsTrash
+                                          style={styles.icon}
+                                          className="icon"
+                                          name="cilTrash"
+                                        />
+                                      </CButton>
+                                    ) : null}
+                                    <Link style={{marginLeft : '4px'}} to={`/detail-evoucher/${item._id}`}>
+                                      <Tooltip title="Xem chi tiết">
+                                        <IconButton size="small">
+                                          <LaunchOutlinedIcon
+                                            sx={{ color: "#3C93E3" }}
+                                          />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </Link>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <td colSpan="10" className="text-center">
+                            Không tìm thấy dữ liệu
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <div style={{ float: "right" }}>
+                      <Pagination
+                        count={this.state.arrPagination.length}
+                        color="primary"
+                        onChange={(e, v) => {
+                          console.log(e,v)  
+                          this.setState({
+                            data: this.state.arrPagination[v - 1],
+                            indexPage: v - 1,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
               </CardBody>
             </Card>
-            {
-          toggleHistory ? <Modal
-          isOpen={true}
-          size="xl"
-          toggle={this.closeModalIframe}
-        >
-          <ModalHeader closeButton toggle={this.closeModalIframe}>Chi tiết soi da</ModalHeader>
-          <ModalBody> 
-          <Iframes url={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
-                  width="100%"
-                  height="500px"
-                  display="initial"
-                  position="relative" />
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="secondary"
-              onClick={(e) =>
-                this.closeModalIframe()
-              }
-            >
-              Đóng
-            </Button>
-          </ModalFooter>
-        </Modal> : null
-        }
+            {toggleHistory ? (
+              <Modal isOpen={true} size="xl" toggle={this.closeModalIframe}>
+                <ModalHeader closeButton toggle={this.closeModalIframe}>
+                  Chi tiết soi da
+                </ModalHeader>
+                <ModalBody>
+                  <Iframes
+                    url={Constants.BASE_URL_HISTORY_EVOUCHER + idHistory}
+                    width="100%"
+                    height="500px"
+                    display="initial"
+                    position="relative"
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="secondary"
+                    onClick={(e) => this.closeModalIframe()}
+                  >
+                    Đóng
+                  </Button>
+                </ModalFooter>
+              </Modal>
+            ) : null}
 
+            <Modal
+            isOpen={this.state.modalDelete}
+            className={this.props.className}
+          >
+            <ModalHeader
+              onClick={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
+            <ModalBody>
+              <label htmlFor="tag">{`Bạn có chắc chắn xóa ?`}</label>
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={(e) => this.remove(this.state.idDelete)}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
           </Col>
         </Row>
       </div>

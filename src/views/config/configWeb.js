@@ -242,7 +242,6 @@ class ConfigWeb extends Component {
 
           let valueConfig = JSON.parse(dataConfig.Value);
           console.log("webinfo", valueConfig);
-
           this.setState(
             {
               dataConfigWeb: valueConfig,

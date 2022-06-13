@@ -218,7 +218,10 @@ class ManageSales extends Component {
       password,
       introduction,
     } = this.state;
-
+    let company_id_output = null;
+    if(this.state.company_id){
+      company_id_output = this.state.company_id;
+    };
     const collaboratorInfo = {
       username,
       isManager,
@@ -231,10 +234,14 @@ class ManageSales extends Component {
       introduction,
       saleGroup: null,
       tikitechCreate: true,
+      company_id : company_id_output 
     };
+    
     if(!this.isVietnamesePhoneNumber(phone)){
-      alert('Vui lòng nhập số điện thoại hợp lệ');
-      return;
+      if(phone.length > 6){
+        alert('Vui lòng nhập số điện thoại hợp lệ');
+        return;
+      }
     }
     collaboratorsApi
       .addNewCollaborator(collaboratorInfo)

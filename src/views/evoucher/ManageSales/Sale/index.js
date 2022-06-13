@@ -11,19 +11,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import QRCode from 'qrcode';
+import QRCode from "qrcode";
+import API_CONNECT from "../../../../../src/functions/callAPI";
+
+import { FilledInput } from "@mui/material";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import "antd/dist/antd.css";
+import QRCodeStyling from "qr-code-styling";
 import axios from "axios";
 import "moment-timezone";
 import { CButton, CCol, CRow } from "@coreui/react";
-import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
+import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Radio from '@mui/material/Radio';
+import Radio from "@mui/material/Radio";
+import QRComponent from "./qr";
 import {
   Card,
   Row,
@@ -36,6 +41,8 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
+import TextFieldGroup from "../../../../views/Common/TextFieldGroup";
+
 import collaboratorsApi from "src/apis/manageCollaboratorsApi";
 import capitalizeFirstLetter from "src/utils/capitalizeFirstLetter";
 import DotLoading from "src/views/components/DotLoading";
@@ -45,7 +52,7 @@ import Constants from "../../../../contants/contants";
 import { BiExport } from "react-icons/bi";
 import { Select } from "antd";
 
-import { MdOutlineQrCodeScanner } from 'react-icons/md';
+import { MdOutlineQrCodeScanner } from "react-icons/md";
 const { Option } = Select;
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
@@ -56,7 +63,7 @@ class ManageSales extends Component {
   state = {
     modalSelect: false,
     data: [],
- 
+
     actionVoucherEditing: "new",
     modalVoucherEditing: false,
     key: "",
@@ -76,13 +83,17 @@ class ManageSales extends Component {
     token: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     type: localStorage.getItem("type"),
     user: localStorage.getItem("user"),
-    typePartner : JSON.parse(localStorage.getItem("user")).typePartner ? JSON.parse(localStorage.getItem("user")).company_id : null,
+    typePartner: JSON.parse(localStorage.getItem("user")).typePartner
+      ? JSON.parse(localStorage.getItem("user")).company_id
+      : null,
     isLoading: false,
     idCurrentUpdate: null,
     levelNormal: "0",
     dataCompany: [],
     quantity: "0",
-    company_id: JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null,
+    company_id: JSON.parse(localStorage.getItem("user")).company_id
+      ? JSON.parse(localStorage.getItem("user")).company_id
+      : null,
 
     username: "",
     isManager: false,
@@ -95,12 +106,15 @@ class ManageSales extends Component {
     introduction: "",
     showPassword: false,
     saleGroupList: [],
-    dataCampaign : [],
+    dataCampaign: [],
   };
   async ExportsFileExcel() {
-    alert("Tính năng chưa hỗ trợ"); return;
+    alert("Tính năng chưa hỗ trợ");
+    return;
 
-    var company_id =  JSON.parse(localStorage.getItem("user")).company_id ? JSON.parse(localStorage.getItem("user")).company_id : null
+    var company_id = JSON.parse(localStorage.getItem("user")).company_id
+      ? JSON.parse(localStorage.getItem("user")).company_id
+      : null;
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.EXPORT_CUSTOMER_EVOUCHER;
 
@@ -119,22 +133,39 @@ class ManageSales extends Component {
           a.click();
         }
       });
-  };
+  }
+  async postImage(link) {
+    var newImage = "";
+    if (link && link !== "") {
+      const form = new FormData();
+
+      form.append("image", link);
+
+      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+        (res) => {}
+      );
+
+      newImage = link.name;
+      return newImage;
+    } else {
+      return newImage;
+    }
+  }
   async getData(key) {
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.COLLABORATOR_GET;
     let url = baseUrlapi + baseUrlCallApi;
     let user = JSON.parse(this.state.user);
     let keyOutput = null;
-    if(key){
+    if (key) {
       keyOutput = key;
     }
     await axios
       .get(url, {
         params: {
           keyword: keyOutput,
-          partnerID : this.state.typePartner,
-          company_id : user.company_id
+          partnerID: this.state.typePartner,
+          company_id: user.company_id,
         },
       })
       .then((res) => {
@@ -144,7 +175,11 @@ class ManageSales extends Component {
         this.setState({ dataApi: val });
 
         let active = 0;
-        this.setState({ isLoading: false, totalActive: active , total : res.data.total  });
+        this.setState({
+          isLoading: false,
+          totalActive: active,
+          total: res.data.total,
+        });
       });
   }
 
@@ -215,10 +250,13 @@ class ManageSales extends Component {
       introduction: "",
       showPassword: false,
       saleGroup: "",
+      imgRenderQRCode: "",
+      imgRenderQRCode_link: "",
+      imgRenderQRCode_show: "",
     });
   }
 
-  onAddNewSales() {
+  async onAddNewSales() {
     const {
       username,
       isManager,
@@ -231,11 +269,21 @@ class ManageSales extends Component {
       introduction,
     } = this.state;
     let user = JSON.parse(this.state.user);
+    let company_id_output = null;
+    if (this.state.company_id) {
+      company_id_output = this.state.company_id;
+    }
+    let logo = "";
+    let newImage = await this.postImage(this.state.imgRenderQRCode_link);
+    if (newImage) {
+      logo = `${Constants.BASE_URL}image_brand/${newImage}`;
+    }
+
     const collaboratorInfo = {
       username,
       isManager,
       partnerID: this.state.typePartner,
-
+      logoPG: logo,
       email,
       relCode,
       phone,
@@ -243,9 +291,10 @@ class ManageSales extends Component {
       address,
       password,
       introduction,
-      
+
       saleGroup: null,
       tikitechCreate: true,
+      company_id: company_id_output,
     };
 
     collaboratorsApi
@@ -280,31 +329,34 @@ class ManageSales extends Component {
         })
       );
   }
-  
-  exportQRCode=(item)=>{
+
+  exportQRCode = (item) => {
     this.setState({
       modalQRCode: true,
       itemRenderQRCode: item,
-      qrCode: ""
+      qrCode: "",
     });
     this.renderQRCode(item);
-    
   };
-  renderQRCode=(item)=>{
-    const {itemRenderQRCode, user} = this.state;
+  renderQRCode = (item) => {
+    const { itemRenderQRCode, user } = this.state;
     const userParse = JSON.parse(user);
-    console.log(item);
-    QRCode.toDataURL(`https://deal24h.vn/${userParse.username}/${item.phone}`).then((data)=>{
-      this.setState({
-        qrCode : data
-      })
-    });
-  }
-  SelectCampaignRenderQR=(item)=>{
     this.setState({
-      campaignRenderQRCode : item
-    })
-  }
+      qrCodeLink: `https://deal24h.vn/${userParse.username}/${item.phone}`,
+    });
+    QRCode.toDataURL(
+      `https://deal24h.vn/${userParse.username}/${item.phone}`
+    ).then((data) => {
+      this.setState({
+        qrCode: data,
+      });
+    });
+  };
+  SelectCampaignRenderQR = (item) => {
+    this.setState({
+      campaignRenderQRCode: item,
+    });
+  };
 
   handleShowEditCollaborator({
     username,
@@ -316,13 +368,14 @@ class ManageSales extends Component {
     password,
     introduction,
     isManager,
+    logoPG,
   }) {
     let user = JSON.parse(this.state.user);
 
     this.setState({
       actionVoucher: "edit",
       modalVoucher: true,
-      partnerID : this.state.typePartner,
+      partnerID: this.state.typePartner,
       username,
       isManager,
       email,
@@ -332,6 +385,7 @@ class ManageSales extends Component {
       address,
       password,
       introduction,
+      imgRenderQRCode: logoPG,
     });
   }
 
@@ -372,30 +426,40 @@ class ManageSales extends Component {
   //     this.setState({ isLoading: false });
   //   }
   // }
-
+  onChangeImage = (e, value, valueLink, valueShow) => {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ [valueLink]: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
+    };
+  };
   renderHeaderTable = () => {
     return (
       <>
         <tr className="header__table--span">
           <th className="text-center"></th>
-          <th colspan="2" className="text-center">
+          <th colspan="3" className="text-center">
             Thông tin PG
           </th>
           <th colspan="3" className="text-center">
             Thông tin Doanh Số
           </th>
-          <th className="text-center" colspan="3"></th>
+          <th className="text-center" colspan="4"></th>
         </tr>
         <tr className="header__table--bottom">
           <th className="text-center ">STT.</th>
           <th className="text-center border-left">Tên Sales</th>
           <th className="text-center">SĐT</th>
+          <th className="text-center">Hình ảnh</th>
+
           <th className="text-center border-left">Tổng số Evoucher</th>
           <th className="text-center">Tổng số khách CheckIn</th>
           <th className="text-center">Tỷ lệ Khách Checkin</th>
           <th className="text-center border-left"></th>
           <th className="text-center">Ghi chú</th>
-   
+
           <th className="text-center">Ngày tạo</th>
         </tr>
       </>
@@ -403,9 +467,9 @@ class ManageSales extends Component {
   };
 
   renderCollaboratorList = (collaboratorList) => {
-    if (! collaboratorList) {
+    if (!collaboratorList) {
       return (
-        <td colSpan="13" className="text-center">
+        <td colSpan="14" className="text-center">
           <h5>Không tìm thấy thông tin Cộng tác viên!!!</h5>
         </td>
       );
@@ -418,12 +482,40 @@ class ManageSales extends Component {
           {capitalizeFirstLetter(collaborator?.name || collaborator?.username)}
         </td>
         <td className="text-center">{collaborator?.phone}</td>
-        <td className="text-center border-left">{collaborator.CampaignOverviewSale && collaborator.CampaignOverviewSale[0] ? collaborator.CampaignOverviewSale[0]?.countVoucher : "Chưa có thông tin"}</td>
-        <td className="text-center">{collaborator.CampaignOverviewSale && collaborator.CampaignOverviewSale[0] ? collaborator.CampaignOverviewSale[0]?.totalVoucher : "Chưa có thông tin"}</td>
-        <td className="text-center">{collaborator.CampaignOverviewSale && collaborator.CampaignOverviewSale[0] ? collaborator.CampaignOverviewSale[0]?.rateCheckIn : "Chưa có thông tin"}</td>
+        <td className="text-center">
+          {collaborator?.logoPG && collaborator?.logoPG !== "" ? (
+            <img
+              src={collaborator?.logoPG}
+              alt="logo"
+              width="60px"
+              height="60px"
+            />
+          ) : (
+            "Không có hình ảnh"
+          )}
+        </td>
 
         <td className="text-center border-left">
-          <div className="flex" style={{minWidth: '400px'}}>
+          {collaborator.CampaignOverviewSale &&
+          collaborator.CampaignOverviewSale[0]
+            ? collaborator.CampaignOverviewSale[0]?.countVoucher
+            : "Chưa có thông tin"}
+        </td>
+        <td className="text-center">
+          {collaborator.CampaignOverviewSale &&
+          collaborator.CampaignOverviewSale[0]
+            ? collaborator.CampaignOverviewSale[0]?.totalVoucher
+            : "Chưa có thông tin"}
+        </td>
+        <td className="text-center">
+          {collaborator.CampaignOverviewSale &&
+          collaborator.CampaignOverviewSale[0]
+            ? collaborator.CampaignOverviewSale[0]?.rateCheckIn
+            : "Chưa có thông tin"}
+        </td>
+
+        <td className="text-center border-left">
+          <div className="flex" style={{ minWidth: "400px" }}>
             <CButton
               shape="rounded-pill"
               variant="outline"
@@ -477,15 +569,24 @@ class ManageSales extends Component {
               size="md"
               onClick={(e) => this.exportQRCode(collaborator)}
             >
-              <MdOutlineQrCodeScanner style={styles.icon} className="mr-1" name="cilPencil" />
+              <MdOutlineQrCodeScanner
+                style={styles.icon}
+                className="mr-1"
+                name="cilPencil"
+              />
               QRCode
             </CButton>
           </div>
         </td>
-        <td className="text-center">{collaborator?.noted ? collaborator?.noted : 'Không có'}</td>
-  
         <td className="text-center">
-          {collaborator?.create_date || "Chưa có thông tin"}
+          {collaborator?.noted ? collaborator?.noted : "Không có"}
+        </td>
+
+        <td className="text-center">
+          {new Date(collaborator?.create_date).toLocaleTimeString() +
+            " ngày " +
+            new Date(collaborator?.create_date).toLocaleDateString() ||
+            "Chưa có thông tin"}
         </td>
       </tr>
     ));
@@ -495,22 +596,23 @@ class ManageSales extends Component {
     saleGroup && this.setState({ saleGroup: saleGroup });
   };
   openSelectExport = (collaborator) => {
-    alert("Tính năng chưa hỗ trợ"); return;
+    alert("Tính năng chưa hỗ trợ");
+    return;
     this.setState({
       modalSelect: true,
     });
   };
   remove = async (item) => {
-    const  user  = JSON.parse(this.state.user);
+    const user = JSON.parse(this.state.user);
     var baseUrlapi = Constants.BASE_URL;
     let baseUrlCallApi = Constants.COLLABORATOR_DELETE;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .delete(url, {
-        data : {
-          id : item._id,
-          partnerID : this.state.typePartner 
-        }    
+        data: {
+          id: item._id,
+          partnerID: this.state.typePartner,
+        },
       })
       .then((res) => {
         this.getData();
@@ -537,15 +639,16 @@ class ManageSales extends Component {
       .then((res) => {
         let val = res.data.data;
         val.unshift({
-          name : "Chưa có",
-          vendor : [
+          name: "Chưa có",
+          vendor: [
             {
-              Slug : ""
-            }
-          ]
-        })
-        this.setState({ dataCampaign: val },()=>{console.log('datacam',this.state.dataCampaign)});
-      
+              Slug: "",
+            },
+          ],
+        });
+        this.setState({ dataCampaign: val }, () => {
+          console.log("datacam", this.state.dataCampaign);
+        });
       });
   }
   render() {
@@ -575,9 +678,7 @@ class ManageSales extends Component {
           <Col>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify title_header">
-                  Quản lý PG
-                </i>
+                <i className="fa fa-align-justify title_header">Quản lý PG</i>
                 <CRow>
                   <CCol md={3} className="mt">
                     <div className="">
@@ -611,7 +712,6 @@ class ManageSales extends Component {
                   </CCol>
                 </CRow>
                 <div className="flex-end" style={{ marginTop: "1rem" }}>
-                
                   <CButton
                     color="info"
                     size="md"
@@ -635,10 +735,9 @@ class ManageSales extends Component {
                     <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
                   </CButton>
                 </div>
-                
               </CardHeader>
               <CardBody className="table__overflow">
-              <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>  
+                <h5>Tổng số: {this.state.total ? this.state.total : ""}</h5>
                 <table
                   ble
                   className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
@@ -678,7 +777,7 @@ class ManageSales extends Component {
               component="h2"
               style={{ margin: "1rem 0 0 0" }}
             >
-              Họ tên 
+              Họ tên
             </Typography>
             <TextField
               id="outlined-basic"
@@ -749,7 +848,43 @@ class ManageSales extends Component {
               }}
               value={address}
             />
-            
+            <Typography
+              variant="subtitle1"
+              component="h2"
+              style={{ margin: "1rem 0 0 0" }}
+            >
+              Hình ảnh render QRCode
+            </Typography>
+
+            <InputLabel htmlFor="" style={styles.importLabel}>
+              <TextFieldGroup
+                field="imgRenderQRCode"
+                label=""
+                type={"file"}
+                className="mt-5"
+                onChange={(e) => {
+                  this.onChangeImage(
+                    e,
+                    "imgRenderQRCode",
+                    "imgRenderQRCode_link",
+                    "imgRenderQRCode_show"
+                  );
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                  this.setState({
+                    imgLogoAdmin_show: "",
+                  });
+                }}
+              />
+              <div className="text-center">
+                <img
+                  src={this.state.imgRenderQRCode}
+                  alt=""
+                  style={{ maxHeight: "250px", maxWidth: "250px" }}
+                />
+              </div>
+            </InputLabel>
             <Typography
               variant="subtitle1"
               component="h2"
@@ -804,9 +939,7 @@ class ManageSales extends Component {
               />
             </FormControl>
 
-            <Box style={{ display: "flex", gap: "15px" }}>
-    
-            </Box>
+            <Box style={{ display: "flex", gap: "15px" }}></Box>
           </ModalBody>
           <ModalFooter>
             <CButton
@@ -873,45 +1006,39 @@ class ManageSales extends Component {
         {/* ------------------END MODAL DELETE COLLABORATOR------------------------- */}
         <Modal isOpen={this.state.modalSelect} className={this.props.className}>
           <ModalHeader>Xuất File</ModalHeader>
-          <ModalBody>    
-          <p>Chọn nhà cung cấp</p>    
-          <div style={{ width: "100%" }}>
-                <Select
-                  className="select_company"
-                  showSearch
-                  defaultValue={this.state.nameCompanyChoose}
-                  placeholder="Chọn"
-                  optionFilterProp="children"
-                  onChange={(value) =>
-                    this.setState({
-                      idCompany: value,
+          <ModalBody>
+            <p>Chọn nhà cung cấp</p>
+            <div style={{ width: "100%" }}>
+              <Select
+                className="select_company"
+                showSearch
+                defaultValue={this.state.nameCompanyChoose}
+                placeholder="Chọn"
+                optionFilterProp="children"
+                onChange={(value) =>
+                  this.setState({
+                    idCompany: value,
+                  })
+                }
+                onSearch={this.onSearchSelect}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {this.state.dataCampaign
+                  ? this.state.dataCampaign.map((item, i) => {
+                      return <Option value={item._id}>{item.name}</Option>;
                     })
-                  }
-                  onSearch={this.onSearchSelect}
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {this.state.dataCampaign
-                    ? this.state.dataCampaign.map((item, i) => {
-                        return <Option value={item._id}>{item.name}</Option>;
-                      })
-                    : null}
-                </Select>
-              </div>
+                  : null}
+              </Select>
+            </div>
           </ModalBody>
           <ModalFooter>
             <a id="download_excel" download></a>
-            <CButton
-              color="primary"
-              onClick={()=>this.ExportsFileExcel()}
-            >
+            <CButton color="primary" onClick={() => this.ExportsFileExcel()}>
               Xuất File
-              
             </CButton>{" "}
-
             <CButton
               color="secondary"
               onClick={(e) =>
@@ -926,20 +1053,23 @@ class ManageSales extends Component {
         </Modal>
         <Modal isOpen={this.state.modalQRCode} className={this.props.className}>
           <ModalHeader>Tạo mã QRCode</ModalHeader>
-          <ModalBody> 
-              <div className="">
-                <h6>Mã QRCode:</h6>
-                <div className="text-center">
-                  <img src={this.state.qrCode} />
-                </div>    
+          <ModalBody>
+            <div className="">
+              <h6>Mã QRCode:</h6>
+              <div className="text-center">
+                {/* <img src={this.state.qrCode} /> */}
+                <div style={{ margin: "40px 0" }}>
+                  <QRComponent link={this.state.qrCodeLink} />
+                </div>
               </div>
+            </div>
           </ModalBody>
           <ModalFooter>
             <CButton
               color="primary"
               disabled={this.state.isLoading}
-              onClick={()=>{
-                alert("Tính năng đang cập nhật")
+              onClick={() => {
+                alert("Tính năng đang cập nhật");
               }}
             >
               Chia sẻ

@@ -7,6 +7,8 @@ export default {
   BASE_URL_CURRENT: "http://localhost:3019/",
 
   EXPORT_HISTORY : "api/history/exportdata",
+  DELETE_HISTORY : "api/history/delete",
+
 
   GET_OVERVIEW : "api/dashboard/overview",
 
@@ -49,6 +51,8 @@ export default {
 
   PLUGIN_SUBSALE_USER2: "api/plugin-subsale-user_New",
   EXPORT_CUSTOMER_EVOUCHER: "api/get-file-export-customer-evoucher2",
+  EXPORT_CUSTOMER_EVOUCHER_ADMIN: "api/evoucher/reportAdmin",
+
   EXPORT_CUSTOMER: "api/get-data-user",
 
   GET_FOOTER: "api/footerPage/getAll",
@@ -79,6 +83,7 @@ export default {
   UPDATE_USER_EVOUCHER: "api/evoucher/list-customer-request",
   DELETE_USER_EVOUCHER: "api/evoucher/list-customer-request",
   FETCH_DETAIL_USER_VOUCHER: "api/transactionEvoucher",
+  DELETE_USER_EVOUCHER_REQUEST: "api/transactionEvoucher/deleteVoucher",
   FETCH_ALL_NOTE_USER_VOUCHER: "api/evoucher/noted",
 
   LIST_USER: "/api/list-user",

@@ -449,7 +449,7 @@ const _navMangerCampaigns = [
             className="c-sidebar-nav-icon c-sidebar-nav-icon-child"
           />
         ),
-        role: ["1", "2"],
+        role: ["0","1", "2"],
        
       },
       {
@@ -554,7 +554,7 @@ const _navMangerUser = [
             customClasses="c-sidebar-nav-icon c-sidebar-nav-icon-child"
           />
         ),
-        role: [typePartner ? "partner" : null],
+        role: [typePartner ? "partner" : null, "0"],
         badge: {
           color: "info",
           text: (

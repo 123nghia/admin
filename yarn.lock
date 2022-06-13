@@ -10549,6 +10549,18 @@
   "resolved" "https://registry.npmjs.org/q/-/q-1.5.1.tgz"
   "version" "1.5.1"
 
+"qr-code-styling@^1.6.0-rc.1":
+  "integrity" "sha512-ModRIiW6oUnsP18QzrRYZSc/CFKFKIdj7pUs57AEVH20ajlglRpN3HukjHk0UbNMTlKGuaYl7Gt6/O5Gg2NU2Q=="
+  "resolved" "https://registry.npmjs.org/qr-code-styling/-/qr-code-styling-1.6.0-rc.1.tgz"
+  "version" "1.6.0-rc.1"
+  dependencies:
+    "qrcode-generator" "^1.4.3"
+
+"qrcode-generator@^1.4.3":
+  "integrity" "sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw=="
+  "resolved" "https://registry.npmjs.org/qrcode-generator/-/qrcode-generator-1.4.4.tgz"
+  "version" "1.4.4"
+
 "qrcode@^1.5.0":
   "integrity" "sha512-9MgRpgVc+/+47dFvQeD6U2s0Z92EsKzcHogtum4QB+UNd025WOJSHvn/hjk9xmzj7Stj95CyUAs31mrjxliEsQ=="
   "resolved" "https://registry.npmjs.org/qrcode/-/qrcode-1.5.0.tgz"

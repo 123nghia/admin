@@ -11,6 +11,7 @@ import {
 import { DatePicker, Space, Spin } from "antd";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import Iframes from 'react-iframe'
+import Swal from "sweetalert2";
 
 import {
   Button,
@@ -311,7 +312,27 @@ class HistorySkin extends Component {
       default: return 'primary'
     }
   }
-
+  async remove(idInput){
+    var baseUrlapi = Constants.BASE_URL;
+    let baseUrlCallApi = Constants.DELETE_HISTORY;
+    let url = baseUrlapi + baseUrlCallApi;
+    await axios
+      .delete(url, {
+        data: {
+          id : idInput,
+        },
+      })
+      .then((res) => {
+        this.setState({ modalDelete: false });
+        Swal.fire({
+          icon: "success",
+          title: "Xóa thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+      this.getData();    
+      })
+  }
   render() {
     const { data, activePage, itemPerPage, itemsCount, toggleHistory, idHistory } = this.state;
 
@@ -504,6 +525,42 @@ class HistorySkin extends Component {
                 </div>
               </CardHeader>
               <CardBody className="table__overflow">
+              <Modal
+            isOpen={this.state.modalDelete}
+            className={this.props.className}
+          >
+            <ModalHeader
+              onClick={(e) =>
+                this.setState({
+                  modalDelete: !this.state.modalDelete,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
+            <ModalBody>
+              <label htmlFor="tag">{`Bạn có chắc chắn xóa ?`}</label>
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={(e) => this.remove(this.state.idDelete)}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: !this.state.modalDelete,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
                {
                  this.state.loadingCallApi ? 
                  <div className='text-center'>  
@@ -580,15 +637,25 @@ class HistorySkin extends Component {
                                 ).toLocaleDateString()}
                               </td>
                               <td className="text-center">
-                              {/* <CButton
+                              {
+                                this.state.type == 0 ? <CButton
                                 shape="rounded-pill"
                                 variant="ghost"
                                 color="danger"
                                 style={styles.mgl5}
+                                onClick={()=>{
+                                  this.setState({
+                                    idDelete: item._id,
+                                    modalDelete: true,
+                                  })
+                                }
+                                  
+                                }
                                 
                               >
                                 <BsTrash style={styles.icon} className="icon" name="cilTrash" />
-                              </CButton> */}
+                              </CButton> : null
+                              }
                               </td>
                             </tr>
                           );
