@@ -4,7 +4,7 @@ export default {
 
   PORTAL_SERVER: "https://portal.applamdep.com/",
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
-  BASE_URL_CURRENT: "http://localhost:3019/",
+  BASE_URL_CURRENT: "https://id.deal24h.vn/",
 
   EXPORT_HISTORY : "api/history/exportdata",
   DELETE_HISTORY : "api/history/delete",

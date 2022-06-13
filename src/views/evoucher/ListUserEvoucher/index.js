@@ -455,7 +455,7 @@ class ListUserEvoucher extends Component {
 
         this.setState({
           isLoading: false,
-          totalActive: active,
+          // totalActive: active,
           total: res.data.total,
         });
 
