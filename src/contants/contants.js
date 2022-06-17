@@ -1,5 +1,5 @@
 export default {
-  BASE_URL: "https://api.deal24h.vn/",
+  BASE_URL: "https://api-tikicare.thulamua.com/",
   // BASE_URL: "http://192.168.1.21:3028/",
   PORTAL_SERVER: "https://portal.applamdep.com/",
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
