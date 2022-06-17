@@ -581,3 +581,17 @@
 .close {
   font-size: 1.6125rem !important
 }
+.ant-btn-primary{
+  background-color: var(--main_web_admin);
+  background: var(--main_web_admin);
+ 
+}
+.ant-btn{
+  align-items: center !important;
+  display: flex !important;
+}
+.ant-btn-primary svg{
+  width: 20px;
+  height: 20px;
+  margin: auto 4px auto 0;
+}

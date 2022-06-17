@@ -31,7 +31,11 @@ import Swal from "sweetalert2";
 import Constants from "../../../contants/contants";
 import TextFieldGroup from "../../Common/TextFieldGroup";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
-
+import { Button, Tooltip } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { MdOpenInNew } from "react-icons/md";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const { Option } = Select;
 
 let headers = new Headers();
@@ -145,11 +149,21 @@ class Products extends Component {
       imageLogo: "",
       techDescription: "",
       idCategory: "",
-      idBranch : "",
+      idBranch: "",
       nameCategoryChoose: "",
       nameBranchChoose: "",
-      price : "",
-      priceSale : "",
+      price: "",
+      priceSale: "",
+      idIsSpecial: false,
+      nameIsSpecialChoose: "Không",
+      preserve: "",
+      guide: "",
+      uses: "",
+      safety: "",
+      skinType: "",
+      element: "",
+      expire: "",
+      origin: "",
     });
   }
   openFormEdit(item) {
@@ -162,7 +176,7 @@ class Products extends Component {
           });
         }
       });
-    };
+    }
     if (dataBranch && dataBranch.length > 0) {
       dataBranch.forEach((element) => {
         if (element._id === item.brandId) {
@@ -171,12 +185,12 @@ class Products extends Component {
           });
         }
       });
-    };
+    }
     this.setState({
       actionModal: "edit",
       modal: true,
       idCategory: item.categoryId,
-      idBranch : item.brandId,
+      idBranch: item.brandId,
       idEdit: item._id,
       title: item.title,
       techDescription: item.techDescription,
@@ -185,9 +199,60 @@ class Products extends Component {
       imageShare: item.imageShare,
       content: item.content,
       imageLogo: item.avatar,
-      price : item.price,
-      priceSale : item.priceSale,
+      price: item.price,
+      priceSale: item.priceSale,
+      idIsSpecial: item.isSpecial,
     });
+    if(item.techDescription?.preserve){
+      this.setState({
+        preserve: item.techDescription.preserve,
+      });
+    }
+    if(item.techDescription?.guide){
+      this.setState({
+        guide: item.techDescription.guide,
+      });
+    }
+    if(item.techDescription?.uses){
+      this.setState({
+        uses: item.techDescription.uses,
+      });
+    }
+    if(item.techDescription?.skinType){
+      this.setState({
+        skinType: item.techDescription.skinType,
+      });
+    }
+    if(item.techDescription?.safety){
+      this.setState({
+        safety: item.techDescription.safety,
+      });
+    }
+    if(item.techDescription?.expire){
+      this.setState({
+        expire: item.techDescription.expire,
+      });
+    }
+    if(item.techDescription?.element){
+      this.setState({
+        element: item.techDescription.element,
+      });
+    }
+    if(item.techDescription?.origin){
+      this.setState({
+        origin: item.techDescription.origin,
+      });
+    }
+
+    if (item.isSpecial) {
+      this.setState({
+        nameIsSpecialChoose: "Có",
+      });
+    } else {
+      this.setState({
+        nameIsSpecialChoose: "Không",
+      });
+    }
   }
   async update() {
     const {
@@ -203,7 +268,7 @@ class Products extends Component {
       idCategory,
       idBranch,
       price,
-      priceSale
+      priceSale,
     } = this.state;
     let img = this.state.imageLogo;
     let img2 = this.state.imageShare;
@@ -235,6 +300,7 @@ class Products extends Component {
         brandId: idBranch,
         price: price,
         priceSale: priceSale,
+        isSpecial: this.state.idIsSpecial,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -267,7 +333,15 @@ class Products extends Component {
       idCategory,
       idBranch,
       price,
-      priceSale
+      priceSale,
+      preserve,
+      guide,
+      uses,
+      safety,
+      skinType,
+      element,
+      expire,
+      origin,
     } = this.state;
     let img = this.state.imageLogo;
     let img2 = this.state.imageShare;
@@ -288,7 +362,16 @@ class Products extends Component {
         title: title,
         slug: slugify(title, { remove: /[0-9]/g }),
         description: description,
-        techDescription,
+        techDescription: {
+          preserve,
+          guide,
+          uses,
+          safety,
+          skinType,
+          element,
+          expire,
+          origin,
+        },
         categoryId: idCategory,
         imageShare: img2,
         content: content,
@@ -296,6 +379,7 @@ class Products extends Component {
         brandId: idBranch,
         price: price,
         priceSale: priceSale,
+        isSpecial: this.state.idIsSpecial,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -315,16 +399,44 @@ class Products extends Component {
       });
   }
   async delete(item) {
+    this.setState({
+      idDelete: item._id,
+      modalDelete: true,
+    });
+    // let baseUrlCallApi = Constants.DELETE_PRODUCT;
+    // var baseUrlapi = Constants.BASE_URL;
+    // let url = baseUrlapi + baseUrlCallApi;
+    // await axios
+    //   .delete(url, {
+    //     data: {
+    //       id: item._id,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     Swal.fire({
+    //       icon: "success",
+    //       title: "Xóa thành công",
+    //       showConfirmButton: false,
+    //       timer: 1200,
+    //     });
+    //     this.getData();
+    //   });
+  }
+  async remove(item) {
+    const { idDelete } = this.state;
     let baseUrlCallApi = Constants.DELETE_PRODUCT;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .delete(url, {
         data: {
-          id: item._id,
+          id: idDelete,
         },
       })
       .then((res) => {
+        this.setState({
+          modalDelete: false,
+        });
         Swal.fire({
           icon: "success",
           title: "Xóa thành công",
@@ -396,7 +508,16 @@ class Products extends Component {
   }
   render() {
     const { data, arrPagination } = this.state;
-
+    const isSpecial = [
+      {
+        value: false,
+        name: "Không",
+      },
+      {
+        value: true,
+        name: "Có",
+      },
+    ];
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -455,21 +576,6 @@ class Products extends Component {
               /> */}
                 </Col>
                 <Col xs="6" md="6">
-                <TextFieldGroup
-                field="techDescription"
-                label="Mô tả kỹ thuật"
-                value={this.state.techDescription}
-                // error={errors.title}
-                onChange={(e) =>
-                  this.setState({ techDescription: e.target.value })
-                }
-                // rows="5"
-              />
-                  
-                </Col>
-              </Row>            
-              <Row>
-                <Col xs="6" md="6">
                   <TextFieldGroup
                     field="price"
                     label="Giá (*)"
@@ -478,29 +584,23 @@ class Products extends Component {
                     onChange={(e) => this.setState({ price: e.target.value })}
                     // rows="5"
                   />
-                  {/* <TextFieldGroup
-                field="slug"
-                label="Đường dẫn"
-                value={this.state.slug}
-                // error={errors.title}
-                onChange={(e) => this.setState({ slug: e.target.value })}
-                // rows="5"
-              /> */}
                 </Col>
+              </Row>
+              <Row>
                 <Col xs="6" md="6">
-                <TextFieldGroup
+                  <TextFieldGroup
                     field="priceSale"
                     label="Giá khuyến mại (*)"
                     value={this.state.priceSale}
                     // error={errors.title}
-                    onChange={(e) => this.setState({ priceSale: e.target.value })}
+                    onChange={(e) =>
+                      this.setState({ priceSale: e.target.value })
+                    }
                     // rows="5"
                   />
                 </Col>
-              </Row>             
-              <Row>
                 <Col xs="6" md="6">
-                <label>Chọn thương hiệu (*)</label>
+                  <label>Chọn thương hiệu (*)</label>
                   <Select
                     className="select_seo"
                     showSearch
@@ -526,8 +626,10 @@ class Products extends Component {
                       : null}
                   </Select>
                 </Col>
+              </Row>
+              <Row>
                 <Col xs="6" md="6">
-                <label>Chọn danh mục (*)</label>
+                  <label>Chọn danh mục (*)</label>
                   <Select
                     className="select_seo"
                     showSearch
@@ -553,8 +655,68 @@ class Products extends Component {
                       : null}
                   </Select>
                 </Col>
+                <Col xs="6" md="6">
+                  <label>Sản phẩm nổi bật</label>
+                  <Select
+                    className="select_seo"
+                    showSearch
+                    defaultValue={this.state.nameIsSpecialChoose}
+                    placeholder=""
+                    optionFilterProp="children"
+                    onChange={(value) =>
+                      this.setState({
+                        idIsSpecial: value,
+                      })
+                    }
+                    onSearch={this.onSearchSelect}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    {isSpecial
+                      ? isSpecial.map((item, i) => {
+                          return (
+                            <Option value={item.value}>{item.name}</Option>
+                          );
+                        })
+                      : null}
+                  </Select>
+                </Col>
               </Row>
-              
+              <div className="mt-3"></div>
+              <Row>
+                <Col xs="6" md="6">
+                  <label>Mô tả kỹ thuật</label>
+                  <div className="">
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.setState({
+                          modalDesc: true,
+                        });
+                      }}
+                      size="default"
+                      icon={<MdOpenInNew />}
+                    >
+                      Mở Tab
+                    </Button>
+                  </div>
+                  {/* <TextFieldGroup
+                    field="techDescription"
+                    label="Mô tả kỹ thuật"
+                    value={this.state.techDescription}
+                    // error={errors.title}
+                    onChange={(e) =>
+                      this.setState({ techDescription: e.target.value })
+                    }
+                    // rows="5"
+                  /> */}
+                </Col>
+                <Col xs="6" md="6"></Col>
+              </Row>
+              <div className="mt-3"></div>
               <Row>
                 <Col xs="6" md="6">
                   <TextFieldGroup
@@ -640,6 +802,160 @@ class Products extends Component {
               </CButton>
             </ModalFooter>
           </Modal>
+          <Modal
+            isOpen={this.state.modalDelete}
+            className={this.props.className}
+          >
+            <ModalHeader
+              onClick={(e) =>
+                this.setState({
+                  modalDelete: false,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
+            <ModalBody>
+              <label htmlFor="tag">{`Bạn có chắc chắn xóa ?`}</label>
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={(e) => this.remove(this.state.idDelete)}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: false,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
+          <Modal
+            isOpen={this.state.modalDesc}
+            className={this.props.className}
+            size="lg"
+            closeButton
+          >
+            <ModalHeader closeButton>MÔ TẢ KỸ THUẬT SẢN PHẨM</ModalHeader>
+            <ModalBody>
+              <h5 className="text-center">CHI TIẾT SẢN PHẨM</h5>
+              <Row>
+                <Col xs="6" md="6">
+                  <TextFieldGroup
+                    field="origin"
+                    label="Xuất xứ"
+                    value={this.state.origin}
+                    // error={errors.title}
+                    onChange={(e) => this.setState({ origin: e.target.value })}
+                  />
+                </Col>
+                <Col xs="6" md="6">
+                  {" "}
+                  <TextFieldGroup
+                    field="expire"
+                    label="Hạn sử dụng"
+                    value={this.state.expire}
+                    // error={errors.title}
+                    onChange={(e) => this.setState({ expire: e.target.value })}
+                  />{" "}
+                </Col>
+              </Row>
+
+              <h5 className="text-center mt-3">MÔ TẢ SẢN PHẨM</h5>
+              <Row className="mt-3">
+                <Col xs="6" md="6">
+                  <label>Thành phần</label>
+                  <CTextarea
+                    name="element"
+                    rows="4"
+                    value={this.state.element}
+                    onChange={(e) => {
+                      this.setState({ element: e.target.value });
+                    }}
+                  />
+                </Col>
+                <Col xs="6" md="6">
+                  <label>Loại da phù hợp</label>
+                  <CTextarea
+                    name="skinType"
+                    rows="4"
+                    value={this.state.skinType}
+                    onChange={(e) => {
+                      this.setState({ skinType: e.target.value });
+                    }}
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Col xs="6" md="6">
+                  <label>Độ an toàn</label>
+                  <CTextarea
+                    name="safety"
+                    rows="4"
+                    value={this.state.safety}
+                    onChange={(e) => {
+                      this.setState({ safety: e.target.value });
+                    }}
+                  />
+                </Col>
+                <Col xs="6" md="6">
+                  <label>Công dụng</label>
+                  <CTextarea
+                    name="uses"
+                    rows="4"
+                    value={this.state.uses}
+                    onChange={(e) => {
+                      this.setState({ uses: e.target.value });
+                    }}
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Col xs="6" md="6">
+                  <label>Hướng dẫn sử dụng</label>
+                  <CTextarea
+                    name="safety"
+                    rows="4"
+                    value={this.state.guide}
+                    onChange={(e) => {
+                      this.setState({ guide: e.target.value });
+                    }}
+                  />
+                </Col>
+                <Col xs="6" md="6">
+                  <label>Hướng dẫn da bảo quản</label>
+                  <CTextarea
+                    name="preserve"
+                    rows="4"
+                    value={this.state.preserve}
+                    onChange={(e) => {
+                      this.setState({ preserve: e.target.value });
+                    }}
+                  />
+                </Col>
+              </Row>
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDesc: false,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
           <Row>
             <Col>
               <Card>
@@ -715,13 +1031,12 @@ class Products extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tiêu đề</th>
                         <th className="text-center">Hình ảnh</th>
-                        
+
                         <th className="text-center">Nội dung</th>
                         <th className="text-center">Mô tả</th>
-                        <th className="text-center">Mô tả kỹ thuật</th>
+
                         <th className="text-center">Link</th>
 
-                      
                         <th className="text-center">Hình ảnh chia sẻ</th>
 
                         <th className="text-center"></th>
@@ -755,12 +1070,8 @@ class Products extends Component {
                                 <td className="text-center">
                                   {item.description}
                                 </td>
-                                <td className="text-center">
-                                  {item.techDescription}
-                                </td>
-                                <td className="text-center">
-                                  {item.slug}
-                                </td>
+
+                                <td className="text-center">{item.slug}</td>
                                 <td className="text-center">
                                   <img
                                     style={{
