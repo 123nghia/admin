@@ -1281,6 +1281,7 @@ class ConfigWebAdmin extends Component {
     } else {
       imageOutput = "";
     }
+    console.log(imageOutput);
     let ob = {
       image: imageOutput,
       content: contentBannerBrand,
@@ -1341,6 +1342,8 @@ class ConfigWebAdmin extends Component {
       content: contentBannerBrand,
       href : hrefBannerBrand
     };
+    console.log(imageBannerBrand);
+
     let coppy = { ...dataConfigWeb };
     coppy.value.bannerBrand[indexBannerBrandEditor] = ob;
     await this.setState(
@@ -2067,7 +2070,7 @@ class ConfigWebAdmin extends Component {
                 field="hrefBanner"
                 label="Đường dẫn"
                 value={this.state.hrefBanner}
-                placeholder={"Tiêu đề"}
+          
                 onChange={(e) => {
                   this.setState({ hrefBanner: e.target.value });
                 }}

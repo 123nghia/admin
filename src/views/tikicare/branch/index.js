@@ -344,7 +344,7 @@ class Products extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="title"
-                label="Tiêu đề"
+                label="Tiêu đề (*)"
                 value={this.state.title}
                 // error={errors.title}
                 onChange={(e) => this.setState({ title: e.target.value })}
@@ -369,7 +369,7 @@ class Products extends Component {
               <div className="mt-3"></div>
               <TextFieldGroup
                 field="imageLogo"
-                label="Hình ảnh"
+                label="Hình ảnh (auto * 45px)"
                 type={"file"}
                 className="mt-5"
                 onChange={(e) => {
@@ -492,9 +492,7 @@ class Products extends Component {
                         style={{ marginRight: "10px" }}
                         size="md"
                         className="btn-main"
-                        onClick={(e) => {
-                          this.onSearch();
-                        }}
+                        
                       >
                         <BsSearch style={{ margin: "auto 6px auto 0" }} />
                         <p style={{ margin: "auto 0" }}>Tìm kiếm</p>

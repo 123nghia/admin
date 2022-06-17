@@ -338,7 +338,7 @@ class Products extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="title"
-                label="Tiêu đề"
+                label="Tiêu đề (*)"
                 value={this.state.title}
                 // error={errors.title}
                 onChange={(e) => this.setState({ title: e.target.value })}
@@ -346,38 +346,16 @@ class Products extends Component {
               />
               <TextFieldGroup
                 field="description"
-                label="Mô tả"
+                label="Mô tả (*)"
                 value={this.state.description}
                 // error={errors.title}
                 onChange={(e) => this.setState({ description: e.target.value })}
                 // rows="5"
               />
-              <p>Nội dung</p>
-              <CKEditor
-                editor={ClassicEditor}
-                data={this.state.content}
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  this.setState({ content: data });
-                }}
-                onBlur={(event, editor) => {}}
-                onFocus={(event, editor) => {}}
-              />
-              {/* <TextFieldGroup
-                field="slug"
-                label="Đường dẫn"
-                value={this.state.slug}
-                // error={errors.title}
-                onChange={(e) => this.setState({ slug: e.target.value })}
-                // rows="5"
-              /> */}
               <div className="mt-3"></div>
               <TextFieldGroup
                 field="imageLogo"
-                label="Hình ảnh"
+                label="Hình ảnh tỷ lệ 2:1 (*)"
                 type={"file"}
                 className="mt-5"
                 onChange={(e) => {
@@ -405,7 +383,7 @@ class Products extends Component {
                   src={this.state.imageLogo}
                 />
               </div>
-              <div className="mt-3"></div>
+
               <TextFieldGroup
                 field="imageShare"
                 label="Hình ảnh chia sẻ"
@@ -436,6 +414,20 @@ class Products extends Component {
                   src={this.state.imageShare}
                 />
               </div>
+              <p>Nội dung (*)</p>
+              <CKEditor
+                editor={ClassicEditor}
+                data={this.state.content}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  this.setState({ content: data });
+                }}
+                onBlur={(event, editor) => {}}
+                onFocus={(event, editor) => {}}
+              />
             </ModalBody>
             <ModalFooter>
               <CButton

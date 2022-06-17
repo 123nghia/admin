@@ -721,7 +721,7 @@ class Products extends Component {
                 <Col xs="6" md="6">
                   <TextFieldGroup
                     field="imageLogo"
-                    label="Hình ảnh (*)"
+                    label="Hình ảnh 285px * 264px(*)"
                     type={"file"}
                     className="mt-5"
                     onChange={(e) => {
@@ -1059,7 +1059,7 @@ class Products extends Component {
                                 <td className="text-center">
                                   <img
                                     style={{
-                                      maxHeight: "60px",
+                                      maxHeight: "80px",
                                       maxWidth: "300px",
                                     }}
                                     src={item.avatar}

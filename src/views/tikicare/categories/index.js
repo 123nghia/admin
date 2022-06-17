@@ -327,8 +327,9 @@ class Products extends Component {
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
-          <Modal isOpen={this.state.modal} className={this.props.className}>
-            <ModalHeader>
+          <Modal closeButton
+            toggle={() => this.setState({ modal: false })} isOpen={this.state.modal} className={this.props.className}>
+            <ModalHeader toggle={() => this.setState({ modal: false })} closeButton>
               {this.state.actionModal === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
@@ -367,7 +368,7 @@ class Products extends Component {
               <div className="mt-3"></div>
               <TextFieldGroup
                 field="imageLogo"
-                label="Hình ảnh"
+                label="Hình ảnh (50px * 50px)"
                 type={"file"}
                 className="mt-5"
                 onChange={(e) => {
@@ -482,9 +483,7 @@ class Products extends Component {
                         style={{ marginRight: "10px" }}
                         size="md"
                         className="btn-main"
-                        onClick={(e) => {
-                          this.onSearch();
-                        }}
+                        
                       >
                         <BsSearch style={{ margin: "auto 6px auto 0" }} />
                         <p style={{ margin: "auto 0" }}>Tìm kiếm</p>
