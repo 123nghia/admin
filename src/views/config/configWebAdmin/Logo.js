@@ -28,14 +28,14 @@ export default class Voucher extends Component {
           </CButton>
         </div>
         <div className="mt-3"></div>
-        <h1>Web Admin</h1>
+        <h1 style={{marginBottom: '0px'}}>Web Admin</h1>
         <TextFieldGroup
           field="imgLogoAdmin"
-          label="Logo (Tỷ lệ 2:1)"
+          label=""
           type={"file"}
-          className="mt-5"
+          className=""
           onChange={(e) => {
-            this.onChangeImage(
+            this.onChangeImage( 
               e,
               "imgLogoAdmin",
               "imgLogoAdmin_link",

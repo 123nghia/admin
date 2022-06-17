@@ -9,27 +9,24 @@ import { ModalHeader, ModalBody, ModalFooter, Modal } from "reactstrap";
 import Swal from "sweetalert2";
 import TextFieldGroup from "../Common/TextFieldGroup";
 import API_CONNECT from "../../functions/callAPI";
-import InfoIcon from "@mui/icons-material/Info";
-import { CButton, CTextarea } from "@coreui/react";
+import { CButton, CCol, CLabel, CRow, CSelect, CTextarea } from "@coreui/react";
 import "moment-timezone";
 import "react-datepicker/dist/react-datepicker.css";
 import Constants from "../../contants/contants";
 import axios from "axios";
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
-import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
 import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
 import Banner1 from "./configWebAdmin/Banner1";
 import Banner2 from "./configWebAdmin/Banner2";
 import Footer from "./configWebAdmin/Footer";
 import Logos from "./configWebAdmin/Logo";
 import GuideVoucher from "./configWebAdmin/GuideVoucher";
-import VoucherPartner from "./configWebAdmin/VoucherPartner";
-import { BiSlideshow } from 'react-icons/bi';
-import { RiGuideLine } from 'react-icons/ri';
-import { AiOutlineInfoCircle } from 'react-icons/ai';
-
-
+import { BiSlideshow, BiCategory } from "react-icons/bi";
+import { RiGuideLine } from "react-icons/ri";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import Sologan from "./configWebAdmin/Slogon";
+import InfoCompany from "./configWebAdmin/InfoCompany";
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 
@@ -39,20 +36,33 @@ class ConfigWebAdmin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bannerCampaign : [],
-      actionModalBannerCampaign : "new",
-      modalBannerCampaign : false,
+      bannerCampaign: [],
+      actionModalBannerCampaign: "new",
+      statusFooter: "0",
+      modalBannerCampaign: false,
       tabNameConfig: [
         {
           _id: "1",
-          name: "Banner Slide Lớn",
-          icon: <BiSlideshow style={{ width: "24px ", height: "24px " }}/>,
+          name: "Banner Slide",
+          icon: <BiSlideshow style={{ width: "24px ", height: "24px " }} />,
+        },
+        {
+          _id: "6",
+          name: "Slogan",
+          icon: (
+            <AiOutlineInfoCircle style={{ width: "24px ", height: "24px " }} />
+          ),
         },
         {
           _id: "2",
-          name: "Banner Slide Nhỏ",
+          name: "Hạng mục",
+          icon: <BiCategory style={{ width: "24px ", height: "24px " }} />,
+        },
+        {
+          _id: "7",
+          name: "Thông tin công ty",
           icon: (
-            <BiSlideshow style={{ width: "24px ", height: "24px " }}/>
+            <AiOutlineInfoCircle style={{ width: "24px ", height: "24px " }} />
           ),
         },
 
@@ -62,15 +72,11 @@ class ConfigWebAdmin extends Component {
           icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
         },
         {
-          _id: "5",
-          name: "Hướng dẫn sử dụng voucher",
-          icon: <RiGuideLine style={{ width: "24px ", height: "24px " }} />,
-        },
-   
-        {
           _id: "4",
           name: "Thông tin footer",
-          icon: <AiOutlineInfoCircle style={{ width: "24px ", height: "24px " }} />,
+          icon: (
+            <AiOutlineInfoCircle style={{ width: "24px ", height: "24px " }} />
+          ),
         },
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
@@ -146,9 +152,7 @@ class ConfigWebAdmin extends Component {
     };
   };
   async componentDidMount() {
-    await this.getFooter();
     this.getDataConfigWeb();
-    this.getData();
     let arr = JSON.parse(localStorage.getItem("url"));
     for (let i = 0; i < arr.length; i++) {
       if ("#" + arr[i].to == window.location.hash) {
@@ -162,17 +166,19 @@ class ConfigWebAdmin extends Component {
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll";
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
+
+    const newComany_id = JSON.parse(localStorage.getItem("user")).company_id;
     let Output_newComany_id;
     if (newComany_id) {
       Output_newComany_id = newComany_id;
     } else {
       Output_newComany_id = "-1";
     }
+
     await axios
       .get(url, {
         params: {
-          key: "webinfo_admin",
+          key: "webinfo_tikicare",
           company_id: Output_newComany_id,
         },
       })
@@ -196,35 +202,62 @@ class ConfigWebAdmin extends Component {
               configData: valueConfig.value.statusConfig,
               banner: valueConfig.value.banner,
               guideVoucher: valueConfig.value.guideVoucher,
-              bannerCampaign : valueConfig.value.bannerCampaign,
+              bannerCampaign: valueConfig.value.bannerCampaign,
+              bannerCategories: valueConfig.value.bannerCategories,
+              sologan: valueConfig.value.sologan,
+              infoCompany: valueConfig.value.infoCompany,
+              dataFooter: valueConfig.value.dataFooter,
             },
             () => {
               const {
                 homepage,
                 seoInfo,
                 logos,
+                infoCompany,
                 chats,
                 bannerCampaign,
                 configData,
                 mxh,
                 guideVoucher,
                 banner,
+                sologan,
+                dataFooter,
               } = this.state;
-              if(guideVoucher){
+              if (infoCompany) {
                 this.setState({
-                  guideVoucher: this.state.guideVoucher
-                })
+                  infoCompany: infoCompany,
+                });
               }
-              if(bannerCampaign){
+              if (dataFooter) {
                 this.setState({
-                  bannerCampaign: this.state.bannerCampaign
-                })
+                  dataFooter: dataFooter,
+                });
+              }
+              if (sologan) {
+                this.setState({
+                  sologan_1: this.state.sologan.text_1,
+                  sologan_2: this.state.sologan.text_2,
+                  sologan_3: this.state.sologan.text_3,
+                  sologan_4: this.state.sologan.text_4,
+                  sologan_5: this.state.sologan.text_5,
+                  sologan_button: this.state.sologan.button,
+                });
+              }
+              if (guideVoucher) {
+                this.setState({
+                  guideVoucher: this.state.guideVoucher,
+                });
+              }
+              if (bannerCampaign) {
+                this.setState({
+                  bannerCampaign: this.state.bannerCampaign,
+                });
               }
               if (banner) {
                 this.setState({
                   image_banner1: this.state.banner.banner1,
                   bannerSlide: this.state.banner.bannerSlide,
-                  bannerMainSlide: this.state.banner.bannerMainSlide,
+                  bannerMainSlide: this.state.banner,
                 });
               }
               if (homepage) {
@@ -298,7 +331,7 @@ class ConfigWebAdmin extends Component {
           );
         } else {
           let templateDataConfigWeb = {
-            key: "webinfo_admin",
+            key: "webinfo_tikicare",
             value: {},
           };
 
@@ -320,127 +353,154 @@ class ConfigWebAdmin extends Component {
       .post(url, {
         company_id: this.state.company_id,
         dataType: "1",
-        key: "webinfo_admin",
+        key: "webinfo_tikicare",
         value: JSON.stringify(this.state.dataConfigWeb),
         type: "system",
       })
       .then((res) => {});
   }
-  async getFooter() {
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.GET_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    axios
-      .get(url, {
-        params: {
-          company_id: Output_newComany_id,
-        },
-      })
-      .then((res) => {
-        this.setState({
-          dataFooter: res.data.data,
+  deleteFooter = async (i) => {
+    console.log(this.state.dataConfigWeb);
+    const { dataConfigWeb } = this.state;
+    let coppyData = {
+      ...dataConfigWeb,
+    };
+    coppyData.value.dataFooter.category.splice(i, 1);
+    this.setState(
+      {
+        dataConfigWeb: coppyData,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Xóa thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.getDataConfigWeb();
         });
-      });
-  }
-  async deleteFooter(item) {
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.DELETE_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    await axios
-      .post(url, {
-        id: item._id,
-      })
-      .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Xóa thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-        this.getFooter();
-      });
-  }
+      }
+    );
+  };
   async updateFooter() {
-    const { slugFooter, updateLink, contentFooter, updateTitle } = this.state;
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.UPDATE_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
-    }
-    await axios
-      .post(url, {
-        id: this.state.idFooterEditor,
-        title: updateTitle,
-        content: contentFooter,
-        slug: slugFooter,
-        link: updateLink,
-        company_id: Output_newComany_id,
-      })
-      .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Cập nhật thành công",
-          showConfirmButton: false,
-          timer: 700,
+    const {
+      slugFooter,
+      updateLink,
+      contentFooter,
+      indexUpdateFooter,
+      updateTitle,
+      dataConfigWeb,
+      statusFooter
+    } = this.state;
+    let ob = {
+      slug: slugFooter,
+      status : statusFooter,
+      link: updateLink,
+      title: updateTitle,
+      content: contentFooter,
+    };
+    if(!statusFooter || statusFooter === "0"){
+      alert("Hãy chọn mục");
+      return;
+    };
+    let coppy = { ...dataConfigWeb };
+    console.log(indexUpdateFooter);
+    coppy.value.dataFooter.category[indexUpdateFooter] = ob;
+    this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Cập nhật thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.setState({
+            statusModalUpdate: false,
+          });
+          this.getDataConfigWeb();
         });
-        this.setState({
-          statusModalUpdate: false,
-        });
-        this.getFooter();
-      });
+      }
+    );
   }
   async addFooter() {
-    const { slugFooter, updateLink, contentFooter, updateTitle } = this.state;
-    var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.ADD_FOOTER;
-    let url = baseUrlapi + urlCall;
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let Output_newComany_id;
-    if (newComany_id) {
-      Output_newComany_id = newComany_id;
-    } else {
-      Output_newComany_id = "-1";
+    const {
+      slugFooter,
+      updateLink,
+      contentFooter,
+      updateTitle,
+      dataConfigWeb,
+      statusFooter
+    } = this.state;
+    let ob = {
+      slug: slugFooter,
+      link: updateLink,
+      title: updateTitle,
+      content: contentFooter,
+      status : statusFooter
+    };
+    if(statusFooter === "0"){
+      alert("Hãy chọn mục");
+      return;
+    };
+    let coppy = { ...dataConfigWeb };
+    if (!coppy.value.dataFooter) {
+      coppy.value.dataFooter = {};
     }
-    await axios
-      .post(url, {
-        title: updateTitle,
-        content: contentFooter,
-        slug: slugFooter,
-        link: updateLink,
-        company_id: Output_newComany_id,
-      })
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Thêm mới thành công",
-          showConfirmButton: false,
-          timer: 700,
+    if (!coppy.value.dataFooter.category) {
+      coppy.value.dataFooter.category = [];
+    }
+    coppy.value.dataFooter.category.push(ob);
+    this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Thêm mới thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.setState({
+            statusModalUpdate: false,
+          });
+          this.getDataConfigWeb();
         });
-        this.setState({
-          statusModalUpdate: false,
-        });
-        this.getFooter();
-      });
+      }
+    );
   }
+  openFormAddFooter = () => {
+    this.setState({
+      action: "new",
+      contentFooter: "",
+      updateLevel: "1",
+      statusModalUpdate: true,
+      updateLink: "",
+      updateTitle: "",
+      slugFooter: "",
+      statusFooter : "0"
+    });
+  };
+  openFormEditFooter = async (item, i) => {
+    this.setState({
+      action: "edit",
+      statusFooter : item.status,
+      updateLevel: item.Level,
+      slugFooter: item.slug,
+      idFooterEditor: item._id,
+      updateTitle: item.title,
+      contentFooter: item.content,
+      statusModalUpdate: true,
+      updateLink: item.link,
+      indexUpdateFooter: i,
+    });
+  };
   async postImage(link) {
     var newImage = "";
     if (link && link !== "") {
@@ -448,7 +508,7 @@ class ConfigWebAdmin extends Component {
 
       form.append("image", link);
 
-      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
+      await API_CONNECT(Constants.UPLOAD_BANNER, form, "", "POST").then(
         (res) => {}
       );
 
@@ -487,22 +547,25 @@ class ConfigWebAdmin extends Component {
       ...dataConfigWeb,
     };
 
-    if(change === "guideVoucher"){
+    if (change === "guideVoucher") {
       coppyData.value.guideVoucher = this.state.guideVoucher;
     }
-    if(change === "bannerCampaign"){
+    if (change === "bannerCampaign") {
       coppyData.value.bannerCampaign = this.state.bannerCampaign;
     }
     if (change === "logoCompany") {
       let newImage1 = await this.postImage(this.state.imageLogoCompany_link);
       if (newImage1) {
-        coppyData.value.homepage.LogoCompany = `${Constants.BASE_URL}image_brand/${newImage1}`;
+        coppyData.value.homepage.LogoCompany = `${Constants.BASE_URL}image_banner/${newImage1}`;
       }
     }
     if (change === "banner") {
+      if (!coppyData.value.banner) {
+        coppyData.value.banner = [];
+      }
       let newImage1 = await this.postImage(this.state.image_banner1_link);
       if (newImage1) {
-        coppyData.value.banner.banner1 = `${Constants.BASE_URL}image_brand/${newImage1}`;
+        coppyData.value.banner.banner1 = `${Constants.BASE_URL}image_banner/${newImage1}`;
       }
     }
     if (change === "mxh") {
@@ -533,13 +596,13 @@ class ConfigWebAdmin extends Component {
       let newImage2 = await this.postImage(image2_link);
       let newImage3 = await this.postImage(image3_link);
       if (newImage1) {
-        coppyData.value.homepage.image1 = `${Constants.BASE_URL}image_brand/${newImage1}`;
+        coppyData.value.homepage.image1 = `${Constants.BASE_URL}image_banner/${newImage1}`;
       }
       if (newImage2) {
-        coppyData.value.homepage.image2 = `${Constants.BASE_URL}image_brand/${newImage2}`;
+        coppyData.value.homepage.image2 = `${Constants.BASE_URL}image_banner/${newImage2}`;
       }
       if (newImage3) {
-        coppyData.value.homepage.image3 = `${Constants.BASE_URL}image_brand/${newImage3}`;
+        coppyData.value.homepage.image3 = `${Constants.BASE_URL}image_banner/${newImage3}`;
       }
     }
     if (change === "seoInfo") {
@@ -550,24 +613,58 @@ class ConfigWebAdmin extends Component {
       coppyData.value.seoInfo.key = keywordSeo;
       let newImage4 = await this.postImage(imgLayout_link);
       if (newImage4) {
-        coppyData.value.seoInfo.imageShare = `${Constants.BASE_URL}image_brand/${newImage4}`;
+        coppyData.value.seoInfo.imageShare = `${Constants.BASE_URL}image_banner/${newImage4}`;
       }
       this.setState({
         dataConfigWeb: coppyData,
       });
     }
+    if (change === "sologan") {
+      const {
+        sologan_1,
+        sologan_2,
+        sologan_3,
+        sologan_4,
+        sologan_5,
+        sologan_button,
+      } = this.state;
+      if (!coppyData.value.sologan) {
+        coppyData.value.sologan = {};
+      }
+      coppyData.value.sologan.text_1 = sologan_1;
+      coppyData.value.sologan.text_2 = sologan_2;
+      coppyData.value.sologan.text_3 = sologan_3;
+      coppyData.value.sologan.text_4 = sologan_4;
+      coppyData.value.sologan.text_5 = sologan_5;
+      coppyData.value.sologan.button = sologan_button;
+      this.setState({
+        dataConfigWeb: coppyData,
+      });
+    }
     if (change === "logos") {
+      if (!coppyData.value.logos) {
+        coppyData.value.logos = {};
+      }
+      if (!coppyData.value.logos.webAdmin) {
+        coppyData.value.logos.webAdmin = {};
+      }
+      if (!coppyData.value.logos.header) {
+        coppyData.value.logos.header = {};
+      }
+      if (!coppyData.value.logos.footer) {
+        coppyData.value.logos.footer = {};
+      }
       let newImage3 = await this.postImage(this.state.imgLogoAdmin_link);
       if (newImage3) {
-        coppyData.value.logos.webAdmin.logo = `${Constants.BASE_URL}image_brand/${newImage3}`;
+        coppyData.value.logos.webAdmin.logo = `${Constants.BASE_URL}image_banner/${newImage3}`;
       }
       let newImage = await this.postImage(this.state.image_link);
       if (newImage) {
-        coppyData.value.logos.header.logo = `${Constants.BASE_URL}image_brand/${newImage}`;
+        coppyData.value.logos.header.logo = `${Constants.BASE_URL}image_banner/${newImage}`;
       }
       let newImage2 = await this.postImage(this.state.imgLogoFooter_link);
       if (newImage2) {
-        coppyData.value.logos.footer.logo = `${Constants.BASE_URL}image_brand/${newImage2}`;
+        coppyData.value.logos.footer.logo = `${Constants.BASE_URL}image_banner/${newImage2}`;
       }
       coppyData.value.logos.footer.href = this.state.hrefLogoFooter;
       coppyData.value.logos.header.href = this.state.hrefLogoHeader;
@@ -607,72 +704,6 @@ class ConfigWebAdmin extends Component {
       id: this.state.idUpdate,
     });
   }
-  getData = async () => {
-    const newComany_id = JSON.parse(this.state.company_id).company_id;
-    let idOutput = "-1";
-    if (newComany_id) {
-      idOutput = newComany_id;
-    }
-    this.setState({ isLoading: true });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.CONFIG_THEME_GET + "/" + idOutput,
-      method: "GET",
-      headers: this.state.token,
-    });
-    let val = res.data.data;
-
-    this.setState({
-      dataApi: val,
-      data: val,
-      currentPassword: val.Password,
-      isLoading: false,
-      current_slug:
-        val.Company_Id == null || val.Company_Id == undefined
-          ? null
-          : val.Company_Id.Slug,
-      companyID:
-        val.Company_Id == null || val.Company_Id == undefined
-          ? null
-          : val.Company_Id._id,
-
-      mainColor: val.mainColor,
-      sub_mainColor: val.sub_mainColor,
-      Phone: val.Phone,
-      Address: val.Address,
-      UserName: val.UserName,
-      Message_Code: val.Message_Code,
-      sub2_mainColor: val.sub2_mainColor,
-      button_color: val.button_color,
-      sucess_color: val.sucess_color,
-      error_color: val.error_color,
-      text_mainColor: val.text_mainColor,
-      isDisable: true,
-    });
-  };
-  openFormAddFooter = () => {
-    this.setState({
-      action: "new",
-      contentFooter: "",
-      updateLevel: "1",
-      statusModalUpdate: true,
-      updateLink: "",
-      updateTitle: "",
-      slugFooter: "",
-    });
-  };
-  openFormEditFooter = async (item, i) => {
-    this.setState({
-      action: "edit",
-      updateLevel: item.Level,
-      slugFooter: item.slug,
-      idFooterEditor: item._id,
-      updateTitle: item.title,
-      contentFooter: item.content,
-      statusModalUpdate: true,
-      updateLink: item.link,
-    });
-  };
   closeFormEdit = () => {
     this.setState({ statusModalUpdate: false });
   };
@@ -686,23 +717,13 @@ class ConfigWebAdmin extends Component {
       contentSlide: "",
     });
   };
-  openFormAddBanner = (value) => {
-    this.setState({
-      positionBannerActive: value,
-      actionBanner: "new",
-      modalBanner: true,
-      image_banner2: "",
-      contentBanner: "",
-      hrefBanner: "",
-    });
-  };
 
   saveAddSlide = async () => {
     const { contentSlide, dataConfigWeb, imageSlide_link } = this.state;
     let newImage = await this.postImage(imageSlide_link);
     let imageOutput;
     if (newImage) {
-      imageOutput = `${Constants.BASE_URL}image_brand/${newImage}`;
+      imageOutput = `${Constants.BASE_URL}image_banner/${newImage}`;
     } else {
       imageOutput = "";
     }
@@ -732,28 +753,37 @@ class ConfigWebAdmin extends Component {
       }
     );
   };
-
+  openFormAddBanner = (value) => {
+    this.setState({
+      positionBannerActive: value,
+      actionBanner: "new",
+      modalBanner: true,
+      image_banner2: "",
+      contentBanner: "",
+      hrefBanner: "",
+    });
+  };
   saveAddBanner = async () => {
     const { contentBanner, dataConfigWeb, image_banner2_link, hrefBanner } =
       this.state;
     let newImage = await this.postImage(image_banner2_link);
     let imageOutput;
     if (newImage) {
-      imageOutput = `${Constants.BASE_URL}image_brand/${newImage}`;
+      imageOutput = `${Constants.BASE_URL}image_banner/${newImage}`;
     } else {
       imageOutput = "";
     }
+    console.log(newImage);
     let ob = {
       image: imageOutput,
       content: contentBanner,
       href: hrefBanner,
     };
     let coppy = { ...dataConfigWeb };
-    if (this.state.positionBannerActive === "1") {
-      coppy.value.banner.bannerMainSlide.unshift(ob);
-    } else {
-      coppy.value.banner.bannerSlide.unshift(ob);
+    if (!coppy.value.banner) {
+      coppy.value.banner = [];
     }
+    coppy.value.banner.unshift(ob);
 
     this.setState(
       {
@@ -793,11 +823,7 @@ class ConfigWebAdmin extends Component {
     let coppyData = {
       ...dataConfigWeb,
     };
-    if (value === "1") {
-      coppyData.value.banner.bannerMainSlide.splice(i, 1);
-    } else {
-      coppyData.value.banner.bannerSlide.splice(i, 1);
-    }
+    coppyData.value.banner.splice(i, 1);
     this.setState(
       {
         dataConfigWeb: coppyData,
@@ -815,6 +841,43 @@ class ConfigWebAdmin extends Component {
       }
     );
   };
+
+  async saveEditBanner() {
+    const {
+      image_banner2,
+      contentBanner,
+      dataConfigWeb,
+      indexBannerEditor,
+      hrefBanner,
+    } = this.state;
+    let ob = {
+      image: image_banner2,
+      content: contentBanner,
+      href: hrefBanner,
+    };
+    let coppy = { ...dataConfigWeb };
+    coppy.value.banner[indexBannerEditor] = ob;
+
+    await this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        Swal.fire({
+          icon: "success",
+          title: "Cập nhật thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+        this.setState({
+          modalBanner: false,
+        });
+        await this.onUpdate();
+
+        this.getDataConfigWeb();
+      }
+    );
+  }
 
   async saveEditSlide() {
     const { imageSlide, contentSlide, dataConfigWeb, indexSlideUpdate } =
@@ -847,51 +910,11 @@ class ConfigWebAdmin extends Component {
     );
   }
 
-  async saveEditBanner() {
-    const {
-      image_banner2,
-      contentBanner,
-      dataConfigWeb,
-      indexBannerEditor,
-      hrefBanner,
-    } = this.state;
-    let ob = {
-      image: image_banner2,
-      content: contentBanner,
-      href: hrefBanner,
-    };
-    let coppy = { ...dataConfigWeb };
-    if (this.state.positionBannerActive === "1") {
-      coppy.value.banner.bannerMainSlide[indexBannerEditor] = ob;
-    } else {
-      coppy.value.banner.bannerSlide[indexBannerEditor] = ob;
-    }
-
-    await this.setState(
-      {
-        dataConfigWeb: coppy,
-      },
-      async () => {
-        Swal.fire({
-          icon: "success",
-          title: "Cập nhật thành công",
-          showConfirmButton: false,
-          timer: 700,
-        });
-        this.setState({
-          modalBanner: false,
-        });
-        await this.onUpdate();
-
-        this.getDataConfigWeb();
-      }
-    );
-  }
   setStateByName = (name, value) => {
     this.setState({ [name]: value });
   };
   openFormAddBannerCampaign = () => {
-    console.log("1")
+    console.log("1");
     this.setState({
       nameBannerCampaign: "",
       image_banner_campaign: "",
@@ -900,14 +923,13 @@ class ConfigWebAdmin extends Component {
       contentBannerCampaign: "",
       hrefBannerCampaign: "",
       outputBannerCampaign: "",
-      modalBannerCampaign : true,
-      actionModalBannerCampaign: "new"
-    })
-  }
-  openEditBannerCampaign = (item,i) => {
-    
+      modalBannerCampaign: true,
+      actionModalBannerCampaign: "new",
+    });
+  };
+  openEditBannerCampaign = (item, i) => {
     this.setState({
-      indexBannerUpdate : i,
+      indexBannerUpdate: i,
       nameBannerCampaign: item.name,
       image_banner_campaign: item.image,
       image_banner_campaign_link: item.image,
@@ -915,10 +937,10 @@ class ConfigWebAdmin extends Component {
       contentBannerCampaign: item.content,
       hrefBannerCampaign: item.link,
       outputBannerCampaign: item.output,
-      modalBannerCampaign : true,
-      actionModalBannerCampaign: "edit"
-    })
-  }
+      modalBannerCampaign: true,
+      actionModalBannerCampaign: "edit",
+    });
+  };
   deleteBannerCampaign = async (i) => {
     const { dataConfigWeb } = this.state;
     let coppyData = {
@@ -941,25 +963,25 @@ class ConfigWebAdmin extends Component {
         });
       }
     );
-  }
+  };
   saveAddBannerCampaign = async () => {
     let newImage = await this.postImage(this.state.image_banner_campaign_link);
     let imageOutput;
     if (newImage) {
-      imageOutput = `${Constants.BASE_URL}image_brand/${newImage}`;
+      imageOutput = `${Constants.BASE_URL}image_banner/${newImage}`;
     } else {
       imageOutput = "";
     }
     let ob = {
       image: imageOutput,
-      name : this.state.nameBannerCampaign,
+      name: this.state.nameBannerCampaign,
       content: this.state.contentBannerCampaign,
       link: this.state.hrefBannerCampaign,
-      output : this.state.outputBannerCampaign,
+      output: this.state.outputBannerCampaign,
     };
     let coppy = { ...this.state.dataConfigWeb };
-    if(!coppy.value.bannerCampaign){
-      coppy.value.bannerCampaign = []
+    if (!coppy.value.bannerCampaign) {
+      coppy.value.bannerCampaign = [];
     }
     coppy.value.bannerCampaign.push(ob);
     this.setState(
@@ -981,20 +1003,20 @@ class ConfigWebAdmin extends Component {
         });
       }
     );
-  }
+  };
   saveEditBannerCampaign = async () => {
     let newImage = await this.postImage(this.state.image_banner_campaign_link);
     let imageOutput = this.state.image_banner_campaign;
     if (newImage) {
-      imageOutput = `${Constants.BASE_URL}image_brand/${newImage}`;
+      imageOutput = `${Constants.BASE_URL}image_banner/${newImage}`;
     }
-      let ob = {
-        image: imageOutput,
-        name : this.state.nameBannerCampaign,
-        content: this.state.contentBannerCampaign,
-        link: this.state.hrefBannerCampaign,
-        output : this.state.outputBannerCampaign,
-      };
+    let ob = {
+      image: imageOutput,
+      name: this.state.nameBannerCampaign,
+      content: this.state.contentBannerCampaign,
+      link: this.state.hrefBannerCampaign,
+      output: this.state.outputBannerCampaign,
+    };
     let coppy = { ...this.state.dataConfigWeb };
 
     coppy.value.bannerCampaign[this.state.indexBannerUpdate] = ob;
@@ -1017,12 +1039,460 @@ class ConfigWebAdmin extends Component {
         this.getDataConfigWeb();
       }
     );
+  };
+  openFormAddCategories = (value) => {
+    this.setState({
+      positionBannerActive: value,
+      actionBannerCategories: "new",
+      modalBannerCategories: true,
+      imageBannerCategories: "",
+      imageBannerCategories_link: "",
+      imageBannerCategories_show: "",
+      contentBannerCategories: "",
+      hrefBannerCategories: "",
+      titleCategories: "",
+    });
+  };
+  saveAddCategories = async () => {
+    const {
+      contentBannerCategories,
+      dataConfigWeb,
+      imageBannerCategories_link,
+      titleCategories,
+      hrefBannerCategories,
+    } = this.state;
+    let newImage = await this.postImage(imageBannerCategories_link);
+    let imageOutput;
+    if (newImage) {
+      imageOutput = `${Constants.BASE_URL}image_banner/${newImage}`;
+    } else {
+      imageOutput = "";
+    }
+    let ob = {
+      image: imageOutput,
+      content: contentBannerCategories,
+      href: hrefBannerCategories,
+      title: titleCategories,
+    };
+    let coppy = { ...dataConfigWeb };
+    if (!coppy.value.bannerCategories) {
+      coppy.value.bannerCategories = [];
+    }
+    coppy.value.bannerCategories.unshift(ob);
+    console.log("coppy", coppy);
+
+    this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        console.log("dataConfigWeb", dataConfigWeb);
+
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Thêm mới thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.setState({
+            modalBannerCategories: false,
+          });
+          this.getDataConfigWeb();
+        });
+      }
+    );
+  };
+  openFormEditCategories = (value, item, i) => {
+    this.setState({
+      actionBannerCategories: "edit",
+      positionBannerActive: value,
+      modalBannerCategories: true,
+      imageBannerCategories: item.image,
+      contentBannerCategories: item.content,
+      hrefBannerCategories: item.href,
+      indexBannerEditorCategories: i,
+      titleCategories: item.title,
+    });
+  };
+  async saveEditCategories() {
+    const {
+      imageBannerCategories,
+      contentBannerCategories,
+      dataConfigWeb,
+      indexBannerEditorCategories,
+      hrefBannerCategories,
+      titleCategories,
+    } = this.state;
+    let ob = {
+      title: titleCategories,
+      image: imageBannerCategories,
+      content: contentBannerCategories,
+      href: hrefBannerCategories,
+    };
+    let coppy = { ...dataConfigWeb };
+    coppy.value.bannerCategories[indexBannerEditorCategories] = ob;
+
+    await this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        Swal.fire({
+          icon: "success",
+          title: "Cập nhật thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+        this.setState({
+          modalBannerCategories: false,
+        });
+        await this.onUpdate();
+
+        this.getDataConfigWeb();
+      }
+    );
   }
+  deleteCategories = async (value, i) => {
+    const { dataConfigWeb } = this.state;
+    let coppyData = {
+      ...dataConfigWeb,
+    };
+    coppyData.value.bannerCategories.splice(i, 1);
+    this.setState(
+      {
+        dataConfigWeb: coppyData,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Xóa thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.getDataConfigWeb();
+        });
+      }
+    );
+  };
+
+  openFormAddInfoCompany = (value) => {
+    this.setState({
+      actionModalInfoCompany: "new",
+      modalInfoCompany: true,
+      imageInfoCompany: "",
+      imageInfoCompany_link: "",
+      imageInfoCompany_show: "",
+      contentInfoCompany: "",
+      titleInfoCompany: "",
+    });
+  };
+  saveAddInfoCompany = async () => {
+    const {
+      contentInfoCompany,
+      dataConfigWeb,
+      imageInfoCompany_link,
+      titleInfoCompany,
+    } = this.state;
+    let newImage = await this.postImage(imageInfoCompany_link);
+    let imageOutput;
+    if (newImage) {
+      imageOutput = `${Constants.BASE_URL}image_banner/${newImage}`;
+    } else {
+      imageOutput = "";
+    }
+    let ob = {
+      image: imageOutput,
+      content: contentInfoCompany,
+      title: titleInfoCompany,
+    };
+    let coppy = { ...dataConfigWeb };
+    if (!coppy.value.infoCompany) {
+      coppy.value.infoCompany = [];
+    }
+    coppy.value.infoCompany.push(ob);
+    this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Thêm mới thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.setState({
+            modalInfoCompany: false,
+          });
+          this.getDataConfigWeb();
+        });
+      }
+    );
+  };
+  openFormEditInfoCompany = (value, item, i) => {
+    this.setState({
+      actionModalInfoCompany: "edit",
+      modalInfoCompany: true,
+      imageInfoCompany: item.image,
+      imageInfoCompany_link: item.image,
+      imageInfoCompany_show: item.image,
+      contentInfoCompany: item.content,
+      titleInfoCompany: item.title,
+      indexInfoCompanyEditor: i,
+    });
+  };
+  async saveEditInfoCompany() {
+    const {
+      imageInfoCompany,
+      contentInfoCompany,
+      dataConfigWeb,
+      indexInfoCompanyEditor,
+      titleInfoCompany,
+    } = this.state;
+    let ob = {
+      title: titleInfoCompany,
+      image: imageInfoCompany,
+      content: contentInfoCompany,
+    };
+    let coppy = { ...dataConfigWeb };
+    coppy.value.infoCompany[indexInfoCompanyEditor] = ob;
+    await this.setState(
+      {
+        dataConfigWeb: coppy,
+      },
+      async () => {
+        Swal.fire({
+          icon: "success",
+          title: "Cập nhật thành công",
+          showConfirmButton: false,
+          timer: 700,
+        });
+        this.setState({
+          modalInfoCompany: false,
+        });
+        await this.onUpdate();
+        this.getDataConfigWeb();
+      }
+    );
+  }
+  deleteInfoCompany = async (value, i) => {
+    const { dataConfigWeb } = this.state;
+    let coppyData = {
+      ...dataConfigWeb,
+    };
+    coppyData.value.infoCompany.splice(i, 1);
+    this.setState(
+      {
+        dataConfigWeb: coppyData,
+      },
+      async () => {
+        await this.onUpdate().then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Xóa thành công",
+            showConfirmButton: false,
+            timer: 700,
+          });
+          this.getDataConfigWeb();
+        });
+      }
+    );
+  };
+
   render() {
+    const arrLevel = [
+      {
+        item: "0",
+      },
+      {
+        item: "1",
+      },
+      {
+        item: "2",
+      },
+    ];
     const { contentSlide } = this.state;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
+          <Modal
+            size="xl"
+            isOpen={this.state.modalBannerCategories}
+            className={this.props.className}
+          >
+            <ModalHeader>
+              {this.state.actionBannerCategories === "new"
+                ? `Tạo mới`
+                : `Cập nhật`}
+            </ModalHeader>
+            <ModalBody>
+              <TextFieldGroup
+                field="titleCategories"
+                label="Tiêu đề"
+                value={this.state.titleCategories}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setState({ titleCategories: e.target.value });
+                }}
+              />
+              <TextFieldGroup
+                field="contentBannerCategories"
+                label="Mô tả"
+                value={this.state.contentBannerCategories}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setState({ contentBannerCategories: e.target.value });
+                }}
+              />
+              <TextFieldGroup
+                field="imageSlide"
+                label="Hình ảnh: (36px x 36px)"
+                type={"file"}
+                className="mt-5"
+                onChange={(e) => {
+                  this.onChangeImage(
+                    e,
+                    "imageBannerCategories",
+                    "imageBannerCategories_link",
+                    "imageBannerCategories_show"
+                  );
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                  this.setState({ imageBannerCategories_show: "" });
+                }}
+              />
+
+              <img
+                alt=""
+                style={{ width: "140px", marginBottom: 20 }}
+                height="auto"
+                src={this.state.imageBannerCategories}
+              />
+              <TextFieldGroup
+                field="hrefBannerCategories"
+                label="Đường dẫn"
+                value={this.state.hrefBannerCategories}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setState({ hrefBannerCategories: e.target.value });
+                }}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={() => {
+                  this.state.actionBannerCategories === "new"
+                    ? this.saveAddCategories()
+                    : this.saveEditCategories();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={() => {
+                  this.setState({
+                    modalBannerCategories: false,
+                  });
+                }}
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
+          <Modal
+            size="xl"
+            isOpen={this.state.modalInfoCompany}
+            className={this.props.className}
+          >
+            <ModalHeader>
+              {this.state.actionModalInfoCompany === "new"
+                ? `Tạo mới`
+                : `Cập nhật`}
+            </ModalHeader>
+            <ModalBody>
+              <TextFieldGroup
+                field="titleInfoCompany"
+                label="Tiêu đề"
+                value={this.state.titleInfoCompany}
+                placeholder={""}
+                onChange={(e) => {
+                  this.setState({ titleInfoCompany: e.target.value });
+                }}
+              />
+              <p>Mô tả</p>
+              <CKEditor
+                editor={ClassicEditor}
+                data={this.state.contentInfoCompany}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                }}
+                style={{ height: "300px" }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  this.setState({ contentInfoCompany: data });
+                }}
+                onBlur={(event, editor) => {}}
+                onFocus={(event, editor) => {}}
+              />
+              <div className="mt-3"></div>
+              <TextFieldGroup
+                field="imageSlide"
+                label="Hình ảnh: (600px x 300px)"
+                type={"file"}
+                className="mt-5"
+                onChange={(e) => {
+                  this.onChangeImage(
+                    e,
+                    "imageInfoCompany",
+                    "imageInfoCompany_link",
+                    "imageInfoCompany_show"
+                  );
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                  this.setState({ imageInfoCompany_show: "" });
+                }}
+              />
+              <div className="text-center">
+                <img
+                  alt=""
+                  style={{ width: "300px", marginBottom: 20 }}
+                  height="auto"
+                  src={this.state.imageInfoCompany}
+                />
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={() => {
+                  this.state.actionModalInfoCompany === "new"
+                    ? this.saveAddInfoCompany()
+                    : this.saveEditInfoCompany();
+                }}
+                disabled={this.state.isLoading}
+              >
+                Lưu
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={() => {
+                  this.setState({
+                    modalInfoCompany: false,
+                  });
+                }}
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
           <div className="flex-tabs">
             <div class="tab">
               <List
@@ -1073,6 +1543,32 @@ class ConfigWebAdmin extends Component {
                   bannerMainSlide={this.state.bannerMainSlide}
                 />
               </div>
+              <div id="tabcontent6" className="tabcontent">
+                <Sologan
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  sologan_1={this.state.sologan_1}
+                  sologan_2={this.state.sologan_2}
+                  sologan_3={this.state.sologan_3}
+                  sologan_4={this.state.sologan_4}
+                  sologan_5={this.state.sologan_5}
+                  sologan_button={this.state.sologan_button}
+                />
+              </div>
+              <div id="tabcontent7" className="tabcontent">
+                <InfoCompany
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  onChangeImage={this.onChangeImage}
+                  openFormAddInfoCompany={this.openFormAddInfoCompany}
+                  openFormEditInfoCompany={this.openFormEditInfoCompany}
+                  deleteInfoCompany={this.deleteInfoCompany}
+                  saveAddInfoCompany={this.saveAddInfoCompany}
+                  saveEditInfoCompany={this.saveEditInfoCompany}
+                  infoCompany={this.state.infoCompany}
+                />
+              </div>
+
               <div id="tabcontent3" className="tabcontent ">
                 <Logos
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
@@ -1093,6 +1589,14 @@ class ConfigWebAdmin extends Component {
                   openFormEditBanner={this.openFormEditBanner}
                   deleteBanner={this.deleteBanner}
                   bannerSlide={this.state.bannerSlide}
+                  getDataConfigWeb={this.getDataConfigWeb}
+                  bannerCategories={this.state.bannerCategories}
+                  dataConfigWeb={this.state.dataConfigWeb}
+                  openFormAddCategories={this.openFormAddCategories}
+                  openFormEditCategories={this.openFormEditCategories}
+                  deleteCategories={this.deleteCategories}
+                  saveAddCategories={this.saveAddCategories}
+                  saveEditCategories={this.saveEditCategories}
                 />
               </div>
               <div id="tabcontent5" className="tabcontent ">
@@ -1102,7 +1606,7 @@ class ConfigWebAdmin extends Component {
                   guideVoucher={this.state.guideVoucher}
                 />
               </div>
-              <div id="tabcontent6" className="tabcontent ">
+              {/* <div id="tabcontent6" className="tabcontent ">
                 <VoucherPartner
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   bannerCampaign={this.state.bannerCampaign}
@@ -1121,7 +1625,7 @@ class ConfigWebAdmin extends Component {
                   saveEditBannerCampaign={this.saveEditBannerCampaign}
                   onChangeImage={this.onChangeImage}
                 />
-              </div>
+              </div> */}
               <div id="tabcontent4" className="tabcontent ">
                 <Footer
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
@@ -1189,6 +1693,47 @@ class ConfigWebAdmin extends Component {
                   this.setState({ slugFooter: e.target.value });
                 }}
               />
+              <div style={{ width: "100%" }} className="mt-3">
+                <CLabel>Mục (*)</CLabel>
+                {arrLevel != undefined ? (
+                  <CSelect
+                    onChange={async (e) => {
+                      this.setState({
+                        statusFooter: e.target.value,
+                      });
+                      console.log(e.target.value);
+                    }}
+                    custom
+                    size="md"
+                    name="status"
+                    id="SelectLm"
+                  >
+                    {arrLevel.map((item, i) => {
+                      if (item.item === this.state.statusFooter) {
+                        return (
+                          <option selected key={i} value={item.item}>
+                            {item.item === "0"
+                              ? "Chưa có"
+                              : item.item == "1"
+                              ? "Danh mục"
+                              : "Về chúng tôi"}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={i} value={item.item}>
+                            {item.item === "0"
+                              ? "Chưa có"
+                              : item.item == "1"
+                              ? "Danh mục"
+                              : "Về chúng tôi"}
+                          </option>
+                        );
+                      }
+                    })}
+                  </CSelect>
+                ) : null}
+              </div>
             </ModalBody>
             <ModalFooter>
               <CButton
@@ -1291,7 +1836,7 @@ class ConfigWebAdmin extends Component {
             <ModalBody>
               <TextFieldGroup
                 field="image_banner2"
-                label="Hình ảnh: (1110px * 287px)"
+                label="Hình ảnh: (784px x 420px)"
                 type={"file"}
                 className="mt-5"
                 onChange={(e) => {

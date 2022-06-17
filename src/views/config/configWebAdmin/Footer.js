@@ -17,8 +17,8 @@ export default class Footer extends Component {
   openFormAddFooter = () => {
     this.props.openFormAddFooter();
   };
-  openFormEditFooter = (value) => {
-    this.props.openFormEditFooter(value);
+  openFormEditFooter = (value,i) => {
+    this.props.openFormEditFooter(value,i);
   };
   deleteFooter = (value) => {
     this.props.deleteFooter(value);
@@ -45,6 +45,7 @@ export default class Footer extends Component {
           <thead className="thead-light">
             <tr>
               <th className="text-center">STT.</th>
+              <th className="text-center">Mục</th>
               <th className="text-center">Tiêu đề</th>
               <th className="text-center">Nội dung</th>
               <th className="text-center">Link tham chiếu</th>
@@ -56,12 +57,12 @@ export default class Footer extends Component {
               Không tìm thấy dữ liệu
             </td>
 
-            {this.props.dataFooter
-              ? this.props.dataFooter.map((item, i) => {
+            {this.props.dataFooter && this.props.dataFooter.category
+              ? this.props.dataFooter.category.map((item, i) => {
                   return (
                     <tr key={i}>
                       <td className="text-center">{i + 1}</td>
-
+                      <td className="text-center">{item.status === "1" ? 'Danh mục' : 'Về chúng tôi'}</td>
                       <td className="text-center">{item.title}</td>
                       <td className="text-center">
                         <div
@@ -83,7 +84,7 @@ export default class Footer extends Component {
                             color="info"
                             style={styles.mgl5}
                             size="md"
-                            onClick={() => this.openFormEditFooter(item)}
+                            onClick={() => this.openFormEditFooter(item,i)}
                           >
                             <FiEdit3
                               style={styles.icon}
@@ -96,7 +97,7 @@ export default class Footer extends Component {
                             variant="ghost"
                             color="danger"
                             style={styles.mgl5}
-                            onClick={() => this.deleteFooter(item)}
+                            onClick={() => this.deleteFooter(i)}
                           >
                             <BsTrash
                               style={styles.icon}

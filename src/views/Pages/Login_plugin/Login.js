@@ -56,7 +56,7 @@ class Login extends Component {
     await axios
       .get(url, {
         params: {
-          key: "webinfo_admin",
+          key: "webinfo_tikicare",
           company_id: "-1",
         },
       })
@@ -115,7 +115,7 @@ class Login extends Component {
        
         if (token.type == "0" || token.type == "1") {
           localStorage.setItem("isAD", "0");
-          this.props.history.push("/list_order");
+          this.props.history.push("/");
         } else {
           localStorage.setItem("isAD", "1");
           this.props.history.push("/profile");

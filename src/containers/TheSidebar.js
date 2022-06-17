@@ -43,7 +43,7 @@ const TheSidebar = () => {
     await axios
       .get(url, {
         params: {
-          key: "webinfo_admin",
+          key: "webinfo_tikicare",
           company_id: "-1",
         },
       })
@@ -60,10 +60,10 @@ const TheSidebar = () => {
     const user = localStorage.getItem("user");
 
     const getRoleUser = async () => {
-      var data = await callApiGetRoleSubAdmin(user);
+      // var data = await callApiGetRoleSubAdmin(user);
       await getDataConfigWeb();
 
-      setSidebar(data);
+      // setSidebar(data);
     };
     getRoleUser();
   }, []);
@@ -72,11 +72,8 @@ const TheSidebar = () => {
   var navigation = [];
 
   for (let i = 0; i < navigations.length; i++) {
-    for (let y = 0; y < sidebar.length; y++) {
-      for (let z = 0; z < navigations[sidebar[y]].length; z++) {
-        navigations[sidebar[y]][z].role.push("5");
-      }
-    }
+    // navigations[sidebar].role.push("5");
+
     navigation = navigation.concat(navigations[i]);
   }
 
@@ -138,7 +135,7 @@ const TheSidebar = () => {
             >
               <img
                 src={Logo}
-                style={{ maxWidth: "12rem" }}
+                style={{ maxHeight: '70px' }}
                 height="auto"
                 alt="HB Analytics Logo"
                 className="navbar-brand-full"

@@ -1,102 +1,38 @@
 import { Component } from "react";
-import { ModalHeader, ModalBody, ModalFooter, Modal } from "reactstrap";
-import axios from "axios";
-import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import { CButton } from "@coreui/react";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
 import { MdLibraryAdd } from "@react-icons/all-files/md/MdLibraryAdd";
 import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
-import Swal from "sweetalert2";
-import Constants from "../../../contants/contants";
-import API_CONNECT from "../../../functions/callAPI";
 
 export default class Banner1 extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalBanner : false,
-      company_id: JSON.parse(localStorage.getItem("user")).company_id
-      ? JSON.parse(localStorage.getItem("user")).company_id
-      : "-1",
- 
-     }
-  }
-  onChangeImage = (e, value, valueLink, valueShow) => {
-    let files = e.target.files;
-    let reader = new FileReader();
-    this.setState({ [valueLink]: files[0] });
-    reader.readAsDataURL(files[0]);
-    reader.onload = (e) => {
-      this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
-    };
-  };
   SaveAllConfigWeb(value) {
     this.props.SaveAllConfigWeb(value);
-  }
-  getDataConfigWeb() {
-    this.props.getDataConfigWeb();
-  }
+  };
   setStateByName = (name, value) => {
     this.props.setStateByName(name, value);
   };
-  openFormAddCategories = (value) => {
-    this.props.openFormAddCategories(value);
+  onChangeImage = (e, name, name_link, name_show) => {
+    this.props.onChangeImage(e, name, name_link, name_show);
   };
-  openFormEditCategories = (value, item, i) => {
-    this.props.openFormEditCategories(value, item, i);
-  };
-  deleteCategories = (value, i) => {
-    this.props.deleteCategories(value, i);
-  };
-  saveAddCategories = (value, i) => {
-    this.props.saveAddCategories(value, i);
-  };
-  saveEditCategories = (value, i) => {
-    this.props.saveEditCategories(value, i);
-  };
-  async postImage(link) {
-    var newImage = "";
-    if (link && link !== "") {
-      const form = new FormData();
-
-      form.append("image", link);
-
-      await API_CONNECT(Constants.UPLOAD_IMAGE_BRAND, form, "", "POST").then(
-        (res) => {}
-      );
-
-      newImage = link.name;
-      return newImage;
-    } else {
-      return newImage;
-    }
+  openFormAddInfoCompany=(value)=>{
+    this.props.openFormAddInfoCompany(value);
   }
-  async onUpdate() {
-    const { dataConfigWeb } = this.state;
-
-    const newComany_id = this.state.company_id;
-    var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "api/config/update";
-    await axios.post(url, {
-      value: JSON.stringify(dataConfigWeb),
-      dataType: "1",
-      type: "system",
-      company_id: newComany_id,
-      id: this.state.idUpdate,
-    });
+  openFormEditInfoCompany = (value, item, i) => {
+    this.props.openFormEditInfoCompany(value, item, i);
   }
- 
+  deleteInfoCompany = (value, i) => {
+    this.props.deleteInfoCompany(value, i);
+  }
   render() {
     return (
-      <>
-  
-        <div class="flex-end">
+      <>    
+        <div class="flex-end mt-3">
           <CButton
             color="info"
             style={{ marginBottom: "10px" }}
             size="md"
             className="btn-main"
-            onClick={() => this.openFormAddCategories("2")}
+            onClick={() => this.openFormAddInfoCompany("1")}
           >
             <MdLibraryAdd style={{ margin: "auto 6px auto 0" }} />
             <p style={{ margin: "auto 0" }}>Thêm mới</p>
@@ -111,31 +47,26 @@ export default class Banner1 extends Component {
               <tr>
                 <th className="text-center">STT.</th>
                 <th className="text-center">Tiêu đề</th>
+                <th className="text-center">Mô tả</th>
                 <th className="text-center">Hình ảnh</th>
-
-                <th className="text-center">Nội dung</th>
-                <th className="text-center">Link tham chiếu</th>
-                <th className="text-center">#</th>
+                <th className="text-center"></th>
               </tr>
             </thead>
             <tbody>
-              {this.props.bannerCategories
-                ? this.props.bannerCategories.map((item, i) => {
+              {this.props.infoCompany
+                ? this.props.infoCompany.map((item, i) => {
                     return (
                       <tr key={i}>
                         <td className="text-center">{i + 1}</td>
                         <td className="text-center">{item.title}</td>
-
+                        <td className="text-center">{item.content}</td>
                         <td className="text-center">
                           <img
-                            style={{ maxWidth: "300px" }}
+                            style={{maxHeight: '160px'}}
                             src={item.image}
                             alt=""
                           />
                         </td>
-                        <td className="text-center">{item.content}</td>
-
-                        <td className="text-center">{item.href}</td>
                         <td className="text-center">
                           <div className="flex">
                             <CButton
@@ -145,7 +76,7 @@ export default class Banner1 extends Component {
                               style={styles.mgl5}
                               size="md"
                               onClick={() =>
-                                this.openFormEditCategories("2", item, i)
+                                this.openFormEditInfoCompany("1", item, i)
                               }
                             >
                               <FiEdit3
@@ -159,7 +90,7 @@ export default class Banner1 extends Component {
                               variant="ghost"
                               color="danger"
                               style={styles.mgl5}
-                              onClick={() => this.deleteCategories("2", i)}
+                              onClick={() => this.deleteInfoCompany("1", i)}
                             >
                               <BsTrash
                                 style={styles.icon}

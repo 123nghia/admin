@@ -1,16 +1,38 @@
 export default {
   BASE_URL: "https://api.deal24h.vn/",
-  // BASE_URL: "http://192.168.1.4:3018/",
-
+  // BASE_URL: "http://192.168.1.10:3028/",
   PORTAL_SERVER: "https://portal.applamdep.com/",
   // BASE_URL_CURRENT: "https://admin-evoucher.applamdep.com/",
   BASE_URL_CURRENT: "https://id.deal24h.vn/",
 
-  EXPORT_HISTORY : "api/history/exportdata",
-  DELETE_HISTORY : "api/history/delete",
+  //
+  GET_BRAND: "api/brand_product/getAll",
+  GET_BRAND_DETAIL: "api/brand_product/getDetail",
+  ADD_BRAND: "api/brand_product/add",
+  UPDATE_BRAND: "api/brand_product/update",
+  DELETE_BRAND: "api/brand_product/delete",
 
+  GET_PRODUCT: "api/product/getAll",
+  GET_PRODUCT_DETAIL: "api/product/getDetail",
+  ADD_PRODUCT: "api/product/add",
+  UPDATE_PRODUCT: "api/product/update",
+  DELETE_PRODUCT: "api/product/delete",
 
-  GET_OVERVIEW : "api/dashboard/overview",
+  GET_CATEGORY: "api/product_category/getAll",
+  GET_CATEGORY_DETAIL: "api/product_category/getDetail",
+  ADD_CATEGORY: "api/product_category/add",
+  UPDATE_CATEGORY: "api/product_category/update",
+  DELETE_CATEGORY: "api/product_category/delete",
+
+  GET_NEWS: "api/news/getAll",
+  GET_NEWS_DETAIL: "api/news/getDetail",
+  ADD_NEWS: "api/news/add",
+  UPDATE_NEWS: "api/news/update",
+  DELETE_NEWS: "api/news/delete",
+  //
+  EXPORT_HISTORY: "api/history/exportdata",
+  DELETE_HISTORY: "api/history/delete",
+  GET_OVERVIEW: "api/dashboard/overview",
 
   GET_NDLOG: "api/ngocdungLog/get-all",
   CHANGE_STATUS: "api/ngocdungLog/checkStatus",
@@ -30,7 +52,6 @@ export default {
   UPDATE_PARTNER: "api/plugin-update-partner",
   DELETE_PARTNER: "api/plugin-delete-partner",
 
-  
   PARTNER_GET_STATISTIC_COLLABORATOR: "api/collaborator/getOverviewDashboard",
   PARTNER_GET_DETAI_COLLABORATOR: "api/collaborator/getDetail",
   COLLABORATOR_GET_LIST: "api/collaborator/getAllCustomer",
@@ -76,7 +97,6 @@ export default {
   UPDATE_VOUCHER: "api/evoucher/update",
   DELETE_VOUCHER: "api/evoucher/delete",
 
-  
   GET_USER_EVOUCHER_FOR_PARTNER: "api/partner/evoucher/list-customer-request",
   GET_USER_EVOUCHER: "api/evoucher/list-customer-request",
   ADD_USER_EVOUCHER: "api/evoucher/list-customer-request",
@@ -278,26 +298,14 @@ export default {
   DELETE_SUGGEST_ITEM: "/itemSdk/deleteItem",
   LIST_SDK: "/sdk",
 
-  LIST_BRAND: "/brands",
-  LIST_BRAND_COMPANY: "brands/",
-  ADD_BRAND: "/add-brand",
-  UPDATE_BRAND: "/update-brand",
-  DELETE_BRAND: "/delete-brand",
-
-  LIST_BRAND_PLUGIN: "/brand-plugin",
-  LIST_BRAND_PLUGIN_COMPANY: "/brand-plugin/",
-  ADD_BRAND_PLUGIN: "/add-brand-plugin",
-  UPDATE_BRAND_PLUGIN: "/update-brand-plugin",
   DELETE_BRAND_PLUGIN: "/delete-brand-plugin",
 
   LIST_PRODUCT: "/product",
   LIST_PRODUCT_HAIR: "/product_hair",
   LIST_PRODUCT_COMPANY: "/product/",
   LIST_PRODUCT_COMPANY_HAIR: "/product_hair/",
-  ADD_PRODUCT: "/add-product",
-  ADD_PRODUCT_HAIR: "/add-product-hair",
-  UPDATE_PRODUCT: "/update-product",
-  DELETE_PRODUCT: "/delete-product",
+
+
 
   LIST_TYPE: "/types",
   LIST_TYPE_COMPANY: "types/",
@@ -355,11 +363,6 @@ export default {
   GET_BANNER: "/api/get-banner",
   UPLOAD_BANNER: "/api/upload-banner",
 
-  LIST_ProductSpecial: "/product-special/all",
-  LIST_ProductSpecial_COMPANY: "/product-special/all/",
-  ADD_ProductSpecial: "/api/prodcut-special/add",
-  UPDATE_ProductSpecial: "/api/prodcut-special/update",
-  DELETE_ProductSpecial: "/product-special/delete",
 
   LIST_Banner: "/api/banner/all",
   LIST_Banner_COMPANY: "/api/banner/all/",

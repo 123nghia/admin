@@ -26,20 +26,7 @@ export default class Banner1 extends Component {
   render() {
     return (
       <>
-        <div class="mb-3 text-center">
-          <CButton
-            onClick={() => this.SaveAllConfigWeb("logoCompany")}
-            style={styles.mgl5}
-            outline
-            color="success"
-            size="md"
-          >
-            {/* <CIcon name="cilPencil" /> */}
-            Lưu thay đổi
-          </CButton>
-        </div>
-        <h1>Banner 1 </h1>
-        <p>Hình ảnh (1519px * 570px)</p>
+        
         <div class="flex-end mt-3">
           <CButton
             color="info"
