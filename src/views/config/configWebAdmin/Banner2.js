@@ -9,6 +9,7 @@ import { FiEdit3 } from "@react-icons/all-files/fi/FiEdit3";
 import Swal from "sweetalert2";
 import Constants from "../../../contants/contants";
 import API_CONNECT from "../../../functions/callAPI";
+import { CCol, CLabel, CRow, CSelect, CTextarea } from "@coreui/react";
 
 export default class Banner1 extends Component {
   constructor(props) {
@@ -89,7 +90,46 @@ export default class Banner1 extends Component {
   render() {
     return (
       <>
-  
+      <div class="text-center">
+          <CButton
+            onClick={() => this.SaveAllConfigWeb("contentCategoryBanner")}
+            style={styles.mgl5}
+            outline
+            color="success"
+            size="md"
+          >
+            {/* <CIcon name="cilPencil" /> */}
+            Lưu thay đổi
+          </CButton>
+        </div>
+        <CRow className="mt-3">
+          <CCol xs="6" sm="6" md="6">
+          <TextFieldGroup
+                field="titleSectionBannerBrand"
+                label="Tiêu đề"
+                value={this.props.titleSectionBannerBrand}
+                placeholder={"DỊCH VỤ CỦA TIKICARE"}
+                onChange={(e) => {
+                  this.setStateByName("titleSectionBannerBrand", e.target.value );
+              
+                }}
+              />
+          </CCol>
+          <CCol xs="6" sm="6" md="6">
+          <TextFieldGroup
+                field="contentSectionBannerBrand"
+                label="Mô tả"
+                value={this.props.contentSectionBannerBrand}
+                placeholder={"lorem ipsum dolor sit amet consectetur adipisicing elit."}
+                onChange={(e) => {
+                  this.setStateByName("contentSectionBannerBrand", e.target.value );
+                }}
+              />
+          </CCol>
+
+        </CRow>
+        
+             
         <div class="flex-end">
           <CButton
             color="info"
