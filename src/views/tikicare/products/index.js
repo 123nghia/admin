@@ -154,6 +154,8 @@ class Products extends Component {
       nameBranchChoose: "",
       price: "",
       priceSale: "",
+      priceSaleText : "",
+      priceText : "",
       idIsSpecial: false,
       nameIsSpecialChoose: "Không",
       preserve: "",
@@ -202,6 +204,8 @@ class Products extends Component {
       price: item.price,
       priceSale: item.priceSale,
       idIsSpecial: item.isSpecial,
+      priceSaleText : item.priceSaleText,
+      priceText : item.priceText,
     });
     if(item.techDescription?.preserve){
       this.setState({
@@ -269,6 +273,8 @@ class Products extends Component {
       idBranch,
       price,
       priceSale,
+      priceSaleText,
+      priceText,
     } = this.state;
     let img = this.state.imageLogo;
     let img2 = this.state.imageShare;
@@ -301,6 +307,8 @@ class Products extends Component {
         price: price,
         priceSale: priceSale,
         isSpecial: this.state.idIsSpecial,
+        priceSaleText : priceSaleText,
+        priceText : priceText,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -342,6 +350,8 @@ class Products extends Component {
       element,
       expire,
       origin,
+      priceSaleText,
+      priceText,
     } = this.state;
     let img = this.state.imageLogo;
     let img2 = this.state.imageShare;
@@ -380,6 +390,8 @@ class Products extends Component {
         price: price,
         priceSale: priceSale,
         isSpecial: this.state.idIsSpecial,
+        priceSaleText : priceSaleText,
+        priceText : priceText,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -534,17 +546,19 @@ class Products extends Component {
             <ModalBody>
               <Row>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                <label>Tiêu đề (*)</label>
+                  <CTextarea
                     field="title"
                     label="Tiêu đề (*)"
                     value={this.state.title}
                     // error={errors.title}
                     onChange={(e) => this.setState({ title: e.target.value })}
-                    // rows="5"
+                    rows="3"
                   />
                 </Col>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                  <label>Mô tả</label>
+                  <CTextarea
                     field="description"
                     label="Mô tả"
                     value={this.state.description}
@@ -552,45 +566,56 @@ class Products extends Component {
                     onChange={(e) =>
                       this.setState({ description: e.target.value })
                     }
-                    // rows="5"
+                    rows="3"
                   />
                 </Col>
               </Row>
               <Row>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                <label>Nội dung</label>
+                  <CTextarea
                     field="content"
                     label="Nội dung"
                     value={this.state.content}
                     // error={errors.title}
                     onChange={(e) => this.setState({ content: e.target.value })}
-                    // rows="5"
+                    rows="3"
                   />
-                  {/* <TextFieldGroup
-                field="slug"
-                label="Đường dẫn"
-                value={this.state.slug}
-                // error={errors.title}
-                onChange={(e) => this.setState({ slug: e.target.value })}
-                // rows="5"
-              /> */}
+               
                 </Col>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                <label>Mô tả kỹ thuật</label>
+                  <div className="">
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.setState({
+                          modalDesc: true,
+                        });
+                      }}
+                      size="default"
+                      icon={<MdOpenInNew />}
+                    >
+                      Mở Tab
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="6" md="6">
+                <TextFieldGroup
                     field="price"
-                    label="Giá (*)"
+                    label="Giá : Kiểu số (*)"
                     value={this.state.price}
                     // error={errors.title}
                     onChange={(e) => this.setState({ price: e.target.value })}
                     // rows="5"
                   />
                 </Col>
-              </Row>
-              <Row>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                <TextFieldGroup
                     field="priceSale"
-                    label="Giá khuyến mại (*)"
+                    label="Giá khuyến mại : Kiểu số (*)"
                     value={this.state.priceSale}
                     // error={errors.title}
                     onChange={(e) =>
@@ -599,32 +624,29 @@ class Products extends Component {
                     // rows="5"
                   />
                 </Col>
+              </Row>
+              <Row>
                 <Col xs="6" md="6">
-                  <label>Chọn thương hiệu (*)</label>
-                  <Select
-                    className="select_seo"
-                    showSearch
-                    defaultValue={this.state.nameBranchChoose}
-                    placeholder="Thương hiệu"
-                    optionFilterProp="children"
-                    onChange={(value) =>
-                      this.setState({
-                        idBranch: value,
-                      })
+                <TextFieldGroup
+                    field="priceText"
+                    label="Giá : Kiểu chữ (*)"
+                    value={this.state.priceText}
+                    // error={errors.title}
+                    onChange={(e) => this.setState({ priceText: e.target.value })}
+                    // rows="5"
+                  />
+                </Col>
+                <Col xs="6" md="6">
+                <TextFieldGroup
+                    field="priceSaleText"
+                    label="Giá khuyến mại : Kiểu chữ (*)"
+                    value={this.state.priceSaleText}
+                    // error={errors.title}
+                    onChange={(e) =>
+                      this.setState({ priceSaleText: e.target.value })
                     }
-                    onSearch={this.onSearchSelect}
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    {this.state.dataBranch
-                      ? this.state.dataBranch.map((item, i) => {
-                          return <Option value={item._id}>{item.title}</Option>;
-                        })
-                      : null}
-                  </Select>
+                    // rows="5"
+                  />
                 </Col>
               </Row>
               <Row>
@@ -688,33 +710,35 @@ class Products extends Component {
               <div className="mt-3"></div>
               <Row>
                 <Col xs="6" md="6">
-                  <label>Mô tả kỹ thuật</label>
-                  <div className="">
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        this.setState({
-                          modalDesc: true,
-                        });
-                      }}
-                      size="default"
-                      icon={<MdOpenInNew />}
-                    >
-                      Mở Tab
-                    </Button>
-                  </div>
-                  {/* <TextFieldGroup
-                    field="techDescription"
-                    label="Mô tả kỹ thuật"
-                    value={this.state.techDescription}
-                    // error={errors.title}
-                    onChange={(e) =>
-                      this.setState({ techDescription: e.target.value })
+                <label>Chọn thương hiệu (*)</label>
+                  <Select
+                    className="select_seo"
+                    showSearch
+                    defaultValue={this.state.nameBranchChoose}
+                    placeholder="Thương hiệu"
+                    optionFilterProp="children"
+                    onChange={(value) =>
+                      this.setState({
+                        idBranch: value,
+                      })
                     }
-                    // rows="5"
-                  /> */}
+                    onSearch={this.onSearchSelect}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    {this.state.dataBranch
+                      ? this.state.dataBranch.map((item, i) => {
+                          return <Option value={item._id}>{item.title}</Option>;
+                        })
+                      : null}
+                  </Select>
                 </Col>
-                <Col xs="6" md="6"></Col>
+                <Col xs="6" md="6">
+                
+                </Col>
               </Row>
               <div className="mt-3"></div>
               <Row>
@@ -1055,7 +1079,15 @@ class Products extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.title}</td>
+                                <td className="text-center">
+                                  <div style={{
+                                      maxHeight: "80px",
+                                      maxWidth: "300px",
+                                      overflow: "hidden",
+                                    }}>
+                                     {item.title}
+                                  </div>
+                                  </td>
                                 <td className="text-center">
                                   <img
                                     style={{
@@ -1066,9 +1098,23 @@ class Products extends Component {
                                     alt=""
                                   />
                                 </td>
-                                <td className="text-center">{item.content}</td>
                                 <td className="text-center">
-                                  {item.description}
+                                <div style={{
+                                      maxHeight: "80px",
+                                      maxWidth: "300px",
+                                      overflow: "hidden",
+                                    }}>
+                                   {item.content}
+                                  </div></td>
+                                <td className="text-center">
+                                <div style={{
+                                      maxHeight: "80px",
+                                      maxWidth: "300px",
+                                      overflow: "hidden",
+                                    }}>
+                                       {item.description}
+                                  </div>
+                             
                                 </td>
 
                                 <td className="text-center">{item.slug}</td>
