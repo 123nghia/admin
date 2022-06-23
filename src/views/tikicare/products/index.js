@@ -955,7 +955,7 @@ class Products extends Component {
                   />
                 </Col>
                 <Col xs="6" md="6">
-                  <label>Hướng dẫn da bảo quản</label>
+                  <label>Hướng dẫn bảo quản</label>
                   <CTextarea
                     name="preserve"
                     rows="4"

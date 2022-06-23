@@ -165,6 +165,7 @@ class ConfigWebAdmin extends Component {
     reader.onload = (e) => {
       this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
     };
+    
   };
   async componentDidMount() {
     this.getDataConfigWeb();
@@ -1394,8 +1395,8 @@ class ConfigWebAdmin extends Component {
       content: contentBannerBrand,
       href : hrefBannerBrand
     };
+    
     console.log(imageBannerBrand);
-
     let coppy = { ...dataConfigWeb };
     coppy.value.bannerBrand[indexBannerBrandEditor] = ob;
     await this.setState(
