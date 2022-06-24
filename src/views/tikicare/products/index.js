@@ -60,6 +60,7 @@ class Products extends Component {
     type: localStorage.getItem("type"),
     user: localStorage.getItem("user"),
     isLoading: false,
+    page : 1
   };
   async componentDidMount() {
     await this.getData();
@@ -67,12 +68,21 @@ class Products extends Component {
     this.getDataBranch();
   }
   getData = async () => {
+    const {page} = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.GET_PRODUCT;
     let url = baseUrlapi + urlCall;
-    axios.get(url, {}).then((res) => {
+    axios.get(url, {
+      params : {
+        page : page,
+      }
+    }).then((res) => {
       console.log(res);
       let val = res.data.data;
+      this.setState({
+      
+        total: res.data.total,
+      });
       this.pagination(val);
       this.setState({ dataApi: val });
 
@@ -81,7 +91,7 @@ class Products extends Component {
       this.setState({
         isLoading: false,
         totalActive: active,
-        total: res.data.total,
+      
       });
     });
   };
@@ -108,16 +118,16 @@ class Products extends Component {
     });
   };
   pagination(dataApi) {
+    const {indexPage, total} = this.state;
     var i,
       j,
       temparray,
-      chunk = 50;
+      chunk = 20;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
-
     if (arrTotal.length == 0) {
       this.setState({
         hidden: false,
@@ -127,8 +137,9 @@ class Products extends Component {
         hidden: true,
       });
     }
-
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    console.log("total",total)
+    this.setState({ arrPagination: Math.ceil(total / 20), data: arrTotal[indexPage] });
+    
   }
 
   onChange(key, val) {
@@ -1171,12 +1182,13 @@ class Products extends Component {
                   </table>
                   <div style={{ float: "right" }}>
                     <Pagination
-                      count={arrPagination.length}
+                      count={arrPagination}
                       color="primary"
                       onChange={(e, v) => {
                         this.setState({
-                          data: arrPagination[v - 1],
-                          indexPage: v - 1,
+                          page: v,
+                        }, ()=>{
+                          this.getData();
                         });
                       }}
                     />
