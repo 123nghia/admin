@@ -168,6 +168,7 @@ class Products extends Component {
       priceSaleText : "",
       priceText : "",
       idIsSpecial: false,
+      link : "",
       nameIsSpecialChoose: "Không",
       preserve: "",
       guide: "",
@@ -217,6 +218,7 @@ class Products extends Component {
       idIsSpecial: item.isSpecial,
       priceSaleText : item.priceSaleText,
       priceText : item.priceText,
+      link : item.link,
     });
     if(item.techDescription?.preserve){
       this.setState({
@@ -285,6 +287,7 @@ class Products extends Component {
       price,
       priceSale,
       priceSaleText,
+      link,
       priceText,
     } = this.state;
     let img = this.state.imageLogo;
@@ -313,6 +316,7 @@ class Products extends Component {
         imageShare: img2,
         categoryId: idCategory,
         content: content,
+        link,
         avatar: img,
         brandId: idBranch,
         price: price,
@@ -358,6 +362,7 @@ class Products extends Component {
       uses,
       safety,
       skinType,
+      link,
       element,
       expire,
       origin,
@@ -396,6 +401,7 @@ class Products extends Component {
         categoryId: idCategory,
         imageShare: img2,
         content: content,
+        link,
         avatar: img,
         brandId: idBranch,
         price: price,
@@ -748,7 +754,16 @@ class Products extends Component {
                   </Select>
                 </Col>
                 <Col xs="6" md="6">
-                
+                <TextFieldGroup
+                    field="link"
+                    label="Đường dẫn"
+                    value={this.state.link}
+                    // error={errors.title}
+                    onChange={(e) =>
+                      this.setState({ link: e.target.value })
+                    }
+                    // rows="5"
+                  />
                 </Col>
               </Row>
               <div className="mt-3"></div>
@@ -1067,12 +1082,13 @@ class Products extends Component {
                         <th className="text-center">Tiêu đề</th>
                         <th className="text-center">Hình ảnh</th>
 
-                        <th className="text-center">Nội dung</th>
+                
                         <th className="text-center">Mô tả</th>
 
-                        <th className="text-center">Link</th>
+                        <th className="text-center">Giá bán</th>
+                        <th className="text-center">Đường dẫn</th>
 
-                        <th className="text-center">Hình ảnh chia sẻ</th>
+                        <th className="text-center">Sản phẩm nổi bật</th>
 
                         <th className="text-center"></th>
                       </tr>
@@ -1115,29 +1131,22 @@ class Products extends Component {
                                       maxWidth: "300px",
                                       overflow: "hidden",
                                     }}>
-                                   {item.content}
+                                   {item.description}
                                   </div></td>
+                       
+
+                                <td className="text-center">{item.priceSaleText}</td>
                                 <td className="text-center">
                                 <div style={{
                                       maxHeight: "80px",
                                       maxWidth: "300px",
                                       overflow: "hidden",
                                     }}>
-                                       {item.description}
-                                  </div>
-                             
-                                </td>
-
-                                <td className="text-center">{item.slug}</td>
+                                   {item.link}
+                                  </div></td>
+                                
                                 <td className="text-center">
-                                  <img
-                                    style={{
-                                      maxHeight: "60px",
-                                      maxWidth: "300px",
-                                    }}
-                                    src={item.imageShare}
-                                    alt=""
-                                  />
+                                  {item.isSpecial ? 'Có' : 'Không'}
                                 </td>
                                 <td
                                   className="text-center"

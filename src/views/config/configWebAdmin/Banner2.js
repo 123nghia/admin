@@ -165,10 +165,9 @@ export default class Banner1 extends Component {
                       <tr key={i}>
                         <td className="text-center">{i + 1}</td>
                         <td className="text-center">{item.title}</td>
-
                         <td className="text-center">
                           <img
-                            style={{ maxWidth: "300px" }}
+                            style={{ maxHeight: "100px" }}
                             src={item.image}
                             alt=""
                           />
