@@ -96,7 +96,7 @@ class EndUser extends Component {
       idCurrentUpdate: null,
       levelNormal: "0",
       statusExcel: false,
-      typePartner : JSON.parse(localStorage.getItem("user")).typePartner
+      typePartner : JSON.parse(localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")).typePartner : null
     };
   }
 

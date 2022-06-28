@@ -68,7 +68,7 @@ class ListUserEvoucher extends Component {
       type: localStorage.getItem("type"),
       user: localStorage.getItem("user"),
       company_slug: JSON.parse(localStorage.getItem("user")).company_slug,
-      typePartner: JSON.parse(localStorage.getItem("user")).typePartner,
+      typePartner: JSON.parse(localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")).typePartner : null,
       isLoading: false,
       indexPage: 0,
       idHistory: "",
