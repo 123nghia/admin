@@ -18,7 +18,7 @@ import {HiOutlineUserGroup} from "react-icons/hi";
 import {GrGroup} from "react-icons/gr";
 import {FiUsers} from "react-icons/fi";
 
-const typePartner = JSON.parse(localStorage.getItem("user")).typePartner;
+const typePartner = JSON.parse(localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")).typePartner : null;
 const type = JSON.parse(localStorage.getItem("type"));
 
 const css = {};
