@@ -43,8 +43,9 @@ const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
 const { RangePicker } = DatePicker;
-class Products extends Component {
+class CodeColor extends Component {
   state = {
+    titlePage: "Danh sách mã màu",
     company_id: JSON.parse(localStorage.getItem("user")).company_id
       ? JSON.parse(localStorage.getItem("user")).company_id
       : null,
@@ -60,40 +61,50 @@ class Products extends Component {
     type: localStorage.getItem("type"),
     user: localStorage.getItem("user"),
     isLoading: false,
-    page : 1
+    page: 1,
   };
   async componentDidMount() {
     await this.getData();
-    this.getDataCategory();
-    this.getDataBranch();
+    // this.getDataCategory();
+    // this.getDataBranch();
   }
   getData = async () => {
-    const {page} = this.state;
+    this.pagination([
+      {
+        _id: "601f91cbf626ff4940762e60",
+        hex: "#ac8f71",
+        makeup_id: "t4fPvLyU8wXgXqtU",
+        alpha: 65,
+      },
+    ]);
+
+    return;
+    const { page } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.GET_PRODUCT;
     let url = baseUrlapi + urlCall;
-    axios.get(url, {
-      params : {
-        page : page,
-      }
-    }).then((res) => {
-      console.log(res);
-      let val = res.data.data;
-      this.setState({
-      
-        total: res.data.total,
-      });
-      this.pagination(val);
-      this.setState({ dataApi: val });
+    axios
+      .get(url, {
+        params: {
+          page: page,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let val = res.data.data;
+        this.setState({
+          total: res.data.total,
+        });
+        this.pagination(val);
+        this.setState({ dataApi: val });
 
-      let active = 0;
+        let active = 0;
 
-      this.setState({
-        isLoading: false,
-        totalActive: active,
-      
+        this.setState({
+          isLoading: false,
+          totalActive: active,
+        });
       });
-    });
   };
   getDataCategory = async () => {
     var baseUrlapi = Constants.BASE_URL;
@@ -118,7 +129,7 @@ class Products extends Component {
     });
   };
   pagination(dataApi) {
-    const {indexPage, total} = this.state;
+    const { indexPage, total } = this.state;
     var i,
       j,
       temparray,
@@ -137,9 +148,11 @@ class Products extends Component {
         hidden: true,
       });
     }
-    console.log("total",total)
-    this.setState({ arrPagination: Math.ceil(total / 20), data: arrTotal[indexPage] });
-    
+    console.log("total", total);
+    this.setState({
+      arrPagination: Math.ceil(total / 20),
+      data: arrTotal[indexPage],
+    });
   }
 
   onChange(key, val) {
@@ -165,10 +178,10 @@ class Products extends Component {
       nameBranchChoose: "",
       price: "",
       priceSale: "",
-      priceSaleText : "",
-      priceText : "",
+      priceSaleText: "",
+      priceText: "",
       idIsSpecial: false,
-      link : "",
+      link: "",
       nameIsSpecialChoose: "Không",
       preserve: "",
       guide: "",
@@ -216,46 +229,46 @@ class Products extends Component {
       price: item.price,
       priceSale: item.priceSale,
       idIsSpecial: item.isSpecial,
-      priceSaleText : item.priceSaleText,
-      priceText : item.priceText,
-      link : item.link,
+      priceSaleText: item.priceSaleText,
+      priceText: item.priceText,
+      link: item.link,
     });
-    if(item.techDescription?.preserve){
+    if (item.techDescription?.preserve) {
       this.setState({
         preserve: item.techDescription.preserve,
       });
     }
-    if(item.techDescription?.guide){
+    if (item.techDescription?.guide) {
       this.setState({
         guide: item.techDescription.guide,
       });
     }
-    if(item.techDescription?.uses){
+    if (item.techDescription?.uses) {
       this.setState({
         uses: item.techDescription.uses,
       });
     }
-    if(item.techDescription?.skinType){
+    if (item.techDescription?.skinType) {
       this.setState({
         skinType: item.techDescription.skinType,
       });
     }
-    if(item.techDescription?.safety){
+    if (item.techDescription?.safety) {
       this.setState({
         safety: item.techDescription.safety,
       });
     }
-    if(item.techDescription?.expire){
+    if (item.techDescription?.expire) {
       this.setState({
         expire: item.techDescription.expire,
       });
     }
-    if(item.techDescription?.element){
+    if (item.techDescription?.element) {
       this.setState({
         element: item.techDescription.element,
       });
     }
-    if(item.techDescription?.origin){
+    if (item.techDescription?.origin) {
       this.setState({
         origin: item.techDescription.origin,
       });
@@ -322,8 +335,8 @@ class Products extends Component {
         price: price,
         priceSale: priceSale,
         isSpecial: this.state.idIsSpecial,
-        priceSaleText : priceSaleText,
-        priceText : priceText,
+        priceSaleText: priceSaleText,
+        priceText: priceText,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -407,8 +420,8 @@ class Products extends Component {
         price: price,
         priceSale: priceSale,
         isSpecial: this.state.idIsSpecial,
-        priceSaleText : priceSaleText,
-        priceText : priceText,
+        priceSaleText: priceSaleText,
+        priceText: priceText,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -432,24 +445,6 @@ class Products extends Component {
       idDelete: item._id,
       modalDelete: true,
     });
-    // let baseUrlCallApi = Constants.DELETE_PRODUCT;
-    // var baseUrlapi = Constants.BASE_URL;
-    // let url = baseUrlapi + baseUrlCallApi;
-    // await axios
-    //   .delete(url, {
-    //     data: {
-    //       id: item._id,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     Swal.fire({
-    //       icon: "success",
-    //       title: "Xóa thành công",
-    //       showConfirmButton: false,
-    //       timer: 1200,
-    //     });
-    //     this.getData();
-    //   });
   }
   async remove(item) {
     const { idDelete } = this.state;
@@ -535,8 +530,19 @@ class Products extends Component {
         a.click();
       });
   }
+  renderHeaderTable = () => {
+    return (
+      <tr>
+        <th className="text-center">STT.</th>
+        <th className="text-center">Mã màu (Hex)</th>
+        <th className="text-center">Makeup ID</th>
+        <th className="text-center">Alpha</th>
+        <th className="text-center"></th>
+      </tr>
+    );
+  };
   render() {
-    const { data, arrPagination } = this.state;
+    const { data, arrPagination, titlePage } = this.state;
     const isSpecial = [
       {
         value: false,
@@ -551,7 +557,7 @@ class Products extends Component {
       return (
         <div className="animated fadeIn">
           <Modal
-            size="lg"
+            size="md"
             closeButton
             toggle={() => this.setState({ modal: false })}
             isOpen={this.state.modal}
@@ -561,278 +567,24 @@ class Products extends Component {
               {this.state.actionModal === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-              <Row>
-                <Col xs="6" md="6">
-                <label>Tiêu đề (*)</label>
-                  <CTextarea
-                    field="title"
-                    label="Tiêu đề (*)"
-                    value={this.state.title}
-                    // error={errors.title}
-                    onChange={(e) => this.setState({ title: e.target.value })}
-                    rows="3"
-                  />
-                </Col>
-                <Col xs="6" md="6">
-                  <label>Mô tả</label>
-                  <CTextarea
-                    field="description"
-                    label="Mô tả"
-                    value={this.state.description}
-                    // error={errors.title}
-                    onChange={(e) =>
-                      this.setState({ description: e.target.value })
-                    }
-                    rows="3"
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="6" md="6">
-                <label>Nội dung</label>
-                  <CTextarea
-                    field="content"
-                    label="Nội dung"
-                    value={this.state.content}
-                    // error={errors.title}
-                    onChange={(e) => this.setState({ content: e.target.value })}
-                    rows="3"
-                  />
-               
-                </Col>
-                <Col xs="6" md="6">
-                <label>Mô tả kỹ thuật</label>
-                  <div className="">
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        this.setState({
-                          modalDesc: true,
-                        });
-                      }}
-                      size="default"
-                      icon={<MdOpenInNew />}
-                    >
-                      Mở Tab
-                    </Button>
-                  </div>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="6" md="6">
-                <TextFieldGroup
-                    field="price"
-                    label="Giá : Kiểu số (*)"
-                    value={this.state.price}
-                    // error={errors.title}
-                    onChange={(e) => this.setState({ price: e.target.value })}
-                    // rows="5"
-                  />
-                </Col>
-                <Col xs="6" md="6">
-                <TextFieldGroup
-                    field="priceSale"
-                    label="Giá khuyến mại : Kiểu số (*)"
-                    value={this.state.priceSale}
-                    // error={errors.title}
-                    onChange={(e) =>
-                      this.setState({ priceSale: e.target.value })
-                    }
-                    // rows="5"
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="6" md="6">
-                <TextFieldGroup
-                    field="priceText"
-                    label="Giá : Kiểu chữ (*)"
-                    value={this.state.priceText}
-                    // error={errors.title}
-                    onChange={(e) => this.setState({ priceText: e.target.value })}
-                    // rows="5"
-                  />
-                </Col>
-                <Col xs="6" md="6">
-                <TextFieldGroup
-                    field="priceSaleText"
-                    label="Giá khuyến mại : Kiểu chữ (*)"
-                    value={this.state.priceSaleText}
-                    // error={errors.title}
-                    onChange={(e) =>
-                      this.setState({ priceSaleText: e.target.value })
-                    }
-                    // rows="5"
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="6" md="6">
-                  <label>Chọn danh mục (*)</label>
-                  <Select
-                    className="select_seo"
-                    showSearch
-                    defaultValue={this.state.nameCategoryChoose}
-                    placeholder="Danh mục liên quan"
-                    optionFilterProp="children"
-                    onChange={(value) =>
-                      this.setState({
-                        idCategory: value,
-                      })
-                    }
-                    onSearch={this.onSearchSelect}
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    {this.state.dataCategory
-                      ? this.state.dataCategory.map((item, i) => {
-                          return <Option value={item._id}>{item.title}</Option>;
-                        })
-                      : null}
-                  </Select>
-                </Col>
-                <Col xs="6" md="6">
-                  <label>Sản phẩm nổi bật</label>
-                  <Select
-                    className="select_seo"
-                    showSearch
-                    defaultValue={this.state.nameIsSpecialChoose}
-                    placeholder=""
-                    optionFilterProp="children"
-                    onChange={(value) =>
-                      this.setState({
-                        idIsSpecial: value,
-                      })
-                    }
-                    onSearch={this.onSearchSelect}
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    {isSpecial
-                      ? isSpecial.map((item, i) => {
-                          return (
-                            <Option value={item.value}>{item.name}</Option>
-                          );
-                        })
-                      : null}
-                  </Select>
-                </Col>
-              </Row>
-              <div className="mt-3"></div>
-              <Row>
-                <Col xs="6" md="6">
-                <label>Chọn thương hiệu (*)</label>
-                  <Select
-                    className="select_seo"
-                    showSearch
-                    defaultValue={this.state.nameBranchChoose}
-                    placeholder="Thương hiệu"
-                    optionFilterProp="children"
-                    onChange={(value) =>
-                      this.setState({
-                        idBranch: value,
-                      })
-                    }
-                    onSearch={this.onSearchSelect}
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    {this.state.dataBranch
-                      ? this.state.dataBranch.map((item, i) => {
-                          return <Option value={item._id}>{item.title}</Option>;
-                        })
-                      : null}
-                  </Select>
-                </Col>
-                <Col xs="6" md="6">
-                <TextFieldGroup
-                    field="link"
-                    label="Đường dẫn"
-                    value={this.state.link}
-                    // error={errors.title}
-                    onChange={(e) =>
-                      this.setState({ link: e.target.value })
-                    }
-                    // rows="5"
-                  />
-                </Col>
-              </Row>
-              <div className="mt-3"></div>
-              <Row>
-                <Col xs="6" md="6">
-                  <TextFieldGroup
-                    field="imageLogo"
-                    label="Hình ảnh 285px * 264px(*)"
-                    type={"file"}
-                    className="mt-5"
-                    onChange={(e) => {
-                      this.onChangeImage(
-                        e,
-                        "imageLogo",
-                        "imageLogo_link",
-                        "imageLogo_show"
-                      );
-                    }}
-                    onClick={(e) => {
-                      e.target.value = null;
-                      this.setState({ imageLogo: "" });
-                    }}
-                  />
-                  <div class="text-center">
-                    <img
-                      alt=""
-                      style={{
-                        maxHeight: "100px",
-                        maxWidth: "150px",
-                        marginBottom: 10,
-                      }}
-                      height="auto"
-                      src={this.state.imageLogo}
-                    />
-                  </div>
-                </Col>
-                <Col xs="6" md="6">
-                  <TextFieldGroup
-                    field="imageShare"
-                    label="Hình ảnh chia sẻ"
-                    type={"file"}
-                    className="mt-5"
-                    onChange={(e) => {
-                      this.onChangeImage(
-                        e,
-                        "imageShare",
-                        "imageShare_link",
-                        "imageShare_show"
-                      );
-                    }}
-                    onClick={(e) => {
-                      e.target.value = null;
-                      this.setState({ imageShare: "" });
-                    }}
-                  />
-                  <div class="text-center">
-                    <img
-                      alt=""
-                      style={{
-                        maxHeight: "100px",
-                        maxWidth: "150px",
-                        marginBottom: 10,
-                      }}
-                      height="auto"
-                      src={this.state.imageShare}
-                    />
-                  </div>
-                </Col>
-              </Row>
+            <TextFieldGroup
+                field="codeColor"
+                label="Mã màu (hex)"
+                value={this.state.codeColor}
+                onChange={(e) => this.setState({ codeColor: e.target.value })}
+              />
+               <TextFieldGroup
+                field="makeupID"
+                label="Makeup ID"
+                value={this.state.makeupID}
+                onChange={(e) => this.setState({ makeupID: e.target.value })}
+              />
+               <TextFieldGroup
+                field="alpha"
+                label="Alpha"
+                value={this.state.alpha}
+                onChange={(e) => this.setState({ alpha: e.target.value })}
+              />
             </ModalBody>
             <ModalFooter>
               <CButton
@@ -888,130 +640,12 @@ class Products extends Component {
               </CButton>
             </ModalFooter>
           </Modal>
-          <Modal
-            isOpen={this.state.modalDesc}
-            className={this.props.className}
-            size="lg"
-            closeButton
-          >
-            <ModalHeader closeButton>MÔ TẢ KỸ THUẬT SẢN PHẨM</ModalHeader>
-            <ModalBody>
-              <h5 className="text-center">CHI TIẾT SẢN PHẨM</h5>
-              <Row>
-                <Col xs="6" md="6">
-                  <TextFieldGroup
-                    field="origin"
-                    label="Xuất xứ"
-                    value={this.state.origin}
-                    // error={errors.title}
-                    onChange={(e) => this.setState({ origin: e.target.value })}
-                  />
-                </Col>
-                <Col xs="6" md="6">
-                  {" "}
-                  <TextFieldGroup
-                    field="expire"
-                    label="Hạn sử dụng"
-                    value={this.state.expire}
-                    // error={errors.title}
-                    onChange={(e) => this.setState({ expire: e.target.value })}
-                  />{" "}
-                </Col>
-              </Row>
-
-              <h5 className="text-center mt-3">MÔ TẢ SẢN PHẨM</h5>
-              <Row className="mt-3">
-                <Col xs="6" md="6">
-                  <label>Thành phần</label>
-                  <CTextarea
-                    name="element"
-                    rows="4"
-                    value={this.state.element}
-                    onChange={(e) => {
-                      this.setState({ element: e.target.value });
-                    }}
-                  />
-                </Col>
-                <Col xs="6" md="6">
-                  <label>Loại da phù hợp</label>
-                  <CTextarea
-                    name="skinType"
-                    rows="4"
-                    value={this.state.skinType}
-                    onChange={(e) => {
-                      this.setState({ skinType: e.target.value });
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row className="mt-3">
-                <Col xs="6" md="6">
-                  <label>Độ an toàn</label>
-                  <CTextarea
-                    name="safety"
-                    rows="4"
-                    value={this.state.safety}
-                    onChange={(e) => {
-                      this.setState({ safety: e.target.value });
-                    }}
-                  />
-                </Col>
-                <Col xs="6" md="6">
-                  <label>Công dụng</label>
-                  <CTextarea
-                    name="uses"
-                    rows="4"
-                    value={this.state.uses}
-                    onChange={(e) => {
-                      this.setState({ uses: e.target.value });
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row className="mt-3">
-                <Col xs="6" md="6">
-                  <label>Hướng dẫn sử dụng</label>
-                  <CTextarea
-                    name="safety"
-                    rows="4"
-                    value={this.state.guide}
-                    onChange={(e) => {
-                      this.setState({ guide: e.target.value });
-                    }}
-                  />
-                </Col>
-                <Col xs="6" md="6">
-                  <label>Hướng dẫn bảo quản</label>
-                  <CTextarea
-                    name="preserve"
-                    rows="4"
-                    value={this.state.preserve}
-                    onChange={(e) => {
-                      this.setState({ preserve: e.target.value });
-                    }}
-                  />
-                </Col>
-              </Row>
-            </ModalBody>
-            <ModalFooter>
-              <CButton
-                color="secondary"
-                onClick={(e) =>
-                  this.setState({
-                    modalDesc: false,
-                  })
-                }
-              >
-                Đóng
-              </CButton>
-            </ModalFooter>
-          </Modal>
           <Row>
             <Col>
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Danh sách sản phẩm
+                    {titlePage}
                   </i>
                   <CRow>
                     <CCol md={3} className="mt">
@@ -1077,21 +711,7 @@ class Products extends Component {
                     className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
                   >
                     <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        <th className="text-center">Tiêu đề</th>
-                        <th className="text-center">Hình ảnh</th>
-
-                
-                        <th className="text-center">Mô tả</th>
-
-                        <th className="text-center">Giá bán</th>
-                        <th className="text-center">Đường dẫn</th>
-
-                        <th className="text-center">Sản phẩm nổi bật</th>
-
-                        <th className="text-center"></th>
-                      </tr>
+                      {this.renderHeaderTable()}
                     </thead>
                     <tbody>
                       <td
@@ -1107,47 +727,19 @@ class Products extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">
-                                  <div style={{
-                                      maxHeight: "80px",
-                                      maxWidth: "300px",
-                                      overflow: "hidden",
-                                    }}>
-                                     {item.title}
+                                  <div className="flex-center">
+                                    <div
+                                      className="makeup__box-color"
+                                      style={{ backgroundColor: item.hex }}
+                                    ></div>
                                   </div>
-                                  </td>
-                                <td className="text-center">
-                                  <img
-                                    style={{
-                                      maxHeight: "80px",
-                                      maxWidth: "300px",
-                                    }}
-                                    src={item.avatar}
-                                    alt=""
-                                  />
-                                </td>
-                                <td className="text-center">
-                                <div style={{
-                                      maxHeight: "80px",
-                                      maxWidth: "300px",
-                                      overflow: "hidden",
-                                    }}>
-                                   {item.description}
-                                  </div></td>
-                       
+                                  {item.hex}
 
-                                <td className="text-center">{item.priceSaleText}</td>
-                                <td className="text-center">
-                                <div style={{
-                                      maxHeight: "80px",
-                                      maxWidth: "300px",
-                                      overflow: "hidden",
-                                    }}>
-                                   {item.link}
-                                  </div></td>
-                                
-                                <td className="text-center">
-                                  {item.isSpecial ? 'Có' : 'Không'}
                                 </td>
+                                <td className="text-center">
+                                  {item.makeup_id}
+                                </td>
+                                <td className="text-center">{item.alpha}</td>
                                 <td
                                   className="text-center"
                                   style={{ minWidth: "100px" }}
@@ -1194,11 +786,14 @@ class Products extends Component {
                       count={arrPagination}
                       color="primary"
                       onChange={(e, v) => {
-                        this.setState({
-                          page: v,
-                        }, ()=>{
-                          this.getData();
-                        });
+                        this.setState(
+                          {
+                            page: v,
+                          },
+                          () => {
+                            this.getData();
+                          }
+                        );
                       }}
                     />
                   </div>
@@ -1313,4 +908,4 @@ const styles = {
   },
 };
 
-export default Products;
+export default CodeColor;

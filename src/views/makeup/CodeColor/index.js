@@ -1,7 +1,5 @@
 import { CButton, CCol, CLabel, CRow, CSelect, CTextarea } from "@coreui/react";
 import { css } from "@emotion/react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Pagination from "@material-ui/lab/Pagination";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsTrash } from "@react-icons/all-files/bs/BsTrash";
@@ -33,13 +31,21 @@ import Swal from "sweetalert2";
 import Constants from "../../../contants/contants";
 import TextFieldGroup from "../../Common/TextFieldGroup";
 import { FaFileExport } from "@react-icons/all-files/fa/FaFileExport";
+import { Button, Tooltip } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { MdOpenInNew } from "react-icons/md";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+const { Option } = Select;
+
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
 headers.append("Content-Type", "application/json");
 const { RangePicker } = DatePicker;
-class Products extends Component {
+class CodeColor extends Component {
   state = {
+    titlePage: "Danh sách mã màu",
     company_id: JSON.parse(localStorage.getItem("user")).company_id
       ? JSON.parse(localStorage.getItem("user")).company_id
       : null,
@@ -55,41 +61,84 @@ class Products extends Component {
     type: localStorage.getItem("type"),
     user: localStorage.getItem("user"),
     isLoading: false,
+    page: 1,
   };
   async componentDidMount() {
     await this.getData();
-    console.log(slugify("one 1 two 2 three 3", { remove: /[0-9]/g }));
+    // this.getDataCategory();
+    // this.getDataBranch();
   }
   getData = async () => {
+    this.pagination([
+      {
+        _id: "601f91cbf626ff4940762e60",
+        hex: "#ac8f71",
+        makeup_id: "t4fPvLyU8wXgXqtU",
+        alpha: 65,
+      },
+    ]);
+
+    return;
+    const { page } = this.state;
     var baseUrlapi = Constants.BASE_URL;
-    let urlCall = Constants.GET_NEWS;
+    let urlCall = Constants.GET_PRODUCT;
     let url = baseUrlapi + urlCall;
-    axios.get(url, {}).then((res) => {
-      console.log(res);
+    axios
+      .get(url, {
+        params: {
+          page: page,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let val = res.data.data;
+        this.setState({
+          total: res.data.total,
+        });
+        this.pagination(val);
+        this.setState({ dataApi: val });
+
+        let active = 0;
+
+        this.setState({
+          isLoading: false,
+          totalActive: active,
+        });
+      });
+  };
+  getDataCategory = async () => {
+    var baseUrlapi = Constants.BASE_URL;
+    let urlCall = Constants.GET_CATEGORY;
+    let url = baseUrlapi + urlCall;
+    axios.get(url).then((res) => {
       let val = res.data.data;
-      this.pagination(val);
-      this.setState({ dataApi: val });
-
-      let active = 0;
-
       this.setState({
-        isLoading: false,
-        totalActive: active,
-        total: res.data.total,
+        dataCategory: val,
+      });
+    });
+  };
+  getDataBranch = async () => {
+    var baseUrlapi = Constants.BASE_URL;
+    let urlCall = Constants.GET_BRAND;
+    let url = baseUrlapi + urlCall;
+    axios.get(url).then((res) => {
+      let val = res.data.data;
+      this.setState({
+        dataBranch: val,
       });
     });
   };
   pagination(dataApi) {
+    const { indexPage, total } = this.state;
     var i,
       j,
       temparray,
-      chunk = 50;
+      chunk = 20;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
-
     if (arrTotal.length == 0) {
       this.setState({
         hidden: false,
@@ -99,8 +148,11 @@ class Products extends Component {
         hidden: true,
       });
     }
-
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    console.log("total", total);
+    this.setState({
+      arrPagination: Math.ceil(total / 20),
+      data: arrTotal[indexPage],
+    });
   }
 
   onChange(key, val) {
@@ -119,20 +171,118 @@ class Products extends Component {
       imageShare: "",
       content: "",
       imageLogo: "",
+      techDescription: "",
+      idCategory: "",
+      idBranch: "",
+      nameCategoryChoose: "",
+      nameBranchChoose: "",
+      price: "",
+      priceSale: "",
+      priceSaleText: "",
+      priceText: "",
+      idIsSpecial: false,
+      link: "",
+      nameIsSpecialChoose: "Không",
+      preserve: "",
+      guide: "",
+      uses: "",
+      safety: "",
+      skinType: "",
+      element: "",
+      expire: "",
+      origin: "",
     });
   }
   openFormEdit(item) {
+    const { dataCategory, dataBranch } = this.state;
+    if (dataCategory && dataCategory.length > 0) {
+      dataCategory.forEach((element) => {
+        if (element._id === item.categoryId) {
+          this.setState({
+            nameCategoryChoose: element.title,
+          });
+        }
+      });
+    }
+    if (dataBranch && dataBranch.length > 0) {
+      dataBranch.forEach((element) => {
+        if (element._id === item.brandId) {
+          this.setState({
+            nameBranchChoose: element.title,
+          });
+        }
+      });
+    }
     this.setState({
       actionModal: "edit",
       modal: true,
+      idCategory: item.categoryId,
+      idBranch: item.brandId,
       idEdit: item._id,
       title: item.title,
+      techDescription: item.techDescription,
       slug: item.slug,
       description: item.description,
       imageShare: item.imageShare,
       content: item.content,
       imageLogo: item.avatar,
+      price: item.price,
+      priceSale: item.priceSale,
+      idIsSpecial: item.isSpecial,
+      priceSaleText: item.priceSaleText,
+      priceText: item.priceText,
+      link: item.link,
     });
+    if (item.techDescription?.preserve) {
+      this.setState({
+        preserve: item.techDescription.preserve,
+      });
+    }
+    if (item.techDescription?.guide) {
+      this.setState({
+        guide: item.techDescription.guide,
+      });
+    }
+    if (item.techDescription?.uses) {
+      this.setState({
+        uses: item.techDescription.uses,
+      });
+    }
+    if (item.techDescription?.skinType) {
+      this.setState({
+        skinType: item.techDescription.skinType,
+      });
+    }
+    if (item.techDescription?.safety) {
+      this.setState({
+        safety: item.techDescription.safety,
+      });
+    }
+    if (item.techDescription?.expire) {
+      this.setState({
+        expire: item.techDescription.expire,
+      });
+    }
+    if (item.techDescription?.element) {
+      this.setState({
+        element: item.techDescription.element,
+      });
+    }
+    if (item.techDescription?.origin) {
+      this.setState({
+        origin: item.techDescription.origin,
+      });
+    }
+
+    if (item.isSpecial) {
+      this.setState({
+        nameIsSpecialChoose: "Có",
+      });
+    } else {
+      this.setState({
+        nameIsSpecialChoose: "Không",
+      });
+    }
   }
   async update() {
     const {
@@ -143,7 +293,15 @@ class Products extends Component {
       content,
       avatar,
       imageLogo,
+      techDescription,
       idEdit,
+      idCategory,
+      idBranch,
+      price,
+      priceSale,
+      priceSaleText,
+      link,
+      priceText,
     } = this.state;
     let img = this.state.imageLogo;
     let img2 = this.state.imageShare;
@@ -157,7 +315,7 @@ class Products extends Component {
       img2 = `${Constants.BASE_URL}image_banner/${imgLink2}`;
     }
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.UPDATE_NEWS;
+    let baseUrlCallApi = Constants.UPDATE_PRODUCT;
 
     let url = baseUrlapi + baseUrlCallApi;
 
@@ -166,10 +324,19 @@ class Products extends Component {
         id: this.state.idEdit,
         title: title,
         slug: slug,
+        techDescription,
         description: description,
         imageShare: img2,
+        categoryId: idCategory,
         content: content,
+        link,
         avatar: img,
+        brandId: idBranch,
+        price: price,
+        priceSale: priceSale,
+        isSpecial: this.state.idIsSpecial,
+        priceSaleText: priceSaleText,
+        priceText: priceText,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -193,11 +360,27 @@ class Products extends Component {
       title,
       slug,
       description,
+      techDescription,
       imageShare,
       content,
       avatar,
       imageLogo,
       idEdit,
+      idCategory,
+      idBranch,
+      price,
+      priceSale,
+      preserve,
+      guide,
+      uses,
+      safety,
+      skinType,
+      link,
+      element,
+      expire,
+      origin,
+      priceSaleText,
+      priceText,
     } = this.state;
     let img = this.state.imageLogo;
     let img2 = this.state.imageShare;
@@ -211,16 +394,34 @@ class Products extends Component {
       img2 = `${Constants.BASE_URL}image_banner/${imgLink2}`;
     }
     var baseUrlapi = Constants.BASE_URL;
-    let baseUrlCallApi = Constants.ADD_NEWS;
+    let baseUrlCallApi = Constants.ADD_PRODUCT;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .post(url, {
         title: title,
         slug: slugify(title, { remove: /[0-9]/g }),
         description: description,
+        techDescription: {
+          preserve,
+          guide,
+          uses,
+          safety,
+          skinType,
+          element,
+          expire,
+          origin,
+        },
+        categoryId: idCategory,
         imageShare: img2,
         content: content,
+        link,
         avatar: img,
+        brandId: idBranch,
+        price: price,
+        priceSale: priceSale,
+        isSpecial: this.state.idIsSpecial,
+        priceSaleText: priceSaleText,
+        priceText: priceText,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -240,16 +441,26 @@ class Products extends Component {
       });
   }
   async delete(item) {
-    let baseUrlCallApi = Constants.DELETE_NEWS;
+    this.setState({
+      idDelete: item._id,
+      modalDelete: true,
+    });
+  }
+  async remove(item) {
+    const { idDelete } = this.state;
+    let baseUrlCallApi = Constants.DELETE_PRODUCT;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + baseUrlCallApi;
     await axios
       .delete(url, {
         data: {
-          id: item._id,
+          id: idDelete,
         },
       })
       .then((res) => {
+        this.setState({
+          modalDelete: false,
+        });
         Swal.fire({
           icon: "success",
           title: "Xóa thành công",
@@ -319,14 +530,34 @@ class Products extends Component {
         a.click();
       });
   }
+  renderHeaderTable = () => {
+    return (
+      <tr>
+        <th className="text-center">STT.</th>
+        <th className="text-center">Mã màu (Hex)</th>
+        <th className="text-center">Makeup ID</th>
+        <th className="text-center">Alpha</th>
+        <th className="text-center"></th>
+      </tr>
+    );
+  };
   render() {
-    const { data, arrPagination } = this.state;
-
+    const { data, arrPagination, titlePage } = this.state;
+    const isSpecial = [
+      {
+        value: false,
+        name: "Không",
+      },
+      {
+        value: true,
+        name: "Có",
+      },
+    ];
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
           <Modal
-            size="lg"
+            size="md"
             closeButton
             toggle={() => this.setState({ modal: false })}
             isOpen={this.state.modal}
@@ -336,97 +567,23 @@ class Products extends Component {
               {this.state.actionModal === "new" ? `Tạo mới` : `Cập nhật`}
             </ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="title"
-                label="Tiêu đề (*)"
-                value={this.state.title}
-                // error={errors.title}
-                onChange={(e) => this.setState({ title: e.target.value })}
-                // rows="5"
+            <TextFieldGroup
+                field="codeColor"
+                label="Mã màu (hex)"
+                value={this.state.codeColor}
+                onChange={(e) => this.setState({ codeColor: e.target.value })}
               />
-              <TextFieldGroup
-                field="description"
-                label="Mô tả (*)"
-                value={this.state.description}
-                // error={errors.title}
-                onChange={(e) => this.setState({ description: e.target.value })}
-                // rows="5"
+               <TextFieldGroup
+                field="makeupID"
+                label="Makeup ID"
+                value={this.state.makeupID}
+                onChange={(e) => this.setState({ makeupID: e.target.value })}
               />
-              <div className="mt-3"></div>
-              <TextFieldGroup
-                field="imageLogo"
-                label="Hình ảnh tỷ lệ 2:1 (*)"
-                type={"file"}
-                className="mt-5"
-                onChange={(e) => {
-                  this.onChangeImage(
-                    e,
-                    "imageLogo",
-                    "imageLogo_link",
-                    "imageLogo_show"
-                  );
-                }}
-                onClick={(e) => {
-                  e.target.value = null;
-                  this.setState({ imageLogo: "" });
-                }}
-              />
-              <div class="text-center">
-                <img
-                  alt=""
-                  style={{
-                    maxHeight: "100px",
-                    maxWidth: "150px",
-                    marginBottom: 10,
-                  }}
-                  height="auto"
-                  src={this.state.imageLogo}
-                />
-              </div>
-
-              <TextFieldGroup
-                field="imageShare"
-                label="Hình ảnh chia sẻ"
-                type={"file"}
-                className="mt-5"
-                onChange={(e) => {
-                  this.onChangeImage(
-                    e,
-                    "imageShare",
-                    "imageShare_link",
-                    "imageShare_show"
-                  );
-                }}
-                onClick={(e) => {
-                  e.target.value = null;
-                  this.setState({ imageShare: "" });
-                }}
-              />
-              <div class="text-center">
-                <img
-                  alt=""
-                  style={{
-                    maxHeight: "100px",
-                    maxWidth: "150px",
-                    marginBottom: 10,
-                  }}
-                  height="auto"
-                  src={this.state.imageShare}
-                />
-              </div>
-              <p>Nội dung (*)</p>
-              <CKEditor
-                editor={ClassicEditor}
-                data={this.state.content}
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  this.setState({ content: data });
-                }}
-                onBlur={(event, editor) => {}}
-                onFocus={(event, editor) => {}}
+               <TextFieldGroup
+                field="alpha"
+                label="Alpha"
+                value={this.state.alpha}
+                onChange={(e) => this.setState({ alpha: e.target.value })}
               />
             </ModalBody>
             <ModalFooter>
@@ -447,12 +604,48 @@ class Products extends Component {
               </CButton>
             </ModalFooter>
           </Modal>
+          <Modal
+            isOpen={this.state.modalDelete}
+            className={this.props.className}
+          >
+            <ModalHeader
+              onClick={(e) =>
+                this.setState({
+                  modalDelete: false,
+                  delete: null,
+                })
+              }
+            >{`Xoá`}</ModalHeader>
+            <ModalBody>
+              <label htmlFor="tag">{`Bạn có chắc chắn xóa ?`}</label>
+            </ModalBody>
+            <ModalFooter>
+              <CButton
+                color="primary"
+                onClick={(e) => this.remove(this.state.idDelete)}
+                disabled={this.state.isLoading}
+              >
+                Xoá
+              </CButton>{" "}
+              <CButton
+                color="secondary"
+                onClick={(e) =>
+                  this.setState({
+                    modalDelete: false,
+                    delete: null,
+                  })
+                }
+              >
+                Đóng
+              </CButton>
+            </ModalFooter>
+          </Modal>
           <Row>
             <Col>
               <Card>
                 <CardHeader>
                   <i className="fa fa-align-justify title_header">
-                    Danh sách tin tức
+                    {titlePage}
                   </i>
                   <CRow>
                     <CCol md={3} className="mt">
@@ -518,19 +711,7 @@ class Products extends Component {
                     className="mt-3 table table-hover table-outline mb-0 d-none d-sm-table table_dash"
                   >
                     <thead className="thead-light">
-                      <tr>
-                        <th className="text-center">STT.</th>
-                        <th className="text-center">Tiêu đề</th>
-                        <th className="text-center">Hình ảnh</th>
-
-                        <th className="text-center">Nội dung</th>
-                        <th className="text-center">Mô tả</th>
-
-                        <th className="text-center">Link</th>
-                        <th className="text-center">Hình ảnh chia sẻ</th>
-
-                        <th className="text-center"></th>
-                      </tr>
+                      {this.renderHeaderTable()}
                     </thead>
                     <tbody>
                       <td
@@ -546,71 +727,19 @@ class Products extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">
-                                  <div
-                                    style={{
-                                      overflowY: "hidden",
-                                      maxWidth: "300px",
-                                      maxHeight: "100px",
-                                    }}
-                                  >
-                                    {item.title}
+                                  <div className="flex-center">
+                                    <div
+                                      className="makeup__box-color"
+                                      style={{ backgroundColor: item.hex }}
+                                    ></div>
                                   </div>
-                                </td>
-                                <td className="text-center">
-                                  <img
-                                    style={{
-                                      maxHeight: "60px",
-                                      maxWidth: "300px",
-                                    }}
-                                    src={item.avatar}
-                                    alt=""
-                                  />
-                                </td>
-                                <td className="text-center">
-                                  <div
-                                    style={{
-                                      overflowY: "hidden",
-                                      maxWidth: "300px",
-                                      maxHeight: "100px",
-                                    }}
-                                  >
-                                    {item.content}
-                                  </div>
-                                </td>
-                                <td className="text-center">
-                                <div
-                                    style={{
-                                      overflowY: "hidden",
-                                      maxWidth: "300px",
-                                      maxHeight: "100px",
-                                    }}
-                                  >
-                               {item.description}
-                                  </div>
-                            
-                                </td>
+                                  {item.hex}
 
-                                <td className="text-center">
-                                <div
-                                    style={{
-                                      overflowY: "hidden",
-                                      maxWidth: "300px",
-                                      maxHeight: "100px",
-                                    }}
-                                  >
-                          {item.slug}
-                                  </div>
-                                 </td>
-                                <td className="text-center">
-                                  <img
-                                    style={{
-                                      maxHeight: "60px",
-                                      maxWidth: "300px",
-                                    }}
-                                    src={item.imageShare}
-                                    alt=""
-                                  />
                                 </td>
+                                <td className="text-center">
+                                  {item.makeup_id}
+                                </td>
+                                <td className="text-center">{item.alpha}</td>
                                 <td
                                   className="text-center"
                                   style={{ minWidth: "100px" }}
@@ -654,13 +783,17 @@ class Products extends Component {
                   </table>
                   <div style={{ float: "right" }}>
                     <Pagination
-                      count={arrPagination.length}
+                      count={arrPagination}
                       color="primary"
                       onChange={(e, v) => {
-                        this.setState({
-                          data: arrPagination[v - 1],
-                          indexPage: v - 1,
-                        });
+                        this.setState(
+                          {
+                            page: v,
+                          },
+                          () => {
+                            this.getData();
+                          }
+                        );
                       }}
                     />
                   </div>
@@ -775,4 +908,4 @@ const styles = {
   },
 };
 
-export default Products;
+export default CodeColor;
