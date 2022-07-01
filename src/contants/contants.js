@@ -1,6 +1,6 @@
 export default {
    "BASE_URL" : "https://soida-api.pensilia.com/",
-  // "BASE_URL" : "http://192.168.1.15:3012/",
+  // "BASE_URL" : "http://192.168.1.4:3038/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   // "PORTAL_SERVER":  "http://192.168.1.5:3014/",
 

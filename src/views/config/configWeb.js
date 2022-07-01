@@ -103,16 +103,8 @@ class Users extends Component {
           name: "Logos",
           icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />
         },
-        {
-          _id: "t4",
-          name: "Mã Chat",
-          icon: <AiFillWechat style={{ width: "24px ", height: "24px " }} />
-        },
-        {
-          _id: "t6",
-          name: "Cấu hình mạng xã hội",
-          icon: <FacebookIcon style={{ width: "24px ", height: "24px " }} />
-        },
+      
+       
         {
           _id: "t7",
           name: "Thông tin footer",
@@ -449,12 +441,14 @@ class Users extends Component {
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "api/config/getAll?key=webinfo";
+    console.log("call",url)
     await axios
       .get(url, {
         key: "webinfo",
       })
       .then((res) => {
-        console.log('data',res)
+        
+        console.log('data 123',res)
         if (res.data.data.length > 0) {
           let dataConfig = res.data.data[0];
 
@@ -512,7 +506,7 @@ class Users extends Component {
                   image2_show: this.state.homepage.image2,
               }
                 )}
-                console.log(this.state.homepage.image2,this.state.homepage.image3)
+         
             if(seoInfo){
               this.setState({
                 titleSeo: this.state.seoInfo.title,
@@ -571,7 +565,9 @@ class Users extends Component {
         }
     
 
-      });
+      }).catch((err) => {
+        console.log("errConfig",err)
+      })
   }
   async addDataConfig() {
     var baseUrlapi = Constants.BASE_URL;
@@ -719,6 +715,9 @@ class Users extends Component {
       
      
     if (change === "homepage") {
+      if(!coppyData.value.homepage){
+        coppyData.value.homepage = {};
+      }
       const form1 = new FormData();
 
       form1.append("image", image1_link);
@@ -778,7 +777,9 @@ class Users extends Component {
       
     
     if (change === "seoInfo") {
-
+      if(!coppyData.value.seoInfo){
+        coppyData.value.seoInfo = {};
+      }
       coppyData.value.seoInfo.title = titleSeo;
       coppyData.value.seoInfo.titleSEO = titleSeo2;
       coppyData.value.seoInfo.description = descSeo;
@@ -794,6 +795,7 @@ class Users extends Component {
     }
     
     if(change === "logos"){
+    
       let newImage1 = await this.postImage(this.state.logoHeader_link);
       let newImage2 = await this.postImage(this.state.logoFooter_link);
      
@@ -805,8 +807,6 @@ class Users extends Component {
       }
     }
     if(change === "chats"){
-  
-     
   
         coppyData.value.tawk = this.state.codeChat
      
@@ -1170,6 +1170,9 @@ class Users extends Component {
       content : contentSlide
     }
     let coppy = {...dataConfigWeb};
+    if(!coppy.value.slideShow){
+      coppy.value.slideShow = []
+    }
     coppy.value.slideShow.push(ob)
     this.setState({
       dataConfigWeb : coppy
@@ -1686,137 +1689,7 @@ class Users extends Component {
                   />
                 </div>  
           </div>
-          <div className="tabcontent"> 
-          <div class="text-center">
-                  <CButton
-                    onClick={() => this.BlurForm("chats")}
-                    style={styles.mgl5}
-                    outline
-                    color="success"
-                    size="md"
-                  >
-                    {/* <CIcon name="cilPencil" /> */}
-                    Lưu thay đổi
-                  </CButton>
-                </div>
-                <div className="text-center">
-                  <div className="mt-3">
-                    <p>Mã chat tawk:</p>
-                  </div>
-
-                  <textarea
-
-                    name="codeChat"
-                    value={this.state.codeChat}
-                    onChange={(e) => this.setState({ codeChat: e.target.value })}
-                    class="mt-3"
-                    cols="60"
-                    rows="8"
-                  ></textarea>
-                </div>
-                <div class="text-center">
-                  <div className="mt-3">
-                    <p>Mã chat message:</p>
-                  </div>
-
-                  <textarea
-
-                    name="codeMess"
-                    value={this.state.codeMess}
-                  onChange={(e) => this.setState({ codeMess: e.target.value })}
-                    class="mt-3"
-                    cols="60"
-                    rows="8"
-                  ></textarea>
-                </div>
-            
-
-          </div>
-          <div id="" class="tabcontent">
-          <div class="text-center">
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => this.BlurForm("config")}
-              >
-                Lưu thay đổi
-              </Button>
-            </div>
-            <div class="mt-3"></div>
-          {
-            this.state.configData.map((product,i)=>{
-              return (
-                <div class="configData_item">
-                  <div class="">
-                  <strong>{product.label}</strong>
-                  </div>
-                  <div class="">
-                  <FormGroup>
-                      <FormControlLabel onChange={e=>{
-                        let x = [...this.state.configData]
-                        x[i].value = !x[i].value
-                        this.setState({
-                          configData : x
-                      })
-                      }} checked={product.value} control={<Switch defaultChecked />} label="" />
-                  
-                  </FormGroup>
-                  <span>{product.value ? "Kích hoạt" : "Tắt"}</span>
-                  </div>
-                </div>
-              )
-            })
-          }
-          <div class="text-center"><p>Facebook</p></div>
-            <div class="col-md-12 mt-3">
-              <div>
-                <TextFieldGroup
-                  field=""
-                  label="Mã ứng dụng"
-                  value={this.state.keyAppFb}
-                  placeholder={"Mã app"}
-                  onChange={(e) => {
-                    this.setState({ keyAppFb: e.target.value });
-                  }}
-                />
-
-                <TextFieldGroup
-                  field=""
-                  label="Mật khẩu"
-                  value={this.state.PassFb}
-                  placeholder={"Mật khẩu"}
-                  onChange={(e) => {
-                    this.setState({ PassFb: e.target.value });
-                  }}
-                />
-              </div>
-            </div>
-            <div class="text-center"><p>Google</p></div>
-            <div class="col-md-12 mt-3">
-              <div>
-              <TextFieldGroup
-                  field=""
-                  label="Mã ứng dụng"
-                  value={this.state.keyAppGg}
-                  placeholder={"Mã app"}
-                  onChange={(e) => {
-                    this.setState({ keyAppGg: e.target.value });
-                  }}
-                />
-
-                <TextFieldGroup
-                  field=""
-                  label="Mật khẩu"
-                  value={this.state.PassGg}
-                  placeholder={"Mật khẩu"}
-                  onChange={(e) => {
-                    this.setState({ PassGg: e.target.value });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          
+        
           <div id="" class="tabcontent ">
             <Row>
               <Col>

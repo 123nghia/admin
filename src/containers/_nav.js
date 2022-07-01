@@ -15,12 +15,6 @@ import { AiFillSetting } from "@react-icons/all-files/ai/AiFillSetting";
 import { RiFileTransferLine } from "@react-icons/all-files/ri/RiFileTransferLine";
 import { CgWebsite } from "@react-icons/all-files/cg/CgWebsite";
 
-
-
-
-
-
-
 const css = {}
 const content = {
   profile: "Quản lý các thông tin cá nhân của bạn như số điện thoại, email, v.v",
@@ -226,91 +220,6 @@ const _navSpecialProduct = [
     }
   }
 ]
-const _navMakeUp = [
-  {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Quản lý trang điểm'],
-    role: ['0', '1', '2'],
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Nhãn hiệu sản phẩm trang điểm',
-    to: '/brand',
-    icon: <CIcon style={css} content={freeSet.cilBookmark} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.brand}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Danh mục trang điểm',
-    to: '/subtype_makeup',
-    icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.subType}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Màu trang điểm',
-    to: '/color',
-    icon: <CIcon style={css} content={freeSet.cilColorPalette} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.color}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Sản phẩm',
-    to: '/product',
-    icon: <CIcon style={css} content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
-    role: ['0', '1', '2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.product}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Danh mục tóc',
-  //   to: '/subtype_hair',
-  //   icon: <CIcon style={css} content={freeSet.cilMenu} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.subType}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-  // {
-  //   _tag: 'CSidebarNavItem',
-  //   name: 'Sản phẩm',
-  //   to: '/product_hair',
-  //   icon: <CIcon style={css} content={freeSet.cilTablet} customClasses="c-sidebar-nav-icon" />,
-  //   role: ['0', '1', '2'],
-  //   badge: {
-  //     color: 'info',
-  //     text: <CTooltip placement={"right"} content={content.product}>
-  //       <CIcon content={freeSet.cilBellExclamation} />
-  //     </CTooltip>,
-  //   }
-  // },
-]
 
 const _navOrther = [
   {
@@ -489,19 +398,7 @@ const _navOrther = [
   //     </CTooltip>,
   //   }
   // },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Quản lý nâng cấp',
-    to: '/update_package',
-    icon: <CIcon style={css} content={freeSet.cilExpandUp} customClasses="c-sidebar-nav-icon" />,
-    role: ['2'],
-    badge: {
-      color: 'info',
-      text: <CTooltip placement={"right"} content={content.update_package}>
-        <CIcon content={freeSet.cilBellExclamation} />
-      </CTooltip>,
-    }
-  },
+
 ]
 
 const _navContact = [
@@ -616,4 +513,4 @@ const _navLogOut = [
   },
 ]
 
-export default [_navSoida, _navMakeUp, _navOrther, _navContact, _navLogOut]
+export default [_navSoida, _navOrther, _navContact, _navLogOut]
