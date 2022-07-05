@@ -1,5 +1,5 @@
 export default {
-   "BASE_URL" : "http://api-shy.thulamua.com/",
+   "BASE_URL" : "https://api-shy.thulamua.com/",
   // "BASE_URL" : "http://192.168.1.11:3038/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   // "PORTAL_SERVER":  "http://192.168.1.5:3014/",
