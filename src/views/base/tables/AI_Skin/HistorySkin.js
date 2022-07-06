@@ -188,6 +188,7 @@ class HistorySkin extends Component {
                       <th className="text-center">STT.</th>
                       <th className="text-center">Tên</th>
                       <th className="text-center">Hình ảnh</th>
+                      <th className="text-center">Tọa độ</th>          
                       <th className="text-center">Kết quả</th>
                       <th className="text-center">Công ty</th>
                       <th className="text-center">Sale</th>
@@ -205,6 +206,14 @@ class HistorySkin extends Component {
                               <td className="text-center">{item.UserName}</td>
                               <td className="text-center">
                                 <img src={item.Result != undefined ? JSON.parse(item.Result).data.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
+                              </td>
+                              <td className="text-center">
+                                {
+                                  item?.location?.x && item?.location?.y ? <a target='_blank' href={`https://www.google.com/maps/place/${item?.location?.x},${item?.location?.y}`}>
+                                  <CButton outline color="primary">Xem trên map</CButton>
+                                  </a> : 'Không có tọa độ'
+                                }
+                                
                               </td>
                               <td className="text-center">
                                 <CButton outline color="primary" onClick={e => {

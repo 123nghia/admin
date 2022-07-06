@@ -1,6 +1,6 @@
 export default {
-  // "BASE_URL" : "https://api-soida.applamdep.com",
-  "BASE_URL" : "http://localhost:3002",
+  "BASE_URL" : "https://api-soida.applamdep.com",
+  // "BASE_URL" : "http://192.168.1.4:3002",
   // "BASE_URL_CURRENT" : "https://id.applamdep.com/",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/soida/xemchitietlichsu/",
   "BASE_URL_CURRENT" : "http://localhost:3003",
