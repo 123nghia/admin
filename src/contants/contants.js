@@ -1,12 +1,12 @@
 export default {
-   "BASE_URL" : "https://api-shy.thulamua.com/",
-  // "BASE_URL" : "http://192.168.1.11:3038/",
+  //  "BASE_URL" : "https://api-shy.thulamua.com/",
+   "BASE_URL" : "http://localhost:3038/",
   "PORTAL_SERVER":  "https://portal.applamdep.com/",
   // "PORTAL_SERVER":  "http://192.168.1.5:3014/",
 
   // "BASE_URL_CURRENT" : "https://soida-admin.pensilia.com/",
-  "BASE_URL_CURRENT" : "http://localhost:3013/",
-  "BASE_URL_HISTORY_SKIN" : "https://soida.pensilia.com/lich-su-soi-da-with-iframe/",
+  "BASE_URL_CURRENT" : "https://admin-soida.shynhbeautyspa.com/",
+  "BASE_URL_HISTORY_SKIN" : "https://soida.shynhbeautyspa.com/lich-su-soi-da-with-iframe/",
 
   "GET_CAMPAIGN" : "api/campaign/getAll",
   "ADD_CAMPAIGN" : "api/campaign/add",
