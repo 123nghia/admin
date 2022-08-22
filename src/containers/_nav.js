@@ -288,6 +288,21 @@ const _navOrther = [
       </CTooltip>,
     }
   },
+
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Danh sách khách hàng',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    to: '/danh-sach-nguoi-dung',
+    icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1','2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.role}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>,
+    }
+  },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách end user',

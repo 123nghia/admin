@@ -1,6 +1,6 @@
 export default {
   "BASE_URL" : "https://api-soida.applamdep.com",
-  // "BASE_URL" : "http://192.168.1.4:3002",
+  // "BASE_URL" : "http://localhost:3002",
   // "BASE_URL_CURRENT" : "https://id.applamdep.com/",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/soida/xemchitietlichsu/",
   "BASE_URL_CURRENT" : "http://localhost:3003",
@@ -242,6 +242,7 @@ export default {
   "DELETE_TYPE_SDK": "/api/delete-type-sdk",
 
   "LIST_END_USER": "/api/list-end-user",
+  "LIST_END_USER2": "/api/list-end-userv2",
   "LOGIN_END_USER": "/api/login-end-user",
   "ADD_END_USER": "/api/add-end-user",
   "UPDATE_END_USER": "/api/update-end-user",

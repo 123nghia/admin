@@ -44,6 +44,7 @@ const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/
 
 //User
 const EndUserPlugin = React.lazy(() => import('./views/base/tables/User/EndUser'));
+const EndUser2Plugin = React.lazy(() => import('./views/base/tables/User/EndUserv2'));
 // config skin AI
 const configSkinDisplay = React.lazy(() => import('./views/skin/configDisplay'));
 
@@ -108,8 +109,9 @@ const routes = [
 
   //User
   { path: '/end_user', name: 'End User', component: EndUserPlugin },
+  { path: '/danh-sach-nguoi-dung', name: 'End Userv2', component: EndUser2Plugin },
 
-
+  
   { path: '/banner', name: 'Banner User', component: Banner },
 
   { path: '/quan-ly-banner', name: 'BannerSlider', component: BrandSlider },
@@ -129,6 +131,7 @@ const routes = [
   { path: '/items/3', name: 'K4', component: TypeOne },
   { path: '/items/4', name: 'K5', component: TypeOne },
   { path: '/items/5', name: 'K6', component: TypeOne },
+  { path: '/history/:phoneNumber', name: 'historyview', component: HistorySkin },
 ];
 
 export default routes;

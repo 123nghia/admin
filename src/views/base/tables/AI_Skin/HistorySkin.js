@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import CIcon from '@coreui/icons-react'
+import CIcon from '@coreui/icons-react';
+
+
 import {
   Card,
   CardBody,
@@ -28,10 +30,16 @@ headers.append('Content-Type', 'application/json');
 class HistorySkin extends Component {
   constructor(props) {
     super(props);
+    const query = new URLSearchParams(this.props.location.search);
+    const phoneNumber = query.get('phoneNumber')
+// console.log(token)//123
+//    console.log(props.match.params.phoneNumber);
+
     this.state = {
       data: [],
       key: '',
       page: 1,
+      phoneNumber: phoneNumber,
       limit: 20,
       totalActive: 0,
       activePage: 1,
@@ -44,7 +52,8 @@ class HistorySkin extends Component {
       isLoading: false,
       type: localStorage.getItem('type'),
       toggleHistory: false,
-      idHistory: ""
+      idHistory: "",
+      company_id: JSON.parse(localStorage.getItem('user')).company_id
     };
     this.closeModal = this.closeModal.bind(this)
   }
@@ -66,14 +75,16 @@ class HistorySkin extends Component {
   }
 
   getData = async () => {
-    const { activePage, itemPerPage } = this.state;
+    const { activePage, itemPerPage ,phoneNumber} = this.state;
+
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN,
       data: {
         page: activePage,
-        limit: itemPerPage
+        limit: itemPerPage,
+        phoneNumber: phoneNumber
       },
       method: 'POST'
     });
@@ -96,7 +107,10 @@ class HistorySkin extends Component {
   };
 
   getData_ByCondition = async () => {
-    const { activePage, itemPerPage } = this.state;
+  
+    const { activePage, itemPerPage ,company_id,phoneNumber} = this.state;
+ 
+  
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
@@ -104,7 +118,10 @@ class HistorySkin extends Component {
       method: 'POST',
       data: {
         page: activePage,
-        limit: itemPerPage
+        limit: itemPerPage,
+        phoneNumber: phoneNumber,
+        company_id: company_id,
+      
       },
       headers: this.state.token
     });
@@ -187,6 +204,7 @@ class HistorySkin extends Component {
                     <tr>
                       <th className="text-center">STT.</th>
                       <th className="text-center">Tên</th>
+                      <th className="text-center">Số điện thoại</th>
                       <th className="text-center">Hình ảnh</th>
                       <th className="text-center">Tọa độ</th>          
                       <th className="text-center">Kết quả</th>
@@ -200,12 +218,28 @@ class HistorySkin extends Component {
                     {
                       data != undefined ?
                         data.map((item, i) => {
+
+                          let  resultItem  =JSON.parse (item.Result);
+                          if(resultItem.data)
+                          {
+                            resultItem=  resultItem.data;
+                          }
+                          let nameUser = item.UserName;
+                          if(item.Name) 
+                          {
+                            nameUser =  item.Name;
+                          }
                           return (
+
+                      
+                        
                             <tr key={i}>
                               <td className="text-center">{i + 1}</td>
-                              <td className="text-center">{item.UserName}</td>
+                              <td className="text-center">{nameUser}</td>
+                              <td className="text-center">{item.Phone}</td>
                               <td className="text-center">
-                                <img src={item.Result != undefined ? JSON.parse(item.Result).data.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
+                               
+                                <img src={item.Result != undefined ? resultItem.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
                               </td>
                               <td className="text-center">
                                 {
