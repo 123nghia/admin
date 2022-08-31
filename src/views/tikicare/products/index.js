@@ -60,6 +60,7 @@ class Products extends Component {
     type: localStorage.getItem("type"),
     user: localStorage.getItem("user"),
     isLoading: false,
+    page : 1
   };
   async componentDidMount() {
     await this.getData();
@@ -67,12 +68,21 @@ class Products extends Component {
     this.getDataBranch();
   }
   getData = async () => {
+    const {page} = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let urlCall = Constants.GET_PRODUCT;
     let url = baseUrlapi + urlCall;
-    axios.get(url, {}).then((res) => {
+    axios.get(url, {
+      params : {
+        page : page,
+      }
+    }).then((res) => {
       console.log(res);
       let val = res.data.data;
+      this.setState({
+      
+        total: res.data.total,
+      });
       this.pagination(val);
       this.setState({ dataApi: val });
 
@@ -81,7 +91,7 @@ class Products extends Component {
       this.setState({
         isLoading: false,
         totalActive: active,
-        total: res.data.total,
+      
       });
     });
   };
@@ -108,16 +118,16 @@ class Products extends Component {
     });
   };
   pagination(dataApi) {
+    const {indexPage, total} = this.state;
     var i,
       j,
       temparray,
-      chunk = 50;
+      chunk = 20;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
       arrTotal.push(temparray);
     }
-
     if (arrTotal.length == 0) {
       this.setState({
         hidden: false,
@@ -127,8 +137,9 @@ class Products extends Component {
         hidden: true,
       });
     }
-
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+    console.log("total",total)
+    this.setState({ arrPagination: Math.ceil(total / 20), data: arrTotal[indexPage] });
+    
   }
 
   onChange(key, val) {
@@ -154,7 +165,10 @@ class Products extends Component {
       nameBranchChoose: "",
       price: "",
       priceSale: "",
+      priceSaleText : "",
+      priceText : "",
       idIsSpecial: false,
+      link : "",
       nameIsSpecialChoose: "Không",
       preserve: "",
       guide: "",
@@ -202,6 +216,9 @@ class Products extends Component {
       price: item.price,
       priceSale: item.priceSale,
       idIsSpecial: item.isSpecial,
+      priceSaleText : item.priceSaleText,
+      priceText : item.priceText,
+      link : item.link,
     });
     if(item.techDescription?.preserve){
       this.setState({
@@ -269,6 +286,9 @@ class Products extends Component {
       idBranch,
       price,
       priceSale,
+      priceSaleText,
+      link,
+      priceText,
     } = this.state;
     let img = this.state.imageLogo;
     let img2 = this.state.imageShare;
@@ -296,11 +316,14 @@ class Products extends Component {
         imageShare: img2,
         categoryId: idCategory,
         content: content,
+        link,
         avatar: img,
         brandId: idBranch,
         price: price,
         priceSale: priceSale,
         isSpecial: this.state.idIsSpecial,
+        priceSaleText : priceSaleText,
+        priceText : priceText,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -339,9 +362,12 @@ class Products extends Component {
       uses,
       safety,
       skinType,
+      link,
       element,
       expire,
       origin,
+      priceSaleText,
+      priceText,
     } = this.state;
     let img = this.state.imageLogo;
     let img2 = this.state.imageShare;
@@ -375,11 +401,14 @@ class Products extends Component {
         categoryId: idCategory,
         imageShare: img2,
         content: content,
+        link,
         avatar: img,
         brandId: idBranch,
         price: price,
         priceSale: priceSale,
         isSpecial: this.state.idIsSpecial,
+        priceSaleText : priceSaleText,
+        priceText : priceText,
       })
       .then(async (res) => {
         if (res.data.is_success) {
@@ -534,17 +563,19 @@ class Products extends Component {
             <ModalBody>
               <Row>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                <label>Tiêu đề (*)</label>
+                  <CTextarea
                     field="title"
                     label="Tiêu đề (*)"
                     value={this.state.title}
                     // error={errors.title}
                     onChange={(e) => this.setState({ title: e.target.value })}
-                    // rows="5"
+                    rows="3"
                   />
                 </Col>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                  <label>Mô tả</label>
+                  <CTextarea
                     field="description"
                     label="Mô tả"
                     value={this.state.description}
@@ -552,45 +583,56 @@ class Products extends Component {
                     onChange={(e) =>
                       this.setState({ description: e.target.value })
                     }
-                    // rows="5"
+                    rows="3"
                   />
                 </Col>
               </Row>
               <Row>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                <label>Nội dung</label>
+                  <CTextarea
                     field="content"
                     label="Nội dung"
                     value={this.state.content}
                     // error={errors.title}
                     onChange={(e) => this.setState({ content: e.target.value })}
-                    // rows="5"
+                    rows="3"
                   />
-                  {/* <TextFieldGroup
-                field="slug"
-                label="Đường dẫn"
-                value={this.state.slug}
-                // error={errors.title}
-                onChange={(e) => this.setState({ slug: e.target.value })}
-                // rows="5"
-              /> */}
+               
                 </Col>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                <label>Mô tả kỹ thuật</label>
+                  <div className="">
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.setState({
+                          modalDesc: true,
+                        });
+                      }}
+                      size="default"
+                      icon={<MdOpenInNew />}
+                    >
+                      Mở Tab
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="6" md="6">
+                <TextFieldGroup
                     field="price"
-                    label="Giá (*)"
+                    label="Giá : Kiểu số (*)"
                     value={this.state.price}
                     // error={errors.title}
                     onChange={(e) => this.setState({ price: e.target.value })}
                     // rows="5"
                   />
                 </Col>
-              </Row>
-              <Row>
                 <Col xs="6" md="6">
-                  <TextFieldGroup
+                <TextFieldGroup
                     field="priceSale"
-                    label="Giá khuyến mại (*)"
+                    label="Giá khuyến mại : Kiểu số (*)"
                     value={this.state.priceSale}
                     // error={errors.title}
                     onChange={(e) =>
@@ -599,32 +641,29 @@ class Products extends Component {
                     // rows="5"
                   />
                 </Col>
+              </Row>
+              <Row>
                 <Col xs="6" md="6">
-                  <label>Chọn thương hiệu (*)</label>
-                  <Select
-                    className="select_seo"
-                    showSearch
-                    defaultValue={this.state.nameBranchChoose}
-                    placeholder="Thương hiệu"
-                    optionFilterProp="children"
-                    onChange={(value) =>
-                      this.setState({
-                        idBranch: value,
-                      })
+                <TextFieldGroup
+                    field="priceText"
+                    label="Giá : Kiểu chữ (*)"
+                    value={this.state.priceText}
+                    // error={errors.title}
+                    onChange={(e) => this.setState({ priceText: e.target.value })}
+                    // rows="5"
+                  />
+                </Col>
+                <Col xs="6" md="6">
+                <TextFieldGroup
+                    field="priceSaleText"
+                    label="Giá khuyến mại : Kiểu chữ (*)"
+                    value={this.state.priceSaleText}
+                    // error={errors.title}
+                    onChange={(e) =>
+                      this.setState({ priceSaleText: e.target.value })
                     }
-                    onSearch={this.onSearchSelect}
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    {this.state.dataBranch
-                      ? this.state.dataBranch.map((item, i) => {
-                          return <Option value={item._id}>{item.title}</Option>;
-                        })
-                      : null}
-                  </Select>
+                    // rows="5"
+                  />
                 </Col>
               </Row>
               <Row>
@@ -688,33 +727,44 @@ class Products extends Component {
               <div className="mt-3"></div>
               <Row>
                 <Col xs="6" md="6">
-                  <label>Mô tả kỹ thuật</label>
-                  <div className="">
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        this.setState({
-                          modalDesc: true,
-                        });
-                      }}
-                      size="default"
-                      icon={<MdOpenInNew />}
-                    >
-                      Mở Tab
-                    </Button>
-                  </div>
-                  {/* <TextFieldGroup
-                    field="techDescription"
-                    label="Mô tả kỹ thuật"
-                    value={this.state.techDescription}
+                <label>Chọn thương hiệu (*)</label>
+                  <Select
+                    className="select_seo"
+                    showSearch
+                    defaultValue={this.state.nameBranchChoose}
+                    placeholder="Thương hiệu"
+                    optionFilterProp="children"
+                    onChange={(value) =>
+                      this.setState({
+                        idBranch: value,
+                      })
+                    }
+                    onSearch={this.onSearchSelect}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    {this.state.dataBranch
+                      ? this.state.dataBranch.map((item, i) => {
+                          return <Option value={item._id}>{item.title}</Option>;
+                        })
+                      : null}
+                  </Select>
+                </Col>
+                <Col xs="6" md="6">
+                <TextFieldGroup
+                    field="link"
+                    label="Đường dẫn"
+                    value={this.state.link}
                     // error={errors.title}
                     onChange={(e) =>
-                      this.setState({ techDescription: e.target.value })
+                      this.setState({ link: e.target.value })
                     }
                     // rows="5"
-                  /> */}
+                  />
                 </Col>
-                <Col xs="6" md="6"></Col>
               </Row>
               <div className="mt-3"></div>
               <Row>
@@ -931,7 +981,7 @@ class Products extends Component {
                   />
                 </Col>
                 <Col xs="6" md="6">
-                  <label>Hướng dẫn da bảo quản</label>
+                  <label>Hướng dẫn bảo quản</label>
                   <CTextarea
                     name="preserve"
                     rows="4"
@@ -1032,12 +1082,13 @@ class Products extends Component {
                         <th className="text-center">Tiêu đề</th>
                         <th className="text-center">Hình ảnh</th>
 
-                        <th className="text-center">Nội dung</th>
+                
                         <th className="text-center">Mô tả</th>
 
-                        <th className="text-center">Link</th>
+                        <th className="text-center">Giá bán</th>
+                        <th className="text-center">Đường dẫn</th>
 
-                        <th className="text-center">Hình ảnh chia sẻ</th>
+                        <th className="text-center">Sản phẩm nổi bật</th>
 
                         <th className="text-center"></th>
                       </tr>
@@ -1055,7 +1106,15 @@ class Products extends Component {
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
-                                <td className="text-center">{item.title}</td>
+                                <td className="text-center">
+                                  <div style={{
+                                      maxHeight: "80px",
+                                      maxWidth: "300px",
+                                      overflow: "hidden",
+                                    }}>
+                                     {item.title}
+                                  </div>
+                                  </td>
                                 <td className="text-center">
                                   <img
                                     style={{
@@ -1066,21 +1125,28 @@ class Products extends Component {
                                     alt=""
                                   />
                                 </td>
-                                <td className="text-center">{item.content}</td>
                                 <td className="text-center">
-                                  {item.description}
-                                </td>
-
-                                <td className="text-center">{item.slug}</td>
-                                <td className="text-center">
-                                  <img
-                                    style={{
-                                      maxHeight: "60px",
+                                <div style={{
+                                      maxHeight: "80px",
                                       maxWidth: "300px",
-                                    }}
-                                    src={item.imageShare}
-                                    alt=""
-                                  />
+                                      overflow: "hidden",
+                                    }}>
+                                   {item.description}
+                                  </div></td>
+                       
+
+                                <td className="text-center">{item.priceSaleText}</td>
+                                <td className="text-center">
+                                <div style={{
+                                      maxHeight: "80px",
+                                      maxWidth: "300px",
+                                      overflow: "hidden",
+                                    }}>
+                                   {item.link}
+                                  </div></td>
+                                
+                                <td className="text-center">
+                                  {item.isSpecial ? 'Có' : 'Không'}
                                 </td>
                                 <td
                                   className="text-center"
@@ -1125,12 +1191,13 @@ class Products extends Component {
                   </table>
                   <div style={{ float: "right" }}>
                     <Pagination
-                      count={arrPagination.length}
+                      count={arrPagination}
                       color="primary"
                       onChange={(e, v) => {
                         this.setState({
-                          data: arrPagination[v - 1],
-                          indexPage: v - 1,
+                          page: v,
+                        }, ()=>{
+                          this.getData();
                         });
                       }}
                     />

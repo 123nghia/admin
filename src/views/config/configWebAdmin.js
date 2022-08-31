@@ -28,6 +28,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import Sologan from "./configWebAdmin/Slogon";
 import InfoCompany from "./configWebAdmin/InfoCompany";
 import BannerBrand from "./configWebAdmin/BannerBrand";
+import Info from './configWebAdmin/Info';
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 
@@ -81,6 +82,13 @@ class ConfigWebAdmin extends Component {
         {
           _id: "4",
           name: "Thông tin footer",
+          icon: (
+            <AiOutlineInfoCircle style={{ width: "24px ", height: "24px " }} />
+          ),
+        },
+        {
+          _id: "9",
+          name: "Thông tin bên lề",
           icon: (
             <AiOutlineInfoCircle style={{ width: "24px ", height: "24px " }} />
           ),
@@ -157,6 +165,7 @@ class ConfigWebAdmin extends Component {
     reader.onload = (e) => {
       this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
     };
+    
   };
   async componentDidMount() {
     this.getDataConfigWeb();
@@ -215,6 +224,9 @@ class ConfigWebAdmin extends Component {
               infoCompany: valueConfig.value.infoCompany,
               dataFooter: valueConfig.value.dataFooter,
               bannerBrand : valueConfig.value.bannerBrand,
+              contentCategoryBanner : valueConfig.value.contentCategoryBanner,
+              info: valueConfig.value.info,
+
             },
             () => {
               const {
@@ -223,15 +235,29 @@ class ConfigWebAdmin extends Component {
                 logos,
                 infoCompany,
                 chats,
+                info,
                 bannerCampaign,
                 configData,
                 mxh,
                 guideVoucher,
                 banner,
                 sologan,
+                contentCategoryBanner,
                 dataFooter,
                 bannerBrand
-              } = this.state;
+              } = this.state;              
+              if (contentCategoryBanner) {
+                this.setState({
+                  titleSectionBannerBrand: contentCategoryBanner.title,
+                  contentSectionBannerBrand: contentCategoryBanner.content,
+                });
+              }
+              if (info) {
+                this.setState({
+                  hotlineCompany: info.hotline,
+                  emailCompany: info.email,
+                });
+              }
               if (infoCompany) {
                 this.setState({
                   infoCompany: infoCompany,
@@ -257,7 +283,7 @@ class ConfigWebAdmin extends Component {
                   sologan_button: this.state.sologan.button,
                 });
               }
-  
+              
               if (bannerCampaign) {
                 this.setState({
                   bannerCampaign: this.state.bannerCampaign,
@@ -502,6 +528,14 @@ class ConfigWebAdmin extends Component {
     if (change === "guideVoucher") {
       coppyData.value.guideVoucher = this.state.guideVoucher;
     }
+    if (change === "info") {
+      if(!coppyData.value.info){
+        coppyData.value.info = {};
+      }
+      coppyData.value.info.hotline = this.state.hotlineCompany;
+      coppyData.value.info.email = this.state.emailCompany;
+
+    }
     if (change === "bannerCampaign") {
       coppyData.value.bannerCampaign = this.state.bannerCampaign;
     }
@@ -593,6 +627,19 @@ class ConfigWebAdmin extends Component {
         dataConfigWeb: coppyData,
       });
     }
+    if (change === "contentCategoryBanner") {
+      const {
+        titleSectionBannerBrand,
+        contentSectionBannerBrand,
+      } = this.state;
+      if(!coppyData.value.contentCategoryBanner){
+        coppyData.value.contentCategoryBanner = {};
+      };
+     console.log(titleSectionBannerBrand);
+      coppyData.value.contentCategoryBanner.title = titleSectionBannerBrand;
+      coppyData.value.contentCategoryBanner.content = contentSectionBannerBrand;
+    }
+    
     if (change === "logos") {
       if (!coppyData.value.logos) {
         coppyData.value.logos = {};
@@ -993,6 +1040,12 @@ class ConfigWebAdmin extends Component {
     );
   };
   openFormAddCategories = (value) => {
+    const {bannerCategories} = this.state
+    console.log(bannerCategories.length)
+    if(bannerCategories && bannerCategories.length >= 3){
+      alert("Tối đa là 3 mục");
+      return;
+    }
     this.setState({
       positionBannerActive: value,
       actionBannerCategories: "new",
@@ -1342,8 +1395,8 @@ class ConfigWebAdmin extends Component {
       content: contentBannerBrand,
       href : hrefBannerBrand
     };
+    
     console.log(imageBannerBrand);
-
     let coppy = { ...dataConfigWeb };
     coppy.value.bannerBrand[indexBannerBrandEditor] = ob;
     await this.setState(
@@ -1734,6 +1787,7 @@ class ConfigWebAdmin extends Component {
                   deleteBannerBrand={this.deleteBannerBrand}
                   setStateByName={this.setStateByName}
                   bannerBrand={this.state.bannerBrand}
+
                 />
               </div>
               <div id="tabcontent6" className="tabcontent">
@@ -1761,6 +1815,16 @@ class ConfigWebAdmin extends Component {
                   infoCompany={this.state.infoCompany}
                 />
               </div>
+              <div id="tabcontent9" className="tabcontent">
+                <Info
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  onChangeImage={this.onChangeImage}
+                  emailCompany={this.state.emailCompany}
+                  hotlineCompany={this.state.hotlineCompany}
+                />
+              </div>
+              
 
               <div id="tabcontent3" className="tabcontent ">
                 <Logos
@@ -1790,6 +1854,8 @@ class ConfigWebAdmin extends Component {
                   deleteCategories={this.deleteCategories}
                   saveAddCategories={this.saveAddCategories}
                   saveEditCategories={this.saveEditCategories}
+                  titleSectionBannerBrand={this.state.titleSectionBannerBrand}
+                  contentSectionBannerBrand={this.state.contentSectionBannerBrand}
                 />
               </div>
               <div id="tabcontent5" className="tabcontent ">

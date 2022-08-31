@@ -578,10 +578,29 @@ class Products extends Component {
                                   </div>
                                 </td>
                                 <td className="text-center">
-                                  {item.description}
+                                <div
+                                    style={{
+                                      overflowY: "hidden",
+                                      maxWidth: "300px",
+                                      maxHeight: "100px",
+                                    }}
+                                  >
+                               {item.description}
+                                  </div>
+                            
                                 </td>
 
-                                <td className="text-center">{item.slug}</td>
+                                <td className="text-center">
+                                <div
+                                    style={{
+                                      overflowY: "hidden",
+                                      maxWidth: "300px",
+                                      maxHeight: "100px",
+                                    }}
+                                  >
+                          {item.slug}
+                                  </div>
+                                 </td>
                                 <td className="text-center">
                                   <img
                                     style={{
