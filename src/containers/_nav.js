@@ -580,4 +580,4 @@ const _navLogOut = [
   },
 ]
 
-export default [_navSoida, _navMakeUp, _navOrther, _navContact, _navLogOut,_navSpecialProduct]
+export default [_navSoida, _navOrther, _navContact, _navLogOut,_navSpecialProduct]

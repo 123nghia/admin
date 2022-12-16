@@ -106,18 +106,8 @@ const TheSidebar = () => {
         />
       </CSidebarBrand>
       <CSidebarNav>
-        {/* <div>
-          <CCreateElement
-            items={navigations[0]}
-            components={{
-              CSidebarNavDivider,
-              CSidebarNavDropdown,
-              CSidebarNavItem,
-              CSidebarNavTitle
-            }}
-          />
-        </div> */}
-        <div style={{ backgroundColor: '#111111' }}>
+        
+        <div style={{ backgroundColor: '#fffff' }}>
           <CCreateElement
             items={navigations[0]}
             components={{
@@ -128,7 +118,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#222222' }}>
+        <div style={{ backgroundColor: '#fffff' }}>
           <CCreateElement
             items={navigations[1]}
             components={{
@@ -139,7 +129,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#fffff' }}>
           <CCreateElement
             items={navigations[2]}
             components={{
@@ -150,7 +140,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#fffff' }}>
           <CCreateElement
             items={navigations[3]}
             components={{
@@ -161,7 +151,7 @@ const TheSidebar = () => {
             }}
           />
         </div>
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#fffff' }}>
           <CCreateElement
             items={navigations[4]}
             components={{
@@ -173,7 +163,7 @@ const TheSidebar = () => {
           />
         </div>
 
-        <div style={{ backgroundColor: '#333333' }}>
+        <div style={{ backgroundColor: '#fffff' }}>
           <CCreateElement
             items={navigations[5]}
             components={{

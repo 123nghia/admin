@@ -44,6 +44,7 @@ class PluginManager extends Component {
     this.state = {
       data: [],
       key: '',
+      isseleted : '0',
       keyStatus: '',
       activePage: 1,
       page: 1,
@@ -242,7 +243,7 @@ class PluginManager extends Component {
   }
 
   async updateCompany() {
-    const { Name, Value, Unit, Status, arrFeature_Save, arrFeature_Update } = this.state
+    const { Name, Value, Unit, Status, arrFeature_Save, arrFeature_Update, isseleted } = this.state
     console.log(arrFeature_Update)
     setTimeout(
       async function () {
@@ -259,6 +260,7 @@ class PluginManager extends Component {
           Unit: Unit,
           Array_Feature: arrFeature_Save,
           Status: Status,
+          isseleted: isseleted,
           id: this.state.id
         }
 
@@ -546,6 +548,7 @@ class PluginManager extends Component {
                         <th className="text-center">Đơn vị tính</th>
                         <th className="text-center">Tính năng</th>
                         <th className="text-center">Trạng thái</th>
+                        <th className="text-center">Mặc định chọn</th>
                         <th className="text-center">#</th>
 
                       </tr>
@@ -561,6 +564,7 @@ class PluginManager extends Component {
                                 <td className="text-center">{item.Name} </td>
                                 <td className="text-center">{item.Value}</td>
                                 <td className="text-center">{item.Unit == '0' ? 'Ngày' : item.Unit == '1' ? "Tháng" : "Năm"}</td>
+                               
                                 <td className="text-center">
                                   {item.Array_Feature.map((item, i) => {
                                     if (i < 2) {
@@ -578,6 +582,8 @@ class PluginManager extends Component {
                                     {this.getBadge_string(item.Status)}
                                   </CBadge>
                                 </td>
+
+                                <td className="text-center">{item.isseleted == '1' ? 'Mặc định' : ""}</td> 
                                 <td className="text-center">
                                   <CButton outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -670,6 +676,8 @@ class PluginManager extends Component {
                     })
                   }
                 </CSelect>
+
+                
                 {
                   action == 'new' ? "" : <div>
                     <label style={styles.flexLabel} htmlFor="tag">Trạng thái    </label>
