@@ -481,10 +481,11 @@ const _navContact = [
           <CIcon content={freeSet.cilBellExclamation} />
         </CTooltip>,
       }
-    }, {
+    },
+     {
       _tag: 'CSidebarNavItem',
       name: 'Danh sách khách hàng',
-      to: '/customer_manager',
+      to: '/danh-sach-khach-hang',
       role: ['0', '1'],
       badge: {
         color: 'info',
@@ -540,7 +541,7 @@ const _navContact = [
         text: <CTooltip placement={"right"} content={content.package_order}>
           <CIcon content={freeSet.cilBellExclamation} />
         </CTooltip>,
-      }
+      } 
     }, {
       _tag: 'CSidebarNavItem',
       name: 'Tạo đơn hàng',

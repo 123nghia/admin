@@ -68,7 +68,9 @@ class PluginCustomerManager extends Component {
       current_province: '',
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
-      hidden: false
+      hidden: false,
+      countPage:  1,
+      limitPage: 10
     };
   }
   async componentDidMount() {
@@ -92,7 +94,9 @@ class PluginCustomerManager extends Component {
   }
 
   pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
+
+   
+    var i, j, temparray, chunk = 50;
     var arrTotal = [];
     for (i = 0, j = dataApi.length; i < j; i += chunk) {
       temparray = dataApi.slice(i, i + chunk);
@@ -109,19 +113,33 @@ class PluginCustomerManager extends Component {
       })
     }
 
-    this.setState({ arrPagination: arrTotal, data: arrTotal[this.state.indexPage] });
+    this.setState({ arrPagination: arrTotal, 
+      
+      
+      data: arrTotal[this.state.indexPage] });
   }
 
   getData = async () => {
     this.setState({ isLoading: true });
+    const { indexPage, key, keyStatus } = this.state;
+    const article = { title: 'Axios POST Request Example' };
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.PLUGIN_LIST_COMPANY,
+      data: {
+        indexPage: indexPage+1, // This is the body part
+        limit: 10
+      },
       method: 'POST',
     });
-    let val = res.data.data;
-    console.log(val)
+    let val = res.data.data.dataCompany;
+    let totalPage = res.data.data.total;
+    let countPage = totalPage/10;
+    
+
+    this.setState({ countPage: countPage});
     this.pagination(val);
+
     this.setState({ dataApi: val, isLoading: false });
   }
 
@@ -423,8 +441,11 @@ class PluginCustomerManager extends Component {
 
   render() {
     const { data, key, action, arrPagination, type, current_province, UserName,
-      arrTotalPackage, company_name, current_package, phone_number, province } = this.state;
+      arrTotalPackage, company_name, current_package, phone_number, province,
+      countPage
+    } = this.state;
 
+      let pageNumber = countPage;
     if (!this.state.isLoading) {
       return (
         <div className="animated fadeIn">
@@ -459,6 +480,10 @@ class PluginCustomerManager extends Component {
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên Công Ty</th>
                         <th className="text-center">Email - SĐT</th>
+
+                        <th className="text-center">Thông tin gói</th>
+                        <th className="text-center">Ngày kích hoạt</th>
+                        <th className="text-center">Ngày hết hạn</th>
                         {/* <th className="text-center">Địa chỉ</th> */}
                         <th className="text-center">Người tạo</th>
                         <th className="text-center">Ngày tạo</th>
@@ -470,8 +495,42 @@ class PluginCustomerManager extends Component {
                     <tbody>
                       <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
                       {
+                      
+                 
                         data != undefined ?
                           data.map((item, i) => {
+                           
+                           let packageNamme = "";
+
+                            let  dataOrderDetail = item.pluginOrder;
+                            let endateText ="";
+                            let activeDate = "";
+
+                            if(item.PluginOrder.length >0 )
+                            {
+                              dataOrderDetail = item.PluginOrder[0];
+                              activeDate = new Date(dataOrderDetail.Active_Date).toLocaleDateString();
+                              endateText = new Date(dataOrderDetail.End_Date).toLocaleDateString();
+                              if(dataOrderDetail.Package_Id == "63958719afe196f92b9c79c1")
+                              {
+                                packageNamme ="Gói 3 tháng";
+                              }
+                              if(dataOrderDetail.Package_Id == "6395873bafe196f92b9c79ca")
+                              {
+                                packageNamme ="Gói 12 tháng";
+                              }
+                              if(dataOrderDetail.Package_Id == "610a3cf1c8412a193924bb48")
+                              {
+                                packageNamme ="Gói Dùng Thử 2 Tháng";
+                              }
+
+                            }
+                            else 
+                            {
+
+                            }
+                           
+                            
                             return (
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
@@ -481,6 +540,15 @@ class PluginCustomerManager extends Component {
                                   <div>------------</div>
                                   <div>{item.Phone}</div>
                                 </td>
+                                <td className="text-center">{packageNamme}</td>
+                                <td className="text-center">
+                                  {activeDate}
+                                
+                                  </td>
+                                <td className="text-center">
+                                  {endateText }
+                                
+                                  </td>
                                 {/* <td className="text-center">{item.Address}</td> */}
                                 <td className="text-center">{item.Create_By == null ? "ADMIN" : item.Create_By.Name}</td>
                                 <td className="text-center">
@@ -516,11 +584,14 @@ class PluginCustomerManager extends Component {
                     </tbody>
                   </table>
 
-                </CardBody>
+                </CardBody> 
               </Card>
               <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
-                  this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                
+                <Pagination count={pageNumber} color="primary" onChange={(e, v) => {
+                  // this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
+                  this.setState({ indexPage: v-1});
+                  this.getData();
                 }} />
               </div>
             </Col>
@@ -602,8 +673,7 @@ class PluginCustomerManager extends Component {
                             <td className="text-center">
                               <CButton outline color="info" size="sm"
                                 onClick={async (e) => {
-                                  console.log(item.Company_Id)
-                                  console.log(item.Package_Id)
+                                 
                                   this.setState({
                                     arrDetailPackage: item.Array_Feature, current_package: item.Name
                                   })

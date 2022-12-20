@@ -87,7 +87,7 @@ const routes = [
   { path: '/spending_order', name: 'SPENDING', component: SPENDING },
   { path: '/role_manager', name: 'Role Manager', component: RoleManager },
   { path: '/plugin_manager', name: 'Plugin Manager', component: PluginManager },
-  { path: '/customer_manager', name: 'Customer Manager', component: PluginCustomer },
+  { path: '/danh-sach-khach-hang', name: 'Customer Manager', component: PluginCustomer },
   { path: '/plugin_create_order', name: 'Create Order', component: PluginCreateOrder },
   { path: '/feature', name: 'Feature', component: FeatureTable },
   { path: '/list_order', name: 'Order Plugin', component: PluginOrderTable },

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Swal from 'sweetalert2';
 
 import {
   Card,
@@ -206,20 +207,24 @@ class User extends Component {
 
   async addUsers() {
     const { Email, Name, Phone, Address, UserName, Password, userData } = this.state
-
-    if (Email == null || Email == ''
-      || Name == null || Name == ''
+    if (
+         Name == null || Name == ''
       || Phone == null || Phone == ''
       || Address == null || Address == ''
       || UserName == null || UserName == ''
       || Password == null || Password == '') {
-      alert("Vui lòng nhập đầy đủ trường !!!");
+        Swal.fire({
+          icon: 'error',
+          title: 'Thiếu thông tin',
+          text: 'Vui lòng điền đầy đủ các trường'
+        })
+        
       return
     }
 
     const body = {
       Name: Name,
-      Email: Email,
+      Email: "",
       Phone: Phone,
       Address: Address,
       UserName: UserName,
@@ -228,7 +233,7 @@ class User extends Component {
       isSale: true
     }
 
-    this.setState({ isLoading: true });
+    // this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.PLUGIN_ADD_SALE,
@@ -237,11 +242,27 @@ class User extends Component {
     });
 
     if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalCom: !this.state.modalCom })
+      Swal.fire({
+        position: 'top-center',
+        icon: 'success',
+        title: 'Thêm mới thành công, sẽ đóng hộp thoại trong giây lát',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      .then((result) => {
+        this.getData();
+        this.setState({ modalCom: !this.state.modalCom })
+      })
+     
     } else {
-      alert(res.data.message);
-      this.setState({ isLoading: false });
+     
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Có lỗi khi khởi tạo',
+        text: res.data.message
+      })
+      // this.setState({ isLoading: false });
     }
   }
 
@@ -251,7 +272,7 @@ class User extends Component {
       modalCom: !this.state.modalCom,
       action: "update",
       Name: item.Name,
-      Email: item.Email,
+      // Email: item.Email,
       Phone: item.Phone,
       Address: item.Address,
       UserName: item.UserName,
@@ -264,17 +285,17 @@ class User extends Component {
   async updateUsers() {
     const { Email, Name, Phone, Address, Status, UserName, Password } = this.state
 
-    if (Email == null || Email == ''
-      || Name == null || Name == ''
-      || Phone == null || Phone == ''
-      || Address == null || Address == '') {
-      alert("Vui lòng nhập đầy đủ trường !!!");
-      return
-    }
+    // if (Email == null || Email == ''
+    //   || Name == null || Name == ''
+    //   || Phone == null || Phone == ''
+    //   || Address == null || Address == '') {
+    //   alert("Vui lòng nhập đầy đủ trường !!!");
+    //   return
+    // }
 
     const body = {
       Name: Name,
-      Email: Email,
+    
       Phone: Phone,
       Address: Address,
       UserName: UserName,
@@ -319,8 +340,17 @@ class User extends Component {
     });
 
     if (res.data.is_success == true) {
-      this.getData();
-      this.setState({ modalDelete: !this.state.modalDelete, delete: null })
+       Swal.fire({
+        position: 'top-center',
+        icon: 'success',
+        title: 'Thao tác thành công',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      .then((result) => {
+        this.getData();
+        this.setState({ modalDelete: !this.state.modalDelete, delete: null })
+      })
     } else {
       alert(res.data.message);
       this.setState({ isLoading: false });
@@ -431,7 +461,7 @@ class User extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên Sale</th>
-                        <th className="text-center">Email</th>
+                        {/* <th className="text-center">Email</th> */}
                         <th className="text-center">Số điện thoại</th>
                         <th className="text-center">Địa chỉ</th>
                         <th className="text-center">Trạng thái</th>
@@ -448,7 +478,7 @@ class User extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.Name}</td>
-                                <td className="text-center">{item.Email}</td>
+                                {/* <td className="text-center">{item.Email}</td> */}
                                 <td className="text-center">{item.Phone}</td>
                                 <td className="text-center">{item.Address}</td>
                                 <td className="text-center">
@@ -497,16 +527,7 @@ class User extends Component {
           <Modal isOpen={this.state.modalCom} className={this.props.className}>
             <ModalHeader>{this.state.action == 'new' ? `Tạo mới` : `Cập nhật`}</ModalHeader>
             <ModalBody>
-              <TextFieldGroup
-                field="Email"
-                label="Email"
-                value={this.state.Email}
-                type={"email"}
-                placeholder={"Emal"}
-                // error={errors.title}
-                onChange={e => this.onChange("Email", e.target.value)}
-              // rows="5"
-              />
+            
               <TextFieldGroup
                 field="Name"
                 label="Tên Sale"
@@ -572,8 +593,8 @@ class User extends Component {
             </ModalBody>
 
             <ModalFooter>
-              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addUsers() : this.updateUsers() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
-              <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
+                <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.addUsers() : this.updateUsers() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+                <CButton color="secondary" onClick={e => this.toggleModal("new")}>Đóng</CButton>
             </ModalFooter>
           </Modal>
 
