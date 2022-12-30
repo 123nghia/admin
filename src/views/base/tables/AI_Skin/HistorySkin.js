@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import CIcon from '@coreui/icons-react';
 
+import {
+
+  CLabel, CSelect, CRow, CCol
+} from "@coreui/react";
 
 import {
   Card,
@@ -8,8 +12,9 @@ import {
   CardHeader,
   Col,
   Row,
+  Input
 } from 'reactstrap';
-
+import { DatePicker, Space, Spin } from "antd";
 import {
   CButton
 } from '@coreui/react'
@@ -27,13 +32,13 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
+const dateFormat = "DD/MM/YYYY";
 class HistorySkin extends Component {
+ 
   constructor(props) {
     super(props);
     const query = new URLSearchParams(this.props.location.search);
     const phoneNumber = query.get('phoneNumber')
-// console.log(token)//123
-//    console.log(props.match.params.phoneNumber);
 
     this.state = {
       data: [],
@@ -198,6 +203,42 @@ class HistorySkin extends Component {
               <CardHeader>
                 <i className="fa fa-align-justify">Lịch sử soi da</i>
               </CardHeader>
+
+              <CRow>
+                  <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Tên khách hàng</p>
+                      <Input
+                        style={styles1.searchInput}
+                        onChange={(e) => {
+                          this.setState({ nameFilter: e.target.value });
+                        }}
+                        name="nameFilter"
+                        value={this.state.nameFilter}
+                        placeholder="Tên"
+                      />
+                    </div>
+                  </CCol>
+
+                  <CCol md={3} className="mt">
+                    <div className="">
+                      <p className="title_filter">Số điện thoại</p>
+                      <Input
+                        style={styles1.searchInput}
+                        onChange={(e) => {
+                          this.setState({ numberFiler: e.target.value });
+                        }}
+                        type="text"
+                        name="numberFiler"
+                        value={this.state.numberFiler}
+                        placeholder="Số điện thoại"
+                      />
+                    </div>
+                  </CCol>
+                
+                 
+                 
+              </CRow>
               <CardBody>
                 <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-light">
@@ -299,3 +340,90 @@ const override = css`
 `;
 
 export default HistorySkin;
+const styles1 = {
+  dateForm : {
+    width: "200px"
+  },
+  pagination: {
+    marginRight: "5px",
+  },
+  flexLabel: {
+    width: 100,
+  },
+  flexOption: {
+    width: 300,
+  },
+  a: {
+    textDecoration: "none",
+  },
+  floatRight: {
+    float: "right",
+    marginTop: "3px",
+  },
+  spinner: {
+    width: "30px",
+  },
+  center: {
+    textAlign: "center",
+  },
+  tbody: {
+    height: "380px",
+    overflowY: "auto",
+  },
+  wh25: {
+    width: "25%",
+    float: "left",
+    height: "80px",
+  },
+  w5: {
+    width: "15%",
+    float: "left",
+    height: "80px",
+  },
+  icon: {
+    fontSize: "16px",
+    height: "20px",
+    width: "20px",
+  },
+  wa10: {
+    width: "5%",
+    float: "left",
+    height: "80px",
+  },
+  row: {
+    float: "left",
+    width: "100%",
+  },
+  success: {
+    color: "green",
+  },
+  danger: {
+    color: "red",
+  },
+  mgl5: {
+    marginLeft: "5px",
+  },
+  tags: {
+    float: "right",
+    marginRight: "5px",
+  },
+  searchInput: {
+    width: "200px",
+    display: "inline-block",
+    
+  },
+  userActive: {
+    color: "green",
+  },
+  userPending: {
+    color: "red",
+  },
+  nagemonNameCol: {
+    width: "328px",
+  },
+  image: {
+    width: "100px",
+    height: "100px",
+    borderRadius: "99999px",
+  },
+};

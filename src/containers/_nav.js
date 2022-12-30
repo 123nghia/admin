@@ -497,6 +497,35 @@ const _navContact = [
     role: ['0', '1', '2'],
   },
   {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Quản lý đơn hàng',
+    icon: <CIcon style={css} content={freeSet.cilFile} customClasses="c-sidebar-nav-icon" />,
+    _children: [{
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách đơn hàng',
+      to: '/list_order',
+      role: ['0', '1'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.package_order}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      } 
+    }, {
+      _tag: 'CSidebarNavItem',
+      name: 'Tạo đơn hàng',
+      to: '/plugin_create_order',
+      role: ['0', '1'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.create_order}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      }
+    }],
+    role: ['0', '1'],
+  },
+  {
     _tag: 'CSidebarNavTitle',
     _children: ['Thông tin liên hệ'],
     role: ['0', '1'],
@@ -527,35 +556,7 @@ const _navContact = [
       </CTooltip>,
     }
   },
-  {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Quản lý đơn hàng',
-    icon: <CIcon style={css} content={freeSet.cilFile} customClasses="c-sidebar-nav-icon" />,
-    _children: [{
-      _tag: 'CSidebarNavItem',
-      name: 'Danh sách đơn hàng',
-      to: '/list_order',
-      role: ['0', '1'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.package_order}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>,
-      } 
-    }, {
-      _tag: 'CSidebarNavItem',
-      name: 'Tạo đơn hàng',
-      to: '/plugin_create_order',
-      role: ['0', '1'],
-      badge: {
-        color: 'info',
-        text: <CTooltip placement={"right"} content={content.create_order}>
-          <CIcon content={freeSet.cilBellExclamation} />
-        </CTooltip>,
-      }
-    }],
-    role: ['0', '1'],
-  },
+  
   {
     _tag: 'CSidebarNavItem',
     name: 'Quản lý banner',
@@ -567,6 +568,13 @@ const _navContact = [
     _tag: 'CSidebarNavItem',
     name: 'Danh sách banner',
     to: '/quan-ly-banner',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['2']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Cấu hình trang web',
+    to: '/cau-hinh-trang-web',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
     role: ['2']
   }

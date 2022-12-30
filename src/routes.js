@@ -58,7 +58,7 @@ const SubTypeHair = React.lazy(() => import('./views/base/tables/MakeUp/SubTypeH
 const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTypeMakeUp'));
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
-
+const configWeb = React.lazy(() => import("./views/config/configWeb"));
 const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
 
 const routes = [
@@ -105,6 +105,11 @@ const routes = [
   { path: '/skin/config', name: 'confgSkinDisplay', component: configSkinDisplay },
   //admin product
   { path: '/products-special', name: 'productSpecial', component: ProductPlugin },
+  {
+    path: "/cau-hinh-trang-web",
+    name: "configWeb",
+    component: configWeb,
+  },
 
 
   //User

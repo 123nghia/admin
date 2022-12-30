@@ -46,6 +46,7 @@ class PluginCustomerManager extends Component {
       action: 'new',
       Name: '',
       Email: '',
+      idDelete: '',
       Phone: '',
       Fax: '',
       Address: '',
@@ -258,6 +259,10 @@ class PluginCustomerManager extends Component {
   }
 
   openDelete = (item) => {
+
+    this.setState({
+      idDelete: item._id
+    })
     this.setState({
       modalDelete: !this.state.modalDelete
     })
@@ -270,7 +275,7 @@ class PluginCustomerManager extends Component {
       url: Constants.PLUGIN_DELETE_COMPANY,
       method: 'DELETE',
       data: {
-        "id": this.state.delete['_id']
+        "id": this.state.idDelete
       }
     });
 
@@ -554,11 +559,7 @@ class PluginCustomerManager extends Component {
                                 <td className="text-center">
                                   {(new Date(item.Create_Date)).toLocaleDateString()}
                                 </td>
-                                {/* <td className="text-center">
-                                  <CBadge color={this.getBadge(item.Status)}>
-                                    {item.Status}
-                                  </CBadge>
-                                </td> */}
+                               
                                 <td className="text-center">
 
                                   <CButton style={{ margin: 1 }} outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
