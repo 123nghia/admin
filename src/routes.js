@@ -40,6 +40,17 @@ const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPl
 const ProductPlugin = React.lazy(() => import('./views/base/tables/Prouduct/ProductSpecialPlugin'));
 
 const BrandSlider = React.lazy(() => import('./views/base/tables/Banner/BrandSlider'));
+
+
+const vendorSpecial = React.lazy(() => import('./views/base/tables/vendorSpecial/BrandSlider'));
+
+const bannerSmall = React.lazy(() => import('./views/base/tables/bannerSmall/BrandSlider'));
+
+const bannermain = React.lazy(() => import('./views/base/tables/bannermain/BrandSlider'));
+
+const bannerLuotSoi = React.lazy(() => import('./views/base/tables/bannerLuotSoi/BrandSlider'));
+
+
 const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/PluginSubSaleTable'));
 
 //User
@@ -59,7 +70,7 @@ const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTyp
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 const configWeb = React.lazy(() => import("./views/config/configWeb"));
-const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
+  const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -121,6 +132,10 @@ const routes = [
 
   { path: '/quan-ly-banner', name: 'BannerSlider', component: BrandSlider },
 
+  { path: '/quan-ly-banner-nhieu-luot-soi', name: 'banner2', component: bannerLuotSoi },
+  { path: '/quan-ly-banner-nho', name: 'banner2', component: bannerSmall },
+  { path: '/quan-ly-banner-chinh', name: 'bannermain', component: bannermain },
+  { path: '/nha-cung-cap-noi-bat', name: 'vendorSpecial', component: vendorSpecial },
   //Admin MakeUp
   { path: '/suggest', name: 'SuggestItem', component: SuggestItem },
   { path: '/brand', name: 'BRAND', component: Brand },
@@ -136,6 +151,7 @@ const routes = [
   { path: '/items/3', name: 'K4', component: TypeOne },
   { path: '/items/4', name: 'K5', component: TypeOne },
   { path: '/items/5', name: 'K6', component: TypeOne },
+ 
   { path: '/history/:phoneNumber', name: 'historyview', component: HistorySkin },
 ];
 

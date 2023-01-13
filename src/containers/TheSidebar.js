@@ -21,7 +21,7 @@ import Constants from '../contants/contants'
 import navigations from './_nav'
 
 const callApiGetRoleSubAdmin = async (user) => {
-
+  
   if (user == null || JSON.parse(user) == null) {
     return;
   }

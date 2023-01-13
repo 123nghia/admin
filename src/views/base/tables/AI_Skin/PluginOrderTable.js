@@ -726,7 +726,7 @@ class PluginOrder extends Component {
                                     <td className="text-center">{item.Package_Id == null ? "" : item.Package_Id.Name}</td>
                                     <td className="text-center">
                                       {item.Array_Feature.map((item, i) => {
-                                        if (i < 2) {
+                                        if (i < 1) {
                                           return (
                                             <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
                                           )

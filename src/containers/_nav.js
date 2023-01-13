@@ -562,14 +562,43 @@ const _navContact = [
     name: 'Quản lý banner',
     to: '/banner',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2']
+    role: ['0', '1'],
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Danh sách banner',
     to: '/quan-ly-banner',
     icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
-    role: ['2']
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Nhà cung cấp nổi bật',
+    to: '/nha-cung-cap-noi-bat',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý banner nhỏ',
+    to: '/quan-ly-banner-nho',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },
+
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý banner theo lượt soi',
+    to: '/quan-ly-banner-nhieu-luot-soi',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Quản lý banner chính',
+    to: '/quan-ly-banner-chinh',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1'],
   },
   {
     _tag: 'CSidebarNavItem',

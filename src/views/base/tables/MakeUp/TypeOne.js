@@ -163,7 +163,7 @@ class SuggestItem extends Component {
       this.setState({ isLoadingTable: true });
 
       const res_suggest = await API_CONNECT(
-        //http://localhost:3002/itemSdk/search/611f1461ef623903dbb4f75d/1?&key=c
+        //https://api-soida.applamdep.com/itemSdk/search/611f1461ef623903dbb4f75d/1?&key=c
         Constants.SEARCH_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}?&key=` + key, {}, "", "GET")
 
       const res_sdk = await axios({

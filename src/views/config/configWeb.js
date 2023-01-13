@@ -73,35 +73,11 @@ class ConfigWeb extends Component {
         },
         {
           _id: "9",
-          name: "Banner",
+          name: "QUẢN LY BANNER",
           icon: (
             <BiSlideshow style={{ width: "24px ", height: "24px " }} />
           ),
         },
-        {
-          _id: "10",
-          name: "Nút",
-          icon: (
-            <BsFillMenuButtonWideFill
-              style={{ width: "24px ", height: "24px " }}
-            />
-          ),
-        },
-        {
-          _id: "12",
-          name: "Popup",
-          icon: (
-            <MdOutlineModeComment style={{ width: "24px ", height: "24px " }} />
-          ),
-        },
-        {
-          _id: "11",
-          name: "Voucher",
-          icon: (
-            <AiOutlineFundView style={{ width: "24px ", height: "24px " }} />
-          ),
-        },
-      
         {
           _id: "4",
           name: "Logos",

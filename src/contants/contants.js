@@ -1,6 +1,6 @@
 export default {
    "BASE_URL" : "https://api-soida.applamdep.com",
-  //"BASE_URL" : "http://localhost:3002",
+  // "BASE_URL" : "https://api-soida.applamdep.com",
   // "BASE_URL_CURRENT" : "https://id.applamdep.com/",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/xemchitietlichsu/",
   "BASE_URL_CURRENT" : "https://id.applamdep.com",
@@ -276,5 +276,34 @@ export default {
   "DELETE_Banner": "/api/banner/delete",
   "CONFIG_THEME_GET": "/api/get-config-color",
   "CONFIG_THEME_UPDATE": "/api/get-config-color/update",
+
+
+  "LIST_Banner_vendor": "/api/baner-vendor/all/",
+  "LIST_Banner_vendor_COMPANY": "/api/banner/all/",
+  "ADD_Banner_vendor": "/api/baner-vendor/add",
+  "UPDATE_Banner_vendor": "/api/baner-vendor/update",
+  "DELETE_Banner_vendor": "/api/baner-vendor/delete",
+
+
+  "LIST_Banner_small": "/api/baner-small/all/",
+  "LIST_Banner_small_COMPANY": "/api/banner/all/",
+  "ADD_Banner_small": "/api/baner-small/add",
+  "UPDATE_Banner_small": "/api/baner-small/update",
+  "DELETE_Banner_small": "/api/baner-small/delete",
+
+
+  "LIST_Banner_main": "/api/baner-main/all/",
+  "LIST_Banner_main_COMPANY": "/api/banner/all/",
+  "ADD_Banner_main": "/api/baner-main/add",
+  "UPDATE_Banner_main": "/api/baner-main/update",
+  "DELETE_Banner_main": "/api/baner-main/delete",
+
+
+  "LIST_Banner_soida": "/api/banner_soida/all/",
+  "LIST_Banner_COMPANY": "/api/banner_soida/all/",
+  "ADD_Banner_soida": "/api/banner_soida/add",
+  "UPDATE_Banner_soida": "/api/banner_soida/update",
+  "DELETE_Banner_soida": "/api/banner_soida/delete",
+
 
 };
