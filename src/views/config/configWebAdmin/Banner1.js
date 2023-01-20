@@ -55,7 +55,7 @@ export default class Banner1 extends Component {
         <div className="table__overflow">
           <table
             ble
-            className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+            className="table table-hover mt-3 table-outline mb-0  d-sm-table"
           >
             <thead className="thead-light">
               <tr>

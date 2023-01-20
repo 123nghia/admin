@@ -40,7 +40,7 @@ export default class Footer extends Component {
         </div>
         <table
           ble
-          className="table table-hover mt-3 table-outline mb-0 d-none d-sm-table"
+          className="table table-hover mt-3 table-outline mb-0  d-sm-table"
         >
           <thead className="thead-light">
             <tr>

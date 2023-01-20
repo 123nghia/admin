@@ -454,7 +454,7 @@ class Transaction extends Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <table ble className="table table-hover table-outline mb-0  d-sm-table">
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
@@ -527,7 +527,7 @@ class Transaction extends Component {
                   <i className="fa fa-align-justify"> Chi tiết giao dịch của {this.state.currenCom} (Mã công ty: {this.state.currenCom_ID}) (Page: {this.state.indexPage + 1})</i>
                 </CardHeader>
                 <CardBody>
-                  <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <table ble className="table table-hover table-outline mb-0  d-sm-table">
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>

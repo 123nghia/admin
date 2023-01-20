@@ -827,7 +827,7 @@ class Users extends Component {
             <CardBody>
               {
                 role == 'SALES' ?
-                  <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <table className="table table-hover table-outline mb-0  d-sm-table">
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">Name</th>
@@ -876,7 +876,7 @@ class Users extends Component {
                     </tbody>
                   </table> : role == 'ADMIN' ?
 
-                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                    <table className="table table-hover table-outline mb-0  d-sm-table">
                       <thead className="thead-light">
                         <tr>
                           <th className="text-center">Username</th>
@@ -911,7 +911,7 @@ class Users extends Component {
                       </tbody>
                     </table> :
 
-                    <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                    <table className="table table-hover table-outline mb-0  d-sm-table">
                       <thead className="thead-light">
                         <tr>
                           <th className="text-center">Name</th>
@@ -977,7 +977,7 @@ class Users extends Component {
               </CardHeader>
               <CardBody>
                 {
-                  <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                  <table className="table table-hover table-outline mb-0  d-sm-table">
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">Name</th>
@@ -1083,7 +1083,7 @@ class Users extends Component {
                   </CardHeader>
                   <CardBody>
                     {
-                      <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                      <table className="table table-hover table-outline mb-0  d-sm-table">
                         <thead className="thead-light">
                           <tr>
                             <th className="text-center">Name</th>

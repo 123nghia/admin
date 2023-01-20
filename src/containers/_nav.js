@@ -615,9 +615,72 @@ const _naveUser = [
     role: ['0', '1', '2'],
     badge: {
       color: 'info',
-      text: <CTooltip placement={"right"} content={content.history_skin}>
+      text: <CTooltip nẻplacement={"right"} content={content.history_skin}>
         <CIcon content={freeSet.cilBellExclamation} />
       </CTooltip>,
     }
   }]
+
+
+  const _naveBanner = [
+    {
+      _tag: 'CSidebarNavTitle',
+      _children: ['Banner trang chủ'],
+      role: ['0', '1', '2'],
+    },
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách người dùng',
+      to: '/customer',
+      icon: <CIcon style={css} content={freeSet.cilUserPlus} customClasses="c-sidebar-nav-icon" />,
+      role: ['0', '1'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.customer}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      }
+    },
+  
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách khách hàng',
+      icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+      to: '/danh-sach-nguoi-dung',
+      icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
+      role: ['0', '1','2'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.role}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      }
+    },
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Danh sách end user',
+      icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+      to: '/end_user',
+      icon: <CIcon style={css} name="cil-people" customClasses="c-sidebar-nav-icon" />,
+      role: ['0', '1'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.role}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      }
+    },
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Lịch sử soi da',
+      to: '/historyskin',
+      icon: <CIcon style={css} content={freeSet.cilHistory} customClasses="c-sidebar-nav-icon" />,
+      role: ['0', '1', '2'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.history_skin}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      }
+    }]
 export default [_naveUser,_navSoida, _navOrther, _navContact, _navLogOut,_navSpecialProduct]

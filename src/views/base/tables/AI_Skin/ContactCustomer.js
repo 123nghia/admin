@@ -262,7 +262,7 @@ class ContactCustomer extends Component {
                   </CardHeader>
                   <CardBody>
 
-                    <table ble className="table table-hover table-outline mb-0 d-none d-sm-table">
+                    <table ble className="table table-hover table-outline mb-0  d-sm-table">
                       <thead className="thead-light">
                         <tr>
                           <th className="text-center">STT.</th>

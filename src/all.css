@@ -1,6 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap");
 @import "./assets/css/evoucher.css";
 
+.d-none{
+  
+  width: 100% !important;
+}
+table {
+  display: block !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+}
 .btn-main {
   padding: 0.375rem 38px;
   display: flex;
