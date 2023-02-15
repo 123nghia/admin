@@ -1,6 +1,6 @@
 export default {
+   //"BASE_URL" : "http://localhost:3002",
    "BASE_URL" : "https://api-soida.applamdep.com",
-  // "BASE_URL" : "https://api-soida.applamdep.com",
   // "BASE_URL_CURRENT" : "https://id.applamdep.com/",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/xemchitietlichsu/",
   "BASE_URL_CURRENT" : "https://id.applamdep.com",
@@ -305,5 +305,5 @@ export default {
   "UPDATE_Banner_soida": "/api/banner_soida/update",
   "DELETE_Banner_soida": "/api/banner_soida/delete",
 
-
+  "Package_updatePackage" : "/api/updatePackage",
 };

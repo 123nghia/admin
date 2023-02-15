@@ -11,6 +11,7 @@ const TableRole = React.lazy(() => import('./views/base/tables/Role'));
 const TableTypeKey = React.lazy(() => import('./views/base/tables/TypeKey'));
 const TableLink = React.lazy(() => import('./views/base/tables/Link'));
 const HistorySkinUser = React.lazy(() => import('./views/base/tables/HistorySkinUser'));
+
 const ListShopManager = React.lazy(() => import('./views/base/tables/ListShopManager'));
 const ListSale = React.lazy(() => import('./views/base/tables/ListSale'));
 const ListCustomer = React.lazy(() => import('./views/base/tables/ListCustomer'));
@@ -34,6 +35,9 @@ const CusRequest = React.lazy(() => import('./views/base/tables/AI_Skin/Customer
 const TypeRequest = React.lazy(() => import('./views/base/tables/AI_Skin/TypeRequestModel'));
 const CustomerManager = React.lazy(() => import('./views/base/tables/AI_Skin/CustomerManager'));
 const HistorySkin = React.lazy(() => import('./views/base/tables/AI_Skin/HistorySkin'));
+const HistorySkinWithUser = React.lazy(() => import('./views/base/tables/AI_Skin/HistorySkinWithUser'));
+
+
 const ContactCustomer = React.lazy(() => import('./views/base/tables/AI_Skin/ContactCustomer'));
 const UpdatePackage = React.lazy(() => import('./views/base/tables/UpdatePackage'));
 const BrandPlugin = React.lazy(() => import('./views/base/tables/AI_Skin/BrandPlugin'));
@@ -85,6 +89,8 @@ const routes = [
   { path: '/role', name: 'Role', component: TableRole },
   { path: '/link', name: 'Key', component: TableLink },
   { path: '/history', name: 'HistorySkin', component: HistorySkinUser },
+  { path: '/lich-su-ca-nhan/:key', name: 'historyPersonal', component: HistorySkinWithUser },
+
   { path: '/sales', name: 'ShopManager', component: ListSale },
   { path: '/shopmanager', name: 'ShopManager', component: ListShopManager },
   { path: '/customers', name: 'Customers', component: ListCustomer },

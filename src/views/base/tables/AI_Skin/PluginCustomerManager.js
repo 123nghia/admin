@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Swal from "sweetalert2";
 import {
   Card,
   CardBody,
@@ -48,16 +48,19 @@ class PluginCustomerManager extends Component {
       Email: '',
       idDelete: '',
       Phone: '',
+      dataPackage_All: [],
       Fax: '',
       Address: '',
       Website: '',
       Code: '',
       Slug: '',
       Status: '',
+      orderId: '',
       modalDelete: false,
       arrPagination: [],
       indexPage: 0,
       toggleView: false,
+      orderEdit: false,
       company_name: '',
       current_package: '',
       arrTotalPackage: [],
@@ -80,7 +83,7 @@ class PluginCustomerManager extends Component {
     } else {
       this.getData_ByID();
     }
-
+   
     this.getProvince();
     // this.getCompanyData();
     let arr = JSON.parse(localStorage.getItem('url'));
@@ -94,41 +97,71 @@ class PluginCustomerManager extends Component {
     }
   }
 
-  pagination(dataApi) {
 
+
+   handlePageChanged = (e, page) => {
    
-    var i, j, temparray, chunk = 50;
-    var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
-
-    if (arrTotal.length == 0) {
+      this.setState({ indexPage:page});
+      debugger;
       this.setState({
-        hidden: false
-      })
-    } else {
-      this.setState({
-        hidden: true
-      })
-    }
+        indexPage:page
+    },() => {
+        this.getData();
+    });
 
-    this.setState({ arrPagination: arrTotal, 
+   };
+  // onChange={(e, v) => {
+                     
+  //   this.setState({ indexPage: v-1});
+  //   this.getData();
+  // }}
+  pagination(dataApi) {
+    
+    // debugger;
+   
+    // var i, j, temparray, chunk = 50;
+    // var arrTotal = [];
+    // for (i = 0, j = dataApi.length; i < j; i += chunk) {
+    //   temparray = dataApi.slice(i, i + chunk);
+    //   arrTotal.push(temparray);
+    // }
+
+    // if (arrTotal.length == 0) {
+    //   this.setState({
+    //     hidden: false
+    //   })
+    // } else {
+    //   this.setState({
+    //     hidden: true
+    //   })
+    // }
+
+    this.setState({ 
+      arrPagination: dataApi, 
       
-      
-      data: arrTotal[this.state.indexPage] });
+    data: dataApi});
   }
+  async getPackageData1() {
+    let arrTemp = [];
+    const resPackage = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_PACKAGE,
+      method: 'POST',
+    });
 
+    this.setState({ dataPackage_All: resPackage.data.data });
+  }
   getData = async () => {
+   
     this.setState({ isLoading: true });
     const { indexPage, key, keyStatus } = this.state;
+   
     const article = { title: 'Axios POST Request Example' };
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.PLUGIN_LIST_COMPANY,
       data: {
-        indexPage: indexPage+1, // This is the body part
+        indexPage:indexPage , // This is the body part
         limit: 10
       },
       method: 'POST',
@@ -139,9 +172,9 @@ class PluginCustomerManager extends Component {
     
 
     this.setState({ countPage: countPage});
-    this.pagination(val);
-
     this.setState({ dataApi: val, isLoading: false });
+
+    this.pagination(val);
   }
 
   getData_ByID = async () => {
@@ -172,6 +205,24 @@ class PluginCustomerManager extends Component {
     }
   }
 
+  async onEDitOrder(name, com_id, phone_number, slug, orderId) {
+
+   
+    let data = await this.getPackageData(com_id)
+    this.getPackageData1();
+    try {
+      this.setState({
+        orderEdit: !this.state.orderEdit, 
+        company_name: name, 
+        orderId: orderId, 
+        current_package: data.length == 0 ? '' : data[0].Name,
+        arrDetailPackage: data.length == 0 ? [] : data[0].Array_Feature, phone_number: phone_number, current_slug: slug
+      })
+    } catch (error) {
+      throw error;
+    }
+  }
+  
   searchKey() {
     const { indexPage, key, keyStatus } = this.state;
     // this.setState({ key: key })
@@ -210,7 +261,42 @@ class PluginCustomerManager extends Component {
         item.Address.split(',')[item.Address.split(',').length - 1]
     })
   }
+  
 
+  async updatePackage() {
+   
+    const {orderId, Package_IdSelect} = this.state;
+    if ( Package_IdSelect == null || Package_IdSelect == '') {
+      alert("Chưa chọn thông tin gói");
+    
+     }
+       const body = {
+      _id: orderId,
+      packageId: Package_IdSelect
+    }
+     this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.Package_updatePackage,
+      method: 'POST',
+      data: body
+    });
+
+    if (res.data.data == true) {
+      Swal.fire({
+        icon: "success",
+        title: "Thay đổi gói thành công",
+        showConfirmButton: false,
+        timer: 700,
+      });
+      this.setState({ isLoading: false });
+      this.getData();
+      this.setState({ orderEdit: !this.state.orderEdit })
+    } else {
+      alert("có lỗi xảy ra");
+      // this.setState({ isLoading: false });
+    }
+  }
   async updateCompany() {
     const { Email, Name, Phone, Fax, Address, Website, Slug, Status, current_province, UserName } = this.state
 
@@ -308,7 +394,7 @@ class PluginCustomerManager extends Component {
       val[i].Value = data.Value
       arrTemp.push(val[i])
     }
-
+    
     this.setState({ arrTotalPackage: arrTemp })
     return arrTemp;
   }
@@ -403,21 +489,25 @@ class PluginCustomerManager extends Component {
           </tr>
         </thead>
         <tbody>
-          {
-            this.state.arrDetailPackage.length == 0 ?
+          {/* {
+            this.state.data.length == 0 ?
               <td colSpan="10" hidden={false} className="text-center">Không tìm thấy dữ liệu</td> :
               <td colSpan="10" hidden={true} className="text-center">Không tìm thấy dữ liệu</td>
 
-          }
+          } */}
 
           {
+         
             this.state.arrDetailPackage != undefined || this.state.arrDetailPackage.length != 0 || this.state.arrDetailPackage != null ?
               this.state.arrDetailPackage.map((item, i) => {
+
+                let packageNameText = item.Value.replace("/soida/","/");
+                
                 return (
                   <tr key={i}>
                     <td className="text-center">{i + 1}</td>
                     <td className="text-center">{item.Key}</td>
-                    <td className="text-center">{item.Value + this.state.current_slug}</td>
+                    <td className="text-center">{packageNameText + this.state.current_slug}</td>
                   </tr>
                 );
               }) : ""
@@ -446,8 +536,8 @@ class PluginCustomerManager extends Component {
 
   render() {
     const { data, key, action, arrPagination, type, current_province, UserName,
-      arrTotalPackage, company_name, current_package, phone_number, province,
-      countPage
+      arrTotalPackage,dataPackage_All, indexPage, company_name, current_package, phone_number, province,
+      countPage,Package_Id
     } = this.state;
 
       let pageNumber = countPage;
@@ -458,25 +548,8 @@ class PluginCustomerManager extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify"> Danh sách công ty</i>
-                  <div style={styles.tags}>
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <CRow>
-                          <CCol sm="12" lg="6">
-                            <div>
-                              <Input style={styles.searchInput} onChange={(e) => {
-                                this.actionSearch(e, "key");
-                              }} name="key" value={key} placeholder="Từ khóa" />
-                            </div>
-                          </CCol>
-                          <CCol sm="12" lg="6">
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                    </CRow>
-                  </div>
+                  <i className="fa fa-align-justify"> Danh sách khách hàng</i>
+                 
                 </CardHeader>
                 <CardBody>
                   <table ble className="table table-hover table-outline mb-0  d-sm-table">
@@ -498,18 +571,22 @@ class PluginCustomerManager extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <td colSpan="10" hidden={this.state.hidden} className="text-center">Không tìm thấy dữ liệu</td>
+                     
                       {
                       
                  
                         data != undefined ?
                           data.map((item, i) => {
+
+                            console.log("33",item);
                            
                            let packageNamme = "";
 
                             let  dataOrderDetail = item.pluginOrder;
                             let endateText ="";
                             let activeDate = "";
+                            let orderId = "";
+                          
 
                             if(item.PluginOrder.length >0 )
                             {
@@ -528,6 +605,12 @@ class PluginCustomerManager extends Component {
                               {
                                 packageNamme ="Gói Dùng Thử 2 Tháng";
                               }
+                              if(dataOrderDetail.Package_Id == "63958903afe196f92b9c79ff")
+                              {
+                                
+                                packageNamme ="50 lượt soi/ tháng";
+                              }
+                              orderId = dataOrderDetail._id;
 
                             }
                             else 
@@ -538,14 +621,14 @@ class PluginCustomerManager extends Component {
                             
                             return (
                               <tr key={i}>
-                                <td className="text-center">{i + 1}</td>
+                                <td className="text-center">{ ( (indexPage<1?0:(indexPage-1))*10) + i +1}</td>
                                 <td className="text-center">{item.Name}</td>
                                 <td className="text-center">
                                   <div>{item.Email}</div>
                                   <div>------------</div>
                                   <div>{item.Phone}</div>
                                 </td>
-                                <td className="text-center">{packageNamme}</td>
+                                <td className="text-center packageNammeWidth">{packageNamme}</td>
                                 <td className="text-center">
                                   {activeDate}
                                 
@@ -560,7 +643,7 @@ class PluginCustomerManager extends Component {
                                   {(new Date(item.Create_Date)).toLocaleDateString()}
                                 </td>
                                
-                                <td className="text-center">
+                                <td className="text-center display-flex"  >
 
                                   <CButton style={{ margin: 1 }} outline color="primary" size="sm" onClick={(e) => this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
@@ -571,10 +654,16 @@ class PluginCustomerManager extends Component {
                                         <CIcon name="cilTrash" />
                                       </CButton> : ""
                                   }
-                                  {' '}
+                                 
                                   <CTooltip content="Xem chi tiết đơn hàng">
                                     <CButton style={{ margin: 1 }} outline color="info" size="sm" onClick={async (e) => { await this.onView(item.Name, item._id, item.Phone, item.Slug) }}>
                                       <CIcon name="cil-magnifying-glass" />
+                                    </CButton>
+                                  </CTooltip>
+                                  {' '}
+                                  <CTooltip content="Chỉnh sửa thông tin gói">
+                                    <CButton style={{ margin: 1 }} outline color="info" size="sm" onClick={async (e) => { await this.onEDitOrder(item.Name, item._id, item.Phone, item.Slug, orderId) }}>
+                                    <CIcon  />
                                     </CButton>
                                   </CTooltip>
                                 </td>
@@ -588,12 +677,23 @@ class PluginCustomerManager extends Component {
                 </CardBody> 
               </Card>
               <div style={{ float: 'right' }}>
-                
-                <Pagination count={pageNumber} color="primary" onChange={(e, v) => {
-                  // this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
-                  this.setState({ indexPage: v-1});
-                  this.getData();
-                }} />
+                      
+                <Pagination count={pageNumber} 
+                color="primary"
+                page={this.state.indexPage>0?this.state.indexPage:1}
+                onChange={
+                  
+                      (e, v) => {
+          
+                        this.setState({ indexPage:v});
+                       
+                        this.setState({
+                        indexPage:v
+                        },() => {
+                        this.getData();
+                        });
+                }}
+               />
               </div>
             </Col>
           </Row>
@@ -632,18 +732,27 @@ class PluginCustomerManager extends Component {
                   {
                     arrTotalPackage != undefined ?
                       arrTotalPackage.map((item, i) => {
+                        
                         return (
                           <tr key={i}>
                             <th className="text-center">{i + 1}</th>
                             <th className="text-center">{item.Name}</th>
                             <th className="text-center">
+
                               {item.Array_Feature.map((item, i) => {
+                                let slugText = this.state.current_slug;
+                                let textFeauter = item.Value;
+                                if(slugText != "soida")
+                                {
+                                  textFeauter = textFeauter.replace("/soida/", "/");
+                                }
                                 if (i < 2) {
                                   return (
-                                    <div><a href={item.Value} target="_blank" key={i}>{item.Value}</a></div>
+                                    <div><a href={textFeauter + this.state.current_slug} target="_blank" key={i}>{textFeauter + this.state.current_slug}</a></div>
                                   )
                                 }
-                              })}
+                              })
+                              }
                               {
                                 (item.Array_Feature.length - 2) <= 0 ? "" : item.Array_Feature.length - 2 + " mores..."
                               }
@@ -818,6 +927,52 @@ class PluginCustomerManager extends Component {
             </ModalFooter>
           </Modal>
 
+
+          <Modal isOpen={this.state.orderEdit} className={this.props.className}>
+            <ModalHeader>Cập nhật sửa chữa đơn hàng</ModalHeader>
+            <ModalBody>
+              
+             
+
+             <div>
+                    <label htmlFor="tag">Chọn gói sản phẩm:    </label>
+                    <CSelect onChange={async e => {
+                      this.setState({ Package_IdSelect: e.target.value });
+                    }}>
+                      <option value={this.state.Package_Id}>-----</option>
+                      {
+                        dataPackage_All.map((item, i) => {
+                          console.log(item);
+                          return (
+                            <option value={item._id}>{`${item.Name} (${item.Value} ${this.convertUnitToDate(item.Unit)})`}</option>
+                          );
+                          // if (item._id == Package_Id._id) {
+                          //   return (
+                          //     <option selected value={item._id}>{`${item.Name} (${item.Value} ${this.convertUnitToDate(item.Unit)})`}</option>
+                          //   );
+                          // } else {
+                          //   return (
+                          //     <option value={item._id}>{`${item.Name} (${item.Value} ${this.convertUnitToDate(item.Unit)})`}</option>
+                          //   );
+                          // }
+                        })
+                      }
+                    </CSelect>
+
+
+                   
+
+               </div>
+
+             
+             
+            </ModalBody>
+
+            <ModalFooter>
+              <CButton color="primary" onClick={e => { this.state.action === 'new' ? this.updatePackage() : this.updateCompany() }} disabled={this.state.isLoading}>Lưu</CButton>{' '}
+              <CButton color="secondary" onClick={e => {this.setState({ orderEdit: !this.state.orderEdit })}}>Đóng</CButton>
+            </ModalFooter>
+          </Modal>
           <Modal isOpen={this.state.modalDelete} toggle={e => this.setState({ modalDelete: !this.state.modalDelete })} className={this.props.className}>
             <ModalHeader toggle={e => this.setState({ modalDelete: !this.state.modalDelete })}>{`Xoá`}</ModalHeader>
             <ModalBody>

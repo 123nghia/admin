@@ -549,7 +549,10 @@ class CustomerManager extends Component {
                                     <td className="text-center">{item.Count}</td>
 
                                     <td className="text-center">
-                                      <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => { }} >
+                                      <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
+                                          window.open("https://id.applamdep.com/#lich-su-ca-nhan/"+ item.Phone, "_blank")
+                                          
+                                       }} >
                                         Lịch sử soi da
                                       </CButton>
                                     </td>
