@@ -277,7 +277,7 @@ class EndUserv2 extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách người dùng</i>
+                  <i className="fa fa-align-justify">Danh sách người dùng </i>
                   <div style={styles.tags}>
 
                     <CRow>

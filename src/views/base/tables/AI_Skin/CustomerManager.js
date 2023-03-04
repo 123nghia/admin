@@ -446,7 +446,9 @@ class CustomerManager extends Component {
                             <th className="text-center">Công ty</th> : ""
                         }
                         <th className="text-center">Lần đến gần nhất</th>
+                        
                         <th className="text-center">Số lần đến</th>
+                        <th className="text-center">Lịch sử soi da</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -468,6 +470,17 @@ class CustomerManager extends Component {
                                   {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                 </td>
                                 <td className="text-center">{item.Count}</td>
+
+                                <td className="text-center">
+
+                                 <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
+                                          window.open("https://id.applamdep.com/#lich-su-ca-nhan/"+ item.Phone, "_blank")
+                                          
+                                       }} >
+                                        Lịch sử soi da
+                                      </CButton>
+
+                                </td>
                               </tr>
                             );
                           }) : ""
@@ -525,6 +538,7 @@ class CustomerManager extends Component {
                             }
                             <th className="text-center">Lần đến gần nhất trong tháng</th>
                             <th className="text-center">Số lần đến</th>
+                            <th className="text-center">Lịch sử soi da</th>
                             <th className="text-center">#</th>
                           </tr>
                         </thead>
@@ -547,7 +561,16 @@ class CustomerManager extends Component {
                                       {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                                     </td>
                                     <td className="text-center">{item.Count}</td>
+                                    <td className="text-center">
 
+<CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
+         window.open("https://id.applamdep.com/#lich-su-ca-nhan/"+ item.Phone, "_blank")
+         
+      }} >
+       Lịch sử soi da
+     </CButton>
+
+</td>
                                     <td className="text-center">
                                       <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
                                           window.open("https://id.applamdep.com/#lich-su-ca-nhan/"+ item.Phone, "_blank")

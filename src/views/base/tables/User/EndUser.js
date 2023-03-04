@@ -263,7 +263,7 @@ class EndUser extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách end user</i>
+                  <i className="fa fa-align-justify">Danh sách người dùng đăng ký</i>
                   <div style={styles.tags}>
 
                     <CRow>
@@ -295,8 +295,9 @@ class EndUser extends Component {
                       <tr>
                         <th className="text-center">STT.</th>
                         <th className="text-center">Tên đăng nhập</th>
-                        <th className="text-center">Email</th>
+                        <th className="text-center">Họ tên</th>
                         <th className="text-center">Số điện thoại</th>
+                        <th className="text-center">Lịch sử</th>
                         <th className="text-center">#</th>
                       </tr>
                     </thead>
@@ -309,8 +310,19 @@ class EndUser extends Component {
                               <tr key={i}>
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.username}</td>
-                                <td className="text-center">{item.email}</td>
+                                <td className="text-center">{item.name}</td>
                                 <td className="text-center">{item.phone}</td>
+                                <td className="text-center">
+
+                                 <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
+                                          window.open("https://id.applamdep.com/#lich-su-ca-nhan/"+ item.phone, "_blank")
+                                          
+                                       }} >
+                                        Lịch sử soi da
+                                      </CButton>
+
+                                </td>
+
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />

@@ -64,18 +64,19 @@ class ConfigWeb extends Component {
       configData: [],
       tabNameConfig: [
        
+       
+        {
+          _id: "9",
+          name: "Banner trang",
+          icon: (
+            <BiSlideshow style={{ width: "24px ", height: "24px " }} />
+          ),
+        },
         {
           _id: "3",
           name: "Cấu hình SEO",
           icon: (
             <MdOutlinePermDataSetting style={{ width: "24px ", height: "24px " }} />
-          ),
-        },
-        {
-          _id: "9",
-          name: "QUẢN LY BANNER",
-          icon: (
-            <BiSlideshow style={{ width: "24px ", height: "24px " }} />
           ),
         },
         {
@@ -185,6 +186,8 @@ class ConfigWeb extends Component {
         }
       }
     }
+
+    this.ToggleViewConfigWeb("9");
   }
 
   async getDataConfigWeb() {
@@ -1392,16 +1395,7 @@ class ConfigWeb extends Component {
                   hrefZalo={this.state.hrefZalo}
                 />
               </div>
-              {/* <div id="tabcontent7" className="tabcontent">
-                <Footer
-                  SaveAllConfigWeb={this.SaveAllConfigWeb}
-                  setStateByName={this.setStateByName}
-                  centerFooterLeft={this.state.centerFooterLeft}
-                  footerLeft={this.state.footerLeft}
-                  centerFooterRight={this.state.centerFooterRight}
-                  footerRight={this.state.footerRight}
-                />
-              </div> */}
+              
               <div id="tabcontent8" className="tabcontent">
                 <ChangeColor
                   setStateByName={this.setStateByName}

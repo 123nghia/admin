@@ -275,7 +275,7 @@ class EndUserv2 extends Component {
             <Col>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify">Danh sách người dùng</i>
+                  <i className="fa fa-align-justify">Danh sách người dùng </i>
                   <div style={styles.tags}>
 
                     <CRow>
@@ -312,6 +312,7 @@ class EndUserv2 extends Component {
 
               
                         <th className="text-center">Ngày tham gia</th>
+                        <th className="text-center">Lịch sử soi da</th>
                         
                         <th className="text-center">#</th>
                       </tr>
@@ -330,7 +331,16 @@ class EndUserv2 extends Component {
                                 <td className="text-center">{item.phone}</td>
                     
                                 <td className="text-center">{(new Date(item.create_date)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}</td>
-                             
+                                <td className="text-center">
+
+<CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
+         window.open("https://id.applamdep.com/#lich-su-ca-nhan/"+ item.Phone, "_blank")
+         
+      }} >
+       Lịch sử soi da
+     </CButton>
+
+</td>
                                 <td className="text-center">
                                   <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                     <CIcon name="cilPencil" />
