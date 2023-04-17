@@ -1,7 +1,6 @@
 export default {
-  //"BASE_URL" : "http://localhost:3002",
-   "BASE_URL" : "https://api-soida.applamdep.com",
-  // "BASE_URL_CURRENT" : "https://id.applamdep.com/",
+ 
+   "BASE_URL" : "http://localhost:3002",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/xemchitietlichsu/",
   "BASE_URL_CURRENT" : "https://id.applamdep.com",
   "LIST_USER" : "/api/list-user",
@@ -227,6 +226,7 @@ export default {
 
   "LIST_HISTORY_SKIN": "/api/get-history-skin",
   "LIST_HISTORY_SKIN_BY_CONDITION": "/api/get-history-skin-by-condition",
+  "LIST_HISTORY_Skin_export": "/api/get-history-skin-by-condition",
   "ADD_HISTORY_SKIN": "/api/add-history-skin",
 
 

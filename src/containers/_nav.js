@@ -162,7 +162,7 @@ const _navDisplay = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lý hiển thị'],
-    role: ['0', '1', '2']
+    role: [ '2']
   },
   {
     _tag: 'CSidebarNavItem',
@@ -584,6 +584,7 @@ const _navVendor = [
 
 
 
+
   const _navOrder = [
     {
       _tag: 'CSidebarNavTitle',
@@ -731,5 +732,48 @@ const _naveUser = [
           <CIcon content={freeSet.cilBellExclamation} />
         </CTooltip>,
       }
-    }]
-export default [_navVendor, _naveUser, _navSoida,_navDisplay, _navOrther, _navContact, _navLogOut,_navSpecialProduct  ]
+    }
+  
+  
+  
+  ]
+
+
+
+  const _navManagementConclue = [
+    {
+      _tag: 'CSidebarNavTitle',
+      _children: ['Quản lý kết luận và chi tiết'],
+      role: [ '2'],
+    },
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Kết luận chi tiết',
+  
+      to: '/skin/configContent',
+      icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+      role: ['0', '1', '2'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.suggest}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      },
+    },
+     {
+      _tag: 'CSidebarNavItem',
+      name: 'Tư vấn tổng quá',
+  
+      to: '/skin/configOverView',
+      icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+      role: ['0', '1', '2'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.suggest}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>,
+      },
+    }
+    ]
+
+export default [_navVendor, _naveUser,_navManagementConclue,_navSoida,_navDisplay, _navOrther, _navContact, _navLogOut,_navSpecialProduct  ]

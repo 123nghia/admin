@@ -149,6 +149,7 @@ class HistorySkin extends Component {
                       <th className="text-center">Kết quả</th>
                       <th className="text-center">Công ty</th>
                       <th className="text-center">Sale</th>
+                      <th className="text-center">Đăng ký tư vấn </th>  
                       <th className="text-center">Ngày tạo</th>
                     </tr>
                   </thead>
@@ -199,6 +200,7 @@ class HistorySkin extends Component {
                               </td>
                               <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
                               <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td>
+                              <td className="text-center">{item.typeLogin == "1" ? "Có": ""}</td>
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>

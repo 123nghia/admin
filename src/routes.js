@@ -74,8 +74,9 @@ const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTyp
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 const configWeb = React.lazy(() => import("./views/config/configWeb"));
-  const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
-
+const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
+const configContent = React.lazy(() => import('./views/skin/content'));
+const configOverView = React.lazy(() => import('./views/skin/overView'));
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -135,7 +136,7 @@ const routes = [
 
   
   { path: '/banner', name: 'Banner User', component: Banner },
-
+                                    
   { path: '/quan-ly-banner', name: 'BannerSlider', component: BrandSlider },
 
   { path: '/quan-ly-banner-nhieu-luot-soi', name: 'banner2', component: bannerLuotSoi },
@@ -159,6 +160,9 @@ const routes = [
   { path: '/items/5', name: 'K6', component: TypeOne },
  
   { path: '/history/:phoneNumber', name: 'historyview', component: HistorySkin },
+
+  { path: '/skin/configContent', name: 'configContent', component: configContent },
+  { path: '/skin/configOverView', name: 'configOverView', component: configOverView },
 ];
 
 export default routes;

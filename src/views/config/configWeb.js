@@ -28,6 +28,7 @@ import { MdOutlineModeComment } from "react-icons/md";
 import { AiOutlineFundView } from "react-icons/ai";
 import { BiWorld } from "react-icons/bi";
 import Chats from "./configWeb/Chats";
+import Embeds from "./configWeb/InfoCompany";
 import BannerAia from "./configWeb/BannerAia";
 import Logo from "./configWeb/Logo";
 import SlideShow from "./configWeb/SlideShow";
@@ -90,6 +91,11 @@ class ConfigWeb extends Component {
           icon: <BsChatDots style={{ width: "24px ", height: "24px " }} />,
         },
         {
+          _id: "10",
+          name: "Thông tin công ty",
+          icon: <BsChatDots style={{ width: "24px ", height: "24px " }} />,
+        },
+        {
           _id: "6",
           name: "Cấu hình mạng xã hội",
           icon: <IoLogoInstagram style={{ width: "24px ", height: "24px " }} />,
@@ -101,7 +107,9 @@ class ConfigWeb extends Component {
           icon: (
             <IoColorPaletteOutline style={{ width: "24px ", height: "24px " }} />
           ),
-        },
+        }
+
+        
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
         ? JSON.parse(localStorage.getItem("user")).company_id
@@ -219,11 +227,13 @@ class ConfigWeb extends Component {
               dataConfigWeb: valueConfig,
               idUpdate: dataConfig._id,
               chats: valueConfig.value.chats,
+              embeds:valueConfig.value.embeds,
               logos: valueConfig.value.logos,
               seoInfo: valueConfig.value.seoInfo,
               homepage: valueConfig.value.homepage,
               slideShow: valueConfig.value.slideShow,
               mxh: valueConfig.value.mxh,
+              
               statusConfig: valueConfig.value.statusConfig,
               configData: valueConfig.value.statusConfig,
               footer: valueConfig.value.footer,
@@ -241,6 +251,7 @@ class ConfigWeb extends Component {
                 seoInfo,
                 logos,
                 chats,
+                embeds,
                 configData,
                 mxh,
                 footer,
@@ -399,6 +410,18 @@ class ConfigWeb extends Component {
                   codeMess: this.state.chats.mess,
                 });
               }
+
+              if (embeds) {
+
+                this.setState({
+                  embeddFacebook: this.state.embeds.embeddFacebook,
+                  embeddZalo: this.state.embeds.embeddZalo,
+                  embedHotline: this.state.embeds.embedHotline
+                });
+              }
+              
+
+
               if (mxh) {
                 this.setState({
                   keyAppFb: this.state.mxh.facebook.appid,
@@ -433,7 +456,11 @@ class ConfigWeb extends Component {
               chats: {
                 tawk: "",
               },
-
+              embeds: {
+                embeddFacebook: "",
+                embeddZalo: "",
+                embedHotline: ""
+              },
               slideShow: [],
               statusConfig: [],
 
@@ -648,6 +675,12 @@ class ConfigWeb extends Component {
       coppyData.value.chatMess = this.state.codeMess;
       coppyData.value.tawk = this.state.codeChat;
     }
+
+    if (change === "embeds") {
+      coppyData.value.embeddFacebook = this.state.codeMess;
+      coppyData.value.embeddZalo = this.state.codeChat;
+      coppyData.value.embedHotline = this.state.embedHotline;
+    }
     if (change === "voucher") {
       if (!coppyData.value.voucher) {
         coppyData.value.voucher = {};
@@ -660,16 +693,16 @@ class ConfigWeb extends Component {
     coppyData.value.voucher.voucherSupplier = this.state.voucherSupplier;
     coppyData.value.voucher.voucherCondition = this.state.voucherCondition;
 
-      coppyData.value.voucher.sendSMS = this.state.sendSMS;
-      coppyData.value.voucher.registerGetVoucher =
-        this.state.registerGetVoucher;
-      
-      coppyData.value.voucher.infoVoucher = this.state.infoVoucher;
-      coppyData.value.voucher.loginWatchVoucher = this.state.loginWatchVoucher;
-      coppyData.value.voucher.receiveVoucher = this.state.receiveVoucher;
-      coppyData.value.voucher.textSales = this.state.textSales;
-      coppyData.value.voucher.receiveVoucherSuccess =
-        this.state.receiveVoucherSuccess;
+    coppyData.value.voucher.sendSMS = this.state.sendSMS;
+    coppyData.value.voucher.registerGetVoucher =
+    this.state.registerGetVoucher;
+
+    coppyData.value.voucher.infoVoucher = this.state.infoVoucher;
+    coppyData.value.voucher.loginWatchVoucher = this.state.loginWatchVoucher;
+    coppyData.value.voucher.receiveVoucher = this.state.receiveVoucher;
+    coppyData.value.voucher.textSales = this.state.textSales;
+    coppyData.value.voucher.receiveVoucherSuccess =
+    this.state.receiveVoucherSuccess;
       let newImage = await this.postImage(this.state.imageFormVoucher_link);
       if (newImage) {
         coppyData.value.voucher.imageFormVoucher = `${Constants.BASE_URL}image_brand/${newImage}`;
@@ -1278,7 +1311,7 @@ class ConfigWeb extends Component {
                   loginViewResult4={this.state.loginViewResult4}
                 />
               </div>
-              <div id="tabcontent10" className="tabcontent">
+              <div id="tabcontent11" className="tabcontent">
                 <ButtonConfig
                 title_get_voucher={this.state.title_get_voucher}
                  textSales={this.state.textSales}
@@ -1379,6 +1412,8 @@ class ConfigWeb extends Component {
                   codeMess={this.state.codeMess}
                 />
               </div>
+
+            
               <div id="tabcontent6" className="tabcontent">
                 <Mxh
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
@@ -1414,6 +1449,15 @@ class ConfigWeb extends Component {
                   hrefImageBannerDesktop={this.state.hrefImageBannerDesktop}
                   imageBannerMobile={this.state.imageBannerMobile}
                   hrefImageBannerMobile={this.state.hrefImageBannerMobile}
+                />
+              </div>
+              <div id="tabcontent10" className="tabcontent ">
+                <Embeds
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  embeddFacebook={this.state.embeddFacebook}
+                  embeddZalo={this.state.embeddZalo}
+                  embedHotline={this.state.embedHotline}
                 />
               </div>
             </div>

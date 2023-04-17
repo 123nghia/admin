@@ -24,18 +24,17 @@ export default class Chats extends Component {
           </CButton>
         </div>
         <div className="text-center">
-          <div className="mt-3">
-            <p>Mã chat tawk (nếu có) :</p>
-          </div>
-
-          <textarea
-            name="codeChat"
-            value={this.props.codeChat}
-            onChange={(e) => this.setStateByName("codeChat", e.target.value)}
-            class="mt-3"
-            cols="60"
-            rows="8"
-          ></textarea>
+            <div className="mt-3">
+              <p>Mã chat tawk (nếu có) :</p>
+            </div>
+            <textarea
+                  name="codeChat"
+                  value={this.props.codeChat}
+                  onChange={(e) => this.setStateByName("codeChat", e.target.value)}
+                  class="mt-3"
+             >
+              
+             </textarea>
         </div>
         <div class="text-center">
           <div className="mt-3">

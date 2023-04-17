@@ -438,7 +438,7 @@ class CustomerManager extends Component {
                     <thead className="thead-light">
                       <tr>
                         <th className="text-center">STT.</th>
-                        <th className="text-center">Số điện thoại</th>
+                        <th className="text-center">Tên đăng nhập</th>
                         <th className="text-center">Tên đầy đủ</th>
                         <th className="text-center">Số điện thoại</th>
                         {
@@ -461,6 +461,7 @@ class CustomerManager extends Component {
                                 <td className="text-center">{i + 1}</td>
                                 <td className="text-center">{item.UserName}</td>
                                 <td className="text-center">{item.FullName}</td>
+                              
                                 <td className="text-center">{item.Phone}</td>
                                 {
                                   type == '0' || type == '1' ?

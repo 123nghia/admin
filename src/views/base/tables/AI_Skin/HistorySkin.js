@@ -12,6 +12,7 @@ import {
   CardHeader,
   Col,
   Row,
+  Button,
   Input
 } from 'reactstrap';
 import { DatePicker, Space, Spin } from "antd";
@@ -27,6 +28,7 @@ import Constants from "../../../../contants/contants";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+let XLSX = require("xlsx");
 
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
@@ -190,12 +192,70 @@ class HistorySkin extends Component {
       default: return 'primary'
     }
   }
+  exportFile = async () => {
+        const { activePage, itemPerPage ,company_id,phoneNumber} = this.state;
+        this.setState({ isLoading: true });
+        const res = await axios({
+          baseURL: Constants.BASE_URL,
+          url: Constants.LIST_HISTORY_Skin_export,
+          method: 'POST',
+          data: {
+            page: activePage,
+            limit: itemPerPage,
+            phoneNumber: phoneNumber,
+            company_id: company_id
+           
+          
+          },
+          headers: this.state.token
+        });
+
+        let data = res.data.data
+        this.exportDataExcel(data);
+
+        
+  }
+
+
+ exportDataExcel (dataReder)  {
+  var DataExport = dataReder.data;
+   var listData =[];
+   var indexSTT =0;
+    DataExport.forEach(element => {
+            indexSTT ++;
+            var item = {
+              indexSTT: indexSTT, 
+              userName: element.UserName, 
+              Phone: element.Phone, 
+              Image: element.Image, 
+              linkDetail: "https://applamdep.com/xemchitietlichsu/"+ element._id,
+              create_Date: element.Create_Date
+            };
+            listData.push(item);
+     });
+   
+ 
+    let workBook = XLSX.utils.book_new();
+    const Heading = [
+    [
+      'STT', 'Tên', 'Số điện thoại','Link hình ảnh', 'Link xem soi da', 'Ngày soi da'
+    ]
+    ];
+      
+    const workSheet = XLSX.utils.json_to_sheet(listData,  
+        { origin: 'A2', skipHeader: true }
+        );
+    XLSX.utils.sheet_add_aoa(workSheet, Heading, { origin: 'A1' });
+    XLSX.utils.book_append_sheet(workBook, workSheet, `data`);
+
+    let exportFileName = `history.xls`;
+     XLSX.writeFile(workBook,exportFileName);
+
+}
 
   render() {
     const { data, activePage, itemPerPage, itemsCount, toggleHistory, idHistory } = this.state;
-
-
-    return (
+     return (
       <div className="animated fadeIn">
         <Row>
           <Col>
@@ -237,7 +297,9 @@ class HistorySkin extends Component {
                   </CCol>
                 
                  
-                 
+                     <CCol md={3} className="mt">
+                        <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.exportFile() }}>Xuất file</Button>
+                      </CCol>
               </CRow>
               <CardBody>
                 <table ble className="table table-hover table-outline mb-0  d-sm-table">
@@ -247,10 +309,11 @@ class HistorySkin extends Component {
                       <th className="text-center">Tên</th>
                       <th className="text-center">Số điện thoại</th>
                       <th className="text-center">Hình ảnh</th>
-                      <th className="text-center">Tỉnh thành</th>          
+                      <th className="text-center">Tỉnh thành </th>          
                       <th className="text-center">Kết quả</th>
                       <th className="text-center">Công ty</th>
                       <th className="text-center">Sale</th>
+                      <th className="text-center">Đăng ký tư vấn </th>  
                       <th className="text-center">Ngày tạo</th>
                     </tr>
                   </thead>
@@ -303,6 +366,7 @@ class HistorySkin extends Component {
                               </td>
                               <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
                               <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td>
+                              <td className="text-center">{item.typeLogin == "1" ? "Có": ""}</td>
                               <td className="text-center">
                                 {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
                               </td>

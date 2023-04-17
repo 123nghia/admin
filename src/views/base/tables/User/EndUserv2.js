@@ -7,6 +7,7 @@ import {
   Col,
   Row,
   Input,
+
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
 
@@ -29,7 +30,7 @@ let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
 headers.append('Content-Type', 'application/json');
-
+let XLSX = require("xlsx");
 class EndUserv2 extends Component {
   constructor(props) {
     super(props);
@@ -255,6 +256,68 @@ class EndUserv2 extends Component {
   inputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+  exportFile = async () => {
+    const { activePage, itemPerPage ,company_id,phoneNumber} = this.state;
+   
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_END_USER2,
+      method: 'POST',
+      data: {
+        page: activePage,
+        limit: itemPerPage,
+        phoneNumber: phoneNumber,
+        company_id: company_id
+       
+      
+      },
+      headers: this.state.token
+    });
+
+    let data = res.data.data
+    this.setState({ isLoading: false });
+    this.exportDataExcel(data);
+
+    
+}
+
+
+exportDataExcel (dataReder)  {
+  debugger;
+var DataExport = dataReder;
+var listData =[];
+var indexSTT =0;
+DataExport.forEach(element => {
+        indexSTT ++;
+        var item = {
+          indexSTT: indexSTT, 
+          username: element.username, 
+          name: element.name,
+          Phone: element.phone, 
+          create_Date: element.create_date
+        };
+        listData.push(item);
+ });
+
+
+let workBook = XLSX.utils.book_new();
+const Heading = [
+    [
+      'STT', 'Tên đăng nhập', 'Họ tên','Số điện thoại', 'Ngày tham gia'
+    ]
+];
+  
+const workSheet = XLSX.utils.json_to_sheet(listData,  
+    { 
+      origin: 'A2', skipHeader: true }
+    );
+XLSX.utils.sheet_add_aoa(workSheet, Heading, { origin: 'A1' });
+XLSX.utils.book_append_sheet(workBook, workSheet, `data`);
+
+let exportFileName = `user.xls`;
+ XLSX.writeFile(workBook,exportFileName);
+
+}
 
   getBadge(status) {
     switch (status) {
@@ -288,9 +351,12 @@ class EndUserv2 extends Component {
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
                           </CCol>
+                         
                           <CCol sm="12" lg="6">
                             <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.exportFile() }}>Xuất file</CButton>
                           </CCol>
+
                         </CRow>
                       </CCol>
                       <CCol sm="12" lg="12">
