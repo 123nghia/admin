@@ -284,7 +284,20 @@ const _navMakeUp = [
     }
   },
 ]
-
+const _navGame = [
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Quản lý game'],
+    role: [ '0','1','2']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Game tuổi da',
+    to: '/game-tuoi-da',
+    icon: <CIcon style={css} content={freeSet.cilList} customClasses="c-sidebar-nav-icon" />,
+    role: [ '0','1','2']
+  } 
+]
 const _navOrther = [
   {
     _tag: 'CSidebarNavTitle',
@@ -776,4 +789,4 @@ const _naveUser = [
     }
     ]
 
-export default [_navVendor, _naveUser,_navManagementConclue,_navSoida,_navDisplay, _navOrther, _navContact, _navLogOut,_navSpecialProduct  ]
+export default [_navVendor, _naveUser,_navManagementConclue,_navSoida,_navGame,_navDisplay, _navOrther, _navContact, _navLogOut,_navSpecialProduct  ]

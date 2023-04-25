@@ -74,6 +74,8 @@ const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTyp
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 const configWeb = React.lazy(() => import("./views/config/configWeb"));
+const configGame = React.lazy(() => import("./views/game/configWeb"));
+
 const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
 const configContent = React.lazy(() => import('./views/skin/content'));
 const configOverView = React.lazy(() => import('./views/skin/overView'));
@@ -128,7 +130,12 @@ const routes = [
     name: "configWeb",
     component: configWeb,
   },
-
+  {
+    path: "/game-tuoi-da",
+    name: "configGame",
+    component: configGame,
+  },
+  
 
   //User
   { path: '/end_user', name: 'End User', component: EndUserPlugin },
