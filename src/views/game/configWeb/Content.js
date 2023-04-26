@@ -5,8 +5,8 @@ import {
     CTextarea,
   } from "@coreui/react";
 export default class Seo extends Component {
-  SaveAllConfigWeb(value) {
-    this.props.SaveAllConfigWeb(value);
+  SaveAllConfigWeb() {
+    this.props.SaveAllConfigWeb();
   }
   setStateByName = (name, value) => {
     this.props.setStateByName(name, value);
@@ -21,7 +21,7 @@ export default class Seo extends Component {
           <Button
             variant="contained"
             color="success"
-            onClick={() => this.SaveAllConfigWeb("seoInfo")}
+            onClick={() => this.SaveAllConfigWeb()}
           >
             Lưu thay đổi
           </Button>

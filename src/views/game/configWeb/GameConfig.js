@@ -1,18 +1,25 @@
 import { Component } from "react";
+import moment from 'moment'
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import { Button, FormGroup, Label,Input  } from "reactstrap";
 import {
     CTextarea,
   } from "@coreui/react";
 export default class Seo extends Component {
-  SaveAllConfigWeb(value) {
-    this.props.SaveAllConfigWeb(value);
+  SaveAllConfigWeb() {
+    this.props.SaveAllConfigWeb();
   }
   setStateByName = (name, value) => {
     this.props.setStateByName(name, value);
   };
   onChangeImage=(e, name, name_link, name_show) =>{
     this.props.onChangeImage(e, name, name_link, name_show);
+}
+getTimeConver = (datetime) => {
+  if(datetime ==null )
+          return '';
+   return  moment(datetime).format('YYYY-MM-DD');
+
 }
 
   render() {
@@ -23,7 +30,7 @@ export default class Seo extends Component {
           <Button
             variant="contained"
             color="success"
-            onClick={() => this.SaveAllConfigWeb("seoInfo")}
+            onClick={() => this.SaveAllConfigWeb()}
           >
             Lưu thay đổi
           </Button>
@@ -35,7 +42,7 @@ export default class Seo extends Component {
     <Input
       id="fromDate"
       name="fromDate"
-      value={this.props.fromDate}
+      value={this.getTimeConver(this.props.fromDate)}
       placeholder="date placeholder"
       type="date"
       onChange={(e) => {
@@ -52,7 +59,7 @@ export default class Seo extends Component {
       name="todate"
       placeholder="Tới ngày"
       type="date"
-      value={this.props.todate}
+      value={this.getTimeConver(this.props.todate)}
       onChange={(e) => {
         this.setStateByName( "todate", e.target.value );
       }}

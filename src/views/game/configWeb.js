@@ -15,6 +15,8 @@ import Seo from "./configWeb/Content";
 import { BiSlideshow } from "react-icons/bi";
 import { MdOutlinePermDataSetting } from "react-icons/md";
 import { BsChatDots } from "react-icons/bs";
+
+import Swal from 'sweetalert2';
 let headers = new Headers();
 const auth = localStorage.getItem("auth");
 headers.append("Authorization", "Bearer " + auth);
@@ -117,43 +119,62 @@ class ConfigWeb extends Component {
         },
       })
       .then((res) => {
-        console.log("res", res.data);
-        if (res.data.data.length > 0) {
-          let dataConfig = res.data.data[0];
+        
+        var data = res.data.data;
+        
+           this.setState(
+          {
+            idUpdate: data._id,
+            poupintro: data.poupintro,
+            pupupSuccess: data.pupupSuccess,
+            popupfail: data.popupfail,
+            fromDate: data.fromDate,
+            todate: data.todate,
+            fromtime: data.fromtime,
+            totime: data.totime,
+            skinNumber: data.skinNumber,
+            statusGame: data.statusGame
+          },
+          () => {
 
-          let valueConfig = JSON.parse(dataConfig.Value);
-
-          this.setState(
-            {
-              dataConfigWeb: valueConfig,
-              idUpdate: dataConfig._id,
-              bannerCampaign: valueConfig.value.bannerCampaign,
-              poupintro: valueConfig.poupintro,
-              pupupSuccess: valueConfig.poupintro,
-              popupfail: valueConfig.popupfail,
-              fromDate: valueConfig.fromDate,
-              todate: valueConfig.todate,
-              fromtime: valueConfig.fromtime,
-              totime: valueConfig.totime,
-              skinNumber: valueConfig.skinNumber,
-              statusGame: valueConfig.statusGame,
-            },
-            () => {}
-          );
-        }
+            console.log(this.state);
+          }
+        );
       });
   }
 
-  SaveAllConfigWeb = async (change) => {
-    const { dataConfigWeb } = this.state;
+  SaveAllConfigWeb = async () => {
+
     var baseUrlapi = Constants.BASE_URL;
-    let url = baseUrlapi + "/api/config/update";
+    let url = baseUrlapi + "/api/game/update";
     const newComany_id = this.state.company_id;
-    let itOutput = "-1";
+    let Output_newComany_id;
     if (newComany_id) {
-      itOutput = newComany_id;
+      Output_newComany_id = newComany_id;
+    } else {
+      Output_newComany_id = "-1";
     }
-  
+    await axios
+    .post(url, {
+              gameType: "1",
+              company_id: Output_newComany_id,
+              poupintro: this.state.poupintro,
+              pupupSuccess: this.state.pupupSuccess,
+              popupfail: this.state.popupfail,
+              fromDate: this.state.fromDate,
+              todate: this.state.todate, 
+              fromtime: this.state.fromtime,
+              totime: this.state.totime, 
+              skinNumber: this.state.skinNumber,
+              statusGame: this.state.statusGame,
+              typeGame: "1"
+    })
+    .then((res) => {
+             Swal.fire({
+              title: 'thao tác thành công!',
+              timer: 3000,    
+            });
+    });
  
   };
 
