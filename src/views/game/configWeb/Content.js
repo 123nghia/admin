@@ -52,9 +52,7 @@ export default class Seo extends Component {
           onChange={(e) => {
             this.setStateByName( "popupfail", e.target.value );
           }}
-        />
-        
-       
+        />  
       </>
     );
   }
