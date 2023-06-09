@@ -60,6 +60,7 @@ class HistorySkin extends Component {
       type: localStorage.getItem('type'),
       toggleHistory: false,
       idHistory: "",
+      dataCompany: [],
       company_id: JSON.parse(localStorage.getItem('user')).company_id
     };
     this.closeModal = this.closeModal.bind(this)
@@ -69,6 +70,10 @@ class HistorySkin extends Component {
       this.getData()
     } else {
       this.getData_ByCondition()
+    }
+    if(this.state.company_id == undefined)
+    {
+      this.getAllDataCompany();
     }
 
     let arr = JSON.parse(localStorage.getItem('url'));
@@ -101,6 +106,28 @@ class HistorySkin extends Component {
     this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });
   }
 
+  getAllDataCompany = async () => {
+    const { activePage, itemPerPage ,phoneNumber} = this.state;
+
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.List_All_company,
+      data: {
+        page: activePage,
+        limit: itemPerPage,
+        phoneNumber: phoneNumber
+      },
+      method: 'POST'
+    });
+
+    let data = res.data;
+    debugger;
+    this.setState({ dataCompany:data.data.dataCompany });
+  }
+
+  
+
   handlePageChange = async (pageNumber) => {
     const { type } = this.state;
     console.log(type)
@@ -128,6 +155,41 @@ class HistorySkin extends Component {
         limit: itemPerPage,
         phoneNumber: phoneNumber,
         company_id: company_id,
+      
+      },
+      headers: this.state.token
+    });
+
+    let data = res.data.data
+
+    this.setState({ isLoading: false, itemsCount: data.total, dataApi: data.data, data: data.data });
+  }
+
+
+  searchData = async () => {
+  
+    const { activePage, itemPerPage ,company_id,phoneNumber,customerName, company_idSearch} = this.state;
+
+    let company_id1 = company_id;
+    if(company_idSearch )
+    {
+      company_id1 = company_idSearch;
+    }
+ 
+  
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.LIST_HISTORY_SKIN_BY_CONDITION,
+      method: 'POST',
+      data: {
+        page: activePage,
+        limit: itemPerPage,
+        customerName: customerName,
+        company_id: company_id1, 
+
+        phoneNumber: phoneNumber,
+      
       
       },
       headers: this.state.token
@@ -193,7 +255,13 @@ class HistorySkin extends Component {
     }
   }
   exportFile = async () => {
-        const { activePage, itemPerPage ,company_id,phoneNumber} = this.state;
+        const { activePage, itemPerPage,customerName ,company_id,phoneNumber,company_idSearch} = this.state;
+
+        let company_id1 = company_id;
+        if(company_idSearch )
+        {
+          company_id1 = company_idSearch;
+        }
         this.setState({ isLoading: true });
         const res = await axios({
           baseURL: Constants.BASE_URL,
@@ -202,8 +270,10 @@ class HistorySkin extends Component {
           data: {
             page: activePage,
             limit: itemPerPage,
+            customerName: customerName,
+            company_id: company_id1, 
+    
             phoneNumber: phoneNumber,
-            company_id: company_id
            
           
           },
@@ -219,16 +289,33 @@ class HistorySkin extends Component {
 
  exportDataExcel (dataReder)  {
   var DataExport = dataReder.data;
+
    var listData =[];
    var indexSTT =0;
     DataExport.forEach(element => {
             indexSTT ++;
+            var region =element.dataCheckRegion;
+            var regionName = '';
+            if(region)
+            {
+              regionName = region.regionName;
+            }
+            var x =  this.state.dataCompany.find(x => x._id ===  element.Company_Id);
+            var compnayName ="";
+            if(x)
+            {
+              compnayName  = x.Name;
+            }
+            
             var item = {
               indexSTT: indexSTT, 
               userName: element.UserName, 
               Phone: element.Phone, 
-              Image: element.Image, 
+              Image: element.Image,
               linkDetail: "https://applamdep.com/xemchitietlichsu/"+ element._id,
+              Slug: compnayName,
+              ipClient: element.ipClient,
+              regionName: regionName, 
               create_Date: element.Create_Date
             };
             listData.push(item);
@@ -238,7 +325,7 @@ class HistorySkin extends Component {
     let workBook = XLSX.utils.book_new();
     const Heading = [
     [
-      'STT', 'Tên', 'Số điện thoại','Link hình ảnh', 'Link xem soi da', 'Ngày soi da'
+      'STT', 'Tên', 'Số điện thoại','Link hình ảnh', 'Link xem soi da','Công ty','IP','Tỉnh thành(Dự đoán)', 'Ngày soi da'
     ]
     ];
       
@@ -252,8 +339,26 @@ class HistorySkin extends Component {
      XLSX.writeFile(workBook,exportFileName);
 
 }
+changeCompanySet = (e) => {
+  e.preventDefault();
+  this.setState({
+    company_idSearch: e.target.value,
+  });
+};
 
   render() {
+    const arrLevel = [
+      {
+        item : "1"
+      },
+      {
+        item : "2"
+      },
+      {
+        item : "3"
+      },
+    ];
+   
     const { data, activePage, itemPerPage, itemsCount, toggleHistory, idHistory } = this.state;
      return (
       <div className="animated fadeIn">
@@ -264,17 +369,18 @@ class HistorySkin extends Component {
                 <i className="fa fa-align-justify">Lịch sử soi da</i>
               </CardHeader>
 
-              <CRow>
+             
+              <CRow className="removeMargin">
                   <CCol md={3} className="mt">
                     <div className="">
                       <p className="title_filter">Tên khách hàng</p>
                       <Input
                         style={styles1.searchInput}
                         onChange={(e) => {
-                          this.setState({ nameFilter: e.target.value });
+                          this.setState({ customerName: e.target.value });
                         }}
-                        name="nameFilter"
-                        value={this.state.nameFilter}
+                        name="customerName"
+                        value={this.state.customerName}
                         placeholder="Tên"
                       />
                     </div>
@@ -286,20 +392,56 @@ class HistorySkin extends Component {
                       <Input
                         style={styles1.searchInput}
                         onChange={(e) => {
-                          this.setState({ numberFiler: e.target.value });
+                          this.setState({ phoneNumber: e.target.value });
                         }}
                         type="text"
-                        name="numberFiler"
-                        value={this.state.numberFiler}
+                        name="phoneNumber"
+                        value={this.state.phoneNumber}
                         placeholder="Số điện thoại"
                       />
                     </div>
                   </CCol>
+                    {
+                      this.state.company_id == undefined ? <CCol md={3} className="mt">
+                      <div className="">
+                        <p className="title_filter">Công ty</p>
+                        {
+                  this.state.dataCompany != undefined ? (
+                    <CSelect onChange={
+                      async e => {this.changeCompanySet(e)}
+                      
+                    } custom size="sm" name="company_idSearch" id="company_idSearch">
+                     
+                     <option selected  value ="">
+ Chọn công ty
+</option>
+                      {
+
+
+                         this.state.dataCompany.map((item, i) => {
+                          return (
+                            <option  value={item._id}>
+                             {item.Name}
+                            </option>
+                          );                     
+                            
+                          })
+                      }
+                    </CSelect>
+                  ) : null
+                }
+                      </div>
+                    </CCol>:<></>
+                    }
+                  
                 
                  
-                     <CCol md={3} className="mt">
-                        <Button color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.exportFile() }}>Xuất file</Button>
-                      </CCol>
+                   
+              </CRow>
+              <CRow className=" removeMargin searchArea ">
+              <Button color="primary"  size="sm" onClick={e => { this.exportFile() }}>Xuất file</Button>
+              <Button color="primary"  size="sm" onClick={e => { this.searchData() }}>Tìm kiếm</Button>
+                
               </CRow>
               <CardBody>
                 <table ble className="table table-hover table-outline mb-0  d-sm-table">
@@ -309,11 +451,13 @@ class HistorySkin extends Component {
                       <th className="text-center">Tên</th>
                       <th className="text-center">Số điện thoại</th>
                       <th className="text-center">Hình ảnh</th>
-                      <th className="text-center">Tỉnh thành </th>          
+                         
                       <th className="text-center">Kết quả</th>
                       <th className="text-center">Công ty</th>
-                      <th className="text-center">Sale</th>
-                      <th className="text-center">Đăng ký tư vấn </th>  
+                      <th className="text-center">Thông tin</th>
+{/*                   
+                      <th className="text-center">Sale</th> */}
+                      {/* <th className="text-center">Đăng ký tư vấn </th>   */}
                       <th className="text-center">Ngày tạo</th>
                     </tr>
                   </thead>
@@ -345,17 +489,7 @@ class HistorySkin extends Component {
                                
                                 <img src={item.Result != undefined ? resultItem.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
                               </td>
-                              <td className="text-center">
-                                {
-                                  item.regionName
-                                }
-                                {/* {
-                                  item?.location?.x && item?.location?.y ? <a target='_blank' href={`https://www.google.com/maps/place/${item?.location?.x},${item?.location?.y}`}>
-                                  <CButton outline color="primary">Xem trên map</CButton>
-                                  </a> : 'Không có thông tin'
-                                } */}
-                                
-                              </td>
+                            
                               <td className="text-center">
                                 <CButton outline color="primary" onClick={e => {
                                   this.setState({
@@ -365,10 +499,26 @@ class HistorySkin extends Component {
                                 }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
                               </td>
                               <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
-                              <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td>
-                              <td className="text-center">{item.typeLogin == "1" ? "Có": ""}</td>
+                              <td className="text-left displayblock">
+                                <span> 
+                                  Loại game:  {item.gameType}
+                                </span>
+                                <span >
+                                  Địa chỉ: <strong>{item.regionName }</strong> 
+                                 
+                                 </span>
+                                 <span>IP: {item.ipClient }</span>
+                                <span>
+                                  Đăng ký tư vấn: {item.typeLogin == "1" ? "Có": ""}
+                                </span>
+                               </td>
+                          
+                              {/* <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td> */}
+                         
                               <td className="text-center">
-                                {(new Date(item.Create_Date)).toLocaleDateString() + ' ' + (new Date(item.Create_Date)).toLocaleTimeString()}
+                                <p>{(new Date(item.Create_Date)).toLocaleDateString()} </p> 
+                                <p>{(new Date(item.Create_Date)).toLocaleTimeString()} </p>
+                             
                               </td>
                             </tr>
                           );

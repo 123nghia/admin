@@ -288,7 +288,7 @@ const _navGame = [
   {
     _tag: 'CSidebarNavTitle',
     _children: ['Quản lý game'],
-    role: [ '0','1','2']
+    role: [ '0']
   },
   {
     _tag: 'CSidebarNavItem',

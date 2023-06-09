@@ -27,31 +27,31 @@ export default class Seo extends Component {
           </Button>
         </div>
         <TextFieldGroup
-          field="poupintro"
-          label="Poup giới thiệu:"
-          value={this.props.poupintro}
-          placeholder={""}
-          onChange={(e) => {
-            this.setStateByName( "poupintro", e.target.value );
-          }}
+            field="poupintro"
+            label="Poup giới thiệu:"
+            value={this.props.poupintro}
+            placeholder={""}
+            onChange={(e) => {
+              this.setStateByName( "poupintro", e.target.value );
+            }}
         />
         <TextFieldGroup
-          field="pupupSuccess"
-          label="Câu thông  báo khi trúng thưởng:"
-          value={this.props.pupupSuccess}
-          placeholder={""}
-          onChange={(e) => {
-            this.setStateByName( "pupupSuccess", e.target.value );
-          }}
+            field="pupupSuccess"
+            label="Câu thông  báo khi trúng thưởng:"
+            value={this.props.pupupSuccess}
+            placeholder={""}
+            onChange={(e) => {
+              this.setStateByName( "pupupSuccess", e.target.value );
+            }}
         />
         <TextFieldGroup
-          field="introduce"
-          label="Câu thông báo khi không trúng thưởng:"
-          value={this.props.popupfail}
-          placeholder={""}
-          onChange={(e) => {
-            this.setStateByName( "popupfail", e.target.value );
-          }}
+            field="introduce"
+            label="Câu thông báo khi không trúng thưởng:"
+            value={this.props.popupfail}
+            placeholder={""}
+            onChange={(e) => {
+              this.setStateByName( "popupfail", e.target.value );
+            }}
         />  
       </>
     );

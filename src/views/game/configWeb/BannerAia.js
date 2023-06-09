@@ -78,8 +78,6 @@ export default class BannerAia extends Component {
               );
             }}
             onClick={(e) => {e.target.value = null;this.setStateByName("imageBannerMobile_show", "")}} 
-
-          
           />
           <div class="text-center">
             <img

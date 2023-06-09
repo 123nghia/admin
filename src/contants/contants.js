@@ -225,8 +225,9 @@ export default {
   "DELETE_COLOR": "/delete-color",
 
   "LIST_HISTORY_SKIN": "/api/get-history-skin",
+  "List_All_company": "/api/getAllCommpany",
   "LIST_HISTORY_SKIN_BY_CONDITION": "/api/get-history-skin-by-condition",
-  "LIST_HISTORY_Skin_export": "/api/get-history-skin-by-condition",
+  "LIST_HISTORY_Skin_export": "/api/export-history-skin",
   "ADD_HISTORY_SKIN": "/api/add-history-skin",
 
 
