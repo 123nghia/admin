@@ -511,6 +511,10 @@ changeCompanySet = (e) => {
                                 <span>
                                   Đăng ký tư vấn: {item.typeLogin == "1" ? "Có": ""}
                                 </span>
+
+                                <span>
+                                  Trúng game: Có (loại 1)
+                                </span>
                                </td>
                           
                               {/* <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td> */}

@@ -3,6 +3,7 @@ import { Button } from "reactstrap";
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 
 export default class BannerAia extends Component {
+  
     SaveAllConfigWeb(value) {
         this.props.SaveAllConfigWeb(value);
     }
@@ -27,7 +28,7 @@ export default class BannerAia extends Component {
           </Button>
         </div>
         <div class="mt-3">
-          <h1>Banner Desktop</h1>
+          <h1>Banner trên PC</h1>
           <TextFieldGroup
             field="image"
             label="Hình ảnh"
@@ -51,7 +52,7 @@ export default class BannerAia extends Component {
           </div>
           <TextFieldGroup
             field="hrefImageBannerDesktop"
-            label="Đường dẫn"
+            label="Đường dẫn(Nếu có)"
             value={this.props.hrefImageBannerDesktop}
             placeholder=""
             type={"text"}
@@ -64,7 +65,7 @@ export default class BannerAia extends Component {
         </div>
         <hr />
         <div class="mt-3">
-          <h1>Banner Mobile</h1>
+          <h1>Banner trên điện thoại</h1>
           <TextFieldGroup
             field="image"
             label="Hình ảnh"
@@ -89,7 +90,7 @@ export default class BannerAia extends Component {
           </div>
           <TextFieldGroup
             field="hrefImageBannerMobile"
-            label="Đường dẫn"
+            label="Đường dẫn(Nếu có)"
             value={this.props.hrefImageBannerMobile}
             placeholder=""
             type={"text"}

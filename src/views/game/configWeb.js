@@ -94,7 +94,15 @@ class ConfigWeb extends Component {
       }
     }
   }
- 
+  onChangeImage = (e, value, valueLink, valueShow) => {
+    let files = e.target.files;
+    let reader = new FileReader();
+    this.setState({ [valueLink]: files[0] });
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      this.setState({ [value]: e.target.result, [valueShow]: e.target.result });
+    };
+  };
   async componentDidMount() {
       await this.getDataConfigWeb();
       this.ToggleViewConfigWeb("9");
@@ -121,6 +129,7 @@ class ConfigWeb extends Component {
       .then((res) => {
         
         var data = res.data.data;
+        console.log(data);
         
            this.setState(
           {
@@ -133,7 +142,11 @@ class ConfigWeb extends Component {
             fromtime: data.fromtime,
             totime: data.totime,
             skinNumber: data.skinNumber,
-            statusGame: data.statusGame
+            statusGame: data.statusGame,
+            imageBannerDesktop: data.imageBannerDesktop,
+            imageBannerMobile: data.imageBannerMobile,
+            hrefImageBannerMobile: data.hrefImageBannerMobile,
+            hrefImageBannerDesktop: data.hrefImageBannerDesktop
           },
           () => {
 
@@ -143,7 +156,9 @@ class ConfigWeb extends Component {
       });
   }
 
-  SaveAllConfigWeb = async () => {
+  SaveAllConfigWeb = async (change) => {
+
+   
 
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "/api/game/update";
@@ -154,21 +169,30 @@ class ConfigWeb extends Component {
     } else {
       Output_newComany_id = "-1";
     }
+    const bodyRequest = {
+      gameType: "1",
+      company_id: Output_newComany_id,
+      poupintro: this.state.poupintro,
+      pupupSuccess: this.state.pupupSuccess,
+      popupfail: this.state.popupfail,
+      fromDate: this.state.fromDate,
+      todate: this.state.todate, 
+      fromtime: this.state.fromtime,
+      totime: this.state.totime, 
+      skinNumber: this.state.skinNumber,
+      statusGame: this.state.statusGame,
+      typeGame: "1",
+      imageBannerDesktop: this.state.imageBannerDesktop,
+      hrefImageBannerDesktop: this.state.hrefImageBannerDesktop,
+      imageBannerMobile: this.state.imageBannerMobile,
+      hrefImageBannerMobile: this.state.hrefImageBannerMobile
+
+
+};
+    
+
     await axios
-    .post(url, {
-              gameType: "1",
-              company_id: Output_newComany_id,
-              poupintro: this.state.poupintro,
-              pupupSuccess: this.state.pupupSuccess,
-              popupfail: this.state.popupfail,
-              fromDate: this.state.fromDate,
-              todate: this.state.todate, 
-              fromtime: this.state.fromtime,
-              totime: this.state.totime, 
-              skinNumber: this.state.skinNumber,
-              statusGame: this.state.statusGame,
-              typeGame: "1"
-    })
+    .post(url,bodyRequest )
     .then((res) => {
              Swal.fire({
               title: 'thao tác thành công!',
@@ -246,7 +270,7 @@ class ConfigWeb extends Component {
                 <BannerAia
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
-                 
+                  onChangeImage = {this.onChangeImage}
                   imageBannerDesktop={this.state.imageBannerDesktop}
                   hrefImageBannerDesktop={this.state.hrefImageBannerDesktop}
                   imageBannerMobile={this.state.imageBannerMobile}
