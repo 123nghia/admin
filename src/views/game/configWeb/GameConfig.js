@@ -128,10 +128,10 @@ getTimeConver = (datetime) => {
       }}
       type="select"
     >
-      <option value = "0" >
+      <option value = "1" >
          Bật
       </option>
-      <option value ="1">
+      <option value ="0">
         Tắt
       </option>
      
