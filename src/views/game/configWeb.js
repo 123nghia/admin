@@ -46,15 +46,7 @@ class ConfigWeb extends Component {
           name: "Danh sách trúng thưởng ",
           icon: <BiSlideshow style={{ width: "24px ", height: "24px " }} />,
         },
-        // {
-        //   _id: "3",
-        //   name: "Nội dung game",
-        //   icon: (
-        //     <MdOutlinePermDataSetting
-        //       style={{ width: "24px ", height: "24px " }}
-        //     />
-        //   ),
-        // },
+      
         {
           _id: "4",
           name: "Cấu hình game",
@@ -351,6 +343,7 @@ class ConfigWeb extends Component {
                   todate={this.state.todate}
                   fromtime={this.state.fromtime}
                   totime={this.state.totime}
+                
                   skinNumber={this.state.skinNumber}
                   statusGame={this.state.statusGame}
                 />
@@ -362,6 +355,7 @@ class ConfigWeb extends Component {
                   setStateByName={this.setStateByName}
                   GameData  = {this.state.dataGame1}
                   typeGetData = {1}
+                 
                   pupupSuccess={this.state.pupupSuccess}
                   poupintro={this.state.poupintro}
                   popupfail={this.state.popupfail}

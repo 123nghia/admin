@@ -1,6 +1,7 @@
 import { Component } from "react";
 import TextFieldGroup from "../../Common/TextFieldGroup";
 import { Button } from "reactstrap";
+import IframeModal from '../../components/Iframe';
 import CIcon from '@coreui/icons-react';
 import {
   CButton
@@ -8,7 +9,8 @@ import {
 import {
     CTextarea,
   } from "@coreui/react";
-export default class GameUser extends Component {
+  export default class GameUser extends Component {
+   
   SaveAllConfigWeb() {
     this.props.SaveAllConfigWeb();
   }
@@ -19,22 +21,16 @@ export default class GameUser extends Component {
     this.props.onChangeImage(e, name, name_link, name_show);
 }
 
+
 viewHistory = (e) => {
 
+  window.open("/#/lich-su-ca-nhan/"+ e, "_blank");
 
 }
   render() {
     return (
       <>
-        <div className="text-center">
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => this.SaveAllConfigWeb()}
-          >
-            Lưu thay đổi
-          </Button>
-        </div>
+      
         <table  className="table table-hover table-outline mb-0  d-sm-table">
                   <thead className="thead-light">
                         <tr>
@@ -79,11 +75,13 @@ viewHistory = (e) => {
 
                                     <td className="text-center">
                                       <CButton outline color="primary" onClick={e => {
-
- this.viewHistory(item._id)
-
-                                      }}><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
-                                      </td>
+                                      this.viewHistory(
+                                         item._id
+                                      )
+                                      }}
+                                
+                                ><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                                     </td>
 
 
                               </tr>
@@ -95,7 +93,7 @@ viewHistory = (e) => {
                
         </table>
       
-       
+   
       </>
     );
   }

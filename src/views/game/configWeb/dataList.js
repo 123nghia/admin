@@ -12,15 +12,7 @@ export default class Voucher extends Component {
   render() {
     return (
       <>
-        <div class="text-center">
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => this.SaveAllConfigWeb("form")}
-          >
-            Lưu thay đổi
-          </Button>
-        </div>
+      
        
         <div class="flex-a-center config-box-border">
           <div>
