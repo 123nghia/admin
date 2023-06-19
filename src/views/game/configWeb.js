@@ -12,6 +12,7 @@ import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
 import BannerAia from "./configWeb/BannerAia";
 import Logo from "./configWeb/GameConfig";
 import Seo from "./configWeb/Content";
+import DataGame from "./configWeb/gameUser";
 import { BiSlideshow } from "react-icons/bi";
 import { MdOutlinePermDataSetting } from "react-icons/md";
 import { BsChatDots } from "react-icons/bs";
@@ -26,16 +27,8 @@ class ConfigWeb extends Component {
     super(props);
     this.state = {
       tabNameConfig: [
-        {
-          _id: "10",
-          name: "Thông tin tổng quan",
-          icon: <BsChatDots style={{ width: "24px ", height: "24px " }} />,
-        },
-        {
-          _id: "5",
-          name: "Danh sách trúng thưởng",
-          icon: <BsChatDots style={{ width: "24px ", height: "24px " }} />,
-        },
+       
+       
 
         {
           _id: "9",
@@ -43,14 +36,25 @@ class ConfigWeb extends Component {
           icon: <BiSlideshow style={{ width: "24px ", height: "24px " }} />,
         },
         {
-          _id: "3",
-          name: "Nội dung game",
-          icon: (
-            <MdOutlinePermDataSetting
-              style={{ width: "24px ", height: "24px " }}
-            />
-          ),
+          _id: "12",
+          name: "Danh sách tham gia ",
+          icon: <BiSlideshow style={{ width: "24px ", height: "24px " }} />,
         },
+        
+        {
+          _id: "13",
+          name: "Danh sách trúng thưởng ",
+          icon: <BiSlideshow style={{ width: "24px ", height: "24px " }} />,
+        },
+        // {
+        //   _id: "3",
+        //   name: "Nội dung game",
+        //   icon: (
+        //     <MdOutlinePermDataSetting
+        //       style={{ width: "24px ", height: "24px " }}
+        //     />
+        //   ),
+        // },
         {
           _id: "4",
           name: "Cấu hình game",
@@ -68,6 +72,7 @@ class ConfigWeb extends Component {
       fromtime: "",
       totime: "",
       skinNumber: "",
+      dataGame:  [],
       statusGame: "",
     };
   }
@@ -105,6 +110,8 @@ class ConfigWeb extends Component {
   };
   async componentDidMount() {
       await this.getDataConfigWeb();
+      await this.getDataGame();
+      await this.getDataGame1();
       this.ToggleViewConfigWeb("9");
   }
 
@@ -151,6 +158,68 @@ class ConfigWeb extends Component {
           () => {
 
             console.log(this.state);
+          }
+        );
+      });
+  }
+
+  async getDataGame1() {
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "/api/get-game-data-11";
+    const newComany_id = this.state.company_id;
+    let Output_newComany_id;
+    if (newComany_id) {
+      Output_newComany_id = newComany_id;
+    } else {
+      Output_newComany_id = "-1";
+    }
+    await axios
+      .get(url, {
+        params: {
+          company_id: Output_newComany_id,
+
+        },
+      })
+      .then((res) => {
+        
+         var data = res.data.data;
+          this.setState(
+          {
+            dataGame1 : data
+          },
+          () => {
+
+            
+          }
+        );
+      });
+  }
+  async getDataGame() {
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "/api/get-game-data-1";
+    const newComany_id = this.state.company_id;
+    let Output_newComany_id;
+    if (newComany_id) {
+      Output_newComany_id = newComany_id;
+    } else {
+      Output_newComany_id = "-1";
+    }
+    await axios
+      .get(url, {
+        params: {
+          company_id: Output_newComany_id,
+        },
+      })
+      .then((res) => {
+        
+         var data = res.data.data;
+          this.setState(
+          {
+            dataGame : data
+          },
+          () => {
+
+            console.log(data);
           }
         );
       });
@@ -266,6 +335,45 @@ class ConfigWeb extends Component {
                   statusGame={this.state.statusGame}
                 />
               </div>
+
+              
+
+              <div id="tabcontent12" className="tabcontent">
+                <DataGame
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  GameData  = {this.state.dataGame}
+                  typeGetData = {0}
+                  pupupSuccess={this.state.pupupSuccess}
+                  poupintro={this.state.poupintro}
+                  popupfail={this.state.popupfail}
+                  fromDate={this.state.fromDate}
+                  todate={this.state.todate}
+                  fromtime={this.state.fromtime}
+                  totime={this.state.totime}
+                  skinNumber={this.state.skinNumber}
+                  statusGame={this.state.statusGame}
+                />
+              </div>
+
+              <div id="tabcontent13" className="tabcontent">
+                <DataGame
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  GameData  = {this.state.dataGame1}
+                  typeGetData = {1}
+                  pupupSuccess={this.state.pupupSuccess}
+                  poupintro={this.state.poupintro}
+                  popupfail={this.state.popupfail}
+                  fromDate={this.state.fromDate}
+                  todate={this.state.todate}
+                  fromtime={this.state.fromtime}
+                  totime={this.state.totime}
+                  skinNumber={this.state.skinNumber}
+                  statusGame={this.state.statusGame}
+                />
+              </div>
+
               <div id="tabcontent9" className="tabcontent">
                 <BannerAia
                   SaveAllConfigWeb={this.SaveAllConfigWeb}

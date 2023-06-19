@@ -1,6 +1,6 @@
 export default {
  
-   "BASE_URL" : "http://192.168.1.37:3002",
+   "BASE_URL" : "http://localhost:3002",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/xemchitietlichsu/",
   "BASE_URL_CURRENT" : "http://localhost:3003",
   "LIST_USER" : "/api/list-user",

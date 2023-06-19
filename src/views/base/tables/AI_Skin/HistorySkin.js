@@ -500,21 +500,20 @@ changeCompanySet = (e) => {
                               </td>
                               <td className="text-center">{item.Company_Id == "" || item.Company_Id == undefined ? "" : item.Company_Id.Name}</td>
                               <td className="text-left displayblock">
-                                <span> 
-                                  Loại game:  {item.gameType}
-                                </span>
-                                <span >
-                                  Địa chỉ: <strong>{item.regionName }</strong> 
-                                 
-                                 </span>
-                                 <span>IP: {item.ipClient }</span>
-                                <span>
-                                  Đăng ký tư vấn: {item.typeLogin == "1" ? "Có": ""}
-                                </span>
 
-                                <span>
-                                  Trúng game: Có (loại 1)
-                                </span>
+                                            <span> 
+                                              Loại game:  {item.gameType}
+                                            </span>
+                                            <span >
+                                              Địa chỉ: <strong>{item.regionName }</strong> 
+                                            
+                                            </span>
+                                            <span>IP: {item.ipClient }</span>
+                                            <span>
+                                              Đăng ký tư vấn: {item.typeLogin == "1" ? "Có": ""}
+                                            </span>
+
+                                           
                                </td>
                           
                               {/* <td className="text-center">{item.Sale_Id == null ? "ADMIN" : item.Sale_Id.Name}</td> */}
