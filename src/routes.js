@@ -76,6 +76,8 @@ const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
 const configWeb = React.lazy(() => import("./views/config/configWeb"));
 const configGame = React.lazy(() => import("./views/game/configWeb"));
 
+const configBeauty = React.lazy(() => import("./views/beauty/configBeauty"));
+
 const Banner = React.lazy(() => import('./views/base/tables/Banner/Banner'));
 const configContent = React.lazy(() => import('./views/skin/content'));
 const configOverView = React.lazy(() => import('./views/skin/overView'));
@@ -134,6 +136,12 @@ const routes = [
     path: "/game-tuoi-da",
     name: "configGame",
     component: configGame,
+  },
+
+  {
+    path: "/quan-ly-diem-dep",
+    name: "configBeauty",
+    component: configBeauty,
   },
   
 

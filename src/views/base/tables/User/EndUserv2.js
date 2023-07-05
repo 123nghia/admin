@@ -377,7 +377,9 @@ let exportFileName = `user.xls`;
                         <th className="text-center">Số điện thoại</th>
 
               
-                        <th className="text-center">Ngày tham gia</th>
+                        <th className="text-center">Ngày tham gia </th>
+
+                        <th className="text-center">Điểm đẹp </th>
                         <th className="text-center">Lịch sử soi da</th>
                         
                         <th className="text-center">#</th>
@@ -397,6 +399,8 @@ let exportFileName = `user.xls`;
                                 <td className="text-center">{item.phone}</td>
                     
                                 <td className="text-center">{(new Date(item.create_date)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}</td>
+                               
+                                <td className="text-center">{item.beautyScore}</td>
                                 <td className="text-center">
 
 <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {

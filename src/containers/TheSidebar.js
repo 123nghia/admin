@@ -225,6 +225,21 @@ const TheSidebar = () => {
 
         
         </div>
+
+        <div style={{ backgroundColor: '#fffff' }}>
+          <CCreateElement
+            items={navigations[9]}
+            components={{
+              CSidebarNavDivider,
+              CSidebarNavDropdown,
+              CSidebarNavItem,
+              CSidebarNavTitle
+            }}
+          />
+
+
+        
+        </div>
       </CSidebarNav>
       {/* <CSidebarMinimizer className="c-d-md-down-none" /> */}
     </CSidebar>

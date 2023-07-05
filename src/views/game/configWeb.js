@@ -42,6 +42,7 @@ class ConfigWeb extends Component {
         },
         
         {
+          
           _id: "13",
           name: "Danh sách trúng thưởng ",
           icon: <BiSlideshow style={{ width: "24px ", height: "24px " }} />,
