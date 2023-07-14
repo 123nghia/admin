@@ -772,7 +772,7 @@ const _naveUser = [
     {
       _tag: 'CSidebarNavTitle',
       _children: ['Quản lý kết luận và chi tiết'],
-      role: [ '2'],
+      role: ['0', '1', '2'],
     },
     {
       _tag: 'CSidebarNavItem',
@@ -790,7 +790,7 @@ const _naveUser = [
     },
      {
       _tag: 'CSidebarNavItem',
-      name: 'Tư vấn tổng quá',
+      name: 'Tư vấn tổng quát',
   
       to: '/skin/configOverView',
       icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
@@ -804,4 +804,4 @@ const _naveUser = [
     }
     ]
 
-export default [_navVendor, _naveUser, _navBeauty,_navManagementConclue,_navSoida,_navGame,_navDisplay, _navOrther, _navContact, _navLogOut,_navSpecialProduct  ]
+export default [_navVendor, _naveUser,_navManagementConclue, _navBeauty,_navSoida,_navGame,_navDisplay, _navOrther, _navContact, _navLogOut,_navSpecialProduct  ]

@@ -7,14 +7,14 @@ import {
   Col,
   Row,
   Input,
-
+  Label,
   ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
-
 import {
   CButton,
   CRow,
-  CCol
+  CCol,
+  CSelect
 } from '@coreui/react'
 
 import API_CONNECT from "../../../../functions/callAPI";
@@ -36,7 +36,7 @@ class EndUserv2 extends Component {
     super(props);
     this.state = {
       data: [],
-        company_id: JSON.parse(localStorage.getItem('user')).company_id,
+      company_id: JSON.parse(localStorage.getItem('user')).company_id,
       key: '',
       totalActive: 0,
       modalCom: false,
@@ -50,6 +50,7 @@ class EndUserv2 extends Component {
       modalDelete: false,
       delete: null,
       arrPagination: [],
+      dataCompany: [],
       indexPage: 0,
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       type: localStorage.getItem('type'),
@@ -70,29 +71,37 @@ class EndUserv2 extends Component {
         }
       }
     }
+
+    if(this.state.company_id == undefined)
+    {
+      this.getAllDataCompany();
+    }
+
   }
 
   pagination(dataApi) {
-    var i, j, temparray, chunk = 5;
-    var arrTotal = [];
-    for (i = 0, j = dataApi.length; i < j; i += chunk) {
-      temparray = dataApi.slice(i, i + chunk);
-      arrTotal.push(temparray);
-    }
+          var i, j, temparray, chunk = 5;
+          var arrTotal = [];
+          for (i = 0, j = dataApi.length; i < j; i += chunk) {
+            temparray = dataApi.slice(i, i + chunk);
+            arrTotal.push(temparray);
+          }
 
-    if (arrTotal.length == 0) {
-      this.setState({
-        hidden: false
-      })
-    } else {
-      this.setState({
-        hidden: true
-      })
-    }
+          if (arrTotal.length == 0) {
+            this.setState({
+              hidden: false
+            })
+          } else {
+            this.setState({
+              hidden: true
+            })
+          }
 
-    this.setState({ arrPagination: arrTotal, data: arrTotal[0] });
+         this.setState({ arrPagination: 2, data: dataApi  });
   }
-
+  setStateByName = (name, value) => {
+    this.props.setStateByName(name, value);
+  };
   getData = async () => {
     const { company_id } = this.state;
     this.setState({ isLoading: true });
@@ -100,7 +109,9 @@ class EndUserv2 extends Component {
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_END_USER2,
       data: {
-        company_id : company_id
+        company_id : company_id, 
+        limit: 10, 
+        page: 1
       },
       method: 'POST'
     });
@@ -113,9 +124,24 @@ class EndUserv2 extends Component {
 
     this.setState({ isLoading: false, totalActive: active });
   }
+  getAllDataCompany = async () => {
+   
+
+    this.setState({ isLoading: true });
+    const res = await axios({
+      baseURL: Constants.BASE_URL,
+      url: Constants.List_All_company,
+     
+      method: 'POST'
+    });
+
+    let data = res.data;
+
+    this.setState({ dataCompany:data.data.dataCompany });
+  };
 
   searchKey() {
-    const { indexPage, key } = this.state;
+    const { indexPage, key, fromDate, endDate,company_idSearch } = this.state;
     // this.setState({ key: key })
 
     if (key != '') {
@@ -328,7 +354,12 @@ let exportFileName = `user.xls`;
       default: return 'primary'
     }
   }
-
+  changeCompanySet = (e) => {
+    e.preventDefault();
+    this.setState({
+      company_idSearch: e.target.value,
+    });
+  };
   render() {
     const { data, arrPagination, key } = this.state;
     if (!this.state.isLoading) {
@@ -341,16 +372,97 @@ let exportFileName = `user.xls`;
                   <i className="fa fa-align-justify">Danh sách người dùng </i>
                   <div style={styles.tags}>
 
-                    <CRow>
-                      <CCol sm="12" lg="12">
-                        <CRow>
-                          <CCol sm="12" lg="6">
+                 
+
+                  </div>
+                </CardHeader>
+
+
+                <CardBody>
+                    <CRow> 
+
+                    <CCol sm="12" lg="6">
+                        <Label for="exampleDate">
+                        Từ ngày
+                        </Label>
+                        <Input
+                        id="fromDate"
+                        name="fromDate"
+                       
+                        placeholder="date placeholder"
+                        type="date"
+                        onChange={(e) => {
+                       
+                        }}
+                        />
+                        </CCol>
+                        <CCol sm="12" lg="6">
+<Label for="exampleDate">
+     Đến ngày
+    </Label>
+    <Input
+  
+      name="endDate"
+    
+      placeholder="date placeholder"
+      type="date"
+      onChange={(e) => {
+   
+      }}
+    />
+    </CCol>
+
+                    </CRow>
+                    <CRow> 
+
+                
+
+                        {
+
+                  this.state.dataCompany.length >0 ? (
+                    <CCol sm="12" lg="6">
+                    <div className="">
+                      <p className="title_filter">Công ty</p>
+                    <CSelect onChange={
+                      async e => {this.changeCompanySet(e)}
+                      
+                    } custom size="sm" name="company_idSearch" id="company_idSearch">
+                     
+                     <option selected  value ="">
+ Chọn công ty
+</option>
+                      {
+
+
+                         this.state.dataCompany.map((item, i) => {
+                          return (
+                            <option  value={item._id}>
+                             {item.Name}
+                            </option>
+                          );                     
+                            
+                          })
+                      }
+                    </CSelect>
+                    
+                         
+                    </div>
+                    </CCol>
+                  ) : null
+                }
+
+                         <CCol sm="12" lg="6">
                             <div>
+                            <p className="title_filter">từ khóa tìm kiếm</p>
                               <Input style={styles.searchInput} onChange={(e) => {
                                 this.actionSearch(e, "key");
                               }} name="key" value={key} placeholder="Từ khóa" />
                             </div>
-                          </CCol>
+                      </CCol>
+
+                    </CRow>
+                    <CRow>
+                         
                          
                           <CCol sm="12" lg="6">
                             <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
@@ -358,16 +470,6 @@ let exportFileName = `user.xls`;
                           </CCol>
 
                         </CRow>
-                      </CCol>
-                      <CCol sm="12" lg="12">
-
-                      </CCol>
-                    </CRow>
-
-                  </div>
-                </CardHeader>
-                <CardBody>
-
                   <table ble className="table table-hover table-outline mb-0  d-sm-table">
                     <thead className="thead-light">
                       <tr>
@@ -398,9 +500,14 @@ let exportFileName = `user.xls`;
                                  <td className="text-center">{item.name}</td>
                                 <td className="text-center">{item.phone}</td>
                     
-                                <td className="text-center">{(new Date(item.create_date)).toLocaleDateString() + ' ' + (new Date(item.create_date)).toLocaleTimeString()}</td>
+                                <td className="text-center">
+                                  
+                                  <p>{(new Date(item.create_date)).toLocaleDateString()} </p> 
+                                  <p>{(new Date(item.create_date)).toLocaleTimeString()} </p>
+                                  
+                                  </td>
                                
-                                <td className="text-center">{item.beautyScore}</td>
+                                <td className="text-center">{item.score}</td>
                                 <td className="text-center">
 
 <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => {
@@ -431,7 +538,7 @@ let exportFileName = `user.xls`;
                 </CardBody>
               </Card>
               <div style={{ float: 'right' }}>
-                <Pagination count={arrPagination.length} color="primary" onChange={(e, v) => {
+                <Pagination count={arrPagination} color="primary" onChange={(e, v) => {
                   this.setState({ data: arrPagination[v - 1], indexPage: v - 1 })
                 }} />
               </div>
@@ -565,10 +672,7 @@ const styles = {
     float: "right",
     marginRight: "5px"
   },
-  searchInput: {
-    width: "190px",
-    display: 'inline-block',
-  },
+
   userActive: {
     color: 'green'
   },

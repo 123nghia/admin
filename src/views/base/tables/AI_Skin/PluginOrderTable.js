@@ -870,7 +870,7 @@ class PluginOrder extends Component {
                         KIỂM TRA LẠI ĐƠN HÀNG TRƯỚC KHI CẬP NHẬT
                       </CCol>
                       <CCol sm="12" lg="12">
-                        <strong>Tên Công Ty: {company_name}</strong>
+                        <strong>Tên Công Ty : {company_name}</strong>
                       </CCol>
                       <CCol sm="12" lg="12">
                         <strong>Tên Gói: {package_name}</strong>

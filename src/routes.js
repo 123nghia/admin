@@ -59,7 +59,7 @@ const PluginSubSaleTable = React.lazy(() => import('./views/base/tables/AI_Skin/
 
 //User
 const EndUserPlugin = React.lazy(() => import('./views/base/tables/User/EndUser'));
-const EndUser2Plugin = React.lazy(() => import('./views/base/tables/User/EndUserv2'));
+const EndUser2Plugin = React.lazy(() => import('./views/base/tables/AI_Skin/userRegiger'));
 // config skin AI
 const configSkinDisplay = React.lazy(() => import('./views/skin/configDisplay'));
 
