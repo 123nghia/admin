@@ -133,7 +133,7 @@ getTimeConver = (datetime) => {
     });
 
     let data = res.data;
-    debugger;
+
     this.setState({ dataCompany:data.data.dataCompany });
   }
 
@@ -515,9 +515,7 @@ changeCompanySet = (e) => {
                     {
                       data != undefined ?
                         data.map((item, i) => {
-                      
-
-                          var x =  this.state.dataCompany.find(x => x._id ===  item.company_id);
+                            var x =  this.state.dataCompany.find(x => x._id ===  item.company_id);
                             var compnayName ="";
                             if(x)
                             {
@@ -539,7 +537,6 @@ changeCompanySet = (e) => {
                               <td className="text-center">
                                 <p>{(new Date(item.create_date)).toLocaleDateString()} </p> 
                                 <p>{(new Date(item.create_date)).toLocaleTimeString()} </p>
-                             
                               </td>
                               <td className="text-center">{compnayName}</td>
                               <td className="text-center">{item.score}</td>

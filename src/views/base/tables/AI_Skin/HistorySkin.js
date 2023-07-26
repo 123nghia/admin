@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CIcon from '@coreui/icons-react';
-
+import moment from 'moment'
 import {
 
   CLabel, CSelect, CRow, CCol
@@ -12,6 +12,7 @@ import {
   CardHeader,
   Col,
   Row,
+  Label,
   Button,
   Input
 } from 'reactstrap';
@@ -122,8 +123,7 @@ class HistorySkin extends Component {
     });
 
     let data = res.data;
-    debugger;
-    this.setState({ dataCompany:data.data.dataCompany });
+    this.setState({ dataCompany : data.data.dataCompany });
   }
 
   
@@ -139,7 +139,12 @@ class HistorySkin extends Component {
       }
     });
   };
-
+  getTimeConver = (datetime) => {
+    if(datetime ==null )
+            return '';
+     return  moment(datetime).format('YYYY-MM-DD');
+  
+  }
   getData_ByCondition = async () => {
   
     const { activePage, itemPerPage ,company_id,phoneNumber} = this.state;
@@ -369,7 +374,39 @@ changeCompanySet = (e) => {
                 <i className="fa fa-align-justify">Lịch sử soi da</i>
               </CardHeader>
 
-             
+              <CRow className="removeMargin"> 
+
+<CCol sm="12" lg="6">
+<Label for="exampleDate">
+Từ ngày
+</Label>
+<Input
+name="fromDate"
+placeholder="date placeholder"
+type="date"
+onChange={(e) => {
+  this.setState({ "fromDate": e.target.value });
+}}
+value={this.getTimeConver(this.state.fromDate)}
+/>
+</CCol>
+<CCol sm="12" lg="6">
+<Label for="exampleDate">
+Đến ngày
+</Label>
+<Input
+
+name="endDate"
+placeholder="date placeholder"
+type="date"
+onChange={(e) => {
+  this.setState({ "endDate": e.target.value });
+}}
+value={this.getTimeConver(this.state.endDate)}
+/>
+</CCol>
+
+</CRow>
               <CRow className="removeMargin">
                   <CCol md={3} className="mt">
                     <div className="">

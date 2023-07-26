@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import List from "@mui/material/List";
+
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -11,6 +12,8 @@ import DotLoader from "react-spinners/DotLoader";
 import { IoLogoBuffer } from "@react-icons/all-files/io/IoLogoBuffer";
 import BannerAia from "./configWeb/BannerAia";
 import Logo from "./configWeb/GameConfig";
+import DataList from "./configWeb/dataList";
+
 import Seo from "./configWeb/Content";
 import DataGame from "./configWeb/gameUser";
 import { BiSlideshow } from "react-icons/bi";
@@ -27,13 +30,14 @@ class ConfigWeb extends Component {
     super(props);
     this.state = {
       tabNameConfig: [
-       
-       
-
-      
-        {
+          {
           _id: "4",
           name: "Cài đặt",
+          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
+        },
+        {
+          _id: "20",
+          name: "Nhà cung cấp",
           icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
         },
       ],
@@ -50,6 +54,10 @@ class ConfigWeb extends Component {
       scoreMax: "",
       dataGame:  [],
       score: "",
+      dataListBeauty: [],
+      dataCompany: []
+
+
     };
   }
 
@@ -85,10 +93,82 @@ class ConfigWeb extends Component {
     };
   };
   async componentDidMount() {
+    await this.getAllDataCompany();
+  
       await this.getDataConfigWeb();
+
+      setTimeout(() => {
+         this.dataListBeauty();
+      }, 2000);
      
+      
+ 
       this.ToggleViewConfigWeb("4");
   }
+
+  async getAllDataCompany (){
+    
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + Constants.List_All_company;
+   
+    await axios
+      .post(url, {
+        params: {
+
+        
+        },
+      })
+      .then((res) => {
+        
+        var data = res.data;
+      
+      
+           this.setState(
+          {
+        
+            dataCompany: data.data.dataCompany
+           
+          },
+          () => {
+
+           
+          }
+        );
+      });
+
+  }
+
+ async dataListBeauty ()
+ {
+
+  var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "/api/gameBeauty/getall";
+   
+    await axios
+      .get(url, {
+        params: {
+
+        
+        },
+      })
+      .then((res) => {
+        
+        var data = res.data.data;
+      
+           this.setState(
+          {
+        
+            dataListBeauty: data
+           
+          },
+          () => {
+
+           
+          }
+        );
+      });
+
+ }
 
   async getDataConfigWeb() {
     var baseUrlapi = Constants.BASE_URL;
@@ -335,6 +415,19 @@ class ConfigWeb extends Component {
                   score={this.state.score}
                 />
               </div>
+              {
+
+                  this.state.company_id == undefined ? ( <div id="tabcontent20" className="tabcontent">
+                  <DataList
+                 
+                    dataListBeauty =  {this.state.dataListBeauty}
+                  
+                    dataCompany = {this.state.dataCompany}
+                    
+                  />
+                </div>) : <></>
+              }
+             
             </div>
           </div>
         </div>

@@ -1,6 +1,10 @@
 import { Component } from "react";
+import CIcon from '@coreui/icons-react';
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import { Button } from "reactstrap";
+import {
+  CButton
+} from '@coreui/react'
 
 export default class Voucher extends Component {
   SaveAllConfigWeb(value) {
@@ -9,175 +13,76 @@ export default class Voucher extends Component {
   setStateByName = (name, value) => {
     this.props.setStateByName(name, value);
   };
+  getstatusItem = (status)=> {
+    if(status =="1")
+    {
+      return "Hoạt động";
+    }
+    return "Không hoạt động";
+  }
   render() {
     return (
       <>
       
        
         <div class="flex-a-center config-box-border">
-          <div>
-          <img        
-              style={{ width: "400px", height: "auto" }}
-              src="/assets/image/form-nhan-voucher.png"
-              alt="voucher"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-              <TextFieldGroup
-                field="title_get_voucher"
-                label="Tiêu đề"
-                value={this.props?.title_get_voucher}
-                placeholder={"Chúc mừng bạn vừa..."}
-                onChange={(e) => {
-                  this.setStateByName("title_get_voucher", e.target.value);
-                }}
-              />
-    
-              <TextFieldGroup
-                field="textSales"
-                label="Tiêu đề trị giá"
-                value={this.props?.textSales}
-                placeholder={"Trị giá 1.000.000đ"}
-                onChange={(e) => {
-                  this.setStateByName("textSales", e.target.value);
-                }}
-              />
+        
+        <table  className="table table-hover table-outline mb-0  d-sm-table">
+                  <thead className="thead-light">
+                    <tr>
+                      <th className="text-center">STT.</th>
+                      <th className="text-center">Tên công ty</th>
+                      <th className="text-center">Điểm mỗi lươt soi</th>
+                      <th className="text-center">Điểm tối đa	</th>
+                         
+                      <th className="text-center">Trạng thái</th>
+                      <th className="text-center">Danh sách</th>
+                      <th className="text-center">Chỉnh sửa</th>
+                          </tr>
+                  </thead>
+                  <tbody>
+             
+                    {
+                      this.props.dataListBeauty.map((item, i) => {
+                    
+                        var x =  this.props.dataCompany.find(x => x._id ===  item.companyId);
 
-              <TextFieldGroup
-                field="loginWatchVoucher"
-                label="Nhập thông tin xem voucher"
-                value={this.props?.loginWatchVoucher}
-                placeholder={"Hãy nhập thông tin của bạn..."}
-                onChange={(e) => {
-                  this.setStateByName("loginWatchVoucher", e.target.value);
-                }}
-              />
-              <TextFieldGroup
-                field="btn_get_voucher"
-                value={this.props?.btn_get_voucher}
-                label="Nút nhận voucher"
-                placeholder={"Nhận ngay voucher"}
-                onChange={(e) => {
-                  this.setStateByName("btn_get_voucher", e.target.value);
-                }}
-              />
-          </div>
-        </div>
+                        const dataCompany = this.props.dataCompany;
+              
+                        var compnayName ="";
+                        if(x)
+                        {
+                          compnayName  = x.Name;
+                        }
+                        return (
+                              <tr >
+                                      <td className="text-center">1 </td>
+                                      <td className="text-center">{compnayName}</td>
+                                      <td className="text-center">{item.score}</td>
+                                      <td className="text-center">{item.scoreMax}</td>
+                                      <td className="text-center">{this.getstatusItem(item.status)}</td>
+                                        
+                                      <td className="text-center">
+                                          <CButton outline color="primary" ><CIcon name="cil-magnifying-glass" /> Xem chi tiết</CButton>
+                                      </td>
+                                      <td className="text-center">
+                                          <CButton outline color="primary" ><CIcon name="cis-update" /> Sửa</CButton>
+                                      
+                                      </td>
+                            </tr>
+                        )
 
-        <div class="flex-a-center config-box-border">
-          <div>
-          <img
-              className="config-web__img-homepage"
-              style={{ width: "400px", height: "auto" }}
-              src="/assets/image/form-dang-ky-nhan-voucher.png"
-              alt="voucher"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="registerGetVoucher"
-              label=""
-              value={this.props?.registerGetVoucher}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName("registerGetVoucher", e.target.value);
-              }}
-            />
-              <TextFieldGroup
-                field="btn_register_get_voucher"
-                label=""
-                value={this.props?.btn_register_get_voucher}
-                placeholder={""}
-                onChange={(e) => {
-                  this.setStateByName(
-                    "btn_register_get_voucher",
-                    e.target.value
-                  );
-                }}
-              />
+                      })
+                     }
+                            
+                 
+                  </tbody>
 
-          </div>
+                </table>
+         
         </div>
-        {/* <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/tieu-de-dang-nhap.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleLogin"
-              label="Tiêu đề: Form đăng nhập"
-              value={this.props?.titleLogin}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleLogin", e.target.value );
-              }}
-            />
-          </div>
-        </div> */}
-        {/* <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/nut-dang-nhap.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="btn_login"
-              label="Tiêu đề: Nút đăng nhập"
-              value={this.props?.btn_login}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "btn_login", e.target.value );
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/tieu-de-cap-nhap.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="titleUpdate"
-              label="Tiêu đề: Form cập nhập"
-              value={this.props?.titleUpdate}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "titleUpdate", e.target.value );
-              }}
-            />
-          </div>
-        </div>
-        <div class="flex-a-center config-box-border">
-          <div>
-            <img
-              style={{ maxWidth: "150px", marginRight: "10px" }}
-              src="/assets/image/nut-cap-nhap.png"
-              alt="img"
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <TextFieldGroup
-              field="btn_update"
-              label="Tiêu đề: Nút cập nhập"
-              value={this.props?.btn_update}
-              placeholder={""}
-              onChange={(e) => {
-                this.setStateByName( "btn_update", e.target.value );
-              }}
-            />
-          </div>
-        </div> */}
+       
+        
       </>
     );
   }
