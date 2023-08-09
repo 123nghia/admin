@@ -61,6 +61,9 @@ class HistorySkin extends Component {
       type: localStorage.getItem('type'),
       toggleHistory: false,
       idHistory: "",
+      fromDate: moment().subtract(1, 'months'), 
+      endDate: moment().add(1, 'days'), 
+
       dataCompany: [],
       company_id: JSON.parse(localStorage.getItem('user')).company_id
     };
@@ -88,27 +91,28 @@ class HistorySkin extends Component {
   }
 
   getData = async () => {
-    const { activePage, itemPerPage ,phoneNumber} = this.state;
-
+    const {fromDate,endDate,  activePage, itemPerPage ,phoneNumber} = this.state;
+   
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.LIST_HISTORY_SKIN,
       data: {
         page: activePage,
+        fromDate: fromDate,
+        endDate: endDate, 
         limit: itemPerPage,
         phoneNumber: phoneNumber
       },
       method: 'POST'
     });
-
     let data = res.data.data;
 
     this.setState({ dataApi: data.data, data: data.data, isLoading: false, itemsCount: data.total });
   }
 
   getAllDataCompany = async () => {
-    const { activePage, itemPerPage ,phoneNumber} = this.state;
+    const { activePage, fromDate,endDate, itemPerPage ,phoneNumber} = this.state;
 
     this.setState({ isLoading: true });
     const res = await axios({
@@ -117,6 +121,8 @@ class HistorySkin extends Component {
       data: {
         page: activePage,
         limit: itemPerPage,
+        fromDate: fromDate,
+        endDate: endDate, 
         phoneNumber: phoneNumber
       },
       method: 'POST'
@@ -173,7 +179,7 @@ class HistorySkin extends Component {
 
   searchData = async () => {
   
-    const { activePage, itemPerPage ,company_id,phoneNumber,customerName, company_idSearch} = this.state;
+    const { activePage,fromDate,endDate , itemPerPage ,company_id,phoneNumber,customerName, company_idSearch} = this.state;
 
     let company_id1 = company_id;
     if(company_idSearch )
@@ -185,11 +191,14 @@ class HistorySkin extends Component {
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_HISTORY_SKIN_BY_CONDITION,
+      url: Constants.LIST_HISTORY_SKIN,
       method: 'POST',
       data: {
         page: activePage,
         limit: itemPerPage,
+        fromDate: fromDate,
+        endDate: endDate,
+
         customerName: customerName,
         company_id: company_id1, 
 
@@ -391,7 +400,7 @@ value={this.getTimeConver(this.state.fromDate)}
 />
 </CCol>
 <CCol sm="12" lg="6">
-<Label for="exampleDate">
+<Label for="endDate">
 Đến ngày
 </Label>
 <Input
@@ -488,7 +497,7 @@ value={this.getTimeConver(this.state.endDate)}
                       <th className="text-center">Tên</th>
                       <th className="text-center">Số điện thoại</th>
                       <th className="text-center">Hình ảnh</th>
-                         
+                      <th className="text-center"> Tuổi da</th>
                       <th className="text-center">Kết quả</th>
                       <th className="text-center">Công ty</th>
                       <th className="text-center">Thông tin</th>
@@ -526,7 +535,7 @@ value={this.getTimeConver(this.state.endDate)}
                                
                                 <img src={item.Result != undefined ? resultItem.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
                               </td>
-                            
+                              <td className="text-center">{item.ageGame}</td>
                               <td className="text-center">
                                 <CButton outline color="primary" onClick={e => {
                                   this.setState({
