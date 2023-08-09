@@ -1,6 +1,6 @@
 export default {
  
-   "BASE_URL" : "http://localhost:3002",
+   "BASE_URL" : "http://192.168.180.108:3002",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/xemchitietlichsu/",
   "BASE_URL_CURRENT" : "https://id.applamdep.com",
   "LIST_USER" : "/api/list-user",
@@ -244,6 +244,7 @@ export default {
 
   "LIST_END_USER": "/api/list-end-user",
   "LIST_END_USER2": "/api/list-end-userv2",
+  "EXPORT_ENDUSER": "/api/export-user",
   "LOGIN_END_USER": "/api/login-end-user",
   "ADD_END_USER": "/api/add-end-user",
   "UPDATE_END_USER": "/api/update-end-user",

@@ -283,15 +283,19 @@ class EndUserv2 extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
   exportFile = async () => {
-    const { activePage, itemPerPage ,company_id,phoneNumber} = this.state;
+
+
+    const { activePage,fromDate, endDate, itemPerPage ,company_id,phoneNumber} = this.state;
    
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_END_USER2,
+      url: Constants.EXPORT_ENDUSER,
       method: 'POST',
       data: {
         page: activePage,
         limit: itemPerPage,
+        fromDate: fromDate,
+        endDate: endDate,
         phoneNumber: phoneNumber,
         company_id: company_id
        
@@ -466,7 +470,7 @@ let exportFileName = `user.xls`;
                          
                           <CCol sm="12" lg="6">
                             <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.resetSearch() }}>Làm mới tìm kiếm</CButton>
-                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.exportFile() }}>Xuất file</CButton>
+                            <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.exportFile() }}>Xuất file </CButton>
                           </CCol>
 
                         </CRow>
@@ -481,7 +485,7 @@ let exportFileName = `user.xls`;
               
                         <th className="text-center">Ngày tham gia </th>
 
-                        <th className="text-center">Điểm đẹp </th>
+                        <th className="text-center">Điểm đẹp 2 </th>
                         <th className="text-center">Lịch sử soi da</th>
                         
                         <th className="text-center">#</th>

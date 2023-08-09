@@ -61,7 +61,7 @@ class HistorySkin extends Component {
       type: localStorage.getItem('type'),
       toggleHistory: false,
       idHistory: "",
-      fromDate: moment().subtract(1, 'months'), 
+      fromDate: moment().subtract(4, 'months'), 
       endDate: moment().add(1, 'days'), 
 
       dataCompany: [],
@@ -91,7 +91,7 @@ class HistorySkin extends Component {
   }
 
   getData = async () => {
-    const {fromDate,endDate,  activePage, itemPerPage ,phoneNumber} = this.state;
+    const {fromDate,endDate, customerName, activePage, itemPerPage ,phoneNumber} = this.state;
    
     this.setState({ isLoading: true });
     const res = await axios({
@@ -100,6 +100,7 @@ class HistorySkin extends Component {
       data: {
         page: activePage,
         fromDate: fromDate,
+        customerName: customerName,
         endDate: endDate, 
         limit: itemPerPage,
         phoneNumber: phoneNumber
@@ -112,7 +113,7 @@ class HistorySkin extends Component {
   }
 
   getAllDataCompany = async () => {
-    const { activePage, fromDate,endDate, itemPerPage ,phoneNumber} = this.state;
+    const { activePage, fromDate,endDate,customerName, itemPerPage ,phoneNumber} = this.state;
 
     this.setState({ isLoading: true });
     const res = await axios({
@@ -121,6 +122,7 @@ class HistorySkin extends Component {
       data: {
         page: activePage,
         limit: itemPerPage,
+        customerName: customerName,
         fromDate: fromDate,
         endDate: endDate, 
         phoneNumber: phoneNumber
@@ -153,17 +155,19 @@ class HistorySkin extends Component {
   }
   getData_ByCondition = async () => {
   
-    const { activePage, itemPerPage ,company_id,phoneNumber} = this.state;
+    const { activePage, itemPerPage ,endDate,fromDate,company_id,phoneNumber} = this.state;
  
   
     this.setState({ isLoading: true });
     const res = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.LIST_HISTORY_SKIN_BY_CONDITION,
+      url: Constants.LIST_HISTORY_SKIN,
       method: 'POST',
       data: {
         page: activePage,
         limit: itemPerPage,
+        endDate: endDate,
+        fromDate: fromDate,
         phoneNumber: phoneNumber,
         company_id: company_id,
       
@@ -269,7 +273,8 @@ class HistorySkin extends Component {
     }
   }
   exportFile = async () => {
-        const { activePage, itemPerPage,customerName ,company_id,phoneNumber,company_idSearch} = this.state;
+    alert("3");
+        const { activePage,fromDate, endDate, itemPerPage,customerName ,company_id,phoneNumber,company_idSearch} = this.state;
 
         let company_id1 = company_id;
         if(company_idSearch )
@@ -283,6 +288,8 @@ class HistorySkin extends Component {
           method: 'POST',
           data: {
             page: activePage,
+            fromDate: fromDate,
+            endDate: endDate,
             limit: itemPerPage,
             customerName: customerName,
             company_id: company_id1, 

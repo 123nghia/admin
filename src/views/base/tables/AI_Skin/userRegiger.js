@@ -59,6 +59,8 @@ class HistorySkin extends Component {
       itemPerPage: 5,
       hidden: false,
       indexPage: 0,
+      fromDate: moment().subtract(4, 'months'), 
+      endDate: moment().add(1, 'days'), 
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
       type: localStorage.getItem('type'),
@@ -269,7 +271,7 @@ getTimeConver = (datetime) => {
     }
   }
   exportFile = async () => {
-        const { activePage, itemPerPage,customerName ,company_id,phoneNumber,company_idSearch} = this.state;
+        const { activePage,fromDate, endDate, itemPerPage,customerName ,company_id,phoneNumber,company_idSearch} = this.state;
 
         let company_id1 = company_id;
         if(company_idSearch )
@@ -279,15 +281,16 @@ getTimeConver = (datetime) => {
         this.setState({ isLoading: true });
         const res = await axios({
           baseURL: Constants.BASE_URL,
-          url: Constants.LIST_HISTORY_Skin_export,
+          url: Constants.EXPORT_ENDUSER,
           method: 'POST',
           data: {
             page: activePage,
             limit: itemPerPage,
             customerName: customerName,
             company_id: company_id1, 
-    
             phoneNumber: phoneNumber,
+            fromDate: fromDate,
+            endDate: endDate
            
           
           },
@@ -314,7 +317,7 @@ getTimeConver = (datetime) => {
             {
               regionName = region.regionName;
             }
-            var x =  this.state.dataCompany.find(x => x._id ===  element.Company_Id);
+            var x =  this.state.dataCompany.find(x => x._id ===  element.company_id);
             var compnayName ="";
             if(x)
             {
@@ -323,14 +326,12 @@ getTimeConver = (datetime) => {
             
             var item = {
               indexSTT: indexSTT, 
-              userName: element.UserName, 
-              Phone: element.Phone, 
-              Image: element.Image,
-              linkDetail: "https://applamdep.com/xemchitietlichsu/"+ element._id,
-              Slug: compnayName,
-              ipClient: element.ipClient,
-              regionName: regionName, 
-              create_Date: element.Create_Date
+              userName: element.username, 
+              Phone: element.phone, 
+              companyName: compnayName,
+              score: element.score,
+              create_Date: element.create_date
+
             };
             listData.push(item);
      });
@@ -339,7 +340,7 @@ getTimeConver = (datetime) => {
     let workBook = XLSX.utils.book_new();
     const Heading = [
     [
-      'STT', 'Tên đăng nhập', 'Họ tên','Số điện thoại', 'Ngày tham gia','Công ty','Điểm đẹp','Lịch sử soi da'
+      'STT', 'Tên đăng nhập', 'Số điện thoại','công ty', 'điểm làm đẹp','Ngày tạo'
     ]
     ];
       
