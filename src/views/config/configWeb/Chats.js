@@ -32,6 +32,8 @@ export default class Chats extends Component {
                   value={this.props.codeChat}
                   onChange={(e) => this.setStateByName("codeChat", e.target.value)}
                   class="mt-3"
+                  rows="8"
+                  cols="60"
              >
               
              </textarea>

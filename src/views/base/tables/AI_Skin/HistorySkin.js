@@ -61,7 +61,7 @@ class HistorySkin extends Component {
       type: localStorage.getItem('type'),
       toggleHistory: false,
       idHistory: "",
-      fromDate: moment().subtract(4, 'months'), 
+      fromDate: moment().subtract(1, 'months'), 
       endDate: moment().add(1, 'days'), 
 
       dataCompany: [],
@@ -273,7 +273,7 @@ class HistorySkin extends Component {
     }
   }
   exportFile = async () => {
-    alert("3");
+
         const { activePage,fromDate, endDate, itemPerPage,customerName ,company_id,phoneNumber,company_idSearch} = this.state;
 
         let company_id1 = company_id;

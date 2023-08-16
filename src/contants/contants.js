@@ -1,6 +1,6 @@
 export default {
  
-   "BASE_URL" : "http://192.168.180.108:3002",
+   "BASE_URL" : "https://api-soida.applamdep.com",
   "BASE_URL_HISTORY_SKIN" : "https://applamdep.com/xemchitietlichsu/",
   "BASE_URL_CURRENT" : "https://id.applamdep.com",
   "LIST_USER" : "/api/list-user",

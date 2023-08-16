@@ -72,30 +72,26 @@ class ConfigWeb extends Component {
           name: "Logos",
           icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
         },
-        {
-          _id: "5",
-          name: "Mã Chat",
-          icon: <BsChatDots style={{ width: "24px ", height: "24px " }} />,
-        },
-        {
-          _id: "10",
-          name: "Thông tin công ty",
-          icon: <BsChatDots style={{ width: "24px ", height: "24px " }} />,
-        },
-        {
-          _id: "6",
-          name: "Cấu hình mạng xã hội",
-          icon: <IoLogoInstagram style={{ width: "24px ", height: "24px " }} />,
-        },
+        // {
+        //   _id: "5",
+        //   name: "Mã Chat",
+        //   icon: <BsChatDots style={{ width: "24px ", height: "24px " }} />,
+        // },
+       
     
         {
           _id: "8",
-          name: "Quản lý màu sắc",
+          name: "Cấu hình theme",
           icon: (
             <IoColorPaletteOutline style={{ width: "24px ", height: "24px " }} />
           ),
-        }
-
+        },
+        {
+          _id: "10",
+          name: "Thông tin mạng xã hội",
+          icon: <BsChatDots style={{ width: "24px ", height: "24px " }} />,
+        },
+     
         
       ],
       company_id: JSON.parse(localStorage.getItem("user")).company_id
@@ -230,6 +226,10 @@ class ConfigWeb extends Component {
               form: valueConfig.value.form,
               aia: valueConfig.value.aia,
               bannerCampaign : valueConfig.value.bannerCampaign,
+              embedHotline: valueConfig.value.embedHotline,
+              embeddFacebook: valueConfig.value.embeddFacebook,
+              embeddZalo: valueConfig.value.embeddZalo
+
 
             },
             () => {
@@ -247,7 +247,11 @@ class ConfigWeb extends Component {
                 voucher,
                 form,
                 aia,
-                bannerCampaign
+                bannerCampaign,
+                embedHotline,
+                embeddFacebook,
+                embeddZalo
+
               } = this.state;
               if (aia) {
                 this.setState({
@@ -628,6 +632,9 @@ class ConfigWeb extends Component {
       image1_link,
       image2_link,
       image3_link,
+      embeddFacebook,
+      embeddZalo,
+      embedHotline
     } = this.state;
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "/api/config/update";
@@ -664,8 +671,8 @@ class ConfigWeb extends Component {
     }
 
     if (change === "embeds") {
-      coppyData.value.embeddFacebook = this.state.codeMess;
-      coppyData.value.embeddZalo = this.state.codeChat;
+      coppyData.value.embeddFacebook = this.state.embeddFacebook;
+      coppyData.value.embeddZalo = this.state.embeddZalo;
       coppyData.value.embedHotline = this.state.embedHotline;
     }
     if (change === "voucher") {
@@ -1391,17 +1398,17 @@ class ConfigWeb extends Component {
                   classLogo={this.state.classLogo}
                 />
               </div>
-              <div id="tabcontent5" className="tabcontent ">
+              {/* <div id="tabcontent5" className="tabcontent ">
                 <Chats
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   setStateByName={this.setStateByName}
                   codeChat={this.state.codeChat}
                   codeMess={this.state.codeMess}
                 />
-              </div>
+              </div> */}
 
             
-              <div id="tabcontent6" className="tabcontent">
+              {/* <div id="tabcontent6" className="tabcontent">
                 <Mxh
                   SaveAllConfigWeb={this.SaveAllConfigWeb}
                   configData={this.state.configData}
@@ -1417,7 +1424,7 @@ class ConfigWeb extends Component {
                   hrefZalo={this.state.hrefZalo}
                 />
               </div>
-              
+               */}
               <div id="tabcontent8" className="tabcontent">
                 <ChangeColor
                   setStateByName={this.setStateByName}

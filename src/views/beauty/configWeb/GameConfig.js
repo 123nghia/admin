@@ -3,8 +3,11 @@ import moment from 'moment'
 import TextFieldGroup from "../../../views/Common/TextFieldGroup";
 import { Button, FormGroup, Label,Input  } from "reactstrap";
 import {
-    CTextarea,
-  } from "@coreui/react";
+
+  CLabel, CSelect, CRow, CCol
+} from "@coreui/react";
+
+
 export default class Seo extends Component {
   SaveAllConfigWeb() {
     this.props.SaveAllConfigWeb();
@@ -66,6 +69,21 @@ getTimeConver = (datetime) => {
       }}
     />
   </FormGroup>
+  <CSelect
+                 onChange={(e) => {
+                  this.setStateByName( "status", e.target.value );
+                }}   custom size="sm" name="status" 
+                        value ={this.props.status}
+                 >
+                     
+                          <option   value ="1" >
+                          Hoạt động
+                          </option>
+                          <option   value ="0" >
+                          không hoạt động
+                          </option>
+                    
+                    </CSelect>
 
 
         </>

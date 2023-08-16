@@ -26,7 +26,7 @@ export default class InfoCompany extends Component {
             Lưu thay đổi
           </CButton>
         </div>
-        <div className="text-center">
+        <div className="">
           <div className="mt-3">
             <p>Mã nhúng facebook (nếu có) :</p>
           </div>
@@ -38,15 +38,15 @@ export default class InfoCompany extends Component {
             cols="60"
             rows="8"
           ></textarea>
+          
         </div>
     
 
-        <div className="text-center">
+        <div className="">
           <div className="mt-3">
             <p>Mã nhúng Zalo (nếu có) :</p>
           </div>
-
-          <textarea
+           <textarea
             name="embeddFacebook"
             value={this.props.embeddZalo}
             onChange={(e) => this.setStateByName("embeddZalo", e.target.value)}
@@ -55,14 +55,14 @@ export default class InfoCompany extends Component {
             rows="8"
           ></textarea>
         </div>
-        <div className="text-center">
+        <div className="">
           <div className="mt-3">
             <p>Hotline(nếu có): </p>
           </div>
           
           <TextFieldGroup
               name="embedHotline"
-              label="Mã ứng dụng"
+              
               value={this.props.embedHotline}
               onChange={(e) => {
                 this.setStateByName("embedHotline", e.target.value );

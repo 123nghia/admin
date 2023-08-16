@@ -28,37 +28,74 @@ headers.append("Content-Type", "application/json");
 class ConfigWeb extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      tabNameConfig: [
+
+    if(localStorage.type !='2')
+    {
+      this.state = {
+        tabNameConfig: [
+           
           {
-          _id: "4",
-          name: "Cài đặt",
-          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
-        },
-        {
-          _id: "20",
-          name: "Nhà cung cấp",
-          icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
-        },
-      ],
-      company_id: JSON.parse(localStorage.getItem("user")).company_id
-        ? JSON.parse(localStorage.getItem("user")).company_id
-        : null,
-      poupintro: "",
-      pupupSuccess: "",
-      popupfail: "",
-      fromDate: "",
-      todate: "",
-      fromtime: "",
-      totime: "",
-      scoreMax: "",
-      dataGame:  [],
-      score: "",
-      dataListBeauty: [],
-      dataCompany: []
-
-
-    };
+            _id: "20",
+            name: "Nhà cung cấp",
+            icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
+          },
+        ],
+        company_id: JSON.parse(localStorage.getItem("user")).company_id
+          ? JSON.parse(localStorage.getItem("user")).company_id
+          : null,
+        poupintro: "",
+        pupupSuccess: "",
+        popupfail: "",
+        fromDate: "",
+        todate: "",
+        fromtime: "",
+        totime: "",
+        scoreMax: "",
+        dataGame:  [],
+        score: "",
+        dataListBeauty: [],
+        dataCompany: []
+  
+  
+      };
+    }
+    else 
+    {
+      this.state = {
+        tabNameConfig: [
+            {
+            _id: "4",
+            name: "Cài đặt",
+            icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
+          }
+          // ,
+          // {
+          //   _id: "19",
+          //   name: "Danh sách",
+          //   icon: <IoLogoBuffer style={{ width: "24px ", height: "24px " }} />,
+          // }
+         
+        ],
+        company_id: JSON.parse(localStorage.getItem("user")).company_id
+          ? JSON.parse(localStorage.getItem("user")).company_id
+          : null,
+        poupintro: "",
+        pupupSuccess: "",
+        popupfail: "",
+        fromDate: "",
+        todate: "",
+        fromtime: "",
+        totime: "",
+        scoreMax: "",
+        dataGame:  [],
+        score: "",
+        dataListBeauty: [],
+        dataCompany: []
+  
+  
+      };
+    }
+   
   }
 
   ToggleViewConfigWeb(id) {
@@ -100,7 +137,12 @@ class ConfigWeb extends Component {
       setTimeout(() => {
          this.dataListBeauty();
       }, 2000);
-     
+
+   
+      if(localStorage.type =='2')
+      {
+        this.getDataBeautyUser();
+      }
       
  
       this.ToggleViewConfigWeb("4");
@@ -196,7 +238,8 @@ class ConfigWeb extends Component {
           {
         
             scoreMax: data.scoreMax,
-            score: data.score
+            score: data.score,
+            status:data.status,
            
           },
           () => {
@@ -210,6 +253,38 @@ class ConfigWeb extends Component {
   async getDataGame1() {
     var baseUrlapi = Constants.BASE_URL;
     let url = baseUrlapi + "/api/get-game-data-11";
+    const newComany_id = this.state.company_id;
+    let Output_newComany_id;
+    if (newComany_id) {
+      Output_newComany_id = newComany_id;
+    } else {
+      Output_newComany_id = "-1";
+    }
+    await axios
+      .get(url, {
+        params: {
+          company_id: Output_newComany_id,
+
+        },
+      })
+      .then((res) => {
+        
+         var data = res.data.data;
+          this.setState(
+          {
+            dataGame1 : data
+          },
+          () => {
+
+            
+          }
+        );
+      });
+  }
+
+  async getDataBeautyUser() {
+    var baseUrlapi = Constants.BASE_URL;
+    let url = baseUrlapi + "/api/get-data-beauty-user";
     const newComany_id = this.state.company_id;
     let Output_newComany_id;
     if (newComany_id) {
@@ -285,7 +360,7 @@ class ConfigWeb extends Component {
     const bodyRequest = {
     
       company_id: Output_newComany_id,
-      
+      status: this.state.status,
       scoreMax: this.state.scoreMax,
       score: this.state.score
      
@@ -371,6 +446,7 @@ class ConfigWeb extends Component {
                   totime={this.state.totime}
                 
                   scoreMax={this.state.scoreMax}
+                  status={this.state.status}
                   score={this.state.score}
                 />
               </div>
@@ -385,6 +461,21 @@ class ConfigWeb extends Component {
                 
                   scoreMax={this.state.scoreMax}
                   score={this.state.score}
+                  status= {this.state.status}
+                />
+              </div>
+
+              <div id="tabcontent19" className="tabcontent">
+                <DataGame
+                  SaveAllConfigWeb={this.SaveAllConfigWeb}
+                  setStateByName={this.setStateByName}
+                  GameData  = {this.state.dataGame1}
+                  typeGetData = {1}
+                 
+                
+                  scoreMax={this.state.scoreMax}
+                  score={this.state.score}
+                  status= {this.state.status}
                 />
               </div>
 
@@ -413,6 +504,7 @@ class ConfigWeb extends Component {
                   totime={this.state.totime}
                   scoreMax={this.state.scoreMax}
                   score={this.state.score}
+                  status= {this.state.status}
                 />
               </div>
               {

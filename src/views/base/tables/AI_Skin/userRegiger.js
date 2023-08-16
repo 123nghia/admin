@@ -59,7 +59,7 @@ class HistorySkin extends Component {
       itemPerPage: 5,
       hidden: false,
       indexPage: 0,
-      fromDate: moment().subtract(4, 'months'), 
+      fromDate: moment().subtract(1, 'months'), 
       endDate: moment().add(1, 'days'), 
       token: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       isLoading: false,
