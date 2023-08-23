@@ -530,6 +530,7 @@ value={this.getTimeConver(this.state.endDate)}
                           {
                             nameUser =  item.Name;
                           }
+                          console.log(resultItem);
                           return (
 
                       
@@ -542,7 +543,7 @@ value={this.getTimeConver(this.state.endDate)}
                                
                                 <img src={item.Result != undefined ? resultItem.facedata.image_info.url : ""} style={{ width: '50%', height: 50 }} />
                               </td>
-                              <td className="text-center">{item.ageGame}</td>
+                              <td className="text-center">{resultItem.facedata.generalResult.data[0].data[0].value}</td>
                               <td className="text-center">
                                 <CButton outline color="primary" onClick={e => {
                                   this.setState({

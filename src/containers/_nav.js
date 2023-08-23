@@ -804,4 +804,73 @@ const _naveUser = [
     }
     ]
 
-export default [_navVendor, _naveUser,_navManagementConclue, _navBeauty,_navSoida,_navGame,_navDisplay, _navOrther, _navContact, _navLogOut,_navSpecialProduct  ]
+
+
+    const _navManagementBook = [
+      {
+        _tag: 'CSidebarNavTitle',
+        _children: ['Quản lý sách'],
+        role: ['0', '1', '2'],
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Sách English',
+    
+        to: '/book/sach-tieng-anh',
+        icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+        role: ['0', '1', '2'],
+        badge: {
+          color: 'info',
+          text: <CTooltip placement={"right"} content={content.suggest}>
+            <CIcon content={freeSet.cilBellExclamation} />
+          </CTooltip>,
+        },
+      },
+       {
+        _tag: 'CSidebarNavItem',
+        name: 'Sách nuôi dạy con',
+    
+        to: '/book/sach-nuoi-day-con',
+        icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+        role: ['0', '1', '2'],
+        badge: {
+          color: 'info',
+          text: <CTooltip placement={"right"} content={content.suggest}>
+            <CIcon content={freeSet.cilBellExclamation} />
+          </CTooltip>,
+        }
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Tạp chí thời trang',
+    
+        to: '/book/tap-chi-thoi-trang',
+        icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+        role: ['0', '1', '2'],
+        badge: {
+          color: 'info',
+          text: <CTooltip placement={"right"} content={content.suggest}>
+            <CIcon content={freeSet.cilBellExclamation} />
+          </CTooltip>
+        }
+       
+    },
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Lý thuyết và sách nói',
+  
+      to: '/book/ly-thuyet-va-sach-noi',
+      icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+      role: ['0', '1', '2'],
+      badge: {
+        color: 'info',
+        text: <CTooltip placement={"right"} content={content.suggest}>
+          <CIcon content={freeSet.cilBellExclamation} />
+        </CTooltip>
+      }
+     
+  }
+      ]
+  
+
+export default [_navVendor, _naveUser,_navManagementConclue, _navBeauty,_navManagementBook,_navSoida,_navGame,_navDisplay, _navOrther, _navContact, _navLogOut,_navSpecialProduct  ]

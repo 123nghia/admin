@@ -73,6 +73,9 @@ const SubTypeHair = React.lazy(() => import('./views/base/tables/MakeUp/SubTypeH
 const SubTypeMakeUp = React.lazy(() => import('./views/base/tables/MakeUp/SubTypeMakeUp'));
 const Color = React.lazy(() => import('./views/base/tables/MakeUp/Color'));
 const TypeOne = React.lazy(() => import('./views/base/tables/MakeUp/TypeOne'));
+
+const BookOne = React.lazy(() => import('./views/base/tables/Book/TypeOne'));
+
 const configWeb = React.lazy(() => import("./views/config/configWeb"));
 const configGame = React.lazy(() => import("./views/game/configWeb"));
 
@@ -174,6 +177,11 @@ const routes = [
   { path: '/items/4', name: 'K5', component: TypeOne },
   { path: '/items/5', name: 'K6', component: TypeOne },
  
+  { path: '/book/sach-tieng-anh', name: 'book1', component: BookOne },
+  { path: '/book/sach-nuoi-day-con', name: 'book2', component: BookOne },
+  { path: '/book/tap-chi-thoi-trang', name: 'book3', component: BookOne },
+  
+  { path: '/book/ly-thuyet-va-sach-noi', name: 'book4', component: BookOne },
   { path: '/history/:phoneNumber', name: 'historyview', component: HistorySkin },
 
   { path: '/skin/configContent', name: 'configContent', component: configContent },

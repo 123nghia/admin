@@ -10,7 +10,7 @@ export default {
   "DELETE_USER" : "/api/delete-user",
   "LOGIN_ADMIN" : "/api/login_admin",
   "GET_SHOP" : "/api/get-shop",
-  "GET_SALE" : "/api/get-sale",
+  "GET_SALE" : "/api/get-s ale",
   "GET_COEFFICIENT" : "/api/calculator-coefficient-user",
   "GET_COEFFICIENT_PER_SALE" : "/api/calculator-coefficient-user-per-sale",
   "GET_USER_SALE_BY_MONTH" : "/api/get-user-of-sale-by-month",
@@ -188,7 +188,9 @@ export default {
   "UPLOAD_IMAGE_MAKEUP": "/itemSdk/upload_image_makeup",
   "UPLOAD_IMAGE_BRAND": "/itemSdk/upload_image_brand",
   "DELETE_SUGGEST_ITEM": "/itemSdk/deleteItem",
+  "DELETE_Book_item": "/api/book/deleteItem",
   "LIST_SDK": "/sdk",
+  "Add_book": "/api/book/update",
 
   "LIST_BRAND": "/brands",
   "LIST_BRAND_COMPANY": "/brands/",
@@ -269,7 +271,7 @@ export default {
   "ADD_ProductSpecial": "/api/prodcut-special/add",
   "UPDATE_ProductSpecial": "/api/prodcut-special/update",
   "DELETE_ProductSpecial": "/product-special/delete",
-
+  "api_getAllBook": "/api/book/getAll",
 
   "LIST_Banner": "/api/banner/all",
   "LIST_Banner_COMPANY": "/api/banner/all/",
