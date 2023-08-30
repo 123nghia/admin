@@ -91,9 +91,9 @@ class SuggestItem extends Component {
   async componentDidMount() {
     const { type } = this.state;
     if (type == '0' || type == '1') {
-      this.getData()
+      this.getData();
     } else {
-      this.getDataForCompany()
+      this.getData();
     }
     // this.getListTypeProduct()
     // let arr = JSON.parse(localStorage.getItem('url'));
@@ -297,10 +297,12 @@ class SuggestItem extends Component {
     {
       categoryId_input = 3;
     }
+    var companyid  = this.state.type == '0' || this.state.type == '1' ? "-1" : JSON.parse(this.state.userData).company_id;
 
+   
     const res_suggest = await axios({
       baseURL: Constants.BASE_URL,
-      url: Constants.api_getAllBook +"?type="+categoryId_input,
+      url: Constants.api_getAllBook +"?companyid="+companyid+"&type="+categoryId_input,
       method: 'GET'
     });
     var dataRender = res_suggest.data.data;
@@ -469,6 +471,9 @@ class SuggestItem extends Component {
     const { hrefLink,linkCover, linkFiePdf,categoryId, des,_id,image, title, description, linkdetail, price,
       level,status, sdktype, type_sdk_id, brand_id, image_link,filepdf_link, arrOptionSdkType, idSDK } = this.state
 
+      var companyidInput = this.state.type == '0' || this.state.type == '1' ? "-1" : JSON.parse(this.state.userData).company_id;
+
+   
     // if (hrefLink == null || hrefLink == '') {
     //   alert("Thiếu tên sản phẩm");
     //   return
@@ -522,11 +527,12 @@ class SuggestItem extends Component {
       title: title,
       des: description,
       status: status, 
+  
       filepdf_link: filepdf_link.name,
       linkdetail: linkdetail,
       image_link: image_link.name,
      
-      companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
+      companyid: companyidInput,
       
     }
     console.log("body",body);
@@ -665,7 +671,7 @@ class SuggestItem extends Component {
       if (this.state.type == '0' || this.state.type == '1') {
         this.getData()
       } else {
-        this.getDataForCompany()
+        this.getData();
       };
       this.setState({ modalDelete: !this.state.modalDelete, delete: null })
     } else {
@@ -740,13 +746,13 @@ class SuggestItem extends Component {
                   <div style={styles.tags}>
                     <CRow>
                       <CCol sm="12" lg="12">
-                        <CRow>
+                        {/* <CRow>
                          
                           <CCol sm="12" lg="4">
                             <CButton color="primary" style={{ width: '100%', marginTop: 5 }} size="sm" onClick={e => { this.onSearch() }}>Tìm kiếm theo từ khoá</CButton>
                           </CCol>
                           
-                        </CRow>
+                        </CRow> */}
                       </CCol>
                       <CCol sm="12" lg="12">
                         <CButton outline color="primary" style={styles.floatRight} size="sm" onClick={e => this.toggleModal("new")}>Thêm mới</CButton>
@@ -766,7 +772,7 @@ class SuggestItem extends Component {
                             <th className="text-center">Ảnh</th>
   
                             <th className="text-center">Đường dẫn File</th>
-                            <th className="text-center">File sách</th>
+                            <th className="text-center">Slug</th>
                             <th className="text-center">Trạng thái</th>
                             <th className="text-center">Lượt tải</th>
                             {/* <th className="text-center">Giá</th> */}
@@ -790,8 +796,10 @@ class SuggestItem extends Component {
                                       <a target="_blank" href= { item.hrefLink }  > Link file</a>
                                    </td>
                                    <td> 
-                                      <a href= { item.linkFiePdf } download> Tải file </a>
+                                      { item.slug }
                                    </td>
+                                 
+
                                     <td> { item.status=="0"? "Không hoạt động": "Hoạt động" } </td>
                                     <td> { item.dowload } </td>
                                     <td className="text-center">
