@@ -182,6 +182,9 @@ const routes = [
   { path: '/book/tap-chi-thoi-trang', name: 'book3', component: BookOne },
   
   { path: '/book/ly-thuyet-va-sach-noi', name: 'book4', component: BookOne },
+  { path: '/book/tieu-thuyet', name: 'book5', component: BookOne },
+  { path: '/book/truyen-ngan', name: 'book6', component: BookOne },
+  { path: '/book/lich-su', name: 'book7', component: BookOne },
   { path: '/history/:phoneNumber', name: 'historyview', component: HistorySkin },
 
   { path: '/skin/configContent', name: 'configContent', component: configContent },

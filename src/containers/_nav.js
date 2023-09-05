@@ -869,7 +869,52 @@ const _naveUser = [
         </CTooltip>
       }
      
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Tiểu thuyết',
+
+    to: '/book/tieu-thuyet',
+    icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.suggest}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>
+    }
+   
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Truyện ngắn',
+
+  to: '/book/truyen-ngan',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
   }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Lịch sử',
+
+  to: '/book/lich-su',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+}
       ]
   
 

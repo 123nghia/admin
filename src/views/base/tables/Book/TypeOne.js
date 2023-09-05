@@ -27,6 +27,7 @@ import TextFieldGroup from "../../../Common/TextFieldGroup";
 import axios from 'axios'
 import { css } from "@emotion/react";
 import DotLoader from "react-spinners/DotLoader";
+import Swal from 'sweetalert2';
 let headers = new Headers();
 const auth = localStorage.getItem('auth');
 headers.append('Authorization', 'Bearer ' + auth);
@@ -54,12 +55,15 @@ class SuggestItem extends Component {
       image: "",
       image_show: "",
       image_link: "",
-        filepdf_link: "",
+       filepdf_link: "",
       title: "",
       description: "",
+      image_file: "",
+
       linkdetail: "",
       level: "K1",
       sdktype: "1",
+      ebookFile:  "",
       brand_id: "",
       companyid: "",
       price: 0,
@@ -277,7 +281,16 @@ class SuggestItem extends Component {
 
   getData = async () => {
     const { idSDK } = this.state;
-    this.setState({ isLoading: false });
+
+    Swal.fire({
+      title: 'Đang tải sách...',
+      html: 'Vui lòng chờ ...',
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading()
+      }
+    });
     var lastSlug = window.location.href.split("/").pop();
     var categoryId_input = 0;
     
@@ -297,6 +310,18 @@ class SuggestItem extends Component {
     {
       categoryId_input = 3;
     }
+    else if(lastSlug == "tieu-thuyet")
+    {
+      categoryId_input = 5;
+    }
+    else if(lastSlug == "truyen-ngan")
+    {
+      categoryId_input = 6;
+    }
+    else if(lastSlug == "lich-su")
+    {
+      categoryId_input = 7;
+    }
     var companyid  = this.state.type == '0' || this.state.type == '1' ? "-1" : JSON.parse(this.state.userData).company_id;
 
    
@@ -309,43 +334,11 @@ class SuggestItem extends Component {
    
 
     this.setState({ dataRe: dataRender });
+    Swal.close();
    
   }
 
-  getDataForCompany = async () => {
-    const { idSDK, userData } = this.state;
-
-    this.setState({ isLoading: true });
-    const res_suggest = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SUGGEST_ITEM_COMPANY + JSON.parse(userData).company_id + `/${idSDK}`,
-      method: 'GET'
-    });
-
-    const res_sdk = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.LIST_SDK,
-      method: 'GET'
-    });
-
-
-    let val = res_suggest.data.dataRes;
-    let totalItem = res_suggest.data.arrTotal;
-
-    this.pagination(totalItem, val);
-
-    let arrB = res_suggest.data.brand;
-
-    let arrTempOptionBrand = [];
-    for (let i = 0; i < arrB.length; i++) {
-      arrTempOptionBrand.push({
-        value: arrB[i]._id, label: arrB[i].name
-      })
-    }
-
-    this.setState({ dataApi: val, sdkItem: res_sdk.data, currentSdkSelect: res_sdk.data[0], isLoading: false, arrBrand: arrB, arrOptionBrand: arrTempOptionBrand });
-
-  }
+  
 
   getListTypeProduct = async () => {
     const res_pro = await axios({
@@ -467,35 +460,55 @@ class SuggestItem extends Component {
     this.setState({ [key]: val })
   }
 
-  async addProduct() {
-    const { hrefLink,linkCover, linkFiePdf,categoryId, des,_id,image, title, description, linkdetail, price,
-      level,status, sdktype, type_sdk_id, brand_id, image_link,filepdf_link, arrOptionSdkType, idSDK } = this.state
-
-      var companyidInput = this.state.type == '0' || this.state.type == '1' ? "-1" : JSON.parse(this.state.userData).company_id;
-
-   
-    // if (hrefLink == null || hrefLink == '') {
-    //   alert("Thiếu tên sản phẩm");
-    //   return
-    // } else if (brand_id == null || brand_id == '') {
-    //   alert("Thiếu tên nhãn hiệu cho sản phẩm");
-    //   return
-    // } else if (title == null || title == '') {
-    //   alert("Thiếu tên tiêu đề cho sản phẩm");
-    //   return
-    // } else if (image == null || image == '') {
-    //   alert("Thiếu hình ảnh cho sản phẩm");
-    //   return
-    // }
+  async  uploadBookFile(fileUpload, hrefLink ='')
+  {
 
     const form = new FormData();
-    form.append("image", image_link);
-    const form2 = new FormData();
-    form.append("image", filepdf_link);
+    form.append("myFile", fileUpload);
+    let options  = {
+      headers: {
+        'Access-Control-Allow-Origin': '*',  
+      }
+    };
 
-    
-    await API_CONNECT(Constants.UPLOAD_IMAGE, form, "", "POST")
-    await API_CONNECT(Constants.UPLOAD_IMAGE, form2, "", "POST")
+    let hrefLinkBookPdf = "";
+    let post = await axios.post("https://file.applamdep.com/uploadfile", form, options)
+    .then((response) => 
+    {
+        let dataRes = response.data;
+        let fileName = dataRes.filename;
+        hrefLinkBookPdf ="https://file.applamdep.com/book/"+ fileName;
+     
+      
+    } )
+    .catch((error) => console.log(error));
+
+    return hrefLinkBookPdf;
+
+  }
+
+  async addProduct() {
+
+    Swal.fire({
+      title: 'Đang xử lý...',
+      html: 'Vui lòng chờ ...',
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading()
+      }
+    });
+     
+    const { ebookFile,
+      image_file,
+      title2,  author, extraInfo,
+      hrefLink,linkCover, linkFiePdf,categoryId, des,_id,image, title, description, linkdetail, price,
+      level,status, sdktype, type_sdk_id, brand_id, image_link,filepdf_link, arrOptionSdkType, idSDK } 
+     = this.state;
+
+    var companyidInput = this.state.type == '0' || this.state.type == '1' ? "-1" : JSON.parse(this.state.userData).company_id;
+    var ebookFileLink = await this.uploadBookFile(ebookFile);
+    var coverLinkImage = await this.uploadBookFile(image_file);
 
     var lastSlug = window.location.href.split("/").pop();
 
@@ -518,46 +531,50 @@ class SuggestItem extends Component {
     {
       categoryId_input = 3;
     }
+
+    else if(lastSlug == "tieu-thuyet")
+    {
+      categoryId_input = 5;
+    }
+    else if(lastSlug == "truyen-ngan")
+    {
+      categoryId_input = 6;
+    }
+    else if(lastSlug == "lich-su")
+    {
+      categoryId_input = 7;
+    }
     const body = {
-      hrefLink: hrefLink,
-      linkFiePdf: linkFiePdf,
-      linkCover: linkCover,
+      linkFiePdf: ebookFileLink,
+      linkCover: coverLinkImage,
       categoryId: categoryId_input,
-      image: image,
+      title2: title2,
+      author: author,
+      extraInfo: extraInfo,
       title: title,
       des: description,
-      status: status, 
-  
-      filepdf_link: filepdf_link.name,
-      linkdetail: linkdetail,
-      image_link: image_link.name,
-     
-      companyid: companyidInput,
+      status: 1, 
+      companyid: companyidInput
       
     }
-    console.log("body",body);
- 
+    
 
-    this.setState({ isLoading: true, isSearch: false });
     const res = await axios({
       baseURL: Constants.BASE_URL,
       url: Constants.Add_book,
       method: 'POST',
       data: body
     });
-
+    
     if (res.status == 200) {
-      if (this.state.type == '0' || this.state.type == '1') {
-         this.getData()
-      } else {
-        // console.log(res)
-        // this.getDataForCompany()
-      };
+      debugger;
+      this.getData();
       this.setState({ modalCom: !this.state.modalCom })
     } else {
-      alert("Thêm sách thất bại");
-      this.setState({ isLoading: false });
+   
     }
+
+    Swal.close();
   }
 
   async openUpdate(item) {
@@ -575,13 +592,7 @@ class SuggestItem extends Component {
       linkdetail: item.linkdetail,
       level: item.level,
       id: item._id,
-      // price: item.price,
-      // sdktype: item.sdktype,
-      // type_product_id: item.type_product_id._id,
-      // type_sdk_id: item.type_sdk_id._id,
-      // companyid: item.companyid,
-      // objectValueBrand: objValue,
-      // id: item._id,
+      
       Status: item.Status,
       // arrLevel: item.type_sdk_id.Level,
       // brand_id: item.brand_id == null ? "" : item.brand_id._id
@@ -590,63 +601,7 @@ class SuggestItem extends Component {
 
   async updateProduct() {
     return;
-    this.setState({ modalCom: !this.state.modalCom })
-    const { name, image, title, description, linkdetail, price,
-      level, sdktype, type_sdk_id, type_product_id, brand_id, image_link, indexPage } = this.state
-
-    if (name == null || name == '') {
-      alert("Thiếu tên sản phẩm");
-      return
-    } else if (brand_id == null || brand_id == '') {
-      alert("Thiếu tên nhãn hiệu cho sản phẩm");
-      return
-    } else if (title == null || title == '') {
-      alert("Thiếu tên tiêu đề cho sản phẩm");
-      return
-    }
-
-    const form = new FormData();
-    form.append("image", image_link);
     
-    await API_CONNECT(Constants.UPLOAD_IMAGE, form, "", "POST")
-  
-
-    const body = {
-      name: name,
-      image: image,
-      image_link: image_link == undefined || image_link == null || image_link == "" ? "" : image_link.name,
-      title: title,
-      description: description,
-      linkdetail: linkdetail,
-      price: price,
-      level: level,
-      sdktype: sdktype,
-      type_sdk_id: type_sdk_id,
-      type_product_id: type_product_id,
-      companyid: this.state.type == '0' || this.state.type == '1' ? "" : JSON.parse(this.state.userData).company_id,
-      brand_id: brand_id
-    }
-
-    this.setState({ isLoadingTable: true, isSearch: false });
-    const res = await axios({
-      baseURL: Constants.BASE_URL,
-      url: Constants.UPDATE_SUGGEST_ITEM + this.state.id,
-      method: 'PUT',
-      data: body
-    });
-
-    if (res.status == 200) {
-      this.getDataPagination(this.state.limit * Number(indexPage), Number(indexPage))
-      // if (this.state.type == '0' || this.state.type == '1') {
-      //   // this.getData()
-      //   this.getDataPagination(20 * Number(indexPage))
-      // } else {
-      //   this.getDataForCompany()
-      // };
-    } else {
-      alert("Cập nhật thất bại");
-      this.setState({ isLoading: false });
-    }
   }
 
   openDelete = (item) => {
@@ -698,22 +653,24 @@ class SuggestItem extends Component {
   onChangeImage(e) {
     let files = e.target.files;
     let reader = new FileReader();
-    this.setState({ image_link: files[0] })
+    this.setState({ image_file: files[0] })
     reader.readAsDataURL(files[0])
     reader.onload = (e) => {
-      this.setState({ image: e.target.result, image_show: e.target.result })
+      this.setState({ 
+         image: e.target.result,
+         image_show: e.target.result })
     }
   }
 
 
   onUploadFile2(e) {
     let files = e.target.files;
-    let reader = new FileReader();
-    this.setState({ filepdf_link : files[0] })
-    reader.readAsDataURL(files[0])
-    reader.onload = (e) => {
-      this.setState({ linkFiePdf: e.target.result, linkFiePdf_show: e.target.result })
-    }
+    // let reader = new FileReader();
+    this.setState({ ebookFile : files[0] })
+    // reader.readAsDataURL(files[0])
+    // reader.onload = (e) => {
+    //   // this.setState({ linkFiePdf: e.target.result, linkFiePdf_show: e.target.result })
+    // }
   }
 
   getBadge(name, defaults) {
@@ -773,9 +730,12 @@ class SuggestItem extends Component {
   
                             <th className="text-center">Đường dẫn File</th>
                             <th className="text-center">Slug</th>
+                            <th className="text-center">Tiêu đề phụ</th>
+                            <th className="text-center">Tác giả</th>
+                            <th className="text-center">Thông tin thêm</th>
                             <th className="text-center">Trạng thái</th>
                             <th className="text-center">Lượt tải</th>
-                            {/* <th className="text-center">Giá</th> */}
+                       
                             <th className="text-center">#</th>
                           </tr>
                         </thead>
@@ -789,17 +749,26 @@ class SuggestItem extends Component {
                                     <td> { item.title } </td>
                                     <td className="text-center">
                                       {
-                                         <img src={`${item.image}`} width={"60px"} height={"60px"} />
+                                         <img src={`${item.linkCover}`} width={"60px"} height={"60px"} />
                                       }
                                     </td>
                                     <td> 
-                                      <a target="_blank" href= { item.hrefLink }  > Link file</a>
+                                      <a target="_blank" href= { item.linkFiePdf }  > Link file</a>
                                    </td>
                                    <td> 
                                       { item.slug }
                                    </td>
                                  
-
+                              
+                                   <td> 
+                                      { item.title2 }
+                                   </td>
+                                   <td> 
+                                      { item.author }
+                                   </td>
+                                   <td> 
+                                      { item.extraInfo }
+                                   </td>
                                     <td> { item.status=="0"? "Không hoạt động": "Hoạt động" } </td>
                                     <td> { item.dowload } </td>
                                     <td className="text-center">
@@ -875,15 +844,31 @@ class SuggestItem extends Component {
                 placeholder="Mô tả"
               />
 
-              <TextFieldGroup
-                field="hrefLink"
-                label="Đường dẫn file"
-                value={this.state.hrefLink}
-                placeholder={"Link file"}
-                onChange={e => this.onChange("hrefLink", e.target.value)}
+ 
+<TextFieldGroup
+                field="title"
+                label="Tiêu đề phụ(2)"
+                value={this.state.title2}
+                placeholder={"Tiêu đề phụ(2)"}
+                onChange={e => this.onChange("title2", e.target.value)}
               />
 
-              <div style={{ width: "100%" }} className="mt-3">
+<TextFieldGroup
+                field="author"
+                label="Tác giả"
+                value={this.state.author}
+                placeholder={"Tác giả"}
+                onChange={e => this.onChange("author", e.target.value)}
+              />
+
+          <TextFieldGroup
+                field="extraInfo"
+                label="Thông tin thêm"
+                value={this.state.extraInfo}
+                placeholder={"Thông tin thêm"}
+                onChange={e => this.onChange("extraInfo", e.target.value)}
+              />
+              {/* <div style={{ width: "100%" }} className="mt-3">
                 <CLabel>Trạng thái:</CLabel>
                 <CSelect onChange={async e => { this.changeLevel(e) }}  value = {this.state.status} custom size="sm" name="selectSm" id="SelectLm">
                       
@@ -899,7 +884,7 @@ class SuggestItem extends Component {
                         </option>
                       
                     </CSelect>
-              </div>
+              </div> */}
 
              
             </ModalBody>
