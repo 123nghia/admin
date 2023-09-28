@@ -322,6 +322,101 @@ class SuggestItem extends Component {
     {
       categoryId_input = 7;
     }
+
+    else if(lastSlug == "sach-van-hoc")
+    {
+      categoryId_input = 8;
+    }
+    else if(lastSlug == "sach-kinh-te")
+    {
+      categoryId_input = 9;
+    }
+    else if(lastSlug == "sach-thieu-nhi")
+    {
+      categoryId_input = 10;
+    }
+    else if(lastSlug == "sach-ky-nang-song")
+    {
+      categoryId_input = 11;
+    }
+    else if(lastSlug == "sach-ba-me-em-be")
+    {
+      categoryId_input = 12;
+    }
+
+    else if(lastSlug == "sach-giao-khoa-giao-trinh")
+    {
+      categoryId_input = 13;
+    }
+    else if(lastSlug == "sach-hoc-ngoai-ngu")
+    {
+      categoryId_input = 14;
+    }
+    else if(lastSlug == "sach-tham-khao")
+    {
+      categoryId_input = 15;
+    }
+    else if(lastSlug == "tu-dien")
+    {
+      categoryId_input = 16;
+    }
+    else if(lastSlug == "kien-thuc-tong-hop")
+    {
+      categoryId_input = 17;
+    }
+    else if(lastSlug == "khoa-hoc-ki-thuat")
+    {
+      categoryId_input = 18;
+    }
+    else if(lastSlug == "dien-anh-nha-hoa")
+    {
+      categoryId_input = 19;
+    }
+    else if(lastSlug == "truyen-tranh-manga-comic")
+    {
+      categoryId_input = 20;
+    }
+    else if(lastSlug == "sach-ton-giao-tam-linh")
+    {
+      categoryId_input = 21;
+    }
+    else if(lastSlug == "sach-van-hoa-dia-ly-du-lich")
+    {
+      categoryId_input = 22;
+    }
+    else if(lastSlug == "sach-chinh-tri-phap-ly")
+    {
+      categoryId_input = 23;
+    }
+    else if(lastSlug == "sach-nong-lam-ngu-nghiep")
+    {
+      categoryId_input = 24;
+    }
+    else if(lastSlug == "sach-cong-nghe-thong-tin")
+    {
+      categoryId_input = 25;
+    }
+    else if(lastSlug == "sach-y-hoc")
+    {
+      categoryId_input = 26;
+    }
+    else if(lastSlug == "tap-chi-catalogue")
+    {
+      categoryId_input = 27;
+    }
+    else if(lastSlug == "tam-ly-gioi-tinh")
+    {
+      categoryId_input = 28;
+    }
+    else if(lastSlug == "thuong-thuc-gia-dinh")
+    {
+      categoryId_input = 29;
+    }
+    else if(lastSlug == "the-duc-the-thao")
+    {
+      categoryId_input = 30;
+    }
+    
     var companyid  = this.state.type == '0' || this.state.type == '1' ? "-1" : JSON.parse(this.state.userData).company_id;
 
    
@@ -526,12 +621,10 @@ class SuggestItem extends Component {
     {
       categoryId_input = 2;
     }
-
     else if(lastSlug == "ly-thuyet-va-sach-noi")
     {
       categoryId_input = 3;
     }
-
     else if(lastSlug == "tieu-thuyet")
     {
       categoryId_input = 5;
@@ -544,6 +637,101 @@ class SuggestItem extends Component {
     {
       categoryId_input = 7;
     }
+
+    else if(lastSlug == "sach-van-hoc")
+    {
+      categoryId_input = 8;
+    }
+    else if(lastSlug == "sach-kinh-te")
+    {
+      categoryId_input = 9;
+    }
+    else if(lastSlug == "sach-thieu-nhi")
+    {
+      categoryId_input = 10;
+    }
+    else if(lastSlug == "sach-ky-nang-song")
+    {
+      categoryId_input = 11;
+    }
+    else if(lastSlug == "sach-ba-me-em-be")
+    {
+      categoryId_input = 12;
+    }
+
+    else if(lastSlug == "sach-giao-khoa-giao-trinh")
+    {
+      categoryId_input = 13;
+    }
+    else if(lastSlug == "sach-hoc-ngoai-ngu")
+    {
+      categoryId_input = 14;
+    }
+    else if(lastSlug == "sach-tham-khao")
+    {
+      categoryId_input = 15;
+    }
+    else if(lastSlug == "tu-dien")
+    {
+      categoryId_input = 16;
+    }
+    else if(lastSlug == "kien-thuc-tong-hop")
+    {
+      categoryId_input = 17;
+    }
+    else if(lastSlug == "khoa-hoc-ki-thuat")
+    {
+      categoryId_input = 18;
+    }
+    else if(lastSlug == "dien-anh-nha-hoa")
+    {
+      categoryId_input = 19;
+    }
+    else if(lastSlug == "truyen-tranh-manga-comic")
+    {
+      categoryId_input = 20;
+    }
+    else if(lastSlug == "sach-ton-giao-tam-linh")
+    {
+      categoryId_input = 21;
+    }
+    else if(lastSlug == "sach-van-hoa-dia-ly-du-lich")
+    {
+      categoryId_input = 22;
+    }
+    else if(lastSlug == "sach-chinh-tri-phap-ly")
+    {
+      categoryId_input = 23;
+    }
+    else if(lastSlug == "sach-nong-lam-ngu-nghiep")
+    {
+      categoryId_input = 24;
+    }
+    else if(lastSlug == "sach-cong-nghe-thong-tin")
+    {
+      categoryId_input = 25;
+    }
+    else if(lastSlug == "sach-y-hoc")
+    {
+      categoryId_input = 26;
+    }
+    else if(lastSlug == "tap-chi-catalogue")
+    {
+      categoryId_input = 27;
+    }
+    else if(lastSlug == "tam-ly-gioi-tinh")
+    {
+      categoryId_input = 28;
+    }
+    else if(lastSlug == "thuong-thuc-gia-dinh")
+    {
+      categoryId_input = 29;
+    }
+    else if(lastSlug == "the-duc-the-thao")
+    {
+      categoryId_input = 30;
+    }
+    
     const body = {
       linkFiePdf: ebookFileLink,
       linkCover: coverLinkImage,
@@ -726,15 +914,15 @@ class SuggestItem extends Component {
                             <th className="text-center">STT.</th>
                             {/* <th className="text-center">Tên</th> */}
                             <th className="text-center">Tên sách</th>
+                            <th className="text-center">Mã sách</th>
                             <th className="text-center">Ảnh</th>
   
                             <th className="text-center">Đường dẫn File</th>
-                            <th className="text-center">Slug</th>
-                            <th className="text-center">Tiêu đề phụ</th>
-                            <th className="text-center">Tác giả</th>
-                            <th className="text-center">Thông tin thêm</th>
+                          
+                            <th className="text-center">Thông  tin sách</th>
+                           
                             <th className="text-center">Trạng thái</th>
-                            <th className="text-center">Lượt tải</th>
+                            <th className="text-center">Thông tin </th>
                        
                             <th className="text-center">#</th>
                           </tr>
@@ -747,6 +935,7 @@ class SuggestItem extends Component {
                                   <tr key={i}>
                                     <td className="text-center">{i +1}</td>
                                     <td> { item.title } </td>
+                                    <td> { item.code } </td>
                                     <td className="text-center">
                                       {
                                          <img src={`${item.linkCover}`} width={"60px"} height={"60px"} />
@@ -755,22 +944,23 @@ class SuggestItem extends Component {
                                     <td> 
                                       <a target="_blank" href= { item.linkFiePdf }  > Link file</a>
                                    </td>
-                                   <td> 
-                                      { item.slug }
-                                   </td>
+                                 
                                  
                               
-                                   <td> 
-                                      { item.title2 }
+                                   <td>
+                                    <p> Slug: {item.slug} </p> 
+                                    <p> Tác giả: {item.author} </p> 
+                                    <p> Thông tin thêm: {item.extraInfo} </p> 
+                                    <p> Tiêu đề 2(nếu có): {item.title2} </p> 
+                                  
                                    </td>
-                                   <td> 
-                                      { item.author }
-                                   </td>
-                                   <td> 
-                                      { item.extraInfo }
-                                   </td>
+                                 
                                     <td> { item.status=="0"? "Không hoạt động": "Hoạt động" } </td>
-                                    <td> { item.dowload } </td>
+                                    <td> 
+                                     <p>Lượt tải: { item.dowload }  </p>
+                                     <p>Lượt xem: { item.dowload }  </p>
+                                     
+                                     </td>
                                     <td className="text-center">
                                       {/* <CButton style={styles.mgl5} outline color="primary" size="sm" onClick={async (e) => await this.openUpdate(item)} >
                                         <CIcon name="cilPencil" />

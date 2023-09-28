@@ -914,6 +914,343 @@ const _naveUser = [
     </CTooltip>
   }
  
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách văn học',
+
+  to: '/book/sach-van-hoc',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách kinh tế',
+
+  to: '/book/sach-kinh-te',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách thiếu nhi',
+
+  to: '/book/sach-thieu-nhi',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách kĩ năng sống',
+
+  to: '/book/sach-ky-nang-song',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách bà mẹ - Em bé',
+
+  to: '/book/sach-ba-me-em-be',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách giáo khoa - giáo trình',
+
+  to: '/book/sach-giao-khoa-giao-trinh',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách học ngoại ngữ',
+
+  to: '/book/sach-hoc-ngoai-ngu',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách tham khảo',
+
+  to: '/book/sach-tham-khao',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Từ điển',
+
+  to: '/book/tu-dien',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Kiến thưc tổng hợp',
+
+  to: '/book/kien-thuc-tong-hop',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Khoa học kĩ thuật',
+
+  to: '/book/khoa-hoc-ki-thuat',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Điện ảnh - nhạc - hoạ',
+
+  to: '/book/khoa-hoc-ki-thuat',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Truyện tranh, Manga, comic',
+
+  to: '/book/truyen-tranh-manga-comic',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách tôn giáo tâm linh',
+
+  to: '/book/sach-ton-giao-tam-linh',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+},
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sách văn hoá - địa lý - giáo dục',
+  
+    to: '/book/sach-van-hoa-dia-ly-du-lich',
+    icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.suggest}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>
+    }
+ 
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách chính trị -pháp lý',
+
+  to: '/book/sach-chinh-tri-phap-ly',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }},
+
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sách Nông - Lâm - Ngư nghiệp',
+  
+    to: '/book/sach-nong-lam-ngu-nghiep',
+    icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+    role: ['0', '1', '2'],
+    badge: {
+      color: 'info',
+      text: <CTooltip placement={"right"} content={content.suggest}>
+        <CIcon content={freeSet.cilBellExclamation} />
+      </CTooltip>
+    }
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách công nghệ thông tin',
+
+  to: '/book/sach-cong-nghe-thong-tin',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Sách y học ',
+
+  to: '/book/sach-y-hoc',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Tạp chí - catelogue ',
+
+  to: '/book/tap-chi-catalogue',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Tâm lý giới tính',
+
+  to: '/book/tam-ly-gioi-tinh',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Thưởng thức - gia đình',
+
+  to: '/book/thuong-thuc-gia-dinh',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
+},
+{
+  _tag: 'CSidebarNavItem',
+  name: 'Thể duc - thể thao',
+
+  to: '/book/the-duc-the-thao',
+  icon: <CIcon style={css} content={freeSet.cilMoodVeryGood} customClasses="c-sidebar-nav-icon" />,
+  role: ['0', '1', '2'],
+  badge: {
+    color: 'info',
+    text: <CTooltip placement={"right"} content={content.suggest}>
+      <CIcon content={freeSet.cilBellExclamation} />
+    </CTooltip>
+  }
 }
       ]
   

@@ -185,6 +185,41 @@ const routes = [
   { path: '/book/tieu-thuyet', name: 'book5', component: BookOne },
   { path: '/book/truyen-ngan', name: 'book6', component: BookOne },
   { path: '/book/lich-su', name: 'book7', component: BookOne },
+  { path: '/book/sach-van-hoc', name: 'book1', component: BookOne },
+  { path: '/book/sach-kinh-te', name: 'book2', component: BookOne },
+  { path: '/book/sach-thieu-nhi', name: 'book3', component: BookOne },
+  
+  { path: '/book/sach-ky-nang-song', name: 'book4', component: BookOne },
+  { path: '/book/sach-ba-me-em-be', name: 'book5', component: BookOne },
+  { path: '/book/sach-giao-khoa-giao-trinh', name: 'book6', component: BookOne },
+  { path: '/book/sach-hoc-ngoai-ngu', name: 'book7', component: BookOne },
+
+
+  { path: '/book/sach-tham-khao', name: 'book4', component: BookOne },
+  { path: '/book/tu-dien', name: 'book5', component: BookOne },
+  { path: '/book/kien-thuc-tong-hop', name: 'book6', component: BookOne },
+  { path: '/book/khoa-hoc-ki-thuat', name: 'book7', component: BookOne },
+
+
+  { path: '/book/dien-anh-nha-hoa', name: 'book4', component: BookOne },
+  { path: '/book/truyen-tranh-manga-comic', name: 'book5', component: BookOne },
+  { path: '/book/sach-ton-giao-tam-linh', name: 'book6', component: BookOne },
+  { path: '/book/sach-van-hoa-dia-ly-du-lich', name: 'book7', component: BookOne },
+
+
+  { path: '/book/sach-chinh-tri-phap-ly', name: 'book4', component: BookOne },
+  { path: '/book/sach-nong-lam-ngu-nghiep', name: 'book5', component: BookOne },
+  { path: '/book/sach-cong-nghe-thong-tin', name: 'book6', component: BookOne },
+  { path: '/book/sach-y-hoc', name: 'book7', component: BookOne },
+
+  { path: '/book/tap-chi-catalogue', name: 'book7', component: BookOne },
+  { path: '/book/tam-ly-gioi-tinh', name: 'book7', component: BookOne },
+  { path: '/book/thuong-thuc-gia-dinh', name: 'book7', component: BookOne },
+  { path: '/book/the-duc-the-thao', name: 'book7', component: BookOne },
+
+
+
+  
   { path: '/history/:phoneNumber', name: 'historyview', component: HistorySkin },
 
   { path: '/skin/configContent', name: 'configContent', component: configContent },
